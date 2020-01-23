@@ -1,5 +1,6 @@
 #include "gui/window/Window.h"
 #include "resources/ResourceManager.h"
+#include "input/InputManager.h"
 
 int main(){
     auto window = Gui::Window();
@@ -10,12 +11,17 @@ int main(){
     title.setPosition(window.getDimensions().width / 2.0f - title.getGlobalBounds().width / 2.0f, 0.0f);
     auto playerOne = sf::Sprite(resourceManager.getTexture("playerOne.png"));
     playerOne.setPosition(window.getDimensions().width / 2.0f, window.getDimensions().height / 2.0f);
+    auto inputManager = InputManager();
 
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
+            else if (event.type == sf::Event::KeyPressed)
+                inputManager.pressKey(static_cast<InputManager::Key>((unsigned int)(event.key.code)));
+            else if (event.type == sf::Event::KeyReleased)
+                inputManager.releaseKey(static_cast<InputManager::Key>((unsigned int)(event.key.code)));
         }
         window.clear();
         window.draw(background);
