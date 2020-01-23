@@ -17,7 +17,9 @@ set(SOURCE_FILES
         game-source-code/resources/ResourceManager.h
         game-source-code/exceptions/Exceptions.h
         game-source-code/input/InputManager.cpp
-        game-source-code/input/InputManager.h)
+        game-source-code/input/InputManager.h
+        game-source-code/event/Event.h
+        game-source-code/event/Event.inl)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
