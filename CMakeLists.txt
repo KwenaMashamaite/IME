@@ -4,11 +4,13 @@ project(duel-invaders)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(game-source-code)
+include_directories(test-source-code)
 
-set(SOURCE_FILES game-source-code/main/main.cpp
+set(SOURCE_FILES
         game-source-code/gui/window/Window.cpp
         game-source-code/gui/window/Window.h
-        game-source-code/globals/Globals.h)
+        game-source-code/globals/Globals.h
+        test-source-code/deul-invaders-unit-tests.cpp)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
@@ -24,7 +26,7 @@ Set(EXECUTABLE_NAME "duel-invaders")
 #Change executable output folder
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/executables)
 
-add_executable(duel-invaders ${SOURCE_FILES} game-source-code/main/main.cpp)
+add_executable(duel-invaders ${SOURCE_FILES})
 
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
