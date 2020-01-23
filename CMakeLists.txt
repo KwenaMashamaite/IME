@@ -11,6 +11,9 @@ set(SOURCE_FILES
         game-source-code/gui/window/Window.h
         game-source-code/globals/Globals.h
         test-source-code/deul-invaders-unit-tests.cpp
+        game-source-code/main/main.cpp
+        game-source-code/resources/ResourceHolder.h
+        game-source-code/resources/ResourceHolder.inl
         game-source-code/exceptions/Exceptions.h)
 
 #add the doctest unit testing framework
