@@ -10,8 +10,8 @@ namespace Globals{
      * @brief Dimensions
      */
     struct Dimensions{
-        int width;
-        int height;
+        unsigned int width;
+        unsigned int height;
     };
 
     /**

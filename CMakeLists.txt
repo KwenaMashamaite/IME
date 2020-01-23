@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(game-source-code)
 
 set(SOURCE_FILES game-source-code/main/main.cpp
+        game-source-code/gui/window/Window.cpp
+        game-source-code/gui/window/Window.h
         game-source-code/globals/Globals.h)
 
 #add the doctest unit testing framework
