@@ -1,0 +1,58 @@
+### C++ ###
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Executables
+*.out
+*.app
+
+### CodeLite IDE ###
+*.mk
+*.project
+*.workspace
+compile_commands.json
+Makefile
+# generated directories
+.codelite/
+
+### CodeBlocks ###
+# specific to CodeBlocks IDE
+*.layout
+*.depend
+*.cbp
+# generated directories
+obj/
+
+### macOS ###
+*.DS_Store
+
+### JETBRAINS CLION IDE ###
+# specific to JetBrains CLion IDE
+.idea
+
+### VS CODE IDE ####
+# specific to vscode ide
+.vscode
+
+### CMAKE BUILD FILES ###
+build
+cmake-build-debug
