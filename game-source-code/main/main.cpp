@@ -3,6 +3,7 @@
 #include "input/InputManager.h"
 #include "event/EventPublisher.h"
 #include "globals/Globals.h"
+#include <iostream>
 
 int main(){
     auto window = Gui::Window();
@@ -19,16 +20,16 @@ int main(){
         window.close();
     });
 
-    Globals::Events::keyPressed.addListener([&inputManager](InputManager::Key pressedKey){
-        inputManager.pressKey(pressedKey);
-    });
-
-    Globals::Events::keyReleased.addListener([&inputManager](InputManager::Key releasedKey){
-        inputManager.releaseKey(releasedKey);
-    });
-
     while (window.isOpen()){
         EventPublisher::update(window);
+
+        if(inputManager.isKeyPressed(InputManager::Key::A)){
+            std::cout << "you pressed A" << std::endl;
+        }
+        if(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton)){
+            std::cout << "You right clicked mouse" << std::endl;
+        }
+        inputManager.update();
         window.clear();
         window.draw(background);
         window.draw(title);

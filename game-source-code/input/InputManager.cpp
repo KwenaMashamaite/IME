@@ -1,7 +1,28 @@
 #include "InputManager.h"
+#include "globals/Globals.h"
+
+using Globals::Events;
 
 InputManager::InputManager() : mouseCoordinates_{0, 0} {
+    Events::keyPressed.addListener([this](InputManager::Key key) {
+        pressKey(key);
+    });
 
+    Events::keyReleased.addListener([this](Key key) {
+        releaseKey(key);
+    });
+
+    Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
+        pressMouse(button);
+    });
+
+    Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
+        releaseMouse(button);
+    });
+
+    Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
+        setMouseCoordinates(xMouseCoord, yMouseCoord);
+    });
 }
 
 void InputManager::pressKey(InputManager::Key keyId) {
