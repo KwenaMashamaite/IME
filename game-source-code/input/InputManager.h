@@ -1,5 +1,9 @@
 /**
- * @brief Class for managing user keyboard and mouse button inputs
+ * @brief Class for managing user keyboard and mouse button inputs.
+ *
+ * This class depends on the EventPublisher class. Therefore, an
+ * event publisher must be running in order to process the right
+ * user inputs.
  */
 
 #ifndef INPUTMANAGER_H
@@ -112,6 +116,19 @@ public:
      */
     MousePosition getMouseCoords() const;
 
+private:
+    //Holds the current state of a key
+    std::unordered_map<Key, bool > currentKeyMap_;
+    //Holds the previous state of a key
+    std::unordered_map<Key, bool > previousKeyMap_;
+    //Holds mouse coordinates
+    MousePosition mouseCoordinates_;
+    //Holds the current state of the mouse buttons
+    std::unordered_map<MouseButton, bool> currentMouseButtonState_;
+    //Holds the previous state of the mouse buttons
+    std::unordered_map<MouseButton, bool> previousMouseButtonState_;
+
+private:
     /**
      * @brief Set key as pressed
      * @param key Key to press
@@ -143,19 +160,6 @@ public:
      */
     void setMouseCoordinates(unsigned int x, unsigned int y);
 
-private:
-    //Holds the current state of a key
-    std::unordered_map<Key, bool > currentKeyMap_;
-    //Holds the previous state of a key
-    std::unordered_map<Key, bool > previousKeyMap_;
-    //Holds mouse coordinates
-    MousePosition mouseCoordinates_;
-    //Holds the current state of the mouse buttons
-    std::unordered_map<MouseButton, bool> currentMouseButtonState_;
-    //Holds the previous state of the mouse buttons
-    std::unordered_map<MouseButton, bool> previousMouseButtonState_;
-
-private:
     /**
      * @brief Check if a key was down or not in the previous upadate
      * @param Key Key to check

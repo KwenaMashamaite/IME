@@ -1,6 +1,9 @@
 #include "gui/window/Window.h"
 #include "resources/ResourceManager.h"
 #include "input/InputManager.h"
+#include "event/EventPublisher.h"
+#include "globals/Globals.h"
+#include <iostream>
 
 int main(){
     auto window = Gui::Window();
@@ -13,16 +16,20 @@ int main(){
     playerOne.setPosition(window.getDimensions().width / 2.0f, window.getDimensions().height / 2.0f);
     auto inputManager = InputManager();
 
+    Globals::Events::windowClose.addListener([&window](){
+        window.close();
+    });
+
     while (window.isOpen()){
-        sf::Event event;
-        while (window.pollEvent(event)){
-            if (event.type == sf::Event::Closed)
-                window.close();
-            else if (event.type == sf::Event::KeyPressed)
-                inputManager.pressKey(static_cast<InputManager::Key>((unsigned int)(event.key.code)));
-            else if (event.type == sf::Event::KeyReleased)
-                inputManager.releaseKey(static_cast<InputManager::Key>((unsigned int)(event.key.code)));
+        EventPublisher::update(window);
+
+        if(inputManager.isKeyPressed(InputManager::Key::A)){
+            std::cout << "you pressed A" << std::endl;
         }
+        if(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton)){
+            std::cout << "You right clicked mouse" << std::endl;
+        }
+        inputManager.update();
         window.clear();
         window.draw(background);
         window.draw(title);
