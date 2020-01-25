@@ -116,6 +116,11 @@ public:
      */
     MousePosition getMouseCoords() const;
 
+    /**
+     * @brief Destructor
+     */
+    ~InputManager();
+
 private:
     //Holds the current state of a key
     std::unordered_map<Key, bool > currentKeyMap_;

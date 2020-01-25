@@ -1,28 +1,30 @@
 #include "InputManager.h"
+#include "event/HandlerIdHolder.h"
 #include "globals/Globals.h"
 
 using Globals::Events;
+using Utility::HanderIdHolder;
 
 InputManager::InputManager() : mouseCoordinates_{0, 0} {
-    Events::keyPressed.addListener([this](InputManager::Key key) {
+    HanderIdHolder::add("keyPress", Events::keyPressed.addListener([this](InputManager::Key key) {
         pressKey(key);
-    });
+    }));
 
-    Events::keyReleased.addListener([this](Key key) {
+    HanderIdHolder::add("keyRelease", Events::keyReleased.addListener([this](Key key) {
         releaseKey(key);
-    });
+    }));
 
-    Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
+    HanderIdHolder::add("mouseButtonPress", Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
         pressMouse(button);
-    });
+    }));
 
-    Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
+    HanderIdHolder::add("mouseButtonRelease", Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
         releaseMouse(button);
-    });
+    }));
 
-    Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
+    HanderIdHolder::add("mouseMove", Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
         setMouseCoordinates(xMouseCoord, yMouseCoord);
-    });
+    }));
 }
 
 void InputManager::pressKey(InputManager::Key keyId) {
@@ -59,9 +61,9 @@ bool InputManager::isKeyDown(InputManager::Key keyId) const{
 
 template <typename T, typename U>
 bool InputManager::getKeyState(const std::unordered_map<T, bool>& keyMap, U keyId) const{
-    auto key = keyMap.find(keyId);
-    if (key != keyMap.end())
-        return key->second;
+    auto iter = keyMap.find(keyId);
+    if (iter != keyMap.end())
+        return iter->second;
     return false;
 }
 
@@ -80,4 +82,12 @@ void InputManager::setMouseCoordinates(unsigned int x, unsigned int y) {
 
 MousePosition InputManager::getMouseCoords() const {
     return mouseCoordinates_;
+}
+
+InputManager::~InputManager() {
+    Events::keyPressed.removeListener(HanderIdHolder::getIdFor("keyPress"));
+    Events::keyReleased.removeListener(HanderIdHolder::getIdFor("keyRelease"));
+    Events::mouseButtonPressed.removeListener(HanderIdHolder::getIdFor("mouseButtonPress"));
+    Events::mouseButtonReleased.removeListener(HanderIdHolder::getIdFor("mouseButtonRelease"));
+    Events::mouseMoved.removeListener(HanderIdHolder::getIdFor("mouseMove"));
 }
