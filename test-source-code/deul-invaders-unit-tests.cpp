@@ -1,7 +1,12 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "../game-source-code/gui/window/Window.h"
+#include "../game-source-code/exceptions/Exceptions.h"
+#include "../game-source-code/event/Event.h"
+#include "../game-source-code/input/InputManager.h"
+#include "../game-source-code/globals/Globals.h"
 
+using Globals::Events;
 using Gui::Window;
 
 //////////////////////////////////////////////////////////////////
@@ -93,3 +98,61 @@ TEST_CASE("The same callback function is treated as a unique handler when subscr
     CHECK_NE(handlerTwoId, -1); //handler registration successful
     CHECK_NE(handlerOneId, handlerTwoId);
 }
+
+/////////////////////////////////////////////////////////////////
+/// Input manager class tests
+/////////////////////////////////////////////////////////////////
+
+TEST_CASE("A key is released by default"){
+    auto inputManager = InputManager();
+    CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::A));
+    CHECK_FALSE(inputManager.isKeyDown(InputManager::Key::A));
+}
+
+TEST_CASE("A mouse button is released by default"){
+    auto inputManager = InputManager();
+    CHECK_FALSE(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton));
+}
+
+TEST_CASE("A key that is pressed and was previously released is pressed"){
+    auto inputManager = InputManager();
+    Events::keyPressed.notifyListeners(InputManager::Key::B);
+    CHECK(inputManager.isKeyPressed(InputManager::Key::B));
+}
+
+TEST_CASE("A mouse button that is pressed and was previously released is pressed"){
+    auto inputManager = InputManager();
+    Events::mouseButtonPressed.notifyListeners(InputManager::MouseButton::LMouseButton, 0, 0);
+    CHECK(inputManager.isMouseButtonPressed(InputManager::MouseButton::LMouseButton));
+}
+
+TEST_CASE("A key that is not pressed is not pressed"){
+    auto inputManager = InputManager();
+    Events::keyPressed.notifyListeners(InputManager::Key::K);
+    CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::H));
+}
+
+TEST_CASE("A mouse button that is not pressed is not pressed"){
+    auto inputManager = InputManager();
+    Events::mouseButtonPressed.notifyListeners(InputManager::MouseButton::LMouseButton, 0, 0);
+    CHECK_FALSE(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton));
+}
+
+/*
+TEST_CASE("A key that is pressed and was previously pressed is held and not pressed"){
+    auto inputManager = InputManager();
+    Events::keyPressed.notifyListeners(InputManager::Key::Q);
+    inputManager.update();
+    //Key still pressed after call to update (that is, no call to release has been made)
+    CHECK(inputManager.isKeyDown(InputManager::Key::Q));
+    CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::Q));
+}
+
+TEST_CASE("A key that is released and was previously held/pressed is released"){
+    auto inputManager = InputManager();
+    Events::keyPressed.notifyListeners(InputManager::Key::Escape);
+    inputManager.update();
+    Events::keyReleased.notifyListeners(InputManager::Key::Escape);
+    CHECK_FALSE(inputManager.isKeyDown(InputManager::Key::Escape));
+    CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::Escape));
+}*/
