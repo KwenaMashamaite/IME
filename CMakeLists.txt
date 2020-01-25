@@ -21,7 +21,9 @@ set(SOURCE_FILES
         game-source-code/event/Event.h
         game-source-code/event/Event.inl
         game-source-code/event/EventPublisher.cpp
-        game-source-code/event/EventPublisher.h)
+        game-source-code/event/EventPublisher.h
+        game-source-code/event/HandlerIdHolder.cpp
+        game-source-code/event/HandlerIdHolder.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
