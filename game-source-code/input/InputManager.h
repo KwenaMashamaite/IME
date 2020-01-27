@@ -96,7 +96,7 @@ public:
      * A key is considered held if it's currently pressed and it
      * was also pressed during the last call to update()
      */
-    bool isKeyDown(Key key) const;
+    bool isKeyHeld(Key key) const;
 
     /**
     * @brief Check if a mouse button is pressed or not
@@ -166,11 +166,11 @@ private:
     void setMouseCoordinates(unsigned int x, unsigned int y);
 
     /**
-     * @brief Check if a key was down or not in the previous upadate
+     * @brief Check if a key was held or not in the previous update
      * @param Key Key to check
-     * @return true if key was down, false if it was not down
+     * @return true if key was held, false if it was not held
      */
-    bool wasKeyDown(Key key) const;
+    bool wasKeyHeld(Key key) const;
 
     /**
      * @brief Get the state of a key/mousebutton
@@ -182,7 +182,7 @@ private:
      * an argument, it returns true if the key/mouseButton is "PRESSED"
      * and false if the key/mouseButton is not pressed. If the "previous"
      * key/mouseButton map is provided as an argument, then the function
-     * returns true if the key/mouseButton is "HELD" and false if the
+     * returns true if the key/mouseButton was "HELD" and false if the
      * key/mouseButton is not held.
      */
     template <typename T, typename U>

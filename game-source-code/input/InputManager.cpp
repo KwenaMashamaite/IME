@@ -42,12 +42,12 @@ void InputManager::update(){
         previousMouseButtonState_[iter.first] = iter.second;
 }
 
-bool InputManager::wasKeyDown(InputManager::Key keyId) const {
-    return getKeyState(previousKeyMap_, keyId);
+bool InputManager::wasKeyHeld(InputManager::Key key) const {
+    return getKeyState(previousKeyMap_, key);
 }
 
 bool InputManager::isKeyPressed(InputManager::Key keyId) const{
-    return (isKeyDown(keyId) && !wasKeyDown(keyId));
+    return (isKeyHeld(keyId) && !wasKeyHeld(keyId));
 }
 
 bool InputManager::isMouseButtonPressed(InputManager::MouseButton mouseButton) const {
@@ -55,8 +55,8 @@ bool InputManager::isMouseButtonPressed(InputManager::MouseButton mouseButton) c
             && !getKeyState(previousMouseButtonState_, mouseButton));
 }
 
-bool InputManager::isKeyDown(InputManager::Key keyId) const{
-    return getKeyState(currentKeyMap_, keyId);
+bool InputManager::isKeyHeld(InputManager::Key key) const{
+    return getKeyState(currentKeyMap_, key);
 }
 
 template <typename T, typename U>

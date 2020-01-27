@@ -106,7 +106,7 @@ TEST_CASE("The same callback function is treated as a unique handler when subscr
 TEST_CASE("A key is released by default"){
     auto inputManager = InputManager();
     CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::A));
-    CHECK_FALSE(inputManager.isKeyDown(InputManager::Key::A));
+    CHECK_FALSE(inputManager.isKeyHeld(InputManager::Key::A));
 }
 
 TEST_CASE("A mouse button is released by default"){
@@ -126,10 +126,11 @@ TEST_CASE("A mouse button that is pressed and was previously released is pressed
     CHECK(inputManager.isMouseButtonPressed(InputManager::MouseButton::LMouseButton));
 }
 
-TEST_CASE("A key that is not pressed is not pressed"){
+TEST_CASE("A key that is not pressed/held is not pressed/held"){
     auto inputManager = InputManager();
     Events::keyPressed.notifyListeners(InputManager::Key::K);
     CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::H));
+    //CHECK_FALSE(inputManager.isKeyHeld(InputManager::Key::H));
 }
 
 TEST_CASE("A mouse button that is not pressed is not pressed"){
@@ -153,6 +154,6 @@ TEST_CASE("A key that is released and was previously held/pressed is released"){
     Events::keyPressed.notifyListeners(InputManager::Key::Escape);
     inputManager.update();
     Events::keyReleased.notifyListeners(InputManager::Key::Escape);
-    CHECK_FALSE(inputManager.isKeyDown(InputManager::Key::Escape));
+    CHECK_FALSE(inputManager.isKeyHeld(InputManager::Key::Escape));
     CHECK_FALSE(inputManager.isKeyPressed(InputManager::Key::Escape));
 }*/
