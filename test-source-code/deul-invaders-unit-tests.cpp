@@ -45,7 +45,7 @@ TEST_CASE("Window is created with specified dimensions"){
 TEST_CASE("A Callback function can be registered to an event"){
     auto clickEvent = Event<>();
     auto clickEventHandlerId = clickEvent.addListener([](){});
-    CHECK(clickEventHandlerId == 1u);
+    CHECK_EQ(clickEventHandlerId, 1u);
 }
 
 TEST_CASE("Event handlers can be notified when an event is raised"){
@@ -60,20 +60,26 @@ TEST_CASE("Event handlers can be notified when an event is raised"){
         mousePosition.second = yMouseCoord;
     });
     mouse.click(50, 40);
-    CHECK((mousePosition.first == 50 && mousePosition.second == 40));
+    CHECK_EQ(mousePosition.first, 50);
+    CHECK_EQ(mousePosition.second, 40);
 }
 
 TEST_CASE("A callback function can be removed from an event"){
     auto event = Event<>();
+    auto anonymousHandler = event.addListener([]{});
+    CHECK(event.removeListener(anonymousHandler));
+}
+
+TEST_CASE("A callback function that is removed from an event does not execute"){
+    auto event = Event<>();
     auto counter = 0u;
     auto counterHandlerId = event.addListener([&counter](){++counter;});
     event.notifyListeners();
-    CHECK(counter == 1);
     event.notifyListeners();
-    CHECK(counter == 2);
+    CHECK_EQ(counter, 2);
     CHECK(event.removeListener(counterHandlerId));
     event.notifyListeners();
-    CHECK_FALSE(counter == 3);
+    CHECK_NE(counter, 3);
 }
 
 TEST_CASE("A non existent event handler cannot be removed from event handler list"){
@@ -85,14 +91,14 @@ TEST_CASE("A non existent event handler cannot be removed from event handler lis
 TEST_CASE("An event can have multiple handlers registered to it"){
     auto event = Event<>();
     event.addListener([](){});
-    auto secondHandlerId = event.addListener(([](){}));
-    auto thirdHandlerId = event.addListener([](){});
-    CHECK(thirdHandlerId == secondHandlerId + 1);
+    auto secondHandlerId = event.addListener([]{});
+    auto thirdHandlerId = event.addListener([]{});
+    CHECK_EQ(thirdHandlerId, secondHandlerId + 1);
 }
 
 TEST_CASE("The same callback function is treated as a unique handler when subscribing to an event"){
     auto clickEvent = Event<int, int>();
-    auto print = [](int x, int y){/*Code that prints the mouse coordinates to the console*/};
+    auto print = [](int x, int y){/*Code that prints x and y on the console*/};
     auto handlerOneId = clickEvent.addListener(print);
     auto handlerTwoId = clickEvent.addListener(print);
     CHECK_NE(handlerTwoId, -1); //handler registration successful
