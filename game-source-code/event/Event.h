@@ -28,6 +28,11 @@ public:
      * @note If the same handler is registered multiple times (i.e, function
      * called with the same argument multiple times), It will be treated
      * as a unique handler and hence given an identification number.
+     *
+     * @warning If the registered callback function is a member of a class or a lambda
+	 * expression that captures "this", then the callback function must be removed from
+	 * the event handler list when the object goes out of scope. If not removed, the event
+	 * will try to invoke a non-existent handler and this will lead to undefined behavior
      */
     int addListener(const EventHandler<Args...> &callback);
 
@@ -44,10 +49,10 @@ public:
     void setNotificationPause(bool isNotifiable, unsigned int handlerId);
 
     /**
-     * @brief Deregister a callback function from an event
+     * @brief Deregister/remove a callback function from an event
      * @param handlerId Event handlers identification number
      * @return True if handler was successfully removed, false if
-     *         handler does not exist
+     *         handler does not exist and could not be removed
      */
     bool removeListener(unsigned int handlerId);
 
