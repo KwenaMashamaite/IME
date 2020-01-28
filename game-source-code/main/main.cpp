@@ -20,10 +20,6 @@ int main(){
     ResourceManager::load(ResourceId::SOUND_BUFFER, {"invaderExplosion.wav", "playerExplosion.wav", "laserExplosion.wav"});
     ResourceManager::load(ResourceId::MUSIC, "originalSpaceInvadersTrack.ogg");
 
-    Globals::Events::windowClose.addListener([&window](){
-        window.close();
-    });
-
     auto soundEffectPlayer = Audio::SoundEffectPlayer();
     auto musicPlayer = Audio::MusicPlayer();
     musicPlayer.play("originalSpaceInvadersTrack.ogg");
