@@ -4,6 +4,7 @@
 #include "event/EventPublisher.h"
 #include "globals/Globals.h"
 #include "audio/SoundEffectPlayer.h"
+#include "audio/MusicPlayer.h"
 
 int main(){
     auto window = Gui::Window();
@@ -16,13 +17,17 @@ int main(){
     playerOne.setPosition(window.getDimensions().width / 2.0f, window.getDimensions().height / 2.0f);
     auto inputManager = InputManager();
 
-    auto soundEffectPlayer = Audio::SoundEffectPlayer();
     ResourceManager::load(ResourceId::SOUND_BUFFER, {"invaderExplosion.wav", "playerExplosion.wav", "laserExplosion.wav"});
+    ResourceManager::load(ResourceId::MUSIC, "originalSpaceInvadersTrack.ogg");
 
     Globals::Events::windowClose.addListener([&window](){
         window.close();
     });
 
+    auto soundEffectPlayer = Audio::SoundEffectPlayer();
+    auto musicPlayer = Audio::MusicPlayer();
+    musicPlayer.play("originalSpaceInvadersTrack.ogg");
+    musicPlayer.setLoop(true);
     while (window.isOpen()){
         EventPublisher::update(window);
 
@@ -31,6 +36,12 @@ int main(){
         }
         if(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton)){
             soundEffectPlayer.play("laserExplosion.wav");
+        }
+        if(inputManager.isKeyPressed(InputManager::Key::P)){
+            musicPlayer.pause();
+        }
+        if(inputManager.isKeyPressed(InputManager::Key::R)){
+            musicPlayer.resume();
         }
 
         inputManager.update();
