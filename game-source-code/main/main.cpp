@@ -3,7 +3,7 @@
 #include "input/InputManager.h"
 #include "event/EventPublisher.h"
 #include "globals/Globals.h"
-#include <iostream>
+#include "audio/SoundEffectPlayer.h"
 
 int main(){
     auto window = Gui::Window();
@@ -16,6 +16,9 @@ int main(){
     playerOne.setPosition(window.getDimensions().width / 2.0f, window.getDimensions().height / 2.0f);
     auto inputManager = InputManager();
 
+    auto soundEffectPlayer = Audio::SoundEffectPlayer();
+    ResourceManager::load(ResourceId::SOUND_BUFFER, {"invaderExplosion.wav", "playerExplosion.wav", "laserExplosion.wav"});
+
     Globals::Events::windowClose.addListener([&window](){
         window.close();
     });
@@ -24,11 +27,12 @@ int main(){
         EventPublisher::update(window);
 
         if(inputManager.isKeyPressed(InputManager::Key::A)){
-            std::cout << "you pressed A" << std::endl;
+            soundEffectPlayer.play("invaderExplosion.wav");
         }
         if(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton)){
-            std::cout << "You right clicked mouse" << std::endl;
+            soundEffectPlayer.play("laserExplosion.wav");
         }
+
         inputManager.update();
         window.clear();
         window.draw(background);
