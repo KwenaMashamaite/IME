@@ -6,14 +6,14 @@
  * using their aliases.
  */
 
-#ifndef HANDERIDHOLDER_H
-#define HANDERIDHOLDER_H
+#ifndef IDHOLDER_H
+#define IDHOLDER_H
 
 #include <unordered_map>
 #include <string>
 
 namespace Utility {
-    class HanderIdHolder {
+    class IdHolder {
     public:
         /**
          * @brief Add a handlers identification number by name

@@ -22,8 +22,8 @@ set(SOURCE_FILES
         game-source-code/event/Event.inl
         game-source-code/event/EventPublisher.cpp
         game-source-code/event/EventPublisher.h
-        game-source-code/event/HandlerIdHolder.cpp
-        game-source-code/event/HandlerIdHolder.h
+        game-source-code/event/IdHolder.cpp
+        game-source-code/event/IdHolder.h
         game-source-code/audio/IAudioPlayer.h
         game-source-code/audio/SoundEffectPlayer.cpp
         game-source-code/audio/SoundEffectPlayer.h

@@ -1,28 +1,28 @@
 #include "InputManager.h"
-#include "event/HandlerIdHolder.h"
+#include "event/IdHolder.h"
 #include "globals/Globals.h"
 
 using Globals::Events;
-using Utility::HanderIdHolder;
+using Utility::IdHolder;
 
 InputManager::InputManager() : mouseCoordinates_{0, 0} {
-    HanderIdHolder::add("keyPress", Events::keyPressed.addListener([this](InputManager::Key key) {
+    IdHolder::add("keyPress", Events::keyPressed.addListener([this](InputManager::Key key) {
         pressKey(key);
     }));
 
-    HanderIdHolder::add("keyRelease", Events::keyReleased.addListener([this](Key key) {
+    IdHolder::add("keyRelease", Events::keyReleased.addListener([this](Key key) {
         releaseKey(key);
     }));
 
-    HanderIdHolder::add("mouseButtonPress", Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
+    IdHolder::add("mouseButtonPress", Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
         pressMouse(button);
     }));
 
-    HanderIdHolder::add("mouseButtonRelease", Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
+    IdHolder::add("mouseButtonRelease", Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
         releaseMouse(button);
     }));
 
-    HanderIdHolder::add("mouseMove", Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
+    IdHolder::add("mouseMove", Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
         setMouseCoordinates(xMouseCoord, yMouseCoord);
     }));
 }
@@ -85,9 +85,9 @@ MousePosition InputManager::getMouseCoords() const {
 }
 
 InputManager::~InputManager() {
-    Events::keyPressed.removeListener(HanderIdHolder::getIdFor("keyPress"));
-    Events::keyReleased.removeListener(HanderIdHolder::getIdFor("keyRelease"));
-    Events::mouseButtonPressed.removeListener(HanderIdHolder::getIdFor("mouseButtonPress"));
-    Events::mouseButtonReleased.removeListener(HanderIdHolder::getIdFor("mouseButtonRelease"));
-    Events::mouseMoved.removeListener(HanderIdHolder::getIdFor("mouseMove"));
+    Events::keyPressed.removeListener(IdHolder::getIdFor("keyPress"));
+    Events::keyReleased.removeListener(IdHolder::getIdFor("keyRelease"));
+    Events::mouseButtonPressed.removeListener(IdHolder::getIdFor("mouseButtonPress"));
+    Events::mouseButtonReleased.removeListener(IdHolder::getIdFor("mouseButtonRelease"));
+    Events::mouseMoved.removeListener(IdHolder::getIdFor("mouseMove"));
 }
