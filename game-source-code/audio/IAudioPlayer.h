@@ -17,7 +17,7 @@ namespace Audio {
         virtual void play(const std::string &filename) = 0;
 
         /**
-         * @brief Stop the currently playing audio
+         * @brief Stop the currently playing or paused audio
          */
         virtual void stop() = 0;
 

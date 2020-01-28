@@ -27,9 +27,8 @@ namespace Audio {
         void play(const std::string &filename) override;
 
         /**
-         * @brief Loop/unloop playing music
-         * @param isLoop Set to true to loop music, false to unloop
-         * 				  it is false by default
+         * @brief Loop/unloop music
+         * @param isLoop Set to true to loop music, false to unloop nusic
          */
         void setLoop(bool isLoop);
 
@@ -44,7 +43,7 @@ namespace Audio {
         void resume() override;
 
         /**
-         * @brief Stop music
+         * @brief Stop playing or paused music
          */
         void stop() override;
 

@@ -21,23 +21,23 @@ namespace Audio {
     class SoundEffectPlayer : public IAudioPlayer{
     public:
         /**
-         * @brief play sound
+         * @brief Play sound
          * @param filename File name of the sound to play
          */
         void play(const std::string &filename) override;
 
         /**
-         * @brief Stop effect
+         * @brief Stop sound effect
          */
         void stop() override;
 
         /**
-         * @brief Pause effect
+         * @brief Pause sound effect
          */
         void pause() override;
 
         /**
-         * @brief Resume effect
+         * @brief Resume sound effect
          */
         void resume() override;
 
