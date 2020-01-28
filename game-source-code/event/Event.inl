@@ -2,11 +2,11 @@
 #include <algorithm>
 
 template <typename... Args>
-int Event<Args...>::addListener(const EventHandler<Args...> &callback) {
+int Event<Args...>::addListener(const EventHandler<Args...> &callbackFunc) {
     auto handlerId = ++handlerIdCounter_;
     auto isNotifiable = true;
     auto handlerListSizeBeforeInsertion = handlerList_.size();
-    handlerList_.push_back(std::move(Handler{handlerId, isNotifiable, callback}));
+    handlerList_.push_back(std::move(Handler{handlerId, isNotifiable, callbackFunc}));
     if (handlerListSizeBeforeInsertion == handlerList_.size()) { //Insertion failed
         handlerIdCounter_--;
         return -1;

@@ -16,7 +16,7 @@ class Event{
 public:
     /**
      * @brief Register a callback function to an event
-     * @param callback Function to execute when event takes place
+     * @param callbackFunc Function to execute when event takes place
      * @return Event handlers (callback function) unique identification number
      *
      * The function returns a positive integer if the callback function was
@@ -34,7 +34,7 @@ public:
 	 * the event handler list when the object goes out of scope. If not removed, the event
 	 * will try to invoke a non-existent handler and this will lead to undefined behavior
      */
-    int addListener(const EventHandler<Args...> &callback);
+    int addListener(const EventHandler<Args...> &callbackFunc);
 
     /**
      * @brief Temporarily stop a handler from receiving event notifications
