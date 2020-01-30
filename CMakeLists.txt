@@ -28,7 +28,11 @@ set(SOURCE_FILES
         game-source-code/audio/SoundEffectPlayer.cpp
         game-source-code/audio/SoundEffectPlayer.h
         game-source-code/audio/MusicPlayer.cpp
-        game-source-code/audio/MusicPlayer.h)
+        game-source-code/audio/MusicPlayer.h
+        game-source-code/event/HandlerIdHolder.cpp
+        game-source-code/event/HandlerIdHolder.h
+        game-source-code/gui/control/UIElement.cpp
+        game-source-code/gui/control/UIElement.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
