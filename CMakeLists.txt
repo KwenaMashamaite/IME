@@ -38,7 +38,10 @@ set(SOURCE_FILES
         game-source-code/gui/layout/Panel.cpp
         game-source-code/gui/layout/Panel.h
         game-source-code/gui/layout/StackPanel.cpp
-        game-source-code/gui/layout/StackPanel.h)
+        game-source-code/gui/layout/StackPanel.h
+        game-source-code/gui/control/ClickableUIElement.cpp
+        game-source-code/gui/control/ClickableUIElement.h
+        )
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
