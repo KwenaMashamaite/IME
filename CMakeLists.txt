@@ -32,7 +32,7 @@ set(SOURCE_FILES
         game-source-code/event/HandlerIdHolder.cpp
         game-source-code/event/HandlerIdHolder.h
         game-source-code/gui/control/UIElement.cpp
-        game-source-code/gui/control/UIElement.h)
+        game-source-code/gui/control/UIElement.h game-source-code/gui/control/TextBlock.cpp game-source-code/gui/control/TextBlock.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
