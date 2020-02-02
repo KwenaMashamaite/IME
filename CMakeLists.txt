@@ -41,7 +41,8 @@ set(SOURCE_FILES
         game-source-code/gui/layout/StackPanel.h
         game-source-code/gui/control/ClickableUIElement.cpp
         game-source-code/gui/control/ClickableUIElement.h
-        )
+        game-source-code/gui/control/Button.cpp
+        game-source-code/gui/control/Button.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
