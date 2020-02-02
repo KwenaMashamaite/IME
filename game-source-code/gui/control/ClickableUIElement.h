@@ -47,17 +47,17 @@ namespace Gui {
 
     private:
         /**
-        * @brief Notifies event listeners when the mouse enters the element
+        * @brief Notify event listeners when the mouse enters the element
         */
         void onHover();
 
         /**
-         * @brief Notifies event listeners when the element is clicked
+         * @brief Notify event listeners when the element is clicked
          */
         void onClick();
 
         /**
-         * @brief Notifies event listeners when the mouse leaves the element
+         * @brief Notify event listeners when the mouse leaves the element
          */
         void onHoverLost();
 
