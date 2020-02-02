@@ -82,7 +82,7 @@ namespace Gui {
          * @brief Get the last element that was added to the panel
          * @return A shared pointer to the last element that was added to the panel
          */
-        std::shared_ptr<UIElement> getLastInsertedElement() const;
+        std::shared_ptr<UIElement> lastInsertedElement() const;
 
     private:
         //Elements contained by the panel

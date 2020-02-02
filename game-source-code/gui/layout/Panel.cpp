@@ -44,7 +44,7 @@ bool Gui::Panel::add(std::shared_ptr<UIElement> UIElement) {
     return insertIter.second;
 }
 
-std::shared_ptr<Gui::UIElement> Gui::Panel::getLastInsertedElement() const {
+std::shared_ptr<Gui::UIElement> Gui::Panel::lastInsertedElement() const {
     return lastInsertedElement_;
 }
 
