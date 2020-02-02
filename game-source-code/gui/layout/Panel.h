@@ -64,6 +64,12 @@ namespace Gui {
          */
         virtual void addElement(std::shared_ptr<UIElement> guiElement) = 0;
 
+        /**
+         * @brief Render the elements of a panel on a render target
+         * @param renderTarget Render target to draw UI elements on
+         */
+        virtual void draw(Window &renderTarget);
+
     protected:
         /**
          * @brief Add gui element to underlying data structure

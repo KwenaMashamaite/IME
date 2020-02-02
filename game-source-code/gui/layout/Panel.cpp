@@ -23,6 +23,14 @@ void Gui::Panel::setPosition(const Position &position) {
     panel_.setPosition(position.x, position.y);
 }
 
+void Gui::Panel::draw(Window &renderTarget) {
+    renderTarget.draw(panel_);
+    for (auto &element : guiElementList_) {
+        if (element != nullptr)
+            element->draw(renderTarget);
+    }
+}
+
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
     panel_.setFillColor(sf::Color(fillColour.red, fillColour.green,
                         fillColour.blue, fillColour.opacity));
