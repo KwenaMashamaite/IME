@@ -30,10 +30,10 @@ namespace Gui {
     };
 
     struct Colour{
-        unsigned int red;
-        unsigned int green;
-        unsigned int blue;
-        unsigned int opacity;
+        unsigned int red = 0;
+        unsigned int green = 0;
+        unsigned int blue = 0;
+        unsigned int opacity = 255;
     };
 
     class UIElement {
