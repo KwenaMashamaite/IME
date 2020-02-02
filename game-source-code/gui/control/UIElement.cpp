@@ -66,7 +66,7 @@ void Gui::UIElement::setPadding(const Gui::Padding &padding) {
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
-    border_.setFillColor(sf::Color(fillColour.red, fillColour.green, fillColour.blue));
+    border_.setFillColor(sf::Color(fillColour.red, fillColour.green, fillColour.blue, fillColour.opacity));
 }
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
@@ -84,7 +84,7 @@ void Gui::UIElement::setText(const std::string &content) {
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
-    textContent_.setFillColor(sf::Color(textFillColour.red, textFillColour.green, textFillColour.blue));
+    textContent_.setFillColor(sf::Color(textFillColour.red, textFillColour.green, textFillColour.blue, textFillColour.opacity));
 }
 
 Position Gui::UIElement::getPosition() const {

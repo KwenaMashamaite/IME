@@ -33,6 +33,7 @@ namespace Gui {
         unsigned int red;
         unsigned int green;
         unsigned int blue;
+        unsigned int opacity;
     };
 
     class UIElement {
