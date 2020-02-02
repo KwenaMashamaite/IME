@@ -44,7 +44,45 @@ namespace Gui {
          */
         void setDimensions(const Dimensions &dimensions);
 
+        /**
+         * @brief Set the fill colour of the panel
+         * @param fillColour Fill colour to set
+         *
+         * The panel has a transparent fill colour by default
+         */
+        void setFillColour(Colour fillColour);
+
+        /**
+         * @brief Get the number of elements in the panel
+         * @return Number of elements in the panel
+         */
+        unsigned int size() const;
+
+        /**
+         * @brief Add a UI element to the panel
+         * @param guiElement Element to add to panel
+         */
+        virtual void addElement(std::shared_ptr<UIElement> guiElement) = 0;
+
+    protected:
+        /**
+         * @brief Add gui element to underlying data structure
+         * @param guiElement Element to be added
+         * @return True if element was successfully added. false otherwise
+         */
+        bool add(std::shared_ptr<UIElement> guiElement);
+
+        /**
+         * @brief Get the last element that was added to the panel
+         * @return A shared pointer to the last element that was added to the panel
+         */
+        std::shared_ptr<UIElement> getLastInsertedElement() const;
+
     private:
+        //Elements contained by the panel
+        std::set<std::shared_ptr<UIElement>> guiElementList_;
+        //Pointer to the last inserted element. (Can't use back(), Elements are sorted after insertion)
+        std::shared_ptr<UIElement> lastInsertedElement_;
         //Representation
         sf::RectangleShape panel_;
     };

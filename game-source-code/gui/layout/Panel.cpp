@@ -22,3 +22,24 @@ Position Gui::Panel::getPosition() const {
 void Gui::Panel::setPosition(const Position &position) {
     panel_.setPosition(position.x, position.y);
 }
+
+void Gui::Panel::setFillColour(Gui::Colour fillColour) {
+    panel_.setFillColor(sf::Color(fillColour.red, fillColour.green,
+                        fillColour.blue, fillColour.opacity));
+}
+
+bool Gui::Panel::add(std::shared_ptr<UIElement> UIElement) {
+    if (UIElement == nullptr)
+        return false;
+    auto insertIter = guiElementList_.insert(UIElement);
+    lastInsertedElement_ = std::move(UIElement);
+    return insertIter.second;
+}
+
+std::shared_ptr<Gui::UIElement> Gui::Panel::getLastInsertedElement() const {
+    return lastInsertedElement_;
+}
+
+unsigned int Gui::Panel::size() const {
+    return guiElementList_.size();
+}
