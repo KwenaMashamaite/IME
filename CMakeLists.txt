@@ -29,8 +29,6 @@ set(SOURCE_FILES
         game-source-code/audio/SoundEffectPlayer.h
         game-source-code/audio/MusicPlayer.cpp
         game-source-code/audio/MusicPlayer.h
-        game-source-code/event/HandlerIdHolder.cpp
-        game-source-code/event/HandlerIdHolder.h
         game-source-code/gui/control/UIElement.cpp
         game-source-code/gui/control/UIElement.h
         game-source-code/gui/control/TextBlock.cpp
