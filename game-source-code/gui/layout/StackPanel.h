@@ -6,6 +6,7 @@
 #define STACKPANEL_H
 
 #include "gui/layout/Panel.h"
+#include <memory>
 
 namespace Gui {
     enum class Orientation{
@@ -32,6 +33,8 @@ namespace Gui {
     private:
         //UI element orientation
         Orientation orientation_;
+        //Pointer to the last inserted element
+        std::shared_ptr<UIElement> lastInsertedElement_;
     };
 }
 

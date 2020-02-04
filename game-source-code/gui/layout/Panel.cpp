@@ -39,13 +39,7 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
 bool Gui::Panel::add(std::shared_ptr<UIElement> UIElement) {
     if (UIElement == nullptr)
         return false;
-    auto insertIter = guiElementList_.insert(UIElement);
-    lastInsertedElement_ = std::move(UIElement);
-    return insertIter.second;
-}
-
-std::shared_ptr<Gui::UIElement> Gui::Panel::lastInsertedElement() const {
-    return lastInsertedElement_;
+    return guiElementList_.insert(UIElement).second;
 }
 
 unsigned int Gui::Panel::size() const {

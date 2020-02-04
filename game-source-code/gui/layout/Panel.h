@@ -78,17 +78,9 @@ namespace Gui {
          */
         bool add(std::shared_ptr<UIElement> guiElement);
 
-        /**
-         * @brief Get the last element that was added to the panel
-         * @return A shared pointer to the last element that was added to the panel
-         */
-        std::shared_ptr<UIElement> lastInsertedElement() const;
-
     private:
         //Elements contained by the panel
         std::set<std::shared_ptr<UIElement>> guiElementList_;
-        //Pointer to the last inserted element. (Can't use back(), Elements are sorted after insertion)
-        std::shared_ptr<UIElement> lastInsertedElement_;
         //Representation
         sf::RectangleShape panel_;
     };
