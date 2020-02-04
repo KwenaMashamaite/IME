@@ -4,7 +4,6 @@
 #include "event/IdHolder.h"
 
 using Utility::IdHolder;
-
 using Globals::Events;
 
 Gui::ClickableUIElement::ClickableUIElement(const std::string &content, const std::string &font,
@@ -17,32 +16,21 @@ Gui::ClickableUIElement::ClickableUIElement(const std::string &content) : UIElem
     subscribeToEvents();
 }
 
-void Gui::ClickableUIElement::onHover() {
-    isSelected_ = true;
-    mouseEnterEvent.notifyListeners();
-}
-
-void Gui::ClickableUIElement::onClick() {
-    clickEvent.notifyListeners();
-}
-
-void Gui::ClickableUIElement::onHoverLost() {
-    isSelected_ = false;
-    mouseLeaveEvent.notifyListeners();
-}
-
 void Gui::ClickableUIElement::subscribeToEvents() {
     IdHolder::add("mouseMoved", Events::mouseMoved.addListener([this](int x, int y) {
-        if (contains(x, y) && !isSelected_)
-            onHover();
-        else if (!contains(x, y) && isSelected_)
-            onHoverLost();
+        if (contains(x, y) && !isSelected_) {
+            isSelected_ = true;
+            mouseEnterEvent.notifyListeners();
+        }else if (!contains(x, y) && isSelected_) {
+            isSelected_ = false;
+            mouseLeaveEvent.notifyListeners();
+        }
     }));
 
     IdHolder::add("mouseButtonPressed", Events::mouseButtonReleased.addListener(
             [this](InputManager::MouseButton releasedMouseButton, int x, int y){
                 if (isSelected_ && releasedMouseButton == InputManager::MouseButton::LMouseButton)
-                    onClick();
+                    clickEvent.notifyListeners();
     }));
 }
 
