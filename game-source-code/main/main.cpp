@@ -1,50 +1,60 @@
-#include "gui/window/Window.h"
-#include "resources/ResourceManager.h"
-#include "input/InputManager.h"
-#include "event/EventPublisher.h"
 #include "globals/Globals.h"
-#include "audio/SoundEffectPlayer.h"
-#include "audio/MusicPlayer.h"
+#include "gui/window/Window.h"
+#include "gui/layout/StackPanel.h"
+#include "gui/control/Button.h"
+#include "event/EventPublisher.h"
+#include <ctime>
+#include <iostream>
 
 int main(){
+    srand(time(nullptr));
     auto window = Gui::Window();
-    window.create("duel invaders", 600u, 600u);
-    auto resourceManager = ResourceManager();
-    auto background = sf::Sprite(resourceManager.getTexture("backgroundTwo.png"));
-    auto title = sf::Text("DUEL INVADERS", resourceManager.getFont("basson.ttf"), 50u);
-    title.setPosition(window.getDimensions().width / 2.0f - title.getGlobalBounds().width / 2.0f, 0.0f);
-    auto playerOne = sf::Sprite(resourceManager.getTexture("playerOne.png"));
-    playerOne.setPosition(window.getDimensions().width / 2.0f, window.getDimensions().height / 2.0f);
-    auto inputManager = InputManager();
+    window.create("test", 600, 600);
 
-    ResourceManager::load(ResourceId::SOUND_BUFFER, {"invaderExplosion.wav", "playerExplosion.wav", "laserExplosion.wav"});
-    ResourceManager::load(ResourceId::MUSIC, "originalSpaceInvadersTrack.ogg");
+    auto greetings = std::vector{"Sanibonani\n (isiZulu)", "Molo\n (isiXhosa)", "Hallo\n (Afrikaans)",
+                                 "Thobela\n (Sepedi)", "Dumela\n (Setswana)", "Lumela\n (Sesotho)",
+                                 "Abusheni\n (Xitsonga)", "Sanibona\n (SiSwati)", "Avuwani\n (Tshivenda)",
+                                 "Salibonani\n (isiNdebele)", "Hello\n (English)"};
 
-    auto soundEffectPlayer = Audio::SoundEffectPlayer();
-    auto musicPlayer = Audio::MusicPlayer();
-    musicPlayer.play("originalSpaceInvadersTrack.ogg");
-    musicPlayer.setLoop(true);
-    while (window.isOpen()){
-        EventPublisher::update(window);
+    auto fonts = std::vector{"sansation.ttf", "hangedLetters.ttf", "basson.ttf", "philosopher.ttf"};
 
-        if(inputManager.isKeyPressed(InputManager::Key::A)){
-            soundEffectPlayer.play("invaderExplosion.wav");
-        }
-        if(inputManager.isMouseButtonPressed(InputManager::MouseButton::RMouseButton)){
-            soundEffectPlayer.play("laserExplosion.wav");
-        }
-        if(inputManager.isKeyPressed(InputManager::Key::P)){
-            musicPlayer.pause();
-        }
-        if(inputManager.isKeyPressed(InputManager::Key::R)){
-            musicPlayer.resume();
-        }
+    auto charSize = 20;
+    auto languagesPanel = Gui::StackPanel(0.0f, window.getDimensions().height / 2.0f, Gui::Orientation::Vertical);
+    for (const auto& greeting : greetings) {
+        languagesPanel.addElement([&]() {
+            auto button = std::make_shared<Gui::Button>(greeting);
+            button->setTextCharSize(charSize);
+            button->setPadding(20.0f);
+            button->setMargin(1.0f);
 
-        inputManager.update();
+            button->setPosition(window.getDimensions().width / 2.0f - button->getDimensions().width / 2.0f,
+                                window.getDimensions().height / 2.0f);
+
+            button->mouseEnterEvent.addListener([button]() {
+                button->setTextFillColour({34,56, 231});
+                button->setFillColour({10, 67, 90});
+            });
+            button->mouseLeaveEvent.addListener([button]() {
+                button->setTextFillColour({54, 78, 3});
+                button->setFillColour({98, 88, 143});
+            });
+            button->clickEvent.addListener([&, button]() {
+                auto randonIndex = rand() % (fonts.size() - 1);
+                button->setTextFont(fonts.at(randonIndex));
+            });
+            return button;
+        }());
+    }
+
+    Globals::Events::windowClose.addListener([&window](){
+        window.close();
+    });
+
+    auto emitter = EventPublisher();
+    while (window.isOpen()) {
+        emitter.update(window);
         window.clear();
-        window.draw(background);
-        window.draw(title);
-        window.draw(playerOne);
+        languagesPanel.draw(window);
         window.display();
     }
 
