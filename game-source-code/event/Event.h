@@ -30,9 +30,9 @@ public:
      * as a unique handler and hence given an identification number.
      *
      * @warning If the registered callback function is a member of a class or a lambda
-	 * expression that captures "this", then the callback function must be removed from
-	 * the event handler list when the object goes out of scope. If not removed, the event
-	 * will try to invoke a non-existent handler and this will lead to undefined behavior
+     * expression that captures "this", then the callback function must be removed from
+     * the event handler list when the object goes out of scope. If not removed, the event
+     * will try to invoke a non-existent handler and this will lead to undefined behavior
      */
     int addListener(const EventHandler<Args...> &callbackFunc);
 
