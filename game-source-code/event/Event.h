@@ -19,11 +19,10 @@ public:
      * @param callbackFunc Function to execute when event takes place
      * @return Event handlers (callback function) unique identification number
      *
-     * The function returns a positive integer if the callback function was
-     * successfully added to the event handler list, otherwise it returns -1 if
-     * the operation was unsuccessful. The identification number must be remembered
-     * in order to perform other operations on the handler such as removing it
-     * from the event handler list.
+     * The function returns a positive integer after the callback function is
+     * added to the event handler list. The identification number must be 
+     * remembered in order to perform other operations on the handler such 
+     * as removing it from the event handler list.
      *
      * @note If the same handler is registered multiple times (i.e, function
      * called with the same argument multiple times), It will be treated

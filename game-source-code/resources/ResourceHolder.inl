@@ -4,7 +4,8 @@
 #include <utility>
 
 template <class T>
-ResourceHolder<T>::ResourceHolder(const std::string& filePath, PassKey) : filePath_(filePath)
+ResourceHolder<T>::ResourceHolder(const std::string& filePath, PassKey) 
+    : filePath_(filePath)
 {}
 
 template <class T>
@@ -12,7 +13,9 @@ void ResourceHolder<T>::load(const std::string& filename){
     auto resource = T();
     if (!resource.loadFromFile(filePath_ + filename))
         throw FileNotFound("");
-    resourceHolder_.insert(std::make_pair(filename, std::move(std::make_shared<T>(resource))));
+    resourceHolder_.insert(
+        std::make_pair(filename, std::move(std::make_shared<T>(resource)))
+    );
 }
 
 template <>
@@ -29,7 +32,7 @@ std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
     if(pairFound != resourceHolder_.end())
         return (pairFound->second);
     else{
-        load(filename); //Function either throws an exception or operation is successful
-        return get(filename); //Since above operation is successful, resource exists in buffer
+        load(filename); //Either throws an exception or succeeds
+        return get(filename); //Return resource that just got loaded
     }
 }
