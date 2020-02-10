@@ -33,6 +33,16 @@ namespace Gui {
         Button(const std::string &content, const std::string &font, unsigned int textCharSize);
 
         /**
+         * @brief Activate or deactivate a button
+         * @param isActive Set to true to activate or false to deactivate
+         *
+         * The button is activated by default. When deactivated, the button
+         * becomes a static UI element. That is, Hovering the mouse over the
+         * button or clicking it will have no effect
+         */
+        void setActive(bool isActive);
+
+        /**
          * @brief Destructor
          */
         ~Button();
@@ -62,6 +72,8 @@ namespace Gui {
     private:
         //Selection state
         bool isSelected_;
+        inline static auto numOfInstantiations_ = 0u;
+        std::string instantiationNum_;
     };
 }
 
