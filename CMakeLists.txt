@@ -37,8 +37,6 @@ set(SOURCE_FILES
         game-source-code/gui/layout/Panel.h
         game-source-code/gui/layout/StackPanel.cpp
         game-source-code/gui/layout/StackPanel.h
-        game-source-code/gui/control/ClickableUIElement.cpp
-        game-source-code/gui/control/ClickableUIElement.h
         game-source-code/gui/control/Button.cpp
         game-source-code/gui/control/Button.h)
 
