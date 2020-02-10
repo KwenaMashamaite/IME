@@ -2,7 +2,7 @@
 #include <algorithm>
 
 template <typename... Args>
-int Event<Args...>::addListener(const EventHandler<Args...> &callbackFunc) {
+int Event<Args...>::addListener(const Callback<Args...> &callbackFunc) {
     auto handlerId = ++handlerIdCounter_;
     auto isNotifiable = true;
     handlerList_.push_back(std::move(Handler{handlerId, isNotifiable, callbackFunc}));

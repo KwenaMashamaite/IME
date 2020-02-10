@@ -61,7 +61,7 @@ void Gui::Button::setActive(bool isActive) {
     );
 }
 
-void Gui::Button::on(std::string &&eventName, EventHandler<> callbackFunc) {
+void Gui::Button::on(std::string &&eventName, Callback<> callbackFunc) {
     if (eventName == "click")
         clickEvent.addListener(callbackFunc);
     else if (eventName == "mouseEnter")

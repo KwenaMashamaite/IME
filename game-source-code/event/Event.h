@@ -9,7 +9,7 @@
 #include <vector>
 
 template <typename... Args>
-using EventHandler = std::function<void(Args...)>;
+using Callback = std::function<void(Args...)>;
 
 template <typename... Args>
 class Event{
@@ -33,7 +33,7 @@ public:
      * the event handler list when the object goes out of scope. If not removed, the event
      * will try to invoke a non-existent handler and this will lead to undefined behavior
      */
-    int addListener(const EventHandler<Args...> &callbackFunc);
+    int addListener(const Callback<Args...> &callbackFunc);
 
     /**
      * @brief Temporarily stop a handler from receiving event notifications
@@ -67,7 +67,7 @@ private:
     struct Handler{
         int id_;
         bool isNotifiable_;
-        EventHandler<Args...> callback_;
+        Callback<Args...> callback_;
     };
     //list of event handlers
     std::vector<Handler> handlerList_;

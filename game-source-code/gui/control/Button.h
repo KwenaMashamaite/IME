@@ -56,7 +56,7 @@ namespace Gui {
          * If the name of the event is none of the above events, the
          * operation is ignored
          */
-        void on(std::string&& eventName, EventHandler<> callbackFunc);
+        void on(std::string&& eventName, Callback<> callbackFunc);
 
         /**
          * @brief Destructor
