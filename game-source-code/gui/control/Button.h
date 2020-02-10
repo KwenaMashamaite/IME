@@ -43,6 +43,22 @@ namespace Gui {
         void setActive(bool isActive);
 
         /**
+         * @brief Register a callback function to an event
+         * @tparam Args Template parameter pack name
+         * @param eventName Name of the event to register callback on
+         * @param callbackFunc Callback function to be registered
+         *
+         * This function registers callbacks to the following events:
+         * 1. "click" - Fires when the button is clicked
+         * 2. "mouseEnter" - Fires when the mouse enters the button
+         * 3. "mouseLeave" - Fires when the mouse leaves the button
+         *
+         * If the name of the event is none of the above events, the
+         * operation is ignored
+         */
+        void on(std::string&& eventName, EventHandler<> callbackFunc);
+
+        /**
          * @brief Destructor
          */
         ~Button();
@@ -53,27 +69,19 @@ namespace Gui {
          */
         void subscribeToEvents();
 
-    public:
-        /**
-         * @brief Subscribe to get notified when the button is clicked
-         */
-        Event<> clickEvent;
-
-        /**
-         * @brief Subscribe to get notified when the mouse enters the button
-         */
-        Event<> mouseEnterEvent;
-
-        /**
-         * @brief Subscribe to get notified when the mouse leaves the button
-         */
-        Event<> mouseLeaveEvent;
-
     private:
         //Selection state
         bool isSelected_;
+        //Stores the number of times the class is instantiated
         inline static auto numOfInstantiations_ = 0u;
+        //Stores the instantiation number of a specific class object
         std::string instantiationNum_;
+        //Button clicked event
+        Event<> clickEvent;
+        //Mouse cursor entered button event
+        Event<> mouseEnterEvent;
+        //Mouse cursor left button event
+        Event<> mouseLeaveEvent;
     };
 }
 

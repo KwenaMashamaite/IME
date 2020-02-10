@@ -30,15 +30,15 @@ int main(){
             button->setPosition(window.getDimensions().width / 2.0f - button->getDimensions().width / 2.0f,
                                 window.getDimensions().height / 2.0f);
 
-            button->mouseEnterEvent.addListener([button]() {
+            button->on("mouseEnter", [button]() {
                 button->setTextFillColour({34,56, 231});
                 button->setFillColour({10, 67, 90});
             });
-            button->mouseLeaveEvent.addListener([button]() {
+            button->on("mouseLeave",[button]() {
                 button->setTextFillColour({54, 78, 3});
                 button->setFillColour({98, 88, 143});
             });
-            button->clickEvent.addListener([&, button]() {
+            button->on("click", [&, button]() {
                 auto randonIndex = rand() % (fonts.size() - 1);
                 button->setTextFont(fonts.at(randonIndex));
             });

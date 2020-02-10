@@ -61,6 +61,17 @@ void Gui::Button::setActive(bool isActive) {
     );
 }
 
+void Gui::Button::on(std::string &&eventName, EventHandler<> callbackFunc) {
+    if (eventName == "click")
+        clickEvent.addListener(callbackFunc);
+    else if (eventName == "mouseEnter")
+        mouseEnterEvent.addListener(callbackFunc);
+    else if (eventName == "mouseLeave")
+        mouseLeaveEvent.addListener(callbackFunc);
+    else
+        return;
+}
+
 Gui::Button::~Button() {
     Events::mouseMoved.removeListener(
         IdHolder::getIdFor("mouseMoved-BtnClass" + instantiationNum_)
