@@ -47,7 +47,10 @@ void Gui::Window::clear(sf::Color colour){
 }
 
 Globals::Position Gui::Window::getMousePosition() const {
-    return Position{(float)(sf::Mouse::getPosition(window_).x), (float)(sf::Mouse::getPosition(window_).y)};
+    return {
+        static_cast<float>(sf::Mouse::getPosition(window_).x),
+        static_cast<float>(sf::Mouse::getPosition(window_).y)
+    };
 }
 
 Gui::Window::~Window(){

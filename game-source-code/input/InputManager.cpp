@@ -6,25 +6,27 @@ using Globals::Events;
 using Utility::IdHolder;
 
 InputManager::InputManager() : mouseCoordinates_{0, 0} {
-    IdHolder::add("keyPress", Events::keyPressed.addListener([this](InputManager::Key key) {
-        pressKey(key);
-    }));
+    IdHolder::add("keyPress", Events::keyPressed.addListener(
+        [this](InputManager::Key key) {pressKey(key);}
+    ));
 
-    IdHolder::add("keyRelease", Events::keyReleased.addListener([this](Key key) {
-        releaseKey(key);
-    }));
+    IdHolder::add("keyRelease", Events::keyReleased.addListener(
+        [this](Key key) {releaseKey(key);}
+    ));
 
-    IdHolder::add("mouseButtonPress", Events::mouseButtonPressed.addListener([this](MouseButton button, int x, int y) {
-        pressMouse(button);
-    }));
+    IdHolder::add("mouseButtonPress", Events::mouseButtonPressed.addListener(
+        [this](MouseButton button, int x, int y) { pressMouse(button);}
+    ));
 
-    IdHolder::add("mouseButtonRelease", Events::mouseButtonReleased.addListener([this](MouseButton button, int x, int y) {
-        releaseMouse(button);
-    }));
+    IdHolder::add("mouseButtonRelease", Events::mouseButtonReleased.addListener(
+        [this](MouseButton button, int x, int y) {releaseMouse(button);}
+    ));
 
-    IdHolder::add("mouseMove", Events::mouseMoved.addListener([this](int xMouseCoord, int yMouseCoord) {
-        setMouseCoordinates(xMouseCoord, yMouseCoord);
-    }));
+    IdHolder::add("mouseMove", Events::mouseMoved.addListener(
+        [this](int xMouseCoord, int yMouseCoord) {
+            setMouseCoordinates(xMouseCoord, yMouseCoord);
+        }
+    ));
 }
 
 void InputManager::pressKey(InputManager::Key keyId) {
@@ -51,8 +53,8 @@ bool InputManager::isKeyPressed(InputManager::Key keyId) const{
 }
 
 bool InputManager::isMouseButtonPressed(InputManager::MouseButton mouseButton) const {
-    return (getKeyState(currentMouseButtonState_, mouseButton)
-            && !getKeyState(previousMouseButtonState_, mouseButton));
+    return (getKeyState(currentMouseButtonState_, mouseButton) &&
+           !getKeyState(previousMouseButtonState_, mouseButton));
 }
 
 bool InputManager::isKeyHeld(InputManager::Key key) const{
