@@ -10,7 +10,7 @@ public:
     /**
      * @brief Mouse Buttons
      */
-    enum class MouseButton{
+    enum class Button{
         LMouseButton,
         RMouseButton,
         MiddleButton
@@ -21,7 +21,7 @@ public:
     * @param button Mouse button to check
     * @return true if mouse button is pressed, false if not pressed
     */
-    static bool isButtonPressed(MouseButton button);
+    static bool isButtonPressed(Button button);
 };
 
 #endif

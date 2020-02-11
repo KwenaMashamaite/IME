@@ -18,8 +18,9 @@ set(SOURCE_FILES
         game-source-code/exceptions/Exceptions.h
         game-source-code/event/Event.h
         game-source-code/event/Event.inl
-        game-source-code/event/EventPublisher.cpp
-        game-source-code/event/EventPublisher.h
+        game-source-code/event/EventEmitter.inl
+        game-source-code/event/EventEmitter.cpp
+        game-source-code/event/EventEmitter.h
         game-source-code/event/IdHolder.cpp
         game-source-code/event/IdHolder.h
         game-source-code/audio/IAudioPlayer.h
