@@ -29,7 +29,7 @@ public:
 	 * @brief Constructor
      * @param filepath File name of the file that contains the scores
      * @throw FileNotFound If the file cannot be found on the disk
-     * 
+     *
      * The file name must be preceded by the path to the file. In addition,
 	 * the file that contains the highscores must be in the same folder as
 	 * the generated executable file (or be in a subfolder of the generated
@@ -81,17 +81,21 @@ public:
 	unsigned int getTopScore() const;
 
 	/**
-	 * @brief Get a constant iterator that points to the first element in a high scores container
-	 * @return A constant iterator that points to the first element in a high scores container
+	 * @brief Get a constant iterator that points to the first element in a
+	 *        high scores container
+	 * @return A constant iterator that points to the first element in a high
+	 *         scores container
 	 */
 	constIterator cBegin() const;
 
 	/**
-	 * @brief Get a constant iterator that points one past the last element in a high scores container
-	 * @return A constant iterator that points one past the last element in a high scores container
+	 * @brief Get a constant iterator that points one past the last element in a
+	 *        high scores container
+	 * @return A constant iterator that points one past the last element in a
+	 *         high scores container
 	 */
 	constIterator cEnd() const;
-	
+
 private:
 	//Reads/writes high scores from/to disk file
 	Utility::FileReader fileReader_;
@@ -100,7 +104,7 @@ private:
 	//Stores current score
 	unsigned int score_;
 	//highscores file path on the disk
-	std::string highScoresPath_;
+	std::string highScoresFilename_;
 };
 
 #endif
