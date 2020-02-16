@@ -40,7 +40,9 @@ set(SOURCE_FILES
         game-source-code/gui/control/Button.cpp
         game-source-code/gui/control/Button.h
         game-source-code/utility/FileReader.h
-        game-source-code/utility/FileReader.cpp)
+        game-source-code/utility/FileReader.cpp
+        game-source-code/scoreboard/Scoreboard.h
+        game-source-code/scoreboard/Scoreboard.cpp)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
