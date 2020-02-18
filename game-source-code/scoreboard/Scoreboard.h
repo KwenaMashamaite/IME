@@ -42,7 +42,7 @@ public:
 
 	/**
 	 * @brief Add points to the current score
-	 * @param destroyedEntity Score to add to current score
+	 * @param destroyedEntity Points to add to current score
 	 *
 	 * The integer value associated with the provided argument determines the
 	 * amount of points that are added to the current score
