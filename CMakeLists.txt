@@ -16,8 +16,6 @@ set(SOURCE_FILES
         game-source-code/resources/ResourceManager.cpp
         game-source-code/resources/ResourceManager.h
         game-source-code/exceptions/Exceptions.h
-        game-source-code/input/InputManager.cpp
-        game-source-code/input/InputManager.h
         game-source-code/event/Event.h
         game-source-code/event/Event.inl
         game-source-code/event/EventPublisher.cpp

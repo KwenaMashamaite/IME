@@ -6,7 +6,8 @@
 #define GLOBALS_H
 
 #include "event/Event.h"
-#include "input/InputManager.h"
+#include "input/Keyboard.h"
+#include "input/Mouse.h"
 
 namespace Globals{
     /**
@@ -21,12 +22,12 @@ namespace Globals{
         /**
          * @brief Key was pressed event. Passes the key that was pressed on notify
          */
-        inline static Event<InputManager::Key> keyPressed;
+        inline static Event<Keyboard::Key> keyPressed;
 
         /**
          * @brief Key was released event. passes the key that was released as an argument on notify
          */
-        inline static Event<InputManager::Key> keyReleased;
+        inline static Event<Keyboard::Key> keyReleased;
 
         /**
          * @brief Mouse was moved event. Passes the new position of the mouse as arguments on notify
@@ -37,13 +38,13 @@ namespace Globals{
          * @brief Mouse button was pressed event. Passes the mouse button that was pressed and the
          *        position of the mouse as arguments on notify
          */
-        inline static Event<InputManager::MouseButton, int, int> mouseButtonPressed;
+        inline static Event<Mouse::MouseButton> mouseButtonPressed;
 
         /**
          * @brief Mouse button was released event. Passes the mouse button that was released and the
          *        position of the mouse as arguments on notify
          */
-        inline static Event<InputManager::MouseButton, int, int> mouseButtonReleased;
+        inline static Event<Mouse::MouseButton> mouseButtonReleased;
     };
 
     /**
