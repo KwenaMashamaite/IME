@@ -44,7 +44,9 @@ set(SOURCE_FILES
         game-source-code/scoreboard/Scoreboard.h
         game-source-code/scoreboard/Scoreboard.cpp
         game-source-code/input/Keyboard.h
-        game-source-code/input/Keyboard.cpp)
+        game-source-code/input/Keyboard.cpp
+        game-source-code/input/Mouse.h
+        game-source-code/input/Mouse.cpp)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
