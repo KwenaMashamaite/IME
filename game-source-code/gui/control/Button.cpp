@@ -1,6 +1,6 @@
 #include "Button.h"
 #include "event/IdHolder.h"
-#include "input/InputManager.h"
+#include "input/Mouse.h"
 #include "globals/Globals.h"
 
 using Utility::IdHolder;
@@ -41,8 +41,8 @@ void Gui::Button::subscribeToEvents() {
     IdHolder::add(
         "mouseBtnPressed-BtnClass" + instantiationNum_,
         Events::mouseButtonReleased.addListener(
-            [this](InputManager::MouseButton releasedMouseButton, int x, int y){
-                if (isSelected_ && releasedMouseButton == InputManager::MouseButton::LMouseButton)
+            [this](Mouse::MouseButton releasedMouseButton){
+                if (isSelected_ && releasedMouseButton == Mouse::MouseButton::LMouseButton)
                     clickEvent.notifyListeners();
             }
         )
