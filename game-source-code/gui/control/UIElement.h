@@ -2,8 +2,8 @@
  * @brief Abstract base class for static Graphical User Interface (GUI) elements
  */
 
-#ifndef ELEMENT_H
-#define ELEMENT_H
+#ifndef UIELEMENT_H
+#define UIELEMENT_H
 
 #include "gui/window/Window.h"
 #include "event/Event.h"

@@ -11,8 +11,13 @@
 template <typename... Args>
 using Callback = std::function<void(Args...)>;
 
+class IEvent{
+public:
+    virtual ~IEvent() = default;
+};
+
 template <typename... Args>
-class Event{
+class Event : public IEvent{
 public:
     /**
      * @brief Register a callback function to an event
@@ -20,8 +25,8 @@ public:
      * @return Event handlers (callback function) unique identification number
      *
      * The function returns a positive integer after the callback function is
-     * added to the event handler list. The identification number must be 
-     * remembered in order to perform other operations on the handler such 
+     * added to the event handler list. The identification number must be
+     * remembered in order to perform other operations on the handler such
      * as removing it from the event handler list.
      *
      * @note If the same handler is registered multiple times (i.e, function
