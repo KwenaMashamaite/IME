@@ -43,6 +43,5 @@ void Gui::Button::on(std::string &&eventName, Callback<> callbackFunc) {
 }
 
 void Gui::Button::setActive(bool isActive) {
-    isSelected_ = false;
-
+    //Stop button from emitting events
 }

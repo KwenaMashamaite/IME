@@ -22,6 +22,21 @@ public:
      * @param eventName Name of the event to register callback on
      * @param callback Function to execute when the event is fired
      * @return Callback identification number
+     *
+     * The function returns a positive integer after the callback function
+     * is added to the event handler list. The identification number must be
+     * remembered in order to perform other operations on the handler such
+     * as removing it from the event handler list.
+     *
+     * @note If the same handler is registered multiple times (i.e, function
+     * called with the same argument multiple times), It will be treated as a
+     * unique handler and hence given an identification number.
+     *
+     * @warning If the registered callback function is a member of a class or
+     * a lambda expression that captures "this", then the callback function must
+     * be removed from the event handler list when the object goes out of scope.
+     * If not removed, the event will try to invoke a non-existent handler and
+     * this will lead to undefined behavior
      */
     template<typename...Args>
     int addEventListener(std::string &&eventName, Callback<Args...> callback);
@@ -29,7 +44,9 @@ public:
     /**
      * @brief Remove a callback from an event
      * @param eventName Name of the event to remove callback function from
-     * @param callbackId Identification number of the callback
+     * @param callbackId Identification number of the callback to be removed
+     * @return True if callback was removed from an event, false if callback
+     *         with the specified id does not exist
      */
      bool removeEventListener(std::string &&eventName, int callbackId);
 
