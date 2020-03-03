@@ -27,7 +27,9 @@ void ResourceManager::load(ResourceId identifier, const std::string &filename){
     }
 }
 
-void ResourceManager::load(ResourceId identifier, const std::initializer_list<std::string>& filenames){
+void ResourceManager::load(ResourceId identifier, 
+    const std::initializer_list<std::string>& filenames)
+{
     for(const auto& filename : filenames)
         load(identifier, filename);
 }

@@ -122,7 +122,6 @@ private:
         static constexpr auto SOUNDS_PATH = "resources/sounds/";
         static constexpr auto MUSIC_PATH = "resources/music/";
         static constexpr auto FONTS_PATH = "resources/fonts/";
-        static constexpr auto HIGHSCORES_PATH = "resources/highscores/";
     };
 };
 

@@ -16,12 +16,9 @@ set(SOURCE_FILES
         game-source-code/resources/ResourceManager.cpp
         game-source-code/resources/ResourceManager.h
         game-source-code/exceptions/Exceptions.h
-        game-source-code/input/InputManager.cpp
-        game-source-code/input/InputManager.h
-        game-source-code/event/Event.h
-        game-source-code/event/Event.inl
-        game-source-code/event/EventPublisher.cpp
-        game-source-code/event/EventPublisher.h
+        game-source-code/event/EventEmitter.inl
+        game-source-code/event/EventEmitter.cpp
+        game-source-code/event/EventEmitter.h
         game-source-code/event/IdHolder.cpp
         game-source-code/event/IdHolder.h
         game-source-code/audio/IAudioPlayer.h
@@ -37,10 +34,16 @@ set(SOURCE_FILES
         game-source-code/gui/layout/Panel.h
         game-source-code/gui/layout/StackPanel.cpp
         game-source-code/gui/layout/StackPanel.h
-        game-source-code/gui/control/ClickableUIElement.cpp
-        game-source-code/gui/control/ClickableUIElement.h
         game-source-code/gui/control/Button.cpp
-        game-source-code/gui/control/Button.h)
+        game-source-code/gui/control/Button.h
+        game-source-code/utility/FileReader.h
+        game-source-code/utility/FileReader.cpp
+        game-source-code/scoreboard/Scoreboard.h
+        game-source-code/scoreboard/Scoreboard.cpp
+        game-source-code/input/Keyboard.h
+        game-source-code/input/Keyboard.cpp
+        game-source-code/input/Mouse.h
+        game-source-code/input/Mouse.cpp)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)

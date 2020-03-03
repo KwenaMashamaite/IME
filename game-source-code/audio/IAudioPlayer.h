@@ -30,6 +30,11 @@ namespace Audio {
          * @brief Resume paused audio
          */
         virtual void resume() = 0;
+
+        /**
+         * @brief Destructor
+         */
+        virtual ~IAudioPlayer() = default;
     };
 }
 
