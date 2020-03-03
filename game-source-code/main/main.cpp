@@ -90,21 +90,22 @@ int main(){
                 std::cout << "mouse left button" << std::endl;
             }));
 
-            eventEmitter.addEventListener("mouseMoved", Callback<int, int>([button](int x, int y){
+            eventEmitter.addListener("mouseMoved", Callback<int, int>([button](int x, int y) {
                 //button->emit("mouseMoved", x, y);
             }));
 
-            eventEmitter.addEventListener("mouseButtonReleased", Callback<Mouse::Button>({
-                [button](Mouse::Button releasedButton){
-                    //button->emit("mouseButtonReleased", releasedButton);
-                }
-            }));
+            eventEmitter.addListener("mouseButtonReleased", Callback<Mouse::Button>({
+                                                                                            [button](
+                                                                                                    Mouse::Button releasedButton) {
+                                                                                                //button->emit("mouseButtonReleased", releasedButton);
+                                                                                            }
+                                                                                    }));
 
             return button;
         }());
     }
 
-    eventEmitter.addEventListener("Closed", Callback<>([&window](){
+    eventEmitter.addListener("Closed", Callback<>([&window]() {
         window.close();
     }));
 

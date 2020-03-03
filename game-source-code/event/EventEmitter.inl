@@ -2,16 +2,16 @@
 // should be placed in .cpp file to avoid the "multiple definition" error
 
 template<typename...Args>
-int EventEmitter::addEventListener(std::string &&eventName, Callback<Args...> callback) {
+int EventEmitter::addListener(std::string &&event, Callback<Args...> callback) {
     auto listenerId = previousListenerId++;
-    auto iter = eventList_.find(eventName);
+    auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;
         listeners.push_back(std::move(
             std::make_shared<Listener<Args...>>(listenerId, callback))
         );
     }else
-        eventList_.insert(std::pair(eventName, std::vector<std::shared_ptr<IListener>>{
+        eventList_.insert(std::pair(event, std::vector<std::shared_ptr<IListener>>{
             std::make_shared<Listener<Args...>>(listenerId, callback)
         }));
 
@@ -19,8 +19,8 @@ int EventEmitter::addEventListener(std::string &&eventName, Callback<Args...> ca
 }
 
 template<typename... Args>
-void EventEmitter::emit(std::string &&eventName, Args... args) {
-    auto iter = eventList_.find(eventName);
+void EventEmitter::emit(std::string &&event, Args... args) {
+    auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;
         for (auto& listenerBasePtr : listeners) {
