@@ -1,5 +1,11 @@
 /**
  * @brief Class for emitting events
+ *
+ * To add an event to the event emitter you simply have to call the addListener
+ * function. In other words, events are created when a listener is added.
+ * If an event already exists, then a listener is added to that event, otherwise
+ * a new event is created. Once an Event is added it won't be automatically fired.
+ * A call to the emit function must be made to fire an event
  */
 
 #ifndef EVENTEMITTER_H
@@ -21,15 +27,13 @@ public:
      * @tparam Args Template parameter pack name
      * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
+     * @param isCalledOnce True if listener is called only once, false for multiple times
      * @return listener's identification number
      *
-     * This function returns a positive integer after the listener is added
-     * to the event listener list. The identification number must be
-     * remembered in order to perform other operations on the listener such
-     * as removing it from the event listener list.
-     *
-     * @note If the same listener is added multiple times, It will be treated
-     * as a unique listener and hence given an identification number.
+     * A listener that is flagged as a once listener (isCalledOnce set to true) will be
+     * invoked once and subsequently removed from the event, Otherwise the listener will
+     * be invoked each time the event is fired. Note, If the same listener is added multiple
+     * times, It will be treated as a unique listener and hence given an identification number.
      *
      * @warning If the added listener is a member of a class, then the listener
      * must be removed from an event when the class instance goes out of scope.
@@ -37,7 +41,7 @@ public:
      * fired and this will lead to undefined behavior
      */
     template<typename...Args>
-    int addListener(std::string &&event, Callback<Args...> callback);
+    int addListener(std::string &&event, Callback<Args...> callback, bool isCalledOnce = false);
 
     /**
      * @brief Remove a listener from an event
@@ -78,11 +82,11 @@ private:
     //Listener of an event
     template <typename ...Args>
     struct Listener : public IListener{
-        Listener(int id, Callback<Args...> callback, bool isNotifiable = true)
-            : IListener(id), callback_(callback), isNotifiable_(isNotifiable){}
+        Listener(int id, Callback<Args...> callback, bool isCalledOnce = false)
+            : IListener(id), callback_(callback), isCalledOnce_(isCalledOnce){}
 
         Callback<Args...> callback_;
-        bool isNotifiable_;
+        bool isCalledOnce_;
     };
 
     using Listeners = std::vector<std::shared_ptr<IListener>>;
