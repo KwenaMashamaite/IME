@@ -1,5 +1,5 @@
 #include "EventPublisher.h"
-#include "input/InputManager.h"
+#include "input/Keyboard.h"
 #include "globals/Globals.h"
 #include <SFML/Graphics.hpp>
 
@@ -14,14 +14,14 @@ void EventPublisher::update(Gui::Window &renderTarget) {
                 break;
             case sf::Event::KeyPressed:
                 Events::keyPressed.notifyListeners(
-                    static_cast<InputManager::Key>(
+                    static_cast<Keyboard::Key>(
                         static_cast<unsigned int>(event.key.code)
                     )
                 ); 
                 break;
             case sf::Event::KeyReleased:
                 Events::keyReleased.notifyListeners(
-                    static_cast<InputManager::Key>(
+                    static_cast<Keyboard::Key>(
                         static_cast<unsigned int>(event.key.code)
                     )
                 ); 
@@ -34,18 +34,14 @@ void EventPublisher::update(Gui::Window &renderTarget) {
                 break;
             case sf::Event::MouseButtonPressed:
                 Events::mouseButtonPressed.notifyListeners(
-                    static_cast<InputManager::MouseButton>(static_cast<unsigned int>(
-                    event.mouseButton.button)),
-                    renderTarget.getMousePosition().x,
-                    renderTarget.getMousePosition().y
+                    static_cast<Mouse::MouseButton>(static_cast<unsigned int>(
+                    event.mouseButton.button))
                 ); 
                 break;
             case sf::Event::MouseButtonReleased:
                 Events::mouseButtonReleased.notifyListeners(
-                    static_cast<InputManager::MouseButton>(static_cast<unsigned int>(
-                    event.mouseButton.button)),
-                    renderTarget.getMousePosition().x,
-                    renderTarget.getMousePosition().y
+                    static_cast<Mouse::MouseButton>(static_cast<unsigned int>(
+                    event.mouseButton.button))
                 ); 
                 break;
             default:
