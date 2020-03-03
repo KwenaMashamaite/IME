@@ -6,7 +6,7 @@
 #define UIELEMENT_H
 
 #include "gui/window/Window.h"
-#include "event/Event.h"
+#include "event/EventEmitter.h"
 #include "globals/Globals.h"
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -163,14 +163,8 @@ namespace Gui {
         sf::RectangleShape border_;
         //Defines the perimeter of the content area
         sf::RectangleShape contentRectangle_;
-        //Element text content change event
-        Event<std::string> onTextChange;
-        //Element text content character size change event
-        Event<> onCharSizeChange;
-        //Margin change event
-        Event<> onMarginChange;
-        //Padding change event
-        Event<> onPaddingChange;
+        //Event Emitter
+        EventEmitter eventEmitter_;
     };
 }
 

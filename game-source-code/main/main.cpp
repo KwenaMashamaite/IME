@@ -3,6 +3,8 @@
 #include "gui/layout/StackPanel.h"
 #include "gui/control/Button.h"
 #include "event/EventEmitter.h"
+#include "input/Keyboard.h"
+#include "input/Mouse.h"
 #include <ctime>
 #include <iostream>
 
@@ -90,21 +92,15 @@ int main(){
                 std::cout << "mouse left button" << std::endl;
             }));
 
-            eventEmitter.addEventListener("mouseMoved", Callback<int, int>([button](int x, int y){
+            eventEmitter.addListener("mouseMoved", Callback<int, int>([button](int x, int y) {
                 //button->emit("mouseMoved", x, y);
-            }));
-
-            eventEmitter.addEventListener("mouseButtonReleased", Callback<Mouse::Button>({
-                [button](Mouse::Button releasedButton){
-                    //button->emit("mouseButtonReleased", releasedButton);
-                }
             }));
 
             return button;
         }());
     }
 
-    eventEmitter.addEventListener("Closed", Callback<>([&window](){
+    eventEmitter.addListener("Closed", Callback<>([&window]() {
         window.close();
     }));
 

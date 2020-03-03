@@ -1,19 +1,12 @@
 #include "Window.h"
-#include "globals/Globals.h"
 #include "event/IdHolder.h"
 #include <cassert>
 
-using Globals::Events;
 using Utility::IdHolder;
 
 Gui::Window::Window() : dimensions_{0u, 0u}{
     assert(!isInstantiated_ && "Only a single instance of window can be instantiated");
     isInstantiated_ = true;
-
-    //Close window on "close window" button click
-    IdHolder::add("windowClose", Events::windowClose.addListener([this]() {
-        window_.close();
-    }));
 }
 
 void Gui::Window::create(const std::string& name, unsigned int width, unsigned int height){
@@ -55,5 +48,4 @@ Globals::Position Gui::Window::getMousePosition() const {
 
 Gui::Window::~Window(){
     isInstantiated_ = false;
-    Events::windowClose.removeListener(IdHolder::getIdFor("windowClose"));
 }
