@@ -1,9 +1,5 @@
 #include "Button.h"
 #include "input/Mouse.h"
-#include <utility>
-
-using Utility::IdHolder;
-using Globals::Events;
 
 Gui::Button::Button(const std::string &buttonText)
     : UIElement(buttonText),
@@ -31,15 +27,15 @@ void Gui::Button::init(){
     }));
 
     eventEmitter_.addListener("mouseButtonReleased", Callback<Mouse::Button>(
-            [this](Mouse::Button button) {
-                if (isSelected_ && button == Mouse::Button::LMouseButton)
-                    eventEmitter_.emit("clicked");
-            })
+        [this](Mouse::Button button) {
+            if (isSelected_ && button == Mouse::Button::LMouseButton)
+                eventEmitter_.emit("clicked");
+        })
     );
 }
 
 void Gui::Button::on(std::string &&eventName, Callback<> callbackFunc) {
-    eventEmitter_.addListener(std::forward<std::string &&>(eventName), std::move(callbackFunc));
+    eventEmitter_.addListener(std::forward<std::string&&>(eventName), std::move(callbackFunc));
 }
 
 void Gui::Button::setActive(bool isActive) {

@@ -8,7 +8,7 @@ Gui::UIElement::UIElement(const std::string &content, const std::string &font, u
       padding_{0.0f, 0.0f, 0.0f, 0.0f}
 {
     //Resize element when text changes
-    onTextChange.addListener([this](const std::string &content) {
+    eventEmitter_.addListener("textChanged", Callback<std::string>([this](const std::string &content) {
         if (content.empty()) {
             numOfLinesInString_ = 0;
             return;
@@ -16,18 +16,14 @@ Gui::UIElement::UIElement(const std::string &content, const std::string &font, u
         numOfLinesInString_ = std::count(content.begin(), content.end(), '\n');
         numOfLinesInString_++; //Account for one line/last line (both dont have terminating character)
         resize();
-    });
+    }));
 
     //Resize element when the character size changes
-    onCharSizeChange.addListener([this](){resize();});
-    //Reflect margin changes
-    onMarginChange.addListener(
+    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){resize();}));
+    //Update element on dimension changes (padding and margin changes)
+    eventEmitter_.addListener("dimensionsChanged", Callback<>(
         [this](){resize(); setPosition(getPosition().x, getPosition().y);}
-    );
-    //Reflect padding changes
-    onPaddingChange.addListener(
-      	[this](){resize(); setPosition(getPosition().x, getPosition().y);}
-    );
+    ));
 
     setTextFont(font);
     setTextCharSize(textCharSize);
@@ -62,22 +58,22 @@ void Gui::UIElement::setPosition(float x, float y) {
 
 void Gui::UIElement::setMargin(float margin) {
     margin_.left = margin_.right = margin_.bottom = margin_.top = margin;
-    onMarginChange.notifyListeners();
+    eventEmitter_.emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(float padding) {
     padding_.left = padding_.right = padding_.top = padding_.bottom = padding;
-    onPaddingChange.notifyListeners();
+    eventEmitter_.emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    onMarginChange.notifyListeners();
+    eventEmitter_.emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    onPaddingChange.notifyListeners();
+    eventEmitter_.emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -95,12 +91,12 @@ void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     textContent_.setCharacterSize(textContent_.getFont()->getGlyph(
         L'A', charSize, false).bounds.height
     );
-    onCharSizeChange.notifyListeners();
+    eventEmitter_.emit("charSizeChanged");
 }
 
 void Gui::UIElement::setText(const std::string &content) {
     textContent_.setString(content);
-    onTextChange.notifyListeners(content);
+    eventEmitter_.emit("textChanged");
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
