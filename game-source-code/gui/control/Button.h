@@ -6,7 +6,7 @@
 #define GUIBUTTON_H
 
 #include "gui/control/UIElement.h"
-#include "event/Event.h"
+#include "event/EventEmitter.h"
 #include <string>
 
 namespace Gui {
@@ -43,45 +43,30 @@ namespace Gui {
         void setActive(bool isActive);
 
         /**
-         * @brief Register a callback function to an event
-         * @tparam Args Template parameter pack name
+         * @brief Register a callback to an event
          * @param eventName Name of the event to register callback on
-         * @param callbackFunc Callback function to be registered
+         * @param callbackFunc Callback to register
          *
-         * This function registers callbacks to the following events:
+         * This function registers callbacks to the following events only:
          * 1. "click" - Fires when the button is clicked
          * 2. "mouseEnter" - Fires when the mouse enters the button
          * 3. "mouseLeave" - Fires when the mouse leaves the button
          *
-         * If the name of the event is none of the above events, the
-         * operation is ignored
+         * Any event that's none of the above will not be raised
          */
         void on(std::string&& eventName, Callback<> callbackFunc);
-
-        /**
-         * @brief Destructor
-         */
-        ~Button();
 
     private:
         /**
          * @brief Subscribe to mouse click and mouse move events
          */
-        void subscribeToEvents();
+        void init();
 
     private:
         //Selection state
         bool isSelected_;
-        //Stores the number of times the class is instantiated
-        inline static auto numOfInstantiations_ = 0u;
-        //Stores the instantiation number of a specific class object
-        std::string instantiationNum_;
-        //Button clicked event
-        Event<> clickEvent;
-        //Mouse cursor entered button event
-        Event<> mouseEnterEvent;
-        //Mouse cursor left button event
-        Event<> mouseLeaveEvent;
+        //Emits button events
+        EventEmitter eventEmitter_;
     };
 }
 
