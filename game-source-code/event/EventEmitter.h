@@ -1,5 +1,5 @@
 /**
- * @brief class for publishing predefined and custom events
+ * @brief Class for emitting events
  */
 
 #ifndef EVENTEMITTER_H
@@ -17,44 +17,49 @@ using Callback = std::function<void(Args...)>;
 class EventEmitter {
 public:
     /**
-     * @brief Register a callback to an event
+     * @brief Add a listener (callback) to an event
      * @tparam Args Template parameter pack name
-     * @param event Name of the event to register callback on
+     * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
-     * @return Callback identification number
+     * @return listener's identification number
      *
-     * The function returns a positive integer after the callback function
-     * is added to the event handler list. The identification number must be
-     * remembered in order to perform other operations on the handler such
-     * as removing it from the event handler list.
+     * This function returns a positive integer after the listener is added
+     * to the event listener list. The identification number must be
+     * remembered in order to perform other operations on the listener such
+     * as removing it from the event listener list.
      *
-     * @note If the same handler is registered multiple times (i.e, function
-     * called with the same argument multiple times), It will be treated as a
-     * unique handler and hence given an identification number.
+     * @note If the same listener is added multiple times, It will be treated
+     * as a unique listener and hence given an identification number.
      *
-     * @warning If the registered callback function is a member of a class or
-     * a lambda expression that captures "this", then the callback function must
-     * be removed from the event handler list when the object goes out of scope.
-     * If not removed, the event will try to invoke a non-existent handler and
-     * this will lead to undefined behavior
+     * @warning If the added listener is a member of a class, then the listener
+     * must be removed from an event when the class instance goes out of scope.
+     * If not removed, a non-existent listener will be invoked when the event is
+     * fired and this will lead to undefined behavior
      */
     template<typename...Args>
     int addListener(std::string &&event, Callback<Args...> callback);
 
     /**
-     * @brief Remove a callback from an event
-     * @param event Name of the event to remove callback function from
-     * @param callbackId Identification number of the callback to be removed
-     * @return True if callback was removed from an event, false if callback
-     *         with the specified id does not exist
+     * @brief Remove a listener from an event
+     * @param event Name Event to remove listener from
+     * @param listenerId Identification number of the listener to be removed
+     * @return True if a listener was removed from an event, false if the specified
+     *         event does not have a listener with the specified id
      */
-     bool removeListener(std::string &&event, int callbackId);
+     bool removeListener(std::string &&event, int listenerId);
+
+     /**
+      * @brief Remove all listeners of an event
+      * @param event Event to remove all listeners from
+      * @return True if all listeners were removed, false if no such event exists
+      */
+     bool removeAllListeners(std::string&& event);
 
     /**
-     * @brief Raise/publish an event
+     * @brief Fire an event
      * @tparam Args Template parameter pack name
-     * @param event Name of the event to publish
-     * @param args Arguments passed to event handlers
+     * @param event Name of the event to fire
+     * @param args Arguments passed to event listeners
      */
     template<typename...Args>
     void emit(std::string &&event, Args...args);
@@ -70,6 +75,7 @@ private:
         int id_;
     };
 
+    //Listener of an event
     template <typename ...Args>
     struct Listener : public IListener{
         Listener(int id, Callback<Args...> callback, bool isNotifiable = true)

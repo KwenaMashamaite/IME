@@ -18,3 +18,13 @@ bool EventEmitter::removeListener(std::string &&event, int callbackId) {
     }
     return false;
 }
+
+bool EventEmitter::removeAllListeners(std::string&& event) {
+    auto iter = eventList_.find(event);
+    if (iter != eventList_.end()) {
+        auto& listeners = iter->second;
+        listeners.clear();
+        return true;
+    }
+    return false;
+}
