@@ -39,7 +39,7 @@ namespace Gui {
          * @brief Get the dimensions of the window
          * @return Dimensions of the window
          */
-        Dimensions getDimensions() const { return dimensions_;}
+        static Dimensions getDimensions(){ return dimensions_;}
 
         /**
          * @brief Check if the window is open or not
@@ -94,7 +94,7 @@ namespace Gui {
         //SFML render window.
         sf::RenderWindow window_;
         //Dimensions of the window
-        Dimensions dimensions_;
+        static Dimensions dimensions_;
         //Instantiation state
         inline static auto isInstantiated_ = false;
         //Minimum window width

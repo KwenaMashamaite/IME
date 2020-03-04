@@ -1,10 +1,13 @@
 #include "Window.h"
 #include "event/IdHolder.h"
+#include "globals/Globals.h"
 #include <cassert>
 
 using Utility::IdHolder;
 
-Gui::Window::Window() : dimensions_{0u, 0u}{
+Globals::Dimensions Gui::Window::dimensions_{0u, 0u};
+
+Gui::Window::Window(){
     assert(!isInstantiated_ && "Only a single instance of window can be instantiated");
     isInstantiated_ = true;
 }
