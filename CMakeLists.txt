@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(duel-invaders)
+project(SFML-2.5.0-Game-Dev-Template)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -54,12 +54,12 @@ set(SFML_LIBRARY_DIR "C:/SFML-2.5.0/lib")
 set(SFML_DIR "C:/SFML-2.5.0/lib/cmake/SFML")
 
 #Change the executable name
-Set(EXECUTABLE_NAME "duel-invaders")
+Set(EXECUTABLE_NAME "template")
 
 #Change executable output folder
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/executables)
 
-add_executable(duel-invaders ${SOURCE_FILES})
+add_executable(SFML-2.5.0-Game-Dev-Template ${SOURCE_FILES})
 
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
@@ -67,7 +67,7 @@ include_directories(SFML_INCLUDE_DIR)
 find_package(SFML 2.5.0 COMPONENTS system window graphics network audio)
 
 if(SFML_FOUND)
-    target_link_libraries (duel-invaders sfml-graphics sfml-window sfml-system sfml-audio)
+    target_link_libraries (SFML-2.5.0-Game-Dev-Template sfml-graphics sfml-window sfml-system sfml-audio)
     message(STATUS "SFML_INCLUDE_DIR: ${SFML_INCLUDE_DIR}")
     message(STATUS "SFML_LIBRARIES: ${SFML_LIBRARIES}")
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
