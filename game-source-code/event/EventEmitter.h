@@ -45,7 +45,7 @@ public:
 
     /**
      * @brief Remove a listener from an event
-     * @param event Name Event to remove listener from
+     * @param event Event to remove listener from
      * @param listenerId Identification number of the listener to be removed
      * @return True if a listener was removed from an event, false if the specified
      *         event does not have a listener with the specified id
