@@ -5,7 +5,6 @@
 #include "input/Keyboard.h"
 #include "gui/layout/DockPanel.h"
 #include <ctime>
-#include <iostream>
 
 int main(){
     srand(time(nullptr));
@@ -17,7 +16,12 @@ int main(){
                                  "Abusheni\n (Xitsonga)", "Sanibona\n (SiSwati)", "Avuwani\n (Tshivenda)",
                                  "Salibonani\n (isiNdebele)", "Hello\n (English)"};
 
-    auto fonts = std::vector{"sansation.ttf", "hangedLetters.ttf", "basson.ttf", "philosopher.ttf"};
+    auto charSizes = std::vector{5, 10, 15, 30, 40};
+
+    auto systemEventEmitter = SystemEventEmitter(window);
+    systemEventEmitter.addListener("Closed", Callback<>([&window]() {
+        window.close();
+    }));
 
     auto charSize = 15;
     auto languagesPanel = std::make_shared<Gui::StackPanel>(0.0f, window.getDimensions().height / 2.0f,
@@ -28,6 +32,7 @@ int main(){
         for (const auto &greeting : greetings) {
             panel->addElement([&]() {
                 auto button = std::make_shared<Gui::Button>(greeting);
+                button->initialize(systemEventEmitter);
                 button->setTextCharSize(charSize);
                 button->setPadding(5.0f);
                 button->setMargin(1.0f);
@@ -44,16 +49,8 @@ int main(){
                     button->setFillColour({98, 88, 143});
                 }));
                 button->on("click", Callback<>([&, button]() {
-                    auto randonIndex = rand() % (fonts.size() - 1);
-                    button->setTextFont(fonts.at(randonIndex));
-                }));
-
-                button->on("mouseEnter", Callback<>([]() {
-                    std::cout << "mouse entered button" << std::endl;
-                }));
-
-                button->on("mouseLeave", Callback<>([]() {
-                    std::cout << "mouse left button" << std::endl;
+                    auto randonIndex = rand() % (charSizes.size() - 1);
+                    button->setTextCharSize(charSizes.at(randonIndex));
                 }));
 
                 return button;
@@ -82,11 +79,6 @@ int main(){
     dockPanel.dock(Gui::DockPanel::Dock::Right, languagesPanel2);
     dockPanel.dock(Gui::DockPanel::Dock::Top, languagesPanel3);
     dockPanel.dock(Gui::DockPanel::Dock::Bottom, languagesPanel4);
-
-    auto systemEventEmitter = SystemEventEmitter(window);
-    systemEventEmitter.addListener("Closed", Callback<>([&window]() {
-        window.close();
-    }));
 
     while (window.isOpen()) {
         systemEventEmitter.process();
