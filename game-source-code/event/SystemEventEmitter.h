@@ -43,11 +43,11 @@ public:
     explicit SystemEventEmitter(Gui::Window& window);
 
     /**
-     * @brief Process window events
+     * @brief Process system events
      *
      * This function will notify event listeners if any events have been
-     * captured by the window. Note, an invocation of this function wil empty
-     * the window event queue. All instances of the class share the same event
+     * captured by the system. Note, an invocation of this function wil empty
+     * the system event queue. All instances of the class share the same event
      * queue. This means that, if one instance calls this function, then the event
      * queue will be processed for all instances. However, only event listeners
      * registered with the instance that invoked the function will be notified

@@ -4,8 +4,8 @@
  * To add an event to the event emitter you simply have to call the addListener
  * function. In other words, events are created when a listener is added.
  * If an event already exists, then a listener is added to that event, otherwise
- * a new event is created. Once an Event is added it won't be automatically fired.
- * A call to the emit function must be made to fire an event
+ * a new event is created. Once an Event is created, it won't be automatically 
+ * fired. A call to the emit function must be made to fire an event
  */
 
 #ifndef EVENTEMITTER_H
