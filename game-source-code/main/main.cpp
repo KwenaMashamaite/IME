@@ -1,52 +1,11 @@
-#include "globals/Globals.h"
 #include "gui/window/Window.h"
 #include "gui/layout/StackPanel.h"
 #include "gui/control/Button.h"
-#include "event/EventEmitter.h"
+#include "event/SystemEventEmitter.h"
 #include "input/Keyboard.h"
-#include "input/Mouse.h"
-#include "gui/layout/Canvas.h"
 #include "gui/layout/DockPanel.h"
-#include "gui/control/TextBlock.h"
 #include <ctime>
 #include <iostream>
-#include <gui/control/TextBlock.h>
-
-void processOSevents(Gui::Window& window, EventEmitter& eventEmitter){
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        switch (event.type){
-            case sf::Event::Closed:
-                eventEmitter.emit("Closed");
-                break;
-            case sf::Event::KeyPressed:
-                eventEmitter.emit("keyPressed",
-                    static_cast<Keyboard::Key>(static_cast<unsigned int>(event.key.code))
-                );
-                break;
-            case sf::Event::KeyReleased:
-                eventEmitter.emit("keyReleased", 
-                    static_cast<Keyboard::Key>(static_cast<unsigned int>(event.key.code))
-                );
-                break;
-            case sf::Event::MouseMoved:
-                eventEmitter.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
-                break;
-            case sf::Event::MouseButtonPressed:
-                eventEmitter.emit("mouseButtonPressed",
-                    static_cast<Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
-                );
-                break;
-            case sf::Event::MouseButtonReleased:
-                eventEmitter.emit("mouseButtonReleased",
-                    static_cast<Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
-                );
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 int main(){
     srand(time(nullptr));
@@ -64,7 +23,6 @@ int main(){
     auto languagesPanel = std::make_shared<Gui::StackPanel>(0.0f, window.getDimensions().height / 2.0f,
             Gui::Orientation::Vertical);
     languagesPanel->setFillColour(Gui::Colour{175, 205, 36});
-    auto eventEmitter = EventEmitter();
 
     auto genButton = [&](std::shared_ptr<Gui::StackPanel>& panel) {
         for (const auto &greeting : greetings) {
@@ -98,10 +56,6 @@ int main(){
                     std::cout << "mouse left button" << std::endl;
                 }));
 
-                eventEmitter.addListener("mouseMoved", Callback<int, int>([button](int x, int y) {
-                    //button->emit("mouseMoved", x, y);
-                }));
-
                 return button;
             }());
         }
@@ -129,14 +83,13 @@ int main(){
     dockPanel.dock(Gui::DockPanel::Dock::Top, languagesPanel3);
     dockPanel.dock(Gui::DockPanel::Dock::Bottom, languagesPanel4);
 
-
-    eventEmitter.addListener("Closed", Callback<>([&window]() {
+    auto systemEventEmitter = SystemEventEmitter(window);
+    systemEventEmitter.addListener("Closed", Callback<>([&window]() {
         window.close();
     }));
 
-
     while (window.isOpen()) {
-        processOSevents(window, eventEmitter);
+        systemEventEmitter.process();
         window.clear();
         dockPanel.draw(window);
         window.display();
