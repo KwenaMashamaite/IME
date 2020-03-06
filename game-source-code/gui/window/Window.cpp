@@ -1,9 +1,5 @@
 #include "Window.h"
-#include "event/IdHolder.h"
-#include "globals/Globals.h"
 #include <cassert>
-
-using Utility::IdHolder;
 
 Globals::Dimensions Gui::Window::dimensions_{0u, 0u};
 
