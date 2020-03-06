@@ -6,6 +6,7 @@
 #define PANEL_H
 
 #include "gui/control/UIElement.h"
+#include "event/EventEmitter.h"
 #include <SFML/Graphics.hpp>
 #include <set>
 #include <memory>
@@ -53,6 +54,12 @@ namespace Gui {
         void setFillColour(Colour fillColour);
 
         /**
+         * @brief Set the outline colour of the panel
+         * @param outlineColour New outline colour of the panel
+         */
+        void setOutlineColour(Colour outlineColour);
+
+        /**
          * @brief Get the number of elements in the panel
          * @return Number of elements in the panel
          */
@@ -78,11 +85,22 @@ namespace Gui {
          */
         bool add(std::shared_ptr<UIElement> guiElement);
 
+        /**
+         * @brief Add listener to event
+         * @param event Event to add listener to
+         * @param callback Function to execute when event is raised
+         */
+        void on(std::string&& event, Callback<> callback);
+
+
+
     private:
         //Elements contained by the panel
         std::set<std::shared_ptr<UIElement>> guiElementList_;
         //Representation
         sf::RectangleShape panel_;
+        //Event Emitter
+        EventEmitter eventEmitter_;
     };
 }
 

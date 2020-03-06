@@ -2,10 +2,11 @@
  * @brief UI element that can be interacted with (e.g clicked)
  */
 
-#ifndef GUIBUTTON_H
-#define GUIBUTTON_H
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include "gui/control/UIElement.h"
+#include "event/SystemEventEmitter.h"
 #include "event/EventEmitter.h"
 #include <string>
 
@@ -33,14 +34,13 @@ namespace Gui {
         Button(const std::string &content, const std::string &font, unsigned int textCharSize);
 
         /**
-         * @brief Activate or deactivate a button
-         * @param isActive Set to true to activate or false to deactivate
+         * @brief Initialize button for event publishing
+         * @param systemEventEmitter System event emitter
          *
-         * The button is activated by default. When deactivated, the button
-         * becomes a static UI element. That is, Hovering the mouse over the
-         * button or clicking it will have no effect
+         * If the button is not initialized, then it will act as a static UI element
+         * That is, hovering over it and pressing it will have no effect
          */
-        void setActive(bool isActive);
+        void initialize(SystemEventEmitter &systemEventEmitter);
 
         /**
          * @brief Register a callback to an event
@@ -55,12 +55,6 @@ namespace Gui {
          * Any event that's none of the above will not be raised
          */
         void on(std::string&& eventName, Callback<> callbackFunc);
-
-    private:
-        /**
-         * @brief Subscribe to mouse click and mouse move events
-         */
-        void init();
 
     private:
         //Selection state

@@ -4,8 +4,8 @@
  * To add an event to the event emitter you simply have to call the addListener
  * function. In other words, events are created when a listener is added.
  * If an event already exists, then a listener is added to that event, otherwise
- * a new event is created. Once an Event is added it won't be automatically fired.
- * A call to the emit function must be made to fire an event
+ * a new event is created. Once an Event is created, it won't be automatically 
+ * fired. A call to the emit function must be made to fire an event
  */
 
 #ifndef EVENTEMITTER_H
@@ -45,7 +45,7 @@ public:
 
     /**
      * @brief Remove a listener from an event
-     * @param event Name Event to remove listener from
+     * @param event Event to remove listener from
      * @param listenerId Identification number of the listener to be removed
      * @return True if a listener was removed from an event, false if the specified
      *         event does not have a listener with the specified id
