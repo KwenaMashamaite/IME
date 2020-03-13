@@ -6,7 +6,6 @@
 #define STACKPANEL_H
 
 #include "gui/layout/Panel.h"
-#include <memory>
 
 namespace Gui {
     enum class Orientation{
@@ -31,10 +30,18 @@ namespace Gui {
         void addElement(std::shared_ptr<UIElement> guiElement) override;
 
     private:
-        //UI element orientation
-        Orientation orientation_;
-        //Pointer to the last inserted element
-        std::shared_ptr<UIElement> lastInsertedElement_;
+        //Panel orientation state
+        bool isOrientationVertical_;
+
+        /**
+         * @brief Set the position of a UI element relative to another UI element
+         * @param uiElem UI element to position relative to another
+         * @param refElem Reference UI element
+         *
+         * The element whose position is changed will have the same orientation
+         * (vertical or horizontal) as the element which is used as reference.
+         */
+        void setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem, std::shared_ptr<UIElement> refUIElem);
     };
 }
 
