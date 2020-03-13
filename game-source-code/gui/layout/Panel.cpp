@@ -56,3 +56,11 @@ void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
         outlineColour.opacity
     ));
 }
+
+Gui::Panel::constIterator Gui::Panel::cBegin() const {
+    return uiElements_.cbegin();
+}
+
+Gui::Panel::constIterator Gui::Panel::cEnd() const {
+    return uiElements_.cend();
+}

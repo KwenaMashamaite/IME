@@ -72,10 +72,12 @@ namespace Gui {
         virtual void draw(Window &renderTarget);
 
     protected:
+        using UIElementContainer = std::vector<std::shared_ptr<UIElement>>;
+        using constIterator = UIElementContainer::const_iterator;
+
         /**
          * @brief Add gui element to underlying data structure
          * @param guiElement Element to be added
-         * @return True if element was successfully added. false otherwise
          */
         void add(std::shared_ptr<UIElement> guiElement);
 
@@ -89,11 +91,25 @@ namespace Gui {
             eventEmitter_.addListener(std::forward<std::string&&>(event),std::move(callback));
         }
 
+        /**
+         * @brief Get a constant iterator that points to the first element in the
+	     *        the panel
+         * @return A constant iterator that points to the first element in the
+	     *         the panel
+         */
+        constIterator cBegin() const;
 
+        /**
+         * @brief Get a constant iterator that points one past the last element in the
+	     *        panel
+         * @return A constant iterator that points one past the last element in the
+	     *         panel
+         */
+        constIterator cEnd() const;
 
     private:
         //Elements contained by the panel
-        std::vector<std::shared_ptr<UIElement>> uiElements_;
+        UIElementContainer uiElements_;
         //Representation
         sf::RectangleShape panel_;
         //Event Emitter
