@@ -1,4 +1,5 @@
 #include "Panel.h"
+#include <cassert>
 
 Gui::Panel::Panel(float x, float y){
     panel_.setFillColor(sf::Color::Transparent);
@@ -29,10 +30,8 @@ void Gui::Panel::setPosition(const Position &position) {
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
-    for (auto &element : uiElements_) {
-        if (element != nullptr)
-            element->draw(renderTarget);
-    }
+    for (auto &element : uiElements_)
+        element->draw(renderTarget);
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
@@ -43,8 +42,7 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
 }
 
 void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
-    if (guiElement == nullptr)
-        return;
+    assert(guiElement && "GUI elements added to panel cannot be null");
     uiElements_.push_back(std::move(guiElement));
 }
 
