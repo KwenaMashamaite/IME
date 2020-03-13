@@ -1,0 +1,150 @@
+\hypertarget{class_gui_1_1_button}{}\doxysection{Gui\+::Button Class Reference}
+\label{class_gui_1_1_button}\index{Gui::Button@{Gui::Button}}
+
+
+{\ttfamily \#include $<$Button.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::Button\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=163pt]{class_gui_1_1_button__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Gui\+::Button\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=163pt]{class_gui_1_1_button__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135}{Button}} (const std\+::string \&button\+Text)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_gui_1_1_button}{Button}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_gui_1_1_button_a0274ff88db1fef4248ce82507ed4e58b}{Button}} (const std\+::string \&content, const std\+::string \&font, unsigned int text\+Char\+Size)
+\begin{DoxyCompactList}\small\item\em Create a button. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_button_aca520127bea8d9200b988e93558617d6}{initialize}} (\mbox{\hyperlink{class_system_event_emitter}{System\+Event\+Emitter}} \&system\+Event\+Emitter)
+\begin{DoxyCompactList}\small\item\em Initialize button for event publishing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_button_a3c1e92b89676a0648dcddf5be53a9ace}{on}} (std\+::string \&\&event\+Name, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$$>$ callback\+Func)
+\begin{DoxyCompactList}\small\item\em Register a callback to an event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 14 of file Button.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135}\label{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135}} 
+\index{Gui::Button@{Gui::Button}!Button@{Button}}
+\index{Button@{Button}!Gui::Button@{Gui::Button}}
+\doxysubsubsection{\texorpdfstring{Button()}{Button()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Gui\+::\+Button\+::\+Button (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{button\+Text }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Construct a new \mbox{\hyperlink{class_gui_1_1_button}{Button}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em button\+Text} & Text to be displayed on the button\\
+\hline
+\end{DoxyParams}
+The button is placed at (0, 0) and the button text has a character size of 30 by default 
+
+Definition at line 4 of file Button.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_button_a0274ff88db1fef4248ce82507ed4e58b}\label{class_gui_1_1_button_a0274ff88db1fef4248ce82507ed4e58b}} 
+\index{Gui::Button@{Gui::Button}!Button@{Button}}
+\index{Button@{Button}!Gui::Button@{Gui::Button}}
+\doxysubsubsection{\texorpdfstring{Button()}{Button()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Gui\+::\+Button\+::\+Button (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{content,  }\item[{const std\+::string \&}]{font,  }\item[{unsigned int}]{text\+Char\+Size }\end{DoxyParamCaption})}
+
+
+
+Create a button. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em content} & Text to be displayed on the button \\
+\hline
+{\em font} & Font used for the text \\
+\hline
+{\em text\+Char\+Size} & Character size of the text\\
+\hline
+\end{DoxyParams}
+The button has the dimensions of the button content and a position of (0, 0) by default 
+
+Definition at line 9 of file Button.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_button_aca520127bea8d9200b988e93558617d6}\label{class_gui_1_1_button_aca520127bea8d9200b988e93558617d6}} 
+\index{Gui::Button@{Gui::Button}!initialize@{initialize}}
+\index{initialize@{initialize}!Gui::Button@{Gui::Button}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily void Gui\+::\+Button\+::initialize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_system_event_emitter}{System\+Event\+Emitter}} \&}]{system\+Event\+Emitter }\end{DoxyParamCaption})}
+
+
+
+Initialize button for event publishing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system\+Event\+Emitter} & System event emitter\\
+\hline
+\end{DoxyParams}
+If the button is not initialized, then it will act as a static UI element That is, hovering over it and pressing it will have no effect 
+
+Definition at line 14 of file Button.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_button_aca520127bea8d9200b988e93558617d6_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_button_a3c1e92b89676a0648dcddf5be53a9ace}\label{class_gui_1_1_button_a3c1e92b89676a0648dcddf5be53a9ace}} 
+\index{Gui::Button@{Gui::Button}!on@{on}}
+\index{on@{on}!Gui::Button@{Gui::Button}}
+\doxysubsubsection{\texorpdfstring{on()}{on()}}
+{\footnotesize\ttfamily void Gui\+::\+Button\+::on (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event\+Name,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$$>$}]{callback\+Func }\end{DoxyParamCaption})}
+
+
+
+Register a callback to an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Name} & Name of the event to register callback on \\
+\hline
+{\em callback\+Func} & Callback to register\\
+\hline
+\end{DoxyParams}
+This function registers callbacks to the following events only\+:
+\begin{DoxyEnumerate}
+\item \char`\"{}click\char`\"{} -\/ Fires when the button is clicked
+\item \char`\"{}mouse\+Enter\char`\"{} -\/ Fires when the mouse enters the button
+\item \char`\"{}mouse\+Leave\char`\"{} -\/ Fires when the mouse leaves the button
+\end{DoxyEnumerate}
+
+Any event that\textquotesingle{}s none of the above will not be raised 
+
+Definition at line 33 of file Button.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/control/\mbox{\hyperlink{_button_8h}{Button.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/control/\mbox{\hyperlink{_button_8cpp}{Button.\+cpp}}\end{DoxyCompactItemize}

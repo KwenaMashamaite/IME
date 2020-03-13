@@ -1,0 +1,385 @@
+\hypertarget{class_gui_1_1_u_i_element}{}\doxysection{Gui\+::U\+I\+Element Class Reference}
+\label{class_gui_1_1_u_i_element}\index{Gui::UIElement@{Gui::UIElement}}
+
+
+{\ttfamily \#include $<$U\+I\+Element.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::U\+I\+Element\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=246pt]{class_gui_1_1_u_i_element__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_u_i_element_a8ddf0a446ec1ccaac74ecc7d9c4372a2}{U\+I\+Element}} (const std\+::string \&content, const std\+::string \&font=\char`\"{}basson.\+ttf\char`\"{}, unsigned int text\+Char\+Size=30u)
+\begin{DoxyCompactList}\small\item\em Creates a UI element that has a width and height of 40 respectively, a transparent fill colour and a position of (0, 0) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_acfa974a2327371b4ba62bd148bb537fa}{set\+Position}} (float x, float y)
+\begin{DoxyCompactList}\small\item\em Set the position of the element. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_abfa1efc7a58349d8d0c1d3b540e8a473}{set\+Margin}} (float margin)
+\begin{DoxyCompactList}\small\item\em Set the margin on all sides (equal) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_a9ee38f0bc862c9cdba3d1ff19664a295}{set\+Padding}} (float padding)
+\begin{DoxyCompactList}\small\item\em Set the padding on all sides (equal) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_ad579df3f290a23422a004281ff20cc2e}{set\+Margin}} (const \mbox{\hyperlink{struct_gui_1_1_margin}{Margin}} \&margin)
+\begin{DoxyCompactList}\small\item\em Set the margin individually. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_ab1596e3da13f218fdc86f12e8cf0d5dd}{set\+Padding}} (const \mbox{\hyperlink{struct_gui_1_1_padding}{Padding}} \&padding)
+\begin{DoxyCompactList}\small\item\em Set the padding individually. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_a84ebdecf38714f3a90323d9a0da7f807}{set\+Fill\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} fill\+Colour)
+\begin{DoxyCompactList}\small\item\em Set the fill colour of the element. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_aca34492a02c14cf9a2348b0b2d99367d}{set\+Text\+Font}} (const std\+::string \&content\+Font)
+\begin{DoxyCompactList}\small\item\em Set the element\textquotesingle{}s text content font. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_a50b7a7e19d5eedef56c9cfdffaab0634}{set\+Text\+Char\+Size}} (unsigned int char\+Size)
+\begin{DoxyCompactList}\small\item\em Set the character size of the element\textquotesingle{}s text content. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_ad8d890689546cf6adc6a81e1198d652c}{set\+Text}} (const std\+::string \&content)
+\begin{DoxyCompactList}\small\item\em Set the text content of the element. Overrides existing content. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_u_i_element_a4673075a24e1ff3d151bde05f54a8823}{set\+Text\+Fill\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} text\+Fill\+Colour)
+\begin{DoxyCompactList}\small\item\em Set the fill colour of the element\textquotesingle{}s text content. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_globals_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_u_i_element_ac9fc8ba32f423d1c52e1071f7418eba7}{get\+Position}} () const
+\begin{DoxyCompactList}\small\item\em Get the position of the element. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_gui_1_1_u_i_element_a22bad568e135e75301f7c8d0e7ae7e8b}{get\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the element. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_gui_1_1_u_i_element_a9aa3d0a562e8fa28f1168aa01fa2586e}{contains}} (float x, float y) const
+\begin{DoxyCompactList}\small\item\em Check if coordinates lie inside the element. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_u_i_element_ae0d78bbc075323f763de1626b776ffe9}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
+\begin{DoxyCompactList}\small\item\em Renders element on a render target. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_gui_1_1_u_i_element_addbacd808f5c4430141688f76de3ef91}{$\sim$\+U\+I\+Element}} ()=0
+\begin{DoxyCompactList}\small\item\em Default destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 39 of file U\+I\+Element.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a8ddf0a446ec1ccaac74ecc7d9c4372a2}\label{class_gui_1_1_u_i_element_a8ddf0a446ec1ccaac74ecc7d9c4372a2}} 
+\index{Gui::UIElement@{Gui::UIElement}!UIElement@{UIElement}}
+\index{UIElement@{UIElement}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{UIElement()}{UIElement()}}
+{\footnotesize\ttfamily Gui\+::\+U\+I\+Element\+::\+U\+I\+Element (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{content,  }\item[{const std\+::string \&}]{font = {\ttfamily \char`\"{}basson.ttf\char`\"{}},  }\item[{unsigned int}]{text\+Char\+Size = {\ttfamily 30u} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Creates a UI element that has a width and height of 40 respectively, a transparent fill colour and a position of (0, 0) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em content} & Content to be displayed inside the element \\
+\hline
+{\em font} & Text content font \\
+\hline
+{\em text\+Char\+Size} & Text content character size \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 5 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_addbacd808f5c4430141688f76de3ef91}\label{class_gui_1_1_u_i_element_addbacd808f5c4430141688f76de3ef91}} 
+\index{Gui::UIElement@{Gui::UIElement}!````~UIElement@{$\sim$UIElement}}
+\index{````~UIElement@{$\sim$UIElement}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{$\sim$UIElement()}{~UIElement()}}
+{\footnotesize\ttfamily Gui\+::\+U\+I\+Element\+::$\sim$\+U\+I\+Element (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [default]}}
+
+
+
+Default destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a9aa3d0a562e8fa28f1168aa01fa2586e}\label{class_gui_1_1_u_i_element_a9aa3d0a562e8fa28f1168aa01fa2586e}} 
+\index{Gui::UIElement@{Gui::UIElement}!contains@{contains}}
+\index{contains@{contains}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool Gui\+::\+U\+I\+Element\+::contains (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption}) const}
+
+
+
+Check if coordinates lie inside the element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X coordinate to be checked \\
+\hline
+{\em y} & Y coordinate to be checked \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if coordinates lie inside the element, false if coordinates do not lie inside the element 
+\end{DoxyReturn}
+
+
+Definition at line 123 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_ae0d78bbc075323f763de1626b776ffe9}\label{class_gui_1_1_u_i_element_ae0d78bbc075323f763de1626b776ffe9}} 
+\index{Gui::UIElement@{Gui::UIElement}!draw@{draw}}
+\index{draw@{draw}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Gui\+::\+Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Renders element on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Render target to draw element on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 132 of file U\+I\+Element.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{class_gui_1_1_u_i_element_ae0d78bbc075323f763de1626b776ffe9_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a22bad568e135e75301f7c8d0e7ae7e8b}\label{class_gui_1_1_u_i_element_a22bad568e135e75301f7c8d0e7ae7e8b}} 
+\index{Gui::UIElement@{Gui::UIElement}!getDimensions@{getDimensions}}
+\index{getDimensions@{getDimensions}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{getDimensions()}{getDimensions()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} Gui\+::\+U\+I\+Element\+::get\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the dimensions of the element. 
+
+\begin{DoxyReturn}{Returns}
+Dimensions of the element 
+\end{DoxyReturn}
+
+
+Definition at line 116 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_ac9fc8ba32f423d1c52e1071f7418eba7}\label{class_gui_1_1_u_i_element_ac9fc8ba32f423d1c52e1071f7418eba7}} 
+\index{Gui::UIElement@{Gui::UIElement}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_globals_1_1_position}{Position}} Gui\+::\+U\+I\+Element\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the position of the element. 
+
+\begin{DoxyReturn}{Returns}
+Position of the element 
+\end{DoxyReturn}
+
+
+Definition at line 109 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a84ebdecf38714f3a90323d9a0da7f807}\label{class_gui_1_1_u_i_element_a84ebdecf38714f3a90323d9a0da7f807}} 
+\index{Gui::UIElement@{Gui::UIElement}!setFillColour@{setFillColour}}
+\index{setFillColour@{setFillColour}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setFillColour()}{setFillColour()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Fill\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gui_1_1_colour}{Gui\+::\+Colour}}}]{fill\+Colour }\end{DoxyParamCaption})}
+
+
+
+Set the fill colour of the element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fill\+Colour} & New fill colour of the element \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 79 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_ad579df3f290a23422a004281ff20cc2e}\label{class_gui_1_1_u_i_element_ad579df3f290a23422a004281ff20cc2e}} 
+\index{Gui::UIElement@{Gui::UIElement}!setMargin@{setMargin}}
+\index{setMargin@{setMargin}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setMargin()}{setMargin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Margin (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gui_1_1_margin}{Margin}} \&}]{margin }\end{DoxyParamCaption})}
+
+
+
+Set the margin individually. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em margin} & \mbox{\hyperlink{struct_gui_1_1_margin}{Margin}} to set \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 69 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_abfa1efc7a58349d8d0c1d3b540e8a473}\label{class_gui_1_1_u_i_element_abfa1efc7a58349d8d0c1d3b540e8a473}} 
+\index{Gui::UIElement@{Gui::UIElement}!setMargin@{setMargin}}
+\index{setMargin@{setMargin}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setMargin()}{setMargin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Margin (\begin{DoxyParamCaption}\item[{float}]{margin }\end{DoxyParamCaption})}
+
+
+
+Set the margin on all sides (equal) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em margin} & \mbox{\hyperlink{struct_gui_1_1_margin}{Margin}} o set \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 59 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_ab1596e3da13f218fdc86f12e8cf0d5dd}\label{class_gui_1_1_u_i_element_ab1596e3da13f218fdc86f12e8cf0d5dd}} 
+\index{Gui::UIElement@{Gui::UIElement}!setPadding@{setPadding}}
+\index{setPadding@{setPadding}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setPadding()}{setPadding()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Padding (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gui_1_1_padding}{Padding}} \&}]{padding }\end{DoxyParamCaption})}
+
+
+
+Set the padding individually. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em padding} & \mbox{\hyperlink{struct_gui_1_1_padding}{Padding}} to set \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 74 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a9ee38f0bc862c9cdba3d1ff19664a295}\label{class_gui_1_1_u_i_element_a9ee38f0bc862c9cdba3d1ff19664a295}} 
+\index{Gui::UIElement@{Gui::UIElement}!setPadding@{setPadding}}
+\index{setPadding@{setPadding}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setPadding()}{setPadding()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Padding (\begin{DoxyParamCaption}\item[{float}]{padding }\end{DoxyParamCaption})}
+
+
+
+Set the padding on all sides (equal) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em padding} & \mbox{\hyperlink{struct_gui_1_1_padding}{Padding}} to set \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 64 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_acfa974a2327371b4ba62bd148bb537fa}\label{class_gui_1_1_u_i_element_acfa974a2327371b4ba62bd148bb537fa}} 
+\index{Gui::UIElement@{Gui::UIElement}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Position (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+
+
+
+Set the position of the element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & New x coordinate of the element \\
+\hline
+{\em y} & New y coordinate of the element \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 39 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_ad8d890689546cf6adc6a81e1198d652c}\label{class_gui_1_1_u_i_element_ad8d890689546cf6adc6a81e1198d652c}} 
+\index{Gui::UIElement@{Gui::UIElement}!setText@{setText}}
+\index{setText@{setText}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setText()}{setText()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Text (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{content }\end{DoxyParamCaption})}
+
+
+
+Set the text content of the element. Overrides existing content. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em content} & New text content \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 97 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a50b7a7e19d5eedef56c9cfdffaab0634}\label{class_gui_1_1_u_i_element_a50b7a7e19d5eedef56c9cfdffaab0634}} 
+\index{Gui::UIElement@{Gui::UIElement}!setTextCharSize@{setTextCharSize}}
+\index{setTextCharSize@{setTextCharSize}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setTextCharSize()}{setTextCharSize()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Text\+Char\+Size (\begin{DoxyParamCaption}\item[{unsigned int}]{char\+Size }\end{DoxyParamCaption})}
+
+
+
+Set the character size of the element\textquotesingle{}s text content. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em char\+Size} & New character size \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 90 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_a4673075a24e1ff3d151bde05f54a8823}\label{class_gui_1_1_u_i_element_a4673075a24e1ff3d151bde05f54a8823}} 
+\index{Gui::UIElement@{Gui::UIElement}!setTextFillColour@{setTextFillColour}}
+\index{setTextFillColour@{setTextFillColour}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setTextFillColour()}{setTextFillColour()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Text\+Fill\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gui_1_1_colour}{Gui\+::\+Colour}}}]{text\+Fill\+Colour }\end{DoxyParamCaption})}
+
+
+
+Set the fill colour of the element\textquotesingle{}s text content. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em text\+Fill\+Colour} & New text content fill colour \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 102 of file U\+I\+Element.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_u_i_element_aca34492a02c14cf9a2348b0b2d99367d}\label{class_gui_1_1_u_i_element_aca34492a02c14cf9a2348b0b2d99367d}} 
+\index{Gui::UIElement@{Gui::UIElement}!setTextFont@{setTextFont}}
+\index{setTextFont@{setTextFont}!Gui::UIElement@{Gui::UIElement}}
+\doxysubsubsection{\texorpdfstring{setTextFont()}{setTextFont()}}
+{\footnotesize\ttfamily void Gui\+::\+U\+I\+Element\+::set\+Text\+Font (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{content\+Font }\end{DoxyParamCaption})}
+
+
+
+Set the element\textquotesingle{}s text content font. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em content\+Font} & New font \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 86 of file U\+I\+Element.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_u_i_element_aca34492a02c14cf9a2348b0b2d99367d_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/control/\mbox{\hyperlink{_u_i_element_8h}{U\+I\+Element.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/control/\mbox{\hyperlink{_u_i_element_8cpp}{U\+I\+Element.\+cpp}}\end{DoxyCompactItemize}

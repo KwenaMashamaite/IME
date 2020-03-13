@@ -1,0 +1,156 @@
+\hypertarget{class_audio_1_1_music_player}{}\doxysection{Audio\+::Music\+Player Class Reference}
+\label{class_audio_1_1_music_player}\index{Audio::MusicPlayer@{Audio::MusicPlayer}}
+
+
+{\ttfamily \#include $<$Music\+Player.\+h$>$}
+
+
+
+Inheritance diagram for Audio\+::Music\+Player\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_audio_1_1_music_player__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Audio\+::Music\+Player\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_audio_1_1_music_player__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}{play}} (const std\+::string \&filename) override
+\begin{DoxyCompactList}\small\item\em play music file \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}{set\+Loop}} (bool is\+Loop)
+\begin{DoxyCompactList}\small\item\em Loop/unloop music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}{pause}} () override
+\begin{DoxyCompactList}\small\item\em Pause the Music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}{resume}} () override
+\begin{DoxyCompactList}\small\item\em Resume paused music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}{stop}} () override
+\begin{DoxyCompactList}\small\item\em Stop playing or paused music. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 21 of file Music\+Player.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}\label{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!pause@{pause}}
+\index{pause@{pause}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{pause()}{pause()}}
+{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::pause (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Pause the Music. 
+
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 15 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}\label{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!play@{play}}
+\index{play@{play}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{play()}{play()}}
+{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::play (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+play music file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & File name of the Music to play \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 4 of file Music\+Player.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}\label{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!resume@{resume}}
+\index{resume@{resume}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{resume()}{resume()}}
+{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::resume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Resume paused music. 
+
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 20 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}\label{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!setLoop@{setLoop}}
+\index{setLoop@{setLoop}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{setLoop()}{setLoop()}}
+{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::set\+Loop (\begin{DoxyParamCaption}\item[{bool}]{is\+Loop }\end{DoxyParamCaption})}
+
+
+
+Loop/unloop music. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+Loop} & Set to true to loop music, false to unloop nusic \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 10 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}\label{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!stop@{stop}}
+\index{stop@{stop}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Stop playing or paused music. 
+
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 25 of file Music\+Player.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/audio/\mbox{\hyperlink{_music_player_8h}{Music\+Player.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/audio/\mbox{\hyperlink{_music_player_8cpp}{Music\+Player.\+cpp}}\end{DoxyCompactItemize}

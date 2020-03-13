@@ -1,0 +1,250 @@
+\hypertarget{class_scoreboard}{}\doxysection{Scoreboard Class Reference}
+\label{class_scoreboard}\index{Scoreboard@{Scoreboard}}
+
+
+{\ttfamily \#include $<$Scoreboard.\+h$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}{Score\+Container}} = std\+::vector$<$ unsigned int $>$
+\item 
+using \mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const\+Iterator}} = Score\+Container\+::const\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_scoreboard_a4e4ee37803e6aad99b29ed874a01528a}{Scoreboard}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}{add\+Points}} (\mbox{\hyperlink{_scoreboard_8h_ab91a38642c07db386f7d2f360ba8ca92}{Destroyed\+Entity}} destroyed\+Entity)
+\begin{DoxyCompactList}\small\item\em Add points to the current score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scoreboard_a80671b685aaaf9c3987709342070927a}{add\+Points}} (unsigned int points)
+\begin{DoxyCompactList}\small\item\em Add points to the current score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe}{update\+High\+Score}} ()
+\begin{DoxyCompactList}\small\item\em Write scores to disk file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scoreboard_a2574007a267d197a38a51ed96ade8c89}{reset}} ()
+\begin{DoxyCompactList}\small\item\em Reset the current score to zero. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_scoreboard_a1e564b025738ad886dc89e7794eca2ac}{get\+Score}} () const
+\begin{DoxyCompactList}\small\item\em Get the current score. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f}{get\+Top\+Score}} () const
+\begin{DoxyCompactList}\small\item\em Get the highest score. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const\+Iterator}} \mbox{\hyperlink{class_scoreboard_a8af3aaed44f75ce0bcd6c07965bc6bcc}{c\+Begin}} () const
+\begin{DoxyCompactList}\small\item\em Get a constant iterator that points to the first element in a high scores container. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const\+Iterator}} \mbox{\hyperlink{class_scoreboard_abe389aaac0862d7f9d8e01490b098932}{c\+End}} () const
+\begin{DoxyCompactList}\small\item\em Get a constant iterator that points one past the last element in a high scores container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 24 of file Scoreboard.\+h.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}\label{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}} 
+\index{Scoreboard@{Scoreboard}!constIterator@{constIterator}}
+\index{constIterator@{constIterator}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{constIterator}{constIterator}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{Scoreboard\+::const\+Iterator}} =  Score\+Container\+::const\+\_\+iterator}
+
+
+
+Definition at line 27 of file Scoreboard.\+h.
+
+\mbox{\Hypertarget{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}\label{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}} 
+\index{Scoreboard@{Scoreboard}!ScoreContainer@{ScoreContainer}}
+\index{ScoreContainer@{ScoreContainer}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{ScoreContainer}{ScoreContainer}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}{Scoreboard\+::\+Score\+Container}} =  std\+::vector$<$unsigned int$>$}
+
+
+
+Definition at line 26 of file Scoreboard.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_scoreboard_a4e4ee37803e6aad99b29ed874a01528a}\label{class_scoreboard_a4e4ee37803e6aad99b29ed874a01528a}} 
+\index{Scoreboard@{Scoreboard}!Scoreboard@{Scoreboard}}
+\index{Scoreboard@{Scoreboard}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{Scoreboard()}{Scoreboard()}}
+{\footnotesize\ttfamily Scoreboard\+::\+Scoreboard (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filepath} & File name of the file that contains the scores \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the file cannot be found on the disk\\
+\hline
+\end{DoxyExceptions}
+The file name must be preceded by the path to the file. In addition, the file that contains the highscores must be in the same folder as the generated executable file (or be in a subfolder of the generated executable file\textquotesingle{}s folder), otherwise a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown
+
+(e.\+g executables/resources/highscores/highscore.\+txt) 
+
+Definition at line 7 of file Scoreboard.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=332pt]{class_scoreboard_a4e4ee37803e6aad99b29ed874a01528a_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}\label{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}} 
+\index{Scoreboard@{Scoreboard}!addPoints@{addPoints}}
+\index{addPoints@{addPoints}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{addPoints()}{addPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Scoreboard\+::add\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_scoreboard_8h_ab91a38642c07db386f7d2f360ba8ca92}{Destroyed\+Entity}}}]{destroyed\+Entity }\end{DoxyParamCaption})}
+
+
+
+Add points to the current score. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em destroyed\+Entity} & Points to add to current score\\
+\hline
+\end{DoxyParams}
+The integer value associated with the provided argument determines the amount of points that are added to the current score 
+
+Definition at line 17 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_a80671b685aaaf9c3987709342070927a}\label{class_scoreboard_a80671b685aaaf9c3987709342070927a}} 
+\index{Scoreboard@{Scoreboard}!addPoints@{addPoints}}
+\index{addPoints@{addPoints}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{addPoints()}{addPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Scoreboard\+::add\+Points (\begin{DoxyParamCaption}\item[{unsigned int}]{points }\end{DoxyParamCaption})}
+
+
+
+Add points to the current score. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Points to add \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 21 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_a8af3aaed44f75ce0bcd6c07965bc6bcc}\label{class_scoreboard_a8af3aaed44f75ce0bcd6c07965bc6bcc}} 
+\index{Scoreboard@{Scoreboard}!cBegin@{cBegin}}
+\index{cBegin@{cBegin}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{cBegin()}{cBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const\+Iterator}} Scoreboard\+::c\+Begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get a constant iterator that points to the first element in a high scores container. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator that points to the first element in a high scores container 
+\end{DoxyReturn}
+
+
+Definition at line 54 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_abe389aaac0862d7f9d8e01490b098932}\label{class_scoreboard_abe389aaac0862d7f9d8e01490b098932}} 
+\index{Scoreboard@{Scoreboard}!cEnd@{cEnd}}
+\index{cEnd@{cEnd}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{cEnd()}{cEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const\+Iterator}} Scoreboard\+::c\+End (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get a constant iterator that points one past the last element in a high scores container. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator that points one past the last element in a high scores container 
+\end{DoxyReturn}
+
+
+Definition at line 58 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_a1e564b025738ad886dc89e7794eca2ac}\label{class_scoreboard_a1e564b025738ad886dc89e7794eca2ac}} 
+\index{Scoreboard@{Scoreboard}!getScore@{getScore}}
+\index{getScore@{getScore}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{getScore()}{getScore()}}
+{\footnotesize\ttfamily unsigned int Scoreboard\+::get\+Score (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the current score. 
+
+\begin{DoxyReturn}{Returns}
+Current score 
+\end{DoxyReturn}
+
+
+Definition at line 46 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f}\label{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f}} 
+\index{Scoreboard@{Scoreboard}!getTopScore@{getTopScore}}
+\index{getTopScore@{getTopScore}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{getTopScore()}{getTopScore()}}
+{\footnotesize\ttfamily unsigned int Scoreboard\+::get\+Top\+Score (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the highest score. 
+
+\begin{DoxyReturn}{Returns}
+Highest score 
+\end{DoxyReturn}
+
+
+Definition at line 50 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_a2574007a267d197a38a51ed96ade8c89}\label{class_scoreboard_a2574007a267d197a38a51ed96ade8c89}} 
+\index{Scoreboard@{Scoreboard}!reset@{reset}}
+\index{reset@{reset}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void Scoreboard\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reset the current score to zero. 
+
+
+
+Definition at line 42 of file Scoreboard.\+cpp.
+
+\mbox{\Hypertarget{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe}\label{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe}} 
+\index{Scoreboard@{Scoreboard}!updateHighScore@{updateHighScore}}
+\index{updateHighScore@{updateHighScore}!Scoreboard@{Scoreboard}}
+\doxysubsubsection{\texorpdfstring{updateHighScore()}{updateHighScore()}}
+{\footnotesize\ttfamily void Scoreboard\+::update\+High\+Score (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Write scores to disk file. 
+
+The disk file is only updated if the current score is greater than the lowest highscore from the last file read 
+
+Definition at line 25 of file Scoreboard.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/scoreboard/\mbox{\hyperlink{_scoreboard_8h}{Scoreboard.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/scoreboard/\mbox{\hyperlink{_scoreboard_8cpp}{Scoreboard.\+cpp}}\end{DoxyCompactItemize}

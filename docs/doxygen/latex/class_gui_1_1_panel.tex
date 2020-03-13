@@ -1,0 +1,407 @@
+\hypertarget{class_gui_1_1_panel}{}\doxysection{Gui\+::Panel Class Reference}
+\label{class_gui_1_1_panel}\index{Gui::Panel@{Gui::Panel}}
+
+
+{\ttfamily \#include $<$Panel.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::Panel\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038}{Panel}} (float x, float y)
+\begin{DoxyCompactList}\small\item\em Create a G\+UI panel. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_globals_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}{get\+Position}} () const
+\begin{DoxyCompactList}\small\item\em Get the position of the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}{set\+Position}} (const \mbox{\hyperlink{struct_globals_1_1_position}{Position}} \&position)
+\begin{DoxyCompactList}\small\item\em Set the position of the panel. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a}{get\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}{set\+Dimensions}} (const \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} \&dimensions)
+\begin{DoxyCompactList}\small\item\em Set the dimensions of the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_a06fb9d831cac8e99a898785c26ae27f8}{set\+Fill\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} fill\+Colour)
+\begin{DoxyCompactList}\small\item\em Set the fill colour of the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_aca9c00bbd5446807e1531d9745e5dbb7}{set\+Outline\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} outline\+Colour)
+\begin{DoxyCompactList}\small\item\em Set the outline colour of the panel. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_panel_a7a9a37e7a5814ecc62641f6977c21830}{add\+Element}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element)=0
+\begin{DoxyCompactList}\small\item\em Add a UI element to the panel. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
+\begin{DoxyCompactList}\small\item\em Render the elements of a panel on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_gui_1_1_panel_a3d4068e5c5039c86cb1597d7387d3c3b}{U\+I\+Element\+Container}} = std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ $>$
+\item 
+using \mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{const\+Iterator}} = U\+I\+Element\+Container\+::const\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_a2cca6e61e005509bf39fd0019fa48874}{add}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element)
+\begin{DoxyCompactList}\small\item\em Add gui element to underlying data structure. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_a5b20837df33bf21dfcac93ff53606a4c}{on}} (std\+::string \&\&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
+\begin{DoxyCompactList}\small\item\em Add listener to event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{const\+Iterator}} \mbox{\hyperlink{class_gui_1_1_panel_aa3cfd39c95432d40a88cb482bbf20a9a}{c\+Begin}} () const
+\begin{DoxyCompactList}\small\item\em Get a constant iterator that points to the first element in the the panel. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{const\+Iterator}} \mbox{\hyperlink{class_gui_1_1_panel_ac587781faa1f859bb05177b446f8b2cc}{c\+End}} () const
+\begin{DoxyCompactList}\small\item\em Get a constant iterator that points one past the last element in the panel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 15 of file Panel.\+h.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}\label{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}} 
+\index{Gui::Panel@{Gui::Panel}!constIterator@{constIterator}}
+\index{constIterator@{constIterator}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{constIterator}{constIterator}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{Gui\+::\+Panel\+::const\+Iterator}} =  U\+I\+Element\+Container\+::const\+\_\+iterator\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 76 of file Panel.\+h.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_a3d4068e5c5039c86cb1597d7387d3c3b}\label{class_gui_1_1_panel_a3d4068e5c5039c86cb1597d7387d3c3b}} 
+\index{Gui::Panel@{Gui::Panel}!UIElementContainer@{UIElementContainer}}
+\index{UIElementContainer@{UIElementContainer}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{UIElementContainer}{UIElementContainer}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_gui_1_1_panel_a3d4068e5c5039c86cb1597d7387d3c3b}{Gui\+::\+Panel\+::\+U\+I\+Element\+Container}} =  std\+::vector$<$std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}}$>$ $>$\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 75 of file Panel.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038}\label{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038}} 
+\index{Gui::Panel@{Gui::Panel}!Panel@{Panel}}
+\index{Panel@{Panel}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{Panel()}{Panel()}}
+{\footnotesize\ttfamily Gui\+::\+Panel\+::\+Panel (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+
+
+
+Create a G\+UI panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X coordinate of the panel \\
+\hline
+{\em y} & Y coordinate of the panel \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 4 of file Panel.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_panel_a2cca6e61e005509bf39fd0019fa48874}\label{class_gui_1_1_panel_a2cca6e61e005509bf39fd0019fa48874}} 
+\index{Gui::Panel@{Gui::Panel}!add@{add}}
+\index{add@{add}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::add (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Add gui element to underlying data structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gui\+Element} & Element to be added \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 44 of file Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_a7a9a37e7a5814ecc62641f6977c21830}\label{class_gui_1_1_panel_a7a9a37e7a5814ecc62641f6977c21830}} 
+\index{Gui::Panel@{Gui::Panel}!addElement@{addElement}}
+\index{addElement@{addElement}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{addElement()}{addElement()}}
+{\footnotesize\ttfamily virtual void Gui\+::\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Add a UI element to the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gui\+Element} & Element to add to panel \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_gui_1_1_stack_panel_a965ce5dfba268354a6b21bee1ad16211}{Gui\+::\+Stack\+Panel}}, \mbox{\hyperlink{class_gui_1_1_canvas_a24fa61894a5def6458d2baad395ebef3}{Gui\+::\+Canvas}}, and \mbox{\hyperlink{class_gui_1_1_dock_panel_ac8f38ea671cd6920c66532ce77704fbd}{Gui\+::\+Dock\+Panel}}.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_aa3cfd39c95432d40a88cb482bbf20a9a}\label{class_gui_1_1_panel_aa3cfd39c95432d40a88cb482bbf20a9a}} 
+\index{Gui::Panel@{Gui::Panel}!cBegin@{cBegin}}
+\index{cBegin@{cBegin}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{cBegin()}{cBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{Gui\+::\+Panel\+::const\+Iterator}} Gui\+::\+Panel\+::c\+Begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Get a constant iterator that points to the first element in the the panel. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator that points to the first element in the the panel 
+\end{DoxyReturn}
+
+
+Definition at line 60 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_aa3cfd39c95432d40a88cb482bbf20a9a_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_ac587781faa1f859bb05177b446f8b2cc}\label{class_gui_1_1_panel_ac587781faa1f859bb05177b446f8b2cc}} 
+\index{Gui::Panel@{Gui::Panel}!cEnd@{cEnd}}
+\index{cEnd@{cEnd}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{cEnd()}{cEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_gui_1_1_panel_a10b2312401e43796bf25f17b3de7ff66}{Gui\+::\+Panel\+::const\+Iterator}} Gui\+::\+Panel\+::c\+End (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Get a constant iterator that points one past the last element in the panel. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator that points one past the last element in the panel 
+\end{DoxyReturn}
+
+
+Definition at line 64 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_ac587781faa1f859bb05177b446f8b2cc_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}\label{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}} 
+\index{Gui::Panel@{Gui::Panel}!draw@{draw}}
+\index{draw@{draw}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Render the elements of a panel on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Render target to draw UI elements on \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}{Gui\+::\+Dock\+Panel}}.
+
+
+
+Definition at line 31 of file Panel.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=303pt]{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a}\label{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a}} 
+\index{Gui::Panel@{Gui::Panel}!getDimensions@{getDimensions}}
+\index{getDimensions@{getDimensions}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{getDimensions()}{getDimensions()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} Gui\+::\+Panel\+::get\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the dimensions of the panel. 
+
+\begin{DoxyReturn}{Returns}
+Dimensions of the panel 
+\end{DoxyReturn}
+
+
+Definition at line 11 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}\label{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}} 
+\index{Gui::Panel@{Gui::Panel}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_globals_1_1_position}{Position}} Gui\+::\+Panel\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the position of the panel. 
+
+\begin{DoxyReturn}{Returns}
+Position of the panel 
+\end{DoxyReturn}
+
+
+Definition at line 22 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_a5b20837df33bf21dfcac93ff53606a4c}\label{class_gui_1_1_panel_a5b20837df33bf21dfcac93ff53606a4c}} 
+\index{Gui::Panel@{Gui::Panel}!on@{on}}
+\index{on@{on}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{on()}{on()}}
+{\footnotesize\ttfamily template$<$typename... Args$>$ \\
+void Gui\+::\+Panel\+::on (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Add listener to event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Event to add listener to \\
+\hline
+{\em callback} & Function to execute when event is raised \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 90 of file Panel.\+h.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{class_gui_1_1_panel_a5b20837df33bf21dfcac93ff53606a4c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{class_gui_1_1_panel_a5b20837df33bf21dfcac93ff53606a4c_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}\label{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}} 
+\index{Gui::Panel@{Gui::Panel}!setDimensions@{setDimensions}}
+\index{setDimensions@{setDimensions}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{setDimensions()}{setDimensions()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::set\+Dimensions (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} \&}]{dimensions }\end{DoxyParamCaption})}
+
+
+
+Set the dimensions of the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dimensions} & New dimensions of the panel \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 18 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_a06fb9d831cac8e99a898785c26ae27f8}\label{class_gui_1_1_panel_a06fb9d831cac8e99a898785c26ae27f8}} 
+\index{Gui::Panel@{Gui::Panel}!setFillColour@{setFillColour}}
+\index{setFillColour@{setFillColour}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{setFillColour()}{setFillColour()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::set\+Fill\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gui_1_1_colour}{Gui\+::\+Colour}}}]{fill\+Colour }\end{DoxyParamCaption})}
+
+
+
+Set the fill colour of the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fill\+Colour} & Fill colour to set\\
+\hline
+\end{DoxyParams}
+The panel has a transparent fill colour by default 
+
+Definition at line 37 of file Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_aca9c00bbd5446807e1531d9745e5dbb7}\label{class_gui_1_1_panel_aca9c00bbd5446807e1531d9745e5dbb7}} 
+\index{Gui::Panel@{Gui::Panel}!setOutlineColour@{setOutlineColour}}
+\index{setOutlineColour@{setOutlineColour}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{setOutlineColour()}{setOutlineColour()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::set\+Outline\+Colour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gui_1_1_colour}{Gui\+::\+Colour}}}]{outline\+Colour }\end{DoxyParamCaption})}
+
+
+
+Set the outline colour of the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em outline\+Colour} & New outline colour of the panel \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 51 of file Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}\label{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}} 
+\index{Gui::Panel@{Gui::Panel}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::set\+Position (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_globals_1_1_position}{Position}} \&}]{position }\end{DoxyParamCaption})}
+
+
+
+Set the position of the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & New position of the panel \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 26 of file Panel.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_panel_8h}{Panel.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_panel_8cpp}{Panel.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,175 @@
+\hypertarget{class_gui_1_1_dock_panel}{}\doxysection{Gui\+::Dock\+Panel Class Reference}
+\label{class_gui_1_1_dock_panel}\index{Gui::DockPanel@{Gui::DockPanel}}
+
+
+{\ttfamily \#include $<$Dock\+Panel.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::Dock\+Panel\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=165pt]{class_gui_1_1_dock_panel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Gui\+::Dock\+Panel\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=165pt]{class_gui_1_1_dock_panel__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}{Dock}} \{ \mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a945d5e233cf7d6240f6b783b36a374ff}{Dock\+::\+Left}}, 
+\mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a92b09c7c48c520c3c55e497875da437c}{Dock\+::\+Right}}, 
+\mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9aa4ffdcf0dc1f31b9acaf295d75b51d00}{Dock\+::\+Top}}, 
+\mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a2ad9d63b69c4a10a5cc9cad923133bc4}{Dock\+::\+Bottom}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_dock_panel_a316a628168e2b1ac030331c688dea568}{Dock\+Panel}} (float x=0.\+0f, float y=0.\+0f)
+\item 
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_a0b5e2ecfc70dc6358f4ca9ec228a8d6b}{dock}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}{Dock}} dock, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$ panel)
+\item 
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_ac8f38ea671cd6920c66532ce77704fbd}{add\+Element}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element) override
+\begin{DoxyCompactList}\small\item\em Add a UI element to the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
+\begin{DoxyCompactList}\small\item\em Render the elements of a panel on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file Dock\+Panel.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}\label{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!Dock@{Dock}}
+\index{Dock@{Dock}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{Dock}{Dock}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}{Gui\+::\+Dock\+Panel\+::\+Dock}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Left@{Left}!Gui::DockPanel@{Gui::DockPanel}}\index{Gui::DockPanel@{Gui::DockPanel}!Left@{Left}}}\mbox{\Hypertarget{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a945d5e233cf7d6240f6b783b36a374ff}\label{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a945d5e233cf7d6240f6b783b36a374ff}} 
+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Right@{Right}!Gui::DockPanel@{Gui::DockPanel}}\index{Gui::DockPanel@{Gui::DockPanel}!Right@{Right}}}\mbox{\Hypertarget{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a92b09c7c48c520c3c55e497875da437c}\label{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a92b09c7c48c520c3c55e497875da437c}} 
+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Top@{Top}!Gui::DockPanel@{Gui::DockPanel}}\index{Gui::DockPanel@{Gui::DockPanel}!Top@{Top}}}\mbox{\Hypertarget{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9aa4ffdcf0dc1f31b9acaf295d75b51d00}\label{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9aa4ffdcf0dc1f31b9acaf295d75b51d00}} 
+Top&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bottom@{Bottom}!Gui::DockPanel@{Gui::DockPanel}}\index{Gui::DockPanel@{Gui::DockPanel}!Bottom@{Bottom}}}\mbox{\Hypertarget{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a2ad9d63b69c4a10a5cc9cad923133bc4}\label{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9a2ad9d63b69c4a10a5cc9cad923133bc4}} 
+Bottom&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 15 of file Dock\+Panel.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a316a628168e2b1ac030331c688dea568}\label{class_gui_1_1_dock_panel_a316a628168e2b1ac030331c688dea568}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!DockPanel@{DockPanel}}
+\index{DockPanel@{DockPanel}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{DockPanel()}{DockPanel()}}
+{\footnotesize\ttfamily Gui\+::\+Dock\+Panel\+::\+Dock\+Panel (\begin{DoxyParamCaption}\item[{float}]{x = {\ttfamily 0.0f},  }\item[{float}]{y = {\ttfamily 0.0f} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 4 of file Dock\+Panel.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_dock_panel_a316a628168e2b1ac030331c688dea568_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_ac8f38ea671cd6920c66532ce77704fbd}\label{class_gui_1_1_dock_panel_ac8f38ea671cd6920c66532ce77704fbd}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!addElement@{addElement}}
+\index{addElement@{addElement}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{addElement()}{addElement()}}
+{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Add a UI element to the panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gui\+Element} & Element to add to panel \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_gui_1_1_panel_a7a9a37e7a5814ecc62641f6977c21830}{Gui\+::\+Panel}}.
+
+
+
+Definition at line 8 of file Dock\+Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a0b5e2ecfc70dc6358f4ca9ec228a8d6b}\label{class_gui_1_1_dock_panel_a0b5e2ecfc70dc6358f4ca9ec228a8d6b}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!dock@{dock}}
+\index{dock@{dock}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{dock()}{dock()}}
+{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::dock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_ad161c5c59f34c303964e2be5e79dcdb9}{Dock}}}]{dock,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$}]{panel }\end{DoxyParamCaption})}
+
+
+
+Definition at line 13 of file Dock\+Panel.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_dock_panel_a0b5e2ecfc70dc6358f4ca9ec228a8d6b_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}\label{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!draw@{draw}}
+\index{draw@{draw}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Gui\+::\+Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Render the elements of a panel on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Render target to draw UI elements on \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}{Gui\+::\+Panel}}.
+
+
+
+Definition at line 59 of file Dock\+Panel.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_dock_panel_8h}{Dock\+Panel.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_dock_panel_8cpp}{Dock\+Panel.\+cpp}}\end{DoxyCompactItemize}

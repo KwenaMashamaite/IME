@@ -1,0 +1,100 @@
+\hypertarget{class_utility_1_1_file_reader}{}\doxysection{Utility\+::File\+Reader Class Reference}
+\label{class_utility_1_1_file_reader}\index{Utility::FileReader@{Utility::FileReader}}
+
+
+{\ttfamily \#include $<$File\+Reader.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_utility_1_1_file_reader_a53294db9e03836eaf563c936f221839a}{read\+File\+Into}} (std\+::stringstream \&buffer, const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Read data from a file on the disk. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_utility_1_1_file_reader_a322c9fbc1f8f5e653c44417de0348784}{write\+To\+File}} (const std\+::stringstream \&buffer, const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Write data to a file on the disk. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file File\+Reader.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_utility_1_1_file_reader_a53294db9e03836eaf563c936f221839a}\label{class_utility_1_1_file_reader_a53294db9e03836eaf563c936f221839a}} 
+\index{Utility::FileReader@{Utility::FileReader}!readFileInto@{readFileInto}}
+\index{readFileInto@{readFileInto}!Utility::FileReader@{Utility::FileReader}}
+\doxysubsubsection{\texorpdfstring{readFileInto()}{readFileInto()}}
+{\footnotesize\ttfamily void Utility\+::\+File\+Reader\+::read\+File\+Into (\begin{DoxyParamCaption}\item[{std\+::stringstream \&}]{buffer,  }\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Read data from a file on the disk. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Stores the contents of the read file \\
+\hline
+{\em filename} & Name of the file to read data from \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the file cannot be found on the disk\\
+\hline
+\end{DoxyExceptions}
+The file name must be preceded by the path to the file. In addition, the file to be read must be in the same folder as the generated executable file (or be in a subfolder of the generated executable file\textquotesingle{}s folder), otherwise a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown 
+
+Definition at line 4 of file File\+Reader.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=332pt]{class_utility_1_1_file_reader_a53294db9e03836eaf563c936f221839a_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_utility_1_1_file_reader_a322c9fbc1f8f5e653c44417de0348784}\label{class_utility_1_1_file_reader_a322c9fbc1f8f5e653c44417de0348784}} 
+\index{Utility::FileReader@{Utility::FileReader}!writeToFile@{writeToFile}}
+\index{writeToFile@{writeToFile}!Utility::FileReader@{Utility::FileReader}}
+\doxysubsubsection{\texorpdfstring{writeToFile()}{writeToFile()}}
+{\footnotesize\ttfamily void Utility\+::\+File\+Reader\+::write\+To\+File (\begin{DoxyParamCaption}\item[{const std\+::stringstream \&}]{buffer,  }\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Write data to a file on the disk. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Contents to write to file \\
+\hline
+{\em filename} & Name of the file to write data to \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the file cannot be found on the disk\\
+\hline
+\end{DoxyExceptions}
+The file name must be preceded by the path to the file. In addition, the file to be written must be in the same folder as the generated executable file (or be in a subfolder of the generated executable file\textquotesingle{}s folder), otherwise a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown.
+
+\begin{DoxyNote}{Note}
+This function will overwrite any data that was previously stored on the file 
+\end{DoxyNote}
+
+
+Definition at line 12 of file File\+Reader.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_utility_1_1_file_reader_a322c9fbc1f8f5e653c44417de0348784_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/utility/\mbox{\hyperlink{_file_reader_8h}{File\+Reader.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/utility/\mbox{\hyperlink{_file_reader_8cpp}{File\+Reader.\+cpp}}\end{DoxyCompactItemize}

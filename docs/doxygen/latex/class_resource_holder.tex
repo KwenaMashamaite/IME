@@ -1,0 +1,144 @@
+\hypertarget{class_resource_holder}{}\doxysection{Resource\+Holder$<$ T $>$ Class Template Reference}
+\label{class_resource_holder}\index{ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Resource\+Holder.\+h$>$}
+
+
+
+Inheritance diagram for Resource\+Holder$<$ T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_resource_holder__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Resource\+Holder$<$ T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{class_resource_holder__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_resource_holder_a4e320743b5ae4ec22ad66d4344e212fb}{Resource\+Holder}} (const std\+::string \&file\+Path, Pass\+Key pass\+Key)
+\begin{DoxyCompactList}\small\item\em Ensures resources can be located. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_resource_holder_aded020e947b7d05edc7aac2d1b1907e2}{load}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Load a resource from the disk and store it in a buffer. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{class_resource_holder_a3eb81559361e3dde734e558312ecc50d}{get}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Get a resource. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T$>$\newline
+class Resource\+Holder$<$ T $>$}
+
+
+
+Definition at line 16 of file Resource\+Holder.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_resource_holder_a4e320743b5ae4ec22ad66d4344e212fb}\label{class_resource_holder_a4e320743b5ae4ec22ad66d4344e212fb}} 
+\index{ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}!ResourceHolder@{ResourceHolder}}
+\index{ResourceHolder@{ResourceHolder}!ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ResourceHolder()}{ResourceHolder()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{class_resource_holder}{Resource\+Holder}}$<$ T $>$\+::\mbox{\hyperlink{class_resource_holder}{Resource\+Holder}} (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Path,  }\item[{Pass\+Key}]{pass\+Key }\end{DoxyParamCaption})}
+
+
+
+Ensures resources can be located. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Path} & Path of the resource to store \\
+\hline
+{\em pass\+Key} & Access key to the constructor\\
+\hline
+\end{DoxyParams}
+The file path must be relative to the generated executable file\textquotesingle{}s root directory (folder in which the .exe file sits). 
+
+Definition at line 7 of file Resource\+Holder.\+inl.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_resource_holder_a3eb81559361e3dde734e558312ecc50d}\label{class_resource_holder_a3eb81559361e3dde734e558312ecc50d}} 
+\index{ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}!get@{get}}
+\index{get@{get}!ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{class_resource_holder}{Resource\+Holder}}$<$ T $>$\+::get (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Get a resource. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & File name of the resource to be retrieved \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the the file cannot be found on the disk \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+Shared pointer to a resource in a buffer
+\end{DoxyReturn}
+If the requested resource is not found in the buffer, an attempt will be made to load it from the disk. If it cannot be loaded from the disk, then a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown. This implies that the returned pointer can never be a nullptr. Therefore, nullptr checks are not necessary, but they can be put in place for robustness 
+
+Definition at line 30 of file Resource\+Holder.\+inl.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_resource_holder_a3eb81559361e3dde734e558312ecc50d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_resource_holder_aded020e947b7d05edc7aac2d1b1907e2}\label{class_resource_holder_aded020e947b7d05edc7aac2d1b1907e2}} 
+\index{ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}!load@{load}}
+\index{load@{load}!ResourceHolder$<$ T $>$@{ResourceHolder$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+void \mbox{\hyperlink{class_resource_holder}{Resource\+Holder}}$<$ T $>$\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Load a resource from the disk and store it in a buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & File name of the resource to load \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the file cannot be found on the disk\\
+\hline
+\end{DoxyExceptions}
+If the path of the resource matches the one provided in the constructor then the file name can be specified without the path (e.\+g texture\+One.\+png), otherwise the file path is required (e.\+g resources/textures/texture\+One.\+png). 
+
+Definition at line 12 of file Resource\+Holder.\+inl.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_resource_holder_aded020e947b7d05edc7aac2d1b1907e2_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/resources/\mbox{\hyperlink{_resource_holder_8h}{Resource\+Holder.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/resources/\mbox{\hyperlink{_resource_holder_8inl}{Resource\+Holder.\+inl}}\end{DoxyCompactItemize}
