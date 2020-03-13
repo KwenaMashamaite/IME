@@ -25,7 +25,7 @@ Position Gui::Panel::getPosition() const {
 
 void Gui::Panel::setPosition(const Position &position) {
     panel_.setPosition(position.x, position.y);
-    eventEmitter_.emit("positionChanged");
+    eventEmitter_.emit("positionChanged", position);
 }
 
 void Gui::Panel::draw(Window &renderTarget) {
@@ -44,16 +44,8 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
 void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
     uiElements_.push_back(std::move(guiElement));
-}
-
-unsigned int Gui::Panel::size() const {
-    return uiElements_.size();
-}
-
-void Gui::Panel::on(std::string &&event, Callback<> callback) {
-    eventEmitter_.addListener(
-        static_cast<std::string &&>(event),std::move(callback)
-    );
+    if (uiElements_.size() == 1)
+        eventEmitter_.emit("firstElement");
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {

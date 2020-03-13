@@ -60,12 +60,6 @@ namespace Gui {
         void setOutlineColour(Colour outlineColour);
 
         /**
-         * @brief Get the number of elements in the panel
-         * @return Number of elements in the panel
-         */
-        unsigned int size() const;
-
-        /**
          * @brief Add a UI element to the panel
          * @param guiElement Element to add to panel
          */
@@ -90,7 +84,10 @@ namespace Gui {
          * @param event Event to add listener to
          * @param callback Function to execute when event is raised
          */
-        void on(std::string&& event, Callback<> callback);
+        template <typename...Args>
+        void on(std::string&& event, Callback<Args...> callback){
+            eventEmitter_.addListener(std::forward<std::string&&>(event),std::move(callback));
+        }
 
 
 
