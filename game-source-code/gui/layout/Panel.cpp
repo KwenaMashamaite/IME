@@ -19,7 +19,7 @@ void Gui::Panel::setDimensions(const Dimensions &dimensions) {
 }
 
 Position Gui::Panel::getPosition() const {
-    return {panel_.getPosition().x, panel_.getPosition().y};
+    return Position{panel_.getPosition().x, panel_.getPosition().y};
 }
 
 void Gui::Panel::setPosition(const Position &position) {
@@ -29,7 +29,7 @@ void Gui::Panel::setPosition(const Position &position) {
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
-    for (auto &element : guiElementList_) {
+    for (auto &element : uiElements_) {
         if (element != nullptr)
             element->draw(renderTarget);
     }
@@ -42,14 +42,14 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
     );
 }
 
-bool Gui::Panel::add(std::shared_ptr<UIElement> UIElement) {
-    if (UIElement == nullptr)
-        return false;
-    return guiElementList_.insert(UIElement).second;
+void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
+    if (guiElement == nullptr)
+        return;
+    uiElements_.push_back(std::move(guiElement));
 }
 
 unsigned int Gui::Panel::size() const {
-    return guiElementList_.size();
+    return uiElements_.size();
 }
 
 void Gui::Panel::on(std::string &&event, Callback<> callback) {

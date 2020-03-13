@@ -8,7 +8,7 @@
 #include "gui/control/UIElement.h"
 #include "event/EventEmitter.h"
 #include <SFML/Graphics.hpp>
-#include <set>
+#include <vector>
 #include <memory>
 
 namespace Gui {
@@ -83,7 +83,7 @@ namespace Gui {
          * @param guiElement Element to be added
          * @return True if element was successfully added. false otherwise
          */
-        bool add(std::shared_ptr<UIElement> guiElement);
+        void add(std::shared_ptr<UIElement> guiElement);
 
         /**
          * @brief Add listener to event
@@ -96,7 +96,7 @@ namespace Gui {
 
     private:
         //Elements contained by the panel
-        std::set<std::shared_ptr<UIElement>> guiElementList_;
+        std::vector<std::shared_ptr<UIElement>> uiElements_;
         //Representation
         sf::RectangleShape panel_;
         //Event Emitter
