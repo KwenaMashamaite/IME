@@ -1,0 +1,117 @@
+\hypertarget{class_audio_1_1_i_audio_player}{}\doxysection{Audio\+::I\+Audio\+Player Class Reference}
+\label{class_audio_1_1_i_audio_player}\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+
+
+{\ttfamily \#include $<$I\+Audio\+Player.\+h$>$}
+
+
+
+Inheritance diagram for Audio\+::I\+Audio\+Player\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{class_audio_1_1_i_audio_player__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}{play}} (const std\+::string \&filename)=0
+\begin{DoxyCompactList}\small\item\em Play audio. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}{stop}} ()=0
+\begin{DoxyCompactList}\small\item\em Stop the currently playing or paused audio. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}{pause}} ()=0
+\begin{DoxyCompactList}\small\item\em Pause the currently playing audio. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}{resume}} ()=0
+\begin{DoxyCompactList}\small\item\em Resume paused audio. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_audio_1_1_i_audio_player_a78bde1a7e4b0f47d2ec6c38b1d3fde73}{$\sim$\+I\+Audio\+Player}} ()=default
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 11 of file I\+Audio\+Player.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_a78bde1a7e4b0f47d2ec6c38b1d3fde73}\label{class_audio_1_1_i_audio_player_a78bde1a7e4b0f47d2ec6c38b1d3fde73}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!````~IAudioPlayer@{$\sim$IAudioPlayer}}
+\index{````~IAudioPlayer@{$\sim$IAudioPlayer}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{$\sim$IAudioPlayer()}{~IAudioPlayer()}}
+{\footnotesize\ttfamily virtual Audio\+::\+I\+Audio\+Player\+::$\sim$\+I\+Audio\+Player (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+Destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}\label{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!pause@{pause}}
+\index{pause@{pause}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{pause()}{pause()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::pause (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Pause the currently playing audio. 
+
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}{Audio\+::\+Sound\+Effect\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}\label{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!play@{play}}
+\index{play@{play}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{play()}{play()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::play (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Play audio. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Filename of the audio to play \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad7326591f50b3d149efbab20633eb718}{Audio\+::\+Sound\+Effect\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}\label{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!resume@{resume}}
+\index{resume@{resume}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{resume()}{resume()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::resume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Resume paused audio. 
+
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a8e516556ca5ed60fc8d85994d36df9d4}{Audio\+::\+Sound\+Effect\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}\label{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!stop@{stop}}
+\index{stop@{stop}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Stop the currently playing or paused audio. 
+
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b07901c4cd9d88b2}{Audio\+::\+Sound\+Effect\+Player}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/audio/\mbox{\hyperlink{_i_audio_player_8h}{I\+Audio\+Player.\+h}}\end{DoxyCompactItemize}

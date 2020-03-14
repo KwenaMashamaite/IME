@@ -1,0 +1,95 @@
+\hypertarget{class_gui_1_1_canvas}{}\doxysection{Gui\+::Canvas Class Reference}
+\label{class_gui_1_1_canvas}\index{Gui::Canvas@{Gui::Canvas}}
+
+
+{\ttfamily \#include $<$Canvas.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::Canvas\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=149pt]{class_gui_1_1_canvas__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Gui\+::Canvas\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=149pt]{class_gui_1_1_canvas__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_canvas_a8c1c11a129370482661b0e73223bba84}{Canvas}} (float x, float y)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_canvas_a24fa61894a5def6458d2baad395ebef3}{add\+Element}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element) override
+\begin{DoxyCompactList}\small\item\em Add UI element to panel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 11 of file Canvas.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_canvas_a8c1c11a129370482661b0e73223bba84}\label{class_gui_1_1_canvas_a8c1c11a129370482661b0e73223bba84}} 
+\index{Gui::Canvas@{Gui::Canvas}!Canvas@{Canvas}}
+\index{Canvas@{Canvas}!Gui::Canvas@{Gui::Canvas}}
+\doxysubsubsection{\texorpdfstring{Canvas()}{Canvas()}}
+{\footnotesize\ttfamily Gui\+::\+Canvas\+::\+Canvas (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X coordinate of the panel \\
+\hline
+{\em y} & Y coordinate of the panel \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 3 of file Canvas.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_canvas_a24fa61894a5def6458d2baad395ebef3}\label{class_gui_1_1_canvas_a24fa61894a5def6458d2baad395ebef3}} 
+\index{Gui::Canvas@{Gui::Canvas}!addElement@{addElement}}
+\index{addElement@{addElement}!Gui::Canvas@{Gui::Canvas}}
+\doxysubsubsection{\texorpdfstring{addElement()}{addElement()}}
+{\footnotesize\ttfamily void Gui\+::\+Canvas\+::add\+Element (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Add UI element to panel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gui\+Element} & UI element to add\\
+\hline
+\end{DoxyParams}
+If the point of placement lies within the panel, then the UI element will be added to the panel. The panel does not check if the element sticks outside of it or not, as long as the UI elements point of placement lies within the panel 
+
+Implements \mbox{\hyperlink{class_gui_1_1_panel_a7a9a37e7a5814ecc62641f6977c21830}{Gui\+::\+Panel}}.
+
+
+
+Definition at line 5 of file Canvas.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_canvas_8h}{Canvas.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/layout/\mbox{\hyperlink{_canvas_8cpp}{Canvas.\+cpp}}\end{DoxyCompactItemize}

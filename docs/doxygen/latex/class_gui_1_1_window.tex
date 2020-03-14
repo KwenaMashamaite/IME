@@ -1,0 +1,275 @@
+\hypertarget{class_gui_1_1_window}{}\doxysection{Gui\+::Window Class Reference}
+\label{class_gui_1_1_window}\index{Gui::Window@{Gui::Window}}
+
+
+{\ttfamily \#include $<$Window.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::Window\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=154pt]{class_gui_1_1_window__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Gui\+::Window\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=154pt]{class_gui_1_1_window__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_window_a46e1442f6494ffdc5faf62ffd745fdb0}{Window}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. Ensures only a single instance of the class can exist at a time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_aaa8fd0402aab575b8a9961af02f0fcf8}{create}} (const std\+::string \&name, unsigned int width, unsigned int height)
+\begin{DoxyCompactList}\small\item\em Create a render window. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}{is\+Open}} () const
+\begin{DoxyCompactList}\small\item\em Check if the window is open or not. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_gui_1_1_window_a840ee7c16f948f2acc710ef70302fe0a}{poll\+Event}} (sf\+::\+Event \&event)
+\begin{DoxyCompactList}\small\item\em Check if the event queue is empty or not. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}{close}} ()
+\begin{DoxyCompactList}\small\item\em Close the window. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}{draw}} (const auto \&drawable)
+\begin{DoxyCompactList}\small\item\em Draw drawable object on the screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}{display}} ()
+\begin{DoxyCompactList}\small\item\em Display drawn objects on the window. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}{clear}} (sf\+::\+Color colour=sf\+::\+Color\+::\+Black)
+\begin{DoxyCompactList}\small\item\em Clear the entire window with a single colour. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_globals_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_window_a3e9c2583d7e45994c99daa2190ba1309}{get\+Mouse\+Position}} () const
+\item 
+\mbox{\hyperlink{class_gui_1_1_window_a4af1ab6d5a911e5f398d6bb87570d298}{$\sim$\+Window}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. Ensures a new \mbox{\hyperlink{class_gui_1_1_window}{Window}} instance can be created when an existing \mbox{\hyperlink{class_gui_1_1_window}{Window}} instance is destroyed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef}{get\+Dimensions}} ()
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the window. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 16 of file Window.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_window_a46e1442f6494ffdc5faf62ffd745fdb0}\label{class_gui_1_1_window_a46e1442f6494ffdc5faf62ffd745fdb0}} 
+\index{Gui::Window@{Gui::Window}!Window@{Window}}
+\index{Window@{Window}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{Window()}{Window()}}
+{\footnotesize\ttfamily Gui\+::\+Window\+::\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. Ensures only a single instance of the class can exist at a time. 
+
+
+
+Definition at line 6 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_a4af1ab6d5a911e5f398d6bb87570d298}\label{class_gui_1_1_window_a4af1ab6d5a911e5f398d6bb87570d298}} 
+\index{Gui::Window@{Gui::Window}!````~Window@{$\sim$Window}}
+\index{````~Window@{$\sim$Window}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{$\sim$Window()}{~Window()}}
+{\footnotesize\ttfamily Gui\+::\+Window\+::$\sim$\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destructor. Ensures a new \mbox{\hyperlink{class_gui_1_1_window}{Window}} instance can be created when an existing \mbox{\hyperlink{class_gui_1_1_window}{Window}} instance is destroyed. 
+
+
+
+Definition at line 48 of file Window.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}\label{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}} 
+\index{Gui::Window@{Gui::Window}!clear@{clear}}
+\index{clear@{clear}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::clear (\begin{DoxyParamCaption}\item[{sf\+::\+Color}]{colour = {\ttfamily sf\+:\+:Color\+:\+:Black} }\end{DoxyParamCaption})}
+
+
+
+Clear the entire window with a single colour. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em colour} & \mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} to clear window with \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 37 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}\label{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}} 
+\index{Gui::Window@{Gui::Window}!close@{close}}
+\index{close@{close}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Close the window. 
+
+
+
+Definition at line 29 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_aaa8fd0402aab575b8a9961af02f0fcf8}\label{class_gui_1_1_window_aaa8fd0402aab575b8a9961af02f0fcf8}} 
+\index{Gui::Window@{Gui::Window}!create@{create}}
+\index{create@{create}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::create (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{unsigned int}]{width,  }\item[{unsigned int}]{height }\end{DoxyParamCaption})}
+
+
+
+Create a render window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the render window \\
+\hline
+{\em width} & Width of the window \\
+\hline
+{\em height} & Height of the window\\
+\hline
+\end{DoxyParams}
+The dimensions of the window must be greater than the minimum dimensions of 100x100 pixels, otherwise the program will be terminated (prematurely). The created window has a maximum frame limit of 60 F\+PS and V-\/\+Sync is enabled by default 
+
+Definition at line 11 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}\label{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}} 
+\index{Gui::Window@{Gui::Window}!display@{display}}
+\index{display@{display}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{display()}{display()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Display drawn objects on the window. 
+
+
+
+Definition at line 33 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}\label{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}} 
+\index{Gui::Window@{Gui::Window}!draw@{draw}}
+\index{draw@{draw}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::draw (\begin{DoxyParamCaption}\item[{const auto \&}]{drawable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Draw drawable object on the screen. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em drawable} & Object to draw \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 66 of file Window.\+h.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef}\label{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef}} 
+\index{Gui::Window@{Gui::Window}!getDimensions@{getDimensions}}
+\index{getDimensions@{getDimensions}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{getDimensions()}{getDimensions()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{struct_globals_1_1_dimensions}{Dimensions}} Gui\+::\+Window\+::get\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the dimensions of the window. 
+
+\begin{DoxyReturn}{Returns}
+Dimensions of the window 
+\end{DoxyReturn}
+
+
+Definition at line 42 of file Window.\+h.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_window_a3e9c2583d7e45994c99daa2190ba1309}\label{class_gui_1_1_window_a3e9c2583d7e45994c99daa2190ba1309}} 
+\index{Gui::Window@{Gui::Window}!getMousePosition@{getMousePosition}}
+\index{getMousePosition@{getMousePosition}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{getMousePosition()}{getMousePosition()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_globals_1_1_position}{Globals\+::\+Position}} Gui\+::\+Window\+::get\+Mouse\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 41 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}\label{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}} 
+\index{Gui::Window@{Gui::Window}!isOpen@{isOpen}}
+\index{isOpen@{isOpen}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{isOpen()}{isOpen()}}
+{\footnotesize\ttfamily bool Gui\+::\+Window\+::is\+Open (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Check if the window is open or not. 
+
+\begin{DoxyReturn}{Returns}
+true if open, false if not open 
+\end{DoxyReturn}
+
+
+Definition at line 21 of file Window.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_window_a840ee7c16f948f2acc710ef70302fe0a}\label{class_gui_1_1_window_a840ee7c16f948f2acc710ef70302fe0a}} 
+\index{Gui::Window@{Gui::Window}!pollEvent@{pollEvent}}
+\index{pollEvent@{pollEvent}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{pollEvent()}{pollEvent()}}
+{\footnotesize\ttfamily bool Gui\+::\+Window\+::poll\+Event (\begin{DoxyParamCaption}\item[{sf\+::\+Event \&}]{event }\end{DoxyParamCaption})}
+
+
+
+Check if the event queue is empty or not. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Event queue to be checked \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if event queue is not empty, false if it is empty 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file Window.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{class_gui_1_1_window_a840ee7c16f948f2acc710ef70302fe0a_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/window/\mbox{\hyperlink{_window_8h}{Window.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/window/\mbox{\hyperlink{_window_8cpp}{Window.\+cpp}}\end{DoxyCompactItemize}

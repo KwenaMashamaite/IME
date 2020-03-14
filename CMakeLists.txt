@@ -48,7 +48,7 @@ set(SOURCE_FILES
         game-source-code/gui/layout/Canvas.h
         game-source-code/gui/layout/DockPanel.h
         game-source-code/gui/layout/DockPanel.cpp
-        )
+        game-source-code/entity/Entity.cpp game-source-code/entity/Entity.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)

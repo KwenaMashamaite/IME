@@ -1,0 +1,50 @@
+\hypertarget{_event_emitter_8h}{}\doxysection{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.5.0-\/Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.h File Reference}
+\label{_event_emitter_8h}\index{C:/Users/Brandon/Desktop/Projects/SFML-\/2.5.0-\/Game-\/Development-\/Template/game-\/source-\/code/event/EventEmitter.h@{C:/Users/Brandon/Desktop/Projects/SFML-\/2.5.0-\/Game-\/Development-\/Template/game-\/source-\/code/event/EventEmitter.h}}
+{\ttfamily \#include $<$unordered\+\_\+map$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include \char`\"{}Event\+Emitter.\+inl\char`\"{}}\newline
+Include dependency graph for Event\+Emitter.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_event_emitter_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_event_emitter_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_event_emitter}{Event\+Emitter}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\using \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}} = std\+::function$<$ void(Args...)$>$
+\begin{DoxyCompactList}\small\item\em Class for emitting events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}\label{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}} 
+\index{EventEmitter.h@{EventEmitter.h}!Callback@{Callback}}
+\index{Callback@{Callback}!EventEmitter.h@{EventEmitter.h}}
+\doxysubsubsection{\texorpdfstring{Callback}{Callback}}
+{\footnotesize\ttfamily template$<$typename... Args$>$ \\
+using \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}} =  std\+::function$<$void(Args...)$>$}
+
+
+
+Class for emitting events. 
+
+To add an event to the event emitter you simply have to call the add\+Listener function. In other words, events are created when a listener is added. If an event already exists, then a listener is added to that event, otherwise a new event is created. Once an Event is created, it won\textquotesingle{}t be automatically fired. A call to the emit function must be made to fire an event 
+
+Definition at line 21 of file Event\+Emitter.\+h.
+

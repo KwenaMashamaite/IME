@@ -1,4 +1,5 @@
 #include "Panel.h"
+#include <cassert>
 
 Gui::Panel::Panel(float x, float y){
     panel_.setFillColor(sf::Color::Transparent);
@@ -19,20 +20,18 @@ void Gui::Panel::setDimensions(const Dimensions &dimensions) {
 }
 
 Position Gui::Panel::getPosition() const {
-    return {panel_.getPosition().x, panel_.getPosition().y};
+    return Position{panel_.getPosition().x, panel_.getPosition().y};
 }
 
 void Gui::Panel::setPosition(const Position &position) {
     panel_.setPosition(position.x, position.y);
-    eventEmitter_.emit("positionChanged");
+    eventEmitter_.emit("positionChanged", position);
 }
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
-    for (auto &element : guiElementList_) {
-        if (element != nullptr)
-            element->draw(renderTarget);
-    }
+    for (auto &element : uiElements_)
+        element->draw(renderTarget);
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
@@ -42,20 +41,11 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
     );
 }
 
-bool Gui::Panel::add(std::shared_ptr<UIElement> UIElement) {
-    if (UIElement == nullptr)
-        return false;
-    return guiElementList_.insert(UIElement).second;
-}
-
-unsigned int Gui::Panel::size() const {
-    return guiElementList_.size();
-}
-
-void Gui::Panel::on(std::string &&event, Callback<> callback) {
-    eventEmitter_.addListener(
-        static_cast<std::string &&>(event),std::move(callback)
-    );
+void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
+    assert(guiElement && "GUI elements added to panel cannot be null");
+    uiElements_.push_back(std::move(guiElement));
+    if (uiElements_.size() == 1)
+        eventEmitter_.emit("firstElement");
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
@@ -65,4 +55,12 @@ void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
         outlineColour.blue,
         outlineColour.opacity
     ));
+}
+
+Gui::Panel::constIterator Gui::Panel::cBegin() const {
+    return uiElements_.cbegin();
+}
+
+Gui::Panel::constIterator Gui::Panel::cEnd() const {
+    return uiElements_.cend();
 }
