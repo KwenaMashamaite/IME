@@ -51,6 +51,7 @@ set(SOURCE_FILES
         game-source-code/entity/Entity.cpp
         game-source-code/entity/Entity.h
         game-source-code/entity/IEntity.h
+        game-source-code/entity/IMovableEntity.h
         )
 
 #add the doctest unit testing framework
