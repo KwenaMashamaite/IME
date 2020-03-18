@@ -52,7 +52,7 @@ set(SOURCE_FILES
         game-source-code/entity/Entity.h
         game-source-code/entity/IEntity.h
         game-source-code/entity/IMovableEntity.h
-        )
+        game-source-code/entity/IWeaponOwner.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
