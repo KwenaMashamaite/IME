@@ -41,8 +41,8 @@ void Gui::StackPanel::setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem,
 void Gui::StackPanel::accomodate(const std::shared_ptr<UIElement>& uiElement) {
     const auto uiElemWidth = uiElement->getDimensions().width;
     const auto uiElemHeight = uiElement->getDimensions().height;
-    const auto oldPanelWidth = getDimensions().width;
-    const auto oldPanelHeight = getDimensions().height;
+    const auto oldPanelWidth = getDimensions().width - 2 * getOutlineThickness();
+    const auto oldPanelHeight = getDimensions().height - 2 * getOutlineThickness();
     const auto newPanelWidth = (uiElemWidth > oldPanelWidth ? uiElemWidth : oldPanelWidth);
     const auto newPanelHeight = (uiElemHeight > oldPanelHeight ? uiElemHeight : oldPanelHeight);
 
