@@ -15,13 +15,15 @@ Gui::UIElement::UIElement(const std::string &content, const std::string &font, u
         numOfLinesInString_++; //Account for one line/last line (both dont have terminating character)
         resize();
     }));
-
     //Resize element when the character size changes
-    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){resize();}));
+    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){
+        resize();
+    }));
     //Update element on dimension changes (padding and margin changes)
-    eventEmitter_.addListener("dimensionsChanged", Callback<>(
-        [this](){resize(); setPosition(getPosition().x, getPosition().y);}
-    ));
+    eventEmitter_.addListener("dimensionsChanged", Callback<>([this](){
+        resize();
+        setPosition(getPosition().x, getPosition().y);
+    }));
 
     setTextFont(font);
     setTextCharSize(textCharSize);
@@ -119,12 +121,9 @@ Dimensions Gui::UIElement::getDimensions() const {
 }
 
 bool Gui::UIElement::contains(float x, float y) const{
-    return (
-        x >= border_.getPosition().x
-        && x <= border_.getPosition().x + border_.getGlobalBounds().width
-        && y >= border_.getPosition().y
-        && y <= border_.getPosition().y + border_.getGlobalBounds().height
-    );
+    return (x >= border_.getPosition().x && x <= border_.getPosition().x +
+        border_.getGlobalBounds().width) && (y >= border_.getPosition().y &&
+        y <= border_.getPosition().y + border_.getGlobalBounds().height);
 }
 
 void Gui::UIElement::draw(Gui::Window &renderTarget) {
@@ -135,16 +134,10 @@ void Gui::UIElement::draw(Gui::Window &renderTarget) {
 }
 
 void Gui::UIElement::resize() {
-    auto textHeight = 0.0f;
-    if (textContent_.getCharacterSize() * numOfLinesInString_
-        < textContent_.getGlobalBounds().height)
-    {
-        textHeight = textContent_.getGlobalBounds().height;
-    }
-    else
-        textHeight = static_cast<float>(
-            textContent_.getCharacterSize() * numOfLinesInString_
-        );
+    auto textHeight = (textContent_.getCharacterSize() * numOfLinesInString_ <
+                      textContent_.getGlobalBounds().height) ?
+                      textContent_.getGlobalBounds().height :
+                      textContent_.getCharacterSize() * numOfLinesInString_;
 
     contentRectangle_.setSize(
         sf::Vector2f(textContent_.getGlobalBounds().width, textHeight
