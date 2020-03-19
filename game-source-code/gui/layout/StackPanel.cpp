@@ -6,7 +6,6 @@ Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
         : Panel(x, y)
 {
     isOrientationVertical_ = orientation == Orientation::Vertical;
-
     //Reposition child elements when the panel changes position
     on("positionChanged", Callback<Position>([this](Position newPos){
         if (cBegin() != cEnd()) {
@@ -14,15 +13,6 @@ Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
             for (auto iter = ++cBegin(); iter != cEnd(); ++iter)
                 setElemPosRelativeTo(*iter, *(iter - 1));
         }
-    }));
-
-    //The stack panel initially takes on the dimensions of the first element
-    on("firstElementAdded", Callback<>([this](){
-        setDimensions(Dimensions{
-            (*cBegin())->getDimensions().width,
-            (*cBegin())->getDimensions().height
-        });
-        (*cBegin())->setPosition(getPosition().x, getPosition().y);
     }));
 }
 
