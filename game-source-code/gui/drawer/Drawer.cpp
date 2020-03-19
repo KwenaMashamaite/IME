@@ -1,6 +1,7 @@
 #include "Drawer.h"
 #include "entity/Entity.h"
 #include "resources/ResourceManager.h"
+#include <algorithm>
 #include <SFML/Graphics.hpp>
 
 Gui::Drawer::Drawer(Gui::Window &renderTarget) : renderTarget_(renderTarget)
@@ -24,8 +25,7 @@ void Gui::Drawer::drawEntity(const std::shared_ptr<Entity> &entity) {
 }
 
 void Gui::Drawer::drawEntities(const std::initializer_list<std::shared_ptr<Entity>> &entities) {
-    for (auto& entity : entities)
-        drawEntity(entity);
+    std::for_each(entities.begin(), entities.end(), &Drawer::drawEntity);
 }
 
 void Gui::Drawer::drawBackground(const std::string &backgroundTexture) {
