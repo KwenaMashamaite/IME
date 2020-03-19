@@ -1,11 +1,11 @@
 #include "StackPanel.h"
 #include <algorithm>
+#include <cassert>
 
 Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
         : Panel(x, y)
 {
     isOrientationVertical_ = orientation == Orientation::Vertical;
-
     //Reposition child elements when the panel changes position
     on("positionChanged", Callback<Position>([this](Position newPos){
         if (cBegin() != cEnd()) {
@@ -14,44 +14,40 @@ Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
                 setElemPosRelativeTo(*iter, *(iter - 1));
         }
     }));
-
-    //The stack panel initially takes on the dimensions of the first element
-    on("firstElement", Callback<>([this](){
-        setDimensions(Dimensions{
-            (*cBegin())->getDimensions().width,
-            (*cBegin())->getDimensions().height
-        });
-        (*cBegin())->setPosition(getPosition().x, getPosition().y);
-    }));
 }
 
 void Gui::StackPanel::addElement(std::shared_ptr<UIElement> guiElement) {
-    if (cBegin() == cEnd())
-        add(std::move(guiElement));
-    else {
-        setElemPosRelativeTo(guiElement, *(cEnd() - 1));
-        auto getNewDimension = [](unsigned int newElemDimension, unsigned int prevElemDimension){
-            return (newElemDimension > prevElemDimension? newElemDimension : prevElemDimension);
-        };
-
-        if (isOrientationVertical_) {
-            setDimensions(Dimensions{
-                getNewDimension(guiElement->getDimensions().width, (*(cEnd() - 1))->getDimensions().width),
-                getDimensions().height + guiElement->getDimensions().height
-            });
-        }else{
-            setDimensions(Dimensions{
-                getDimensions().width + guiElement->getDimensions().width,
-                getNewDimension(guiElement->getDimensions().height, (*(cEnd() - 1))->getDimensions().height)
-            });
-        }
-        add(std::move(guiElement));
+    assert(guiElement && "GUI elements added to stack panel cannot be null");
+    if (cBegin() == cEnd()) {
+        guiElement->setPosition(getPosition().x, getPosition().y);
+        setDimensions(guiElement->getDimensions());
+    }else {
+        const auto& lastAddedUIElement = *(cEnd() - 1);
+        setElemPosRelativeTo(guiElement, lastAddedUIElement);
+        accomodate(guiElement);
     }
+    add(std::move(guiElement));
 }
 
-void Gui::StackPanel::setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem, std::shared_ptr<UIElement> refElem){
+void Gui::StackPanel::setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem,
+        const std::shared_ptr<UIElement>& refElem)
+{
     uiElem->setPosition(
         refElem->getPosition().x + (isOrientationVertical_ ? 0.0f : refElem->getDimensions().width),
         refElem->getPosition().y + (isOrientationVertical_ ? refElem->getDimensions().height : 0.0f)
     );
+}
+
+void Gui::StackPanel::accomodate(const std::shared_ptr<UIElement>& uiElement) {
+    const auto uiElemWidth = uiElement->getDimensions().width;
+    const auto uiElemHeight = uiElement->getDimensions().height;
+    const auto oldPanelWidth = getDimensions().width - 2 * getOutlineThickness();
+    const auto oldPanelHeight = getDimensions().height - 2 * getOutlineThickness();
+    const auto newPanelWidth = (uiElemWidth > oldPanelWidth ? uiElemWidth : oldPanelWidth);
+    const auto newPanelHeight = (uiElemHeight > oldPanelHeight ? uiElemHeight : oldPanelHeight);
+
+    if (isOrientationVertical_)
+        setDimensions(Dimensions{newPanelWidth, oldPanelHeight + uiElemHeight});
+    else
+        setDimensions(Dimensions{oldPanelWidth + uiElemWidth, newPanelHeight});
 }

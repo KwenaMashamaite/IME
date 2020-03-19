@@ -15,20 +15,31 @@ using Globals::Position;
 using Globals::Dimensions;
 
 namespace Gui {
+    /**
+     * @brief Represents the whitespace around the borders
+     *        of the GUI element
+     */
     struct Margin{
-        float left;
-        float right;
-        float top;
-        float bottom;
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
     };
 
+    /**
+     * @brief Represents the spacing between the
+     *        text and the border of the GUI element
+     */
     struct Padding{
-        float left;
-        float right;
-        float top;
-        float bottom;
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
     };
 
+    /**
+     * @brief Represents RGB combination colour
+     */
     struct Colour{
         unsigned int red = 0;
         unsigned int green = 0;
@@ -153,16 +164,16 @@ namespace Gui {
         Margin margin_;
         //Space between border and content
         Padding padding_;
-        //Element content
-        sf::Text textContent_;
+        //Elements text content
+        sf::Text text_;
         //Number of lines present in the content string
-        unsigned int numOfLinesInString_;
+        unsigned int numOfLinesInText_;
         //Defines the perimeter of the entire element (includes margin and padding)
         sf::RectangleShape parentRectangle_;
         //Defines the perimeter of the element border
         sf::RectangleShape border_;
         //Defines the perimeter of the content area
-        sf::RectangleShape contentRectangle_;
+        sf::RectangleShape textRectangle_;
         //Event Emitter
         EventEmitter eventEmitter_;
     };

@@ -3,27 +3,27 @@
 #include <algorithm>
 
 Gui::UIElement::UIElement(const std::string &content, const std::string &font, unsigned int textCharSize)
-    : numOfLinesInString_{0u},
-      margin_{0.0f, 0.0f, 0.0f, 0.0f},
-      padding_{0.0f, 0.0f, 0.0f, 0.0f}
+    : numOfLinesInText_{0u}
 {
     //Resize element when text changes
     eventEmitter_.addListener("textChanged", Callback<std::string>([this](const std::string &content) {
         if (content.empty()) {
-            numOfLinesInString_ = 0;
+            numOfLinesInText_ = 0;
             return;
         }
-        numOfLinesInString_ = std::count(content.begin(), content.end(), '\n');
-        numOfLinesInString_++; //Account for one line/last line (both dont have terminating character)
+        numOfLinesInText_ = std::count(content.begin(), content.end(), '\n');
+        numOfLinesInText_++; //Account for one line/last line (both dont have '\n')
         resize();
     }));
-
     //Resize element when the character size changes
-    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){resize();}));
+    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){
+        resize();
+    }));
     //Update element on dimension changes (padding and margin changes)
-    eventEmitter_.addListener("dimensionsChanged", Callback<>(
-        [this](){resize(); setPosition(getPosition().x, getPosition().y);}
-    ));
+    eventEmitter_.addListener("dimensionsChanged", Callback<>([this](){
+        resize();
+        setPosition(getPosition().x, getPosition().y);
+    }));
 
     setTextFont(font);
     setTextCharSize(textCharSize);
@@ -32,8 +32,8 @@ Gui::UIElement::UIElement(const std::string &content, const std::string &font, u
     border_.setOutlineColor(sf::Color::Transparent);
     parentRectangle_.setFillColor(sf::Color::Transparent);
     border_.setFillColor(sf::Color::Black);
-    contentRectangle_.setFillColor(sf::Color::Transparent);
-    textContent_.setFillColor(sf::Color::White);
+    textRectangle_.setFillColor(sf::Color::Transparent);
+    text_.setFillColor(sf::Color::White);
 }
 
 void Gui::UIElement::setPosition(float x, float y) {
@@ -42,17 +42,13 @@ void Gui::UIElement::setPosition(float x, float y) {
       	parentRectangle_.getPosition().x + margin_.left,
       	parentRectangle_.getPosition().y + margin_.top
     );
-    contentRectangle_.setPosition(
+    textRectangle_.setPosition(
       	border_.getPosition().x + padding_.left,
       	border_.getPosition().y + padding_.top
     );
-    textContent_.setPosition(
-      	contentRectangle_.getPosition().x
-        + contentRectangle_.getGlobalBounds().width / 2.0f
-		- textContent_.getGlobalBounds().width / 2.0f,
-        contentRectangle_.getPosition().y
-      	+ contentRectangle_.getGlobalBounds().height / 2.0f
-        - textContent_.getGlobalBounds().height / 2.0f
+    text_.setPosition(
+        textRectangle_.getPosition().x,
+        textRectangle_.getPosition().y
 	);
 }
 
@@ -84,23 +80,23 @@ void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
 }
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
-    textContent_.setFont(ResourceManager::getFont(contentFont));
+    text_.setFont(ResourceManager::getFont(contentFont));
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
-    textContent_.setCharacterSize(textContent_.getFont()->getGlyph(
+    text_.setCharacterSize(text_.getFont()->getGlyph(
         L'A', charSize, false).bounds.height
     );
     eventEmitter_.emit("charSizeChanged");
 }
 
 void Gui::UIElement::setText(const std::string &content) {
-    textContent_.setString(content);
+    text_.setString(content);
     eventEmitter_.emit("textChanged");
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
-    textContent_.setFillColor(sf::Color(
+    text_.setFillColor(sf::Color(
         textFillColour.red, textFillColour.green,
         textFillColour.blue, textFillColour.opacity
     ));
@@ -115,45 +111,36 @@ Position Gui::UIElement::getPosition() const {
 
 Dimensions Gui::UIElement::getDimensions() const {
     return Dimensions{
-        static_cast<unsigned int>(parentRectangle_.getGlobalBounds().width),
-        static_cast<unsigned int>(parentRectangle_.getGlobalBounds().height)
+        parentRectangle_.getGlobalBounds().width,
+        parentRectangle_.getGlobalBounds().height
     };
 }
 
 bool Gui::UIElement::contains(float x, float y) const{
-    return (
-        x >= border_.getPosition().x
-        && x <= border_.getPosition().x + border_.getGlobalBounds().width
-        && y >= border_.getPosition().y
-        && y <= border_.getPosition().y + border_.getGlobalBounds().height
-    );
+    return (x >= border_.getPosition().x && x <= border_.getPosition().x +
+            border_.getGlobalBounds().width) && (y >= border_.getPosition().y &&
+            y <= border_.getPosition().y + border_.getGlobalBounds().height);
 }
 
 void Gui::UIElement::draw(Gui::Window &renderTarget) {
     renderTarget.draw(parentRectangle_);
     renderTarget.draw(border_);
-    renderTarget.draw(contentRectangle_);
-    renderTarget.draw(textContent_);
+    renderTarget.draw(textRectangle_);
+    renderTarget.draw(text_);
 }
 
 void Gui::UIElement::resize() {
-    auto textHeight = 0.0f;
-    if (textContent_.getCharacterSize() * numOfLinesInString_
-        < textContent_.getGlobalBounds().height)
-    {
-        textHeight = textContent_.getGlobalBounds().height;
-    }
-    else
-        textHeight = static_cast<float>(
-            textContent_.getCharacterSize() * numOfLinesInString_
-        );
+    auto textHeight = (text_.getCharacterSize() * numOfLinesInText_ <
+                      text_.getGlobalBounds().height ?
+                      text_.getGlobalBounds().height :
+                      text_.getCharacterSize() * numOfLinesInText_);
 
-    contentRectangle_.setSize(
-        sf::Vector2f(textContent_.getGlobalBounds().width, textHeight
+    textRectangle_.setSize(
+        sf::Vector2f(text_.getGlobalBounds().width, textHeight
     ));
     border_.setSize(sf::Vector2f(
-        contentRectangle_.getGlobalBounds().width + padding_.left + padding_.right,
-        contentRectangle_.getGlobalBounds().height + padding_.top + padding_.bottom
+            textRectangle_.getGlobalBounds().width + padding_.left + padding_.right,
+            textRectangle_.getGlobalBounds().height + padding_.top + padding_.bottom
     ));
     parentRectangle_.setSize(sf::Vector2f(
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
