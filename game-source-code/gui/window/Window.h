@@ -33,7 +33,7 @@ namespace Gui {
          * window has a maximum frame limit of 60 FPS and V-Sync
          * is enabled by default
          */
-        void create(const std::string &name, unsigned int width, unsigned int height);
+        void create(const std::string &name, float width, float height);
 
         /**
          * @brief Get the dimensions of the window

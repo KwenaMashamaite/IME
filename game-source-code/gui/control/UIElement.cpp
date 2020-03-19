@@ -47,12 +47,8 @@ void Gui::UIElement::setPosition(float x, float y) {
       	border_.getPosition().y + padding_.top
     );
     text_.setPosition(
-        textRectangle_.getPosition().x +
-        textRectangle_.getGlobalBounds().width / 2.0f -
-        text_.getGlobalBounds().width / 2.0f,
-        textRectangle_.getPosition().y +
-        textRectangle_.getGlobalBounds().height / 2.0f -
-        text_.getGlobalBounds().height / 2.0f
+        textRectangle_.getPosition().x,
+        textRectangle_.getPosition().y
 	);
 }
 
@@ -115,15 +111,15 @@ Position Gui::UIElement::getPosition() const {
 
 Dimensions Gui::UIElement::getDimensions() const {
     return Dimensions{
-        static_cast<unsigned int>(parentRectangle_.getGlobalBounds().width),
-        static_cast<unsigned int>(parentRectangle_.getGlobalBounds().height)
+        parentRectangle_.getGlobalBounds().width,
+        parentRectangle_.getGlobalBounds().height
     };
 }
 
 bool Gui::UIElement::contains(float x, float y) const{
     return (x >= border_.getPosition().x && x <= border_.getPosition().x +
-        border_.getGlobalBounds().width) && (y >= border_.getPosition().y &&
-        y <= border_.getPosition().y + border_.getGlobalBounds().height);
+            border_.getGlobalBounds().width) && (y >= border_.getPosition().y &&
+            y <= border_.getPosition().y + border_.getGlobalBounds().height);
 }
 
 void Gui::UIElement::draw(Gui::Window &renderTarget) {
@@ -135,9 +131,9 @@ void Gui::UIElement::draw(Gui::Window &renderTarget) {
 
 void Gui::UIElement::resize() {
     auto textHeight = (text_.getCharacterSize() * numOfLinesInText_ <
-                       text_.getGlobalBounds().height) ?
+                      text_.getGlobalBounds().height ?
                       text_.getGlobalBounds().height :
-                      text_.getCharacterSize() * numOfLinesInText_;
+                      text_.getCharacterSize() * numOfLinesInText_);
 
     textRectangle_.setSize(
         sf::Vector2f(text_.getGlobalBounds().width, textHeight
