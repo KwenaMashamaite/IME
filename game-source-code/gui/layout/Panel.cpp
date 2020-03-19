@@ -6,7 +6,6 @@ Gui::Panel::Panel(float x, float y){
     panel_.setFillColor(sf::Color::Transparent);
     panel_.setSize(sf::Vector2f(0, 0));
     panel_.setPosition(x, y);
-    panel_.setOutlineThickness(1.0f);
 }
 
 Dimensions Gui::Panel::getDimensions() const {
@@ -55,10 +54,18 @@ void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
     ));
 }
 
+void Gui::Panel::setOutlineThickness(float outlineThickness) {
+    panel_.setOutlineThickness(outlineThickness);
+}
+
 Gui::Panel::constIterator Gui::Panel::cBegin() const {
     return uiElements_.cbegin();
 }
 
 Gui::Panel::constIterator Gui::Panel::cEnd() const {
     return uiElements_.cend();
+}
+
+float Gui::Panel::getOutlineThickness() const {
+    return panel_.getOutlineThickness();
 }
