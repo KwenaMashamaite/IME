@@ -21,6 +21,16 @@ namespace Globals{
         float x;
         float y;
     };
+
+    /**
+     * @brief Stores all game entity types
+     *
+     * Any Entity object that exists in the game must also be added
+     * here
+     */
+    enum class EntityType{
+        Player //An example
+    };
 };
 
 #endif

@@ -48,8 +48,11 @@ set(SOURCE_FILES
         game-source-code/gui/layout/Canvas.h
         game-source-code/gui/layout/DockPanel.h
         game-source-code/gui/layout/DockPanel.cpp
+        game-source-code/entity/IEntity.h
         game-source-code/entity/Entity.cpp
         game-source-code/entity/Entity.h
+        game-source-code/entity/IMovableEntity.h
+        game-source-code/entity/IWeaponOwner.h
         game-source-code/gui/drawer/Drawer.cpp
         game-source-code/gui/drawer/Drawer.h)
 
