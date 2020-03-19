@@ -15,6 +15,10 @@ using Globals::Position;
 using Globals::Dimensions;
 
 namespace Gui {
+    /**
+     * @brief Represents the whitespace around the borders
+     *        of the GUI element
+     */
     struct Margin{
         float left = 0.0f;
         float right = 0.0f;
@@ -22,6 +26,10 @@ namespace Gui {
         float bottom = 0.0f;
     };
 
+    /**
+     * @brief Represents the spacing between the
+     *        text and the border of the GUI element
+     */
     struct Padding{
         float left = 0.0f;
         float right = 0.0f;
@@ -29,6 +37,9 @@ namespace Gui {
         float bottom = 0.0f;
     };
 
+    /**
+     * @brief Represents RGB combination colour
+     */
     struct Colour{
         unsigned int red = 0;
         unsigned int green = 0;
