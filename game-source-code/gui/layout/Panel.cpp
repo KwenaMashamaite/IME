@@ -47,7 +47,7 @@ void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
     uiElements_.push_back(std::move(guiElement));
     if (uiElements_.size() == 1)
-        eventEmitter_.emit("firstElement");
+        eventEmitter_.emit("firstElementAdded");
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {

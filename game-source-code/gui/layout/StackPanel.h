@@ -41,7 +41,20 @@ namespace Gui {
          * The element whose position is changed will have the same orientation
          * (vertical or horizontal) as the element which is used as reference.
          */
-        void setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem, std::shared_ptr<UIElement> refUIElem);
+        void setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem,
+                const std::shared_ptr<UIElement>& refUIElem);
+
+        /**
+         * @brief Adjust the dimensions of the panel based on the dimensions of
+         *        a UI element
+         * @param uiElement UI Element to accomodate
+         *
+         * This function will adjust the width or height of the panel depending
+         * on the dimensions of the UI element. The dimesnions of the panel will
+         * be adjusted such all the egdes of the UI elemnst lie within the edges
+         * of the panel
+         */
+        void accomodate(const std::shared_ptr<UIElement>& uiElement);
     };
 }
 
