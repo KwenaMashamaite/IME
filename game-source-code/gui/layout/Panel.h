@@ -60,6 +60,20 @@ namespace Gui {
         void setOutlineColour(Colour outlineColour);
 
         /**
+         * @brief Set the outline thickness of the panel
+         * @param outlineThickness New outline thickness
+         *
+         * The outline thickness is zero by default
+         */
+        void setOutlineThickness(float outlineThickness);
+
+        /**
+         * @brief Get the outline thickness
+         * @return Outline thickness
+         */
+        float getOutlineThickness() const;
+
+        /**
          * @brief Add a UI element to the panel
          * @param guiElement Element to add to panel
          */

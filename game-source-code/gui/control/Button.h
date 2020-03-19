@@ -1,5 +1,5 @@
 /**
- * @brief UI element that can be interacted with (e.g clicked)
+ * @brief Dynamic UI element that can perform actions
  */
 
 #ifndef BUTTON_H

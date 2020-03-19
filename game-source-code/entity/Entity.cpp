@@ -1,8 +1,14 @@
 #include "Entity.h"
 
-Entity::Entity(const Position &position, const Dimensions &boundRect, const std::string &texture, float life)
-        : position_(position), boundingRect_(boundRect), texture_(texture), life_(life),
-          direction_(Direction::Up), speed_(0.0f), angleOfRotation_(0.0f)
+Entity::Entity(EntityType entityType,const Position &position, Direction direction,
+        const Dimensions &boundRect, const std::string &texture,
+        unsigned int numOfLives)
+        : entityType_(entityType),
+          position_(position),
+          boundingRect_(boundRect),
+          texture_(texture),
+          numOfLives_(numOfLives),
+          direction_(direction)
           {}
 
 void Entity::setPosition(float xPos, float yPos) {
@@ -12,14 +18,6 @@ void Entity::setPosition(float xPos, float yPos) {
 
 void Entity::setDirection(Direction dir) {
     direction_ = dir;
-}
-
-void Entity::setSpeed(float speed) {
-    speed_ = speed;
-}
-
-void Entity::rotateBy(float angle) {
-    angleOfRotation_ += angle;
 }
 
 void Entity::setTexture(const std::string &texture) {
@@ -34,16 +32,16 @@ Dimensions Entity::getBoundingRect() const {
     return boundingRect_;
 }
 
-void Entity::takeDamage(float amountOfDamage) {
+void Entity::takeDamage(unsigned int amountOfDamage) {
     if (isAlive())
-        life_ -= amountOfDamage;
+        numOfLives_ -= amountOfDamage;
 }
 
 bool Entity::isAlive() const {
-    return life_ <= 0.0f;
+    return numOfLives_ <= 0u;
 }
 
-Direction Entity::getDirection() const {
+IEntity::Direction Entity::getDirection() const {
     return direction_;
 }
 
@@ -51,14 +49,12 @@ Position Entity::getPosition() const {
     return position_;
 }
 
-float Entity::getAngleOfRotation() const {
-    return angleOfRotation_;
+unsigned int Entity::getRemainingLives() const {
+    return numOfLives_;
 }
 
-float Entity::getRemainingLife() const {
-    return life_;
+EntityType Entity::getEntityType() {
+    return entityType_;
 }
 
-void Entity::adjustSpeed(float speed) {
-    speed_ += speed;
-}
+Entity::~Entity() = default;

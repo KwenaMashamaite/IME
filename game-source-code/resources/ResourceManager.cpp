@@ -1,5 +1,5 @@
 #include "ResourceManager.h"
-#include "globals/Globals.h"
+#include <algorithm>
 
 ResourceHolder<sf::Texture> ResourceManager::texturesHolder_{FilePath::TEXTURES_PATH, {}};
 ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffersHolder_{FilePath::SOUNDS_PATH, {}};
@@ -27,11 +27,13 @@ void ResourceManager::load(ResourceId identifier, const std::string &filename){
     }
 }
 
-void ResourceManager::load(ResourceId identifier, 
+void ResourceManager::load(ResourceId identifier,
     const std::initializer_list<std::string>& filenames)
 {
-    for(const auto& filename : filenames)
-        load(identifier, filename);
+    std::for_each(filenames.begin(), filenames.end(),
+        [=](const std::string& filename) {
+            load(identifier, filename);
+    });
 }
 
 const sf::Font &ResourceManager::getFont(const std::string &fileName) {

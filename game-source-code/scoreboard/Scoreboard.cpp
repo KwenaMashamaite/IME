@@ -7,15 +7,15 @@ using constIterator = std::vector<unsigned int>::const_iterator;
 Scoreboard::Scoreboard(const std::string& filename)
     : score_(0u), highScoresFilename_(filename)
 {
-    auto scoreListBuffer = std::stringstream();
-    fileReader_.readFileInto(scoreListBuffer, highScoresFilename_);
-    auto line = std::string();
-    while(std::getline(scoreListBuffer, line))
-        highScores_.push_back(std::stoi(line));
+    auto highScores = std::stringstream();
+    fileReader_.readFileInto(highScores, highScoresFilename_);
+    auto highscore = std::string();
+    while(std::getline(highScores, highscore))
+        highScores_.push_back(std::stoi(highscore));
 }
 
-void Scoreboard::addPoints(DestroyedEntity destroyedEntity) {
-    score_ += static_cast<int>(destroyedEntity);
+void Scoreboard::addPoints(EntityTypeWorthPoints entityPoints) {
+    score_ += static_cast<int>(entityPoints);
 }
 
 void Scoreboard::addPoints(unsigned int points) {
@@ -23,19 +23,16 @@ void Scoreboard::addPoints(unsigned int points) {
 }
 
 void Scoreboard::updateHighScore(){
-    if(score_ > highScores_.back()){//Highscores stored in descending order
+    if (score_ > highScores_.back()){//Highscores stored in descending order
         highScores_.pop_back();
         highScores_.push_back(score_);
-        //Sort high scores in descending order
         std::sort(std::begin(highScores_), std::end(highScores_), std::greater<>());
-        auto scoreListBuffer = std::stringstream();
-        for(auto i = 0u; i < highScores_.size(); i++){ //@TODO - REPLACE LOOP WITH AUTO-RANGE FOR LOOP
-            if(i < highScores_.size() - 1)
-                scoreListBuffer << std::to_string(highScores_.at(i)) + "\n";
-            else
-                scoreListBuffer << std::to_string(highScores_.at(i));
-        }
-        fileReader_.writeToFile(scoreListBuffer, highScoresFilename_);
+        auto newHighscoreList = std::stringstream();
+        std::for_each(highScores_.begin(), highScores_.end() - 2, [&](unsigned int score){
+            newHighscoreList << std::to_string(score) + "\n";
+        });
+        newHighscoreList << std::to_string(highScores_.back()); //No "\n" for last score
+        fileReader_.writeToFile(newHighscoreList, highScoresFilename_);
     }
 }
 

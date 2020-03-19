@@ -1,17 +1,17 @@
 #include "Panel.h"
 #include <cassert>
+#include <algorithm>
 
 Gui::Panel::Panel(float x, float y){
     panel_.setFillColor(sf::Color::Transparent);
     panel_.setSize(sf::Vector2f(0, 0));
     panel_.setPosition(x, y);
-    panel_.setOutlineThickness(1.0f);
 }
 
 Dimensions Gui::Panel::getDimensions() const {
     return Dimensions{
-        static_cast<unsigned int>(panel_.getGlobalBounds().width),
-        static_cast<unsigned int>(panel_.getGlobalBounds().height)
+        panel_.getGlobalBounds().width,
+        panel_.getGlobalBounds().height
     };
 }
 
@@ -30,8 +30,9 @@ void Gui::Panel::setPosition(const Position &position) {
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
-    for (auto &element : uiElements_)
-        element->draw(renderTarget);
+    std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
+        uiElem->draw(renderTarget);
+    });
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
@@ -44,17 +45,17 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
 void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
     uiElements_.push_back(std::move(guiElement));
-    if (uiElements_.size() == 1)
-        eventEmitter_.emit("firstElement");
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
     panel_.setOutlineColor(sf::Color(
-        outlineColour.red,
-        outlineColour.green, 
-        outlineColour.blue,
-        outlineColour.opacity
+        outlineColour.red,outlineColour.green,
+        outlineColour.blue,outlineColour.opacity
     ));
+}
+
+void Gui::Panel::setOutlineThickness(float outlineThickness) {
+    panel_.setOutlineThickness(outlineThickness);
 }
 
 Gui::Panel::constIterator Gui::Panel::cBegin() const {
@@ -63,4 +64,8 @@ Gui::Panel::constIterator Gui::Panel::cBegin() const {
 
 Gui::Panel::constIterator Gui::Panel::cEnd() const {
     return uiElements_.cend();
+}
+
+float Gui::Panel::getOutlineThickness() const {
+    return panel_.getOutlineThickness();
 }

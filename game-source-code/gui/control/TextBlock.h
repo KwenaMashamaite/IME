@@ -1,5 +1,5 @@
 /**
- * @brief Static UI element that can display multiple lines of text
+ * @brief Static UI element that can display single and multiple lines of text
  */
 
 #ifndef TEXTBLOCK_H

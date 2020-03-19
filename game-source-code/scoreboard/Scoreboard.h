@@ -9,13 +9,13 @@
 #include <vector>
 
 /**
- * @brief Defines entities that are worth points and their corresponding points
+ * @brief Defines entity types worth points and their corresponding points
  *
  * The entries provided below are placeholders for illustration purposes. Please
  * remove this comment after adding the appropriate entries to the enum. You may
  * leave the "@brief" tag as it is or update it
  */
-enum class DestroyedEntity{
+enum class EntityTypeWorthPoints{
     EnemyBullet = 10, //Adds 10 points to current score
     InvisibleEnemy = 50,
     FlyingEnemy = 100
@@ -42,12 +42,12 @@ public:
 
 	/**
 	 * @brief Add points to the current score
-	 * @param destroyedEntity Points to add to current score
+	 * @param entityType Entity type with points to add
 	 *
-	 * The integer value associated with the provided argument determines the
+	 * The integer value associated with the entity determines the
 	 * amount of points that are added to the current score
  	 */
-    void addPoints(DestroyedEntity destroyedEntity);
+    void addPoints(EntityTypeWorthPoints entityType);
 
     /**
      * @brief Add points to the current score

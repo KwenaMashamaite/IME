@@ -8,12 +8,16 @@ Gui::Window::Window(){
     isInstantiated_ = true;
 }
 
-void Gui::Window::create(const std::string& name, unsigned int width, unsigned int height){
+void Gui::Window::create(const std::string& name, float width, float height){
     assert(width >= minWidth && "Specified width must be greater than the minimum window width");
     assert(height >= minHeight && "Specified height must be greater than the minimum window height");
     dimensions_.width = width;
     dimensions_.height = height;
-    window_.create(sf::VideoMode(dimensions_.width, dimensions_.height), name, sf::Style::Close);
+    window_.create(sf::VideoMode(static_cast<unsigned int>(dimensions_.width),
+        static_cast<unsigned int>(dimensions_.height)),
+        name,
+        sf::Style::Close
+    );
     window_.setFramerateLimit(60);
     window_.setVerticalSyncEnabled(true);
 }
