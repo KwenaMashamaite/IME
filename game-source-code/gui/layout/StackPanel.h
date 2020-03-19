@@ -13,7 +13,7 @@ namespace Gui {
         Horizontal
     };
 
-    class StackPanel : public Panel{
+    class StackPanel final : public Panel{
     public:
         /**
          * @brief Create a new Panel object

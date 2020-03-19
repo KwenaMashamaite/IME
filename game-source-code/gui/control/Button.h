@@ -11,7 +11,7 @@
 #include <string>
 
 namespace Gui {
-    class Button : public UIElement {
+    class Button final : public UIElement {
     public:
         /**
          * @brief Construct a new Button object

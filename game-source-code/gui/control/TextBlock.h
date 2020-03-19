@@ -9,7 +9,7 @@
 #include <string>
 
 namespace Gui {
-    class TextBlock : public UIElement {
+    class TextBlock final : public UIElement {
     public:
         /**
          * @brief Construct a new Text Block object
