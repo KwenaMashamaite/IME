@@ -23,18 +23,15 @@ void Scoreboard::addPoints(unsigned int points) {
 }
 
 void Scoreboard::updateHighScore(){
-    if(score_ > highScores_.back()){//Highscores stored in descending order
+    if (score_ > highScores_.back()){//Highscores stored in descending order
         highScores_.pop_back();
         highScores_.push_back(score_);
-        //Sort high scores in descending order
         std::sort(std::begin(highScores_), std::end(highScores_), std::greater<>());
         auto scoreListBuffer = std::stringstream();
-        for(auto i = 0u; i < highScores_.size(); i++){ //@TODO - REPLACE LOOP WITH AUTO-RANGE FOR LOOP
-            if(i < highScores_.size() - 1)
-                scoreListBuffer << std::to_string(highScores_.at(i)) + "\n";
-            else
-                scoreListBuffer << std::to_string(highScores_.at(i));
-        }
+        std::for_each(highScores_.begin(), highScores_.end() - 2, [&](unsigned int score){
+            scoreListBuffer << std::to_string(score) + "\n";
+        });
+        scoreListBuffer << std::to_string(highScores_.back()); //No "\n" for last score
         fileReader_.writeToFile(scoreListBuffer, highScoresFilename_);
     }
 }
