@@ -1,5 +1,6 @@
 #include "Panel.h"
 #include <cassert>
+#include <algorithm>
 
 Gui::Panel::Panel(float x, float y){
     panel_.setFillColor(sf::Color::Transparent);
@@ -30,8 +31,9 @@ void Gui::Panel::setPosition(const Position &position) {
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
-    for (auto &element : uiElements_)
-        element->draw(renderTarget);
+    std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
+        uiElem->draw(renderTarget);
+    });
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
@@ -50,10 +52,8 @@ void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
     panel_.setOutlineColor(sf::Color(
-        outlineColour.red,
-        outlineColour.green, 
-        outlineColour.blue,
-        outlineColour.opacity
+        outlineColour.red,outlineColour.green,
+        outlineColour.blue,outlineColour.opacity
     ));
 }
 
