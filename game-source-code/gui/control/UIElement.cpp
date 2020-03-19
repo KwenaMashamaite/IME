@@ -3,9 +3,7 @@
 #include <algorithm>
 
 Gui::UIElement::UIElement(const std::string &content, const std::string &font, unsigned int textCharSize)
-    : numOfLinesInString_{0u},
-      margin_{0.0f, 0.0f, 0.0f, 0.0f},
-      padding_{0.0f, 0.0f, 0.0f, 0.0f}
+    : numOfLinesInString_{0u}
 {
     //Resize element when text changes
     eventEmitter_.addListener("textChanged", Callback<std::string>([this](const std::string &content) {

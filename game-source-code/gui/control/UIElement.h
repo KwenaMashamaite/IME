@@ -16,17 +16,17 @@ using Globals::Dimensions;
 
 namespace Gui {
     struct Margin{
-        float left;
-        float right;
-        float top;
-        float bottom;
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
     };
 
     struct Padding{
-        float left;
-        float right;
-        float top;
-        float bottom;
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
     };
 
     struct Colour{
