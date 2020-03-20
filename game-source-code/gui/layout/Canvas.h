@@ -26,7 +26,7 @@ namespace Gui {
          * sticks outside of it or not, as long as the UI elements point of
          * placement lies within the panel
          */
-        void addElement(std::shared_ptr<UIElement> guiElement) override;
+        void addElement(std::unique_ptr<UIElement> guiElement) override;
     };
 }
 

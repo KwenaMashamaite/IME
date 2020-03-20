@@ -77,7 +77,7 @@ namespace Gui {
          * @brief Add a UI element to the panel
          * @param guiElement Element to add to panel
          */
-        virtual void addElement(std::shared_ptr<UIElement> guiElement) = 0;
+        virtual void addElement(std::unique_ptr<UIElement> guiElement) = 0;
 
         /**
          * @brief Render the elements of a panel on a render target
@@ -86,14 +86,14 @@ namespace Gui {
         virtual void draw(Window &renderTarget);
 
     protected:
-        using UIElementContainer = std::vector<std::shared_ptr<UIElement>>;
+        using UIElementContainer = std::vector<std::unique_ptr<UIElement>>;
         using constIterator = UIElementContainer::const_iterator;
 
         /**
          * @brief Add gui element to underlying data structure
          * @param guiElement Element to be added
          */
-        void add(std::shared_ptr<UIElement> guiElement);
+        void add(std::unique_ptr<UIElement> guiElement);
 
         /**
          * @brief Add listener to event
