@@ -10,7 +10,7 @@
 #include <unordered_map>
 
 namespace Gui {
-    class DockPanel : public Panel {
+    class DockPanel final : public Panel {
     public:
         enum class Dock{
             Left,

@@ -28,7 +28,7 @@ enum class ResourceId{
     MUSIC
 };
 
-class ResourceManager {
+class ResourceManager final{
 public:
     /**
      * @brief Load a resource from the disk into a cache

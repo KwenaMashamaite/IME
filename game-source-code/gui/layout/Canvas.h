@@ -8,7 +8,7 @@
 #include "Panel.h"
 
 namespace Gui {
-    class Canvas : public Panel{
+    class Canvas final : public Panel{
     public:
         /**
          * @brief Constructor
