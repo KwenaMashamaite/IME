@@ -6,13 +6,14 @@
 #define DRAWER_H
 
 #include "gui/window/Window.h"
+#include "entity/Entity.h"
+#include "animation/Animator.h"
 #include <memory>
-
-class Entity;
 
 namespace Gui {
     class Drawer {
     public:
+        using EntityAnimatorPair = std::pair<std::shared_ptr<Entity>&, Animator&>;
         /**
 		 * @brief Constructor
 		 * @param renderTarget Target to draw on
@@ -21,23 +22,24 @@ namespace Gui {
 
         /**
          * @brief Draw entity on a render target
-         * @param entity entity to draw
+         * @param entityAnimatorPair entity to draw
          */
-        void drawEntity(const std::shared_ptr<Entity> &entity);
+        void drawEntity(const EntityAnimatorPair &entityAnimatorPair);
 
         /**
-         * @brief Draw multiple entities all at once
-         * @param entities Entities to be drawn
+         * @brief Draw multiple entities at the same time on a render target
+         * @param entitieAnimatorPairs Entities to be drawn
          */
-        void drawEntities(const std::initializer_list<std::shared_ptr<Entity>> &entities);
+        void drawEntities(const std::initializer_list<EntityAnimatorPair> &entitieAnimatorPairs);
 
         /**
-         * @brief Draw background tex
+         * @brief Draw background texture
          * @param background filename of the background texture
          *
          * The background texture must at least have the same dimensions as
          * the render target, otherwise the texture will be stretched to fit the
-         * the entire window. This may lead to an unpleasant looking background
+         * the size of the render target. This may lead to an unpleasant looking
+         * backgrounds
          */
         void drawBackground(const std::string &background);
 
