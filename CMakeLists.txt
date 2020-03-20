@@ -54,7 +54,11 @@ set(SOURCE_FILES
         game-source-code/entity/IMovableEntity.h
         game-source-code/entity/IWeaponOwner.h
         game-source-code/gui/drawer/Drawer.cpp
-        game-source-code/gui/drawer/Drawer.h)
+        game-source-code/gui/drawer/Drawer.h
+        game-source-code/animation/Animation.cpp
+        game-source-code/animation/Animation.h
+        game-source-code/animation/Animator.cpp
+        game-source-code/animation/Animator.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
