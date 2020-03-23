@@ -56,11 +56,40 @@ namespace Gui {
          */
         void on(std::string&& eventName, Callback<> callbackFunc);
 
+        /**
+         * @brief Disable the default behaviour of the button's response to the
+         *        mouse cursor
+         *
+         * This function will stop the button from changing colours when the mouse
+         * cursor enters or leaves the button. @note After calling this function, the
+         * button will stil react to the mouse cursor, however, there won't be any
+         * graphical representation to show it. You can define your own behaviour
+         * by registering callbacks to "mouseEnter" and "mouseLeave" events. Therefore,
+         * calling this functions is useful only if you want to use your own colours or
+         * behavior
+         */
+        void clearDefaultBehavior();
+
     private:
         //Selection state
         bool isSelected_;
         //Emits button events
         EventEmitter eventEmitter_;
+        //Callback id for the default onMouseEnter listener
+        int mouseEnterCallbackId_;
+        //Callback id for the default onMouseLeave listener
+        int mouseLeaveCallbackId_;
+
+        /**
+         * @brief Initialize the default hover and hover lost behavior
+         *        of the button
+         *
+         * This function will make the button and the button text change colour
+         * when the mouse cursor enters the button. When the mouse cursor leaves
+         * the button, the previous colour will be restored. This default behavior
+         * may be overwritten through the public interface
+         */
+        void initDefaultBehavior();
     };
 }
 
