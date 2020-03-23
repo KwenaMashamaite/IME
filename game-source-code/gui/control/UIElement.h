@@ -197,7 +197,7 @@ namespace Gui {
         static sf::Color convertOwnColourToSFMLColour(Colour color);
 
         /**
-         * Convert SFML colour object to own colour object
+         * @brief Convert SFML colour object to own colour object
          * @param SFMLColour Colour to be converted to own colour object
          * @return Own colour object
          */
