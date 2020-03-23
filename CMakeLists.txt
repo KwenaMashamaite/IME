@@ -60,7 +60,9 @@ set(SOURCE_FILES
         game-source-code/animation/Animator.cpp
         game-source-code/animation/Animator.h
         game-source-code/utility/Clock.cpp
-        game-source-code/utility/Clock.h)
+        game-source-code/utility/Clock.h
+        game-source-code/gui/menu/IMenu.h
+        )
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
