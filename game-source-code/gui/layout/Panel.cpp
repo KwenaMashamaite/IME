@@ -42,7 +42,7 @@ void Gui::Panel::setFillColour(Gui::Colour fillColour) {
     );
 }
 
-void Gui::Panel::add(std::shared_ptr<UIElement> guiElement) {
+void Gui::Panel::add(std::unique_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
     uiElements_.push_back(std::move(guiElement));
 }

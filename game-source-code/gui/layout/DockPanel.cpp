@@ -5,36 +5,41 @@ Gui::DockPanel::DockPanel(float x, float y) : Panel(x, y){
     setDimensions(Window::getDimensions());
 }
 
-void Gui::DockPanel::addElement(std::shared_ptr<UIElement> guiElement) {
+void Gui::DockPanel::addElement(std::unique_ptr<UIElement> guiElement) {
     if (lastDocked_)
         lastDocked_->addElement(std::move(guiElement));
 }
 
-void Gui::DockPanel::dock(Dock dockPosition, std::shared_ptr<Panel> panel) {
+void Gui::DockPanel::dock(Dock dockPosiion, std::unique_ptr<Panel> panel) {
     if(panel == nullptr)
         return;;
-    switch (dockPosition){
+    switch (dockPosiion){
         case Dock::Left:
-            dock(Dock ::Left, leftDock_, std::move(panel), Position{0u, 0u});
+            dock(Dock::Left, leftDock_, panel, Position{0u, 0u});
+            leftDock_ = std::move(panel);
             break;
         case Dock::Right:
             dock(Dock::Right, rightDock_, panel, Position{static_cast<float>(
                 Window::getDimensions().width -
                 panel->getDimensions().width), 0u
             });
+            rightDock_ = std::move(panel);
             break;
         case Dock::Top:
-            dock(Dock::Top, topDock_, std::move(panel), Position{0u, 0u});
+            dock(Dock::Top, topDock_, panel, Position{0u, 0u});
+            topDock_ = std::move(panel);
             break;
         case Dock::Bottom:
             dock(Dock::Bottom, bottomDock_, panel, Position{0u, static_cast<float>(
                     Window::getDimensions().height - panel->getDimensions().height)
             });
+            bottomDock_ = std::move(panel);
             break;
     }
 }
 
-void Gui::DockPanel::dock(Dock dockPosition, std::shared_ptr<Panel> &dockPanel, std::shared_ptr<Panel> panel,
+void Gui::DockPanel::dock(Dock dockPosition, const std::unique_ptr<Panel> &dockPanel,
+        const std::unique_ptr<Panel> &panel,
                           Position defaultPos) {
     if (dockPosition == Dock::Left || dockPosition == Dock::Right){
         panel->setDimensions(Dimensions{
@@ -53,11 +58,11 @@ void Gui::DockPanel::dock(Dock dockPosition, std::shared_ptr<Panel> &dockPanel, 
         });
         panel->setPosition({leftDock_ ? leftDock_->getDimensions().width : defaultPos.x, defaultPos.y});
     }
-    lastDocked_ = dockPanel = std::move(panel);
 }
 
 void Gui::DockPanel::draw(Gui::Window &renderTarget) {
-    for (const auto& dock : {topDock_, bottomDock_, leftDock_, rightDock_})
-        if (dock)
-            dock->draw(renderTarget);
+    if (topDock_) topDock_->draw(renderTarget);
+    if (bottomDock_) bottomDock_->draw(renderTarget);
+    if (leftDock_) leftDock_->draw(renderTarget);
+    if (rightDock_) rightDock_->draw(renderTarget);
 }
