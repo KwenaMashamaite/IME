@@ -7,11 +7,11 @@ Gui::Window &Gui::Menu::getRenderTarget() {
     return renderTarget_;
 }
 
-void Gui::Menu::addPanel(const std::string &panelName, std::shared_ptr<IPanel> panel) {
+void Gui::Menu::addPanel(const std::string &panelName, std::shared_ptr<Panel> panel) {
     panels_.insert(std::pair(panelName, std::move(panel)));
 }
 
-std::shared_ptr<IPanel> Gui::Menu::getPanel(const std::string &panel) const {
+std::shared_ptr<Gui::Panel> Gui::Menu::getPanel(const std::string &panel) const {
     auto found = panels_.find(panel);
     if (found != panels_.end())
         return found->second;

@@ -15,10 +15,10 @@
 
 #include "gui/menu/IMenu.h"
 #include "gui/window/Window.h"
+#include "gui/layout/Panel.h"
 #include <unordered_map>
 #include <memory>
 
-class IPanel;
 
 namespace Gui {
     class Menu : public IMenu {
@@ -41,7 +41,7 @@ namespace Gui {
          * @param panelName Name of the panel
          * @param panel Panel to be added
          */
-        void addPanel(const std::string &panelName, std::shared_ptr<IPanel> panel);
+        void addPanel(const std::string &panelName, std::shared_ptr<Panel> panel);
 
         /**
          * @brief Get access to a panel
@@ -51,7 +51,7 @@ namespace Gui {
          * If the requested panel cannot be found, a null shared
          * pointer will be returned
          */
-        std::shared_ptr<IPanel> getPanel(const std::string& panel) const;
+        std::shared_ptr<Panel> getPanel(const std::string& panel) const;
 
         /**
          * @brief Remove a panel from the menu
@@ -63,7 +63,7 @@ namespace Gui {
         //Render target
         Window& renderTarget_;
         //Stores a list of GUI control element containers
-        std::unordered_map<std::string, std::shared_ptr<IPanel>> panels_;
+        std::unordered_map<std::string, std::shared_ptr<Panel>> panels_;
     };
 }
 
