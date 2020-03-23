@@ -73,10 +73,7 @@ void Gui::UIElement::setPadding(const Gui::Padding &padding) {
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
-    border_.setFillColor(sf::Color(
-        fillColour.red, fillColour.green,
-        fillColour.blue, fillColour.opacity
-    ));
+    border_.setFillColor(convertOwnColourToSFMLColour(fillColour));
 }
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
@@ -96,10 +93,15 @@ void Gui::UIElement::setText(const std::string &content) {
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
-    text_.setFillColor(sf::Color(
-        textFillColour.red, textFillColour.green,
-        textFillColour.blue, textFillColour.opacity
-    ));
+    text_.setFillColor(convertOwnColourToSFMLColour(textFillColour));
+}
+
+Gui::Colour Gui::UIElement::getTextFillColour() const {
+    return convertSFMLColourToOwnColour(text_.getFillColor());
+}
+
+Gui::Colour Gui::UIElement::getFillColour() const {
+    return convertSFMLColourToOwnColour(border_.getFillColor());
 }
 
 Position Gui::UIElement::getPosition() const {
@@ -146,6 +148,17 @@ void Gui::UIElement::resize() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
+}
+
+sf::Color Gui::UIElement::convertOwnColourToSFMLColour(Gui::Colour color) {
+    return {static_cast<sf::Uint8>(color.red),
+            static_cast<sf::Uint8>(color.blue),
+            static_cast<sf::Uint8>(color.green),
+            static_cast<sf::Uint8>(color.opacity)};
+}
+
+Gui::Colour Gui::UIElement::convertSFMLColourToOwnColour(sf::Color SFMLColour) {
+    return {SFMLColour.r, SFMLColour.b, SFMLColour.g, SFMLColour.a};
 }
 
 Gui::UIElement::~UIElement() = default;

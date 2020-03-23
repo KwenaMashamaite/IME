@@ -122,6 +122,18 @@ namespace Gui {
         void setTextFillColour(Colour textFillColour);
 
         /**
+         * @brief Get the fill colour of the element's text
+         * @return Fill colour of the element's text
+         */
+        Colour getTextFillColour() const;
+
+        /**
+         * @brief Get the fill colour of the element
+         * @return Fill colour of the element
+         */
+        Colour getFillColour() const;
+
+        /**
          * @brief Get the position of the element
          * @return Position of the element
          */
@@ -176,6 +188,20 @@ namespace Gui {
         sf::RectangleShape textRectangle_;
         //Event Emitter
         EventEmitter eventEmitter_;
+
+        /**
+         * @brief Convert own Colour object to SFML colour object
+         * @param color Colour to be converted to SFML colour object
+         * @return SFML colour object
+         */
+        static sf::Color convertOwnColourToSFMLColour(Colour color);
+
+        /**
+         * Convert SFML colour object to own colour object
+         * @param SFMLColour Colour to be converted to own colour object
+         * @return Own colour object
+         */
+        static Colour convertSFMLColourToOwnColour(sf::Color SFMLColour);
     };
 }
 
