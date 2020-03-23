@@ -39,8 +39,6 @@ void Gui::Button::on(std::string &&eventName, Callback<> callbackFunc) {
 }
 
 void Gui::Button::initDefaultBehavior() {
-    auto defaultButtonColour = Gui::Colour{120, 142, 175};
-    auto defaultButtonTextColour = Gui::Colour{45, 151, 271};
     auto onHoverButtonColour = Gui::Colour{12, 241, 252};
     auto onHoverButtonTextColour = Gui::Colour{88, 175, 232};
 
@@ -50,8 +48,8 @@ void Gui::Button::initDefaultBehavior() {
     }));
 
     mouseLeaveCallbackId_ = eventEmitter_.addListener("mouseLeave",Callback<>([=](){
-        setFillColour(defaultButtonColour);
-        setTextFillColour(defaultButtonTextColour);
+        setFillColour(getFillColour());
+        setTextFillColour(getTextFillColour());
     }));
 }
 
