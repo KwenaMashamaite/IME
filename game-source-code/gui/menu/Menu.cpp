@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <cassert>
 
 Gui::Menu::Menu(Gui::Window &renderTarget) : renderTarget_(renderTarget)
 {}
@@ -8,6 +9,7 @@ Gui::Window &Gui::Menu::getRenderTarget() {
 }
 
 void Gui::Menu::addPanel(const std::string &panelName, std::shared_ptr<Panel> panel) {
+    assert(panel && "Null panels cannot be added to the menu");
     panels_.insert(std::pair(panelName, std::move(panel)));
 }
 
