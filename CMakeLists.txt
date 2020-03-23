@@ -62,8 +62,6 @@ set(SOURCE_FILES
         game-source-code/utility/Clock.cpp
         game-source-code/utility/Clock.h
         game-source-code/gui/menu/IMenu.h
-        game-source-code/gui/menu/Menu.cpp
-        game-source-code/gui/menu/Menu.h
         )
 
 #add the doctest unit testing framework
