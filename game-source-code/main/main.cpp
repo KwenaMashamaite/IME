@@ -24,14 +24,14 @@ int main(){
     }));
 
     auto charSize = 15;
-    auto languagesPanel = std::make_unique<Gui::StackPanel>(0.0f, window.getDimensions().height / 2.0f,
+    auto languagesPanel = std::make_shared<Gui::StackPanel>(0.0f, window.getDimensions().height / 2.0f,
             Gui::Orientation::Vertical);
     languagesPanel->setFillColour(Gui::Colour{175, 205, 36});
 
-    auto genButton = [&](std::unique_ptr<Gui::StackPanel>& panel) {
+    auto genButton = [&](std::shared_ptr<Gui::StackPanel>& panel) {
         for (const auto &greeting : greetings) {
             panel->addElement([&]() {
-                auto button = std::make_unique<Gui::Button>(greeting);
+                auto button = std::make_shared<Gui::Button>(greeting);
                 button->initialize(systemEventEmitter);
                 button->setTextCharSize(charSize);
                 button->setPadding(5.0f);
@@ -39,18 +39,18 @@ int main(){
 
                 button->setPosition(window.getDimensions().width / 2.0f - button->getDimensions().width / 2.0f,
                                     window.getDimensions().height / 2.0f);
-                auto& buttonPointee = (*(button.get()));
-                button->on("mouseEnter", Callback<>([&]() {
-                    buttonPointee.setTextFillColour({34, 56, 231});
-                    buttonPointee.setFillColour({10, 67, 90});
+
+                button->on("mouseEnter", Callback<>([button]() {
+                    button->setTextFillColour({34, 56, 231});
+                    button->setFillColour({10, 67, 90});
                 }));
-                button->on("mouseLeave", Callback<>([&]() {
-                    buttonPointee.setTextFillColour({54, 78, 3});
-                    buttonPointee.setFillColour({98, 88, 143});
+                button->on("mouseLeave", Callback<>([button]() {
+                    button->setTextFillColour({54, 78, 3});
+                    button->setFillColour({98, 88, 143});
                 }));
-                button->on("click", Callback<>([&]() {
+                button->on("click", Callback<>([&, button]() {
                     auto randonIndex = rand() % (charSizes.size() - 1);
-                    buttonPointee.setTextCharSize(charSizes.at(randonIndex));
+                    button->setTextCharSize(charSizes.at(randonIndex));
                 }));
 
                 return button;
@@ -59,26 +59,26 @@ int main(){
     };
 
     genButton(languagesPanel);
-    auto languagesPanel2 = std::make_unique<Gui::StackPanel>(320.0f, window.getDimensions().height / 2.0f,
+    auto languagesPanel2 = std::make_shared<Gui::StackPanel>(320.0f, window.getDimensions().height / 2.0f,
                                                             Gui::Orientation::Vertical);
     languagesPanel2->setFillColour(Gui::Colour{1, 205, 136});
     languagesPanel2->setOutlineColour(Gui::Colour{45, 78, 45});
     genButton(languagesPanel2);
 
-    auto languagesPanel3 = std::make_unique<Gui::StackPanel>(0.0f, 0.0f,Gui::Orientation::Horizontal);
+    auto languagesPanel3 = std::make_shared<Gui::StackPanel>(0.0f, 0.0f,Gui::Orientation::Horizontal);
     languagesPanel3->setFillColour(Gui::Colour{100, 50, 13});
     genButton(languagesPanel3);
     languagesPanel3->setOutlineColour(Gui::Colour{45, 78, 124});
 
-    auto languagesPanel4 = std::make_unique<Gui::StackPanel>(0.0f, 0.0f,Gui::Orientation::Horizontal);
+    auto languagesPanel4 = std::make_shared<Gui::StackPanel>(0.0f, 0.0f,Gui::Orientation::Horizontal);
     languagesPanel4->setFillColour(Gui::Colour{80, 150, 133});
     languagesPanel4->setOutlineColour(Gui::Colour{145, 178, 224});
     genButton(languagesPanel4);
-    auto dockPanel = Gui::DockPanel();
-    dockPanel.dock(Gui::DockPanel::Dock::Left, std::move(languagesPanel));
-    dockPanel.dock(Gui::DockPanel::Dock::Right, std::move(languagesPanel2));
-    dockPanel.dock(Gui::DockPanel::Dock::Top, std::move(languagesPanel3));
-    dockPanel.dock(Gui::DockPanel::Dock::Bottom, std::move(languagesPanel4));
+    auto dockPanel = Gui::DockPanel(0.0f, 0.0f);
+    dockPanel.dock(Gui::DockPanel::DockPosition::LeftEdge, languagesPanel);
+    dockPanel.dock(Gui::DockPanel::DockPosition::RightEdge, languagesPanel2);
+    dockPanel.dock(Gui::DockPanel::DockPosition::TopEdge, languagesPanel3);
+    dockPanel.dock(Gui::DockPanel::DockPosition::BottomEdge, languagesPanel4);
 
     while (window.isOpen()) {
         systemEventEmitter.process();
