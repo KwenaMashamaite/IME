@@ -74,11 +74,11 @@ int main(){
     languagesPanel4->setFillColour(Gui::Colour{80, 150, 133});
     languagesPanel4->setOutlineColour(Gui::Colour{145, 178, 224});
     genButton(languagesPanel4);
-    auto dockPanel = Gui::DockPanel();
-    dockPanel.dock(Gui::DockPanel::Dock::Left, languagesPanel);
-    dockPanel.dock(Gui::DockPanel::Dock::Right, languagesPanel2);
-    dockPanel.dock(Gui::DockPanel::Dock::Top, languagesPanel3);
-    dockPanel.dock(Gui::DockPanel::Dock::Bottom, languagesPanel4);
+    auto dockPanel = Gui::DockPanel(0.0f, 0.0f);
+    dockPanel.dock(Gui::DockPanel::DockPosition::LeftEdge, languagesPanel);
+    dockPanel.dock(Gui::DockPanel::DockPosition::RightEdge, languagesPanel2);
+    dockPanel.dock(Gui::DockPanel::DockPosition::TopEdge, languagesPanel3);
+    dockPanel.dock(Gui::DockPanel::DockPosition::BottomEdge, languagesPanel4);
 
     while (window.isOpen()) {
         systemEventEmitter.process();
