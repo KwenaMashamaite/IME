@@ -66,7 +66,9 @@ set(SOURCE_FILES
         game-source-code/gui/menu/Menu.h
         game-source-code/gui/menu/MainMenu.cpp
         game-source-code/gui/menu/MainMenu.h
-        )
+        game-source-code/gui/menu/PauseMenu.cpp
+        game-source-code/gui/menu/PauseMenu.h
+        game-source-code/utility/Utility.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)

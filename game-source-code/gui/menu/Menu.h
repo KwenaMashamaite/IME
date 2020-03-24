@@ -1,13 +1,13 @@
 /**
- * @brief Intemediate Abstract Base Class for menus
+ * @brief Intermediate Abstract Base Class for menus
  *
  * The menus are made up of layout panels that contain GUI elements
  * such as buttons and text labels
  *
  * @note This class does not implement the Menu Interface, it only
  * implements methods which are common to all menus to avoid code
- * duplication. All Menu classes must implement the Menu Interface
- * through this intermediate class.
+ * duplication. All Menu classes implement the Menu Interface
+ * through this intermediate base class.
  */
 
 #ifndef MENU_H

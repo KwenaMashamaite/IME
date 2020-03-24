@@ -1,6 +1,7 @@
 #include "gui/window/Window.h"
 #include "event/SystemEventEmitter.h"
 #include "gui/menu/MainMenu.h"
+#include "gui/menu/PauseMenu.h"
 #include "gui/layout/DockPanel.h"
 
 int main(){
@@ -12,12 +13,12 @@ int main(){
         window.close();
     }));
 
-    std::unique_ptr<Gui::IMenu> mainMenu = std::make_unique<Gui::MainMenu>(window, systemEventEmitter);
+    auto mainMenu = Gui::MainMenu(window, systemEventEmitter);
 
     while (window.isOpen()) {
-        systemEventEmitter.process();
+        systemEventEmitter.processEvents();
         window.clear();
-        mainMenu->draw();
+        mainMenu.draw();
         window.display();
     }
 

@@ -1,16 +1,18 @@
 /**
- * @brief Represennts the main menu of the game
+ * @brief Represents the main menu of the game
  */
 
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "gui/menu/Menu.h"
+#include "gui/menu/IMenu.h"
 #include "gui/control/Button.h"
 #include "gui/control/TextBlock.h"
+#include "gui/layout/DockPanel.h"
+#include "gui/layout/StackPanel.h"
 
 namespace Gui {
-    class MainMenu : public Menu{
+    class MainMenu : public IMenu{
     public:
         /**
          * @brief Construct a new Main Menu object
@@ -30,35 +32,37 @@ namespace Gui {
         void clear() override;
 
     private:
-        enum class State{
-            MAIN,
-            INSTRUCTIONS,
-            HIGHSCORES,
-            CONTROLS
-        };
-        //Current State of the main menu
-        State state_;
-        //
-        SystemEventEmitter systemEventEmitter_;
-
-    private:
         /**
-         * @brief Create main menu navigation buttons
+         * @brief Initialize information to be displayed when a main menu
+         *        button is clicked
+         */
+        void initOnClickInfo();
+
+        /**
+         * @brief Create the main menu title panel
+         */
+        void createTitle();
+
+        /**
+         * @brief Create the main menu navigation panel
          */
         void createNavigationButtons();
 
         /**
-         * @brief Set up the content that is displayed when a
-         *        navigation button is clicked
+         * @brief Initialize the main menu buttons (Subscribe to events, etc...)
          */
-        void initNavigationButtonsContent();
+        void initNavigationButtons();
 
         /**
-         * @brief Get the actions to be performed when navigation
-         *        buttons are clicked
-         * @return Actions to be performed when navigation buttons are clicked
+         * @brief Create a button that return back to the main menu
          */
-        std::vector<Callback<>> getOnClickCallbacks();
+        void createReturnButton();
+
+        /**
+        * @brief Set text to be displayed on the info panel
+        * @param newInfo Text to be set
+        */
+        void updateInfoPanel(const std::string& newInfo);
 
         /**
          * @brief Create a text block
@@ -74,7 +78,32 @@ namespace Gui {
          */
         std::unique_ptr<Button> createButton(const std::string &buttonText);
 
-        void renderPanels(const std::initializer_list<std::string> &panelNames);
+    private:
+        //Reference to the games render target
+        Window& renderTarget_;
+        //Reference to a system
+        SystemEventEmitter& systemEventEmitter_;
+        //Container for all main menu panels
+        std::unique_ptr<DockPanel> mainLayoutPanel_;
+        //Panel displayed when any of the menu buttons are pressed
+        std::unique_ptr<StackPanel> onClickInfoPanel_;
+
+        /**
+         * @brief States the menu can be in
+         */
+        enum class State{
+            Main,
+            Info
+        };
+        //Current State of the main menu
+        State state_;
+
+        //Main menu buttons
+        enum class ButtonType{Play, Instructions, Controls, Highscores, Exit};
+        //Stores the information that is displayed when a certain button is clicked
+        std::unordered_map<ButtonType, std::string> onClickButtonInfo_;
+        //Temporarily stores the navigation buttons
+        std::vector<std::pair<ButtonType, std::unique_ptr<Button>>> navButtons_;
     };
 }
 

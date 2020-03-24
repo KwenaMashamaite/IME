@@ -6,7 +6,7 @@
 SystemEventEmitter::SystemEventEmitter(Gui::Window &window) : renderTarget_(window)
 {}
 
-void SystemEventEmitter::process() {
+void SystemEventEmitter::processEvents() {
     sf::Event event;
     while (renderTarget_.pollEvent(event)) {
         switch (event.type){

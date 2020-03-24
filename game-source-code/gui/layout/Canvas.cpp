@@ -2,7 +2,7 @@
 
 Gui::Canvas::Canvas(float x, float y) : Panel(x, y) {}
 
-void Gui::Canvas::addElement(std::unique_ptr<UIElement> guiElement) {
+void Gui::Canvas::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
     auto elementOverlapsWithPanel = [&](){
         return guiElement->getPosition().x >= getPosition().x
                && guiElement->getPosition().x <= getPosition().x + getDimensions().width
@@ -11,5 +11,5 @@ void Gui::Canvas::addElement(std::unique_ptr<UIElement> guiElement) {
     };
 
     if (elementOverlapsWithPanel())
-        add(std::move(guiElement));
+        add(alias, std::move(guiElement));
 }
