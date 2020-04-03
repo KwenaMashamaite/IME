@@ -1,6 +1,6 @@
 #include "ResourceHolder.h"
 #include "exceptions/Exceptions.h"
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <utility>
 
 template <class T>

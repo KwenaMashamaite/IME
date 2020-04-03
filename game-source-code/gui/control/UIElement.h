@@ -7,12 +7,12 @@
 
 #include "gui/window/Window.h"
 #include "event/EventEmitter.h"
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <string>
 #include <SFML/Graphics.hpp>
 
-using Globals::Position;
-using Globals::Dimensions;
+using Common::Position;
+using Common::Dimensions;
 
 namespace Gui {
     /**

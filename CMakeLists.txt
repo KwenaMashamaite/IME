@@ -9,7 +9,7 @@ include_directories(test-source-code)
 set(SOURCE_FILES
         game-source-code/gui/window/Window.cpp
         game-source-code/gui/window/Window.h
-        game-source-code/globals/Globals.h
+        game-source-code/common/Common.h
         game-source-code/main/main.cpp
         game-source-code/resources/ResourceHolder.h
         game-source-code/resources/ResourceHolder.inl
@@ -62,8 +62,6 @@ set(SOURCE_FILES
         game-source-code/utility/Clock.cpp
         game-source-code/utility/Clock.h
         game-source-code/gui/menu/IMenu.h
-        game-source-code/gui/menu/Menu.cpp
-        game-source-code/gui/menu/Menu.h
         game-source-code/gui/menu/MainMenu.cpp
         game-source-code/gui/menu/MainMenu.h
         game-source-code/gui/menu/PauseMenu.cpp
