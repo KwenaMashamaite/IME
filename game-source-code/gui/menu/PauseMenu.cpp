@@ -7,13 +7,20 @@ Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget, SystemEventEmitter& systemE
 {
     pauseMenuButtonsPanel_ = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Vertical);
     pauseMenuButtonsPanel_->setFillColour({157, 15, 241});
+    auto centreOfScreen = Position{Window::getDimensions().width / 2.0f -
+                                    pauseMenuButtonsPanel_->getDimensions().width / 2.0f,
+                                    Window::getDimensions().height / 2.0f -
+                                    pauseMenuButtonsPanel_->getDimensions().height / 2.0f};
+    pauseMenuButtonsPanel_->setPosition(centreOfScreen);
+    createButtons(systemEventEmitter);
+}
 
+void Gui::PauseMenu::createButtons(SystemEventEmitter &systemEventEmitter) {
     auto unpauseButton = std::make_unique<Button>("UNPAUSE");
     unpauseButton->on("click", Callback<>([this](){
-        //Game::RequestStateChange(Game::State::Playing);
         clear();
+        //Game::RequestStateChange(Game::State::Playing);
     }));
-
     auto exitButton = std::make_unique<Button>("EXIT");
     exitButton->on("click", Callback<>([this](){
         renderTarget_.close();
@@ -27,11 +34,6 @@ Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget, SystemEventEmitter& systemE
 
     pauseMenuButtonsPanel_->addElement("unpauseButton", std::move(unpauseButton));
     pauseMenuButtonsPanel_->addElement("exitButton", std::move(exitButton));
-    auto centreOfScreen = Position{Window::getDimensions().width / 2.0f -
-                                    pauseMenuButtonsPanel_->getDimensions().width / 2.0f,
-                                    Window::getDimensions().height / 2.0f -
-                                    pauseMenuButtonsPanel_->getDimensions().height / 2.0f};
-    pauseMenuButtonsPanel_->setPosition(centreOfScreen);
 }
 
 void Gui::PauseMenu::draw() {
@@ -46,5 +48,3 @@ void Gui::PauseMenu::clear() {
     isCleared_ = true;
     pauseMenuButtonsPanel_->hide();
 }
-
-

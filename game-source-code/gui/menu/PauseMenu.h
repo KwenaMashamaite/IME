@@ -32,6 +32,13 @@ namespace Gui {
         void clear() override;
 
     private:
+        /**
+         * @brief Create menu buttons
+         * @param systemEventEmitter System event emitter
+         */
+        void createButtons(SystemEventEmitter &systemEventEmitter);
+
+    private:
         //Games render target
         Window& renderTarget_;
         //Layout panel for the menus UI elements
