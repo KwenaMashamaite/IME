@@ -3,12 +3,16 @@
 
 Gui::Button::Button(const std::string &buttonText)
     : UIElement(buttonText),
-      isSelected_(false)
+      isSelected_(false),
+      mouseEnterCallbackId_(-1),
+      mouseLeaveCallbackId_(-1),
 {}
 
 Gui::Button::Button(const std::string &content, const std::string &font, unsigned int textCharSize)
     : UIElement(content, font, textCharSize),
-      isSelected_(false)
+      isSelected_(false),
+      mouseEnterCallbackId_(-1),
+      mouseLeaveCallbackId_(-1)
 {}
 
 void Gui::Button::initialize(SystemEventEmitter &systemEventEmitter) {
@@ -55,7 +59,7 @@ void Gui::Button::initDefaultBehavior() {
     }));
 }
 
-void Gui::Button::clearDefaultBehavior() {
+void Gui::Button::removeDefaultBehavior() {
     eventEmitter_.removeListener("mouseEnter", mouseEnterCallbackId_);
     eventEmitter_.removeListener("mouseLeave", mouseLeaveCallbackId_);
 }

@@ -39,6 +39,8 @@ namespace Gui {
          *
          * If the button is not initialized, then it will act as a static UI element
          * That is, hovering over it and pressing it will have no effect
+         *
+         * @note A button that is hidden will not respond to or emit events
          */
         void initialize(SystemEventEmitter &systemEventEmitter);
 
@@ -62,13 +64,13 @@ namespace Gui {
          *
          * This function will stop the button from changing colours when the mouse
          * cursor enters or leaves the button. @note After calling this function, the
-         * button will stil react to the mouse cursor, however, there won't be any
+         * button will still react to the mouse cursor, however, there won't be any
          * graphical representation to show it. You can define your own behaviour
          * by registering callbacks to "mouseEnter" and "mouseLeave" events. Therefore,
          * calling this functions is useful only if you want to use your own colours or
          * behavior
          */
-        void clearDefaultBehavior();
+        void removeDefaultBehavior();
 
     private:
         //Selection state
