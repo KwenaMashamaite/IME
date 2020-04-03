@@ -83,6 +83,9 @@ namespace Gui {
         /**
          * @brief Remove a UI element from the panel
          * @param uiElement Name of the element to be removed
+         *
+         * This function is destructive. This means that the element will
+         * be removed completely
          */
         void remove(const std::string& uiElement);
 
@@ -93,7 +96,7 @@ namespace Gui {
          * from a render target. Operations on a hidden panel or on the
          * child elements of a hidden panel can still be performed. The
          * only difference is that the panel and it's child elements will
-         * not be shown on the render when a call to display i made
+         * not be shown on the render when a call to display is made
          */
         void hide();
 
@@ -111,7 +114,7 @@ namespace Gui {
         const std::unique_ptr<UIElement>& getElement(const std::string& uiElement);
 
         /**
-         * @brief Render the elements of a panel on a render target
+         * @brief Render panel and it's UI elements on a render target
          * @param renderTarget Render target to draw UI elements on
          */
         virtual void draw(Window &renderTarget);

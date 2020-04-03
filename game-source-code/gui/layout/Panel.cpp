@@ -13,10 +13,8 @@ Gui::Panel::Panel(float x, float y){
 }
 
 Dimensions Gui::Panel::getDimensions() const {
-    return {
-        panel_.getGlobalBounds().width,
-        panel_.getGlobalBounds().height
-    };
+    return {panel_.getGlobalBounds().width,
+            panel_.getGlobalBounds().height};
 }
 
 void Gui::Panel::setDimensions(const Dimensions &dimensions) {
