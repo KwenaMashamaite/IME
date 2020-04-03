@@ -37,7 +37,7 @@ Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget, SystemEventEmitter& systemE
 void Gui::PauseMenu::draw() {
     if (isCleared_){
         isCleared_ = false;
-        pauseMenuButtonsPanel_->unhide();
+        pauseMenuButtonsPanel_->reveal();
     }
     pauseMenuButtonsPanel_->draw(renderTarget_);
 }

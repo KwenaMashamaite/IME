@@ -101,9 +101,9 @@ namespace Gui {
         void hide();
 
         /**
-         * @brief Unhide a hidden panel
+         * @brief Reveal a hidden panel
          */
-        void unhide();
+        void reveal();
 
         /**
          * @brief Get access to an element

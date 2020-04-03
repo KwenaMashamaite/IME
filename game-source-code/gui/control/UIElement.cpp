@@ -141,7 +141,7 @@ void Gui::UIElement::hide() {
     Utility::makeInvisible(text_);
 }
 
-void Gui::UIElement::unHide() {
+void Gui::UIElement::reveal() {
     isHidden_ = false;
     Utility::makeVisible(outline_);
     Utility::makeVisible(border_);

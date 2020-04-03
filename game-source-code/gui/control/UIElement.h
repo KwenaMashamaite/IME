@@ -170,7 +170,7 @@ namespace Gui {
         /**
          * @brief Make UI element reappear on a render target
          */
-        void unHide();
+        void reveal();
 
         /**
          * @brief Check if UI element is hidden on a render target or not
