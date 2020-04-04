@@ -2,10 +2,10 @@
  * @brief Stores shared/common definitions and/or declarations (structs, constants, events etc)
  */
 
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#ifndef COMMON_H
+#define COMMON_H
 
-namespace Globals{
+namespace Common{
     /**
      * @brief Dimensions
      */

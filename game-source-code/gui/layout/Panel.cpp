@@ -1,18 +1,20 @@
 #include "Panel.h"
+#include "utility/Utility.h"
 #include <cassert>
 #include <algorithm>
 
 Gui::Panel::Panel(float x, float y){
-    panel_.setFillColor(sf::Color::Transparent);
-    panel_.setSize(sf::Vector2f(0, 0));
-    panel_.setPosition(x, y);
+    eventEmitter_.addListener("outlineThicknessChanged", Callback<>([this](){
+        setPosition(getPosition());
+    }));
+    setFillColour({0, 0, 0, 0}); //Transparent
+    setDimensions({0.0f, 0.0f});
+    setPosition({x, y});
 }
 
 Dimensions Gui::Panel::getDimensions() const {
-    return Dimensions{
-        panel_.getGlobalBounds().width,
-        panel_.getGlobalBounds().height
-    };
+    return {panel_.getGlobalBounds().width,
+            panel_.getGlobalBounds().height};
 }
 
 void Gui::Panel::setDimensions(const Dimensions &dimensions) {
@@ -20,52 +22,76 @@ void Gui::Panel::setDimensions(const Dimensions &dimensions) {
 }
 
 Position Gui::Panel::getPosition() const {
-    return Position{panel_.getPosition().x, panel_.getPosition().y};
+    return {panel_.getPosition().x, panel_.getPosition().y};
 }
 
 void Gui::Panel::setPosition(const Position &position) {
-    panel_.setPosition(position.x, position.y);
-    eventEmitter_.emit("positionChanged", position);
+    panel_.setPosition(position.x + panel_.getOutlineThickness(), position.y + panel_.getOutlineThickness());
+    eventEmitter_.emit("positionChanged", Position{panel_.getPosition().x, panel_.getPosition().y});
 }
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
     std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
-        uiElem->draw(renderTarget);
+        uiElem.second->draw(renderTarget);
     });
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
-    panel_.setFillColor(sf::Color(
-        fillColour.red, fillColour.green,
-        fillColour.blue, fillColour.opacity)
-    );
+    panel_.setFillColor(Utility::convertOwnColourToSFMLColour(fillColour));
 }
 
-void Gui::Panel::add(std::unique_ptr<UIElement> guiElement) {
+void Gui::Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
-    uiElements_.push_back(std::move(guiElement));
+    auto found = findUIElement(alias);
+    if (found == uiElements_.end())
+        uiElements_.push_back(std::pair(alias, std::move(guiElement)));
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
-    panel_.setOutlineColor(sf::Color(
-        outlineColour.red,outlineColour.green,
-        outlineColour.blue,outlineColour.opacity
-    ));
+    panel_.setOutlineColor(Utility::convertOwnColourToSFMLColour(outlineColour));
 }
 
 void Gui::Panel::setOutlineThickness(float outlineThickness) {
     panel_.setOutlineThickness(outlineThickness);
+    eventEmitter_.emit("outlineThicknessChanged");
 }
 
-Gui::Panel::constIterator Gui::Panel::cBegin() const {
+Gui::Panel::ConstIterator Gui::Panel::cBegin() const {
     return uiElements_.cbegin();
 }
 
-Gui::Panel::constIterator Gui::Panel::cEnd() const {
+Gui::Panel::ConstIterator Gui::Panel::cEnd() const {
     return uiElements_.cend();
 }
 
 float Gui::Panel::getOutlineThickness() const {
     return panel_.getOutlineThickness();
+}
+
+void Gui::Panel::remove(const std::string &uiElementName) {
+    auto found = findUIElement(uiElementName);
+    if (found != uiElements_.end())
+        uiElements_.erase(found);
+}
+
+const std::unique_ptr<Gui::UIElement>& Gui::Panel::getElement(const std::string &uiElementAlias) {
+    auto found = findUIElement(uiElementAlias);
+    if (found != uiElements_.end())
+        return found->second;
+    return null_Ptr;
+}
+
+void Gui::Panel::hide() {
+    Utility::makeInvisible(panel_);
+    std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
+        uiElem.second->hide();
+    });
+}
+
+void Gui::Panel::reveal() {
+    Utility::makeVisible(panel_);
+    std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
+        uiElem.second->reveal();
+    });
 }

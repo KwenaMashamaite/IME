@@ -5,13 +5,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 
 namespace Gui {
-    using Globals::Position;
-    using Globals::Dimensions;
+    using Common::Position;
+    using Common::Dimensions;
 
     class Window : sf::NonCopyable {
     public:

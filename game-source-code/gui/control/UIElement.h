@@ -7,12 +7,12 @@
 
 #include "gui/window/Window.h"
 #include "event/EventEmitter.h"
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <string>
 #include <SFML/Graphics.hpp>
 
-using Globals::Position;
-using Globals::Dimensions;
+using Common::Position;
+using Common::Dimensions;
 
 namespace Gui {
     /**
@@ -50,11 +50,13 @@ namespace Gui {
     class UIElement {
     public:
         /**
-         * @brief Creates a UI element that has a width and height of 40 respectively,
-         * 		  a transparent fill colour and a position of (0, 0)
-         * @param content Content to be displayed inside the element
-         * @param font Text content font
-         * @param textCharSize Text content character size
+         * @brief Create a UI element
+         * @param content Text to be displayed inside the element
+         * @param font Font to be used for the text
+         * @param textCharSize Character size of the text
+         *
+         * The UI element has a character size of 30, a white background
+         * and a black foreground by default
          */
         explicit UIElement(const std::string &content,
                            const std::string &font = "basson.ttf",
@@ -68,13 +70,13 @@ namespace Gui {
         void setPosition(float x, float y);
 
         /**
-         * @brief Set the margin on all sides (equal)
-         * @param margin Margin o set
+         * @brief Set the same margin on all sides
+         * @param margin Margin to set
          */
         void setMargin(float margin);
 
         /**
-         * @brief Set the padding on all sides (equal)
+         * @brief Set the same padding on all sides
          * @param padding Padding to set
          */
         void setPadding(float padding);
@@ -98,28 +100,43 @@ namespace Gui {
         void setFillColour(Colour fillColour);
 
         /**
-         * @brief Set the element's text content font
-         * @param contentFont New font
+         * @brief Set the UI element's text font
+         * @param textFont New font
          */
-        void setTextFont(const std::string &contentFont);
+        void setTextFont(const std::string &textFont);
 
         /**
-         * @brief Set the character size of the element's text content
+         * @brief Set the character size of the element's text
          * @param charSize New character size
          */
         void setTextCharSize(unsigned int charSize);
 
         /**
-         * @brief Set the text content of the element. Overrides existing content.
+         * @brief Set the text content of the element
          * @param content New text content
+         *
+         * This function will overwrite the text that
+         * was previously set
          */
         void setText(const std::string &content);
 
         /**
-         * @brief Set the fill colour of the element's text content
-         * @param textFillColour New text content fill colour
+         * @brief Set the fill colour of the element's text
+         * @param textFillColour New text fill colour
          */
         void setTextFillColour(Colour textFillColour);
+
+        /**
+         * @brief Get the fill colour of the element's text
+         * @return Fill colour of the element's text
+         */
+        Colour getTextFillColour() const;
+
+        /**
+         * @brief Get the fill colour of the element
+         * @return Fill colour of the element
+         */
+        Colour getFillColour() const;
 
         /**
          * @brief Get the position of the element
@@ -134,6 +151,34 @@ namespace Gui {
         Dimensions getDimensions() const;
 
         /**
+         * @brief Get the padding set on the element
+         * @return Padding set on th element
+         */
+        Padding getPadding() const;
+
+        /**
+         * @brief Get the margin set on the element
+         * @return Margin set on the element
+         */
+        Margin getMargin() const;
+
+        /**
+         * @brief Make UI element disappear from a render target
+         */
+        void hide();
+
+        /**
+         * @brief Make UI element reappear on a render target
+         */
+        void reveal();
+
+        /**
+         * @brief Check if UI element is hidden on a render target or not
+         * @return True if UI element is hidden, false if it is not hidden
+         */
+        bool isHidden() const;
+
+        /**
         * @brief Check if coordinates lie inside the element
         * @param x X coordinate to be checked
         * @param y Y coordinate to be checked
@@ -143,21 +188,30 @@ namespace Gui {
         bool contains(float x, float y) const;
 
         /**
-         * @brief Renders element on a render target
+         * @brief Draw element on a render target
          * @param renderTarget Render target to draw element on
          */
         virtual void draw(Window &renderTarget);
 
         /**
-         * @brief Default destructor
+         * @brief Abstract Destructor
+         *
+         * The destructor is made abstract so that the class cannot be
+         * instantiated directly. Derived classes will NOT be abstract
+         * by default!, Only if they themselves introduce abstract methods
          */
         virtual ~UIElement() = 0;
 
     private:
         /**
-        * @brief helper function for resizing element
+        * @brief helper function for resizing the element
         */
         void resize();
+
+        /**
+         * @brief setup events
+         */
+        void initEvents();
 
     private:
         //White space around element
@@ -169,13 +223,13 @@ namespace Gui {
         //Number of lines present in the content string
         unsigned int numOfLinesInText_;
         //Defines the perimeter of the entire element (includes margin and padding)
-        sf::RectangleShape parentRectangle_;
+        sf::RectangleShape outline_;
         //Defines the perimeter of the element border
         sf::RectangleShape border_;
-        //Defines the perimeter of the content area
-        sf::RectangleShape textRectangle_;
         //Event Emitter
         EventEmitter eventEmitter_;
+        //
+        bool isHidden_;
     };
 }
 

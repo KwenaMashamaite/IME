@@ -5,13 +5,13 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-using Globals::Dimensions;
-using Globals::Position;
+using Common::Dimensions;
+using Common::Position;
 
 class Animation {
 public:
