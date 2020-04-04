@@ -1,5 +1,5 @@
 /**
- * @brief UI layout that has no restrictions on the placement of UI controls
+ * @brief UI layout that has no restrictions on the placement of UI control elements
  */
 
 #ifndef CANVAS_H
@@ -21,12 +21,12 @@ namespace Gui {
          * @brief Add UI element to panel
          * @param guiElement UI element to add
          *
-         * If the point of placement lies within the panel, then the UI element
-         * will be added to the panel. The panel does not check if the element
-         * sticks outside of it or not, as long as the UI elements point of
-         * placement lies within the panel
+         * This function will try to add a UI element to the panel. The element can be placed
+         * anywhere within the panel. There are no restrictions on how and where the UI element
+         * should be placed. @note A UI element that extends outside the edges of the panel will
+         * NOT be added to the panel
          */
-        void addElement(std::shared_ptr<UIElement> guiElement) override;
+        void addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) override;
     };
 }
 

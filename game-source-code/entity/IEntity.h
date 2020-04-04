@@ -5,12 +5,12 @@
 #ifndef IENTITY_H
 #define IENTITY_H
 
-#include "globals/Globals.h"
+#include "common/Common.h"
 #include <string>
 
-using Globals::Position;
-using Globals::Dimensions;
-using Globals::EntityType;
+using Common::Position;
+using Common::Dimensions;
+using Common::EntityType;
 
 class IEntity{
 public:

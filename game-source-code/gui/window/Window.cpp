@@ -1,7 +1,7 @@
 #include "Window.h"
 #include <cassert>
 
-Globals::Dimensions Gui::Window::dimensions_{0u, 0u};
+Common::Dimensions Gui::Window::dimensions_{0u, 0u};
 
 Gui::Window::Window(){
     assert(!isInstantiated_ && "Only a single instance of window can be instantiated");
@@ -42,7 +42,7 @@ void Gui::Window::clear(sf::Color colour){
     window_.clear(colour);
 }
 
-Globals::Position Gui::Window::getMousePosition() const {
+Common::Position Gui::Window::getMousePosition() const {
     return {
         static_cast<float>(sf::Mouse::getPosition(window_).x),
         static_cast<float>(sf::Mouse::getPosition(window_).y)

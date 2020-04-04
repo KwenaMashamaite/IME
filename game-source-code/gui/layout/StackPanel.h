@@ -16,7 +16,7 @@ namespace Gui {
     class StackPanel final : public Panel{
     public:
         /**
-         * @brief Create a new Panel object
+         * @brief Create a new Stack Panel object
          * @param x X coordinate of the panel
          * @param y Y coordinate of the panel
          * @param orientation Specify how the UI elements are stacked to each other
@@ -25,9 +25,10 @@ namespace Gui {
 
         /**
          * @brief Add a UI element to the panel
+         * @param alias Name that can be used to refer to element
          * @param guiElement Element to be added
          */
-        void addElement(std::shared_ptr<UIElement> guiElement) override;
+        void addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) override;
 
     private:
         //Panel orientation state
@@ -36,13 +37,13 @@ namespace Gui {
         /**
          * @brief Set the position of a UI element relative to another UI element
          * @param uiElem UI element to position relative to another
-         * @param refElem Reference UI element
+         * @param refUIElem Reference UI element
          *
          * The element whose position is changed will have the same orientation
          * (vertical or horizontal) as the element which is used as reference.
          */
-        void setElemPosRelativeTo(std::shared_ptr<UIElement> uiElem,
-                const std::shared_ptr<UIElement>& refUIElem);
+        void setElemPosRelativeTo(const std::unique_ptr<UIElement> &uiElem,
+                                  const std::unique_ptr<UIElement> &refUIElem);
 
         /**
          * @brief Adjust the dimensions of the panel based on the dimensions of
@@ -51,10 +52,10 @@ namespace Gui {
          *
          * This function will adjust the width or height of the panel depending
          * on the dimensions of the UI element. The dimesnions of the panel will
-         * be adjusted such all the egdes of the UI elemnst lie within the edges
-         * of the panel
+         * be adjusted such that all the egdes of the UI element lie within the
+         * edges of the panel
          */
-        void accomodate(const std::shared_ptr<UIElement>& uiElement);
+        void adjustPanelDimensions(const std::unique_ptr<UIElement> &uiElement);
     };
 }
 
