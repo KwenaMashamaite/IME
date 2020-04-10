@@ -36,7 +36,7 @@ void Gui::PauseMenu::createButtons() {
 void Gui::PauseMenu::draw() {
     if (isCleared_){
         isCleared_ = false;
-        pauseMenuButtonsPanel_->reveal();
+        pauseMenuButtonsPanel_->show();
     }
     pauseMenuButtonsPanel_->draw(renderTarget_);
 }

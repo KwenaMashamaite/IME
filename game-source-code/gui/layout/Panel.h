@@ -103,7 +103,7 @@ namespace Gui {
         /**
          * @brief Reveal a hidden panel
          */
-        void reveal();
+        void show();
 
         /**
          * @brief Get access to an element
