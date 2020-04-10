@@ -128,7 +128,8 @@ void Gui::MainMenu::draw() {
 }
 
 void Gui::MainMenu::clear() {
-    //@TODO Implement functionality to clear the menu without destroying it
+   onClickInfoPanel_->hide();
+   mainLayoutPanel_->hide();
 }
 
 std::unique_ptr<Gui::TextBlock> Gui::MainMenu::createTextBlock(const std::string &text) {
