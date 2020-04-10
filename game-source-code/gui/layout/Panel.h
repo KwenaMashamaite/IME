@@ -78,14 +78,15 @@ namespace Gui {
          * @param alias Name that can be used to refer to element
          * @param guiElement Element to add to panel
          */
-        virtual void addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) = 0;
+        virtual void addElement(const std::string &alias,
+                std::unique_ptr<UIElement> guiElement) = 0;
 
         /**
          * @brief Remove a UI element from the panel
          * @param uiElement Name of the element to be removed
          *
-         * This function is destructive. This means that the element will
-         * be removed completely
+         * This function is destructive. This means that the element
+         * will be removed completely
          */
         void remove(const std::string& uiElement);
 
@@ -129,10 +130,11 @@ namespace Gui {
          * @param alias Name of the UI element
          * @param guiElement Element to be added
          *
-         * This function will try to add a UI element to the panel. If the alias for
-         * the UI element to be added is already present in the collection, that UI element
-         * wil not be added to the panel. In other words, aliases for UI elements must be
-         * unique
+         * This function will try to add a UI element to the panel.
+         * If the alias for the UI element to be added is already
+         * present in the collection, that UI element wil not be
+         * added to the panel. In other words, aliases for UI
+         * elements must be unique
          */
         void add(const std::string &alias, std::unique_ptr<UIElement> guiElement);
 
@@ -147,18 +149,18 @@ namespace Gui {
         }
 
         /**
-         * @brief Get a constant iterator that points to the first element in the
-	     *        the panel
-         * @return A constant iterator that points to the first element in the
-	     *         the panel
+         * @brief  Get a constant iterator that points to the
+         *         first element in the the panel
+         * @return A constant iterator that points to the first
+         *         element in the the panel
          */
         ConstIterator cBegin() const;
 
         /**
-         * @brief Get a constant iterator that points one past the last element in the
-	     *        panel
-         * @return A constant iterator that points one past the last element in the
-	     *         panel
+         * @brief  Get a constant iterator that points one past
+         *         the last element in the panel
+         * @return A constant iterator that points one past the
+         *         last element in the panel
          */
         ConstIterator cEnd() const;
 
@@ -166,9 +168,9 @@ namespace Gui {
         /**
          * @brief Get access to a UI element inside the collection
          * @param uiElemAlias Name of the UI element to get access to
-         * @return An iterator that points to the required element if it exists
-         *         in the collection, otherwise an iterator that points one past the
-         *         last element in collection
+         * @return An iterator that points to the required element if
+         *         it exists in the collection, otherwise an iterator
+         *         that points one past the last element in collection
          */
         auto findUIElement(const std::string& uiElemAlias){
             return std::find_if(uiElements_.begin(), uiElements_.end(),
