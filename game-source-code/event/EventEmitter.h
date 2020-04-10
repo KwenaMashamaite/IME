@@ -27,13 +27,10 @@ public:
      * @tparam Args Template parameter pack name
      * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
-     * @param isCalledOnce True if listener is called only once, false for multiple times
      * @return listener's identification number
      *
-     * A listener that is flagged as a once listener (isCalledOnce set to true) will be
-     * invoked once and subsequently removed from the event, Otherwise the listener will
-     * be invoked each time the event is fired. Note, If the same listener is added multiple
-     * times, It will be treated as a unique listener and hence given an identification number.
+     * If the same listener is added multiple times, It will be treated as a unique
+     * listener and hence given an identification number.
      *
      * @warning If the added listener is a member of a class, then the listener
      * must be removed from an event when the class instance goes out of scope.
@@ -41,7 +38,33 @@ public:
      * fired and this will lead to undefined behavior
      */
     template<typename...Args>
-    int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce = false);
+    int addListener(const std::string &event, Callback<Args...> callback);
+
+    /**
+     * @brief Add listener to an event
+     *
+     * This function does the same thing as the addListener function. It just provides
+     * a slightly more understandable syntax
+     *
+     * For example:
+     *  returnButton.on("click", showMainMenu) as opposed to
+     *  returnButton.addListener("click", showMainMenu)
+     */
+    template<typename...Args>
+    int on(const std::string &event, Callback<Args...> callback);
+
+    /**
+     * @brief Add a listener to an event
+     * @param event Event to add listener to
+     * @param callback Function to execute when the event is fired
+     *
+     * This function will add a listener to an event. The listener will only be invoked
+     * once and subsequently removed from the event. This means that the callback will
+     * only run when an event is raised for the first time. Use addListener() or the on()
+     * function if the callback is to be invoked each time an event is fired
+     */
+     template <typename ...Args>
+    void addOnceListener(const std::string &event, Callback<Args...> callback);
 
     /**
      * @brief Remove a listener from an event
@@ -67,6 +90,18 @@ public:
      */
     template<typename...Args>
     void emit(const std::string &event, Args...args);
+
+private:
+    /**
+     * @brief Add a listener (callback) to an event
+     * @tparam Args Template parameter pack name
+     * @param event Event to add listener to
+     * @param callback Function to execute when the event is fired
+     * @param isCalledOnce True if listener is called only once, false for multiple times
+     * @return listener's identification number
+     */
+    template<typename...Args>
+    int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce);
 
 private:
     //Event listener identification number
