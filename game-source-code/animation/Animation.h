@@ -19,17 +19,17 @@ public:
      * @brief Create a new animation
      * @param spriteSheetFilename Texture file with animation frames
      * @param frameSize Size of each animation frame
-     * @param startPos Position of the first frame on the spritesheet
+     * @param startPos Position of the first frame on the sprite sheet
      * @param numOfFrames Number of animation frames
      * @param duration How long the animation plays before it
      *        stops/loops around
      *
-     * The starting position must lie on the sprite sheet. In addition,
-     * the spritesheet must be large enough to accomodate all the
-     * animation frames. In other words, the dimensions of a frame and the
-     * number of frames must be such that none of the frames extend beyond
-     * the width and height of the sprite sheet. Lastly, all animation frames
-     * must be the same size otherwise, incorrect frames will be animated
+     * The starting position must lie on the sprite sheet. In addition, the
+     * sprite sheet must be large enough to accommodate all the animation
+     * frames. In other words, the dimensions of a frame and the number of
+     * frames must be such that none of the frames extend beyond the width
+     * and height of the sprite sheet. Lastly, all animation frames must
+     * be the same size otherwise, incorrect frames will be animated
      */
     Animation(const std::string& spriteSheetFilename,
             Dimensions frameSize,
@@ -71,9 +71,9 @@ public:
      * @throw std::out_of_range if the specified index is invalid
      *
      * The returned frame is not textured. It only specifies the position
-     * and the size of the sprite sheet area that should be displayed.
-     * In other words, the presentation sprite must be textured with
-     * the approprate sprite sheet before calling this function.
+     * and the size of the sprite sheet area that should be displayed. In
+     * other words, the presentation sprite must be textured with the
+     * appropriate sprite sheet before calling this function.
 	 */
     sf::IntRect  getFrameAt(unsigned int frameNumber) const;
 
@@ -96,7 +96,7 @@ private:
     /**
      * @brief Create animation frames
      * @param numOfFrames Number of frames to create
-     * @param startingPos Position of the first frame on the spritesheet
+     * @param startingPos Position of the first frame on the sprite sheet
      * @param frameSize Size of each frame
      *
      * This function creates empty rectangles (not textured) contiguously.
