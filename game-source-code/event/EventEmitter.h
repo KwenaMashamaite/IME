@@ -79,6 +79,10 @@ public:
       * @brief Remove all listeners of an event
       * @param event Event to remove all listeners from
       * @return True if all listeners were removed, false if no such event exists
+      *
+      * @warning Use caution when removing all listeners. For instance, avoid calling this
+      * function on an event emitter that is not local to the scope in which your in as this
+      * could lead to undefined behavior.
       */
      bool removeAllListeners(const std::string &event);
 
