@@ -5,7 +5,7 @@ Gui::Button::Button(const std::string &buttonText)
     : UIElement(buttonText),
       isSelected_(false),
       mouseEnterCallbackId_(-1),
-      mouseLeaveCallbackId_(-1),
+      mouseLeaveCallbackId_(-1)
 {}
 
 Gui::Button::Button(const std::string &content, const std::string &font, unsigned int textCharSize)

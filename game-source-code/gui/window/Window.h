@@ -82,7 +82,7 @@ namespace Gui {
          * @brief Get the mouse cursor position relative to this window
          * @return Mouse cursor position relative to this window
          */
-        Position getMousePosition() const;
+        Position getMouseCursorPosition() const;
 
         /**
          * @brief Destructor. Ensures a new Window instance can be created
