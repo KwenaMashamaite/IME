@@ -21,10 +21,11 @@ namespace Gui {
          * @brief Add UI element to panel
          * @param guiElement UI element to add
          *
-         * This function will try to add a UI element to the panel. The element can be placed
-         * anywhere within the panel. There are no restrictions on how and where the UI element
-         * should be placed. @note A UI element that extends outside the edges of the panel will
-         * NOT be added to the panel
+         * This function will try to add a UI element to the panel.
+         * The element can be placed anywhere within the panel. There
+         * are no restrictions on how and where the UI element should
+         * be placed. @note A UI element that extends outside the edges
+         * of the panel will NOT be added to the panel
          */
         void addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) override;
     };
