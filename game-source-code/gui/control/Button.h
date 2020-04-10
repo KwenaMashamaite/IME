@@ -6,7 +6,6 @@
 #define BUTTON_H
 
 #include "gui/control/UIElement.h"
-#include "event/SystemEventEmitter.h"
 #include "event/EventEmitter.h"
 #include <string>
 
@@ -32,17 +31,6 @@ namespace Gui {
          * a position of (0, 0) by default
          */
         Button(const std::string &content, const std::string &font, unsigned int textCharSize);
-
-        /**
-         * @brief Initialize button for event publishing
-         * @param systemEventEmitter System event emitter
-         *
-         * If the button is not initialized, then it will act as a static UI element
-         * That is, hovering over it and pressing it will have no effect
-         *
-         * @note A button that is hidden will not respond to or emit events
-         */
-        void initialize(SystemEventEmitter &systemEventEmitter);
 
         /**
          * @brief Register a callback to an event
@@ -73,14 +61,10 @@ namespace Gui {
         void removeDefaultBehavior();
 
     private:
-        //Selection state
-        bool isSelected_;
-        //Emits button events
-        EventEmitter eventEmitter_;
-        //Callback id for the default onMouseEnter listener
-        int mouseEnterCallbackId_;
-        //Callback id for the default onMouseLeave listener
-        int mouseLeaveCallbackId_;
+        /**
+         * @brief Subscribe button to system events
+         */
+        void subscribeToEvents();
 
         /**
          * @brief Initialize the default hover and hover lost behavior
@@ -92,6 +76,16 @@ namespace Gui {
          * may be overwritten through the public interface
          */
         void initDefaultBehavior();
+
+    private:
+        //Selection state
+        bool isSelected_;
+        //Emits button events
+        EventEmitter eventEmitter_;
+        //Callback id for the default onMouseEnter listener
+        int mouseEnterCallbackId_;
+        //Callback id for the default onMouseLeave listener
+        int mouseLeaveCallbackId_;
     };
 }
 

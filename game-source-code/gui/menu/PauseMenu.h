@@ -7,7 +7,6 @@
 
 #include "gui/menu/IMenu.h"
 #include "gui/layout/StackPanel.h"
-#include "event/SystemEventEmitter.h"
 
 namespace Gui {
     class PauseMenu : public IMenu{
@@ -15,9 +14,8 @@ namespace Gui {
         /**
          * @brief Create a new Pause Menu object
          * @param renderTarget Target to draw menu on
-         * @param systemEventEmitter System events emitter
          */
-        PauseMenu(Window &renderTarget, SystemEventEmitter& systemEventEmitter);
+        explicit PauseMenu(Window &renderTarget);
 
         /**
          * @brief Draw all GUI elements and layouts of the menu
@@ -33,10 +31,9 @@ namespace Gui {
 
     private:
         /**
-         * @brief Create menu buttons
-         * @param systemEventEmitter System event emitter
+         * @brief Create pause menu buttons
          */
-        void createButtons(SystemEventEmitter &systemEventEmitter);
+        void createButtons();
 
     private:
         //Games render target

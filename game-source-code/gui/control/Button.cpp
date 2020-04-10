@@ -1,24 +1,30 @@
 #include "Button.h"
-
-#include <utility>
+#include "gui/window/Window.h"
 #include "input/Mouse.h"
+#include <utility>
 
 Gui::Button::Button(const std::string &buttonText)
     : UIElement(buttonText),
       isSelected_(false),
       mouseEnterCallbackId_(-1),
       mouseLeaveCallbackId_(-1)
-{}
+{
+    subscribeToEvents();
+    initDefaultBehavior();
+}
 
 Gui::Button::Button(const std::string &content, const std::string &font, unsigned int textCharSize)
     : UIElement(content, font, textCharSize),
       isSelected_(false),
       mouseEnterCallbackId_(-1),
       mouseLeaveCallbackId_(-1)
-{}
+{
+    subscribeToEvents();
+    initDefaultBehavior();
+}
 
-void Gui::Button::initialize(SystemEventEmitter &systemEventEmitter) {
-    systemEventEmitter.addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
+void Gui::Button::subscribeToEvents() {
+    Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
         if (!isHidden()) {
             if (contains(x, y) && !isSelected_) {
                 isSelected_ = true;
@@ -30,14 +36,12 @@ void Gui::Button::initialize(SystemEventEmitter &systemEventEmitter) {
         }
     }));
 
-    systemEventEmitter.addListener("mouseButtonReleased", Callback<Mouse::Button>(
+    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
                 eventEmitter_.emit("click");
         })
     );
-
-    initDefaultBehavior();
 }
 
 void Gui::Button::on(const std::string &eventName, Callback<> callbackFunc) {

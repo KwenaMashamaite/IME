@@ -3,8 +3,8 @@
 #include <vector>
 #include <algorithm>
 
-Gui::MainMenu::MainMenu(Window &renderTarget, SystemEventEmitter &sysEventEmitter)
-    : renderTarget_(renderTarget), systemEventEmitter_(sysEventEmitter), state_(State::Main)
+Gui::MainMenu::MainMenu(Window &renderTarget)
+    : renderTarget_(renderTarget), state_(State::Main)
 {
     mainLayoutPanel_ = std::make_unique<DockPanel>(0.0f, 0.0f);
     mainLayoutPanel_->setDimensions(Window::getDimensions());
@@ -51,7 +51,6 @@ void Gui::MainMenu::createNavigationButtons() {
 
     std::for_each(buttonTexts.begin(), buttonTexts.end(),[&](auto& buttonText){
         auto button = createButton(buttonText.second);
-        button->initialize(systemEventEmitter_);
         navButtons_.push_back(std::pair(buttonText.first, std::move(button)));
     });
 }
@@ -204,7 +203,6 @@ GAME:
 
 void Gui::MainMenu::createReturnButton() {
     auto returnButton = createButton("back to main");
-    returnButton->initialize(systemEventEmitter_);
     (*(returnButton.get())).on("click", [this](){state_ = State::Main;});
     onClickInfoPanel_->addElement("returnButton", std::move(returnButton));
 }
