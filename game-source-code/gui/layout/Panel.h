@@ -142,8 +142,8 @@ namespace Gui {
          * @param callback Function to execute when event is raised
          */
         template <typename...Args>
-        void on(std::string&& event, Callback<Args...> callback){
-            eventEmitter_.addListener(std::forward<std::string&&>(event),std::move(callback));
+        void on(const std::string& event, Callback<Args...> callback){
+            eventEmitter_.addListener(event,std::move(callback));
         }
 
         /**

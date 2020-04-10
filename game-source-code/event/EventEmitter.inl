@@ -2,7 +2,7 @@
 // should be placed in .cpp file to avoid the "multiple definition" error
 
 template<typename...Args>
-int EventEmitter::addListener(std::string &&event, Callback<Args...> callback, bool isCalledOnce) {
+int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
     auto listenerId = previousListenerId++;
     auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
     auto iter = eventList_.find(event);
@@ -16,7 +16,7 @@ int EventEmitter::addListener(std::string &&event, Callback<Args...> callback, b
 }
 
 template<typename... Args>
-void EventEmitter::emit(std::string &&event, Args... args) {
+void EventEmitter::emit(const std::string &event, Args... args) {
     auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;
@@ -25,7 +25,7 @@ void EventEmitter::emit(std::string &&event, Args... args) {
             if (listenerPtr && listenerPtr->callback_) {
                 listenerPtr->callback_(args...);
                 if (listenerPtr->isCalledOnce_)
-                    removeListener(std::forward<std::string&&>(event), listenerPtr->id_);
+                    removeListener(event, listenerPtr->id_);
             }
         }
     }

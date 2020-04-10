@@ -1,4 +1,6 @@
 #include "Button.h"
+
+#include <utility>
 #include "input/Mouse.h"
 
 Gui::Button::Button(const std::string &buttonText)
@@ -38,8 +40,8 @@ void Gui::Button::initialize(SystemEventEmitter &systemEventEmitter) {
     initDefaultBehavior();
 }
 
-void Gui::Button::on(std::string &&eventName, Callback<> callbackFunc) {
-    eventEmitter_.addListener(std::forward<std::string&&>(eventName), std::move(callbackFunc));
+void Gui::Button::on(const std::string &eventName, Callback<> callbackFunc) {
+    eventEmitter_.addListener(eventName, std::move(callbackFunc));
 }
 
 void Gui::Button::initDefaultBehavior() {

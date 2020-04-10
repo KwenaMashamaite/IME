@@ -41,7 +41,7 @@ public:
      * fired and this will lead to undefined behavior
      */
     template<typename...Args>
-    int addListener(std::string &&event, Callback<Args...> callback, bool isCalledOnce = false);
+    int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce = false);
 
     /**
      * @brief Remove a listener from an event
@@ -50,14 +50,14 @@ public:
      * @return True if a listener was removed from an event, false if the specified
      *         event does not have a listener with the specified id
      */
-     bool removeListener(std::string &&event, int listenerId);
+     bool removeListener(const std::string &event, int listenerId);
 
      /**
       * @brief Remove all listeners of an event
       * @param event Event to remove all listeners from
       * @return True if all listeners were removed, false if no such event exists
       */
-     bool removeAllListeners(std::string&& event);
+     bool removeAllListeners(const std::string &event);
 
     /**
      * @brief Fire an event
@@ -66,7 +66,7 @@ public:
      * @param args Arguments passed to event listeners
      */
     template<typename...Args>
-    void emit(std::string &&event, Args...args);
+    void emit(const std::string &event, Args...args);
 
 private:
     //Event listener identification number

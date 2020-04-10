@@ -56,7 +56,7 @@ namespace Gui {
          *
          * Any event that's none of the above will not be raised
          */
-        void on(std::string&& eventName, Callback<> callbackFunc);
+        void on(const std::string &eventName, Callback<> callbackFunc);
 
         /**
          * @brief Disable the default behaviour of the button's response to the
