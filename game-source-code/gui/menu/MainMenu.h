@@ -49,7 +49,7 @@ namespace Gui {
         void createNavigationButtons();
 
         /**
-         * @brief Initialize the main menu buttons (Subscribe to events, etc...)
+         * @brief Initialize the main menu buttons
          */
         void initNavigationButtons();
 

@@ -51,9 +51,9 @@ namespace Gui {
         /**
          * @brief Process events
          *
-         * This function will notify event listeners if any events have been
-         * captured by the window. An invocation of this function wil empty
-         * the event queue
+         * This function will notify event listeners if any events
+         * have been captured by the window. An invocation of this
+         * function wil empty the event queue
          */
         void processEvents();
 
@@ -100,19 +100,22 @@ namespace Gui {
         }
 
         /**
-         * @brief Remove a listener from a window event
-         * @param event Event to remove listener from
-         * @param listenerId Identification number of the listener to be removed
-         * @return True if a listener was removed from an event, false if the specified
-         *         event does not have a listener with the specified id
+         * @brief  Remove a listener from a window event
+         * @param  event Event to remove listener from
+         * @param  listenerId Identification number of the listener
+         *         to be removed
+         * @return True if a listener was removed from an event,
+         *         false if the specified event does not have a
+         *         listener with the specified id
          */
         static bool removeListener(const std::string& event, int callbackId){
             eventEmitter_.removeListener(event, callbackId);
         }
 
         /**
-         * @brief Destructor. Ensures a new Window instance can be created
-         *        when an existing Window instance is destroyed
+         * @brief Destructor. Ensures a new Window instance can be
+         *        created when an existing Window instance is
+         *        destroyed
          */
         ~Window();
 
