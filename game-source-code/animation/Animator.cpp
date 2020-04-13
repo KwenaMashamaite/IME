@@ -11,7 +11,7 @@ void Animator::addAnimation(const std::string &name, std::shared_ptr<Animation> 
     assert(animation && "A null animation cannot be added to an Animator");
     animations_.insert(std::pair(name, std::move(animation)));
     if (animations_.size() == 1)
-        currentAnimation_ = animations_.begin()->second;
+        changeAnimation(name);
 }
 
 void Animator::addAnimation(Animator::AnimationGroup animationGroup) {
