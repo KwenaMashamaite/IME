@@ -73,7 +73,8 @@ public:
      * The returned frame is not textured. It only specifies the position
      * and the size of the sprite sheet area that should be displayed. In
      * other words, the presentation sprite must be textured with the
-     * appropriate sprite sheet before calling this function.
+     * appropriate sprite sheet before displaying it, otherwise a white
+     * rectangle will be displayed instead.
 	 */
     sf::IntRect  getFrameAt(unsigned int frameNumber) const;
 
@@ -99,7 +100,7 @@ private:
      * @param startingPos Position of the first frame on the sprite sheet
      * @param frameSize Size of each frame
      *
-     * This function creates empty rectangles (not textured) contiguously.
+     * This function creates empty frames (not textured) contiguously.
      */
     void createFrames(unsigned int numOfFrames, Position startingPos, Dimensions frameSize);
 };
