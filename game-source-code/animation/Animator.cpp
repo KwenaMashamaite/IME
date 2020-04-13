@@ -14,9 +14,12 @@ void Animator::addAnimation(const std::string &name, std::shared_ptr<Animation> 
         changeAnimation(name);
 }
 
-void Animator::addAnimation(Animator::AnimationGroup animationGroup) {
-    for (const auto& animation : animationGroup)
-        addAnimation(animation.first, animation.second);
+void Animator::addAnimation(Animator::Animations animations) {
+    std::for_each(animations.begin(), animations.end(),
+        [this](const auto& animation) {
+            addAnimation(animation.first, animation.second);
+        }
+    );
 }
 
 //@todo Reset var totaltime due to some condition (Overflow risk)
