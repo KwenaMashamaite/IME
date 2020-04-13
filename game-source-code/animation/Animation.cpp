@@ -4,7 +4,7 @@ Animation::Animation(const std::string &spriteSheetFilename,
         Dimensions frameSize,
         Position startPos,
         unsigned int numOfFrames,
-        float duration) : duration_(duration), isLooped_(false)
+        float duration) : spriteSheet_(spriteSheetFilename), duration_(duration), isLooped_(false)
 {
     createFrames(numOfFrames, startPos, frameSize);
 }
