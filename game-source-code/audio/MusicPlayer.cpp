@@ -3,8 +3,7 @@
 
 void Audio::MusicPlayer::play(const std::string &song){
     song_ = ResourceManager::getMusic(song);
-    if (song_)
-        song_->play();
+    song_->play();
 }
 
 void Audio::MusicPlayer::setLoop(bool isLoop){
