@@ -69,8 +69,8 @@ float Gui::Panel::getOutlineThickness() const {
     return panel_.getOutlineThickness();
 }
 
-void Gui::Panel::remove(const std::string &uiElementName) {
-    auto found = findUIElement(uiElementName);
+void Gui::Panel::removeElement(const std::string &uiElement) {
+    auto found = findUIElement(uiElement);
     if (found != uiElements_.end())
         uiElements_.erase(found);
 }

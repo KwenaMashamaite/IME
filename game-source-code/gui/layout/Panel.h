@@ -88,7 +88,7 @@ namespace Gui {
          * This function is destructive. This means that the element
          * will be removed completely
          */
-        void remove(const std::string& uiElement);
+        void removeElement(const std::string& uiElement);
 
         /**
          * @brief Hide panel
