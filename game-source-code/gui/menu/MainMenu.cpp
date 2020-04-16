@@ -4,14 +4,13 @@
 #include <algorithm>
 
 Gui::MainMenu::MainMenu(Window &renderTarget)
-    : renderTarget_(renderTarget), state_(State::Main)
+    : renderTarget_(renderTarget),
+      state_(State::Main),
+      mainLayoutPanel_(std::make_unique<DockPanel>(0.0f, 0.0f)),
+      onClickInfoPanel_(std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical))
 {
-    mainLayoutPanel_ = std::make_unique<DockPanel>(0.0f, 0.0f);
     mainLayoutPanel_->setDimensions(Window::getDimensions());
-
-    onClickInfoPanel_ = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
-    onClickInfoPanel_->setDimensions(Window::getDimensions());
-    onClickInfoPanel_->addElement("infoTextBlock", std::make_unique<TextBlock>(""));
+    onClickInfoPanel_->addElement("infoTextBlock", std::move(std::make_unique<TextBlock>("kffhhggffh", "philosopher.ttf", 10u)));
 
     initOnClickInfo();
     createTitle();
