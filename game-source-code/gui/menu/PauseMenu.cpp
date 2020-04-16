@@ -7,12 +7,12 @@ Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget)
 {
     pauseMenuButtonsPanel_ = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Vertical);
     pauseMenuButtonsPanel_->setFillColour({157, 15, 241});
+    createButtons();
     auto centreOfScreen = Position{Window::getDimensions().width / 2.0f -
                                     pauseMenuButtonsPanel_->getDimensions().width / 2.0f,
                                     Window::getDimensions().height / 2.0f -
                                     pauseMenuButtonsPanel_->getDimensions().height / 2.0f};
     pauseMenuButtonsPanel_->setPosition(centreOfScreen);
-    createButtons();
 }
 
 void Gui::PauseMenu::createButtons() {
