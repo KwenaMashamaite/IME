@@ -41,12 +41,13 @@ void Gui::MainMenu::createTitle() {
 }
 
 void Gui::MainMenu::createNavigationButtons() {
-    auto buttonTexts = std::vector{std::pair(ButtonType::Play, "PLAY"),
-                                   std::pair(ButtonType::Instructions, "INSTRUCTIONS"),
-                                   std::pair(ButtonType::Highscores, "HIGHSCORES"),
-                                   std::pair(ButtonType::Controls, "CONTROLS"),
-                                   std::pair(ButtonType::Exit, "EXIT")
-                                   };
+    auto buttonTexts = std::vector{
+        std::pair(ButtonType::Play, "PLAY"),
+        std::pair(ButtonType::Instructions, "INSTRUCTIONS"),
+        std::pair(ButtonType::Highscores, "HIGHSCORES"),
+        std::pair(ButtonType::Controls, "CONTROLS"),
+        std::pair(ButtonType::Exit, "EXIT")
+    };
 
     std::for_each(buttonTexts.begin(), buttonTexts.end(),[&](auto& buttonText){
         auto button = createButton(buttonText.second);
