@@ -15,7 +15,7 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
     initOnClickInfo();
     createTitle();
     createNavigationButtons();
-    initNavigationButtons();
+    initNavigationButtonActions();
     createReturnButton();
     createFooter();
 
@@ -57,7 +57,7 @@ void Gui::MainMenu::createNavigationButtons() {
     });
 }
 
-void Gui::MainMenu::initNavigationButtons() {
+void Gui::MainMenu::initNavigationButtonActions() {
     auto navigationPanel = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Vertical);
     navigationPanel->setFillColour({157, 15, 241});
     navigationPanel->setOutlineThickness(5.0f);

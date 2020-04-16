@@ -56,7 +56,7 @@ namespace Gui {
         /**
          * @brief Initialize the main menu buttons
          */
-        void initNavigationButtons();
+        void initNavigationButtonActions();
 
         /**
          * @brief Create a button that return back to the main menu
