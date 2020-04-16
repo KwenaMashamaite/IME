@@ -86,7 +86,7 @@ void Gui::UIElement::setTextCharSize(unsigned int charSize) {
 
 void Gui::UIElement::setText(const std::string &content) {
     text_.setString(content);
-    eventEmitter_.emit("textChanged");
+    eventEmitter_.emit("textChanged", content);
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
