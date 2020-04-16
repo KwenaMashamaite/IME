@@ -18,18 +18,21 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
     createNavigationButtons();
     initNavigationButtons();
     createReturnButton();
-
-    auto navInfo = createTextBlock("USE THE MOUSE TO INTERACT WITH MENU");
-    navInfo->setTextCharSize(15.0f);
-    navInfo->setPadding({100, 100, 0, 0});
-    auto navInfoPanel = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Horizontal);
-    navInfoPanel->setFillColour({45, 78, 251});
-    navInfoPanel->addElement("navInfo", std::move(navInfo));
-    mainLayoutPanel_->dock(DockPanel::DockPosition::BottomEdge,std::move(navInfoPanel));
+    createFooter();
 
     auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
     onHoverInfoPanel->addElement("onHoverInfo", std::make_unique<TextBlock>("DUMMY TEXT"));
     mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
+}
+
+void Gui::MainMenu::createFooter() {
+    auto navInfo = this->createTextBlock("USE THE MOUSE TO INTERACT WITH MENU");
+    navInfo->setTextCharSize(15.0f);
+    navInfo->setPadding({100, 100, 0, 0});
+    auto navInfoPanel = std::make_unique<Gui::StackPanel>(0.0f, 0.0f, Gui::Orientation::Horizontal);
+    navInfoPanel->setFillColour({45, 78, 251});
+    navInfoPanel->addElement("navInfo", std::move(navInfo));
+    this->mainLayoutPanel_->dock(Gui::DockPanel::DockPosition::BottomEdge, std::move(navInfoPanel));
 }
 
 void Gui::MainMenu::createTitle() {

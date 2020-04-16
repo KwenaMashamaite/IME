@@ -44,6 +44,11 @@ namespace Gui {
         void createTitle();
 
         /**
+         * @brief Create the main menu footer
+         */
+        void createFooter();
+
+        /**
          * @brief Create the main menu navigation panel
          */
         void createNavigationButtons();
