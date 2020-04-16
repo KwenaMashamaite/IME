@@ -17,7 +17,7 @@
 
 class Animator {
 public:
-    using AnimationGroup = std::initializer_list<std::pair<std::string, std::shared_ptr<Animation>>>;
+    using Animations = std::initializer_list<std::pair<std::string, std::shared_ptr<Animation>>>;
 
     /**
      * @brief Constructor
@@ -39,7 +39,7 @@ public:
      * @brief Add multiple animations at the same time
      * @param animations Animations to be added
      */
-    void addAnimation(AnimationGroup animations);
+    void addAnimation(Animations animations);
 
     /**
 	 * @brief Update animation

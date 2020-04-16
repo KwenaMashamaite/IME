@@ -6,7 +6,6 @@
 #define BUTTON_H
 
 #include "gui/control/UIElement.h"
-#include "event/SystemEventEmitter.h"
 #include "event/EventEmitter.h"
 #include <string>
 
@@ -34,17 +33,6 @@ namespace Gui {
         Button(const std::string &content, const std::string &font, unsigned int textCharSize);
 
         /**
-         * @brief Initialize button for event publishing
-         * @param systemEventEmitter System event emitter
-         *
-         * If the button is not initialized, then it will act as a static UI element
-         * That is, hovering over it and pressing it will have no effect
-         *
-         * @note A button that is hidden will not respond to or emit events
-         */
-        void initialize(SystemEventEmitter &systemEventEmitter);
-
-        /**
          * @brief Register a callback to an event
          * @param eventName Name of the event to register callback on
          * @param callbackFunc Callback to register
@@ -56,21 +44,40 @@ namespace Gui {
          *
          * Any event that's none of the above will not be raised
          */
-        void on(std::string&& eventName, Callback<> callbackFunc);
+        void on(const std::string &eventName, Callback<> callbackFunc);
 
         /**
-         * @brief Disable the default behaviour of the button's response to the
-         *        mouse cursor
+         * @brief Disable the default behaviour of the button's response
+         *        to the mouse cursor
          *
-         * This function will stop the button from changing colours when the mouse
-         * cursor enters or leaves the button. @note After calling this function, the
-         * button will still react to the mouse cursor, however, there won't be any
-         * graphical representation to show it. You can define your own behaviour
-         * by registering callbacks to "mouseEnter" and "mouseLeave" events. Therefore,
-         * calling this functions is useful only if you want to use your own colours or
-         * behavior
+         * This function will stop the button from changing colours when
+         * the mouse cursor enters or leaves the button. @note After
+         * calling this function, the button will still react to the
+         * mouse cursor, however, there won't be any graphical
+         * representation to show it. You can define your own behaviour
+         * by registering callbacks to "mouseEnter" and "mouseLeave"
+         * events. Therefore, calling this functions is useful only if
+         * you want to use your own colours or behavior
          */
         void removeDefaultBehavior();
+
+    private:
+        /**
+         * @brief Subscribe button to system events
+         */
+        void subscribeToEvents();
+
+        /**
+         * @brief Initialize the default hover and hover lost behavior
+         *        of the button
+         *
+         * This function will make the button and the button text change
+         * colour when the mouse cursor enters the button. When the mouse
+         * cursor leaves the button, the previous colour will be restored.
+         * This default behavior may be overwritten through the public
+         * interface
+         */
+        void initDefaultBehavior();
 
     private:
         //Selection state
@@ -81,17 +88,6 @@ namespace Gui {
         int mouseEnterCallbackId_;
         //Callback id for the default onMouseLeave listener
         int mouseLeaveCallbackId_;
-
-        /**
-         * @brief Initialize the default hover and hover lost behavior
-         *        of the button
-         *
-         * This function will make the button and the button text change colour
-         * when the mouse cursor enters the button. When the mouse cursor leaves
-         * the button, the previous colour will be restored. This default behavior
-         * may be overwritten through the public interface
-         */
-        void initDefaultBehavior();
     };
 }
 

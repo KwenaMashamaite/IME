@@ -16,12 +16,13 @@ template <class T>
 class ResourceHolder : sf::NonCopyable {
 private:
     /**
-	 * @brief Ensures only selected classes/functions can access selected parts
-     *        of ResourceHolder (Attorney-Client idiom).
+	 * @brief Ensures only selected classes/functions can access
+     *        selected parts of ResourceHolder (Attorney-Client idiom).
      *
-	 * A class/function can obtain limited access to the class ResourceHolder
-     * by becoming a friend of class PassKey. PassKey has access to all the members
-     * (public, protected and private) of ResourceHolder but friends of PassKey only
+	 * A class/function can obtain limited access to the class
+     * ResourceHolder by becoming a friend of class PassKey.
+     * PassKey has access to all the members (public, protected
+     * and private) of ResourceHolder but friends of PassKey only
      * have access to member functions that are exposed by PassKey.
 	 */
     class PassKey{
@@ -47,9 +48,10 @@ public:
      * @param filename File name of the resource to load
      * @throws FileNotFound If the file cannot be found on the disk
      *
-     * If the path of the resource matches the one provided in the constructor
-     * then the file name can be specified without the path (e.g textureOne.png),
-     * otherwise the file path is required (e.g resources/textures/textureOne.png).
+     * If the path of the resource matches the one provided in the
+     * constructor then the file name can be specified without the
+     * path (e.g textureOne.png), otherwise the file path is required
+     * (e.g resources/textures/textureOne.png).
      */
     void load(const std::string& filename);
 
@@ -59,11 +61,11 @@ public:
      * @throws FileNotFound If the the file cannot be found on the disk
      * @return Shared pointer to a resource in a buffer
      *
-     * If the requested resource is not found in the buffer, an attempt
-     * will be made to load it from the disk. If it cannot be loaded from
-     * the disk, then a "FileNotFound" exception will be thrown. This implies
-     * that the returned pointer can never be a nullptr. Therefore, nullptr
-     * checks are not necessary, but they can be put in place for robustness
+     * If the requested resource is not found in the buffer, an
+     * attempt will be made to load it from the disk. If it cannot
+     * be loaded from the disk, then a "FileNotFound" exception will
+     * be thrown. This implies that the returned pointer can never be
+     * a nullptr. Therefore, nullptr checks are not necessary
      */
     std::shared_ptr<T> get(const std::string& filename);
 

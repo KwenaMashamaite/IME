@@ -86,7 +86,7 @@ void Gui::UIElement::setTextCharSize(unsigned int charSize) {
 
 void Gui::UIElement::setText(const std::string &content) {
     text_.setString(content);
-    eventEmitter_.emit("textChanged");
+    eventEmitter_.emit("textChanged", content);
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
@@ -141,7 +141,7 @@ void Gui::UIElement::hide() {
     Utility::makeInvisible(text_);
 }
 
-void Gui::UIElement::reveal() {
+void Gui::UIElement::show() {
     isHidden_ = false;
     Utility::makeVisible(outline_);
     Utility::makeVisible(border_);

@@ -18,7 +18,7 @@ namespace Gui {
          * @brief Construct a new Main Menu object
          * @param renderTarget Render target to draw menu on
          */
-        MainMenu(Window &renderTarget, SystemEventEmitter &sysEventEmitter);
+        explicit MainMenu(Window &renderTarget);
 
         /**
          * @brief Draw all GUI elements and layouts of the main menu
@@ -44,12 +44,17 @@ namespace Gui {
         void createTitle();
 
         /**
+         * @brief Create the main menu footer
+         */
+        void createFooter();
+
+        /**
          * @brief Create the main menu navigation panel
          */
         void createNavigationButtons();
 
         /**
-         * @brief Initialize the main menu buttons (Subscribe to events, etc...)
+         * @brief Initialize the main menu buttons
          */
         void initNavigationButtons();
 
@@ -81,8 +86,6 @@ namespace Gui {
     private:
         //Reference to the games render target
         Window& renderTarget_;
-        //Reference to a system
-        SystemEventEmitter& systemEventEmitter_;
         //Container for all main menu panels
         std::unique_ptr<DockPanel> mainLayoutPanel_;
         //Panel displayed when any of the menu buttons are pressed

@@ -9,11 +9,13 @@
 #include <vector>
 
 /**
- * @brief Defines entity types worth points and their corresponding points
+ * @brief Defines entity types worth points and their corresponding
+ *        points
  *
- * The entries provided below are placeholders for illustration purposes. Please
- * remove this comment after adding the appropriate entries to the enum. You may
- * leave the "@brief" tag as it is or update it
+ * The entries provided below are placeholders for illustration
+ * purposes. Please remove this comment after adding the appropriate
+ * entries to the enum. You may leave the "@brief" tag as it is or
+ * update it
  */
 enum class EntityTypeWorthPoints{
     EnemyBullet = 10, //Adds 10 points to current score
@@ -30,11 +32,11 @@ public:
      * @param filepath File name of the file that contains the scores
      * @throw FileNotFound If the file cannot be found on the disk
      *
-     * The file name must be preceded by the path to the file. In addition,
-	 * the file that contains the highscores must be in the same folder as
-	 * the generated executable file (or be in a subfolder of the generated
-	 * executable file's folder), otherwise a "FileNotFound" exception will
-	 * be thrown
+     * The file name must be preceded by the path to the file. In
+     * addition, the file that contains the highscores must be in
+     * the same folder as the generated executable file (or be in
+     * a subfolder of the generated executable file's folder),
+     * otherwise a "FileNotFound" exception will be thrown
      *
      * (e.g executables/resources/highscores/highscore.txt)
 	 */
@@ -44,8 +46,8 @@ public:
 	 * @brief Add points to the current score
 	 * @param entityType Entity type with points to add
 	 *
-	 * The integer value associated with the entity determines the
-	 * amount of points that are added to the current score
+	 * The integer value associated with the entity determines
+	 * the amount of points that are added to the current score
  	 */
     void addPoints(EntityTypeWorthPoints entityType);
 
@@ -58,8 +60,8 @@ public:
 	/**
 	 * @brief Write scores to disk file
 	 *
-	 * The disk file is only updated if the current score is greater than the lowest
-	 * highscore from the last file read
+	 * The disk file is only updated if the current score is greater
+	 * than the lowest highscore from the last file read
 	 */
 	void updateHighScore();
 
@@ -81,18 +83,18 @@ public:
 	unsigned int getTopScore() const;
 
 	/**
-	 * @brief Get a constant iterator that points to the first element in a
-	 *        high scores container
-	 * @return A constant iterator that points to the first element in a high
-	 *         scores container
+	 * @brief  Get a constant iterator that points to the first element
+	 *         in a high scores container
+	 * @return A constant iterator that points to the first element in
+	 *         a high scores container
 	 */
 	constIterator cBegin() const;
 
 	/**
-	 * @brief Get a constant iterator that points one past the last element in a
-	 *        high scores container
-	 * @return A constant iterator that points one past the last element in a
-	 *         high scores container
+	 * @brief  Get a constant iterator that points one past the last
+	 *         element in a high scores container
+	 * @return A constant iterator that points one past the last
+	 *         element in a high scores container
 	 */
 	constIterator cEnd() const;
 

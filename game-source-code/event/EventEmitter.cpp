@@ -1,15 +1,15 @@
 #include "EventEmitter.h"
 #include <algorithm>
 
-bool EventEmitter::removeListener(std::string &&event, int callbackId) {
-    if (callbackId > previousListenerId)
+bool EventEmitter::removeListener(const std::string &event, int listenerId) {
+    if (listenerId > previousListenerId)
         return false;
     auto eventIter = eventList_.find(event);
     if (eventIter != eventList_.end()) {
         auto& listeners = eventIter->second;
         auto listenerIter = std::find_if(listeners.begin(), listeners.end(),
-            [callbackId](std::shared_ptr<IListener>& listener){
-                return listener->id_ == callbackId;
+            [listenerId](std::shared_ptr<IListener>& listener){
+                return listener->id_ == listenerId;
         });
         if (listenerIter != listeners.end()) {
             listeners.erase(listenerIter);
@@ -19,7 +19,7 @@ bool EventEmitter::removeListener(std::string &&event, int callbackId) {
     return false;
 }
 
-bool EventEmitter::removeAllListeners(std::string&& event) {
+bool EventEmitter::removeAllListeners(const std::string &event) {
     auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;

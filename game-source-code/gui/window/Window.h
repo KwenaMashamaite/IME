@@ -6,6 +6,7 @@
 #define WINDOW_H
 
 #include "common/Common.h"
+#include "event/EventEmitter.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 
@@ -48,11 +49,13 @@ namespace Gui {
         bool isOpen() const;
 
         /**
-         * @brief Check if the event queue is empty or not.
-         * @param event Event queue to be checked
-         * @return true if event queue is not empty, false if it is empty
+         * @brief Process events
+         *
+         * This function will notify event listeners if any events
+         * have been captured by the window. An invocation of this
+         * function wil empty the event queue
          */
-        bool pollEvent(sf::Event &event);
+        void processEvents();
 
         /**
          * @brief Close the window
@@ -82,13 +85,45 @@ namespace Gui {
          * @brief Get the mouse cursor position relative to this window
          * @return Mouse cursor position relative to this window
          */
-        Position getMousePosition() const;
+        Position getMouseCursorPosition() const;
 
         /**
-         * @brief Destructor. Ensures a new Window instance can be created
-         *        when an existing Window instance is destroyed
+         * @brief Add a listener to a window event
+         * @tparam Args Template parameter pack name
+         * @param event Event to add listener to
+         * @param callback Function to execute when the event is fired
+         * @return listener's identification number
+         */
+        template <typename ...Args>
+        static int addListener(const std::string& event, Callback<Args...> callback){
+            eventEmitter_.addListener(event, callback);
+        }
+
+        /**
+         * @brief  Remove a listener from a window event
+         * @param  event Event to remove listener from
+         * @param  listenerId Identification number of the listener
+         *         to be removed
+         * @return True if a listener was removed from an event,
+         *         false if the specified event does not have a
+         *         listener with the specified id
+         */
+        static bool removeListener(const std::string& event, int callbackId){
+            eventEmitter_.removeListener(event, callbackId);
+        }
+
+        /**
+         * @brief Destructor. Ensures a new Window instance can be
+         *        created when an existing Window instance is
+         *        destroyed
          */
         ~Window();
+
+    private:
+        /**
+         * @brief Subscribe to events
+         */
+        void subscribeToEvents();
 
     private:
         //SFML render window.
@@ -101,6 +136,8 @@ namespace Gui {
         inline static const auto minWidth = 100u;
         //Minimum window height
         inline static const auto minHeight = 100u;
+        //Event Emitter
+        inline static EventEmitter eventEmitter_{};
     };
 }
 

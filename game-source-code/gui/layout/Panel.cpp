@@ -69,8 +69,8 @@ float Gui::Panel::getOutlineThickness() const {
     return panel_.getOutlineThickness();
 }
 
-void Gui::Panel::remove(const std::string &uiElementName) {
-    auto found = findUIElement(uiElementName);
+void Gui::Panel::removeElement(const std::string &uiElement) {
+    auto found = findUIElement(uiElement);
     if (found != uiElements_.end())
         uiElements_.erase(found);
 }
@@ -89,9 +89,9 @@ void Gui::Panel::hide() {
     });
 }
 
-void Gui::Panel::reveal() {
+void Gui::Panel::show() {
     Utility::makeVisible(panel_);
     std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
-        uiElem.second->reveal();
+        uiElem.second->show();
     });
 }

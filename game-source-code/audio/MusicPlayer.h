@@ -28,7 +28,7 @@ namespace Audio {
 
         /**
          * @brief Loop/unloop music
-         * @param isLoop Set to true to loop music, false to unloop nusic
+         * @param isLoop Set to true to loop music, false to unloop music
          */
         void setLoop(bool isLoop);
 

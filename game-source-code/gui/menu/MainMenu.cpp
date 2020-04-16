@@ -3,33 +3,35 @@
 #include <vector>
 #include <algorithm>
 
-Gui::MainMenu::MainMenu(Window &renderTarget, SystemEventEmitter &sysEventEmitter)
-    : renderTarget_(renderTarget), systemEventEmitter_(sysEventEmitter), state_(State::Main)
+Gui::MainMenu::MainMenu(Window &renderTarget)
+    : renderTarget_(renderTarget),
+      state_(State::Main),
+      mainLayoutPanel_(std::make_unique<DockPanel>(0.0f, 0.0f)),
+      onClickInfoPanel_(std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical))
 {
-    mainLayoutPanel_ = std::make_unique<DockPanel>(0.0f, 0.0f);
     mainLayoutPanel_->setDimensions(Window::getDimensions());
-
-    onClickInfoPanel_ = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
-    onClickInfoPanel_->setDimensions(Window::getDimensions());
-    onClickInfoPanel_->addElement("infoTextBlock", std::make_unique<TextBlock>(""));
+    onClickInfoPanel_->addElement("infoTextBlock", std::move(std::make_unique<TextBlock>("kffhhggffh", "philosopher.ttf", 10u)));
 
     initOnClickInfo();
     createTitle();
     createNavigationButtons();
     initNavigationButtons();
     createReturnButton();
-
-    auto navInfo = createTextBlock("USE THE MOUSE TO INTERACT WITH MENU");
-    navInfo->setTextCharSize(15.0f);
-    navInfo->setPadding({100, 100, 0, 0});
-    auto navInfoPanel = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Horizontal);
-    navInfoPanel->setFillColour({45, 78, 251});
-    navInfoPanel->addElement("navInfo", std::move(navInfo));
-    mainLayoutPanel_->dock(DockPanel::DockPosition::BottomEdge,std::move(navInfoPanel));
+    createFooter();
 
     auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
     onHoverInfoPanel->addElement("onHoverInfo", std::make_unique<TextBlock>("DUMMY TEXT"));
     mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
+}
+
+void Gui::MainMenu::createFooter() {
+    auto navInfo = this->createTextBlock("USE THE MOUSE TO INTERACT WITH MENU");
+    navInfo->setTextCharSize(15.0f);
+    navInfo->setPadding({100, 100, 0, 0});
+    auto navInfoPanel = std::make_unique<Gui::StackPanel>(0.0f, 0.0f, Gui::Orientation::Horizontal);
+    navInfoPanel->setFillColour({45, 78, 251});
+    navInfoPanel->addElement("navInfo", std::move(navInfo));
+    this->mainLayoutPanel_->dock(Gui::DockPanel::DockPosition::BottomEdge, std::move(navInfoPanel));
 }
 
 void Gui::MainMenu::createTitle() {
@@ -51,7 +53,6 @@ void Gui::MainMenu::createNavigationButtons() {
 
     std::for_each(buttonTexts.begin(), buttonTexts.end(),[&](auto& buttonText){
         auto button = createButton(buttonText.second);
-        button->initialize(systemEventEmitter_);
         navButtons_.push_back(std::pair(buttonText.first, std::move(button)));
     });
 }
@@ -129,7 +130,8 @@ void Gui::MainMenu::draw() {
 }
 
 void Gui::MainMenu::clear() {
-    //@TODO Implement functionality to clear the menu without destroying it
+   onClickInfoPanel_->hide();
+   mainLayoutPanel_->hide();
 }
 
 std::unique_ptr<Gui::TextBlock> Gui::MainMenu::createTextBlock(const std::string &text) {
@@ -204,7 +206,6 @@ GAME:
 
 void Gui::MainMenu::createReturnButton() {
     auto returnButton = createButton("back to main");
-    returnButton->initialize(systemEventEmitter_);
     (*(returnButton.get())).on("click", [this](){state_ = State::Main;});
     onClickInfoPanel_->addElement("returnButton", std::move(returnButton));
 }
