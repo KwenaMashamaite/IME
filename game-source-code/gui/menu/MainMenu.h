@@ -103,20 +103,6 @@ namespace Gui {
         */
         void updateInfoPanel(const std::string& newInfo);
 
-        /**
-         * @brief Create a text block
-         * @param text Text to be displayed inside the text block
-         * @return Created text block
-         */
-        std::unique_ptr<TextBlock> createTextBlock(const std::string& text);
-
-        /**
-         * @brief Create a button
-         * @param buttonText Text to be displayed inside the button
-         * @return Created button
-         */
-        std::unique_ptr<Button> createButton(const std::string &buttonText);
-
     private:
         //Reference to the games render target
         Window& renderTarget_;
