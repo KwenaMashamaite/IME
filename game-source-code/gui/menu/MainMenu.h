@@ -64,6 +64,18 @@ namespace Gui {
         void createReturnButton();
 
         /**
+         * @brief Create a panel to display information when a navigation
+         *        button is hovered over
+         *
+         * This function creates a panel that displays information associated
+         * with a certain navigation button when the mouse cursor enters it.
+         * This information is not cleared when the mouse cursor leaves the
+         * button. However, the information will be cleared if after leaving
+         * the button, the mouse cursor enters another navigation button.
+         */
+        void createOnHoverInfoPanel();
+
+        /**
         * @brief Set text to be displayed on the info panel
         * @param newInfo Text to be set
         */

@@ -18,10 +18,7 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
     initNavigationButtonActions();
     createReturnButton();
     createFooter();
-
-    auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
-    onHoverInfoPanel->addElement("onHoverInfo", std::make_unique<TextBlock>("DUMMY TEXT"));
-    mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
+    createOnHoverInfoPanel();
 }
 
 void Gui::MainMenu::createFooter() {
@@ -208,4 +205,11 @@ void Gui::MainMenu::createReturnButton() {
     auto returnButton = createButton("back to main");
     (*(returnButton.get())).on("click", [this](){state_ = State::Main;});
     onClickInfoPanel_->addElement("returnButton", std::move(returnButton));
+}
+
+void Gui::MainMenu::createOnHoverInfoPanel() {
+    auto onHoverInfoPanel = std::make_unique<Canvas>(0.0f,0.0f);
+    auto infoElement = std::make_unique<TextBlock>(""); //Assuming initially no button is hovered over
+    onHoverInfoPanel->addElement("onHoverInfo", std::move(infoElement));
+    mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
 }
