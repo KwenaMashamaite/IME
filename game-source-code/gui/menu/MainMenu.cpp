@@ -1,5 +1,5 @@
 #include "MainMenu.h"
-#include "gui/layout/StackPanel.h"
+#include "gui/layout/Canvas.h"
 #include <vector>
 #include <algorithm>
 
