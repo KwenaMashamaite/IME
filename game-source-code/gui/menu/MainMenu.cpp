@@ -1,6 +1,6 @@
 #include "MainMenu.h"
 #include "gui/layout/Canvas.h"
-#include <vector>
+#include "gui/layout/StackPanel.h"
 #include <algorithm>
 
 Gui::MainMenu::MainMenu(Window &renderTarget)
@@ -10,7 +10,7 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
       onClickInfoPanel_(std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical))
 {
     mainLayoutPanel_->setDimensions(Window::getDimensions());
-    onClickInfoPanel_->addElement("infoTextBlock", std::move(std::make_unique<TextBlock>("kffhhggffh", "philosopher.ttf", 10u)));
+    onClickInfoPanel_->addElement("infoTextBlock", std::make_unique<TextBlock>(""));
 
     initOnClickInfo();
     createTitle();
@@ -136,8 +136,14 @@ void Gui::MainMenu::clear() {
 
 void Gui::MainMenu::updateInfoPanel(const std::string& newInfo) {
     auto& infoPanel = mainLayoutPanel_->getPanelAt(DockPanel::DockPosition::RightEdge);
-    if (infoPanel)
-        infoPanel->getElement("onHoverInfo")->setText(newInfo);
+    if (infoPanel){
+        auto& infoElement = infoPanel->getElement("onHoverInfo");
+        if (infoElement)
+            infoElement->setText(newInfo);
+        else{
+			infoPanel->addElement("onHoverInfo", std::move(std::make_unique<Button>(newInfo)));
+        }
+    }
 }
 
 void Gui::MainMenu::initOnClickInfo() {
@@ -199,7 +205,7 @@ void Gui::MainMenu::createReturnButton() {
 }
 
 void Gui::MainMenu::createOnHoverInfoPanel() {
-    auto onHoverInfoPanel = std::make_unique<Canvas>(0.0f,0.0f);
+    auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
     auto infoElement = std::make_unique<TextBlock>(""); //Assuming initially no button is hovered over
     onHoverInfoPanel->addElement("onHoverInfo", std::move(infoElement));
     mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));

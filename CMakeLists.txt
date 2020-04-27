@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(SFML-2.5.0-Game-Dev-Template)
+project(Unit-tests)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -10,7 +10,6 @@ set(SOURCE_FILES
         game-source-code/gui/window/Window.cpp
         game-source-code/gui/window/Window.h
         game-source-code/common/Common.h
-        game-source-code/main/main.cpp
         game-source-code/resources/ResourceHolder.h
         game-source-code/resources/ResourceHolder.inl
         game-source-code/resources/ResourceManager.cpp
@@ -64,7 +63,9 @@ set(SOURCE_FILES
         game-source-code/gui/menu/MainMenu.h
         game-source-code/gui/menu/PauseMenu.cpp
         game-source-code/gui/menu/PauseMenu.h
-        game-source-code/utility/Utility.h)
+        game-source-code/utility/Utility.h
+        test-source-code/EventEmitterTests.hpp
+        test-source-code/main.cpp)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
@@ -74,13 +75,10 @@ set(SFML_INCLUDE_DIR "C:/SFML-2.5.0/include")
 set(SFML_LIBRARY_DIR "C:/SFML-2.5.0/lib")
 set(SFML_DIR "C:/SFML-2.5.0/lib/cmake/SFML")
 
-#Change the executable name
-Set(EXECUTABLE_NAME "template")
-
 #Change executable output folder
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/executables)
 
-add_executable(SFML-2.5.0-Game-Dev-Template ${SOURCE_FILES})
+add_executable(unit-tests ${SOURCE_FILES})
 
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
@@ -88,7 +86,7 @@ include_directories(SFML_INCLUDE_DIR)
 find_package(SFML 2.5.0 COMPONENTS system window graphics network audio)
 
 if(SFML_FOUND)
-    target_link_libraries (SFML-2.5.0-Game-Dev-Template sfml-graphics sfml-window sfml-system sfml-audio)
+    target_link_libraries (unit-tests sfml-graphics sfml-window sfml-system sfml-audio)
     message(STATUS "SFML_INCLUDE_DIR: ${SFML_INCLUDE_DIR}")
     message(STATUS "SFML_LIBRARIES: ${SFML_LIBRARIES}")
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
