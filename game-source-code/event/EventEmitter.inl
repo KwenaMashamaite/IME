@@ -20,7 +20,7 @@ void EventEmitter::addOnceListener(const std::string &event, Callback<Args...> c
 
 template<typename...Args>
 int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
-    auto listenerId = previousListenerId++;
+    auto listenerId = ++previousListenerId;
     auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
     auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {

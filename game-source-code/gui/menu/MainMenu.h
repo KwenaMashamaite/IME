@@ -39,49 +39,69 @@ namespace Gui {
         void initOnClickInfo();
 
         /**
-         * @brief Create the main menu title panel
+         * @brief Create the main menu title
+         *
+         * The title is positioned at the top of the window
          */
         void createTitle();
 
         /**
          * @brief Create the main menu footer
+         *
+         * The footer is positioned at the bottom of the
+         * window
          */
         void createFooter();
 
         /**
          * @brief Create the main menu navigation panel
+         *
+         * This function creates buttons that are stacked vertically and
+         * positioned at the left edge of the window. This buttons may be
+         * used to navigate the main menu
          */
         void createNavigationButtons();
 
         /**
          * @brief Initialize the main menu buttons
+         *
+         * This function defines how the navigation buttons responds to
+         * the mouse cursor. That is, what the buttons do when they are
+         * clicked or when the mouse cursor enters/leaves them
          */
-        void initNavigationButtons();
+        void initNavigationButtonActions();
 
         /**
          * @brief Create a button that return back to the main menu
+         *
+         * This function creates a button whose sole purpose is to return
+         * to the main menu after it hs been exited. This button is only
+         * visible if the main menu is exited. For example, clicking on
+         * the "Controls" button to see how the game is played would usually
+         * exit the main menu
          */
         void createReturnButton();
 
         /**
+         * @brief Create a panel to display information when a navigation
+         *        button is hovered over
+         *
+         * This function creates a panel that displays information associated
+         * with a certain navigation button when the mouse cursor enters it.
+         * This information is not cleared when the mouse cursor leaves the
+         * button. However, the information will be cleared if after leaving
+         * the button, the mouse cursor enters another navigation button.
+         */
+        void createOnHoverInfoPanel();
+
+        /**
         * @brief Set text to be displayed on the info panel
         * @param newInfo Text to be set
+         *
+         * This function will overwrite any information that was on the info
+         * panel, prior to calling the function
         */
         void updateInfoPanel(const std::string& newInfo);
-
-        /**
-         * @brief Create a text block
-         * @param text Text to be displayed inside the text block
-         * @return Created text block
-         */
-        std::unique_ptr<TextBlock> createTextBlock(const std::string& text);
-
-        /**
-         * @brief Create a button
-         * @param buttonText Text to be displayed inside the button
-         * @return Created button
-         */
-        std::unique_ptr<Button> createButton(const std::string &buttonText);
 
     private:
         //Reference to the games render target
