@@ -76,11 +76,19 @@ TEST_CASE("A callback function is not executed if the event is not raised"){
     CHECK_EQ(testString, "callback function not executed");
 }
 
-TEST_CASE("Raising an event with different parameter to that of the callback does not execute it"){
+//What to take away from this test is that argument types must match Parameter types exactly
+TEST_CASE("Raising an event with different parameter types to that of the callback does not execute it"){
     auto eventEmitter = EventEmitter();
-    eventEmitter.addListener("click", Callback<int, int>([](int x, int y){
-
+    auto testString = std::string("callback function not executed");
+    eventEmitter.addListener("click", Callback<int, int>([&testString](int x, int y){
+        testString = "callback function executed";
     }));
+    eventEmitter.emit("click", 25.0f, 25.0f); //callback expecting int, float provided
+    CHECK_EQ(testString, "callback function not executed");
+    eventEmitter.emit("click", 25u, 25u); //callback expected int, unsigned int provided
+    CHECK_EQ(testString, "callback function not executed");
+    eventEmitter.emit("click", 25, 25); //callback expected int, int provided
+    CHECK_EQ(testString, "callback function executed");
 }
 
 TEST_CASE("Event listeners receive correct arguments upon notification"){
