@@ -5,8 +5,8 @@
 #ifndef PAUSEMENU_H
 #define PAUSEMENU_H
 
-#include "gui/menu/IMenu.h"
-#include "gui/layout/StackPanel.h"
+#include "IMenu.h"
+#include "../layout/StackPanel.h"
 
 namespace Gui {
     class PauseMenu : public IMenu{

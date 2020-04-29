@@ -5,7 +5,7 @@
 #ifndef TEXTBLOCK_H
 #define TEXTBLOCK_H
 
-#include "gui/control/UIElement.h"
+#include "UIElement.h"
 #include <string>
 
 namespace Gui {

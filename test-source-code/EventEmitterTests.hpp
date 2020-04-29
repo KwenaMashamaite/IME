@@ -7,7 +7,7 @@
  */
 
 /////////////////////////////////////////////////////////////////
-/// Registering event listeners to events tests
+/// Event listener registration tests
 /////////////////////////////////////////////////////////////////
 
 //This test must always be the first test as the handler id counter belongs to the class
@@ -43,7 +43,7 @@ TEST_CASE("Multiple listeners can be registered with the same event"){
 }
 
 /////////////////////////////////////////////////////////////////
-/// Publishing events tests
+/// Event publishing tests
 /////////////////////////////////////////////////////////////////
 
 TEST_CASE("Raising an event executes a callback function registered to that event") {
@@ -85,9 +85,9 @@ TEST_CASE("Raising an event with different parameter types to that of the callba
     }));
     eventEmitter.emit("click", 25.0f, 25.0f); //callback expecting int, float provided
     CHECK_EQ(testString, "callback function not executed");
-    eventEmitter.emit("click", 25u, 25u); //callback expected int, unsigned int provided
+    eventEmitter.emit("click", 25u, 25u); //callback expecting int, unsigned int provided
     CHECK_EQ(testString, "callback function not executed");
-    eventEmitter.emit("click", 25, 25); //callback expected int, int provided
+    eventEmitter.emit("click", 25, 25); //callback expecting int, int provided
     CHECK_EQ(testString, "callback function executed");
 }
 
@@ -150,7 +150,7 @@ TEST_CASE("A once event listener is removed from an event after it executes"){
 }
 
 /////////////////////////////////////////////////////////////////
-/// Removing event listeners from events tests
+/// Event listener removal tests
 /////////////////////////////////////////////////////////////////
 
 TEST_CASE("A callback function can be removed from an event"){
@@ -179,4 +179,3 @@ TEST_CASE("Removing a non-existent handler from an event returns false"){
     auto invalidHandlerId = -99;
     CHECK_FALSE(eventEmitter.removeListener("test", invalidHandlerId));
 }
-

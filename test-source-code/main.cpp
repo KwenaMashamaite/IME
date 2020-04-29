@@ -9,6 +9,6 @@
 //Initialize Doctest unit testing framework
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-//Include unit tests to be run
-#include "../test-source-code/WindowTests.hpp"
-#include "../test-source-code/EventEmitterTests.hpp"
+//Include unit tests to run
+#include "WindowTests.hpp"
+#include "EventEmitterTests.hpp"

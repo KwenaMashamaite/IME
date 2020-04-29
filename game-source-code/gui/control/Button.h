@@ -5,7 +5,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "gui/control/UIElement.h"
+#include "UIElement.h"
 #include <string>
 
 namespace Gui {

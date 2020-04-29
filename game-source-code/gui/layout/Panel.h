@@ -5,7 +5,7 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include "gui/control/UIElement.h"
+#include "../control/UIElement.h"
 #include "event/EventEmitter.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>

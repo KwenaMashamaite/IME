@@ -5,7 +5,7 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include "gui/window/Window.h"
+#include "../window/Window.h"
 #include "event/EventEmitter.h"
 #include "common/Common.h"
 #include <string>
