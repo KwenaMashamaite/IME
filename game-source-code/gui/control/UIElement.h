@@ -51,16 +51,23 @@ namespace Gui {
     public:
         /**
          * @brief Create a UI element
-         * @param content Text to be displayed inside the element
-         * @param font Font to be used for the text
-         * @param textCharSize Character size of the text
+         *
+         * The UI element is created with no text, has a character
+         * size of 30, a white background and a black foreground.
+         * @note A UI element with no text cannot be seen when
+         * rendered. It will remain invisible until its text
+         * content is set
+         */
+        UIElement();
+
+        /**
+         * @brief Create a UI element
+         * @param textContent Text to be displayed inside the element
          *
          * The UI element has a character size of 30, a white background
          * and a black foreground by default
          */
-        explicit UIElement(const std::string &content,
-                           const std::string &font = "basson.ttf",
-                           unsigned int textCharSize = 30u);
+        explicit UIElement(const std::string &textContent);
 
         /**
          * @brief Set the position of the element
@@ -216,6 +223,10 @@ namespace Gui {
         using EventEmitter::emit;
 
     private:
+        /**
+         * @brief Initialize element
+         */
+        void initialize();
         /**
         * @brief helper function for resizing the element
         */

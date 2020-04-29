@@ -1,5 +1,5 @@
 /**
- * @brief Dynamic UI element that can perform actions
+ * @brief UI element that can perform actions
  */
 
 #ifndef BUTTON_H
@@ -12,24 +12,21 @@ namespace Gui {
     class Button final : public UIElement {
     public:
         /**
-         * @brief Construct a new Button object
-         * @param buttonText Text to be displayed on the button
+         * @brief Create a button
          *
          * The button is placed at (0, 0) and the button text
          * has a character size of 30 by default
          */
-        explicit Button(const std::string &buttonText);
+        Button();
 
         /**
          * @brief Create a button
-         * @param content Text to be displayed on the button
-         * @param font  Font used for the text
-         * @param textCharSize Character size of the text
+         * @param buttonText Text to be displayed on the button
          *
-         * The button has the dimensions of the button content and
+         * The button has the dimensions of the button text and
          * a position of (0, 0) by default
          */
-        Button(const std::string &content, const std::string &font, unsigned int textCharSize);
+        explicit Button(const std::string& buttonText);
 
         /**
          * @brief Disable the default behaviour of the button's response

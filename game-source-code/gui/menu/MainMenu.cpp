@@ -49,10 +49,10 @@ void Gui::MainMenu::createNavigationButtons() {
         std::pair(ButtonType::Exit, "EXIT")
     };
 
-    auto navButtonsFont = "basson.ttf";
-    auto navButtonsTextCharSize = 40u;
     std::for_each(buttonTexts.begin(), buttonTexts.end(),[&](auto& buttonText){
-        auto button = std::make_unique<Button>(buttonText.second, navButtonsFont, navButtonsTextCharSize);
+        auto button = std::make_unique<Button>(buttonText.second);
+        button->setTextFont("basson.ttf");
+        button->setTextCharSize(40u);
         navButtons_.push_back(std::pair(buttonText.first, std::move(button)));
     });
 }
@@ -197,16 +197,15 @@ GAME:
 }
 
 void Gui::MainMenu::createReturnButton() {
-    auto buttonTextFont = "philosopher.ttf";
-    auto buttonSize = 20u;
-    auto returnButton = std::make_unique<Button>("back to main", buttonTextFont, buttonSize);
+    auto returnButton = std::make_unique<Button>("back to main");
+    returnButton->setTextCharSize(20u);
     (*(returnButton.get())).on("click", Callback<>([this](){state_ = State::Main;}));
     onClickInfoPanel_->addElement("returnButton", std::move(returnButton));
 }
 
 void Gui::MainMenu::createOnHoverInfoPanel() {
     auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
-    auto infoElement = std::make_unique<TextBlock>(""); //Assuming initially no button is hovered over
+    auto infoElement = std::make_unique<TextBlock>(" "); //Assuming initially no button is hovered over
     onHoverInfoPanel->addElement("onHoverInfo", std::move(infoElement));
     mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
 }

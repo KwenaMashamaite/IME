@@ -3,13 +3,26 @@
 #include "utility/Utility.h"
 #include <algorithm>
 
-Gui::UIElement::UIElement(const std::string &content, const std::string &font, unsigned int textCharSize)
+Gui::UIElement::UIElement()
     : numOfLinesInText_{0u}, isHidden_(false)
 {
+    initialize();
+}
+
+Gui::UIElement::UIElement(const std::string &textContent)
+    : numOfLinesInText_{0u}, isHidden_(false)
+{
+    setText(textContent);
+    initialize();
+}
+
+void Gui::UIElement::initialize() {
+    auto defaultTextFont = "philosopher.ttf";
+    auto defaultTextCharSize = 30u;
+
     initEvents();
-    setTextFont(font);
-    setTextCharSize(textCharSize);
-    setText(content);
+    setTextFont(defaultTextFont);
+    setTextCharSize(defaultTextCharSize);
     setPadding(0.0f);
     setMargin(0.0f);
 

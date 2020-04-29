@@ -3,9 +3,8 @@
 #include "input/Mouse.h"
 #include <utility>
 
-Gui::Button::Button(const std::string &buttonText)
-    : UIElement(buttonText),
-      isSelected_(false),
+Gui::Button::Button()
+    : isSelected_(false),
       mouseEnterCallbackId_(-1),
       mouseLeaveCallbackId_(-1)
 {
@@ -13,8 +12,8 @@ Gui::Button::Button(const std::string &buttonText)
     initDefaultBehavior();
 }
 
-Gui::Button::Button(const std::string &content, const std::string &font, unsigned int textCharSize)
-    : UIElement(content, font, textCharSize),
+Gui::Button::Button(const std::string& buttonText)
+    : UIElement(buttonText),
       isSelected_(false),
       mouseEnterCallbackId_(-1),
       mouseLeaveCallbackId_(-1)

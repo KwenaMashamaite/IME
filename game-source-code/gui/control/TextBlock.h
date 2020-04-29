@@ -1,5 +1,5 @@
 /**
- * @brief Static UI element that can display single and multiple lines of text
+ * @brief UI element that can display single and multiple lines of text
  */
 
 #ifndef TEXTBLOCK_H
@@ -13,17 +13,9 @@ namespace Gui {
     public:
         /**
          * @brief Construct a new Text Block object
-         * @param labelText - text to be displayed
+         * @param textContent text displayed inside the text block
          */
-        explicit TextBlock(const std::string &labelText);
-
-        /**
-         * @brief Construct a new TextBlock object
-         * @param content Text to be displayed
-         * @param font Font of the text
-         * @param textCharSize Character size of the text
-         */
-        TextBlock(const std::string &content, const std::string &font, unsigned int textCharSize);
+        explicit TextBlock(const std::string &textContent);
     };
 }
 
