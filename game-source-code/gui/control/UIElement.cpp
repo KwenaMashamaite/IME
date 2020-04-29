@@ -161,6 +161,14 @@ void Gui::UIElement::show() {
     Utility::makeVisible(text_);
 }
 
+void Gui::UIElement::toggle() {
+    isHidden_ = !isHidden_;
+    if (isHidden_)
+        show();
+    else
+        hide();
+}
+
 bool Gui::UIElement::isHidden() const {
     return isHidden_;
 }

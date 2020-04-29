@@ -180,6 +180,14 @@ namespace Gui {
         void show();
 
         /**
+         * @brief Toggle the hidden state of the element
+         *
+         * This function will make a UI element invisible if its
+         * currently visible and vice versa
+         */
+        void toggle();
+
+        /**
          * @brief Check if UI element is hidden on a render target or not
          * @return True if UI element is hidden, false if it is not hidden
          */
