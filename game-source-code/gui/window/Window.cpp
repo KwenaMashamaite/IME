@@ -12,10 +12,9 @@ Gui::Window::Window(){
 }
 
 void Gui::Window::create(const std::string& name, float width, float height){
-    assert(width >= minWidth && "Specified width must be greater than the minimum window width");
-    assert(height >= minHeight && "Specified height must be greater than the minimum window height");
-    dimensions_.width = width;
-    dimensions_.height = height;
+    assert(width >= 0.0f && "Window width cannot be negative");
+    assert(height >= 0.0f && "Window height cannot be negative");
+    dimensions_ = {width, height};
     window_.create(sf::VideoMode(static_cast<unsigned int>(dimensions_.width),
         static_cast<unsigned int>(dimensions_.height)),
         name,

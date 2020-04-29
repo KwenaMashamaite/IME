@@ -136,10 +136,6 @@ namespace Gui {
         static Dimensions dimensions_;
         //Instantiation state
         inline static auto isInstantiated_ = false;
-        //Minimum window width
-        inline static const auto minWidth = 100u;
-        //Minimum window height
-        inline static const auto minHeight = 100u;
         //Event Emitter
         inline static EventEmitter eventEmitter_{};
     };
