@@ -28,10 +28,10 @@ void Gui::Button::subscribeToEvents() {
         if (!isHidden()) {
             if (contains(x, y) && !isSelected_) {
                 isSelected_ = true;
-                eventEmitter_.emit("mouseEnter");
+                emit("mouseEnter");
             } else if (!contains(x, y) && isSelected_) {
                 isSelected_ = false;
-                eventEmitter_.emit("mouseLeave");
+                emit("mouseLeave");
             }
         }
     }));
@@ -39,13 +39,9 @@ void Gui::Button::subscribeToEvents() {
     Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
-                eventEmitter_.emit("click");
+                emit("click");
         })
     );
-}
-
-void Gui::Button::on(const std::string &eventName, Callback<> callbackFunc) {
-    eventEmitter_.addListener(eventName, std::move(callbackFunc));
 }
 
 void Gui::Button::initDefaultBehavior() {
@@ -54,18 +50,18 @@ void Gui::Button::initDefaultBehavior() {
     auto onHoverButtonColour = Gui::Colour{12, 241, 252};
     auto onHoverButtonTextColour = Gui::Colour{88, 175, 232};
 
-    mouseEnterCallbackId_ = eventEmitter_.addListener("mouseEnter", Callback<>([=](){
+    mouseEnterCallbackId_ = addListener("mouseEnter", Callback<>([=](){
         setFillColour(onHoverButtonColour);
         setTextFillColour(onHoverButtonTextColour);
     }));
 
-    mouseLeaveCallbackId_ = eventEmitter_.addListener("mouseLeave",Callback<>([=](){
+    mouseLeaveCallbackId_ = addListener("mouseLeave",Callback<>([=](){
         setFillColour(defaultButtonColour);
         setTextFillColour(defaultButtonTextColour);
     }));
 }
 
 void Gui::Button::removeDefaultBehavior() {
-    eventEmitter_.removeListener("mouseEnter", mouseEnterCallbackId_);
-    eventEmitter_.removeListener("mouseLeave", mouseLeaveCallbackId_);
+    removeListener("mouseEnter", mouseEnterCallbackId_);
+    removeListener("mouseLeave", mouseLeaveCallbackId_);
 }

@@ -19,7 +19,7 @@ Gui::UIElement::UIElement(const std::string &content, const std::string &font, u
 }
 
 void Gui::UIElement::initEvents() {
-    eventEmitter_.addListener("textChanged", Callback<std::string>([this](const std::string &content) {
+    addListener("textChanged", Callback<std::string>([this](const std::string &content) {
         if (content.empty()) {
             numOfLinesInText_ = 0;
             return;
@@ -29,11 +29,11 @@ void Gui::UIElement::initEvents() {
         resize();
     }));
 
-    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){
+    addListener("charSizeChanged", Callback<>([this](){
         resize();
     }));
 
-    eventEmitter_.addListener("dimensionsChanged", Callback<>([this](){
+    addListener("dimensionsChanged", Callback<>([this](){
         resize();
         setPosition(getPosition().x, getPosition().y);
     }));
@@ -53,22 +53,22 @@ void Gui::UIElement::setPosition(float x, float y) {
 
 void Gui::UIElement::setMargin(float margin) {
     margin_ = {margin, margin, margin, margin};
-    eventEmitter_.emit("dimensionsChanged");
+    emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(float padding) {
     padding_ = {padding, padding, padding, padding};
-    eventEmitter_.emit("dimensionsChanged");
+    emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    eventEmitter_.emit("dimensionsChanged");
+    emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    eventEmitter_.emit("dimensionsChanged");
+    emit("dimensionsChanged");
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -81,12 +81,12 @@ void Gui::UIElement::setTextFont(const std::string &contentFont) {
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
-    eventEmitter_.emit("charSizeChanged");
+    emit("charSizeChanged");
 }
 
 void Gui::UIElement::setText(const std::string &content) {
     text_.setString(content);
-    eventEmitter_.emit("textChanged", content);
+    emit("textChanged", content);
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {

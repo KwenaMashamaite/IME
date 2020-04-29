@@ -47,7 +47,7 @@ namespace Gui {
         unsigned int opacity = 255;
     };
 
-    class UIElement {
+    class UIElement : public EventEmitter{
     public:
         /**
          * @brief Create a UI element
@@ -202,6 +202,19 @@ namespace Gui {
          */
         virtual ~UIElement() = 0;
 
+    protected:
+        /**
+         * @brief Restrict the publication of UI element events to
+         *        class level
+         *
+         * This ensures that the publishing of events is exclusively
+         * controlled by the class. For instance, if the method is
+         * public, a click event can be raised on a button through
+         * an instance, even thought the said button is not clicked.
+         * This may cause bugs in the program
+         */
+        using EventEmitter::emit;
+
     private:
         /**
         * @brief helper function for resizing the element
@@ -226,9 +239,7 @@ namespace Gui {
         sf::RectangleShape outline_;
         //Defines the perimeter of the element border
         sf::RectangleShape border_;
-        //Event Emitter
-        EventEmitter eventEmitter_;
-        //
+        //Display state of element
         bool isHidden_;
     };
 }

@@ -200,7 +200,7 @@ void Gui::MainMenu::createReturnButton() {
     auto buttonTextFont = "philosopher.ttf";
     auto buttonSize = 20u;
     auto returnButton = std::make_unique<Button>("back to main", buttonTextFont, buttonSize);
-    (*(returnButton.get())).on("click", [this](){state_ = State::Main;});
+    (*(returnButton.get())).on("click", Callback<>([this](){state_ = State::Main;}));
     onClickInfoPanel_->addElement("returnButton", std::move(returnButton));
 }
 

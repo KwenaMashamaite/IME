@@ -6,7 +6,6 @@
 #define BUTTON_H
 
 #include "gui/control/UIElement.h"
-#include "event/EventEmitter.h"
 #include <string>
 
 namespace Gui {
@@ -31,20 +30,6 @@ namespace Gui {
          * a position of (0, 0) by default
          */
         Button(const std::string &content, const std::string &font, unsigned int textCharSize);
-
-        /**
-         * @brief Register a callback to an event
-         * @param eventName Name of the event to register callback on
-         * @param callbackFunc Callback to register
-         *
-         * This function registers callbacks to the following events only:
-         * 1. "click" - Fires when the button is clicked
-         * 2. "mouseEnter" - Fires when the mouse enters the button
-         * 3. "mouseLeave" - Fires when the mouse leaves the button
-         *
-         * Any event that's none of the above will not be raised
-         */
-        void on(const std::string &eventName, Callback<> callbackFunc);
 
         /**
          * @brief Disable the default behaviour of the button's response
@@ -82,8 +67,6 @@ namespace Gui {
     private:
         //Selection state
         bool isSelected_;
-        //Emits button events
-        EventEmitter eventEmitter_;
         //Callback id for the default onMouseEnter listener
         int mouseEnterCallbackId_;
         //Callback id for the default onMouseLeave listener
