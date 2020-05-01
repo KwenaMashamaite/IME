@@ -163,6 +163,12 @@ namespace Gui {
         Colour getFillColour() const;
 
         /**
+         * @brief Get the outline colour of the element
+         * @return Outline colour of the element
+         */
+        Colour getOutlineColour() const;
+
+        /**
          * @brief Get the position of the element
          * @return Position of the element
          */
