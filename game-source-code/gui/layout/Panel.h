@@ -142,12 +142,12 @@ namespace Gui {
          * @brief Subscribe a child element to an event
          * @tparam Args Template argument name
          * @param event Event to register callback function on
-         * @param callback Function to be executed when event event is raised
+         * @param callback Function to be executed when event is raised
          * @param childElementName Child element alias
          *
          * This function will attempt to register a child element to an
          * event. If the child element is not found in the collection, this
-         * operation is will cancel. When the event is raised the provided
+         * operation will  cancel. When the event is raised the provided
          * callback function will be invoked
          */
         template <typename...Args>
