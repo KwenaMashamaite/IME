@@ -134,6 +134,12 @@ namespace Gui {
         void setTextFillColour(Colour textFillColour);
 
         /**
+         * @brief Set the outline colour of the element
+         * @param outlineColour New outline colour
+         */
+        void setOutlineColour(Colour outlineColour);
+
+        /**
          * @brief Get the fill colour of the element's text
          * @return Fill colour of the element's text
          */

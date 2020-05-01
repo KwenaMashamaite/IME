@@ -112,6 +112,10 @@ void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
     text_.setFillColor(Utility::convertOwnColourToSFMLColour(textFillColour));
 }
 
+void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
+    outline_.setFillColor(Utility::convertOwnColourToSFMLColour(outlineColour));
+}
+
 Gui::Colour Gui::UIElement::getTextFillColour() const {
     return Utility::convertSFMLColourToOwnColour(text_.getFillColor());
 }
