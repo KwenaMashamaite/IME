@@ -2,14 +2,8 @@
 #include "input/Mouse.h"
 #include <utility>
 
-Gui::Button::Button()
-    : isSelected_(false),
-      onHoverColour_({255, 255, 255}),
-      onHoverTextColour_({102, 0, 204}),
-      onHoverOutlineColour_({0, 0, 0})
-{
-    subscribeToEvents();
-}
+Gui::Button::Button() : Button("")
+{}
 
 Gui::Button::Button(const std::string& buttonText)
     : UIElement(buttonText),
