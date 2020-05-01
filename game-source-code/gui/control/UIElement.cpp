@@ -129,7 +129,7 @@ Gui::Colour Gui::UIElement::getFillColour() const {
 }
 
 Gui::Colour Gui::UIElement::getOutlineColour() const {
-    return Utility::convertSFMLColourToOwnColour(border_.getOutlineColor());
+    return Utility::convertSFMLColourToOwnColour(outline_.getFillColor());
 }
 
 Position Gui::UIElement::getPosition() const {
