@@ -95,3 +95,11 @@ void Gui::Panel::show() {
         uiElem.second->show();
     });
 }
+
+Gui::Panel::UIElementContainer::iterator Gui::Panel::findUIElement(const std::string &uiElemAlias) {
+    return std::find_if(uiElements_.begin(), uiElements_.end(),
+        [this, &uiElemAlias](const auto& uiElement){
+            return uiElement.first == uiElemAlias;
+        }
+    );
+}

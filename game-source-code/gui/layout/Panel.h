@@ -139,6 +139,15 @@ namespace Gui {
         void add(const std::string &alias, std::unique_ptr<UIElement> guiElement);
 
         /**
+         * @brief Get access to a UI element inside the collection
+         * @param uiElemAlias Name of the UI element to get access to
+         * @return An iterator that points to the required element if
+         *         it exists in the collection, otherwise an iterator
+         *         that points one past the last element in collection
+         */
+        UIElementContainer::iterator findUIElement(const std::string& uiElemAlias);
+
+        /**
          * @brief Add listener to event
          * @param event Event to add listener to
          * @param callback Function to execute when event is raised
@@ -163,21 +172,6 @@ namespace Gui {
          *         last element in the panel
          */
         ConstIterator cEnd() const;
-
-    private:
-        /**
-         * @brief Get access to a UI element inside the collection
-         * @param uiElemAlias Name of the UI element to get access to
-         * @return An iterator that points to the required element if
-         *         it exists in the collection, otherwise an iterator
-         *         that points one past the last element in collection
-         */
-        auto findUIElement(const std::string& uiElemAlias){
-            return std::find_if(uiElements_.begin(), uiElements_.end(),
-                [this, &uiElemAlias](const auto& uiElement){
-                    return uiElement.first == uiElemAlias;
-                });
-        }
 
     private:
         //Elements contained by the panel
