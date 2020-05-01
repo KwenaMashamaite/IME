@@ -17,8 +17,11 @@ namespace Gui {
     class Window : sf::NonCopyable {
     public:
         /**
-         * @brief Default constructor. Ensures only a single
-         *         instance of the class can exist at a time
+         * @brief Constructor
+         *
+         * @warning Only a single instance of the class can exist
+         * at a time. Attempting to instantiate the class while
+         * there is an active instance will terminate the program
          */
         Window();
 
@@ -113,9 +116,10 @@ namespace Gui {
         }
 
         /**
-         * @brief Destructor. Ensures a new Window instance can be
-         *        created when an existing Window instance is
-         *        destroyed
+         * @brief Destructor.
+         *
+         * Ensures a new Window instance can be created when an existing
+         * Window instance is destroyed
          */
         ~Window();
 
@@ -132,10 +136,6 @@ namespace Gui {
         static Dimensions dimensions_;
         //Instantiation state
         inline static auto isInstantiated_ = false;
-        //Minimum window width
-        inline static const auto minWidth = 100u;
-        //Minimum window height
-        inline static const auto minHeight = 100u;
         //Event Emitter
         inline static EventEmitter eventEmitter_{};
     };

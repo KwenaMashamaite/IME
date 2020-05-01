@@ -1,0 +1,310 @@
+\hypertarget{class_i_entity}{}\doxysection{I\+Entity Class Reference}
+\label{class_i_entity}\index{IEntity@{IEntity}}
+
+
+{\ttfamily \#include $<$I\+Entity.\+h$>$}
+
+
+
+Inheritance diagram for I\+Entity\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=124pt]{class_i_entity__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{Direction}} \{ \mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a945d5e233cf7d6240f6b783b36a374ff}{Direction\+::\+Left}}, 
+\mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a92b09c7c48c520c3c55e497875da437c}{Direction\+::\+Right}}, 
+\mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a258f49887ef8d14ac268c92b02503aaa}{Direction\+::\+Up}}, 
+\mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a08a38277b0309070706f6652eeae9a53}{Direction\+::\+Down}}
+ \}
+\begin{DoxyCompactList}\small\item\em Directions in which an enity can face. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_entity_a149fd65aeac9c15dbecadfe1c1aa1166}{set\+Position}} (float x\+Pos, float y\+Pos)=0
+\begin{DoxyCompactList}\small\item\em Set the position of the entity. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_entity_a2b95a259202d4e6b19daccd8210cb90a}{set\+Direction}} (\mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{Direction}} dir)=0
+\begin{DoxyCompactList}\small\item\em Set the direction of the entity. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_entity_ab6b0ea81ea077f502d110a409eead3ff}{set\+Texture}} (const std\+::string \&texture)=0
+\begin{DoxyCompactList}\small\item\em Set the texture of the entity. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{class_i_entity_a32db5b6de45bca7356d16d1cf8a5949b}{get\+Texture}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the texture of the entity. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{struct_common_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_i_entity_af9a9f4ab40a5ceb6bb6c8f0e767a5507}{get\+Bounding\+Rect}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the entity\textquotesingle{}s bounding box. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_entity_ada185260f3b58605ccf7f37139c8ecec}{take\+Damage}} (unsigned int amount\+Of\+Damage)=0
+\item 
+virtual bool \mbox{\hyperlink{class_i_entity_a3c69e2d0dd2bd40ec5865a1d974d5403}{is\+Alive}} () const =0
+\begin{DoxyCompactList}\small\item\em Check if entity is alive or not. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{Direction}} \mbox{\hyperlink{class_i_entity_a98ae1ff15e9d0666daa3c23f857bf09a}{get\+Direction}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the direction of the entity. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{struct_common_1_1_position}{Position}} \mbox{\hyperlink{class_i_entity_a292e36b7c495008e22531cac64e95d5d}{get\+Position}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the position of the entity. \end{DoxyCompactList}\item 
+virtual Entity\+Type \mbox{\hyperlink{class_i_entity_a571eb81d5e21a89d07aab133d1842493}{get\+Entity\+Type}} ()=0
+\begin{DoxyCompactList}\small\item\em Get the type of the entity. \end{DoxyCompactList}\item 
+virtual unsigned int \mbox{\hyperlink{class_i_entity_acbd65f35e81a46986bba667d364bd67a}{get\+Remaining\+Lives}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the remaining life of the entity. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{class_i_entity_a727892234e0efad23c7a399997dee974}{$\sim$\+I\+Entity}} ()=default
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 15 of file I\+Entity.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}\label{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}} 
+\index{IEntity@{IEntity}!Direction@{Direction}}
+\index{Direction@{Direction}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{Direction}{Direction}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{I\+Entity\+::\+Direction}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Directions in which an enity can face. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Left@{Left}!IEntity@{IEntity}}\index{IEntity@{IEntity}!Left@{Left}}}\mbox{\Hypertarget{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a945d5e233cf7d6240f6b783b36a374ff}\label{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a945d5e233cf7d6240f6b783b36a374ff}} 
+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Right@{Right}!IEntity@{IEntity}}\index{IEntity@{IEntity}!Right@{Right}}}\mbox{\Hypertarget{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a92b09c7c48c520c3c55e497875da437c}\label{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a92b09c7c48c520c3c55e497875da437c}} 
+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Up@{Up}!IEntity@{IEntity}}\index{IEntity@{IEntity}!Up@{Up}}}\mbox{\Hypertarget{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a258f49887ef8d14ac268c92b02503aaa}\label{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a258f49887ef8d14ac268c92b02503aaa}} 
+Up&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Down@{Down}!IEntity@{IEntity}}\index{IEntity@{IEntity}!Down@{Down}}}\mbox{\Hypertarget{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a08a38277b0309070706f6652eeae9a53}\label{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5a08a38277b0309070706f6652eeae9a53}} 
+Down&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 20 of file I\+Entity.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_i_entity_a727892234e0efad23c7a399997dee974}\label{class_i_entity_a727892234e0efad23c7a399997dee974}} 
+\index{IEntity@{IEntity}!````~IEntity@{$\sim$IEntity}}
+\index{````~IEntity@{$\sim$IEntity}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{$\sim$IEntity()}{~IEntity()}}
+{\footnotesize\ttfamily virtual I\+Entity\+::$\sim$\+I\+Entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+Destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_entity_af9a9f4ab40a5ceb6bb6c8f0e767a5507}\label{class_i_entity_af9a9f4ab40a5ceb6bb6c8f0e767a5507}} 
+\index{IEntity@{IEntity}!getBoundingRect@{getBoundingRect}}
+\index{getBoundingRect@{getBoundingRect}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getBoundingRect()}{getBoundingRect()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{struct_common_1_1_dimensions}{Dimensions}} I\+Entity\+::get\+Bounding\+Rect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the dimensions of the entity\textquotesingle{}s bounding box. 
+
+\begin{DoxyReturn}{Returns}
+Dimensions of the entity\textquotesingle{}s bounding box 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a6ca544394bdf9262adaf3f1a41152e17}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a98ae1ff15e9d0666daa3c23f857bf09a}\label{class_i_entity_a98ae1ff15e9d0666daa3c23f857bf09a}} 
+\index{IEntity@{IEntity}!getDirection@{getDirection}}
+\index{getDirection@{getDirection}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getDirection()}{getDirection()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{Direction}} I\+Entity\+::get\+Direction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the direction of the entity. 
+
+\begin{DoxyReturn}{Returns}
+Direction of the entity 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a5153f65f84bed5e78477019efa5fad55}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a571eb81d5e21a89d07aab133d1842493}\label{class_i_entity_a571eb81d5e21a89d07aab133d1842493}} 
+\index{IEntity@{IEntity}!getEntityType@{getEntityType}}
+\index{getEntityType@{getEntityType}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getEntityType()}{getEntityType()}}
+{\footnotesize\ttfamily virtual Entity\+Type I\+Entity\+::get\+Entity\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the type of the entity. 
+
+\begin{DoxyReturn}{Returns}
+The type of the entity 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a65cd9d09862952274d8ccf18c24ceeac}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a292e36b7c495008e22531cac64e95d5d}\label{class_i_entity_a292e36b7c495008e22531cac64e95d5d}} 
+\index{IEntity@{IEntity}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{struct_common_1_1_position}{Position}} I\+Entity\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the position of the entity. 
+
+\begin{DoxyReturn}{Returns}
+Position of the entity 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a05bbe21d3507c236c6790d69b7359b52}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_acbd65f35e81a46986bba667d364bd67a}\label{class_i_entity_acbd65f35e81a46986bba667d364bd67a}} 
+\index{IEntity@{IEntity}!getRemainingLives@{getRemainingLives}}
+\index{getRemainingLives@{getRemainingLives}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getRemainingLives()}{getRemainingLives()}}
+{\footnotesize\ttfamily virtual unsigned int I\+Entity\+::get\+Remaining\+Lives (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the remaining life of the entity. 
+
+\begin{DoxyReturn}{Returns}
+The remaining life of the entity 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_af28ff35c8a40b970a408074dbb900729}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a32db5b6de45bca7356d16d1cf8a5949b}\label{class_i_entity_a32db5b6de45bca7356d16d1cf8a5949b}} 
+\index{IEntity@{IEntity}!getTexture@{getTexture}}
+\index{getTexture@{getTexture}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{getTexture()}{getTexture()}}
+{\footnotesize\ttfamily virtual const std\+::string\& I\+Entity\+::get\+Texture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the texture of the entity. 
+
+\begin{DoxyReturn}{Returns}
+Texture of the entity 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a81ba72aef2df702969a039694abcb0cd}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a3c69e2d0dd2bd40ec5865a1d974d5403}\label{class_i_entity_a3c69e2d0dd2bd40ec5865a1d974d5403}} 
+\index{IEntity@{IEntity}!isAlive@{isAlive}}
+\index{isAlive@{isAlive}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{isAlive()}{isAlive()}}
+{\footnotesize\ttfamily virtual bool I\+Entity\+::is\+Alive (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Check if entity is alive or not. 
+
+\begin{DoxyReturn}{Returns}
+True if entity is alive, false if it\textquotesingle{}s not alive 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_entity_aa05a11d11c33597a4f423e5c459da5fb}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a2b95a259202d4e6b19daccd8210cb90a}\label{class_i_entity_a2b95a259202d4e6b19daccd8210cb90a}} 
+\index{IEntity@{IEntity}!setDirection@{setDirection}}
+\index{setDirection@{setDirection}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{setDirection()}{setDirection()}}
+{\footnotesize\ttfamily virtual void I\+Entity\+::set\+Direction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_entity_ad9ba33013aa2da542e9fa6c6fadabef5}{Direction}}}]{dir }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the direction of the entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir} & new direction of the entity \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a5da9daff56dc6ccdaebc5aaeb6f6e090}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_a149fd65aeac9c15dbecadfe1c1aa1166}\label{class_i_entity_a149fd65aeac9c15dbecadfe1c1aa1166}} 
+\index{IEntity@{IEntity}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily virtual void I\+Entity\+::set\+Position (\begin{DoxyParamCaption}\item[{float}]{x\+Pos,  }\item[{float}]{y\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the position of the entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+Pos} & New x coordinate of the entity \\
+\hline
+{\em y\+Pos} & New y coordinate of the entity \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_entity_a0c54190a36ade5c6c3598a1b21f1e8cd}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_ab6b0ea81ea077f502d110a409eead3ff}\label{class_i_entity_ab6b0ea81ea077f502d110a409eead3ff}} 
+\index{IEntity@{IEntity}!setTexture@{setTexture}}
+\index{setTexture@{setTexture}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{setTexture()}{setTexture()}}
+{\footnotesize\ttfamily virtual void I\+Entity\+::set\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{texture }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the texture of the entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture} & Texture to be set\\
+\hline
+\end{DoxyParams}
+The texture is the name of the file that graphically represents the entity 
+
+Implemented in \mbox{\hyperlink{class_entity_a405601112665cb2a94ef3d00846cf166}{Entity}}.
+
+\mbox{\Hypertarget{class_i_entity_ada185260f3b58605ccf7f37139c8ecec}\label{class_i_entity_ada185260f3b58605ccf7f37139c8ecec}} 
+\index{IEntity@{IEntity}!takeDamage@{takeDamage}}
+\index{takeDamage@{takeDamage}!IEntity@{IEntity}}
+\doxysubsubsection{\texorpdfstring{takeDamage()}{takeDamage()}}
+{\footnotesize\ttfamily virtual void I\+Entity\+::take\+Damage (\begin{DoxyParamCaption}\item[{unsigned int}]{amount\+Of\+Damage }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em Damage} & entity \\
+\hline
+{\em amount\+Of\+Damage} & Amount of damage to inflict on entity\\
+\hline
+\end{DoxyParams}
+This function decreases the entity\textquotesingle{}s life by the specified amount of damage. If the life gets to zero the entity will die 
+
+Implemented in \mbox{\hyperlink{class_entity_afaca03a296361d5efbb96206efaef63e}{Entity}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/entity/\mbox{\hyperlink{_i_entity_8h}{I\+Entity.\+h}}\end{DoxyCompactItemize}

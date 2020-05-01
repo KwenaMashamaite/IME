@@ -5,7 +5,7 @@
 #ifndef STACKPANEL_H
 #define STACKPANEL_H
 
-#include "gui/layout/Panel.h"
+#include "Panel.h"
 
 namespace Gui {
     enum class Orientation{

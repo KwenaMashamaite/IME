@@ -2,15 +2,14 @@
  * @brief Intermediate Abstract Base Class (ABC) for game entities
  *
  * This class implements the domain object interface (IEntity). All methods
- * that are the same (such as getters and setters) for all game entities are
+ * that are the same for all game entities (such as getters and setters) are
  * implemented by this class. Those that are entity specific are passed down
  * to derived classes to implement. As a result, the class itself is an ABC.
- *
- * All game entities must inherit directly from this class to avoid code duplication
- * within derived classes (DRY).
+ * All game entities inherit directly from this class instead of IEntity to
+ * avoid code duplication within derived classes (DRY).
  *
  * @note All methods implemented by this class are not final. This means that they
- * can be overriden by derive classs.
+ * can be overridden by derived classes.
  */
 
 #ifndef ENTITY_H

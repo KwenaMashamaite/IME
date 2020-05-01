@@ -5,7 +5,7 @@
 #ifndef DRAWER_H
 #define DRAWER_H
 
-#include "gui/window/Window.h"
+#include "../window/Window.h"
 #include "entity/Entity.h"
 #include "animation/Animator.h"
 #include <memory>

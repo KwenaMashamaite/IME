@@ -1,0 +1,53 @@
+\hypertarget{class_i_weapon_owner}{}\doxysection{I\+Weapon\+Owner Class Reference}
+\label{class_i_weapon_owner}\index{IWeaponOwner@{IWeaponOwner}}
+
+
+{\ttfamily \#include $<$I\+Weapon\+Owner.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_weapon_owner_acb955557552d1dbfed103c0658a8ed4b}{add\+Weapon}} (std\+::unique\+\_\+ptr$<$ I\+Weapon $>$ weapon)=0
+\begin{DoxyCompactList}\small\item\em Give an entity a weapon. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_weapon_owner_a7c3411bfd853522b81e1da719a3c05eb}{use}} ()=0
+\begin{DoxyCompactList}\small\item\em Use default weapon. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 12 of file I\+Weapon\+Owner.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_weapon_owner_acb955557552d1dbfed103c0658a8ed4b}\label{class_i_weapon_owner_acb955557552d1dbfed103c0658a8ed4b}} 
+\index{IWeaponOwner@{IWeaponOwner}!addWeapon@{addWeapon}}
+\index{addWeapon@{addWeapon}!IWeaponOwner@{IWeaponOwner}}
+\doxysubsubsection{\texorpdfstring{addWeapon()}{addWeapon()}}
+{\footnotesize\ttfamily virtual void I\+Weapon\+Owner\+::add\+Weapon (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ I\+Weapon $>$}]{weapon }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Give an entity a weapon. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em weapon} & Weapon to give to entity\\
+\hline
+\end{DoxyParams}
+If the entity does not currently poses a weapon, the newly added weapon becomes the default weapon, otherwise the weapon is added to the entity\textquotesingle{}s collection of weapons \mbox{\Hypertarget{class_i_weapon_owner_a7c3411bfd853522b81e1da719a3c05eb}\label{class_i_weapon_owner_a7c3411bfd853522b81e1da719a3c05eb}} 
+\index{IWeaponOwner@{IWeaponOwner}!use@{use}}
+\index{use@{use}!IWeaponOwner@{IWeaponOwner}}
+\doxysubsubsection{\texorpdfstring{use()}{use()}}
+{\footnotesize\ttfamily virtual void I\+Weapon\+Owner\+::use (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Use default weapon. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/entity/\mbox{\hyperlink{_i_weapon_owner_8h}{I\+Weapon\+Owner.\+h}}\end{DoxyCompactItemize}

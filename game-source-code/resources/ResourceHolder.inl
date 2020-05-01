@@ -1,6 +1,5 @@
 #include "ResourceHolder.h"
 #include "exceptions/Exceptions.h"
-#include "common/Common.h"
 #include <utility>
 
 template <class T>
@@ -12,7 +11,7 @@ template <class T>
 void ResourceHolder<T>::load(const std::string& filename){
     auto resource = T();
     if (!resource.loadFromFile(filePath_ + filename))
-        throw FileNotFound("");
+        throw FileNotFound("cannot find file, " + filename + " in " + filePath_);
     resourceHolder_.insert(
         std::make_pair(filename, std::move(std::make_shared<T>(resource)))
     );
@@ -22,7 +21,7 @@ template <>
 inline void ResourceHolder<sf::Music>::load(const std::string &filename){
     auto music = std::make_shared<sf::Music>();
     if(!(*music).openFromFile(filePath_ + filename))
-        throw FileNotFound("");
+        throw FileNotFound("cannot find file, " + filename + " in " + filePath_);
     resourceHolder_.insert(std::make_pair(filename, std::move(music)));
 }
 

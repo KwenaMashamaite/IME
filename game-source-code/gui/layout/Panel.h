@@ -5,7 +5,7 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include "gui/control/UIElement.h"
+#include "../control/UIElement.h"
 #include "event/EventEmitter.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
@@ -120,6 +120,46 @@ namespace Gui {
          */
         virtual void draw(Window &renderTarget);
 
+        /**
+         * @brief Subscribe all child elements to an event
+         * @tparam Args Template argument name
+         * @param event Event to listen for
+         * @param callback Function to execute when event is fired
+         *
+         * This function will make all child elements of the panel to
+         * listen for an event and execute a callback when that event
+         * is raised
+         */
+        template <typename...Args>
+        void subscribeChildrenToEvent(const std::string& event, Callback<Args...> callback){
+            std::for_each(uiElements_.begin(), uiElements_.end(),
+                [&](const auto& uiElement){
+                    uiElement->on(event, callback);
+                });
+        }
+
+        /**
+         * @brief Subscribe a child element to an event
+         * @tparam Args Template argument name
+         * @param event Event to register callback function on
+         * @param callback Function to be executed when event event is raised
+         * @param childElementName Child element alias
+         *
+         * This function will attempt to register a child element to an
+         * event. If the child element is not found in the collection, this
+         * operation is will cancel. When the event is raised the provided
+         * callback function will be invoked
+         */
+        template <typename...Args>
+        void subscribeChildToEvent(const std::string& nameOfChild, const std::string& event,
+           Callback<Args...> callback)
+        {
+            auto found = findUIElement(nameOfChild);
+            if (found != uiElements_.end()){
+                found->second->on(event, callback);
+            }
+        }
+
     protected:
         //Collection alias
         using UIElementContainer = std::vector<std::pair<std::string, std::unique_ptr<UIElement>>>;
@@ -137,6 +177,15 @@ namespace Gui {
          * elements must be unique
          */
         void add(const std::string &alias, std::unique_ptr<UIElement> guiElement);
+
+        /**
+         * @brief Get access to a UI element inside the collection
+         * @param uiElemAlias Name of the UI element to get access to
+         * @return An iterator that points to the required element if
+         *         it exists in the collection, otherwise an iterator
+         *         that points one past the last element in collection
+         */
+        UIElementContainer::iterator findUIElement(const std::string& uiElemAlias);
 
         /**
          * @brief Add listener to event
@@ -163,21 +212,6 @@ namespace Gui {
          *         last element in the panel
          */
         ConstIterator cEnd() const;
-
-    private:
-        /**
-         * @brief Get access to a UI element inside the collection
-         * @param uiElemAlias Name of the UI element to get access to
-         * @return An iterator that points to the required element if
-         *         it exists in the collection, otherwise an iterator
-         *         that points one past the last element in collection
-         */
-        auto findUIElement(const std::string& uiElemAlias){
-            return std::find_if(uiElements_.begin(), uiElements_.end(),
-                [this, &uiElemAlias](const auto& uiElement){
-                    return uiElement.first == uiElemAlias;
-                });
-        }
 
     private:
         //Elements contained by the panel

@@ -16,7 +16,7 @@ using \mbox{\hyperlink{class_scoreboard_adf13ff38502458d4fc9cf55159a43d11}{const
 \item 
 \mbox{\hyperlink{class_scoreboard_a4e4ee37803e6aad99b29ed874a01528a}{Scoreboard}} (const std\+::string \&filename)
 \begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}{add\+Points}} (\mbox{\hyperlink{_scoreboard_8h_ab91a38642c07db386f7d2f360ba8ca92}{Destroyed\+Entity}} destroyed\+Entity)
+void \mbox{\hyperlink{class_scoreboard_a2eeee40b8a3706dfe27aa424d514f7de}{add\+Points}} (\mbox{\hyperlink{_scoreboard_8h_a188e5600612708b0ecbaf5c329321771}{Entity\+Type\+Worth\+Points}} entity\+Type)
 \begin{DoxyCompactList}\small\item\em Add points to the current score. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_scoreboard_a80671b685aaaf9c3987709342070927a}{add\+Points}} (unsigned int points)
 \begin{DoxyCompactList}\small\item\em Add points to the current score. \end{DoxyCompactList}\item 
@@ -37,7 +37,7 @@ unsigned int \mbox{\hyperlink{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f
 \doxysubsection{Detailed Description}
 
 
-Definition at line 24 of file Scoreboard.\+h.
+Definition at line 26 of file Scoreboard.\+h.
 
 
 
@@ -50,7 +50,7 @@ Definition at line 24 of file Scoreboard.\+h.
 
 
 
-Definition at line 27 of file Scoreboard.\+h.
+Definition at line 29 of file Scoreboard.\+h.
 
 \mbox{\Hypertarget{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}\label{class_scoreboard_ac062011f4323f21f9f35395c0195fdc4}} 
 \index{Scoreboard@{Scoreboard}!ScoreContainer@{ScoreContainer}}
@@ -60,7 +60,7 @@ Definition at line 27 of file Scoreboard.\+h.
 
 
 
-Definition at line 26 of file Scoreboard.\+h.
+Definition at line 28 of file Scoreboard.\+h.
 
 
 
@@ -101,11 +101,11 @@ Here is the call graph for this function\+:\nopagebreak
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}\label{class_scoreboard_a5c791285c8ec2beec46e5720aeff149f}} 
+\mbox{\Hypertarget{class_scoreboard_a2eeee40b8a3706dfe27aa424d514f7de}\label{class_scoreboard_a2eeee40b8a3706dfe27aa424d514f7de}} 
 \index{Scoreboard@{Scoreboard}!addPoints@{addPoints}}
 \index{addPoints@{addPoints}!Scoreboard@{Scoreboard}}
 \doxysubsubsection{\texorpdfstring{addPoints()}{addPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void Scoreboard\+::add\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_scoreboard_8h_ab91a38642c07db386f7d2f360ba8ca92}{Destroyed\+Entity}}}]{destroyed\+Entity }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Scoreboard\+::add\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_scoreboard_8h_a188e5600612708b0ecbaf5c329321771}{Entity\+Type\+Worth\+Points}}}]{entity\+Type }\end{DoxyParamCaption})}
 
 
 
@@ -113,10 +113,10 @@ Add points to the current score.
 
 
 \begin{DoxyParams}{Parameters}
-{\em destroyed\+Entity} & Points to add to current score\\
+{\em entity\+Type} & \mbox{\hyperlink{class_entity}{Entity}} type with points to add\\
 \hline
 \end{DoxyParams}
-The integer value associated with the provided argument determines the amount of points that are added to the current score 
+The integer value associated with the entity determines the amount of points that are added to the current score 
 
 Definition at line 17 of file Scoreboard.\+cpp.
 
@@ -154,7 +154,7 @@ A constant iterator that points to the first element in a high scores container
 \end{DoxyReturn}
 
 
-Definition at line 54 of file Scoreboard.\+cpp.
+Definition at line 51 of file Scoreboard.\+cpp.
 
 \mbox{\Hypertarget{class_scoreboard_abe389aaac0862d7f9d8e01490b098932}\label{class_scoreboard_abe389aaac0862d7f9d8e01490b098932}} 
 \index{Scoreboard@{Scoreboard}!cEnd@{cEnd}}
@@ -171,7 +171,7 @@ A constant iterator that points one past the last element in a high scores conta
 \end{DoxyReturn}
 
 
-Definition at line 58 of file Scoreboard.\+cpp.
+Definition at line 55 of file Scoreboard.\+cpp.
 
 \mbox{\Hypertarget{class_scoreboard_a1e564b025738ad886dc89e7794eca2ac}\label{class_scoreboard_a1e564b025738ad886dc89e7794eca2ac}} 
 \index{Scoreboard@{Scoreboard}!getScore@{getScore}}
@@ -188,7 +188,7 @@ Current score
 \end{DoxyReturn}
 
 
-Definition at line 46 of file Scoreboard.\+cpp.
+Definition at line 43 of file Scoreboard.\+cpp.
 
 \mbox{\Hypertarget{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f}\label{class_scoreboard_a51847d1f4d2f8c6409e5ba53fb02653f}} 
 \index{Scoreboard@{Scoreboard}!getTopScore@{getTopScore}}
@@ -205,7 +205,7 @@ Highest score
 \end{DoxyReturn}
 
 
-Definition at line 50 of file Scoreboard.\+cpp.
+Definition at line 47 of file Scoreboard.\+cpp.
 
 \mbox{\Hypertarget{class_scoreboard_a2574007a267d197a38a51ed96ade8c89}\label{class_scoreboard_a2574007a267d197a38a51ed96ade8c89}} 
 \index{Scoreboard@{Scoreboard}!reset@{reset}}
@@ -219,7 +219,7 @@ Reset the current score to zero.
 
 
 
-Definition at line 42 of file Scoreboard.\+cpp.
+Definition at line 39 of file Scoreboard.\+cpp.
 
 \mbox{\Hypertarget{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe}\label{class_scoreboard_acfc19e8bc709155e8133b50ade33b5fe}} 
 \index{Scoreboard@{Scoreboard}!updateHighScore@{updateHighScore}}

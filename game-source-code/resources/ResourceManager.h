@@ -1,6 +1,6 @@
 /**
  * @brief Class for managing resources (textures, fonts, sound buffers,
- * images and music)
+ *        images and music)
  *
  * The resources to be loaded must be placed in the executables folder
  * as follows:
@@ -43,7 +43,7 @@ public:
      * later in the program is much faster and efficient as the
      * resource is cached (i.e, a copy of the resource is stored
      * in the program rather than having to load it from the disk
-     * every time it's needed.
+     * every time it's needed).
      */
     static void load(ResourceId identifier, const std::string &filename);
 

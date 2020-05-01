@@ -5,11 +5,11 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "gui/menu/IMenu.h"
-#include "gui/control/Button.h"
-#include "gui/control/TextBlock.h"
-#include "gui/layout/DockPanel.h"
-#include "gui/layout/StackPanel.h"
+#include "IMenu.h"
+#include "../control/Button.h"
+#include "../control/TextBlock.h"
+#include "../layout/DockPanel.h"
+#include "../layout/StackPanel.h"
 
 namespace Gui {
     class MainMenu : public IMenu{

@@ -1,7 +1,5 @@
 /**
- * @brief Interface for movable game entites
- *
- * All game entities that move must implement this interface
+ * @brief Interface for movable game entities
  */
 
 #ifndef IMOVABLE_H
@@ -26,7 +24,8 @@ public:
 
     /**
      * @brief Increase/decrease the speed of the entity
-     * @param speed Speed to increase/decrease by
+     * @param speed Amount of speed to be added/subtracted
+     *        from the current speed
      */
     virtual void adjustSpeed(float speed) = 0;
 };

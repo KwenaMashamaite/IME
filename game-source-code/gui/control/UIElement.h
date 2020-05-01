@@ -5,7 +5,7 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include "gui/window/Window.h"
+#include "../window/Window.h"
 #include "event/EventEmitter.h"
 #include "common/Common.h"
 #include <string>
@@ -47,20 +47,27 @@ namespace Gui {
         unsigned int opacity = 255;
     };
 
-    class UIElement {
+    class UIElement : public EventEmitter{
     public:
         /**
          * @brief Create a UI element
-         * @param content Text to be displayed inside the element
-         * @param font Font to be used for the text
-         * @param textCharSize Character size of the text
+         *
+         * The UI element is created with no text, has a character
+         * size of 30, a white background and a black foreground.
+         * @note A UI element with no text cannot be seen when
+         * rendered. It will remain invisible until its text
+         * content is set
+         */
+        UIElement();
+
+        /**
+         * @brief Create a UI element
+         * @param textContent Text to be displayed inside the element
          *
          * The UI element has a character size of 30, a white background
          * and a black foreground by default
          */
-        explicit UIElement(const std::string &content,
-                           const std::string &font = "basson.ttf",
-                           unsigned int textCharSize = 30u);
+        explicit UIElement(const std::string &textContent);
 
         /**
          * @brief Set the position of the element
@@ -70,26 +77,37 @@ namespace Gui {
         void setPosition(float x, float y);
 
         /**
-         * @brief Set the same margin on all sides
-         * @param margin Margin to set
+         * @brief Set the outline thickness
+         * @param outlineThickness Thickness to set
          */
-        void setMargin(float margin);
+        void setOutlineThickness(float outlineThickness);
 
         /**
          * @brief Set the same padding on all sides
          * @param padding Padding to set
+         *
+         * This function will move the border away from the
+         * text content by the specified amount on all four
+         * sides. The padding is zero by default. This means
+         * that, the border and the text content have the same
+         * dimensions
          */
         void setPadding(float padding);
 
         /**
-         * @brief Set the margin individually
+         * @brief Set the margin (individually)
          * @param margin Margin to set
          */
         void setMargin(const Margin &margin);
 
         /**
-         * @brief Set the padding individually
+         * @brief Set the padding (individually)
          * @param padding Padding to set
+         *
+         * This function may be used to adjust the width/height
+         * of the element. The "left" and "right" values of the
+         * argument adjust the width while the "top" and "bottom"
+         * values adjust the height. The padding is zero by default
          */
         void setPadding(const Padding& padding);
 
@@ -127,6 +145,12 @@ namespace Gui {
         void setTextFillColour(Colour textFillColour);
 
         /**
+         * @brief Set the outline colour of the element
+         * @param outlineColour New outline colour
+         */
+        void setOutlineColour(Colour outlineColour);
+
+        /**
          * @brief Get the fill colour of the element's text
          * @return Fill colour of the element's text
          */
@@ -137,6 +161,12 @@ namespace Gui {
          * @return Fill colour of the element
          */
         Colour getFillColour() const;
+
+        /**
+         * @brief Get the outline colour of the element
+         * @return Outline colour of the element
+         */
+        Colour getOutlineColour() const;
 
         /**
          * @brief Get the position of the element
@@ -173,6 +203,14 @@ namespace Gui {
         void show();
 
         /**
+         * @brief Toggle the hidden state of the element
+         *
+         * This function will make a UI element invisible if its
+         * currently visible and vice versa
+         */
+        void toggle();
+
+        /**
          * @brief Check if UI element is hidden on a render target or not
          * @return True if UI element is hidden, false if it is not hidden
          */
@@ -202,16 +240,45 @@ namespace Gui {
          */
         virtual ~UIElement() = 0;
 
+    protected:
+        /**
+         * @brief Restrict the publication of UI element events to
+         *        class level
+         *
+         * This ensures that the publishing of events is exclusively
+         * controlled by the class. For instance, if the method is
+         * public, a click event can be raised on a button through
+         * an instance, even thought the said button is not clicked.
+         * This may cause bugs in the program
+         */
+        using EventEmitter::emit;
+
     private:
         /**
-        * @brief helper function for resizing the element
-        */
-        void resize();
+         * @brief Initialize element
+         */
+        void initialize();
 
         /**
-         * @brief setup events
+         * @brief Create events and attach listeners
          */
         void initEvents();
+
+        /**
+        * @brief Update element when text dimensions change
+         *
+         * This function will update the element when the text font,
+         * text content, text character size etc.. changes
+        */
+        void onTextDimensionsChange();
+
+        /**
+         * @brief Update the element wen it's dimensions changes
+         *
+         * This function will update the elements dimensions when the
+         * margin, outline thickness or  padding of the element changes
+         */
+        void onElementDimensionChange();
 
     private:
         //White space around element
@@ -220,15 +287,11 @@ namespace Gui {
         Padding padding_;
         //Elements text content
         sf::Text text_;
-        //Number of lines present in the content string
-        unsigned int numOfLinesInText_;
         //Defines the perimeter of the entire element (includes margin and padding)
         sf::RectangleShape outline_;
         //Defines the perimeter of the element border
         sf::RectangleShape border_;
-        //Event Emitter
-        EventEmitter eventEmitter_;
-        //
+        //Display state of element
         bool isHidden_;
     };
 }

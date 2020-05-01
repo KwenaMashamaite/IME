@@ -24,26 +24,26 @@ namespace Utility{
      * @brief Make Drawable object invisible
      * @param drawable Drawable to make invisible
      *
-     * This function will make any sf:: object invisible. This means
+     * This function will make any sf::Drawable object invisible. This means
      * that if the said instance is drawn on a render target and a call to
      * display is made, the instance will not be shown on the render target
      */
     template <class T>
-    void makeInvisible(T& shape){
-        shape.setFillColor(changeOpacity(shape.getFillColor(), 0));
-        shape.setOutlineColor(changeOpacity(shape.getOutlineColor(), 0));
+    void makeInvisible(T& drawable){
+        drawable.setFillColor(changeOpacity(drawable.getFillColor(), 0));
+        drawable.setOutlineColor(changeOpacity(drawable.getOutlineColor(), 0));
     }
 
     /**
-     * @brief Make a sf::Drawable visible
-     * @param shape Shape to make visible
+     * @brief Make an invisible sf::Drawable visible
+     * @param drawable drawable to make visible
      */
     template <class T>
-    void makeVisible(T& shape) {
-        if (shape.getFillColor() != sf::Color::Transparent)
-            shape.setFillColor(changeOpacity(shape.getFillColor(), 255));
-        if (shape.getOutlineColor() != sf::Color::Transparent)
-            shape.setOutlineColor(changeOpacity(shape.getOutlineColor(), 255));
+    void makeVisible(T& drawable) {
+        if (drawable.getFillColor() != sf::Color::Transparent)
+            drawable.setFillColor(changeOpacity(drawable.getFillColor(), 255));
+        if (drawable.getOutlineColor() != sf::Color::Transparent)
+            drawable.setOutlineColor(changeOpacity(drawable.getOutlineColor(), 255));
     }
 
     /**

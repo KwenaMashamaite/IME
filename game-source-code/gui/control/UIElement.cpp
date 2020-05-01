@@ -3,39 +3,59 @@
 #include "utility/Utility.h"
 #include <algorithm>
 
-Gui::UIElement::UIElement(const std::string &content, const std::string &font, unsigned int textCharSize)
-    : numOfLinesInText_{0u}, isHidden_(false)
+Gui::UIElement::UIElement()
+    : isHidden_(false)
 {
-    initEvents();
-    setTextFont(font);
-    setTextCharSize(textCharSize);
-    setText(content);
-    setPadding(0.0f);
-    setMargin(0.0f);
+    setText("");
+    initialize();
+}
 
-    outline_.setFillColor(sf::Color::Transparent);
-    border_.setFillColor(sf::Color::White);
-    text_.setFillColor(sf::Color::Black);
+Gui::UIElement::UIElement(const std::string &textContent)
+    : isHidden_(false)
+{
+    setText(textContent);
+    initialize();
+}
+
+void Gui::UIElement::initialize() {
+    initEvents();
+    setTextFont("secret-code.ttf");
+    setTextCharSize(25u);
+    setFillColour({220, 220, 220}); //Gainsboro
+    setOutlineColour({128, 128, 128}); //Grey
+    setTextFillColour({0, 0, 0}); //Black
+    setOutlineThickness(1.0f);
+    setPadding(0.0f);
+    text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
 }
 
 void Gui::UIElement::initEvents() {
-    eventEmitter_.addListener("textChanged", Callback<std::string>([this](const std::string &content) {
-        if (content.empty()) {
-            numOfLinesInText_ = 0;
-            return;
-        }
-        numOfLinesInText_ = std::count(content.begin(), content.end(), '\n');
-        numOfLinesInText_++; //Account for one line/last line (both dont have '\n')
-        resize();
+    addListener("textLocalBoundsChanged", Callback<>([this] {
+        text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
 
-    eventEmitter_.addListener("charSizeChanged", Callback<>([this](){
-        resize();
+    addListener("textFontChanged", Callback<>([this] {
+        onTextDimensionsChange();
     }));
 
-    eventEmitter_.addListener("dimensionsChanged", Callback<>([this](){
-        resize();
-        setPosition(getPosition().x, getPosition().y);
+    addListener("textContentChanged", Callback<>([this] {
+        onTextDimensionsChange();
+    }));
+
+    addListener("textCharSizeChanged", Callback<>([this] {
+        onTextDimensionsChange();
+    }));
+
+    addListener("marginChanged", Callback<>([this] {
+        onElementDimensionChange();
+    }));
+
+    addListener("paddingChanged", Callback<>([this] {
+        onElementDimensionChange();
+    }));
+
+    addListener("outlineThicknessChanged", Callback<>([this] {
+        onElementDimensionChange();
     }));
 }
 
@@ -51,24 +71,24 @@ void Gui::UIElement::setPosition(float x, float y) {
 	);
 }
 
-void Gui::UIElement::setMargin(float margin) {
+void Gui::UIElement::setOutlineThickness(float margin) {
     margin_ = {margin, margin, margin, margin};
-    eventEmitter_.emit("dimensionsChanged");
+    emit("outlineThicknessChanged");
 }
 
 void Gui::UIElement::setPadding(float padding) {
     padding_ = {padding, padding, padding, padding};
-    eventEmitter_.emit("dimensionsChanged");
+    emit("paddingChanged");
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    eventEmitter_.emit("dimensionsChanged");
+    emit("marginChanged");
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    eventEmitter_.emit("dimensionsChanged");
+    emit("paddingChanged");
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -77,20 +97,27 @@ void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
     text_.setFont(ResourceManager::getFont(contentFont));
+    emit("textFontChanged");
+    emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
-    eventEmitter_.emit("charSizeChanged");
+    emit("textCharSizeChanged");
+    emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setText(const std::string &content) {
     text_.setString(content);
-    eventEmitter_.emit("textChanged", content);
+    emit("textContentChanged");
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
     text_.setFillColor(Utility::convertOwnColourToSFMLColour(textFillColour));
+}
+
+void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
+    outline_.setFillColor(Utility::convertOwnColourToSFMLColour(outlineColour));
 }
 
 Gui::Colour Gui::UIElement::getTextFillColour() const {
@@ -99,6 +126,10 @@ Gui::Colour Gui::UIElement::getTextFillColour() const {
 
 Gui::Colour Gui::UIElement::getFillColour() const {
     return Utility::convertSFMLColourToOwnColour(border_.getFillColor());
+}
+
+Gui::Colour Gui::UIElement::getOutlineColour() const {
+    return Utility::convertSFMLColourToOwnColour(outline_.getFillColor());
 }
 
 Position Gui::UIElement::getPosition() const {
@@ -123,7 +154,7 @@ void Gui::UIElement::draw(Gui::Window &renderTarget) {
     renderTarget.draw(text_);
 }
 
-void Gui::UIElement::resize() {
+void Gui::UIElement::onTextDimensionsChange() {
     border_.setSize(sf::Vector2f(
         text_.getGlobalBounds().width + padding_.left + padding_.right,
         text_.getGlobalBounds().height + padding_.top + padding_.bottom
@@ -132,6 +163,11 @@ void Gui::UIElement::resize() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
+}
+
+void Gui::UIElement::onElementDimensionChange() {
+    onTextDimensionsChange(); //Update padding and margin
+    setPosition(getPosition().x, getPosition().y); //Update padding and margin
 }
 
 void Gui::UIElement::hide() {
@@ -146,6 +182,14 @@ void Gui::UIElement::show() {
     Utility::makeVisible(outline_);
     Utility::makeVisible(border_);
     Utility::makeVisible(text_);
+}
+
+void Gui::UIElement::toggle() {
+    isHidden_ = !isHidden_;
+    if (isHidden_)
+        show();
+    else
+        hide();
 }
 
 bool Gui::UIElement::isHidden() const {
