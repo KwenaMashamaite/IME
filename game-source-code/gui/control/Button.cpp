@@ -89,3 +89,10 @@ void Gui::Button::setHoverTextFillColour(Gui::Colour textFillColour) {
 void Gui::Button::setHoverOutlineColour(Gui::Colour outlineColour) {
     onHoverOutlineColour_ = outlineColour;
 }
+
+void Gui::Button::resetDefault() {
+    std::for_each(handlerIdList_.begin(), handlerIdList_.end(),
+        [this](const auto& handlerNameIdPair){
+            removeListener(handlerNameIdPair.first, handlerNameIdPair.second);
+    });
+}
