@@ -16,6 +16,15 @@ namespace Gui {
     class StackPanel final : public Panel{
     public:
         /**
+         * @brief Create a new Stack Panel
+         * @param orientation Specify how the UI elements
+         *        are stacked to each other
+         *
+         * The created stack panel is located at (0, 0)
+         */
+        explicit StackPanel(Orientation orientation);
+
+        /**
          * @brief Create a new Stack Panel object
          * @param x X coordinate of the panel
          * @param y Y coordinate of the panel

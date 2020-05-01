@@ -3,6 +3,9 @@
 #include <cassert>
 #include <iostream>
 
+Gui::StackPanel::StackPanel(Gui::Orientation orientation)
+ : StackPanel(0.0f, 0.0f, orientation){}
+
 Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
         : Panel(x, y)
 {
