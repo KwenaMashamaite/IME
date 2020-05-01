@@ -6,40 +6,48 @@
 
 
 
-Inheritance diagram for Event\+Emitter\+:\nopagebreak
+Inheritance diagram for Event\+Emitter\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=186pt]{class_event_emitter__inherit__graph}
+\includegraphics[width=246pt]{class_event_emitter__inherit__graph}
 \end{center}
 \end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename... Args$>$ }\\int \mbox{\hyperlink{class_event_emitter_a46cf277f61205371f728587ee3973940}{add\+Listener}} (std\+::string \&\&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback, bool is\+Called\+Once=false)
+{\footnotesize template$<$typename... Args$>$ }\\int \mbox{\hyperlink{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}{add\+Listener}} (const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
 \begin{DoxyCompactList}\small\item\em Add a listener (callback) to an event. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{class_event_emitter_aeaec3f1373bd2af776f169d1b2cad423}{remove\+Listener}} (std\+::string \&\&event, int listener\+Id)
+{\footnotesize template$<$typename... Args$>$ }\\int \mbox{\hyperlink{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b}{on}} (const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
+\item 
+{\footnotesize template$<$typename ... Args$>$ }\\void \mbox{\hyperlink{class_event_emitter_aabdeca68669f8d263530d98f89fcd59b}{add\+Once\+Listener}} (const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
+\begin{DoxyCompactList}\small\item\em Add a listener to an event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_event_emitter_a1a470fee5274eb7913b6e20f0338e56d}{remove\+Listener}} (const std\+::string \&event, int listener\+Id)
 \begin{DoxyCompactList}\small\item\em Remove a listener from an event. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{class_event_emitter_a8f5201404247c2eb149a191343c022d1}{remove\+All\+Listeners}} (std\+::string \&\&event)
+bool \mbox{\hyperlink{class_event_emitter_a9d5bb84b27c0d5d1cca12a8ed0072602}{remove\+All\+Listeners}} (const std\+::string \&event)
 \begin{DoxyCompactList}\small\item\em Remove all listeners of an event. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_event_emitter_a6df1293e51f1413a6c53c5c42a2205dd}{emit}} (std\+::string \&\&event, Args...\+args)
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_event_emitter_aa5c1edb36ee818d48c2175a1e7e77612}{emit}} (const std\+::string \&event, Args...\+args)
 \begin{DoxyCompactList}\small\item\em Fire an event. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
 
 
-Definition at line 23 of file Event\+Emitter.\+h.
+Definition at line 24 of file Event\+Emitter.\+h.
 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_event_emitter_a46cf277f61205371f728587ee3973940}\label{class_event_emitter_a46cf277f61205371f728587ee3973940}} 
+\mbox{\Hypertarget{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}\label{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}} 
 \index{EventEmitter@{EventEmitter}!addListener@{addListener}}
 \index{addListener@{addListener}!EventEmitter@{EventEmitter}}
 \doxysubsubsection{\texorpdfstring{addListener()}{addListener()}}
 {\footnotesize\ttfamily template$<$typename... Args$>$ \\
-int Event\+Emitter\+::add\+Listener (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback,  }\item[{bool}]{is\+Called\+Once = {\ttfamily false} }\end{DoxyParamCaption})}
+int Event\+Emitter\+::add\+Listener (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})}
 
 
 
@@ -56,34 +64,67 @@ Add a listener (callback) to an event.
 \hline
 {\em callback} & Function to execute when the event is fired \\
 \hline
-{\em is\+Called\+Once} & True if listener is called only once, false for multiple times \\
-\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 listener\textquotesingle{}s identification number
 \end{DoxyReturn}
-A listener that is flagged as a once listener (is\+Called\+Once set to true) will be invoked once and subsequently removed from the event, Otherwise the listener will be invoked each time the event is fired. Note, If the same listener is added multiple times, It will be treated as a unique listener and hence given an identification number.
-
-\begin{DoxyWarning}{Warning}
+If the same listener is added multiple times, It will be treated as a unique listener and hence given an identification number. \begin{DoxyWarning}{Warning}
 If the added listener is a member of a class, then the listener must be removed from an event when the class instance goes out of scope. If not removed, a non-\/existent listener will be invoked when the event is fired and this will lead to undefined behavior 
 \end{DoxyWarning}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
 
 
 Definition at line 5 of file Event\+Emitter.\+inl.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{class_event_emitter_a46cf277f61205371f728587ee3973940_icgraph}
+\includegraphics[width=350pt]{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0_icgraph}
 \end{center}
 \end{figure}
-\mbox{\Hypertarget{class_event_emitter_a6df1293e51f1413a6c53c5c42a2205dd}\label{class_event_emitter_a6df1293e51f1413a6c53c5c42a2205dd}} 
+\mbox{\Hypertarget{class_event_emitter_aabdeca68669f8d263530d98f89fcd59b}\label{class_event_emitter_aabdeca68669f8d263530d98f89fcd59b}} 
+\index{EventEmitter@{EventEmitter}!addOnceListener@{addOnceListener}}
+\index{addOnceListener@{addOnceListener}!EventEmitter@{EventEmitter}}
+\doxysubsubsection{\texorpdfstring{addOnceListener()}{addOnceListener()}}
+{\footnotesize\ttfamily template$<$typename... Args$>$ \\
+void Event\+Emitter\+::add\+Once\+Listener (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})}
+
+
+
+Add a listener to an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Event to add listener to \\
+\hline
+{\em callback} & Function to execute when the event is fired\\
+\hline
+\end{DoxyParams}
+This function will add a listener to an event. The listener will only be invoked once and subsequently removed from the event. This means that the callback will only run when an event is raised for the first time. Use \mbox{\hyperlink{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}{add\+Listener()}} or the \mbox{\hyperlink{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b}{on()}} function if the callback is to be invoked each time an event is fired \begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
+
+
+Definition at line 16 of file Event\+Emitter.\+inl.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_event_emitter_aabdeca68669f8d263530d98f89fcd59b_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_event_emitter_aa5c1edb36ee818d48c2175a1e7e77612}\label{class_event_emitter_aa5c1edb36ee818d48c2175a1e7e77612}} 
 \index{EventEmitter@{EventEmitter}!emit@{emit}}
 \index{emit@{emit}!EventEmitter@{EventEmitter}}
 \doxysubsubsection{\texorpdfstring{emit()}{emit()}}
 {\footnotesize\ttfamily template$<$typename... Args$>$ \\
-void Event\+Emitter\+::emit (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event,  }\item[{Args...}]{args }\end{DoxyParamCaption})}
+void Event\+Emitter\+::emit (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{Args...}]{args }\end{DoxyParamCaption})}
 
 
 
@@ -101,29 +142,48 @@ Fire an event.
 {\em args} & Arguments passed to event listeners \\
 \hline
 \end{DoxyParams}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
 
 
-Definition at line 19 of file Event\+Emitter.\+inl.
+Definition at line 36 of file Event\+Emitter.\+inl.
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{class_event_emitter_a6df1293e51f1413a6c53c5c42a2205dd_cgraph}
+\includegraphics[width=350pt]{class_event_emitter_aa5c1edb36ee818d48c2175a1e7e77612_cgraph}
 \end{center}
 \end{figure}
-Here is the caller graph for this function\+:\nopagebreak
+\mbox{\Hypertarget{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b}\label{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b}} 
+\index{EventEmitter@{EventEmitter}!on@{on}}
+\index{on@{on}!EventEmitter@{EventEmitter}}
+\doxysubsubsection{\texorpdfstring{on()}{on()}}
+{\footnotesize\ttfamily template$<$typename... Args$>$ \\
+int Event\+Emitter\+::on (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})}
+
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
+
+
+Definition at line 11 of file Event\+Emitter.\+inl.
+
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=319pt]{class_event_emitter_a6df1293e51f1413a6c53c5c42a2205dd_icgraph}
+\includegraphics[width=333pt]{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b_cgraph}
 \end{center}
 \end{figure}
-\mbox{\Hypertarget{class_event_emitter_a8f5201404247c2eb149a191343c022d1}\label{class_event_emitter_a8f5201404247c2eb149a191343c022d1}} 
+\mbox{\Hypertarget{class_event_emitter_a9d5bb84b27c0d5d1cca12a8ed0072602}\label{class_event_emitter_a9d5bb84b27c0d5d1cca12a8ed0072602}} 
 \index{EventEmitter@{EventEmitter}!removeAllListeners@{removeAllListeners}}
 \index{removeAllListeners@{removeAllListeners}!EventEmitter@{EventEmitter}}
 \doxysubsubsection{\texorpdfstring{removeAllListeners()}{removeAllListeners()}}
-{\footnotesize\ttfamily bool Event\+Emitter\+::remove\+All\+Listeners (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Event\+Emitter\+::remove\+All\+Listeners (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})}
 
 
 
@@ -135,17 +195,23 @@ Remove all listeners of an event.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-True if all listeners were removed, false if no such event exists 
+True if all listeners were removed, false if no such event exists
 \end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Use caution when removing all listeners. For instance, avoid calling this function on an event emitter that is not local to the scope in which your in as this could lead to undefined behavior. 
+\end{DoxyWarning}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
 
 
 Definition at line 22 of file Event\+Emitter.\+cpp.
 
-\mbox{\Hypertarget{class_event_emitter_aeaec3f1373bd2af776f169d1b2cad423}\label{class_event_emitter_aeaec3f1373bd2af776f169d1b2cad423}} 
+\mbox{\Hypertarget{class_event_emitter_a1a470fee5274eb7913b6e20f0338e56d}\label{class_event_emitter_a1a470fee5274eb7913b6e20f0338e56d}} 
 \index{EventEmitter@{EventEmitter}!removeListener@{removeListener}}
 \index{removeListener@{removeListener}!EventEmitter@{EventEmitter}}
 \doxysubsubsection{\texorpdfstring{removeListener()}{removeListener()}}
-{\footnotesize\ttfamily bool Event\+Emitter\+::remove\+Listener (\begin{DoxyParamCaption}\item[{std\+::string \&\&}]{event,  }\item[{int}]{listener\+Id }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Event\+Emitter\+::remove\+Listener (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{int}]{listener\+Id }\end{DoxyParamCaption})}
 
 
 
@@ -161,15 +227,19 @@ Remove a listener from an event.
 \begin{DoxyReturn}{Returns}
 True if a listener was removed from an event, false if the specified event does not have a listener with the specified id 
 \end{DoxyReturn}
+\begin{Desc}
+\item[Examples]\par
+\mbox{\hyperlink{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}}.\end{Desc}
 
 
 Definition at line 4 of file Event\+Emitter.\+cpp.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{class_event_emitter_aeaec3f1373bd2af776f169d1b2cad423_icgraph}
+\includegraphics[width=350pt]{class_event_emitter_a1a470fee5274eb7913b6e20f0338e56d_icgraph}
 \end{center}
 \end{figure}
 

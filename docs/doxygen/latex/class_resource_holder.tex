@@ -64,7 +64,7 @@ Ensures resources can be located.
 \end{DoxyParams}
 The file path must be relative to the generated executable file\textquotesingle{}s root directory (folder in which the .exe file sits). 
 
-Definition at line 7 of file Resource\+Holder.\+inl.
+Definition at line 6 of file Resource\+Holder.\+inl.
 
 
 
@@ -93,11 +93,12 @@ Get a resource.
 \begin{DoxyReturn}{Returns}
 Shared pointer to a resource in a buffer
 \end{DoxyReturn}
-If the requested resource is not found in the buffer, an attempt will be made to load it from the disk. If it cannot be loaded from the disk, then a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown. This implies that the returned pointer can never be a nullptr. Therefore, nullptr checks are not necessary, but they can be put in place for robustness 
+If the requested resource is not found in the buffer, an attempt will be made to load it from the disk. If it cannot be loaded from the disk, then a \char`\"{}\+File\+Not\+Found\char`\"{} exception will be thrown. This implies that the returned pointer can never be a nullptr. Therefore, nullptr checks are not necessary 
 
-Definition at line 30 of file Resource\+Holder.\+inl.
+Definition at line 29 of file Resource\+Holder.\+inl.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -127,7 +128,7 @@ Load a resource from the disk and store it in a buffer.
 \end{DoxyExceptions}
 If the path of the resource matches the one provided in the constructor then the file name can be specified without the path (e.\+g texture\+One.\+png), otherwise the file path is required (e.\+g resources/textures/texture\+One.\+png). 
 
-Definition at line 12 of file Resource\+Holder.\+inl.
+Definition at line 11 of file Resource\+Holder.\+inl.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]

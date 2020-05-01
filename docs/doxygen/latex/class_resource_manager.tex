@@ -26,7 +26,7 @@ static std\+::shared\+\_\+ptr$<$ sf\+::\+Music $>$ \mbox{\hyperlink{class_resour
 \doxysubsection{Detailed Description}
 
 
-Definition at line 31 of file Resource\+Manager.\+h.
+Definition at line 34 of file Resource\+Manager.\+h.
 
 
 
@@ -56,7 +56,7 @@ Constant reference to a sf\+::font
 \end{DoxyReturn}
 If the requested font is not cached, an attempt will be made to load it from the disk 
 
-Definition at line 37 of file Resource\+Manager.\+cpp.
+Definition at line 39 of file Resource\+Manager.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -65,7 +65,8 @@ Here is the call graph for this function\+:\nopagebreak
 \includegraphics[width=350pt]{class_resource_manager_aa33bfa86e9b38cb20cced8d102eca4ac_cgraph}
 \end{center}
 \end{figure}
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -84,7 +85,7 @@ Get an image.
 
 
 \begin{DoxyParams}{Parameters}
-{\em file\+Name} & File name of the image (without path) \\
+{\em file\+Name} & File name of the image \\
 \hline
 \end{DoxyParams}
 
@@ -97,7 +98,7 @@ constant reference to an sf\+::\+Image
 \end{DoxyReturn}
 If the requested image is not cached, an attempt will be made to load it from the disk 
 
-Definition at line 45 of file Resource\+Manager.\+cpp.
+Definition at line 47 of file Resource\+Manager.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -131,7 +132,7 @@ A shared pointer to sf\+::music
 \end{DoxyReturn}
 
 
-Definition at line 53 of file Resource\+Manager.\+cpp.
+Definition at line 55 of file Resource\+Manager.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -159,7 +160,7 @@ Get a sound buffer.
 
 
 \begin{DoxyParams}{Parameters}
-{\em file\+Name} & File name of the sound buffer (without path) \\
+{\em file\+Name} & File name of the sound buffer \\
 \hline
 \end{DoxyParams}
 
@@ -172,7 +173,7 @@ Constant reference to a sf\+::\+Sound\+Buffer
 \end{DoxyReturn}
 If the requested sound buffer is not cached, an attempt will be made to load it from the disk 
 
-Definition at line 49 of file Resource\+Manager.\+cpp.
+Definition at line 51 of file Resource\+Manager.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -200,7 +201,7 @@ Get a texture.
 
 
 \begin{DoxyParams}{Parameters}
-{\em file\+Name} & File name of the texture (without path) \\
+{\em file\+Name} & File name of the texture \\
 \hline
 \end{DoxyParams}
 
@@ -213,13 +214,21 @@ Constant reference to a sf\+::\+Texture
 \end{DoxyReturn}
 If the requested texture is not cached, an attempt will be made to load it from the disk 
 
-Definition at line 41 of file Resource\+Manager.\+cpp.
+Definition at line 43 of file Resource\+Manager.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{class_resource_manager_aa9b2580c138e4958c37e6f6a77b0a430_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_resource_manager_aa9b2580c138e4958c37e6f6a77b0a430_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{class_resource_manager_ac1a06c0f5cb8cbfa53808e3f7b6cda19}\label{class_resource_manager_ac1a06c0f5cb8cbfa53808e3f7b6cda19}} 
@@ -277,7 +286,7 @@ Load a resource from the disk into a cache.
 {\em \mbox{\hyperlink{class_file_not_found}{File\+Not\+Found}}} & If the resource cannot be found on the disk\\
 \hline
 \end{DoxyExceptions}
-Loading a resource from the disk prior to retrieving it later in the program is much faster and efficient as the resource is cached (i.\+e, a copy of the resource is stored in the program rather than having to load it from the disk every time it\textquotesingle{}s needed. 
+Loading a resource from the disk prior to retrieving it later in the program is much faster and efficient as the resource is cached (i.\+e, a copy of the resource is stored in the program rather than having to load it from the disk every time it\textquotesingle{}s needed). 
 
 Definition at line 10 of file Resource\+Manager.\+cpp.
 

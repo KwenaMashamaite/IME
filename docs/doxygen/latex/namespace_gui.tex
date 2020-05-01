@@ -2,7 +2,7 @@
 \label{namespace_gui}\index{Gui@{Gui}}
 
 
-UI element that can be interacted with (e.\+g clicked)  
+UI element that can perform actions.  
 
 
 \doxysubsection*{Classes}
@@ -13,14 +13,22 @@ class \mbox{\hyperlink{class_gui_1_1_button}{Button}}
 class \mbox{\hyperlink{class_gui_1_1_canvas}{Canvas}}
 \item 
 struct \mbox{\hyperlink{struct_gui_1_1_colour}{Colour}}
-\item 
+\begin{DoxyCompactList}\small\item\em Represents R\+GB combination colour. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_gui_1_1_dock_panel}{Dock\+Panel}}
 \item 
+class \mbox{\hyperlink{class_gui_1_1_drawer}{Drawer}}
+\item 
+class \mbox{\hyperlink{class_gui_1_1_i_menu}{I\+Menu}}
+\item 
+class \mbox{\hyperlink{class_gui_1_1_main_menu}{Main\+Menu}}
+\item 
 struct \mbox{\hyperlink{struct_gui_1_1_margin}{Margin}}
-\item 
+\begin{DoxyCompactList}\small\item\em Represents the whitespace around the borders of the G\+UI element. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{struct_gui_1_1_padding}{Padding}}
-\item 
+\begin{DoxyCompactList}\small\item\em Represents the spacing between the text and the border of the G\+UI element. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_gui_1_1_panel}{Panel}}
+\item 
+class \mbox{\hyperlink{class_gui_1_1_pause_menu}{Pause\+Menu}}
 \item 
 class \mbox{\hyperlink{class_gui_1_1_stack_panel}{Stack\+Panel}}
 \item 
@@ -40,17 +48,27 @@ enum \mbox{\hyperlink{namespace_gui_aad5ab01630f5db2f62d8480c7eca827e}{Orientati
 
 
 \doxysubsection{Detailed Description}
-UI element that can be interacted with (e.\+g clicked) 
+UI element that can perform actions. 
 
 \mbox{\hyperlink{class_gui_1_1_window}{Window}} that can serve as a target for 2D drawing.
+
+Menu displayed when the game is paused.
+
+Represents the main menu of the game.
+
+Interface for menus.
 
 UI layout that stacks panel vertically or horizontally.
 
 Abstract base class for UI element layouts.
 
-UI layout that has no restrictions on the placement of UI controls.
+G\+UI layout panel for other G\+UI layout panels.
 
-Static UI element that can display multiple lines of text. 
+UI layout that has no restrictions on the placement of UI control elements.
+
+Class for drawing game graphics (textures, texts, sprites, images, etc)
+
+UI element that can display single and multiple lines of text. 
 
 \doxysubsection{Enumeration Type Documentation}
 \mbox{\Hypertarget{namespace_gui_aad5ab01630f5db2f62d8480c7eca827e}\label{namespace_gui_aad5ab01630f5db2f62d8480c7eca827e}} 

@@ -1,0 +1,80 @@
+\hypertarget{class_i_movable_entity}{}\doxysection{I\+Movable\+Entity Class Reference}
+\label{class_i_movable_entity}\index{IMovableEntity@{IMovableEntity}}
+
+
+Interface for movable game entities.  
+
+
+
+
+{\ttfamily \#include $<$I\+Movable\+Entity.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_movable_entity_a267e956af397bd67e6173f90dde4acf0}{move}} (float delta\+Time)=0
+\begin{DoxyCompactList}\small\item\em move entity in current direction at current speed \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_movable_entity_a403ca789b76a1b6dd40c02f99cfcb7c6}{set\+Speed}} (float speed)=0
+\begin{DoxyCompactList}\small\item\em Set the speed of the entity. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_i_movable_entity_a2fb7096543e4a20119a859d9d8238711}{adjust\+Speed}} (float speed)=0
+\begin{DoxyCompactList}\small\item\em Increase/decrease the speed of the entity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Interface for movable game entities. 
+
+Definition at line 8 of file I\+Movable\+Entity.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_movable_entity_a2fb7096543e4a20119a859d9d8238711}\label{class_i_movable_entity_a2fb7096543e4a20119a859d9d8238711}} 
+\index{IMovableEntity@{IMovableEntity}!adjustSpeed@{adjustSpeed}}
+\index{adjustSpeed@{adjustSpeed}!IMovableEntity@{IMovableEntity}}
+\doxysubsubsection{\texorpdfstring{adjustSpeed()}{adjustSpeed()}}
+{\footnotesize\ttfamily virtual void I\+Movable\+Entity\+::adjust\+Speed (\begin{DoxyParamCaption}\item[{float}]{speed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Increase/decrease the speed of the entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & Amount of speed to be added/subtracted from the current speed \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_i_movable_entity_a267e956af397bd67e6173f90dde4acf0}\label{class_i_movable_entity_a267e956af397bd67e6173f90dde4acf0}} 
+\index{IMovableEntity@{IMovableEntity}!move@{move}}
+\index{move@{move}!IMovableEntity@{IMovableEntity}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily virtual void I\+Movable\+Entity\+::move (\begin{DoxyParamCaption}\item[{float}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+move entity in current direction at current speed 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & Amount of time passed since entity last moved \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_i_movable_entity_a403ca789b76a1b6dd40c02f99cfcb7c6}\label{class_i_movable_entity_a403ca789b76a1b6dd40c02f99cfcb7c6}} 
+\index{IMovableEntity@{IMovableEntity}!setSpeed@{setSpeed}}
+\index{setSpeed@{setSpeed}!IMovableEntity@{IMovableEntity}}
+\doxysubsubsection{\texorpdfstring{setSpeed()}{setSpeed()}}
+{\footnotesize\ttfamily virtual void I\+Movable\+Entity\+::set\+Speed (\begin{DoxyParamCaption}\item[{float}]{speed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the speed of the entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & New speed of the entity\\
+\hline
+\end{DoxyParams}
+This function overrides the previous speed of the entity 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/entity/\mbox{\hyperlink{_i_movable_entity_8h}{I\+Movable\+Entity.\+h}}\end{DoxyCompactItemize}

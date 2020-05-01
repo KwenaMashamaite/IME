@@ -1,0 +1,138 @@
+\hypertarget{class_gui_1_1_drawer}{}\doxysection{Gui\+::Drawer Class Reference}
+\label{class_gui_1_1_drawer}\index{Gui::Drawer@{Gui::Drawer}}
+
+
+{\ttfamily \#include $<$Drawer.\+h$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Entity\+Animator\+Pair}} = std\+::pair$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_entity}{Entity}} $>$ \&, \mbox{\hyperlink{class_animator}{Animator}} \& $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_gui_1_1_drawer_a2407b8422957989a7d29f9235a4ff478}{Drawer}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_drawer_ab9fe09a32f64074b1dc57d76302d64e7}{draw\+Entity}} (const \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Entity\+Animator\+Pair}} \&entity\+Animator\+Pair)
+\begin{DoxyCompactList}\small\item\em Draw entity on a render target. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_drawer_a9d050ff3b36740f36eba639099be720d}{draw\+Entities}} (const std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Entity\+Animator\+Pair}} $>$ \&entitie\+Animator\+Pairs)
+\begin{DoxyCompactList}\small\item\em Draw multiple entities at the same time on a render target. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_drawer_a93cfdfd128c067e62e4875039c8ee57e}{draw\+Background}} (const std\+::string \&background)
+\begin{DoxyCompactList}\small\item\em Draw background texture. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 14 of file Drawer.\+h.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}\label{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}} 
+\index{Gui::Drawer@{Gui::Drawer}!EntityAnimatorPair@{EntityAnimatorPair}}
+\index{EntityAnimatorPair@{EntityAnimatorPair}!Gui::Drawer@{Gui::Drawer}}
+\doxysubsubsection{\texorpdfstring{EntityAnimatorPair}{EntityAnimatorPair}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Gui\+::\+Drawer\+::\+Entity\+Animator\+Pair}} =  std\+::pair$<$std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{class_entity}{Entity}}$>$\&, \mbox{\hyperlink{class_animator}{Animator}}\&$>$}
+
+
+
+Definition at line 16 of file Drawer.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_drawer_a2407b8422957989a7d29f9235a4ff478}\label{class_gui_1_1_drawer_a2407b8422957989a7d29f9235a4ff478}} 
+\index{Gui::Drawer@{Gui::Drawer}!Drawer@{Drawer}}
+\index{Drawer@{Drawer}!Gui::Drawer@{Gui::Drawer}}
+\doxysubsubsection{\texorpdfstring{Drawer()}{Drawer()}}
+{\footnotesize\ttfamily Gui\+::\+Drawer\+::\+Drawer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Gui\+::\+Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Target to draw on \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 6 of file Drawer.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_drawer_a93cfdfd128c067e62e4875039c8ee57e}\label{class_gui_1_1_drawer_a93cfdfd128c067e62e4875039c8ee57e}} 
+\index{Gui::Drawer@{Gui::Drawer}!drawBackground@{drawBackground}}
+\index{drawBackground@{drawBackground}!Gui::Drawer@{Gui::Drawer}}
+\doxysubsubsection{\texorpdfstring{drawBackground()}{drawBackground()}}
+{\footnotesize\ttfamily void Gui\+::\+Drawer\+::draw\+Background (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{background }\end{DoxyParamCaption})}
+
+
+
+Draw background texture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em background} & filename of the background texture\\
+\hline
+\end{DoxyParams}
+The background texture must at least have the same dimensions as the render target, otherwise the texture will be stretched to fit the the size of the render target. This may lead to an unpleasant looking backgrounds 
+
+Definition at line 43 of file Drawer.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_drawer_a93cfdfd128c067e62e4875039c8ee57e_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_drawer_a9d050ff3b36740f36eba639099be720d}\label{class_gui_1_1_drawer_a9d050ff3b36740f36eba639099be720d}} 
+\index{Gui::Drawer@{Gui::Drawer}!drawEntities@{drawEntities}}
+\index{drawEntities@{drawEntities}!Gui::Drawer@{Gui::Drawer}}
+\doxysubsubsection{\texorpdfstring{drawEntities()}{drawEntities()}}
+{\footnotesize\ttfamily void Gui\+::\+Drawer\+::draw\+Entities (\begin{DoxyParamCaption}\item[{const std\+::initializer\+\_\+list$<$ \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Entity\+Animator\+Pair}} $>$ \&}]{entitie\+Animator\+Pairs }\end{DoxyParamCaption})}
+
+
+
+Draw multiple entities at the same time on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entitie\+Animator\+Pairs} & Entities to be drawn \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 35 of file Drawer.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_drawer_ab9fe09a32f64074b1dc57d76302d64e7}\label{class_gui_1_1_drawer_ab9fe09a32f64074b1dc57d76302d64e7}} 
+\index{Gui::Drawer@{Gui::Drawer}!drawEntity@{drawEntity}}
+\index{drawEntity@{drawEntity}!Gui::Drawer@{Gui::Drawer}}
+\doxysubsubsection{\texorpdfstring{drawEntity()}{drawEntity()}}
+{\footnotesize\ttfamily void Gui\+::\+Drawer\+::draw\+Entity (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_gui_1_1_drawer_ab4b4eb2543f82bc451c804eb362ca56f}{Entity\+Animator\+Pair}} \&}]{entity\+Animator\+Pair }\end{DoxyParamCaption})}
+
+
+
+Draw entity on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity\+Animator\+Pair} & entity to draw \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 9 of file Drawer.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/drawer/\mbox{\hyperlink{_drawer_8h}{Drawer.\+h}}\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/drawer/\mbox{\hyperlink{_drawer_8cpp}{Drawer.\+cpp}}\end{DoxyCompactItemize}
