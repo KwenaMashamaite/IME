@@ -85,18 +85,29 @@ namespace Gui {
         /**
          * @brief Set the same padding on all sides
          * @param padding Padding to set
+         *
+         * This function will move the border away from the
+         * text content by the specified amount on all four
+         * sides. The padding is zero by default. This means
+         * that, the border and the text content have the same
+         * dimensions
          */
         void setPadding(float padding);
 
         /**
-         * @brief Set the margin individually
+         * @brief Set the margin (individually)
          * @param margin Margin to set
          */
         void setMargin(const Margin &margin);
 
         /**
-         * @brief Set the padding individually
+         * @brief Set the padding (individually)
          * @param padding Padding to set
+         *
+         * This function may be used to adjust the width/height
+         * of the element. The "left" and "right" values of the
+         * argument adjust the width while the "top" and "bottom"
+         * values adjust the height. The padding is zero by default
          */
         void setPadding(const Padding& padding);
 
