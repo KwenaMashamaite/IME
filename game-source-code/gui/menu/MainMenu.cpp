@@ -2,12 +2,13 @@
 #include "gui/layout/Canvas.h"
 #include "gui/layout/StackPanel.h"
 #include <algorithm>
+#include <iostream>
 
 Gui::MainMenu::MainMenu(Window &renderTarget)
     : renderTarget_(renderTarget),
       state_(State::Main),
       mainLayoutPanel_(std::make_unique<DockPanel>(0.0f, 0.0f)),
-      onClickInfoPanel_(std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical))
+      onClickInfoPanel_(std::make_unique<StackPanel>(Orientation::Vertical))
 {
     mainLayoutPanel_->setDimensions(Window::getDimensions());
     onClickInfoPanel_->addElement("infoTextBlock", std::make_unique<TextBlock>(""));
@@ -23,99 +24,91 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
 
 void Gui::MainMenu::createFooter() {
     auto navInfo = std::make_unique<TextBlock>("USE THE MOUSE TO INTERACT WITH MENU");
-    navInfo->setTextCharSize(15.0f);
-    navInfo->setPadding({100, 100, 0, 0});
-    auto navInfoPanel = std::make_unique<Gui::StackPanel>(0.0f, 0.0f, Gui::Orientation::Horizontal);
-    navInfoPanel->setFillColour({45, 78, 251});
+    auto navInfoPanel = std::make_unique<Gui::StackPanel>(Gui::Orientation::Horizontal);
     navInfoPanel->addElement("navInfo", std::move(navInfo));
-    this->mainLayoutPanel_->dock(Gui::DockPanel::DockPosition::BottomEdge, std::move(navInfoPanel));
+    mainLayoutPanel_->dock(Gui::DockPanel::DockPosition::BottomEdge, std::move(navInfoPanel));
 }
 
 void Gui::MainMenu::createTitle() {
-    auto title = std::make_unique<TextBlock>("SFML 2.5.0 GAME DEV TEMPLATE");
-    title->setPadding({0.0f, 0.0f, 10.0f, 80.0f });
-    title->setFillColour({14, 45, 178});
-    auto titlePanel = std::make_unique<StackPanel>(0.0f, 0.0f,Orientation::Vertical);
+    auto title = std::make_unique<TextBlock>("GAME TITLE");
+    title->setTextFont("basson.ttf");
+    title->setTextCharSize(40u);
+    title->setMargin({100, 100, 10, 10});
+    auto titlePanel = std::make_unique<StackPanel>(Orientation::Horizontal);
     titlePanel->addElement("title", std::move(title));
     mainLayoutPanel_->dock(DockPanel::DockPosition::TopEdge, std::move(titlePanel));
 }
 
 void Gui::MainMenu::createNavigationButtons() {
-    auto buttonTexts = std::vector{
-        std::pair(ButtonType::Play, "PLAY"),
-        std::pair(ButtonType::Instructions, "INSTRUCTIONS"),
-        std::pair(ButtonType::Highscores, "HIGHSCORES"),
-        std::pair(ButtonType::Controls, "CONTROLS"),
-        std::pair(ButtonType::Exit, "EXIT")
+    struct ButtonDetails{std::string name; std::string value;};
+    auto navigationButtons = std::vector<ButtonDetails>{
+            {"play-btn", "PLAY"},
+            {"instructions-btn", "INSTRUCTIONS"},
+            {"highscores-btn", "HIGHSCORES"},
+            {"controls-btn", "CONTROLS"},
+            {"exit-btn", "EXIT"}
     };
-
-    std::for_each(buttonTexts.begin(), buttonTexts.end(),[&](auto& buttonText){
-        auto button = std::make_unique<Button>(buttonText.second);
-        button->setTextFont("basson.ttf");
-        button->setTextCharSize(40u);
-        navButtons_.push_back(std::pair(buttonText.first, std::move(button)));
+    auto navigationPanel = std::make_unique<StackPanel>( Orientation::Vertical);
+    std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
+        auto button = std::make_unique<Button>(buttonInfo.value);
+        button->setTextFont("europe-underground-light.ttf");
+        navigationPanel->addElement(buttonInfo.name, std::move(button));
     });
+    mainLayoutPanel_->dock(DockPanel::DockPosition::LeftEdge, std::move(navigationPanel));
 }
 
 void Gui::MainMenu::initNavigationButtonActions() {
-    auto navigationPanel = std::make_unique<StackPanel>(0.0f, 0.0f, Orientation::Vertical);
-    navigationPanel->setFillColour({157, 15, 241});
-    navigationPanel->setOutlineThickness(5.0f);
+    auto& navigationPanel = mainLayoutPanel_->getPanelAt(DockPanel::DockPosition::LeftEdge);
 
-    for (auto i = 0u; i < navButtons_.size(); ++i){
-        auto &buttonPointee = (*(navButtons_[i].second.get()));
-        switch (navButtons_[i].first) {
-            case ButtonType::Play:
-                buttonPointee.on("mouseEnter", Callback<>([this]() {
-                    updateInfoPanel("Click button to start the game");
-                }));
-                buttonPointee.on("click", Callback<>([this]() {
-                    //emit("playButtonClicked");
-                }));
-                break;
-            case ButtonType::Instructions:
-                buttonPointee.on("mouseEnter", Callback<>([this]() {
-                    updateInfoPanel("Click button to see the main objective of the game");
-                }));
-                buttonPointee.on("click", Callback<>([this]() {
-                    state_ = State::Info;
-                    onClickInfoPanel_->getElement("infoTextBlock")->setText(
-                            onClickButtonInfo_[ButtonType::Instructions]);
-                }));
-                break;
-            case ButtonType::Controls:
-                buttonPointee.on("mouseEnter", Callback<>([this]() {
-                    updateInfoPanel("Click button to see the instructions on how to play the game");
-                }));
-                buttonPointee.on("click", Callback<>([this]() {
-                    state_ = State::Info;
-                    onClickInfoPanel_->getElement("infoTextBlock")->setText(
-                            onClickButtonInfo_[ButtonType::Controls]);
-                }));
-                break;
-            case ButtonType::Highscores:
-                buttonPointee.on("mouseEnter", Callback<>([this]() {
-                    updateInfoPanel("Click button to see the top 5 highscores from the previous game");
-                }));
-                buttonPointee.on("click", Callback<>([this]() {
-                    state_ = State::Info;
-                    onClickInfoPanel_->getElement("infoTextBlock")->setText(
-                            onClickButtonInfo_[ButtonType::Highscores]);
-                }));
-                break;
-            case ButtonType::Exit:
-                buttonPointee.on("mouseEnter", Callback<>([this]() {
-                    updateInfoPanel("Click button to exit the game");
-                }));
-                buttonPointee.on("click", Callback<>([this]() {
-                    renderTarget_.close();
-                }));
-                break;
-        }
-        navigationPanel->addElement(std::to_string(static_cast<int>(navButtons_[i].first)), std::move(navButtons_[i].second));
-    }
-    navButtons_.clear();
-    mainLayoutPanel_->dock(DockPanel::DockPosition::LeftEdge, std::move(navigationPanel));
+    ////////PLAY BUTTON ///////////
+    navigationPanel->subscribeChildToEvent("play-btn", "click", Callback<>([this]{
+        //Game::RequestStateChange(State::Playing);
+    }));
+
+    navigationPanel->subscribeChildToEvent("play-btn", "mouseEnter", Callback<>([this]{
+        updateInfoPanel("Click to start game");
+    }));
+
+    //// INSTRUCTIONS BUTTON ///////
+    navigationPanel->subscribeChildToEvent("instructions-btn", "click", Callback<>([this]{
+        state_ = State::Info;
+        onClickInfoPanel_->getElement("infoTextBlock")->setText(
+                onClickButtonInfo_[ButtonType::Instructions]);
+    }));
+
+    navigationPanel->subscribeChildToEvent("instructions-btn", "mouseEnter", Callback<>([this]{
+        updateInfoPanel("Click to see the main\nobjective of the game");
+    }));
+
+    //// CONTROLS BUTTON //////////
+    navigationPanel->subscribeChildToEvent("controls-btn", "click", Callback<>([this]{
+        state_ = State::Info;
+        onClickInfoPanel_->getElement("infoTextBlock")->setText(
+            onClickButtonInfo_[ButtonType::Controls]);
+    }));
+
+    navigationPanel->subscribeChildToEvent("controls-btn", "mouseEnter", Callback<>([this]{
+        updateInfoPanel("Click to see instructions\non how to play the game");
+    }));
+
+    //// HIGHSCORES BUTTON ///////
+    navigationPanel->subscribeChildToEvent("highscores-btn", "click", Callback<>([this]{
+        state_ = State::Info;
+        onClickInfoPanel_->getElement("infoTextBlock")->setText(
+            onClickButtonInfo_[ButtonType::Highscores]);
+    }));
+
+    navigationPanel->subscribeChildToEvent("highscores-btn", "mouseEnter", Callback<>([this]{
+        updateInfoPanel("Click to see the top five\nhighscoresfrom prev game");
+    }));
+
+    //// EXIT BUTTON ///////////
+    navigationPanel->subscribeChildToEvent("exit-btn", "click", Callback<>([this]{
+        renderTarget_.close();
+    }));
+    navigationPanel->subscribeChildToEvent("exit-btn", "mouseEnter", Callback<>([this]{
+        updateInfoPanel("Click to exit game");
+    }));
 }
 
 void Gui::MainMenu::draw() {
@@ -204,8 +197,9 @@ void Gui::MainMenu::createReturnButton() {
 }
 
 void Gui::MainMenu::createOnHoverInfoPanel() {
-    auto onHoverInfoPanel = std::make_unique<StackPanel>(0.0f,0.0f, Orientation::Vertical);
-    auto infoElement = std::make_unique<TextBlock>(" "); //Assuming initially no button is hovered over
+    auto onHoverInfoPanel = std::make_unique<StackPanel>( Orientation::Vertical);
+    auto infoElement = std::make_unique<TextBlock>("Hover over button to display\naddtional info");
+    infoElement->setFillColour({0, 0, 0, 0});
     onHoverInfoPanel->addElement("onHoverInfo", std::move(infoElement));
     mainLayoutPanel_->dock(DockPanel::DockPosition::RightEdge, std::move(onHoverInfoPanel));
 }
