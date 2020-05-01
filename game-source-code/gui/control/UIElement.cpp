@@ -38,19 +38,19 @@ void Gui::UIElement::initEvents() {
     }));
 
     addListener("textFontChanged", Callback<>([this]{
-        resize();
+        onTextDimensionsChange();
     }));
 
     addListener("textContentChanged", Callback<>([this] {
-        resize();
+        onTextDimensionsChange();
     }));
 
     addListener("textCharSizeChanged", Callback<>([this](){
-        resize();
+        onTextDimensionsChange();
     }));
 
     addListener("elemDimensionsChanged", Callback<>([this](){
-        resize();
+        onTextDimensionsChange();
         setPosition(getPosition().x, getPosition().y);
     }));
 }
@@ -146,7 +146,7 @@ void Gui::UIElement::draw(Gui::Window &renderTarget) {
     renderTarget.draw(text_);
 }
 
-void Gui::UIElement::resize() {
+void Gui::UIElement::onTextDimensionsChange() {
     border_.setSize(sf::Vector2f(
         text_.getGlobalBounds().width + padding_.left + padding_.right,
         text_.getGlobalBounds().height + padding_.top + padding_.bottom

@@ -242,14 +242,12 @@ namespace Gui {
          */
         void initialize();
         /**
-        * @brief helper function for resizing the element
+        * @brief Update element when text dimensions change
+         *
+         * This function will update the element when the text font, These modifications can be the text character
+         * text content, text character size etc.. changes
         */
-        void resize();
-
-        /**
-         * @brief setup events
-         */
-        void initEvents();
+        void onTextDimensionsChange();
 
     private:
         //White space around element
