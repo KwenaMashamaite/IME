@@ -255,6 +255,14 @@ namespace Gui {
         */
         void onTextDimensionsChange();
 
+        /**
+         * @brief Update the element wen it's dimensions changes
+         *
+         * This function will update the elements dimensions when the
+         * margin, outline thickness or  padding of the element changes
+         */
+        void onElementDimensionChange();
+
     private:
         //White space around element
         Margin margin_;

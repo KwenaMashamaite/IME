@@ -33,11 +33,11 @@ void Gui::UIElement::initialize() {
 }
 
 void Gui::UIElement::initEvents() {
-    addListener("textLocalBoundsChanged", Callback<>([this]{
+    addListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
 
-    addListener("textFontChanged", Callback<>([this]{
+    addListener("textFontChanged", Callback<>([this] {
         onTextDimensionsChange();
     }));
 
@@ -45,13 +45,20 @@ void Gui::UIElement::initEvents() {
         onTextDimensionsChange();
     }));
 
-    addListener("textCharSizeChanged", Callback<>([this](){
+    addListener("textCharSizeChanged", Callback<>([this] {
         onTextDimensionsChange();
     }));
 
-    addListener("elemDimensionsChanged", Callback<>([this](){
-        onTextDimensionsChange();
-        setPosition(getPosition().x, getPosition().y);
+    addListener("marginChanged", Callback<>([this] {
+        onElementDimensionChange();
+    }));
+
+    addListener("paddingChanged", Callback<>([this] {
+        onElementDimensionChange();
+    }));
+
+    addListener("outlineThicknessChanged", Callback<>([this] {
+        onElementDimensionChange();
     }));
 }
 
@@ -69,22 +76,22 @@ void Gui::UIElement::setPosition(float x, float y) {
 
 void Gui::UIElement::setOutlineThickness(float margin) {
     margin_ = {margin, margin, margin, margin};
-    emit("elemDimensionsChanged");
+    emit("outlineThicknessChanged");
 }
 
 void Gui::UIElement::setPadding(float padding) {
     padding_ = {padding, padding, padding, padding};
-    emit("elemDimensionsChanged");
+    emit("paddingChanged");
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    emit("elemDimensionsChanged");
+    emit("marginChanged");
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    emit("elemDimensionsChanged");
+    emit("paddingChanged");
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -155,6 +162,11 @@ void Gui::UIElement::onTextDimensionsChange() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
+}
+
+void Gui::UIElement::onElementDimensionChange() {
+    onTextDimensionsChange(); //Update padding and margin
+    setPosition(getPosition().x, getPosition().y); //Update padding and margin
 }
 
 void Gui::UIElement::hide() {
