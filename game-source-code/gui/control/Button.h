@@ -29,19 +29,25 @@ namespace Gui {
         explicit Button(const std::string& buttonText);
 
         /**
-         * @brief Disable the default behaviour of the button's response
-         *        to the mouse cursor
-         *
-         * This function will stop the button from changing colours when
-         * the mouse cursor enters or leaves the button. @note After
-         * calling this function, the button will still react to the
-         * mouse cursor, however, there won't be any graphical
-         * representation to show it. You can define your own behaviour
-         * by registering callbacks to "mouseEnter" and "mouseLeave"
-         * events. Therefore, calling this functions is useful only if
-         * you want to use your own colours or behavior
+         * @brief Set the colour of the button text when the
+         *        mouse cursor enters the button
+         * @param textFillColour Button text colour to set
          */
-        void removeDefaultBehavior();
+        void setHoverTextFillColour(Colour textFillColour);
+
+        /**
+         * @brief Set the colour of the button when the mouse
+         *        cursor enters it
+         * @param fillColour Button colour to set
+         */
+        void setHoverFillColour(Colour fillColour);
+
+        /**
+         * @brief Set the outline colour of the button when the
+         *        mouse enters the button
+         * @param outlineColour Outline colour to set
+         */
+        void setHoverOutlineColour(Colour outlineColour);
 
     private:
         /**
@@ -49,25 +55,15 @@ namespace Gui {
          */
         void subscribeToEvents();
 
-        /**
-         * @brief Initialize the default hover and hover lost behavior
-         *        of the button
-         *
-         * This function will make the button and the button text change
-         * colour when the mouse cursor enters the button. When the mouse
-         * cursor leaves the button, the previous colour will be restored.
-         * This default behavior may be overwritten through the public
-         * interface
-         */
-        void initDefaultBehavior();
-
     private:
         //Selection state
         bool isSelected_;
-        //Callback id for the default onMouseEnter listener
-        int mouseEnterCallbackId_;
-        //Callback id for the default onMouseLeave listener
-        int mouseLeaveCallbackId_;
+        //Button Colour when mouse enters it
+        Colour onHoverColour_;
+        //Button text colour when mouse enters it
+        Colour onHoverTextColour_;
+        //Button outline colour when mouse enters it
+        Colour onHoverOutlineColour_;
     };
 }
 

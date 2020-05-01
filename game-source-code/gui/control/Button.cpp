@@ -1,25 +1,24 @@
 #include "Button.h"
-#include "gui/window/Window.h"
 #include "input/Mouse.h"
 #include <utility>
 
 Gui::Button::Button()
     : isSelected_(false),
-      mouseEnterCallbackId_(-1),
-      mouseLeaveCallbackId_(-1)
+      onHoverColour_({255, 255, 255}),
+      onHoverTextColour_({102, 0, 204}),
+      onHoverOutlineColour_({0, 0, 0})
 {
     subscribeToEvents();
-    initDefaultBehavior();
 }
 
 Gui::Button::Button(const std::string& buttonText)
     : UIElement(buttonText),
       isSelected_(false),
-      mouseEnterCallbackId_(-1),
-      mouseLeaveCallbackId_(-1)
+      onHoverColour_({255, 255, 255}),
+      onHoverTextColour_({102, 0, 204}),
+      onHoverOutlineColour_({0, 0, 0})
 {
     subscribeToEvents();
-    initDefaultBehavior();
 }
 
 void Gui::Button::subscribeToEvents() {
@@ -35,32 +34,47 @@ void Gui::Button::subscribeToEvents() {
         }
     }));
 
-    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
+    Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
-                emit("click");
+                setFillColour({0, 0, 0, 0}); //Transparent
         })
     );
-}
 
-void Gui::Button::initDefaultBehavior() {
-    auto defaultButtonColour = getFillColour();
-    auto defaultButtonTextColour = getTextFillColour();
-    auto onHoverButtonColour = Gui::Colour{12, 241, 252};
-    auto onHoverButtonTextColour = Gui::Colour{88, 175, 232};
+    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
+        [this](Mouse::Button button) {
+            if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden()) {
+                setFillColour(onHoverColour_);
+                emit("click");
+            }
+        })
+    );
 
-    mouseEnterCallbackId_ = addListener("mouseEnter", Callback<>([=](){
-        setFillColour(onHoverButtonColour);
-        setTextFillColour(onHoverButtonTextColour);
+    addListener("mouseEnter", Callback<>([this] {
+        setFillColour(onHoverColour_);
+        setTextFillColour(onHoverTextColour_);
+        setOutlineColour(onHoverOutlineColour_);
     }));
 
-    mouseLeaveCallbackId_ = addListener("mouseLeave",Callback<>([=](){
-        setFillColour(defaultButtonColour);
-        setTextFillColour(defaultButtonTextColour);
+    auto defaultFillColour = getFillColour();
+    auto defaultTextColour = getTextFillColour();
+    auto defaultOutlineColour = getOutlineColour();
+
+    addListener("mouseLeave",Callback<>([=] {
+        setFillColour(defaultFillColour);
+        setTextFillColour(defaultTextColour);
+        setOutlineColour(defaultOutlineColour);
     }));
 }
 
-void Gui::Button::removeDefaultBehavior() {
-    removeListener("mouseEnter", mouseEnterCallbackId_);
-    removeListener("mouseLeave", mouseLeaveCallbackId_);
+void Gui::Button::setHoverFillColour(Gui::Colour fillColour) {
+    onHoverColour_ = fillColour;
+}
+
+void Gui::Button::setHoverTextFillColour(Gui::Colour textFillColour) {
+    onHoverTextColour_ = textFillColour;
+}
+
+void Gui::Button::setHoverOutlineColour(Gui::Colour outlineColour) {
+    onHoverOutlineColour_ = outlineColour;
 }
