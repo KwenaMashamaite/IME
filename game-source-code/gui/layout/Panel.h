@@ -120,6 +120,46 @@ namespace Gui {
          */
         virtual void draw(Window &renderTarget);
 
+        /**
+         * @brief Subscribe all child elements to an event
+         * @tparam Args Template argument name
+         * @param event Event to listen for
+         * @param callback Function to execute when event is fired
+         *
+         * This function will make all child elements of the panel to
+         * listen for an event and execute a callback when that event
+         * is raised
+         */
+        template <typename...Args>
+        void subscribeChildrenToEvent(const std::string& event, Callback<Args...> callback){
+            std::for_each(uiElements_.begin(), uiElements_.end(),
+                [&](const auto& uiElement){
+                    uiElement->on(event, callback);
+                });
+        }
+
+        /**
+         * @brief Subscribe a child element to an event
+         * @tparam Args Template argument name
+         * @param event Event to register callback function on
+         * @param callback Function to be executed when event event is raised
+         * @param childElementName Child element alias
+         *
+         * This function will attempt to register a child element to an
+         * event. If the child element is not found in the collection, this
+         * operation is will cancel. When the event is raised the provided
+         * callback function will be invoked
+         */
+        template <typename...Args>
+        void subscribeChildToEvent(const std::string& nameOfChild, const std::string& event,
+           Callback<Args...> callback)
+        {
+            auto found = findUIElement(nameOfChild);
+            if (found != uiElements_.end()){
+                found->second->on(event, callback);
+            }
+        }
+
     protected:
         //Collection alias
         using UIElementContainer = std::vector<std::pair<std::string, std::unique_ptr<UIElement>>>;
