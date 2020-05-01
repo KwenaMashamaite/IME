@@ -14,9 +14,9 @@ Gui::Button::Button()
 Gui::Button::Button(const std::string& buttonText)
     : UIElement(buttonText),
       isSelected_(false),
-      onHoverColour_({255, 255, 255}),
-      onHoverTextColour_({102, 0, 204}),
-      onHoverOutlineColour_({0, 0, 0})
+      onHoverColour_({105, 105, 105}), //Dim gray
+      onHoverTextColour_({169, 169, 169}), //Dark grey
+      onHoverOutlineColour_({135,206,250}) //light sky blue
 {
     subscribeToEvents();
 }

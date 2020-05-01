@@ -14,8 +14,8 @@ namespace Gui {
         /**
          * @brief Create a button
          *
-         * The button is placed at (0, 0) and the button text
-         * has a character size of 30 by default
+         * The button has no text, is located at (0, 0), has the
+         * dimensions (0, 0) and a character size of 25 by default
          */
         Button();
 
@@ -23,8 +23,9 @@ namespace Gui {
          * @brief Create a button
          * @param buttonText Text to be displayed on the button
          *
-         * The button has the dimensions of the button text and
-         * a position of (0, 0) by default
+         * The button has the dimensions of the button text, a
+         * character size of 25 and it's position is (0, 0) by
+         * default
          */
         explicit Button(const std::string& buttonText);
 
@@ -32,6 +33,10 @@ namespace Gui {
          * @brief Set the colour of the button text when the
          *        mouse cursor enters the button
          * @param textFillColour Button text colour to set
+         *
+         * The buttons text colour changes to dark grey by default
+         * on "mouseEnter". The colour changes back to the way it
+         * was prior to "mouseEnter" on "mouseLeave"
          */
         void setHoverTextFillColour(Colour textFillColour);
 
@@ -39,19 +44,28 @@ namespace Gui {
          * @brief Set the colour of the button when the mouse
          *        cursor enters it
          * @param fillColour Button colour to set
+         *
+         * The button colour changes to dim grey by default on mouse
+         * enter. The colour changes back to the way it was
+         * prior to "mouseEnter" on "mouseLeave"
+         *
          */
         void setHoverFillColour(Colour fillColour);
 
         /**
          * @brief Set the outline colour of the button when the
-         *        mouse enters the button
+         *        mouse cursor enters the button
          * @param outlineColour Outline colour to set
+         *
+         * The buttons outline colour changes to light sky blue
+         * by default on "mouseEnter". The colour changes back
+         * to the way it was prior to "mouseEnter" on "mouseLeave"
          */
         void setHoverOutlineColour(Colour outlineColour);
 
     private:
         /**
-         * @brief Subscribe button to system events
+         * @brief Initialize events
          */
         void subscribeToEvents();
 
