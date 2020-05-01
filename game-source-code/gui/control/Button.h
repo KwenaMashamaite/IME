@@ -78,6 +78,8 @@ namespace Gui {
         Colour onHoverTextColour_;
         //Button outline colour when mouse enters it
         Colour onHoverOutlineColour_;
+        //Handler identification numbers
+        std::vector<std::pair<std::string, int>> handlerIdList_;
     };
 }
 

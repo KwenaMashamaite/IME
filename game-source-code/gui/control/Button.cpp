@@ -31,20 +31,32 @@ void Gui::Button::initializeEvents() {
     Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
-                setFillColour({0, 0, 0, 0}); //Transparent
+                emit("mouseDown");
         })
     );
 
     Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
         [this](Mouse::Button button) {
-            if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden()) {
-                setFillColour(onHoverColour_);
-                emit("click");
-            }
-        })
+            if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
+                emit("mouseUp");
+            })
     );
 
-    addListener("mouseEnter", Callback<>([this] {
+    addListener("mouseUp", Callback<>([this] {
+        emit("click");
+    }));
+
+    auto mouseDownId = addListener("mouseDown", Callback<>([this] {
+        setFillColour({0, 0, 0, 0}); //Transparent
+        setTextFillColour({0, 0, 0}); //Black
+    }));
+
+    auto clickId = addListener("click", Callback<>([this] {
+        setFillColour(onHoverColour_); //Back to hover colour, button not exited
+        setTextFillColour(onHoverTextColour_);
+    }));
+
+    auto mouseEnterId = addListener("mouseEnter", Callback<>([this] {
         setFillColour(onHoverColour_);
         setTextFillColour(onHoverTextColour_);
         setOutlineColour(onHoverOutlineColour_);
@@ -53,12 +65,17 @@ void Gui::Button::initializeEvents() {
     auto defaultFillColour = getFillColour();
     auto defaultTextColour = getTextFillColour();
     auto defaultOutlineColour = getOutlineColour();
-
-    addListener("mouseLeave",Callback<>([=] {
+    auto mouseLeaveId = addListener("mouseLeave",Callback<>([=] {
         setFillColour(defaultFillColour);
         setTextFillColour(defaultTextColour);
         setOutlineColour(defaultOutlineColour);
     }));
+
+    //Save handler identification numbers
+    handlerIdList_.emplace_back(std::pair("mouseLeave", mouseLeaveId));
+    handlerIdList_.emplace_back(std::pair("mouseEnter", mouseEnterId));
+    handlerIdList_.emplace_back(std::pair("mouseDown", mouseDownId));
+    handlerIdList_.emplace_back(std::pair("click", clickId));
 }
 
 void Gui::Button::setHoverFillColour(Gui::Colour fillColour) {
