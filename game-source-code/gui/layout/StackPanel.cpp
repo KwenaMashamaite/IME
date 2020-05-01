@@ -20,9 +20,9 @@ Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
 void Gui::StackPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to stack panel cannot be null");
     if (isOrientationVertical_) {
-        guiElement->setPadding({0.0f, guiElement->getPadding().right, guiElement->getPadding().top,
+        guiElement->setPadding({1.0f, guiElement->getPadding().right, guiElement->getPadding().top,
                                 guiElement->getPadding().bottom});
-        guiElement->setMargin({0.0f, 0.0f, guiElement->getMargin().top, guiElement->getMargin().bottom});
+        guiElement->setMargin({1.0f, 1.0f, guiElement->getMargin().top, guiElement->getMargin().bottom});
     }
     if (cBegin() == cEnd()) {
         guiElement->setPosition(getPosition().x, getPosition().y);
