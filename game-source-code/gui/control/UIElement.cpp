@@ -12,8 +12,9 @@ Gui::UIElement::UIElement()
 Gui::UIElement::UIElement(const std::string &textContent)
     : numOfLinesInText_{0u}, isHidden_(false)
 {
-    setText(textContent);
     initialize();
+    setText(textContent);
+    text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
 }
 
 void Gui::UIElement::initialize() {
@@ -32,21 +33,23 @@ void Gui::UIElement::initialize() {
 }
 
 void Gui::UIElement::initEvents() {
-    addListener("textChanged", Callback<std::string>([this](const std::string &content) {
-        if (content.empty()) {
-            numOfLinesInText_ = 0;
-            return;
-        }
-        numOfLinesInText_ = std::count(content.begin(), content.end(), '\n');
-        numOfLinesInText_++; //Account for one line/last line (both dont have '\n')
+    addListener("textLocalBoundsChanged", Callback<>([this]{
+        text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
+    }));
+
+    addListener("textFontChanged", Callback<>([this]{
         resize();
     }));
 
-    addListener("charSizeChanged", Callback<>([this](){
+    addListener("textContentChanged", Callback<>([this] {
         resize();
     }));
 
-    addListener("dimensionsChanged", Callback<>([this](){
+    addListener("textCharSizeChanged", Callback<>([this](){
+        resize();
+    }));
+
+    addListener("elemDimensionsChanged", Callback<>([this](){
         resize();
         setPosition(getPosition().x, getPosition().y);
     }));
@@ -66,22 +69,22 @@ void Gui::UIElement::setPosition(float x, float y) {
 
 void Gui::UIElement::setMargin(float margin) {
     margin_ = {margin, margin, margin, margin};
-    emit("dimensionsChanged");
+    emit("elemDimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(float padding) {
     padding_ = {padding, padding, padding, padding};
-    emit("dimensionsChanged");
+    emit("elemDimensionsChanged");
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    emit("dimensionsChanged");
+    emit("elemDimensionsChanged");
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    emit("dimensionsChanged");
+    emit("elemDimensionsChanged");
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -90,16 +93,19 @@ void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
     text_.setFont(ResourceManager::getFont(contentFont));
+    emit("textFontChanged");
+    emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
-    emit("charSizeChanged");
+    emit("textCharSizeChanged");
+    emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setText(const std::string &content) {
     text_.setString(content);
-    emit("textChanged", content);
+    emit("textContentChanged");
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
