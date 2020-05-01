@@ -258,8 +258,6 @@ namespace Gui {
         Padding padding_;
         //Elements text content
         sf::Text text_;
-        //Number of lines present in the content string
-        unsigned int numOfLinesInText_;
         //Defines the perimeter of the entire element (includes margin and padding)
         sf::RectangleShape outline_;
         //Defines the perimeter of the element border

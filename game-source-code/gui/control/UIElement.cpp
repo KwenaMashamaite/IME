@@ -4,13 +4,13 @@
 #include <algorithm>
 
 Gui::UIElement::UIElement()
-    : numOfLinesInText_{0u}, isHidden_(false)
+    : isHidden_(false)
 {
     initialize();
 }
 
 Gui::UIElement::UIElement(const std::string &textContent)
-    : numOfLinesInText_{0u}, isHidden_(false)
+    : isHidden_(false)
 {
     initialize();
     setText(textContent);
