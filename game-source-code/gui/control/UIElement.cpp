@@ -19,7 +19,7 @@ Gui::UIElement::UIElement(const std::string &textContent)
 
 void Gui::UIElement::initialize() {
     auto defaultTextFont = "philosopher.ttf";
-    auto defaultTextCharSize = 30u;
+    auto defaultTextCharSize = 20u;
 
     initEvents();
     setTextFont(defaultTextFont);
