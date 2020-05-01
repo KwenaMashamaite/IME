@@ -77,10 +77,10 @@ namespace Gui {
         void setPosition(float x, float y);
 
         /**
-         * @brief Set the same margin on all sides
-         * @param margin Margin to set
+         * @brief Set the outline thickness
+         * @param outlineThickness Thickness to set
          */
-        void setMargin(float margin);
+        void setOutlineThickness(float outlineThickness);
 
         /**
          * @brief Set the same padding on all sides

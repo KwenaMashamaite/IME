@@ -25,9 +25,9 @@ void Gui::UIElement::initialize() {
     setTextFont(defaultTextFont);
     setTextCharSize(defaultTextCharSize);
     setPadding(0.0f);
-    setMargin(0.0f);
+    setOutlineThickness(0.0f);
 
-    outline_.setFillColor(sf::Color::Transparent);
+    outline_.setFillColor(sf::Color(40, 26, 5)); //Dark brown
     border_.setFillColor(sf::Color::White);
     text_.setFillColor(sf::Color::Black);
 }
@@ -67,7 +67,7 @@ void Gui::UIElement::setPosition(float x, float y) {
 	);
 }
 
-void Gui::UIElement::setMargin(float margin) {
+void Gui::UIElement::setOutlineThickness(float margin) {
     margin_ = {margin, margin, margin, margin};
     emit("elemDimensionsChanged");
 }
