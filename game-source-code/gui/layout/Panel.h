@@ -134,7 +134,7 @@ namespace Gui {
         void subscribeChildrenToEvent(const std::string& event, Callback<Args...> callback){
             std::for_each(uiElements_.begin(), uiElements_.end(),
                 [&](const auto& uiElement){
-                    uiElement->on(event, callback);
+                    uiElement.second->on(event, callback);
                 });
         }
 
