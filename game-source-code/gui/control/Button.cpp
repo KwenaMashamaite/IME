@@ -95,4 +95,5 @@ void Gui::Button::resetDefault() {
         [this](const auto& handlerNameIdPair){
             removeListener(handlerNameIdPair.first, handlerNameIdPair.second);
     });
+    handlerIdList_.clear();
 }
