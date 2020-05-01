@@ -6,30 +6,27 @@
 Gui::UIElement::UIElement()
     : isHidden_(false)
 {
+    setText("");
     initialize();
 }
 
 Gui::UIElement::UIElement(const std::string &textContent)
     : isHidden_(false)
 {
-    initialize();
     setText(textContent);
-    text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
+    initialize();
 }
 
 void Gui::UIElement::initialize() {
-    auto defaultTextFont = "philosopher.ttf";
-    auto defaultTextCharSize = 20u;
-
     initEvents();
-    setTextFont(defaultTextFont);
-    setTextCharSize(defaultTextCharSize);
+    setTextFont("secret-code.ttf");
+    setTextCharSize(25u);
+    setFillColour({220, 220, 220}); //Gainsboro
+    setOutlineColour({128, 128, 128}); //Grey
+    setTextFillColour({0, 0, 0}); //Black
+    setOutlineThickness(1.0f);
     setPadding(0.0f);
-    setOutlineThickness(0.0f);
-
-    outline_.setFillColor(sf::Color(40, 26, 5)); //Dark brown
-    border_.setFillColor(sf::Color::White);
-    text_.setFillColor(sf::Color::Black);
+    text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
 }
 
 void Gui::UIElement::initEvents() {
