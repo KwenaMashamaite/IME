@@ -7,8 +7,10 @@ Gui::Panel::Panel(float x, float y){
     eventEmitter_.addListener("outlineThicknessChanged", Callback<>([this](){
         setPosition(getPosition());
     }));
-    setFillColour({0, 0, 0, 0}); //Transparent
+    setFillColour({64, 64, 64}); //Grey
+    setOutlineColour({255, 255, 255}); //White
     setDimensions({0.0f, 0.0f});
+    setOutlineThickness(1.0f);
     setPosition({x, y});
 }
 
