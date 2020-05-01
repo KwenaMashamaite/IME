@@ -12,10 +12,10 @@ Gui::Button::Button(const std::string& buttonText)
       onHoverTextColour_({169, 169, 169}), //Dark grey
       onHoverOutlineColour_({135,206,250}) //light sky blue
 {
-    subscribeToEvents();
+    initializeEvents();
 }
 
-void Gui::Button::subscribeToEvents() {
+void Gui::Button::initializeEvents() {
     Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
         if (!isHidden()) {
             if (contains(x, y) && !isSelected_) {

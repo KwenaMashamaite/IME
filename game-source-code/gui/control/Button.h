@@ -67,7 +67,7 @@ namespace Gui {
         /**
          * @brief Initialize events
          */
-        void subscribeToEvents();
+        void initializeEvents();
 
     private:
         //Selection state
