@@ -112,7 +112,7 @@ namespace Gui {
          *         listener with the specified id
          */
         static bool removeListener(const std::string& event, int callbackId){
-            eventEmitter_.removeListener(event, callbackId);
+            return eventEmitter_.removeListener(event, callbackId);
         }
 
         /**
