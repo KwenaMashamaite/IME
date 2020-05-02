@@ -7,7 +7,7 @@ Gui::Panel::Panel(float x, float y){
     eventEmitter_.addListener("outlineThicknessChanged", Callback<>([this](){
         setPosition(getPosition());
     }));
-    setFillColour({64, 64, 64}); //Grey
+    setFillColour({0, 0, 0, 0}); //Transparent
     setOutlineColour({255, 255, 255}); //White
     setDimensions({0.0f, 0.0f});
     setOutlineThickness(1.0f);
@@ -35,7 +35,7 @@ void Gui::Panel::setPosition(const Position &position) {
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
     std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
-        uiElem.second->draw(renderTarget);
+        renderTarget.draw(*(uiElem.second));
     });
 }
 

@@ -10,6 +10,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+namespace Gui{class UIElement;} //Forward declaration
+
 namespace Gui {
     using Common::Position;
     using Common::Dimensions;
@@ -66,12 +68,16 @@ namespace Gui {
         void close();
 
         /**
-         * @brief Draw drawable object on the screen
+         * @brief Draw drawable object on the window
          * @param drawable Object to draw
          */
-        void draw(const auto &drawable) {
-            window_.draw(drawable);
-        }
+        void draw(const sf::Drawable& drawable);
+
+        /**
+         * @brief Draw UI element on the window
+         * @param uiElement UI element to draw
+         */
+        void draw(Gui::UIElement& uiElement);
 
         /**
          * @brief Display drawn objects on the window
