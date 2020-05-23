@@ -3,12 +3,8 @@
 #include "utility/Utility.h"
 #include <algorithm>
 
-Gui::UIElement::UIElement()
-    : isHidden_(false)
-{
-    setText("");
-    initialize();
-}
+Gui::UIElement::UIElement() : UIElement("")
+{}
 
 Gui::UIElement::UIElement(const std::string &textContent)
     : isHidden_(false)
@@ -163,6 +159,8 @@ void Gui::UIElement::onTextDimensionsChange() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
+    //Alert listeners with the new dimensions of the element
+    emit("dimensionsChanged", getDimensions());
 }
 
 void Gui::UIElement::onElementDimensionChange() {
