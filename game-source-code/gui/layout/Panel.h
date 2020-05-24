@@ -12,7 +12,7 @@
 #include <memory>
 
 namespace Gui {
-    class Panel {
+    class Panel : public EventEmitter{
     public:
         /**
          * @brief Create a GUI panel
@@ -188,14 +188,9 @@ namespace Gui {
         UIElementContainer::iterator findUIElement(const std::string& uiElemAlias);
 
         /**
-         * @brief Add listener to event
-         * @param event Event to add listener to
-         * @param callback Function to execute when event is raised
+         * @brief Restrict publication of event to class level
          */
-        template <typename...Args>
-        void on(const std::string& event, Callback<Args...> callback){
-            eventEmitter_.addListener(event,std::move(callback));
-        }
+        using EventEmitter::emit;
 
         /**
          * @brief  Get a constant iterator that points to the
@@ -218,8 +213,6 @@ namespace Gui {
         UIElementContainer uiElements_;
         //Representation
         sf::RectangleShape panel_;
-        //Event Emitter
-        EventEmitter eventEmitter_;
         //Dummy variable
         const std::unique_ptr<UIElement> null_Ptr;
     };
