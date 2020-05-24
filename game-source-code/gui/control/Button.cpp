@@ -12,6 +12,7 @@ Gui::Button::Button(const std::string& buttonText)
       onHoverOutlineColour_({135,206,250}) //light sky blue
 {
     initializeEvents();
+    initializeDefaultBehavior();
 }
 
 void Gui::Button::initializeEvents() {
@@ -44,7 +45,21 @@ void Gui::Button::initializeEvents() {
     addListener("mouseUp", Callback<>([this] {
         emit("click");
     }));
+}
 
+void Gui::Button::setHoverFillColour(Gui::Colour fillColour) {
+    onHoverColour_ = fillColour;
+}
+
+void Gui::Button::setHoverTextFillColour(Gui::Colour textFillColour) {
+    onHoverTextColour_ = textFillColour;
+}
+
+void Gui::Button::setHoverOutlineColour(Gui::Colour outlineColour) {
+    onHoverOutlineColour_ = outlineColour;
+}
+
+void Gui::Button::initializeDefaultBehavior() {
     addListener("mouseDown", Callback<>([this] {
         setFillColour({0, 0, 0, 0}); //Transparent
         setTextFillColour({0, 0, 0}); //Black
@@ -69,17 +84,5 @@ void Gui::Button::initializeEvents() {
         setTextFillColour(defaultTextColour);
         setOutlineColour(defaultOutlineColour);
     }));
-}
-
-void Gui::Button::setHoverFillColour(Gui::Colour fillColour) {
-    onHoverColour_ = fillColour;
-}
-
-void Gui::Button::setHoverTextFillColour(Gui::Colour textFillColour) {
-    onHoverTextColour_ = textFillColour;
-}
-
-void Gui::Button::setHoverOutlineColour(Gui::Colour outlineColour) {
-    onHoverOutlineColour_ = outlineColour;
 }
 

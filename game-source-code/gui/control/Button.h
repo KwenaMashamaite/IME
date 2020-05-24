@@ -69,6 +69,16 @@ namespace Gui {
          */
         void initializeEvents();
 
+        /**
+         * @brief Initialize the default behaviour of the button
+         *
+         * This function will make the button respond to the mouse
+         * by default. That is, the button will graphically change
+         * to indicate when the mouse enters the button, leaves the
+         * button or when the button is clicked.
+         */
+        void initializeDefaultBehavior();
+
     private:
         //Selection state
         bool isSelected_;
