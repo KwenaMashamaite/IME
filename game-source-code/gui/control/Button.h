@@ -82,12 +82,18 @@ namespace Gui {
     private:
         //Selection state
         bool isSelected_;
-        //Button Colour when mouse enters it
-        Colour onHoverColour_;
-        //Button text colour when mouse enters it
-        Colour onHoverTextColour_;
-        //Button outline colour when mouse enters it
-        Colour onHoverOutlineColour_;
+
+        //Group of colours
+        struct Colours{
+            Colour fillColour;
+            Colour TextColour;
+            Colour OutlineColour;
+        };
+
+        //Button colours when mouse cursor enters it
+        Colours onHoverColours_;
+        //Button colours when mouse cursor leaves it
+        Colours defaultColours_;
     };
 }
 
