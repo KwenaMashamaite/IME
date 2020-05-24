@@ -7,12 +7,13 @@
 
 #include "../control/UIElement.h"
 #include "event/EventEmitter.h"
+#include "gui/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <memory>
 
 namespace Gui {
-    class Panel : public EventEmitter{
+    class Panel : public EventEmitter, public IDrawable{
     public:
         /**
          * @brief Create a GUI panel
@@ -124,7 +125,13 @@ namespace Gui {
          * @brief Render panel and it's UI elements on a render target
          * @param renderTarget Render target to draw UI elements on
          */
-        virtual void draw(Window &renderTarget);
+        void draw(Window &renderTarget) override;
+
+        /**
+         * @brief Remove panel and it's UI elements from a render target
+         * @param renderTarget Render target to remove panel from
+         */
+        void remove(Window& renderTarget) override;
 
         /**
          * @brief Subscribe all child elements to an event
