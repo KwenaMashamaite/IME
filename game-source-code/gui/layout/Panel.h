@@ -91,6 +91,12 @@ namespace Gui {
         void removeElement(const std::string& uiElement);
 
         /**
+         * @brief Get the number of elements in the panel
+         * @return Number of elements in the panel
+         */
+        unsigned int size() const;
+
+        /**
          * @brief Hide panel
          *
          * This function will hide a panel and all it's child elements

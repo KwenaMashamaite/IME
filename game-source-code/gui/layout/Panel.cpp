@@ -108,3 +108,7 @@ Gui::Panel::UIElementContainer::iterator Gui::Panel::findUIElement(const std::st
         }
     );
 }
+
+unsigned int Gui::Panel::size() const {
+    return uiElements_.size();
+}
