@@ -79,16 +79,6 @@ void Gui::StackPanel::initEvents() {
                 setElemPosRelativeTo(newUIElem, lastAddedUIElement);
             }
         }();
-
-        //Adjust the stack panel dimensions when a child element's dimension change
-        [this, &newElemIter] {
-            auto childName = newElemIter->first;
-            auto& targetElement = newElemIter->second;
-            subscribeChildToEvent(childName, "dimensionsChanged",
-                Callback<Dimensions>([this](Dimensions newElemDimensions) {
-                    emit("dimensionsChanged");
-                }));
-        }();
     }));
 }
 
