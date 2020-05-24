@@ -202,4 +202,8 @@ Gui::Margin Gui::UIElement::getMargin() const {
     return margin_;
 }
 
+void Gui::UIElement::remove(Gui::Window &renderTarget) {
+    hide();
+}
+
 Gui::UIElement::~UIElement() = default;

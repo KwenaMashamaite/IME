@@ -7,6 +7,7 @@
 
 #include "../window/Window.h"
 #include "event/EventEmitter.h"
+#include "gui/IDrawable.h"
 #include "common/Common.h"
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -47,7 +48,7 @@ namespace Gui {
         unsigned int opacity = 255;
     };
 
-    class UIElement : public EventEmitter{
+    class UIElement : public EventEmitter, public IDrawable{
     public:
         /**
          * @brief Create a UI element
@@ -229,7 +230,13 @@ namespace Gui {
          * @brief Draw element on a render target
          * @param renderTarget Render target to draw element on
          */
-        virtual void draw(Window &renderTarget);
+        void draw(Window &renderTarget) override;
+
+        /**
+         * @brief Remove UI element from render target
+         * @param renderTarget Target to remove UI element from
+         */
+        void remove(Window &renderTarget) override;
 
         /**
          * @brief Abstract Destructor
