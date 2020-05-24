@@ -113,13 +113,13 @@ void Gui::StackPanel::fitElementToPanel(const std::unique_ptr<UIElement> &uiElem
     auto panelHeight = getDimensions().height - 2 * getOutlineThickness();
     if (orientation_ == Orientation::Vertical) {
         auto rightPadding = panelWidth - uiElem->getDimensions().width;
-        uiElem->setPadding({1.0f, rightPadding,
+        uiElem->setPadding({uiElem->getPadding().left, rightPadding,
             uiElem->getPadding().top, uiElem->getPadding().bottom
         });
     } else if (orientation_ == Orientation::Horizontal) {
         auto bottomPadding = panelHeight - uiElem->getDimensions().height;
         uiElem->setPadding({uiElem->getPadding().left,
-            uiElem->getPadding().right, 1.0f, bottomPadding
+            uiElem->getPadding().right, uiElem->getPadding().top, bottomPadding
         });
     }
 }
