@@ -27,7 +27,6 @@ void Gui::StackPanel::initEvents() {
     //same height as the panel when the orientation is horizontal
     on("dimensionsChanged", Callback<Dimensions>([this](Dimensions newDim) {
         std::for_each(cBegin(), cEnd(), [=](const auto &uiElemIter) {
-            uiElemIter.second->setPadding(1.0f);
             fitElementToPanel(uiElemIter.second);
         });
     }));
@@ -38,6 +37,11 @@ void Gui::StackPanel::initEvents() {
         auto &newUIElem = newElemIter->second;
         //Adjust the dimensions of the panel to accommodate the new element
         [this, &newUIElem] {
+            if (size() == 1){
+                setDimensions(newUIElem->getDimensions());
+                return;
+            }
+
             auto currentPanelWidth = getDimensions().width - 2 * getOutlineThickness();
             auto currentPanelHeight = getDimensions().height - 2 * getOutlineThickness();
             auto newPanelWidth = 0.0f;
