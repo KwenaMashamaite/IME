@@ -47,15 +47,15 @@ namespace Utility{
     }
 
     /**
-     * @brief Convert own Colour object to SFML colour object
-     * @param colour Colour to be converted to SFML colour object
-     * @return SFML colour object
+     * @brief Convert own Colour object to graphics library colour object
+     * @param colour Colour to be converted to graphics library colour object
+     * @return Graphics library colour object
      *
      * This function only converts the object and not the actual
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    static sf::Color convertOwnColourToSFMLColour(Gui::Colour color){
+    static sf::Color convertOwnColourTo3rdPartyColour(Gui::Colour color){
         return {static_cast<sf::Uint8>(color.red),
                 static_cast<sf::Uint8>(color.green),
                 static_cast<sf::Uint8>(color.blue),
@@ -63,16 +63,16 @@ namespace Utility{
     }
 
     /**
-     * @brief Convert SFML colour object to own colour object
-     * @param SFMLColour Colour to be converted to own colour object
+     * @brief Convert graphics library colour object to own colour object
+     * @param thirdPartyColour Colour to be converted to own colour object
      * @return Own colour object
      *
      * This function only converts the object and not the actual
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    static Gui::Colour convertSFMLColourToOwnColour(sf::Color SFMLColour){
-        return {SFMLColour.r, SFMLColour.g, SFMLColour.b, SFMLColour.a};
+    static Gui::Colour convert3rdPartyColourToOwnColour(sf::Color thirdPartyColour){
+        return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
     }
 }
 

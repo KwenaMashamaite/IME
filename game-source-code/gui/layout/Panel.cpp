@@ -41,7 +41,7 @@ void Gui::Panel::draw(Window &renderTarget) {
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
-    panel_.setFillColor(Utility::convertOwnColourToSFMLColour(fillColour));
+    panel_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
 }
 
 void Gui::Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
@@ -54,7 +54,7 @@ void Gui::Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiEle
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
-    panel_.setOutlineColor(Utility::convertOwnColourToSFMLColour(outlineColour));
+    panel_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
 }
 
 void Gui::Panel::setOutlineThickness(float outlineThickness) {
