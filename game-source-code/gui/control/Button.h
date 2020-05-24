@@ -63,17 +63,6 @@ namespace Gui {
          */
         void setHoverOutlineColour(Colour outlineColour);
 
-        /**
-         * @brief Remove all default handlers
-         *
-         * This function will remove all default handlers from the
-         * button. That is, the default behavior of the button will
-         * be disabled. Handlers that have been added externally will
-         * not be removed and will still continue to receive notifications
-         * when events are raised. @note This operation cannot be undone
-         */
-        void resetDefault();
-
     private:
         /**
          * @brief Initialize events
@@ -89,8 +78,6 @@ namespace Gui {
         Colour onHoverTextColour_;
         //Button outline colour when mouse enters it
         Colour onHoverOutlineColour_;
-        //Handler identification numbers
-        std::vector<std::pair<std::string, int>> handlerIdList_;
     };
 }
 
