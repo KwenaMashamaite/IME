@@ -42,8 +42,10 @@ namespace Gui {
                 std::unique_ptr<UIElement> guiElement) override;
 
     private:
-        //Panel orientation state
-        bool isOrientationVertical_;
+        /**
+         * @brief Initialize stack panel events
+         */
+        void initEvents();
 
         /**
          * @brief Set the position of a UI element relative to
@@ -53,23 +55,26 @@ namespace Gui {
          *
          * The element whose position is changed will have the
          * same orientation (vertical or horizontal) as the
-         * element which is used as reference.
+         * element which is used as reference
          */
         void setElemPosRelativeTo(const std::unique_ptr<UIElement> &uiElem,
-                                  const std::unique_ptr<UIElement> &refUIElem);
+              const std::unique_ptr<UIElement> &refUIElem) const;
 
         /**
-         * @brief Adjust the dimensions of the panel based on
-         *        the dimensions of a UI element
-         * @param uiElement UI Element to accommodate
+         * @brief Fit element to panel
+         * @param uiElem Element to fit to panel
          *
-         * This function will adjust the width or height of the
-         * panel depending
-         * on the dimensions of the UI element. The dimensions of
-         * the panel will be adjusted such that all the edges of
-         * the UI element lie within the edges of the panel
+         * This function will adjust the dimensions  of an element
+         * (depending on the orientation of the panel) such that it
+         * fits the panel. If the orientation of the panel is vertical,
+         * the width of the element will be adjusted whereas the height
+         * will be adjusted if the orientation if horizontal
          */
-        void adjustPanelDimensions(const std::unique_ptr<UIElement> &uiElement);
+        void fitElementToPanel(const std::unique_ptr<UIElement> &uiElem);
+
+    private:
+        //Panel orientation state
+        Orientation orientation_;
     };
 }
 

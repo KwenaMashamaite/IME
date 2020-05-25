@@ -98,6 +98,10 @@ void Gui::Window::draw(const sf::Drawable &drawable) {
     window_.draw(drawable);
 }
 
-void Gui::Window::draw(Gui::UIElement &uiElement) {
-    uiElement.draw(*this);
+void Gui::Window::draw(Gui::IDrawable &drawable) {
+    drawable.draw(*this);
+}
+
+void Gui::Window::remove(Gui::IDrawable &drawable) {
+    drawable.remove(*this);
 }

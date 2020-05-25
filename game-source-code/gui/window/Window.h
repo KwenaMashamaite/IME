@@ -7,10 +7,9 @@
 
 #include "common/Common.h"
 #include "event/EventEmitter.h"
+#include "gui/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <string>
-
-namespace Gui{class UIElement;} //Forward declaration
 
 namespace Gui {
     using Common::Position;
@@ -74,10 +73,19 @@ namespace Gui {
         void draw(const sf::Drawable& drawable);
 
         /**
-         * @brief Draw UI element on the window
-         * @param uiElement UI element to draw
+         * @brief Draw drawable on the window
+         * @param drawable Object to draw
          */
-        void draw(Gui::UIElement& uiElement);
+        void draw(Gui::IDrawable& drawable);
+
+        /**
+         * @brief Remove drawable on the window
+         * @param drawable Object to remove
+         *
+         * This function allows drawable elements to be removed
+         * from the window without clearing it
+         */
+        void remove(Gui::IDrawable& drawable);
 
         /**
          * @brief Display drawn objects on the window

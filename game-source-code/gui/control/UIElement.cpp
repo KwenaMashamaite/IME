@@ -3,12 +3,8 @@
 #include "utility/Utility.h"
 #include <algorithm>
 
-Gui::UIElement::UIElement()
-    : isHidden_(false)
-{
-    setText("");
-    initialize();
-}
+Gui::UIElement::UIElement() : UIElement("")
+{}
 
 Gui::UIElement::UIElement(const std::string &textContent)
     : isHidden_(false)
@@ -92,7 +88,7 @@ void Gui::UIElement::setPadding(const Gui::Padding &padding) {
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
-    border_.setFillColor(Utility::convertOwnColourToSFMLColour(fillColour));
+    border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
 }
 
 void Gui::UIElement::setTextFont(const std::string &contentFont) {
@@ -113,23 +109,23 @@ void Gui::UIElement::setText(const std::string &content) {
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
-    text_.setFillColor(Utility::convertOwnColourToSFMLColour(textFillColour));
+    text_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(textFillColour));
 }
 
 void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
-    outline_.setFillColor(Utility::convertOwnColourToSFMLColour(outlineColour));
+    outline_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
 }
 
 Gui::Colour Gui::UIElement::getTextFillColour() const {
-    return Utility::convertSFMLColourToOwnColour(text_.getFillColor());
+    return Utility::convert3rdPartyColourToOwnColour(text_.getFillColor());
 }
 
 Gui::Colour Gui::UIElement::getFillColour() const {
-    return Utility::convertSFMLColourToOwnColour(border_.getFillColor());
+    return Utility::convert3rdPartyColourToOwnColour(border_.getFillColor());
 }
 
 Gui::Colour Gui::UIElement::getOutlineColour() const {
-    return Utility::convertSFMLColourToOwnColour(outline_.getFillColor());
+    return Utility::convert3rdPartyColourToOwnColour(outline_.getFillColor());
 }
 
 Position Gui::UIElement::getPosition() const {
@@ -163,6 +159,8 @@ void Gui::UIElement::onTextDimensionsChange() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
+    //Alert listeners with the new dimensions of the element
+    emit("dimensionsChanged", getDimensions());
 }
 
 void Gui::UIElement::onElementDimensionChange() {
@@ -202,6 +200,10 @@ Gui::Padding Gui::UIElement::getPadding() const {
 
 Gui::Margin Gui::UIElement::getMargin() const {
     return margin_;
+}
+
+void Gui::UIElement::remove(Gui::Window &renderTarget) {
+    hide();
 }
 
 Gui::UIElement::~UIElement() = default;

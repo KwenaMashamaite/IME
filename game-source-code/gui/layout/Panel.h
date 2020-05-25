@@ -7,12 +7,13 @@
 
 #include "../control/UIElement.h"
 #include "event/EventEmitter.h"
+#include "gui/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <memory>
 
 namespace Gui {
-    class Panel {
+    class Panel : public EventEmitter, public IDrawable{
     public:
         /**
          * @brief Create a GUI panel
@@ -91,6 +92,12 @@ namespace Gui {
         void removeElement(const std::string& uiElement);
 
         /**
+         * @brief Get the number of elements in the panel
+         * @return Number of elements in the panel
+         */
+        unsigned int size() const;
+
+        /**
          * @brief Hide panel
          *
          * This function will hide a panel and all it's child elements
@@ -118,7 +125,13 @@ namespace Gui {
          * @brief Render panel and it's UI elements on a render target
          * @param renderTarget Render target to draw UI elements on
          */
-        virtual void draw(Window &renderTarget);
+        void draw(Window &renderTarget) override;
+
+        /**
+         * @brief Remove panel and it's UI elements from a render target
+         * @param renderTarget Render target to remove panel from
+         */
+        void remove(Window& renderTarget) override;
 
         /**
          * @brief Subscribe all child elements to an event
@@ -188,14 +201,9 @@ namespace Gui {
         UIElementContainer::iterator findUIElement(const std::string& uiElemAlias);
 
         /**
-         * @brief Add listener to event
-         * @param event Event to add listener to
-         * @param callback Function to execute when event is raised
+         * @brief Restrict publication of event to class level
          */
-        template <typename...Args>
-        void on(const std::string& event, Callback<Args...> callback){
-            eventEmitter_.addListener(event,std::move(callback));
-        }
+        using EventEmitter::emit;
 
         /**
          * @brief  Get a constant iterator that points to the
@@ -218,8 +226,6 @@ namespace Gui {
         UIElementContainer uiElements_;
         //Representation
         sf::RectangleShape panel_;
-        //Event Emitter
-        EventEmitter eventEmitter_;
         //Dummy variable
         const std::unique_ptr<UIElement> null_Ptr;
     };
