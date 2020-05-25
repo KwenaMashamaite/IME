@@ -4,11 +4,13 @@
 #include <algorithm>
 
 Gui::Panel::Panel(float x, float y){
-    eventEmitter_.addListener("outlineThicknessChanged", Callback<>([this](){
+    addListener("outlineThicknessChanged", Callback<>([this](){
         setPosition(getPosition());
     }));
     setFillColour({0, 0, 0, 0}); //Transparent
+    setOutlineColour({255, 255, 255}); //White
     setDimensions({0.0f, 0.0f});
+    setOutlineThickness(1.0f);
     setPosition({x, y});
 }
 
@@ -19,6 +21,7 @@ Dimensions Gui::Panel::getDimensions() const {
 
 void Gui::Panel::setDimensions(const Dimensions &dimensions) {
     panel_.setSize(sf::Vector2f(dimensions.width, dimensions.height));
+    emit("dimensionsChanged", getDimensions());
 }
 
 Position Gui::Panel::getPosition() const {
@@ -27,34 +30,36 @@ Position Gui::Panel::getPosition() const {
 
 void Gui::Panel::setPosition(const Position &position) {
     panel_.setPosition(position.x + panel_.getOutlineThickness(), position.y + panel_.getOutlineThickness());
-    eventEmitter_.emit("positionChanged", Position{panel_.getPosition().x, panel_.getPosition().y});
+    emit("positionChanged", getPosition());
 }
 
 void Gui::Panel::draw(Window &renderTarget) {
     renderTarget.draw(panel_);
     std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
-        uiElem.second->draw(renderTarget);
+        renderTarget.draw(*(uiElem.second));
     });
 }
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
-    panel_.setFillColor(Utility::convertOwnColourToSFMLColour(fillColour));
+    panel_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
 }
 
 void Gui::Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
     assert(guiElement && "GUI elements added to panel cannot be null");
     auto found = findUIElement(alias);
-    if (found == uiElements_.end())
+    if (found == uiElements_.end()) {
         uiElements_.push_back(std::pair(alias, std::move(guiElement)));
+        emit("newElementAdded", std::prev(uiElements_.end()));
+    }
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
-    panel_.setOutlineColor(Utility::convertOwnColourToSFMLColour(outlineColour));
+    panel_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
 }
 
 void Gui::Panel::setOutlineThickness(float outlineThickness) {
     panel_.setOutlineThickness(outlineThickness);
-    eventEmitter_.emit("outlineThicknessChanged");
+    emit("outlineThicknessChanged");
 }
 
 Gui::Panel::ConstIterator Gui::Panel::cBegin() const {
@@ -102,4 +107,12 @@ Gui::Panel::UIElementContainer::iterator Gui::Panel::findUIElement(const std::st
             return uiElement.first == uiElemAlias;
         }
     );
+}
+
+unsigned int Gui::Panel::size() const {
+    return uiElements_.size();
+}
+
+void Gui::Panel::remove(Gui::Window &renderTarget) {
+    hide();
 }

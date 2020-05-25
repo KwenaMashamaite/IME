@@ -27,7 +27,7 @@ void Gui::PauseMenu::createButtons() {
     }));
 
     auto distanceBetweenButtons = 50.0f;
-    unpauseButton->setMargin({0.0f, 0.0f, 0.0f, distanceBetweenButtons});
+    unpauseButton->setMargin({1.0f, 1.0f, 1.0f, distanceBetweenButtons});
 
     pauseMenuButtonsPanel_->addElement("unpauseButton", std::move(unpauseButton));
     pauseMenuButtonsPanel_->addElement("exitButton", std::move(exitButton));

@@ -125,8 +125,6 @@ namespace Gui {
         enum class ButtonType{Play, Instructions, Controls, Highscores, Exit};
         //Stores the information that is displayed when a certain button is clicked
         std::unordered_map<ButtonType, std::string> onClickButtonInfo_;
-        //Temporarily stores the navigation buttons
-        std::vector<std::pair<ButtonType, std::unique_ptr<Button>>> navButtons_;
     };
 }
 

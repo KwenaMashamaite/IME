@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "input/Mouse.h"
 #include "input/Keyboard.h"
+#include "gui/control/UIElement.h"
 #include <cassert>
 
 Common::Dimensions Gui::Window::dimensions_{0u, 0u};
@@ -91,4 +92,16 @@ void Gui::Window::subscribeToEvents() {
     eventEmitter_.addOnceListener("Closed", Callback<>([this]() {
         close();
     }));
+}
+
+void Gui::Window::draw(const sf::Drawable &drawable) {
+    window_.draw(drawable);
+}
+
+void Gui::Window::draw(Gui::IDrawable &drawable) {
+    drawable.draw(*this);
+}
+
+void Gui::Window::remove(Gui::IDrawable &drawable) {
+    drawable.remove(*this);
 }

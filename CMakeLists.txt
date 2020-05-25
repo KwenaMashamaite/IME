@@ -66,7 +66,8 @@ set(SOURCE_FILES
         game-source-code/utility/Utility.h
         test-source-code/EventEmitterTests.hpp
         test-source-code/main.cpp
-        test-source-code/WindowTests.hpp)
+        test-source-code/WindowTests.hpp
+        game-source-code/gui/IDrawable.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)

@@ -7,6 +7,7 @@
 
 #include "common/Common.h"
 #include "event/EventEmitter.h"
+#include "gui/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 
@@ -66,12 +67,25 @@ namespace Gui {
         void close();
 
         /**
-         * @brief Draw drawable object on the screen
+         * @brief Draw drawable object on the window
          * @param drawable Object to draw
          */
-        void draw(const auto &drawable) {
-            window_.draw(drawable);
-        }
+        void draw(const sf::Drawable& drawable);
+
+        /**
+         * @brief Draw drawable on the window
+         * @param drawable Object to draw
+         */
+        void draw(Gui::IDrawable& drawable);
+
+        /**
+         * @brief Remove drawable on the window
+         * @param drawable Object to remove
+         *
+         * This function allows drawable elements to be removed
+         * from the window without clearing it
+         */
+        void remove(Gui::IDrawable& drawable);
 
         /**
          * @brief Display drawn objects on the window
@@ -112,7 +126,7 @@ namespace Gui {
          *         listener with the specified id
          */
         static bool removeListener(const std::string& event, int callbackId){
-            eventEmitter_.removeListener(event, callbackId);
+            return eventEmitter_.removeListener(event, callbackId);
         }
 
         /**
