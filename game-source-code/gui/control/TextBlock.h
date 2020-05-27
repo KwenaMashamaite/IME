@@ -13,7 +13,7 @@ namespace Gui {
     public:
         /**
          * @brief Construct a new Text Block object
-         * @param textContent text displayed inside the text block
+         * @param textContent text to be displayed inside the text block
          */
         explicit TextBlock(const std::string &textContent);
     };

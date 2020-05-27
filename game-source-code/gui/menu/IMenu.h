@@ -5,19 +5,11 @@
 #ifndef IMENU_H
 #define IMENU_H
 
+#include "gui/IDrawable.h"
+
 namespace Gui {
-    class IMenu {
+    class IMenu : public IDrawable {
     public:
-        /**
-         * @brief Draw menu on a render target
-         */
-        virtual void draw() = 0;
-
-        /**
-         * @brief Remove menu from a render target
-         */
-        virtual void clear() = 0;
-
         /**
          * @brief Destructor
          */
