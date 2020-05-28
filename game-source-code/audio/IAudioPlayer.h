@@ -32,6 +32,12 @@ namespace Audio {
         virtual void resume() = 0;
 
         /**
+         * @brief Set the volume of the audio
+         * @param volume Volume to set
+         */
+        virtual void setVolume(float volume) = 0;
+
+        /**
          * @brief Destructor
          */
         virtual ~IAudioPlayer() = default;

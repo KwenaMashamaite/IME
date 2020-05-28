@@ -41,6 +41,15 @@ namespace Audio {
          */
         void resume() override;
 
+        /**
+         * @brief Set the audio volume
+         * @param volume Volume to set
+         *
+         * The volume must be between 0 (mute) and 100 (full volume)
+         * The default volume is 100.
+         */
+        void setVolume(float volume) override;
+
     private:
         //Currently playing sound
         sf::Sound soundEffect_;

@@ -18,3 +18,7 @@ void Audio::SoundEffectPlayer::resume() {
     if (soundEffect_.getStatus() == sf::Sound::Status::Paused)
         soundEffect_.play();
 }
+
+void Audio::SoundEffectPlayer::setVolume(float volume) {
+    soundEffect_.setVolume(volume);
+}
