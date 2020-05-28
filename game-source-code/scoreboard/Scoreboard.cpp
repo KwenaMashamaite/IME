@@ -28,10 +28,10 @@ void Scoreboard::updateHighScore(){
         highScores_.push_back(score_);
         std::sort(std::begin(highScores_), std::end(highScores_), std::greater<>());
         auto newHighscoreList = std::stringstream();
-        std::for_each(highScores_.begin(), highScores_.end() - 2, [&](unsigned int score){
-            newHighscoreList << std::to_string(score) + "\n";
+        newHighscoreList << std::to_string(highScores_.front());
+        std::for_each(++highScores_.begin(), highScores_.end(), [&](unsigned int score){
+            newHighscoreList << "\n" + std::to_string(score);
         });
-        newHighscoreList << std::to_string(highScores_.back()); //No "\n" for last score
         fileReader_.writeToFile(newHighscoreList, highScoresFilename_);
     }
 }
