@@ -1,12 +1,14 @@
 /**
- * @brief Class for emitting events
+ * @brief Class for creating and publishing events
  *
- * To add an event to the event emitter you simply have to call the
- * addListener function. In other words, events are created when a
- * listener is added. If an event already exists, then a listener
- * is added to that event, otherwise a new event is created. Once
- * an Event is created, it won't be automatically fired. A call to
- * the emit function must be made to fire an event
+ * This class is invaluable when writing event-based systems such
+ * as Graphical User interface (GUI) applications.
+ *
+ * @note There is no function for creating an event. Events are
+ * created when a listener/callback is added for the first time.
+ * All Subsequent event listeners will be added to the created
+ * event. Events are not fired automatically, a call to the emit
+ * function must be made to fire an event and notify event listeners
  */
 
 #ifndef EVENTEMITTER_H
@@ -35,7 +37,7 @@ public:
      * @warning If the added listener is a member of a class, then the
 	 * listener must be removed from an event when the class instance
      * goes out of scope. If not removed, a non-existent listener will
-     * be invoked when the event is fired and this will lead to undefined
+     * be invoked when the event is fired; this may lead to undefined
 	 * behavior
      */
     template<typename...Args>
@@ -44,7 +46,7 @@ public:
     /**
      * @brief Add listener to an event
      *
-     * This function does the same thing as the addListener function.
+     * This function does the same thing as the addListener() function.
      * It just provides a slightly more readable syntax. For example:
      *
      *  @example:
@@ -59,11 +61,10 @@ public:
      * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
      *
-     * This function will add a listener to an event. The listener
-     * will only be invoked once and subsequently removed from the
-     * event. This means that the callback will only run when an
-     * event is raised for the first time. Use addListener() or the
-     * on() function if the callback is to be invoked each time an
+     * The listener will only be invoked once and subsequently removed
+     * from the event. This means that the callback will only execute
+     * when an event is raised for the first time. Use addListener() or
+     * the on() function if the callback is to be invoked each time an
      * event is fired
      */
      template <typename ...Args>
@@ -83,13 +84,10 @@ public:
      /**
       * @brief Remove all listeners of an event
       * @param  event Event to remove all listeners from
-      * @return True if all listeners were removed,
-      *         false if no such event exists
+      * @return True if all listeners were removed, false if no such
+      *         event exists
       *
-      * @warning Use caution when removing all listeners. For instance,
-      * avoid calling this function on an event emitter that is not
-      * local to the scope in which your in as this could lead to
-      * undefined behavior.
+      * @warning Exercise caution when using this function
       */
      bool removeAllListeners(const std::string &event);
 
@@ -97,7 +95,7 @@ public:
      * @brief Fire an event
      * @tparam Args Template parameter pack name
      * @param event Name of the event to fire
-     * @param args Arguments passed to event listeners
+     * @param args Arguments to be passed to event listeners
      */
     template<typename...Args>
     void emit(const std::string &event, Args...args);
@@ -108,8 +106,8 @@ private:
      * @tparam Args Template parameter pack name
      * @param  event Event to add listener to
      * @param  callback Function to execute when the event is fired
-     * @param  isCalledOnce True if listener is called only once,
-     *         false for multiple times
+     * @param  isCalledOnce True if listener is called only when the event is raised
+     *         for the first time, false for multiple times
      * @return listener's identification number
      */
     template<typename...Args>
@@ -117,7 +115,7 @@ private:
             bool isCalledOnce);
 
 private:
-    //Event listener identification number
+    //Event listeners identification number counter
     inline static auto previousListenerId = 0;
 
     //Base class for template class
