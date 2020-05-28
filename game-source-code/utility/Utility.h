@@ -40,10 +40,8 @@ namespace Utility{
      */
     template <class T>
     void makeVisible(T& drawable) {
-        if (drawable.getFillColor() != sf::Color::Transparent)
-            drawable.setFillColor(changeOpacity(drawable.getFillColor(), 255));
-        if (drawable.getOutlineColor() != sf::Color::Transparent)
-            drawable.setOutlineColor(changeOpacity(drawable.getOutlineColor(), 255));
+        drawable.setFillColor(changeOpacity(drawable.getFillColor(), 255));
+        drawable.setOutlineColor(changeOpacity(drawable.getOutlineColor(), 255));
     }
 
     /**

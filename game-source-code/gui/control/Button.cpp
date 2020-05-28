@@ -8,12 +8,12 @@ Gui::Button::Button(const std::string& buttonText)
     : UIElement(buttonText),
       isSelected_(false)
 {
-    //Colours of the button when the mouse cursor enters it (may be changed)
+    //Colours of the button when the mouse cursor enters it (may be changed at run-time)
     onHoverColours_.fillColour = {105, 105, 105}; //Dim gray
     onHoverColours_.TextColour = {169, 169, 169}; //Dark grey
     onHoverColours_.OutlineColour = {135,206,250}; //light sky blue
 
-    //Colours of the button when the mouse cursor leaves it (May be changed)
+    //Colours of the button when the mouse cursor leaves it (May be changed at run-time)
     defaultColours_.fillColour = getFillColour();
     defaultColours_.TextColour = getTextFillColour();
     defaultColours_.OutlineColour = getOutlineColour();

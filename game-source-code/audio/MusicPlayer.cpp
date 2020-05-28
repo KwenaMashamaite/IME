@@ -25,3 +25,8 @@ void Audio::MusicPlayer::stop() {
     if (song_)
         song_->stop();
 }
+
+void Audio::MusicPlayer::setVolume(float volume) {
+    if (song_)
+        song_->setVolume(volume);
+}

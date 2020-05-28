@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 
-Gui::StackPanel::StackPanel(Gui::Orientation orientation)
+Gui::StackPanel::StackPanel(Orientation orientation)
  : StackPanel(0.0f, 0.0f, orientation){}
 
 Gui::StackPanel::StackPanel(float x, float y, Orientation orientation)
@@ -47,7 +47,7 @@ void Gui::StackPanel::initEvents() {
         auto &newUIElem = newElemIter->second;
         //Adjust the dimensions of the panel to accommodate the new element
         [this, &newUIElem] {
-            if (size() == 1){
+            if (getNumberOfElements() == 1){
                 setDimensions(newUIElem->getDimensions());
                 return;
             }
@@ -72,7 +72,7 @@ void Gui::StackPanel::initEvents() {
         //Place new element next to last added element (directly below it if the
         //orientation is vertical or directly on its right if orientation is horizontal
         [this, &newUIElem] {
-            if (size() == 1)
+            if (getNumberOfElements() == 1)
                 newUIElem->setPosition(getPosition().x, getPosition().y);
             else {
                 const auto &lastAddedUIElement = std::prev(cEnd(), 2)->second;
@@ -82,9 +82,9 @@ void Gui::StackPanel::initEvents() {
     }));
 }
 
-void Gui::StackPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
-    assert(guiElement && "GUI elements added to stack panel cannot be null");
-    add(alias, std::move(guiElement));
+void Gui::StackPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
+    assert(uiElement && "GUI elements added to stack panel cannot be null");
+    add(alias, std::move(uiElement));
 }
 
 void Gui::StackPanel::setElemPosRelativeTo(const std::unique_ptr<UIElement> &uiElem,

@@ -21,8 +21,9 @@ namespace Gui {
          * @brief Constructor
          *
          * @warning Only a single instance of the class can exist
-         * at a time. Attempting to instantiate the class while
-         * there is an active instance will terminate the program
+         *          at a time. Attempting to instantiate the class
+         *          while there is an active instance will terminate
+         *          the program
          */
         Window();
 
@@ -32,13 +33,19 @@ namespace Gui {
          * @param width Width of the window
          * @param height Height of the window
          *
-         * The dimensions of the window must be greater than the
-         * minimum dimensions of 100x100 pixels, otherwise the
-         * program will be terminated (prematurely). The created
-         * window has a maximum frame limit of 60 FPS and V-Sync
-         * is enabled by default
+         * The dimensions of the window must be positive, otherwise
+         * the program will be terminated prematurely
          */
         void create(const std::string &name, float width, float height);
+
+        /**
+         * @brief Set the frame rate limit of the window
+         * @param framerateLimit Frame rate limit
+         *
+         * The frame rate is not limited by default. If set, it can be
+         * disabled by providing 0 as the argument
+         */
+        void setFramerateLimit(unsigned int framerateLimit);
 
         /**
          * @brief Get the dimensions of the window
@@ -53,11 +60,12 @@ namespace Gui {
         bool isOpen() const;
 
         /**
-         * @brief Process events
+         * @brief Process window events
          *
-         * This function will notify event listeners if any events
-         * have been captured by the window. An invocation of this
-         * function wil empty the event queue
+         * This function will notify all event listeners if any events
+         * have been captured by the window.
+         * @note Calling this function will empty the event queue for
+         *       that frame
          */
         void processEvents();
 
@@ -79,15 +87,6 @@ namespace Gui {
         void draw(Gui::IDrawable& drawable);
 
         /**
-         * @brief Remove drawable on the window
-         * @param drawable Object to remove
-         *
-         * This function allows drawable elements to be removed
-         * from the window without clearing it
-         */
-        void remove(Gui::IDrawable& drawable);
-
-        /**
          * @brief Display drawn objects on the window
          */
         void display();
@@ -97,12 +96,6 @@ namespace Gui {
          * @param colour Colour to clear window with
          */
         void clear(sf::Color colour = sf::Color::Black);
-
-        /***
-         * @brief Get the mouse cursor position relative to this window
-         * @return Mouse cursor position relative to this window
-         */
-        Position getMouseCursorPosition() const;
 
         /**
          * @brief Add a listener to a window event
@@ -136,12 +129,6 @@ namespace Gui {
          * Window instance is destroyed
          */
         ~Window();
-
-    private:
-        /**
-         * @brief Subscribe to events
-         */
-        void subscribeToEvents();
 
     private:
         //SFML render window.

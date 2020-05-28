@@ -47,6 +47,17 @@ namespace Audio {
          */
         void stop() override;
 
+        /**
+         * @brief Set the audio volume
+         * @param volume Volume to set
+         *
+         * The volume must be between 0 (mute) and 100 (full volume)
+         * The default volume is 100.
+         *
+         * @note The volume must be set after playing the song
+         */
+        void setVolume(float volume) override;
+
     private:
         //pointer to playing music
         std::shared_ptr<sf::Music> song_;

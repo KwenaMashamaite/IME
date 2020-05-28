@@ -24,7 +24,7 @@ namespace Gui {
          * @param buttonText Text to be displayed on the button
          *
          * The button has the dimensions of the button text, a
-         * character size of 25 and it's position is (0, 0) by
+         * character size of 30 and it's position is (0, 0) by
          * default
          */
         explicit Button(const std::string& buttonText);
@@ -65,7 +65,13 @@ namespace Gui {
 
     private:
         /**
-         * @brief Initialize events
+         * @brief Create button events
+         *
+         * This function creates events that clients may subscribe
+         * to in order to be notified when something happens to the
+         * button. For instance, a client may listen for a "click"
+         * event in order to perform some action when the button is
+         * clicked
          */
         void initializeEvents();
 
@@ -90,7 +96,7 @@ namespace Gui {
             Colour OutlineColour;
         };
 
-        //Button colours when mouse cursor enters it
+        //Button colours when the mouse cursor interacts with it
         Colours onHoverColours_;
         //Button colours when mouse cursor leaves it
         Colours defaultColours_;
