@@ -114,6 +114,10 @@ void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     emit("outlineThicknessChanged");
 }
 
+void Gui::UIElement::setEnable(bool isEnable) {
+    isEnabled_ = isEnable;
+}
+
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
     border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
 }
@@ -165,6 +169,10 @@ void Gui::UIElement::toggleVisibility() {
 
 bool Gui::UIElement::isHidden() const {
     return isHidden_;
+}
+
+bool Gui::UIElement::isEnabled() const{
+    return isEnabled_;
 }
 
 bool Gui::UIElement::contains(float x, float y) const{

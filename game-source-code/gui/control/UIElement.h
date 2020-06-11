@@ -167,6 +167,20 @@ namespace Gui {
         void setOutlineThickness(float outlineThickness);
 
         /**
+         * @brief Enable or disable the element
+         * @param isEnable Set true to enable the element, false to
+         *        disable the element
+         *
+         * The element is enabled by default
+         *
+         * @note Disabling the element cancels all the interaction events.
+         *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
+         *       and "mouseDown" events will not fire while the element is
+         *       disabled.
+         */
+        void setEnable(bool isEnable);
+
+        /**
         * @brief Set the fill colour of the element
         * @param fillColour New fill colour of the element
         *
@@ -250,6 +264,15 @@ namespace Gui {
          * @return True if UI element is hidden, false if it is not hidden
          */
         bool isHidden() const;
+
+        /**
+         * @brief Check if element is enabled or disabled
+         * @return True if element is enabled, false if element is disabled
+         *
+         * @note A disabled element cannot be interacted with using the mouse.
+         *       @see setEnable(bool)
+         */
+        bool isEnabled() const;
 
         /**
         * @brief Check if coordinates lie inside the element
@@ -350,6 +373,8 @@ namespace Gui {
         sf::RectangleShape border_;
         //Display state of element
         bool isHidden_;
+        //Enabled state
+        bool isEnabled_;
     };
 }
 
