@@ -162,7 +162,7 @@ Gui::Colour Gui::UIElement::getOutlineColour() const {
 
 void Gui::UIElement::toggleVisibility() {
     if (isHidden_)
-        unhide();
+        show();
     else
         hide();
 }
@@ -197,7 +197,7 @@ void Gui::UIElement::hide() {
     Utility::makeInvisible(text_);
 }
 
-void Gui::UIElement::unhide() {
+void Gui::UIElement::show() {
     isHidden_ = false;
     Utility::makeVisible(parentRectangle_);
     Utility::makeVisible(border_);

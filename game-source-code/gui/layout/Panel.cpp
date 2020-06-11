@@ -81,7 +81,7 @@ void Gui::Panel::show() {
     isHidden_ = false;
     Utility::makeVisible(panel_);
     std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
-        uiElem.second->unhide();
+        uiElem.second->show();
     });
 }
 

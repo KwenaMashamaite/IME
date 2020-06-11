@@ -308,7 +308,7 @@ namespace Gui {
          * @note revealing a hidden UI element does not automatically show
          *       it on the render target, a call to draw() must be made
          */
-        void unhide();
+        void show();
 
         /**
          * @brief Abstract Destructor
