@@ -26,15 +26,17 @@ void Gui::Panel::setDimensions(const Dimensions &dimensions) {
 
 void Gui::Panel::setFillColour(Gui::Colour fillColour) {
     panel_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
+    emit("fillColourChanged", fillColour);
 }
 
 void Gui::Panel::setOutlineColour(Gui::Colour outlineColour) {
     panel_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
+    emit("outlineColourChanged", outlineColour);
 }
 
 void Gui::Panel::setOutlineThickness(float outlineThickness) {
     panel_.setOutlineThickness(outlineThickness);
-    emit("outlineThicknessChanged");
+    emit("outlineThicknessChanged", outlineThickness);
 }
 
 Position Gui::Panel::getPosition() const {
@@ -65,8 +67,11 @@ void Gui::Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiEle
 
 void Gui::Panel::removeElement(const std::string &uiElement) {
     auto found = findUIElement(uiElement);
-    if (found != uiElements_.end())
+    if (found != uiElements_.end()) {
+        auto elementName = found->first;
         uiElements_.erase(found);
+        emit("elementRemoved", elementName);
+    }
 }
 
 void Gui::Panel::hide() {
@@ -76,6 +81,7 @@ void Gui::Panel::hide() {
         std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
             uiElem.second->hide();
         });
+        emit("visibilityChanged", isHidden_);
     }
 }
 
@@ -86,6 +92,7 @@ void Gui::Panel::show() {
         std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
             uiElem.second->show();
         });
+        emit("visibilityChanged", isHidden_);
     }
 }
 

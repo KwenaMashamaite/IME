@@ -77,49 +77,47 @@ void Gui::UIElement::initEvents() {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
 
-    addListener("textFontChanged", Callback<>([this] {
+    addListener("textFontChanged", Callback<std::string>([this](const std::string&) {
         onTextDimensionsChange();
     }));
 
-    addListener("textContentChanged", Callback<>([this] {
+    addListener("textContentChanged", Callback<std::string>([this](const std::string&) {
         onTextDimensionsChange();
     }));
 
-    addListener("textCharSizeChanged", Callback<>([this] {
+    addListener("textCharSizeChanged", Callback<unsigned int>([this](unsigned int) {
         onTextDimensionsChange();
     }));
 
-    addListener("marginChanged", Callback<>([this] {
+    addListener("marginChanged", Callback<Margin>([this](Margin) {
         onElementDimensionChange();
     }));
 
-    addListener("paddingChanged", Callback<>([this] {
+    addListener("paddingChanged", Callback<Padding>([this](Padding) {
         onElementDimensionChange();
     }));
 
-    addListener("outlineThicknessChanged", Callback<>([this] {
+    addListener("outlineThicknessChanged", Callback<float>([this](float) {
         onElementDimensionChange();
     }));
 }
 
 void Gui::UIElement::setPadding(float padding) {
-    padding_ = {padding, padding, padding, padding};
-    emit("paddingChanged");
+    setPadding({padding, padding, padding, padding});
 }
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
-    emit("paddingChanged");
+    emit("paddingChanged", padding_);
 }
 
 void Gui::UIElement::setMargin(float margin) {
-    margin_ = {margin, margin, margin, margin};
-    emit("marginChanged");
+    setMargin({margin, margin, margin, margin});
 }
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
-    emit("marginChanged");
+    emit("marginChanged", margin_);
 }
 
 void Gui::UIElement::setPosition(float x, float y) {
@@ -132,48 +130,53 @@ void Gui::UIElement::setPosition(float x, float y) {
         border_.getPosition().x + padding_.left,
         border_.getPosition().y + padding_.top
     );
+    emit("positionChanged", getPosition());
 }
 
 void Gui::UIElement::setPosition(Position position) {
     setPosition(position.x, position.y);
 }
 
-void Gui::UIElement::setTextFont(const std::string &contentFont) {
-    text_.setFont(ResourceManager::getFont(contentFont));
-    emit("textFontChanged");
+void Gui::UIElement::setTextFont(const std::string &textFont) {
+    text_.setFont(ResourceManager::getFont(textFont));
+    emit("textFontChanged", textFont);
     emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
-    emit("textCharSizeChanged");
+    emit("textCharSizeChanged", charSize);
     emit("textLocalBoundsChanged");
 }
 
-void Gui::UIElement::setText(const std::string &content) {
-    text_.setString(content);
-    emit("textContentChanged");
+void Gui::UIElement::setText(const std::string &textContent) {
+    text_.setString(textContent);
+    emit("textContentChanged", textContent);
 }
 
 void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     border_.setOutlineThickness(outlineThickness);
-    emit("outlineThicknessChanged");
+    emit("outlineThicknessChanged", outlineThickness);
 }
 
 void Gui::UIElement::setEnable(bool isEnable) {
     isEnabled_ = isEnable;
+    emit("intractabilityChanged", isEnabled_);
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
     border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
+    emit("fillColourChanged", fillColour);
 }
 
 void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
     text_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(textFillColour));
+    emit("textFillColourChanged", textFillColour);
 }
 
 void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
     border_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
+    emit("outlineColourChanged", outlineColour);
 }
 
 Gui::Padding Gui::UIElement::getPadding() const {
@@ -243,6 +246,7 @@ void Gui::UIElement::hide() {
     Utility::makeInvisible(parentRectangle_);
     Utility::makeInvisible(border_);
     Utility::makeInvisible(text_);
+    emit("visibilityChanged", isHidden_);
 }
 
 void Gui::UIElement::show() {
@@ -250,6 +254,7 @@ void Gui::UIElement::show() {
     Utility::makeVisible(parentRectangle_);
     Utility::makeVisible(border_);
     Utility::makeVisible(text_);
+    emit("visibilityChanged", isHidden_);
 }
 
 void Gui::UIElement::onTextDimensionsChange() {
@@ -261,7 +266,6 @@ void Gui::UIElement::onTextDimensionsChange() {
 		border_.getGlobalBounds().width + margin_.left + margin_.right,
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
-    //Alert listeners with the new dimensions of the element
     emit("dimensionsChanged", getDimensions());
 }
 
@@ -272,6 +276,7 @@ void Gui::UIElement::onElementDimensionChange() {
 
 void Gui::UIElement::setSelected(bool isSelected) {
     isSelected_ = isSelected;
+    emit("selectionChanged", isSelected_);
 }
 
 bool Gui::UIElement::isSelected() const {
