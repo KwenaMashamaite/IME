@@ -1,12 +1,10 @@
 #include "Button.h"
-#include "input/Mouse.h"
 
 Gui::Button::Button() : Button("")
 {}
 
 Gui::Button::Button(const std::string& buttonText)
-    : UIElement(buttonText),
-      isSelected_(false)
+    : UIElement(buttonText)
 {
     //Colours of the button when the mouse cursor enters it (may be changed at run-time)
     onHoverColours_.fillColour = {105, 105, 105}; //Dim gray
@@ -18,40 +16,7 @@ Gui::Button::Button(const std::string& buttonText)
     defaultColours_.TextColour = getTextFillColour();
     defaultColours_.OutlineColour = getOutlineColour();
 
-    initializeEvents();
     initializeDefaultBehavior();
-}
-
-void Gui::Button::initializeEvents() {
-    Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
-        if (!isHidden()) {
-            if (contains(x, y) && !isSelected_) {
-                isSelected_ = true;
-                emit("mouseEnter");
-            } else if (!contains(x, y) && isSelected_) {
-                isSelected_ = false;
-                emit("mouseLeave");
-            }
-        }
-    }));
-
-    Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
-                emit("mouseDown");
-        })
-    );
-
-    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected_ && button == Mouse::Button::LMouseButton && !isHidden())
-                emit("mouseUp");
-            })
-    );
-
-    addListener("mouseUp", Callback<>([this] {
-        emit("click");
-    }));
 }
 
 void Gui::Button::initializeDefaultBehavior() {

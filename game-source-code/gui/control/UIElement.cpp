@@ -1,4 +1,5 @@
 #include "UIElement.h"
+#include "input/Mouse.h"
 #include "resources/ResourceManager.h"
 #include "utility/Utility.h"
 
@@ -27,6 +28,51 @@ void Gui::UIElement::initialize() {
 }
 
 void Gui::UIElement::initEvents() {
+    ///////////////INTERACTION EVENTS /////////////////////////////
+
+    //Notify listeners when mouse cursor enters or leaves element
+    Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
+        if (!isHidden() && isEnabled()) {
+            if (contains(x, y) && !isSelected()) {
+                setSelected(true);
+                emit("mouseEnter");
+            } else if (!contains(x, y) && isSelected()) {
+                setSelected(false);
+                emit("mouseLeave");
+            }
+        }
+    }));
+
+    //Notify listeners when element is pressed
+    Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
+        [this](Mouse::Button button) {
+            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
+                emit("mouseDown");
+        })
+    );
+
+    //notify listeners when element is released
+    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
+        [this](Mouse::Button button) {
+            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
+                emit("mouseUp");
+        })
+    );
+
+    //Notify listeners when the element is clicked. A click event always occurs after a
+    //mouse up event, which occurs after a mouse down event (mouseDown->mouseUp->click)
+    addListener("mouseUp", Callback<>([this] {
+        emit("click");
+    }));
+
+    //Automatically disable/enable the element when its visibility state changes. User
+    // must not interact with a hidden element
+    addListener("visibilityChanged", Callback<bool>([this](bool isHidden){
+        setEnable(!isHidden);
+    }));
+
+    ////////////////COSMETIC EVENTS ////////////////////////////////////
+
     addListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));

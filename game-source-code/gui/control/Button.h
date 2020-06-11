@@ -65,17 +65,6 @@ namespace Gui {
 
     private:
         /**
-         * @brief Create button events
-         *
-         * This function creates events that clients may subscribe
-         * to in order to be notified when something happens to the
-         * button. For instance, a client may listen for a "click"
-         * event in order to perform some action when the button is
-         * clicked
-         */
-        void initializeEvents();
-
-        /**
          * @brief Initialize the default behaviour of the button
          *
          * This function will make the button respond to the mouse
@@ -86,9 +75,6 @@ namespace Gui {
         void initializeDefaultBehavior();
 
     private:
-        //Selection state
-        bool isSelected_;
-
         //Group of colours
         struct Colours{
             Colour fillColour;
