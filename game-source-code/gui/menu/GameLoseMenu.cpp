@@ -1,0 +1,16 @@
+#include "GameLoseMenu.h"
+
+Gui::GameLoseMenu::GameLoseMenu() {
+    message_ = std::make_unique<TextBlock>("You lost the game");
+    message_->setTextCharSize(40);
+    message_->setTextFillColour({151, 75, 105});
+    message_->setFillColour({0, 0, 0, 0});
+    message_->setPosition(
+        Window::getDimensions().width / 2 - message_->getDimensions().width / 2,
+        Window::getDimensions().height / 2 - message_->getDimensions().height / 2
+    );
+}
+
+void Gui::GameLoseMenu::draw(Gui::Window &renderTarget) {
+    renderTarget.draw(*message_);
+}
