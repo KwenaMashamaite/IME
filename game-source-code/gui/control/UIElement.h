@@ -75,9 +75,9 @@ namespace Gui {
          * This function controls the distance between the elements text
          * content and the border. When the padding is 0, the border and
          * the elements text will have the same dimensions, When the padding
-         * is set to a non-zero value, the border will move away from the text
-         * content by the specified amount on all four sides. The padding is 0
-         * by default
+         * is set to a non-zero value, the border will move away from the
+         * text content by the specified amount on all four sides. The
+         * padding is 0 by default
          */
         void setPadding(float padding);
 
@@ -101,9 +101,10 @@ namespace Gui {
          * The margin controls the distance between the element and
          * whatever its placed next to. For instance, when the element
          * is placed next to another UI element and the margin is zero,
-         * The elements will physically touch each other. However, when the
-         * margin is non-zero, the elements will automatically be separated
-         * by the set margin. The default margin is 0 on all sides
+         * The elements will physically touch each other. However, when
+         * the margin is non-zero, the elements will automatically be
+         * separated by the set margin. The default margin is 0 on all
+         * sides
          */
         void setMargin(float margin);
 
@@ -114,9 +115,9 @@ namespace Gui {
          * The margin controls the distance between the element and
          * whatever its placed next to. For instance, when the element
          * is placed next to another UI element and the margin is zero,
-         * The elements will physically touch each other. However, when the
-         * margin is non-zero, the elements will automatically be separated
-         * by the set margin. The default margin is {0, 0, 0, 0}
+         * The elements will physically touch each other. However, when
+         * the margin is non-zero, the elements will automatically be
+         * separated by the set margin. The default margin is {0, 0, 0, 0}
          */
         void setMargin(const Margin &margin);
 
@@ -293,20 +294,21 @@ namespace Gui {
          * @brief Remove the element from a render target
          *
          * The UI element is only hidden graphically. That is, after
-         * calling this function the element will remain where it is and
-         * any operations on it will be carried out behind the scene
+         * calling this function the element will remain where it is
+         * and any operations on it (Such as changing the text font)
+         * will be carried out behind the scene. Calling draw() on a
+         * hidden element has no effect. That is, the element will
+         * not appear on the render target
          *
-         * @note Calling draw() on an element that is hidden will have no
-         *       have effect, that is, the element will not appear on the
-         *       render target
+         * @note Hiding an element disables it, @see setEnable(bool)
          */
         void hide();
 
         /**
          * @brief Make a hidden element reappear on a render target
          *
-         * @note revealing a hidden UI element does not automatically show
-         *       it on the render target, a call to draw() must be made
+         * revealing a hidden UI element does not automatically show
+         * it on the render target, a call to draw() must be made
          */
         void show();
 
