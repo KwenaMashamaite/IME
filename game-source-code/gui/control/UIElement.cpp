@@ -6,7 +6,7 @@ Gui::UIElement::UIElement() : UIElement("")
 {}
 
 Gui::UIElement::UIElement(const std::string &textContent)
-    : isHidden_(false)
+    : isHidden_(false), isSelected_(false), isEnabled_(true)
 {
     setText(textContent);
     initialize();
