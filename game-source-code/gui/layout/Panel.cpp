@@ -70,19 +70,23 @@ void Gui::Panel::removeElement(const std::string &uiElement) {
 }
 
 void Gui::Panel::hide() {
-    isHidden_ = true;
-    Utility::makeInvisible(panel_);
-    std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
-        uiElem.second->hide();
-    });
+    if (!isHidden_) {
+        isHidden_ = true;
+        Utility::makeInvisible(panel_);
+        std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
+            uiElem.second->hide();
+        });
+    }
 }
 
 void Gui::Panel::show() {
-    isHidden_ = false;
-    Utility::makeVisible(panel_);
-    std::for_each(uiElements_.begin(), uiElements_.end(), [](auto& uiElem){
-        uiElem.second->show();
-    });
+    if (isHidden_) {
+        isHidden_ = false;
+        Utility::makeVisible(panel_);
+        std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
+            uiElem.second->show();
+        });
+    }
 }
 
 const std::unique_ptr<Gui::UIElement>& Gui::Panel::getElement(const std::string &uiElementAlias) {
@@ -93,10 +97,12 @@ const std::unique_ptr<Gui::UIElement>& Gui::Panel::getElement(const std::string 
 }
 
 void Gui::Panel::draw(Window &renderTarget) {
-    renderTarget.draw(panel_);
-    std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto& uiElem){
-        renderTarget.draw(*(uiElem.second));
-    });
+    if (!isHidden_) {
+        renderTarget.draw(panel_);
+        std::for_each(uiElements_.begin(), uiElements_.end(), [&](auto &uiElem) {
+            renderTarget.draw(*(uiElem.second));
+        });
+    }
 }
 
 Gui::Panel::UIElementContainer::iterator Gui::Panel::findUIElement(const std::string &uiElemAlias) {

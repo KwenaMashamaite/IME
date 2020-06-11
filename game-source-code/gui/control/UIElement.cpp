@@ -231,9 +231,11 @@ bool Gui::UIElement::contains(float x, float y) const{
 }
 
 void Gui::UIElement::draw(Gui::Window &renderTarget) {
-    renderTarget.draw(parentRectangle_);
-    renderTarget.draw(border_);
-    renderTarget.draw(text_);
+    if (!isHidden_) {
+        renderTarget.draw(parentRectangle_);
+        renderTarget.draw(border_);
+        renderTarget.draw(text_);
+    }
 }
 
 void Gui::UIElement::hide() {
