@@ -360,6 +360,20 @@ namespace Gui {
          */
         void onElementDimensionChange();
 
+        /**
+         * @brief Select/deselect element
+         * @param isSelected Set true to select element, false to deselect element
+         *
+         * The element is not selected by default
+         */
+        void setSelected(bool isSelected);
+
+        /**
+         * @brief Check if element is selected or not
+         * @return True if element is selected, false if element is not selected
+         */
+        bool isSelected() const;
+
     private:
         //White space around element
         Margin margin_;
@@ -373,6 +387,8 @@ namespace Gui {
         sf::RectangleShape border_;
         //Display state of element
         bool isHidden_;
+        //Selected state
+        bool isSelected_;
         //Enabled state
         bool isEnabled_;
     };

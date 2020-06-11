@@ -222,4 +222,12 @@ void Gui::UIElement::onElementDimensionChange() {
     setPosition(getPosition().x, getPosition().y); //Update padding and margin
 }
 
+void Gui::UIElement::setSelected(bool isSelected) {
+    isSelected_ = isSelected;
+}
+
+bool Gui::UIElement::isSelected() const {
+    return isSelected_;
+}
+
 Gui::UIElement::~UIElement() = default;
