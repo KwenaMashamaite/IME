@@ -161,7 +161,7 @@ void Gui::UIElement::setOutlineThickness(float outlineThickness) {
 
 void Gui::UIElement::setEnable(bool isEnable) {
     isEnabled_ = isEnable;
-    emit("intractabilityChanged", isEnabled_);
+    emit("interactivityChanged", isEnabled_);
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
