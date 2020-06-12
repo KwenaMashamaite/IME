@@ -5,10 +5,11 @@
 #ifndef AUDIOPLAYER_H
 #define AUDIOPLAYER_H
 
+#include "event/EventEmitter.h"
 #include <string>
 
 namespace Audio {
-    class IAudioPlayer {
+    class IAudioPlayer : public EventEmitter{
     public:
         /**
          * @brief Play audio
@@ -41,6 +42,17 @@ namespace Audio {
          * @brief Destructor
          */
         virtual ~IAudioPlayer() = default;
+
+    protected:
+        /**
+         * @brief Prevent external publishing of events
+         *
+         * Only the class knows the conditions under which an event may be
+         * fired. Therefore, events must not be raised externally as this
+         * may result in events being raised at the wong time, resulting
+         * in undesired and incorrect behavior
+         */
+        using::EventEmitter::emit;
     };
 }
 
