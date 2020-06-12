@@ -37,7 +37,7 @@ void Gui::StackPanel::initEvents() {
                     uiElem->getPadding().right, uiElem->getPadding().top, 0.0f
                 });
 
-            fitElementToPanel(uiElemIter.second);
+            fitElementToPanel(uiElem);
         });
     }));
 
