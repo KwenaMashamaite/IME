@@ -4,7 +4,7 @@
 void Audio::MusicPlayer::play(const std::string &song){
     song_ = ResourceManager::getMusic(song);
     song_->play();
-    emit("playing");
+    emit("playing", song);
 }
 
 void Audio::MusicPlayer::setLoop(bool isLoop){
