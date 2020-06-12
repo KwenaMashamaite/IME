@@ -242,19 +242,23 @@ void Gui::UIElement::draw(Gui::Window &renderTarget) {
 }
 
 void Gui::UIElement::hide() {
-    isHidden_ = true;
-    Utility::makeInvisible(parentRectangle_);
-    Utility::makeInvisible(border_);
-    Utility::makeInvisible(text_);
-    emit("visibilityChanged", isHidden_);
+    if (!isHidden()) {
+        isHidden_ = true;
+        Utility::makeInvisible(parentRectangle_);
+        Utility::makeInvisible(border_);
+        Utility::makeInvisible(text_);
+        emit("visibilityChanged", isHidden_);
+    }
 }
 
 void Gui::UIElement::show() {
-    isHidden_ = false;
-    Utility::makeVisible(parentRectangle_);
-    Utility::makeVisible(border_);
-    Utility::makeVisible(text_);
-    emit("visibilityChanged", isHidden_);
+    if (isHidden()) {
+        isHidden_ = false;
+        Utility::makeVisible(parentRectangle_);
+        Utility::makeVisible(border_);
+        Utility::makeVisible(text_);
+        emit("visibilityChanged", isHidden_);
+    }
 }
 
 void Gui::UIElement::onTextDimensionsChange() {
