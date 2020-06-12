@@ -18,7 +18,7 @@
 #include <memory>
 
 namespace Audio {
-    class MusicPlayer : public IAudioPlayer{
+    class MusicPlayer final : public IAudioPlayer{
     public:
         /**
          * @brief play music file

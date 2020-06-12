@@ -18,7 +18,7 @@
 #include <SFML/Audio.hpp>
 
 namespace Audio {
-    class SoundEffectPlayer : public IAudioPlayer{
+    class SoundEffectPlayer final : public IAudioPlayer{
     public:
         /**
          * @brief Play sound
