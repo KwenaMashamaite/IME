@@ -50,6 +50,12 @@ namespace Audio {
          */
         void setVolume(float volume) override;
 
+        /**
+         * @brief Get the current status of the audio file
+         * @return Current status of the audio file
+         */
+        Status getStatus() const override;
+
     private:
         //Currently playing sound
         sf::Sound soundEffect_;

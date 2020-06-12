@@ -9,6 +9,15 @@
 #include <string>
 
 namespace Audio {
+    /**
+     * @brief Audio status
+     */
+    enum class Status{
+        Playing,
+        Paused,
+        Stopped
+    };
+
     class IAudioPlayer : public EventEmitter{
     public:
         /**
@@ -37,6 +46,12 @@ namespace Audio {
          * @param volume Volume to set
          */
         virtual void setVolume(float volume) = 0;
+
+        /**
+         * @brief Get the current status of the audio file
+         * @return Current status of the audio file
+         */
+        virtual Status getStatus() const = 0;
 
         /**
          * @brief Destructor

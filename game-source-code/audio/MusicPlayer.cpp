@@ -43,3 +43,16 @@ void Audio::MusicPlayer::setVolume(float volume) {
         emit("volumeChanged", volume);
     }
 }
+
+Audio::Status Audio::MusicPlayer::getStatus() const {
+    if (song_) {
+        switch (song_->getStatus()) {
+            case sf::Sound::Status::Playing:
+                return Status::Playing;
+            case sf::Sound::Status::Paused:
+                return Status::Paused;
+            case sf::Sound::Status::Stopped:
+                return Status::Stopped;
+        }
+    }
+}

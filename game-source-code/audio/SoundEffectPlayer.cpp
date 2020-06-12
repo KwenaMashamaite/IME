@@ -36,3 +36,14 @@ void Audio::SoundEffectPlayer::setVolume(float volume) {
         emit("volumeChanged", volume);
     }
 }
+
+Audio::Status Audio::SoundEffectPlayer::getStatus() const {
+    switch (soundEffect_.getStatus()) {
+        case sf::Music::Status::Playing:
+            return Status::Playing;
+        case sf::Music::Status::Paused:
+            return Status::Paused;
+        case sf::Music::Status::Stopped:
+            return Status::Stopped;
+    }
+}
