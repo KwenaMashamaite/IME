@@ -4,7 +4,7 @@
 void Audio::SoundEffectPlayer::play(const std::string &filename){
     soundEffect_.setBuffer(ResourceManager::getSoundBuffer(filename));
     soundEffect_.play();
-    emit("playing", filename);
+    emit("playing");
 }
 
 void Audio::SoundEffectPlayer::stop() {
