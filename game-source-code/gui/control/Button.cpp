@@ -21,7 +21,6 @@ Gui::Button::Button(const std::string& buttonText)
 
 void Gui::Button::initializeDefaultBehavior() {
     addListener("mouseDown", Callback<>([this] {
-        setFillColour({0, 0, 0, 0}); //Transparent
         setTextFillColour({0, 0, 0}); //Black
     }));
 
