@@ -48,6 +48,14 @@ void Audio::AudioManager::stop(const std::string& filename) {
     }
 }
 
+void Audio::AudioManager::remove(const std::string &filename) {
+    auto found = audioPlayers_.find(filename);
+    if (found != audioPlayers_.end()) {
+        found->second->stop();
+        audioPlayers_.erase(found);
+    }
+}
+
 void Audio::AudioManager::pauseAll() {
     std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
         [](const auto& audioPlayer) {

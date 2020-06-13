@@ -73,6 +73,12 @@ namespace Audio {
         void stop(const std::string& filename);
 
         /**
+         * @brief Remove an audio file from an audio player
+         * @param filename Filename of the audio to remove
+         */
+        void remove(const std::string& filename);
+
+        /**
          * @brief Pause all playing audio files
          */
         void pauseAll();
