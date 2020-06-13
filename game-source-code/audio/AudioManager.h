@@ -73,9 +73,7 @@ namespace Audio {
         void stop(const std::string& filename);
 
         /**
-         * @brief Pause all playing audio
-         *
-         * Paused audio may be resumed using @see resumeAll()
+         * @brief Pause all playing audio files
          */
         void pauseAll();
 
