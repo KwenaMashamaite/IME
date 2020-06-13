@@ -16,16 +16,21 @@ void Audio::AudioManager::loadAudioFiles(AudioType audioType,
 }
 
 void Audio::AudioManager::play(const std::string& filename) {
+    if (audioPlayers_.find(filename) != audioPlayers_.end()) {
+        audioPlayers_[filename]->play(filename);
+        return;
+    }
+
     auto found = audioFilenames_.find(filename);
-    if (found != audioFilenames_.end()){
+    if (found != audioFilenames_.end()) {
         std::unique_ptr<IAudioPlayer> audioPlayer;
         if (found->second == AudioType::Music)
             audioPlayer = std::make_unique<MusicPlayer>();
         else
             audioPlayer = std::make_unique<SoundEffectPlayer>();
 
+        audioPlayer->play(filename);
         audioPlayers_.insert(std::pair(filename, std::move(audioPlayer)));
-        audioPlayers_[filename]->play(filename);
     }
 }
 
