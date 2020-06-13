@@ -2,8 +2,8 @@
  * @brief Class for managing audio
  *
  * This class allows us to play multiple audio files of different types
- * (Music or SoundEffect; @see @class Music and @class SoundEffectPlayer)
- * simultaneously
+ * (Music or SoundEffect, @see @class Music and @class SoundEffectPlayer)
+ * simultaneously. Each audio file is played in a seperate thread
  */
 
 #ifndef AUDIOMANAGER_H
@@ -40,11 +40,14 @@ namespace Audio {
         void loadAudioFiles(AudioType audioType, std::initializer_list<std::string> filenames);
 
         /**
-         * @brief Play audio file
+         * @brief Play an audio file
          * @param filename Filename of the audio to play
          *
          * The audio file must be loaded first otherwise nothing will play
          * @see loadAudioFiles(AudioType, std::initializer_list<std::string>)
+         * The audio file will be played in a seperate thread. This means
+         * that, the main thread is not blocked and other audio file may be
+         * played simultaneously
          */
         void play(const std::string& filename);
 
@@ -64,7 +67,8 @@ namespace Audio {
          * @brief Stop playing audio file
          * @param filename Filename of the audio to stop
          *
-         * A Stopped audio file cannot be resumed, it needs to be replayed
+         * Stopping an audio file (playing/paused) will reset the current
+         * playing position to the beginning
          */
         void stop(const std::string& filename);
 
@@ -76,14 +80,10 @@ namespace Audio {
         void pauseAll();
 
         /**
-         * @brief Resume all paused audio
-         */
-        void resumeAll();
-
-        /**
-         * @brief Stop all playing audio
+         * @brief Stop all playing audio files
          *
-         * A stopped audio file cannot be resumed, it needs to be replayed
+         * Stopping an audio file (playing/paused) will reset the current
+         * playing position to the beginning
          */
         void stopAll();
 
