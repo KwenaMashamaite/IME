@@ -58,12 +58,6 @@ namespace Audio {
         void pause(const std::string& filename);
 
         /**
-         * @brief Resume paused audio file
-         * @param filename Filename of the audio to pause
-         */
-        void resume(const std::string& filename);
-
-        /**
          * @brief Stop playing audio file
          * @param filename Filename of the audio to stop
          *

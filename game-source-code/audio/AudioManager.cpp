@@ -35,12 +35,6 @@ void Audio::AudioManager::pause(const std::string& filename) {
         found->second->pause();
 }
 
-void Audio::AudioManager::resume(const std::string &filename) {
-    auto found = audioPlayers_.find(filename);
-    if (found != audioPlayers_.end())
-        found->second->resume();
-}
-
 void Audio::AudioManager::stop(const std::string& filename) {
     auto found = audioPlayers_.find(filename);
     if (found != audioPlayers_.end()) {
