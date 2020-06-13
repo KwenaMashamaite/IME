@@ -1,10 +1,12 @@
 #include "MainMenu.h"
+#include "scoreboard/Scoreboard.h"
+#include "../control/Button.h"
+#include "../control/TextBlock.h"
+#include "../layout/DockPanel.h"
+#include "../layout/StackPanel.h"
+#include "../layout/Canvas.h"
 #include <algorithm>
 #include <cassert>
-#include <iostream>
-#include "scoreboard/Scoreboard.h"
-#include "utility/FileReader.h"
-#include "../drawer/Drawer.h"
 
 Gui::MainMenu::MainMenu(Window &renderTarget)
     : renderTarget_(renderTarget),
@@ -84,17 +86,17 @@ void Gui::MainMenu::initNavigationButtonActions() {
         //@TODO - START GAME
     }));
 
-    //// INSTRUCTIONS BUTTON ///////
     auto fileReader = Utility::FileReader();
     auto textBuffer =  std::stringstream();
+
+    //// INSTRUCTIONS BUTTON ///////
     fileReader.readFileInto(textBuffer, "static/instructions.txt");
     updateInfoPanelOnButtonClick("instructions-btn", textBuffer.str());
 
     //// CONTROLS BUTTON //////////
     textBuffer.str("");
     fileReader.readFileInto(textBuffer, "static/controls.txt");
-    auto controlsText = textBuffer.str();
-    updateInfoPanelOnButtonClick("controls-btn", controlsText);
+    updateInfoPanelOnButtonClick("controls-btn", textBuffer.str());
 
     //// HIGHSCORES BUTTON ///////
     auto scoreBoard = Scoreboard("static/highscores.txt");
@@ -114,21 +116,15 @@ void Gui::MainMenu::initNavigationButtonActions() {
 }
 
 void Gui::MainMenu::draw(Window &renderTarget) {
-    static auto drawer = Drawer(renderTarget);
-    drawer.drawBackground("mainMenuBackground.png");
     switch (state_){
-        //The main menu is hidden when the info panel is displayed and vice versa
+        //Buttons need to be hidden because they can still be interacted with if only cleared
         case State::Main:
-            panels_["onClickInfoPanel"]->hide();
-            panels_["titlePanel"]->show();
             panels_["navButtonsPanel"]->show();
             renderTarget.draw(*(panels_["titlePanel"]));
             renderTarget.draw(*(panels_["navButtonsPanel"]));
             break;
         case State::Info:
-            panels_["titlePanel"]->hide();
             panels_["navButtonsPanel"]->hide();
-            panels_["onClickInfoPanel"]->show();
             renderTarget.draw(*(panels_["onClickInfoPanel"]));
             break;
     }

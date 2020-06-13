@@ -6,11 +6,9 @@
 #define MAINMENU_H
 
 #include "IMenu.h"
-#include "../control/Button.h"
-#include "../control/TextBlock.h"
-#include "../layout/DockPanel.h"
-#include "../layout/StackPanel.h"
-#include "../layout/Canvas.h"
+#include "../layout/Panel.h"
+#include <memory>
+#include <map>
 
 namespace Gui {
     class MainMenu : public IMenu{
