@@ -50,6 +50,12 @@ void Audio::AudioManager::remove(const std::string &filename) {
     }
 }
 
+void Audio::AudioManager::setVolumeFor(const std::string &filename, float volume) {
+    auto found = audioPlayers_.find(filename);
+    if (found != audioPlayers_.end())
+        found->second->setVolume(volume);
+}
+
 void Audio::AudioManager::setLoopFor(const std::string &filename, bool isLooped) {
     auto found = audioPlayers_.find(filename);
     if (found != audioPlayers_.end())

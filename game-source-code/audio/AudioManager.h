@@ -82,6 +82,15 @@ namespace Audio {
         void setLoopFor(const std::string& filename, bool isLooped);
 
         /**
+         * @brief Set the volume for an audio file
+         * @param filename Filename of the audio to set volume for
+         * @param volume Volume to set, (mute) 0 <= volume <= 100 (max)
+         *
+         * The default volume is 100 (max)
+         */
+        void setVolumeFor(const std::string& filename, float volume);
+
+        /**
          * @brief Get the volume of an audio file
          * @param filename Audio file to get volume of
          * @return Volume of an audio file
