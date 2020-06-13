@@ -37,6 +37,13 @@ void Audio::SoundEffectPlayer::setVolume(float volume) {
     }
 }
 
+void Audio::SoundEffectPlayer::setLoop(bool isLooped) {
+    if (soundEffect_.getLoop() != isLooped) {
+        soundEffect_.setLoop(isLooped);
+        emit("loopChanged", isLooped);
+    }
+}
+
 Audio::Status Audio::SoundEffectPlayer::getStatus() const {
     switch (soundEffect_.getStatus()) {
         case sf::Music::Status::Playing:

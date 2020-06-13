@@ -29,8 +29,10 @@ namespace Audio {
         /**
          * @brief Loop/unloop music
          * @param isLoop Set to true to loop music, false to unloop music
+         *
+         * The music is not looped by default
          */
-        void setLoop(bool isLoop);
+        void setLoop(bool isLoop) override ;
 
         /**
          * @brief Pause the Music

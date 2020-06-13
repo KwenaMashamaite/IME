@@ -48,6 +48,12 @@ namespace Audio {
         virtual void setVolume(float volume) = 0;
 
         /**
+         * @brief Loop/unloop audio
+         * @param isLooped Set to true to loop audio, false to unloop audio
+         */
+        virtual void setLoop(bool isLooped) = 0;
+
+        /**
          * @brief Get the current status of the audio file
          * @return Current status of the audio file
          */

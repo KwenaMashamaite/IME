@@ -51,6 +51,14 @@ namespace Audio {
         void setVolume(float volume) override;
 
         /**
+         * @brief Loop/unloop sound effect
+         * @param isLooped Set to true to loop audio, false to unloop audio
+         *
+         * The sund effect s not looped by default
+         */
+        void setLoop(bool isLooped) override;
+
+        /**
          * @brief Get the current status of the audio file
          * @return Current status of the audio file
          */
