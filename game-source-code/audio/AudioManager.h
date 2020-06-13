@@ -73,6 +73,20 @@ namespace Audio {
         void remove(const std::string& filename);
 
         /**
+         * @brief Loop/unloop an audio file
+         * @param filename Filename of the audio to set loop for
+         * @param isLooped Set true to loop and false to unloop
+         *
+         * All audio files are not looped by default
+         */
+        void setLoopFor(const std::string& filename, bool isLooped);
+
+        /**
+         * @brief Play all paused/stopped audio files
+         */
+        void playAll();
+
+        /**
          * @brief Pause all playing audio files
          */
         void pauseAll();

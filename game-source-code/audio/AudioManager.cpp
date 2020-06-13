@@ -50,6 +50,19 @@ void Audio::AudioManager::remove(const std::string &filename) {
     }
 }
 
+void Audio::AudioManager::setLoopFor(const std::string &filename, bool isLooped) {
+    auto found = audioPlayers_.find(filename);
+    if (found != audioPlayers_.end())
+        found->second->setLoop(isLooped);
+}
+
+void Audio::AudioManager::playAll() {
+    std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
+        [](const auto& audioPlayer) {
+            audioPlayer.second->resume();
+    });
+}
+
 void Audio::AudioManager::pauseAll() {
     std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
         [](const auto& audioPlayer) {
