@@ -79,6 +79,9 @@ void Audio::AudioManager::resumeAll() {
     );
 }
 
-void Audio::AudioManager::stopAll() {
-    audioPlayers_.clear();
+float Audio::AudioManager::getVolumeFor(const std::string &filename) {
+    auto found = audioPlayers_.find(filename);
+    if (found != audioPlayers_.end())
+        return found->second->getVolume();
+    return 0.0f;
 }

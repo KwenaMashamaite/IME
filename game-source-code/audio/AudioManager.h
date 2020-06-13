@@ -82,6 +82,15 @@ namespace Audio {
         void setLoopFor(const std::string& filename, bool isLooped);
 
         /**
+         * @brief Get the volume of an audio file
+         * @param filename Audio file to get volume of
+         * @return Volume of an audio file
+         *
+         * This function will return zero
+         */
+        float getVolumeFor(const std::string& filename);
+
+        /**
          * @brief Play all paused/stopped audio files
          */
         void playAll();
