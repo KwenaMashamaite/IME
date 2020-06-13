@@ -23,22 +23,10 @@ namespace Gui {
         Panel(float x, float y);
 
         /**
-         * @brief Get the position of the panel
-         * @return Position of the panel
-         */
-        Position getPosition() const;
-
-        /**
          * @brief Set the position of the panel
          * @param position New position of the panel
          */
         void setPosition(const Position &position);
-
-        /**
-         * @brief Get the dimensions of the panel
-         * @return Dimensions of the panel
-         */
-        Dimensions getDimensions() const;
 
         /**
          * @brief Set the dimensions of the panel
@@ -48,15 +36,17 @@ namespace Gui {
 
         /**
          * @brief Set the fill colour of the panel
-         * @param fillColour Fill colour to set
+         * @param fillColour New fill colour of the panel
          *
-         * The panel has a transparent fill colour by default
+         * The default fill colour is transparent
          */
         void setFillColour(Colour fillColour);
 
         /**
          * @brief Set the outline colour of the panel
          * @param outlineColour New outline colour of the panel
+         *
+         * The default outline colour is white
          */
         void setOutlineColour(Colour outlineColour);
 
@@ -64,15 +54,33 @@ namespace Gui {
          * @brief Set the outline thickness of the panel
          * @param outlineThickness New outline thickness
          *
-         * The outline thickness is zero by default
+         * The default outline thickness is 0
          */
         void setOutlineThickness(float outlineThickness);
 
         /**
-         * @brief Get the outline thickness
-         * @return Outline thickness
+         * @brief Get the position of the panel
+         * @return Current position of the panel
+         */
+        Position getPosition() const;
+
+        /**
+         * @brief Get the dimensions of the panel
+         * @return Current dimensions of the panel
+         */
+        Dimensions getDimensions() const;
+
+        /**
+         * @brief Get the outline thickness of the panel
+         * @return Outline thickness of the panel
          */
         float getOutlineThickness() const;
+
+        /**
+         * @brief Get the number of elements in the panel
+         * @return Number of elements in the panel
+         */
+        unsigned int getNumberOfElements() const;
 
         /**
          * @brief Add a UI element to the panel
@@ -92,56 +100,52 @@ namespace Gui {
         void removeElement(const std::string& uiElement);
 
         /**
-         * @brief Get the number of elements in the panel
-         * @return Number of elements in the panel
-         */
-        unsigned int size() const;
-
-        /**
-         * @brief Hide panel
+         * @brief Hide the panel from a render target
          *
-         * This function will hide a panel and all it's child elements
+         * This function will hide the panel and all it's child elements
          * from a render target. Operations on a hidden panel or on the
          * child elements of a hidden panel can still be performed. The
          * only difference is that the panel and it's child elements will
-         * not be shown on the render when a call to display is made
+         * not be shown on the render when after they have been drawn
          */
         void hide();
 
         /**
          * @brief Reveal a hidden panel
+         *
+         * The panel will not automatically be shown on a render target. It
+         * needs to be drawn after being revealed
          */
         void show();
 
         /**
-         * @brief Get access to an element
+         * @brief Get access to an element in the panel
          * @param uiElement Name of the element to get access to
-         * @return Pointer to a UI element if found, otherwise
-         *         null pointer
+         * @return A pointer to the requested UI element if it exist in the
+         *         panel, otherwise a null pointer if the element cannot be
+         *         found in the panel
+         *
+         * @note The pointer is returned by reference. Therefore, it is not
+         *       advisable to keep the pointer after it has been accessed as
+         *       it can be invalidated by removing the element from the panel
          */
         const std::unique_ptr<UIElement>& getElement(const std::string& uiElement);
 
         /**
-         * @brief Render panel and it's UI elements on a render target
-         * @param renderTarget Render target to draw UI elements on
+         * @brief Render the panel and it's UI elements on a render target
+         * @param renderTarget Render target to draw panel on
          */
         void draw(Window &renderTarget) override;
 
         /**
-         * @brief Remove panel and it's UI elements from a render target
-         * @param renderTarget Render target to remove panel from
-         */
-        void remove(Window& renderTarget) override;
-
-        /**
          * @brief Subscribe all child elements to an event
          * @tparam Args Template argument name
-         * @param event Event to listen for
+         * @param event Event to subscribe child elements to
          * @param callback Function to execute when event is fired
          *
          * This function will make all child elements of the panel to
          * listen for an event and execute a callback when that event
-         * is raised
+         * is fired
          */
         template <typename...Args>
         void subscribeChildrenToEvent(const std::string& event, Callback<Args...> callback){
@@ -154,20 +158,20 @@ namespace Gui {
         /**
          * @brief Subscribe a child element to an event
          * @tparam Args Template argument name
-         * @param event Event to register callback function on
-         * @param callback Function to be executed when event is raised
-         * @param childElementName Child element alias
+         * @param event Event to subscribe child element to
+         * @param callback Function to execute when the event is fired
+         * @param childElementName Child element to subscribe to an event
          *
          * This function will attempt to register a child element to an
-         * event. If the child element is not found in the collection, this
-         * operation will  cancel. When the event is raised the provided
-         * callback function will be invoked
+         * event such that the provided callback function is executed when
+         * the event is raised. This operation will be ignored if the child
+         * element to subscribe to an event does not exist in the panel
          */
         template <typename...Args>
-        void subscribeChildToEvent(const std::string& nameOfChild, const std::string& event,
+        void subscribeChildToEvent(const std::string& childElementName, const std::string& event,
            Callback<Args...> callback)
         {
-            auto found = findUIElement(nameOfChild);
+            auto found = findUIElement(childElementName);
             if (found != uiElements_.end()){
                 found->second->on(event, callback);
             }
@@ -179,15 +183,24 @@ namespace Gui {
         using ConstIterator = UIElementContainer::const_iterator;
 
         /**
-         * @brief Add gui element to underlying data structure
+         * @brief Restrict publication of event to class level
+         *
+         * Only the class knows the conditions under which an event may be
+         * fired. Therefore, events must not be raised externally as this
+         * may result in events being raised at the wong time, resulting
+         * in undesired and incorrect behavior
+         */
+        using EventEmitter::emit;
+
+        /**
+         * @brief Add UI element to underlying data structure
          * @param alias Name of the UI element
          * @param guiElement Element to be added
          *
-         * This function will try to add a UI element to the panel.
-         * If the alias for the UI element to be added is already
-         * present in the collection, that UI element wil not be
-         * added to the panel. In other words, aliases for UI
-         * elements must be unique
+         * This function will try to add a UI element to the panel. If the
+         * alias for the UI element to be added is already present in the
+         * collection, that UI element wil not be added to the panel. In
+         * other words, aliases for UI elements must be unique
          */
         void add(const std::string &alias, std::unique_ptr<UIElement> guiElement);
 
@@ -201,33 +214,30 @@ namespace Gui {
         UIElementContainer::iterator findUIElement(const std::string& uiElemAlias);
 
         /**
-         * @brief Restrict publication of event to class level
-         */
-        using EventEmitter::emit;
-
-        /**
-         * @brief  Get a constant iterator that points to the
-         *         first element in the the panel
-         * @return A constant iterator that points to the first
-         *         element in the the panel
+         * @brief  Get a constant iterator that points to the first
+         *          element in the the panel
+         * @return Constant iterator that points to the first element
+         *         in the the panel
          */
         ConstIterator cBegin() const;
 
         /**
-         * @brief  Get a constant iterator that points one past
-         *         the last element in the panel
-         * @return A constant iterator that points one past the
+         * @brief  Get a constant iterator that points one past the
          *         last element in the panel
+         * @return A constant iterator that points one past the last
+         *         element in the panel
          */
         ConstIterator cEnd() const;
 
     private:
-        //Elements contained by the panel
+        //UI elements container
         UIElementContainer uiElements_;
-        //Representation
+        //Graphical representation of the panel
         sf::RectangleShape panel_;
-        //Dummy variable
+        //Null pointer (Useful when returning unique_ptr by reference)
         const std::unique_ptr<UIElement> null_Ptr;
+        //Visibility state of the panel
+        bool isHidden_;
     };
 }
 

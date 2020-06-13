@@ -65,9 +65,15 @@ set(SOURCE_FILES
         game-source-code/gui/menu/PauseMenu.h
         game-source-code/utility/Utility.h
         test-source-code/EventEmitterTests.hpp
-        test-source-code/main.cpp
-        test-source-code/WindowTests.hpp
-        game-source-code/gui/IDrawable.h)
+        game-source-code/main/main.cpp
+        #test-source-code/WindowTests.hpp
+        game-source-code/gui/IDrawable.h
+        game-source-code/gui/menu/GameLoseMenu.cpp
+        game-source-code/gui/menu/GameLoseMenu.h
+        game-source-code/gui/menu/GameWinMenu.cpp
+        game-source-code/gui/menu/GameWinMenu.h
+        game-source-code/audio/AudioManager.cpp
+        game-source-code/audio/AudioManager.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)

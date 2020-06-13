@@ -18,7 +18,7 @@
 #include <memory>
 
 namespace Audio {
-    class MusicPlayer : public IAudioPlayer{
+    class MusicPlayer final : public IAudioPlayer{
     public:
         /**
          * @brief play music file
@@ -29,8 +29,10 @@ namespace Audio {
         /**
          * @brief Loop/unloop music
          * @param isLoop Set to true to loop music, false to unloop music
+         *
+         * The music is not looped by default
          */
-        void setLoop(bool isLoop);
+        void setLoop(bool isLoop) override ;
 
         /**
          * @brief Pause the Music
@@ -46,6 +48,29 @@ namespace Audio {
          * @brief Stop playing or paused music
          */
         void stop() override;
+
+        /**
+         * @brief Set the audio volume
+         * @param volume Volume to set
+         *
+         * The volume must be between 0 (mute) and 100 (full volume)
+         * The default volume is 100.
+         *
+         * @note The volume must be set after playing the song
+         */
+        void setVolume(float volume) override;
+
+        /**
+         * @brief Get the current status of the audio file
+         * @return Current status of the audio file
+         */
+        Status getStatus() const override;
+
+        /**
+         * @brief Get the volume of the music
+         * @return Volume of the music
+         */
+        float getVolume() const override;
 
     private:
         //pointer to playing music

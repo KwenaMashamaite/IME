@@ -18,7 +18,7 @@
 #include <SFML/Audio.hpp>
 
 namespace Audio {
-    class SoundEffectPlayer : public IAudioPlayer{
+    class SoundEffectPlayer final : public IAudioPlayer{
     public:
         /**
          * @brief Play sound
@@ -40,6 +40,35 @@ namespace Audio {
          * @brief Resume sound effect
          */
         void resume() override;
+
+        /**
+         * @brief Set the audio volume
+         * @param volume Volume to set
+         *
+         * The volume must be between 0 (mute) and 100 (full volume)
+         * The default volume is 100.
+         */
+        void setVolume(float volume) override;
+
+        /**
+         * @brief Loop/unloop sound effect
+         * @param isLooped Set to true to loop audio, false to unloop audio
+         *
+         * The sund effect s not looped by default
+         */
+        void setLoop(bool isLooped) override;
+
+        /**
+         * @brief Get the current status of the audio file
+         * @return Current status of the audio file
+         */
+        Status getStatus() const override;
+
+        /**
+         * @brief Get the volume of the sound effect
+         * @return Volume of the sound effect
+         */
+        float getVolume() const override;
 
     private:
         //Currently playing sound

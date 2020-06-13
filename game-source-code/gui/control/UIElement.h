@@ -53,11 +53,10 @@ namespace Gui {
         /**
          * @brief Create a UI element
          *
-         * The UI element is created with no text, has a character
-         * size of 30, a white background and a black foreground.
-         * @note A UI element with no text cannot be seen when
-         * rendered. It will remain invisible until its text
-         * content is set
+         * The UI element is created with an empty text content
+         * @note A UI element with no text content cannot be seen when
+         * rendered. It will remain invisible until its text content,
+         * outline thickness, padding or margin is set
          */
         UIElement();
 
@@ -65,10 +64,62 @@ namespace Gui {
          * @brief Create a UI element
          * @param textContent Text to be displayed inside the element
          *
-         * The UI element has a character size of 30, a white background
-         * and a black foreground by default
+         * The UI element will have the dimensions of the text content
          */
         explicit UIElement(const std::string &textContent);
+
+        /**
+         * @brief Set the same padding on all sides
+         * @param padding Padding to set
+         *
+         * This function controls the distance between the elements text
+         * content and the border. When the padding is 0, the border and
+         * the elements text will have the same dimensions, When the padding
+         * is set to a non-zero value, the border will move away from the
+         * text content by the specified amount on all four sides. The
+         * padding is 0 by default
+         */
+        void setPadding(float padding);
+
+        /**
+         * @brief Set the padding of the element individually
+         * @param padding Padding to set
+         *
+         * This function controls the distance between the elements text
+         * content and the border. When the padding is 0, the border and
+         * the elements text will have the same dimensions. The "left"
+         * and "right" values of the argument adjust the width while the
+         * "top" and "bottom" values adjust the height. The default padding
+         * is {0, 0, 0, 0}
+         */
+        void setPadding(const Padding& padding);
+
+        /**
+         * @brief Set the same margin on all sides
+         * @param margin Margin to set
+         *
+         * The margin controls the distance between the element and
+         * whatever its placed next to. For instance, when the element
+         * is placed next to another UI element and the margin is zero,
+         * The elements will physically touch each other. However, when
+         * the margin is non-zero, the elements will automatically be
+         * separated by the set margin. The default margin is 0 on all
+         * sides
+         */
+        void setMargin(float margin);
+
+        /**
+         * @brief Set the margin (individually)
+         * @param margin Margin to set
+         *
+         * The margin controls the distance between the element and
+         * whatever its placed next to. For instance, when the element
+         * is placed next to another UI element and the margin is zero,
+         * The elements will physically touch each other. However, when
+         * the margin is non-zero, the elements will automatically be
+         * separated by the set margin. The default margin is {0, 0, 0, 0}
+         */
+        void setMargin(const Margin &margin);
 
         /**
          * @brief Set the position of the element
@@ -78,55 +129,24 @@ namespace Gui {
         void setPosition(float x, float y);
 
         /**
-         * @brief Set the outline thickness
-         * @param outlineThickness Thickness to set
+         * @brief Set the position of the element
+         * @param position New position of the element
          */
-        void setOutlineThickness(float outlineThickness);
+        void setPosition(Position position);
 
         /**
-         * @brief Set the same padding on all sides
-         * @param padding Padding to set
-         *
-         * This function will move the border away from the
-         * text content by the specified amount on all four
-         * sides. The padding is zero by default. This means
-         * that, the border and the text content have the same
-         * dimensions
-         */
-        void setPadding(float padding);
-
-        /**
-         * @brief Set the margin (individually)
-         * @param margin Margin to set
-         */
-        void setMargin(const Margin &margin);
-
-        /**
-         * @brief Set the padding (individually)
-         * @param padding Padding to set
-         *
-         * This function may be used to adjust the width/height
-         * of the element. The "left" and "right" values of the
-         * argument adjust the width while the "top" and "bottom"
-         * values adjust the height. The padding is zero by default
-         */
-        void setPadding(const Padding& padding);
-
-        /**
-        * @brief Set the fill colour of the element
-        * @param fillColour New fill colour of the element
-        */
-        void setFillColour(Colour fillColour);
-
-        /**
-         * @brief Set the UI element's text font
+         * @brief Set the element's text font
          * @param textFont New font
+         *
+         * This function will overwrite the default text font
          */
         void setTextFont(const std::string &textFont);
 
         /**
          * @brief Set the character size of the element's text
          * @param charSize New character size
+         *
+         * The default character size is 30
          */
         void setTextCharSize(unsigned int charSize);
 
@@ -134,52 +154,56 @@ namespace Gui {
          * @brief Set the text content of the element
          * @param content New text content
          *
-         * This function will overwrite the text that
-         * was previously set
+         * This function will overwrite any text that was previously
+         * set
          */
         void setText(const std::string &content);
 
         /**
+         * @brief Set the outline thickness of the element
+         * @param outlineThickness New outline thickness to set
+         *
+         * The default outline thickness is 0
+         */
+        void setOutlineThickness(float outlineThickness);
+
+        /**
+         * @brief Enable or disable the element
+         * @param isEnable Set true to enable the element, false to
+         *        disable the element
+         *
+         * The element is enabled by default
+         *
+         * @note Disabling the element cancels all the interaction events.
+         *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
+         *       and "mouseDown" events will not fire while the element is
+         *       disabled.
+         */
+        void setEnable(bool isEnable);
+
+        /**
+        * @brief Set the fill colour of the element
+        * @param fillColour New fill colour of the element
+        *
+        * The default fill colour is gainsboro
+        */
+        void setFillColour(Colour fillColour);
+
+        /**
          * @brief Set the fill colour of the element's text
          * @param textFillColour New text fill colour
+         *
+         * The default text fill colour is black
          */
         void setTextFillColour(Colour textFillColour);
 
         /**
          * @brief Set the outline colour of the element
          * @param outlineColour New outline colour
+         *
+         * The default outline colour is grey
          */
         void setOutlineColour(Colour outlineColour);
-
-        /**
-         * @brief Get the fill colour of the element's text
-         * @return Fill colour of the element's text
-         */
-        Colour getTextFillColour() const;
-
-        /**
-         * @brief Get the fill colour of the element
-         * @return Fill colour of the element
-         */
-        Colour getFillColour() const;
-
-        /**
-         * @brief Get the outline colour of the element
-         * @return Outline colour of the element
-         */
-        Colour getOutlineColour() const;
-
-        /**
-         * @brief Get the position of the element
-         * @return Position of the element
-         */
-        Position getPosition() const;
-
-        /**
-         * @brief Get the dimensions of the element
-         * @return Dimensions of the element
-         */
-        Dimensions getDimensions() const;
 
         /**
          * @brief Get the padding set on the element
@@ -194,28 +218,62 @@ namespace Gui {
         Margin getMargin() const;
 
         /**
-         * @brief Make UI element disappear from a render target
+         * @brief Get the position of the element
+         * @return Current position of the element
          */
-        void hide();
+        Position getPosition() const;
 
         /**
-         * @brief Make UI element reappear on a render target
-         */
-        void show();
-
-        /**
-         * @brief Toggle the hidden state of the element
+         * @brief Get the dimensions of the element
+         * @return Current Dimensions of the element
          *
-         * This function will make a UI element invisible if its
-         * currently visible and vice versa
+         * The dimensions of the element include the applied
+         * margin, padding and outline thickness
          */
-        void toggle();
+        Dimensions getDimensions() const;
+
+        /**
+         * @brief Get the fill colour of the element
+         * @return Fill colour of the element
+         */
+        Colour getFillColour() const;
+
+        /**
+         * @brief Get the fill colour of the element's text
+         * @return Fill colour of the element's text
+         */
+        Colour getTextFillColour() const;
+
+        /**
+         * @brief Get the outline colour of the element
+         * @return Outline colour of the element
+         */
+        Colour getOutlineColour() const;
+
+        /**
+         * @brief Toggle the visibility of the element
+         *
+         * This function will make the element invisible if its currently
+         * visible and vice versa. The visibility is not automatically
+         * reflected on the render target. A call to draw() must be made
+         * after calling this function
+         */
+        void toggleVisibility();
 
         /**
          * @brief Check if UI element is hidden on a render target or not
          * @return True if UI element is hidden, false if it is not hidden
          */
         bool isHidden() const;
+
+        /**
+         * @brief Check if element is enabled or disabled
+         * @return True if element is enabled, false if element is disabled
+         *
+         * @note A disabled element cannot be interacted with using the mouse.
+         *       @see setEnable(bool)
+         */
+        bool isEnabled() const;
 
         /**
         * @brief Check if coordinates lie inside the element
@@ -233,17 +291,34 @@ namespace Gui {
         void draw(Window &renderTarget) override;
 
         /**
-         * @brief Remove UI element from render target
-         * @param renderTarget Target to remove UI element from
+         * @brief Remove the element from a render target
+         *
+         * The UI element is only hidden graphically. That is, after
+         * calling this function the element will remain where it is
+         * and any operations on it (Such as changing the text font)
+         * will be carried out behind the scene. Calling draw() on a
+         * hidden element has no effect. That is, the element will
+         * not appear on the render target
+         *
+         * @note Hiding an element disables it, @see setEnable(bool)
          */
-        void remove(Window &renderTarget) override;
+        void hide();
+
+        /**
+         * @brief Make a hidden element reappear on a render target
+         *
+         * revealing a hidden UI element does not automatically show
+         * it on the render target, a call to draw() must be made
+         */
+        void show();
 
         /**
          * @brief Abstract Destructor
          *
          * The destructor is made abstract so that the class cannot be
          * instantiated directly. Derived classes will NOT be abstract
-         * by default!, Only if they themselves introduce abstract methods
+         * by default (The class implements the destructor), Only if they
+         * themselves introduce abstract methods
          */
         virtual ~UIElement() = 0;
 
@@ -272,7 +347,7 @@ namespace Gui {
         void initEvents();
 
         /**
-        * @brief Update element when text dimensions change
+        * @brief Update the element when text dimensions change
          *
          * This function will update the element when the text font,
          * text content, text character size etc.. changes
@@ -283,23 +358,41 @@ namespace Gui {
          * @brief Update the element when it's dimensions changes
          *
          * This function will update the elements dimensions when the
-         * margin, outline thickness or  padding of the element changes
+         * margin, outline thickness or padding of the element changes
          */
         void onElementDimensionChange();
+
+        /**
+         * @brief Select/deselect element
+         * @param isSelected Set true to select element, false to deselect element
+         *
+         * The element is not selected by default
+         */
+        void setSelected(bool isSelected);
+
+        /**
+         * @brief Check if element is selected or not
+         * @return True if element is selected, false if element is not selected
+         */
+        bool isSelected() const;
 
     private:
         //White space around element
         Margin margin_;
-        //Space between border and content
+        //Space between the border and elements text content
         Padding padding_;
         //Elements text content
         sf::Text text_;
         //Defines the perimeter of the entire element (includes margin and padding)
-        sf::RectangleShape outline_;
-        //Defines the perimeter of the element border
+        sf::RectangleShape parentRectangle_;
+        //Defines the perimeter of the elements border
         sf::RectangleShape border_;
         //Display state of element
         bool isHidden_;
+        //Selected state
+        bool isSelected_;
+        //Enabled state
+        bool isEnabled_;
     };
 }
 

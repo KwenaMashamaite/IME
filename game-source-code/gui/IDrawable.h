@@ -13,16 +13,10 @@ namespace Gui {
     class IDrawable {
     public:
         /**
-         * @brief Draw drawable on a render target
-         * @param renderTarget Target to draw menu on
+         * @brief Draw object on a render target
+         * @param renderTarget Target to draw object on
          */
         virtual void draw(Window &renderTarget) = 0;
-
-        /**
-         * @brief Remove drawable from a render target
-         * @param renderTarget Target to remove drawable from
-         */
-        virtual void remove(Window &renderTarget) = 0;
     };
 }
 

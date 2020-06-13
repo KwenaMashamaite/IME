@@ -1,28 +1,26 @@
 #include "Window.h"
 #include "input/Mouse.h"
 #include "input/Keyboard.h"
-#include "gui/control/UIElement.h"
 #include <cassert>
 
 Common::Dimensions Gui::Window::dimensions_{0u, 0u};
 
 Gui::Window::Window(){
-    assert(!isInstantiated_ && "Only a single instance of window can be instantiated");
+    assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
     isInstantiated_ = true;
-    subscribeToEvents();
 }
 
 void Gui::Window::create(const std::string& name, float width, float height){
     assert(width >= 0.0f && "Window width cannot be negative");
     assert(height >= 0.0f && "Window height cannot be negative");
     dimensions_ = {width, height};
-    window_.create(sf::VideoMode(static_cast<unsigned int>(dimensions_.width),
-        static_cast<unsigned int>(dimensions_.height)),
-        name,
-        sf::Style::Close
+    window_.create(sf::VideoMode(static_cast<unsigned int>(width),
+        static_cast<unsigned int>(height)),name,sf::Style::Close
     );
-    window_.setFramerateLimit(60);
-    window_.setVerticalSyncEnabled(true);
+}
+
+void Gui::Window::setFramerateLimit(unsigned int framerateLimit) {
+    window_.setFramerateLimit(framerateLimit);
 }
 
 bool Gui::Window::isOpen() const{
@@ -77,23 +75,6 @@ void Gui::Window::clear(sf::Color colour){
     window_.clear(colour);
 }
 
-Common::Position Gui::Window::getMouseCursorPosition() const {
-    return {
-        static_cast<float>(sf::Mouse::getPosition(window_).x),
-        static_cast<float>(sf::Mouse::getPosition(window_).y)
-    };
-}
-
-Gui::Window::~Window(){
-    isInstantiated_ = false;
-}
-
-void Gui::Window::subscribeToEvents() {
-    eventEmitter_.addOnceListener("Closed", Callback<>([this]() {
-        close();
-    }));
-}
-
 void Gui::Window::draw(const sf::Drawable &drawable) {
     window_.draw(drawable);
 }
@@ -102,6 +83,6 @@ void Gui::Window::draw(Gui::IDrawable &drawable) {
     drawable.draw(*this);
 }
 
-void Gui::Window::remove(Gui::IDrawable &drawable) {
-    drawable.remove(*this);
+Gui::Window::~Window(){
+    isInstantiated_ = false;
 }

@@ -5,10 +5,20 @@
 #ifndef AUDIOPLAYER_H
 #define AUDIOPLAYER_H
 
+#include "event/EventEmitter.h"
 #include <string>
 
 namespace Audio {
-    class IAudioPlayer {
+    /**
+     * @brief Audio status
+     */
+    enum class Status{
+        Playing,
+        Paused,
+        Stopped
+    };
+
+    class IAudioPlayer : public EventEmitter{
     public:
         /**
          * @brief Play audio
@@ -32,9 +42,44 @@ namespace Audio {
         virtual void resume() = 0;
 
         /**
+         * @brief Set the volume of the audio
+         * @param volume Volume to set
+         */
+        virtual void setVolume(float volume) = 0;
+
+        /**
+         * @brief Loop/unloop audio
+         * @param isLooped Set to true to loop audio, false to unloop audio
+         */
+        virtual void setLoop(bool isLooped) = 0;
+
+        /**
+         * @brief Get the current status of the audio file
+         * @return Current status of the audio file
+         */
+        virtual Status getStatus() const = 0;
+
+        /**
+         * @brief Get the volume of an audio file
+         * @return Volume of an audio file
+         */
+        virtual float getVolume() const = 0;
+
+        /**
          * @brief Destructor
          */
         virtual ~IAudioPlayer() = default;
+
+    protected:
+        /**
+         * @brief Prevent external publishing of events
+         *
+         * Only the class knows the conditions under which an event may be
+         * fired. Therefore, events must not be raised externally as this
+         * may result in events being raised at the wong time, resulting
+         * in undesired and incorrect behavior
+         */
+        using::EventEmitter::emit;
     };
 }
 

@@ -1,5 +1,5 @@
 /**
- * @brief Stores highscores from previous game plays
+ * @brief Class for managing game scores
  */
 
 #ifndef SCOREBOARD_H
@@ -8,79 +8,52 @@
 #include "utility/FileReader.h"
 #include <vector>
 
-/**
- * @brief Defines entity types worth points and their corresponding
- *        points
- *
- * The entries provided below are placeholders for illustration
- * purposes. Please remove this comment after adding the appropriate
- * entries to the enum. You may leave the "@brief" tag as it is or
- * update it
- */
-enum class EntityTypeWorthPoints{
-    EnemyBullet = 10, //Adds 10 points to current score
-    InvisibleEnemy = 50,
-    FlyingEnemy = 100
-};
-
 class Scoreboard{
 public:
-    using ScoreContainer = std::vector<unsigned int>;
+    using ScoreContainer = std::vector<int>;
 	using constIterator = ScoreContainer::const_iterator;
 	/**
 	 * @brief Constructor
-     * @param filepath File name of the file that contains the scores
+     * @param filename The file name (including path) of the file that
+     *        contains the highscores
      * @throw FileNotFound If the file cannot be found on the disk
-     *
-     * The file name must be preceded by the path to the file. In
-     * addition, the file that contains the highscores must be in
-     * the same folder as the generated executable file (or be in
-     * a subfolder of the generated executable file's folder),
-     * otherwise a "FileNotFound" exception will be thrown
-     *
-     * (e.g executables/resources/highscores/highscore.txt)
 	 */
 	explicit Scoreboard(const std::string& filename);
-
-	/**
-	 * @brief Add points to the current score
-	 * @param entityType Entity type with points to add
-	 *
-	 * The integer value associated with the entity determines
-	 * the amount of points that are added to the current score
- 	 */
-    void addPoints(EntityTypeWorthPoints entityType);
 
     /**
      * @brief Add points to the current score
      * @param points Points to add
+     *
+     * This function does not overwrite the existing current score,
+     * it adds to it. Providing a negative score subtracts from the
+     * current score
      */
-    void addPoints(unsigned int points);
+    void addPoints(int points);
 
 	/**
-	 * @brief Write scores to disk file
+	 * @brief Write scores to highscores file on disk
 	 *
-	 * The disk file is only updated if the current score is greater
-	 * than the lowest highscore from the last file read
+	 * The file is only updated if the current score is greater than
+	 * the lowest highscore from the last file read
 	 */
-	void updateHighScore();
+	void updateHighScoreFile();
 
 	/**
 	 * @brief Reset the current score to zero
 	 */
-	void reset();
+	void resetCurrentScore();
 
 	/**
 	 * @brief Get the current score
 	 * @return Current score
 	 */
-	unsigned int getScore() const;
+    int getCurrentScore() const;
 
 	/**
 	 * @brief Get the highest score
 	 * @return Highest score
 	 */
-	unsigned int getTopScore() const;
+    int getTopScore() const;
 
 	/**
 	 * @brief  Get a constant iterator that points to the first element
@@ -99,14 +72,12 @@ public:
 	constIterator cEnd() const;
 
 private:
-	//Reads/writes high scores from/to disk file
-	Utility::FileReader fileReader_;
 	//stores high scores read from disk file
 	ScoreContainer highScores_;
 	//Stores current score
-	unsigned int score_;
+	int currentScore_;
 	//highscores file path on the disk
-	std::string highScoresFilename_;
+	std::string highScoresFile_;
 };
 
 #endif

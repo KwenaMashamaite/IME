@@ -20,14 +20,9 @@ namespace Gui {
         /**
          * @brief Draw all GUI elements and layouts of the menu
          *        on a render target
+         * @param renderTarget Target to draw pause menu on
          */
-        void draw() override;
-
-        /**
-         * @brief Remove all Gui elements and layouts of the menu from a
-         *        render target
-         */
-        void clear() override;
+        void draw(Window &renderTarget) override;
 
     private:
         /**

@@ -5,4 +5,5 @@ Gui::TextBlock::TextBlock(const std::string &textContent)
 {
     setFillColour({255, 255, 255}); //White
     setTextFillColour({0, 0, 0}); //Black
+    setEnable(false); //Disable interactions with the mouse cursor
 }

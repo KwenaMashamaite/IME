@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace Gui {
-    class Drawer {
+    class Drawer final {
     public:
         using EntityAnimatorPair = std::pair<std::shared_ptr<Entity>&, Animator&>;
         /**
