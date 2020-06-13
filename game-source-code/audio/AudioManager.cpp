@@ -38,7 +38,7 @@ void Audio::AudioManager::pause(const std::string& filename) {
 void Audio::AudioManager::stop(const std::string& filename) {
     auto found = audioPlayers_.find(filename);
     if (found != audioPlayers_.end()) {
-        audioPlayers_.erase(found);
+        found->second->stop();
     }
 }
 
@@ -77,10 +77,10 @@ void Audio::AudioManager::pauseAll() {
     );
 }
 
-void Audio::AudioManager::resumeAll() {
+void Audio::AudioManager::stopAll() {
     std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
         [](const auto& audioPlayer) {
-            audioPlayer.second->resume();
+            audioPlayer.second->stop();
         }
     );
 }
