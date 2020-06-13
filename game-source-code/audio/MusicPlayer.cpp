@@ -38,7 +38,8 @@ void Audio::MusicPlayer::stop() {
 }
 
 void Audio::MusicPlayer::setVolume(float volume) {
-    if (song_ && song_->getVolume() != volume) {
+    if (song_ && song_->getVolume() != volume
+        && (volume >=0 && volume <= 100)) {
         song_->setVolume(volume);
         emit("volumeChanged", volume);
     }
@@ -55,4 +56,9 @@ Audio::Status Audio::MusicPlayer::getStatus() const {
                 return Status::Stopped;
         }
     }
+}
+
+float Audio::MusicPlayer::getVolume() const {
+    if (song_)
+        return song_->getVolume();
 }

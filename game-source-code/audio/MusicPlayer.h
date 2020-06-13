@@ -66,6 +66,12 @@ namespace Audio {
          */
         Status getStatus() const override;
 
+        /**
+         * @brief Get the volume of the music
+         * @return Volume of the music
+         */
+        float getVolume() const override;
+
     private:
         //pointer to playing music
         std::shared_ptr<sf::Music> song_;

@@ -60,6 +60,12 @@ namespace Audio {
         virtual Status getStatus() const = 0;
 
         /**
+         * @brief Get the volume of an audio file
+         * @return Volume of an audio file
+         */
+        virtual float getVolume() const = 0;
+
+        /**
          * @brief Destructor
          */
         virtual ~IAudioPlayer() = default;

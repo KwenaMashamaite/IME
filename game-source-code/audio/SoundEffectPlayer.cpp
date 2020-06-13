@@ -31,7 +31,8 @@ void Audio::SoundEffectPlayer::resume() {
 }
 
 void Audio::SoundEffectPlayer::setVolume(float volume) {
-    if (volume != soundEffect_.getVolume()) {
+    if (volume != soundEffect_.getVolume()
+        && (volume >=0 && volume <= 100)) {
         soundEffect_.setVolume(volume);
         emit("volumeChanged", volume);
     }
@@ -53,4 +54,8 @@ Audio::Status Audio::SoundEffectPlayer::getStatus() const {
         case sf::Music::Status::Stopped:
             return Status::Stopped;
     }
+}
+
+float Audio::SoundEffectPlayer::getVolume() const {
+    return soundEffect_.getVolume();
 }

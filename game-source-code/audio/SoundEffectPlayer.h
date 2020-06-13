@@ -64,6 +64,12 @@ namespace Audio {
          */
         Status getStatus() const override;
 
+        /**
+         * @brief Get the volume of the sound effect
+         * @return Volume of the sound effect
+         */
+        float getVolume() const override;
+
     private:
         //Currently playing sound
         sf::Sound soundEffect_;
