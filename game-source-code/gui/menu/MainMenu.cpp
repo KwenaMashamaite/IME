@@ -146,6 +146,7 @@ void Gui::MainMenu::updateInfoPanel(const std::string& newInfo) {
 void Gui::MainMenu::createReturnButton() {
     auto returnButton = std::make_unique<Button>("<-back");
     returnButton->setTextCharSize(18u);
+    returnButton->setOutlineThickness(2.0f);
     returnButton->setTextFont("europe-underground-dark.ttf");
     returnButton->setPosition(1, 1);
     returnButton->on("click", Callback<>([this](){state_ = State::Main;}));
