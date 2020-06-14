@@ -29,20 +29,22 @@ Collaboration diagram for Gui\+::Window\+:\nopagebreak
 \begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_window_a782dafd317ffc5de0b214cd511509f36}{create}} (const std\+::string \&name, float width, float height)
 \begin{DoxyCompactList}\small\item\em Create a render window. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_a544f9a9fe36a07ac9b865c56f8dc70bc}{set\+Framerate\+Limit}} (unsigned int framerate\+Limit)
+\begin{DoxyCompactList}\small\item\em Set the frame rate limit of the window. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}{is\+Open}} () const
 \begin{DoxyCompactList}\small\item\em Check if the window is open or not. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_window_a7196799d49ee42dfee5406851edb79dc}{process\+Events}} ()
-\begin{DoxyCompactList}\small\item\em Process events. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Process window events. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}{close}} ()
 \begin{DoxyCompactList}\small\item\em Close the window. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}{draw}} (const auto \&drawable)
-\begin{DoxyCompactList}\small\item\em Draw drawable object on the screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_a23619496d179fee208540715d9e5916e}{draw}} (const sf\+::\+Drawable \&drawable)
+\begin{DoxyCompactList}\small\item\em Draw drawable object on the window. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_window_a949b353ffaf944d0de247dded4ee1f8c}{draw}} (\mbox{\hyperlink{class_gui_1_1_i_drawable}{Gui\+::\+I\+Drawable}} \&drawable)
+\begin{DoxyCompactList}\small\item\em Draw drawable on the window. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}{display}} ()
 \begin{DoxyCompactList}\small\item\em Display drawn objects on the window. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}{clear}} (sf\+::\+Color colour=sf\+::\+Color\+::\+Black)
 \begin{DoxyCompactList}\small\item\em Clear the entire window with a single colour. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{struct_common_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_window_a0c70983b433011a5ebfc0ab92197e1bf}{get\+Mouse\+Cursor\+Position}} () const
-\item 
 \mbox{\hyperlink{class_gui_1_1_window_a4af1ab6d5a911e5f398d6bb87570d298}{$\sim$\+Window}} ()
 \begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Static Public Member Functions}
@@ -59,7 +61,7 @@ static bool \mbox{\hyperlink{class_gui_1_1_window_a44f8300430f362bc6a0d299f9414f
 \doxysubsection{Detailed Description}
 
 
-Definition at line 17 of file Window.\+h.
+Definition at line 18 of file Window.\+h.
 
 
 
@@ -126,14 +128,21 @@ listener\textquotesingle{}s identification number
 \end{DoxyReturn}
 
 
-Definition at line 100 of file Window.\+h.
+Definition at line 108 of file Window.\+h.
 
-Here is the call graph for this function\+:
-\nopagebreak
+Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{class_gui_1_1_window_ac9401dd2c2981b7f1c4322409c67aeaa_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{class_gui_1_1_window_ac9401dd2c2981b7f1c4322409c67aeaa_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}\label{class_gui_1_1_window_ab9c0d1423c6e2536415fd2b136a4b540}} 
@@ -153,7 +162,7 @@ Clear the entire window with a single colour.
 \end{DoxyParams}
 
 
-Definition at line 75 of file Window.\+cpp.
+Definition at line 74 of file Window.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}\label{class_gui_1_1_window_abf2190b09a4b12bd3715eac7e8a1eaca}} 
 \index{Gui::Window@{Gui::Window}!close@{close}}
@@ -167,7 +176,7 @@ Close the window.
 
 
 
-Definition at line 67 of file Window.\+cpp.
+Definition at line 66 of file Window.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_window_a782dafd317ffc5de0b214cd511509f36}\label{class_gui_1_1_window_a782dafd317ffc5de0b214cd511509f36}} 
 \index{Gui::Window@{Gui::Window}!create@{create}}
@@ -188,9 +197,9 @@ Create a render window.
 {\em height} & Height of the window\\
 \hline
 \end{DoxyParams}
-The dimensions of the window must be greater than the minimum dimensions of 100x100 pixels, otherwise the program will be terminated (prematurely). The created window has a maximum frame limit of 60 F\+PS and V-\/\+Sync is enabled by default 
+The dimensions of the window must be positive, otherwise the program will be terminated prematurely 
 
-Definition at line 14 of file Window.\+cpp.
+Definition at line 13 of file Window.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}\label{class_gui_1_1_window_ac5c4445513e04926aec17d2943187c39}} 
 \index{Gui::Window@{Gui::Window}!display@{display}}
@@ -204,17 +213,17 @@ Display drawn objects on the window.
 
 
 
-Definition at line 71 of file Window.\+cpp.
+Definition at line 70 of file Window.\+cpp.
 
-\mbox{\Hypertarget{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}\label{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49}} 
+\mbox{\Hypertarget{class_gui_1_1_window_a23619496d179fee208540715d9e5916e}\label{class_gui_1_1_window_a23619496d179fee208540715d9e5916e}} 
 \index{Gui::Window@{Gui::Window}!draw@{draw}}
 \index{draw@{draw}!Gui::Window@{Gui::Window}}
-\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
-{\footnotesize\ttfamily void Gui\+::\+Window\+::draw (\begin{DoxyParamCaption}\item[{const auto \&}]{drawable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::draw (\begin{DoxyParamCaption}\item[{const sf\+::\+Drawable \&}]{drawable }\end{DoxyParamCaption})}
 
 
 
-Draw drawable object on the screen. 
+Draw drawable object on the window. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -223,14 +232,41 @@ Draw drawable object on the screen.
 \end{DoxyParams}
 
 
-Definition at line 72 of file Window.\+h.
+Definition at line 78 of file Window.\+cpp.
 
 Here is the caller graph for this function\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=323pt]{class_gui_1_1_window_a80e0722ff161697464e9d06ef0340c49_icgraph}
+\includegraphics[width=349pt]{class_gui_1_1_window_a23619496d179fee208540715d9e5916e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_window_a949b353ffaf944d0de247dded4ee1f8c}\label{class_gui_1_1_window_a949b353ffaf944d0de247dded4ee1f8c}} 
+\index{Gui::Window@{Gui::Window}!draw@{draw}}
+\index{draw@{draw}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_i_drawable}{Gui\+::\+I\+Drawable}} \&}]{drawable }\end{DoxyParamCaption})}
+
+
+
+Draw drawable on the window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em drawable} & Object to draw \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 82 of file Window.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{class_gui_1_1_window_a949b353ffaf944d0de247dded4ee1f8c_cgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef}\label{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef}} 
@@ -248,7 +284,7 @@ Dimensions of the window
 \end{DoxyReturn}
 
 
-Definition at line 46 of file Window.\+h.
+Definition at line 54 of file Window.\+h.
 
 Here is the caller graph for this function\+:
 \nopagebreak
@@ -258,16 +294,6 @@ Here is the caller graph for this function\+:
 \includegraphics[width=350pt]{class_gui_1_1_window_a645732483b463ba3e7f50b911c002bef_icgraph}
 \end{center}
 \end{figure}
-\mbox{\Hypertarget{class_gui_1_1_window_a0c70983b433011a5ebfc0ab92197e1bf}\label{class_gui_1_1_window_a0c70983b433011a5ebfc0ab92197e1bf}} 
-\index{Gui::Window@{Gui::Window}!getMouseCursorPosition@{getMouseCursorPosition}}
-\index{getMouseCursorPosition@{getMouseCursorPosition}!Gui::Window@{Gui::Window}}
-\doxysubsubsection{\texorpdfstring{getMouseCursorPosition()}{getMouseCursorPosition()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{struct_common_1_1_position}{Common\+::\+Position}} Gui\+::\+Window\+::get\+Mouse\+Cursor\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
-
-
-
-Definition at line 79 of file Window.\+cpp.
-
 \mbox{\Hypertarget{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}\label{class_gui_1_1_window_ae8327a32cf5457476bf53212c8609a3d}} 
 \index{Gui::Window@{Gui::Window}!isOpen@{isOpen}}
 \index{isOpen@{isOpen}!Gui::Window@{Gui::Window}}
@@ -283,7 +309,7 @@ true if open, false if not open
 \end{DoxyReturn}
 
 
-Definition at line 27 of file Window.\+cpp.
+Definition at line 26 of file Window.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_window_a7196799d49ee42dfee5406851edb79dc}\label{class_gui_1_1_window_a7196799d49ee42dfee5406851edb79dc}} 
 \index{Gui::Window@{Gui::Window}!processEvents@{processEvents}}
@@ -293,11 +319,14 @@ Definition at line 27 of file Window.\+cpp.
 
 
 
-Process events. 
+Process window events. 
 
-This function will notify event listeners if any events have been captured by the window. An invocation of this function wil empty the event queue 
+This function will notify all event listeners if any events have been captured by the window. \begin{DoxyNote}{Note}
+Calling this function will empty the event queue for that frame 
+\end{DoxyNote}
 
-Definition at line 31 of file Window.\+cpp.
+
+Definition at line 30 of file Window.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_window_a44f8300430f362bc6a0d299f9414f611}\label{class_gui_1_1_window_a44f8300430f362bc6a0d299f9414f611}} 
 \index{Gui::Window@{Gui::Window}!removeListener@{removeListener}}
@@ -321,7 +350,34 @@ True if a listener was removed from an event, false if the specified event does 
 \end{DoxyReturn}
 
 
-Definition at line 113 of file Window.\+h.
+Definition at line 121 of file Window.\+h.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_window_a44f8300430f362bc6a0d299f9414f611_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_window_a544f9a9fe36a07ac9b865c56f8dc70bc}\label{class_gui_1_1_window_a544f9a9fe36a07ac9b865c56f8dc70bc}} 
+\index{Gui::Window@{Gui::Window}!setFramerateLimit@{setFramerateLimit}}
+\index{setFramerateLimit@{setFramerateLimit}!Gui::Window@{Gui::Window}}
+\doxysubsubsection{\texorpdfstring{setFramerateLimit()}{setFramerateLimit()}}
+{\footnotesize\ttfamily void Gui\+::\+Window\+::set\+Framerate\+Limit (\begin{DoxyParamCaption}\item[{unsigned int}]{framerate\+Limit }\end{DoxyParamCaption})}
+
+
+
+Set the frame rate limit of the window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em framerate\+Limit} & Frame rate limit\\
+\hline
+\end{DoxyParams}
+The frame rate is not limited by default. If set, it can be disabled by providing 0 as the argument 
+
+Definition at line 22 of file Window.\+cpp.
 
 
 

@@ -1,5 +1,5 @@
 \hypertarget{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{}\doxysection{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}
-Add listener to an event\+This function does the same thing as the add\+Listener function. It just provides a slightly more readable syntax. For example\+:
+Add listener to an event\+This function does the same thing as the add\+Listener() function. It just provides a slightly more readable syntax. For example\+:
 
 return\+Button.\+on(\char`\"{}click\char`\"{}, show\+Main\+Menu) as opposed to return\+Button.\+add\+Listener(\char`\"{}click\char`\"{}, show\+Main\+Menu)
 
@@ -42,7 +42,7 @@ return\+Button.\+on(\char`\"{}click\char`\"{}, show\+Main\+Menu) as opposed to r
 \DoxyCodeLine{            \textcolor{keywordtype}{bool} isCalledOnce);}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{keyword}{private}:}
-\DoxyCodeLine{    \textcolor{comment}{//Event listener identification number}}
+\DoxyCodeLine{    \textcolor{comment}{//Event listeners identification number counter}}
 \DoxyCodeLine{    \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keyword}{auto} previousListenerId = 0;}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{comment}{//Base class for template class}}

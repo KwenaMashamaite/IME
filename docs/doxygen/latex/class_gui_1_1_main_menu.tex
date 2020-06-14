@@ -29,16 +29,14 @@ Collaboration diagram for Gui\+::Main\+Menu\+:
 \item 
 \mbox{\hyperlink{class_gui_1_1_main_menu_a4b8c627c92fa1a2672df2703e4e188ba}{Main\+Menu}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
 \begin{DoxyCompactList}\small\item\em Construct a new Main Menu object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_main_menu_ac5925edbe4e35b3bb6318af137bcbf5b}{draw}} () override
-\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the main menu on a render target. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_main_menu_a98d227d284754f3723450065add79453}{clear}} () override
-\begin{DoxyCompactList}\small\item\em Clear the main menu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
+\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the main menu on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 
 
-Definition at line 15 of file Main\+Menu.\+h.
+Definition at line 14 of file Main\+Menu.\+h.
 
 
 
@@ -60,55 +58,42 @@ Construct a new Main Menu object.
 \end{DoxyParams}
 
 
-Definition at line 6 of file Main\+Menu.\+cpp.
+Definition at line 11 of file Main\+Menu.\+cpp.
 
-Here is the call graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_gui_1_1_main_menu_a4b8c627c92fa1a2672df2703e4e188ba_cgraph}
-\end{center}
-\end{figure}
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_gui_1_1_main_menu_a98d227d284754f3723450065add79453}\label{class_gui_1_1_main_menu_a98d227d284754f3723450065add79453}} 
-\index{Gui::MainMenu@{Gui::MainMenu}!clear@{clear}}
-\index{clear@{clear}!Gui::MainMenu@{Gui::MainMenu}}
-\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
-{\footnotesize\ttfamily void Gui\+::\+Main\+Menu\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
-
-
-
-Clear the main menu. 
-
-
-
-Implements \mbox{\hyperlink{class_gui_1_1_i_menu_adae941ebd6c323198db72d5707e7fd74}{Gui\+::\+I\+Menu}}.
-
-
-
-Definition at line 133 of file Main\+Menu.\+cpp.
-
-\mbox{\Hypertarget{class_gui_1_1_main_menu_ac5925edbe4e35b3bb6318af137bcbf5b}\label{class_gui_1_1_main_menu_ac5925edbe4e35b3bb6318af137bcbf5b}} 
+\mbox{\Hypertarget{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4}\label{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4}} 
 \index{Gui::MainMenu@{Gui::MainMenu}!draw@{draw}}
 \index{draw@{draw}!Gui::MainMenu@{Gui::MainMenu}}
 \doxysubsubsection{\texorpdfstring{draw()}{draw()}}
-{\footnotesize\ttfamily void Gui\+::\+Main\+Menu\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Gui\+::\+Main\+Menu\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
 Draw all G\+UI elements and layouts of the main menu on a render target. 
 
 
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Target to draw main menu on \\
+\hline
+\end{DoxyParams}
 
-Implements \mbox{\hyperlink{class_gui_1_1_i_menu_aa85a630bbea3694341a96525023f50f3}{Gui\+::\+I\+Menu}}.
+
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}{Gui\+::\+I\+Drawable}}.
 
 
 
-Definition at line 122 of file Main\+Menu.\+cpp.
+Definition at line 118 of file Main\+Menu.\+cpp.
 
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=323pt]{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4_cgraph}
+\end{center}
+\end{figure}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

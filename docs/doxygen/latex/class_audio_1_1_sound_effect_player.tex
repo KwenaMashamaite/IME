@@ -6,7 +6,8 @@
 
 
 
-Inheritance diagram for Audio\+::Sound\+Effect\+Player\+:\nopagebreak
+Inheritance diagram for Audio\+::Sound\+Effect\+Player\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -15,7 +16,8 @@ Inheritance diagram for Audio\+::Sound\+Effect\+Player\+:\nopagebreak
 \end{figure}
 
 
-Collaboration diagram for Audio\+::Sound\+Effect\+Player\+:\nopagebreak
+Collaboration diagram for Audio\+::Sound\+Effect\+Player\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -32,7 +34,15 @@ void \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b0790
 void \mbox{\hyperlink{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}{pause}} () override
 \begin{DoxyCompactList}\small\item\em Pause sound effect. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a8e516556ca5ed60fc8d85994d36df9d4}{resume}} () override
-\begin{DoxyCompactList}\small\item\em Resume sound effect. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Resume sound effect. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_sound_effect_player_adfcaf7862bfa2e7b646671a8695b5140}{set\+Volume}} (float volume) override
+\begin{DoxyCompactList}\small\item\em Set the audio volume. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a470667e663866294c9712cfc595236fc}{set\+Loop}} (bool is\+Looped) override
+\begin{DoxyCompactList}\small\item\em Loop/unloop sound effect. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Status}} \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a4c62c16b78f51e5ba48906bc5173d306}{get\+Status}} () const override
+\begin{DoxyCompactList}\small\item\em Get the current status of the audio file. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_audio_1_1_sound_effect_player_acbb8bac8dcfb2e03b67ace48e71f3646}{get\+Volume}} () const override
+\begin{DoxyCompactList}\small\item\em Get the volume of the sound effect. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -43,6 +53,48 @@ Definition at line 21 of file Sound\+Effect\+Player.\+h.
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_audio_1_1_sound_effect_player_a4c62c16b78f51e5ba48906bc5173d306}\label{class_audio_1_1_sound_effect_player_a4c62c16b78f51e5ba48906bc5173d306}} 
+\index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!getStatus@{getStatus}}
+\index{getStatus@{getStatus}!Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}}
+\doxysubsubsection{\texorpdfstring{getStatus()}{getStatus()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Audio\+::\+Status}} Audio\+::\+Sound\+Effect\+Player\+::get\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the current status of the audio file. 
+
+\begin{DoxyReturn}{Returns}
+Current status of the audio file 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ac81225369c92ecaf851d512df09cdf66}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 48 of file Sound\+Effect\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_sound_effect_player_acbb8bac8dcfb2e03b67ace48e71f3646}\label{class_audio_1_1_sound_effect_player_acbb8bac8dcfb2e03b67ace48e71f3646}} 
+\index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!getVolume@{getVolume}}
+\index{getVolume@{getVolume}!Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}}
+\doxysubsubsection{\texorpdfstring{getVolume()}{getVolume()}}
+{\footnotesize\ttfamily float Audio\+::\+Sound\+Effect\+Player\+::get\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the volume of the sound effect. 
+
+\begin{DoxyReturn}{Returns}
+Volume of the sound effect 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_a75abdf3880631000c398ca5a1651391a}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 59 of file Sound\+Effect\+Player.\+cpp.
+
 \mbox{\Hypertarget{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}\label{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}} 
 \index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!pause@{pause}}
 \index{pause@{pause}!Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}}
@@ -59,7 +111,7 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f
 
 
 
-Definition at line 13 of file Sound\+Effect\+Player.\+cpp.
+Definition at line 17 of file Sound\+Effect\+Player.\+cpp.
 
 \mbox{\Hypertarget{class_audio_1_1_sound_effect_player_ad7326591f50b3d149efbab20633eb718}\label{class_audio_1_1_sound_effect_player_ad7326591f50b3d149efbab20633eb718}} 
 \index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!play@{play}}
@@ -84,7 +136,8 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a2
 
 Definition at line 4 of file Sound\+Effect\+Player.\+cpp.
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -107,7 +160,53 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_a3084aae367de0acc9414
 
 
 
-Definition at line 17 of file Sound\+Effect\+Player.\+cpp.
+Definition at line 24 of file Sound\+Effect\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_sound_effect_player_a470667e663866294c9712cfc595236fc}\label{class_audio_1_1_sound_effect_player_a470667e663866294c9712cfc595236fc}} 
+\index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!setLoop@{setLoop}}
+\index{setLoop@{setLoop}!Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}}
+\doxysubsubsection{\texorpdfstring{setLoop()}{setLoop()}}
+{\footnotesize\ttfamily void Audio\+::\+Sound\+Effect\+Player\+::set\+Loop (\begin{DoxyParamCaption}\item[{bool}]{is\+Looped }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Loop/unloop sound effect. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+Looped} & Set to true to loop audio, false to unloop audio\\
+\hline
+\end{DoxyParams}
+The sund effect s not looped by default 
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_affdb02f0118b6c864774441c2c56b8fa}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 41 of file Sound\+Effect\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_sound_effect_player_adfcaf7862bfa2e7b646671a8695b5140}\label{class_audio_1_1_sound_effect_player_adfcaf7862bfa2e7b646671a8695b5140}} 
+\index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!setVolume@{setVolume}}
+\index{setVolume@{setVolume}!Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}}
+\doxysubsubsection{\texorpdfstring{setVolume()}{setVolume()}}
+{\footnotesize\ttfamily void Audio\+::\+Sound\+Effect\+Player\+::set\+Volume (\begin{DoxyParamCaption}\item[{float}]{volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the audio volume. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Volume to set\\
+\hline
+\end{DoxyParams}
+The volume must be between 0 (mute) and 100 (full volume) The default volume is 100. 
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_adb7c385689091a7231dd0cf262ed87bb}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 33 of file Sound\+Effect\+Player.\+cpp.
 
 \mbox{\Hypertarget{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b07901c4cd9d88b2}\label{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b07901c4cd9d88b2}} 
 \index{Audio::SoundEffectPlayer@{Audio::SoundEffectPlayer}!stop@{stop}}
@@ -125,7 +224,7 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_adaded10b4aecb11b2024
 
 
 
-Definition at line 9 of file Sound\+Effect\+Player.\+cpp.
+Definition at line 10 of file Sound\+Effect\+Player.\+cpp.
 
 
 

@@ -6,11 +6,22 @@
 
 
 
-Inheritance diagram for Gui\+::Panel\+:\nopagebreak
+Inheritance diagram for Gui\+::Panel\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{class_gui_1_1_panel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Gui\+::Panel\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{class_gui_1_1_panel__coll__graph}
 \end{center}
 \end{figure}
 \doxysubsection*{Public Member Functions}
@@ -18,12 +29,8 @@ Inheritance diagram for Gui\+::Panel\+:\nopagebreak
 \item 
 \mbox{\hyperlink{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038}{Panel}} (float x, float y)
 \begin{DoxyCompactList}\small\item\em Create a G\+UI panel. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{struct_common_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}{get\+Position}} () const
-\begin{DoxyCompactList}\small\item\em Get the position of the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}{set\+Position}} (const \mbox{\hyperlink{struct_common_1_1_position}{Position}} \&position)
 \begin{DoxyCompactList}\small\item\em Set the position of the panel. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{struct_common_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a}{get\+Dimensions}} () const
-\begin{DoxyCompactList}\small\item\em Get the dimensions of the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}{set\+Dimensions}} (const \mbox{\hyperlink{struct_common_1_1_dimensions}{Dimensions}} \&dimensions)
 \begin{DoxyCompactList}\small\item\em Set the dimensions of the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_a06fb9d831cac8e99a898785c26ae27f8}{set\+Fill\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} fill\+Colour)
@@ -32,23 +39,29 @@ void \mbox{\hyperlink{class_gui_1_1_panel_aca9c00bbd5446807e1531d9745e5dbb7}{set
 \begin{DoxyCompactList}\small\item\em Set the outline colour of the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_ad45e1553cd8201100d5373ed64b4d88b}{set\+Outline\+Thickness}} (float outline\+Thickness)
 \begin{DoxyCompactList}\small\item\em Set the outline thickness of the panel. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_common_1_1_position}{Position}} \mbox{\hyperlink{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}{get\+Position}} () const
+\begin{DoxyCompactList}\small\item\em Get the position of the panel. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_common_1_1_dimensions}{Dimensions}} \mbox{\hyperlink{class_gui_1_1_panel_ac3b13baa6e13d27de7189ee78865d72a}{get\+Dimensions}} () const
+\begin{DoxyCompactList}\small\item\em Get the dimensions of the panel. \end{DoxyCompactList}\item 
 float \mbox{\hyperlink{class_gui_1_1_panel_a29e799166c2da9da120b782e97b5a209}{get\+Outline\+Thickness}} () const
-\begin{DoxyCompactList}\small\item\em Get the outline thickness. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get the outline thickness of the panel. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_gui_1_1_panel_a2bb47be10314b8aca0d279bda0f33f0a}{get\+Number\+Of\+Elements}} () const
+\begin{DoxyCompactList}\small\item\em Get the number of elements in the panel. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{class_gui_1_1_panel_a87e8ad3bd9b6d2c72c777993af696dcb}{add\+Element}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element)=0
 \begin{DoxyCompactList}\small\item\em Add a UI element to the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_a154c0fefb830e78a4aa7c350961fb640}{remove\+Element}} (const std\+::string \&ui\+Element)
 \begin{DoxyCompactList}\small\item\em Remove a UI element from the panel. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_ae73ff515ef496f506757c9f7ee64fee6}{hide}} ()
-\begin{DoxyCompactList}\small\item\em Hide panel. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Hide the panel from a render target. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_panel_ab07dec2e95c2b49f8cff7c16e10529b9}{show}} ()
 \begin{DoxyCompactList}\small\item\em Reveal a hidden panel. \end{DoxyCompactList}\item 
 const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ \& \mbox{\hyperlink{class_gui_1_1_panel_a95680eb6f8b86aaf0eaccf252d0d69aa}{get\+Element}} (const std\+::string \&ui\+Element)
-\begin{DoxyCompactList}\small\item\em Get access to an element. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
-\begin{DoxyCompactList}\small\item\em Render panel and it\textquotesingle{}s UI elements on a render target. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get access to an element in the panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_panel_aaf008241b3d4b8cc5247178395f0f457}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
+\begin{DoxyCompactList}\small\item\em Render the panel and it\textquotesingle{}s UI elements on a render target. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_ad53b2fff12abc8d9fb5cbca0337f5ff3}{subscribe\+Children\+To\+Event}} (const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
 \begin{DoxyCompactList}\small\item\em Subscribe all child elements to an event. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_aa1e547b53d176d9819d58080a3e3d032}{subscribe\+Child\+To\+Event}} (const std\+::string \&name\+Of\+Child, const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_aa052ce8a7176e3788b528bd0fe12798f}{subscribe\+Child\+To\+Event}} (const std\+::string \&child\+Element\+Name, const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
 \begin{DoxyCompactList}\small\item\em Subscribe a child element to an event. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Protected Types}
 \begin{DoxyCompactItemize}
@@ -61,21 +74,21 @@ using \mbox{\hyperlink{class_gui_1_1_panel_ae5db70333d68d838e862617a26d0ef9e}{Co
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_gui_1_1_panel_a3a0da7ee1e2f63d6b2d0737be37b873b}{add}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element)
-\begin{DoxyCompactList}\small\item\em Add gui element to underlying data structure. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Add UI element to underlying data structure. \end{DoxyCompactList}\item 
 U\+I\+Element\+Container\+::iterator \mbox{\hyperlink{class_gui_1_1_panel_a08a76f0be2112dbda5a1b97e95600ded}{find\+U\+I\+Element}} (const std\+::string \&ui\+Elem\+Alias)
 \begin{DoxyCompactList}\small\item\em Get access to a UI element inside the collection. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_a9d6af5fe8aabcca2540d5aa0ff90eaaf}{on}} (const std\+::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$ callback)
-\begin{DoxyCompactList}\small\item\em Add listener to event. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_gui_1_1_panel_ae5db70333d68d838e862617a26d0ef9e}{Const\+Iterator}} \mbox{\hyperlink{class_gui_1_1_panel_a9b2a888cbb60e3437bf4f825c3de2d1f}{c\+Begin}} () const
 \begin{DoxyCompactList}\small\item\em Get a constant iterator that points to the first element in the the panel. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_gui_1_1_panel_ae5db70333d68d838e862617a26d0ef9e}{Const\+Iterator}} \mbox{\hyperlink{class_gui_1_1_panel_a9559e99a58505ef3f739e710b968b621}{c\+End}} () const
-\begin{DoxyCompactList}\small\item\em Get a constant iterator that points one past the last element in the panel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get a constant iterator that points one past the last element in the panel. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_gui_1_1_panel_aa5c1edb36ee818d48c2175a1e7e77612}{emit}} (const std\+::string \&event, Args...\+args)
+\begin{DoxyCompactList}\small\item\em Restrict publication of event to class level. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 
 
-Definition at line 15 of file Panel.\+h.
+Definition at line 16 of file Panel.\+h.
 
 
 
@@ -88,7 +101,7 @@ Definition at line 15 of file Panel.\+h.
 
 
 
-Definition at line 166 of file Panel.\+h.
+Definition at line 183 of file Panel.\+h.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a480df3e2de407ce8ef3d831d676b7ee8}\label{class_gui_1_1_panel_a480df3e2de407ce8ef3d831d676b7ee8}} 
 \index{Gui::Panel@{Gui::Panel}!UIElementContainer@{UIElementContainer}}
@@ -98,7 +111,7 @@ Definition at line 166 of file Panel.\+h.
 
 
 
-Definition at line 165 of file Panel.\+h.
+Definition at line 182 of file Panel.\+h.
 
 
 
@@ -129,7 +142,7 @@ Here is the call graph for this function\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=342pt]{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038_cgraph}
+\includegraphics[width=350pt]{class_gui_1_1_panel_a863bb2e35e4aeae1967743cc874f9038_cgraph}
 \end{center}
 \end{figure}
 
@@ -143,7 +156,7 @@ Here is the call graph for this function\+:
 
 
 
-Add gui element to underlying data structure. 
+Add UI element to underlying data structure. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -154,7 +167,7 @@ Add gui element to underlying data structure.
 \end{DoxyParams}
 This function will try to add a UI element to the panel. If the alias for the UI element to be added is already present in the collection, that UI element wil not be added to the panel. In other words, aliases for UI elements must be unique 
 
-Definition at line 44 of file Panel.\+cpp.
+Definition at line 59 of file Panel.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a87e8ad3bd9b6d2c72c777993af696dcb}\label{class_gui_1_1_panel_a87e8ad3bd9b6d2c72c777993af696dcb}} 
 \index{Gui::Panel@{Gui::Panel}!addElement@{addElement}}
@@ -175,7 +188,7 @@ Add a UI element to the panel.
 \end{DoxyParams}
 
 
-Implemented in \mbox{\hyperlink{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e6e9895f5d6}{Gui\+::\+Dock\+Panel}}, \mbox{\hyperlink{class_gui_1_1_stack_panel_a98c16c37ae3e8035a8d6eaf38c727094}{Gui\+::\+Stack\+Panel}}, and \mbox{\hyperlink{class_gui_1_1_canvas_a03b732b86e1ac4e3379e27928000aa41}{Gui\+::\+Canvas}}.
+Implemented in \mbox{\hyperlink{class_gui_1_1_stack_panel_a948e6356f78765c35ca76c3677a882d3}{Gui\+::\+Stack\+Panel}}, \mbox{\hyperlink{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e6e9895f5d6}{Gui\+::\+Dock\+Panel}}, and \mbox{\hyperlink{class_gui_1_1_canvas_a03b732b86e1ac4e3379e27928000aa41}{Gui\+::\+Canvas}}.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a9b2a888cbb60e3437bf4f825c3de2d1f}\label{class_gui_1_1_panel_a9b2a888cbb60e3437bf4f825c3de2d1f}} 
 \index{Gui::Panel@{Gui::Panel}!cBegin@{cBegin}}
@@ -188,20 +201,12 @@ Implemented in \mbox{\hyperlink{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e
 Get a constant iterator that points to the first element in the the panel. 
 
 \begin{DoxyReturn}{Returns}
-A constant iterator that points to the first element in the the panel 
+Constant iterator that points to the first element in the the panel 
 \end{DoxyReturn}
 
 
-Definition at line 60 of file Panel.\+cpp.
+Definition at line 123 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_gui_1_1_panel_a9b2a888cbb60e3437bf4f825c3de2d1f_icgraph}
-\end{center}
-\end{figure}
 \mbox{\Hypertarget{class_gui_1_1_panel_a9559e99a58505ef3f739e710b968b621}\label{class_gui_1_1_panel_a9559e99a58505ef3f739e710b968b621}} 
 \index{Gui::Panel@{Gui::Panel}!cEnd@{cEnd}}
 \index{cEnd@{cEnd}!Gui::Panel@{Gui::Panel}}
@@ -217,47 +222,54 @@ A constant iterator that points one past the last element in the panel
 \end{DoxyReturn}
 
 
-Definition at line 64 of file Panel.\+cpp.
+Definition at line 127 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_gui_1_1_panel_a9559e99a58505ef3f739e710b968b621_icgraph}
-\end{center}
-\end{figure}
-\mbox{\Hypertarget{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}\label{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a}} 
+\mbox{\Hypertarget{class_gui_1_1_panel_aaf008241b3d4b8cc5247178395f0f457}\label{class_gui_1_1_panel_aaf008241b3d4b8cc5247178395f0f457}} 
 \index{Gui::Panel@{Gui::Panel}!draw@{draw}}
 \index{draw@{draw}!Gui::Panel@{Gui::Panel}}
 \doxysubsubsection{\texorpdfstring{draw()}{draw()}}
-{\footnotesize\ttfamily void Gui\+::\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Gui\+::\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Render panel and it\textquotesingle{}s UI elements on a render target. 
+Render the panel and it\textquotesingle{}s UI elements on a render target. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em render\+Target} & Render target to draw UI elements on \\
+{\em render\+Target} & Render target to draw panel on \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented in \mbox{\hyperlink{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}{Gui\+::\+Dock\+Panel}}.
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}{Gui\+::\+I\+Drawable}}.
 
 
 
-Definition at line 33 of file Panel.\+cpp.
+Definition at line 106 of file Panel.\+cpp.
 
 Here is the call graph for this function\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=303pt]{class_gui_1_1_panel_a4447ca3af6eecd3b27505b565e53e01a_cgraph}
+\includegraphics[width=303pt]{class_gui_1_1_panel_aaf008241b3d4b8cc5247178395f0f457_cgraph}
 \end{center}
 \end{figure}
+\mbox{\Hypertarget{class_gui_1_1_panel_aa5c1edb36ee818d48c2175a1e7e77612}\label{class_gui_1_1_panel_aa5c1edb36ee818d48c2175a1e7e77612}} 
+\index{Gui::Panel@{Gui::Panel}!emit@{emit}}
+\index{emit@{emit}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{emit()}{emit()}}
+{\footnotesize\ttfamily template$<$typename... Args$>$ \\
+void Event\+Emitter\+::emit (\begin{DoxyParamCaption}\item[{typename...}]{Args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Restrict publication of event to class level. 
+
+Only the class knows the conditions under which an event may be fired. Therefore, events must not be raised externally as this may result in events being raised at the wong time, resulting in undesired and incorrect behavior 
+
+Definition at line 36 of file Event\+Emitter.\+inl.
+
 \mbox{\Hypertarget{class_gui_1_1_panel_a08a76f0be2112dbda5a1b97e95600ded}\label{class_gui_1_1_panel_a08a76f0be2112dbda5a1b97e95600ded}} 
 \index{Gui::Panel@{Gui::Panel}!findUIElement@{findUIElement}}
 \index{findUIElement@{findUIElement}!Gui::Panel@{Gui::Panel}}
@@ -278,7 +290,7 @@ An iterator that points to the required element if it exists in the collection, 
 \end{DoxyReturn}
 
 
-Definition at line 99 of file Panel.\+cpp.
+Definition at line 115 of file Panel.\+cpp.
 
 Here is the caller graph for this function\+:
 \nopagebreak
@@ -299,11 +311,11 @@ Here is the caller graph for this function\+:
 Get the dimensions of the panel. 
 
 \begin{DoxyReturn}{Returns}
-Dimensions of the panel 
+Current dimensions of the panel 
 \end{DoxyReturn}
 
 
-Definition at line 15 of file Panel.\+cpp.
+Definition at line 46 of file Panel.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a95680eb6f8b86aaf0eaccf252d0d69aa}\label{class_gui_1_1_panel_a95680eb6f8b86aaf0eaccf252d0d69aa}} 
 \index{Gui::Panel@{Gui::Panel}!getElement@{getElement}}
@@ -313,7 +325,7 @@ Definition at line 15 of file Panel.\+cpp.
 
 
 
-Get access to an element. 
+Get access to an element in the panel. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -321,11 +333,31 @@ Get access to an element.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Pointer to a UI element if found, otherwise null pointer 
+A pointer to the requested UI element if it exist in the panel, otherwise a null pointer if the element cannot be found in the panel
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The pointer is returned by reference. Therefore, it is not advisable to keep the pointer after it has been accessed as it can be invalidated by removing the element from the panel 
+\end{DoxyNote}
+
+
+Definition at line 99 of file Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_panel_a2bb47be10314b8aca0d279bda0f33f0a}\label{class_gui_1_1_panel_a2bb47be10314b8aca0d279bda0f33f0a}} 
+\index{Gui::Panel@{Gui::Panel}!getNumberOfElements@{getNumberOfElements}}
+\index{getNumberOfElements@{getNumberOfElements}!Gui::Panel@{Gui::Panel}}
+\doxysubsubsection{\texorpdfstring{getNumberOfElements()}{getNumberOfElements()}}
+{\footnotesize\ttfamily unsigned int Gui\+::\+Panel\+::get\+Number\+Of\+Elements (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the number of elements in the panel. 
+
+\begin{DoxyReturn}{Returns}
+Number of elements in the panel 
 \end{DoxyReturn}
 
 
-Definition at line 78 of file Panel.\+cpp.
+Definition at line 55 of file Panel.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a29e799166c2da9da120b782e97b5a209}\label{class_gui_1_1_panel_a29e799166c2da9da120b782e97b5a209}} 
 \index{Gui::Panel@{Gui::Panel}!getOutlineThickness@{getOutlineThickness}}
@@ -335,14 +367,14 @@ Definition at line 78 of file Panel.\+cpp.
 
 
 
-Get the outline thickness. 
+Get the outline thickness of the panel. 
 
 \begin{DoxyReturn}{Returns}
-Outline thickness 
+Outline thickness of the panel 
 \end{DoxyReturn}
 
 
-Definition at line 68 of file Panel.\+cpp.
+Definition at line 51 of file Panel.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}\label{class_gui_1_1_panel_a0a5dd747509951fd28ef3a8e0fdb603f}} 
 \index{Gui::Panel@{Gui::Panel}!getPosition@{getPosition}}
@@ -355,14 +387,13 @@ Definition at line 68 of file Panel.\+cpp.
 Get the position of the panel. 
 
 \begin{DoxyReturn}{Returns}
-Position of the panel 
+Current position of the panel 
 \end{DoxyReturn}
 
 
-Definition at line 24 of file Panel.\+cpp.
+Definition at line 42 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -377,11 +408,11 @@ Here is the caller graph for this function\+:
 
 
 
-Hide panel. 
+Hide the panel from a render target. 
 
-This function will hide a panel and all it\textquotesingle{}s child elements from a render target. Operations on a hidden panel or on the child elements of a hidden panel can still be performed. The only difference is that the panel and it\textquotesingle{}s child elements will not be shown on the render when a call to display is made 
+This function will hide the panel and all it\textquotesingle{}s child elements from a render target. Operations on a hidden panel or on the child elements of a hidden panel can still be performed. The only difference is that the panel and it\textquotesingle{}s child elements will not be shown on the render when after they have been drawn 
 
-Definition at line 85 of file Panel.\+cpp.
+Definition at line 77 of file Panel.\+cpp.
 
 Here is the call graph for this function\+:
 \nopagebreak
@@ -389,44 +420,6 @@ Here is the call graph for this function\+:
 \begin{center}
 \leavevmode
 \includegraphics[width=307pt]{class_gui_1_1_panel_ae73ff515ef496f506757c9f7ee64fee6_cgraph}
-\end{center}
-\end{figure}
-\mbox{\Hypertarget{class_gui_1_1_panel_a9d6af5fe8aabcca2540d5aa0ff90eaaf}\label{class_gui_1_1_panel_a9d6af5fe8aabcca2540d5aa0ff90eaaf}} 
-\index{Gui::Panel@{Gui::Panel}!on@{on}}
-\index{on@{on}!Gui::Panel@{Gui::Panel}}
-\doxysubsubsection{\texorpdfstring{on()}{on()}}
-{\footnotesize\ttfamily template$<$typename... Args$>$ \\
-void Gui\+::\+Panel\+::on (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
-
-
-
-Add listener to event. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em event} & Event to add listener to \\
-\hline
-{\em callback} & Function to execute when event is raised \\
-\hline
-\end{DoxyParams}
-
-
-Definition at line 196 of file Panel.\+h.
-
-Here is the call graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=323pt]{class_gui_1_1_panel_a9d6af5fe8aabcca2540d5aa0ff90eaaf_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=339pt]{class_gui_1_1_panel_a9d6af5fe8aabcca2540d5aa0ff90eaaf_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{class_gui_1_1_panel_a154c0fefb830e78a4aa7c350961fb640}\label{class_gui_1_1_panel_a154c0fefb830e78a4aa7c350961fb640}} 
@@ -446,7 +439,7 @@ Remove a UI element from the panel.
 \end{DoxyParams}
 This function is destructive. This means that the element will be removed completely 
 
-Definition at line 72 of file Panel.\+cpp.
+Definition at line 68 of file Panel.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}\label{class_gui_1_1_panel_a9a71390158e7280ac6d02f512bcc2604}} 
 \index{Gui::Panel@{Gui::Panel}!setDimensions@{setDimensions}}
@@ -465,10 +458,9 @@ Set the dimensions of the panel.
 \end{DoxyParams}
 
 
-Definition at line 20 of file Panel.\+cpp.
+Definition at line 22 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -487,15 +479,14 @@ Set the fill colour of the panel.
 
 
 \begin{DoxyParams}{Parameters}
-{\em fill\+Colour} & Fill colour to set\\
+{\em fill\+Colour} & New fill colour of the panel\\
 \hline
 \end{DoxyParams}
-The panel has a transparent fill colour by default 
+The default fill colour is transparent 
 
-Definition at line 40 of file Panel.\+cpp.
+Definition at line 27 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -514,13 +505,21 @@ Set the outline colour of the panel.
 
 
 \begin{DoxyParams}{Parameters}
-{\em outline\+Colour} & New outline colour of the panel \\
+{\em outline\+Colour} & New outline colour of the panel\\
 \hline
 \end{DoxyParams}
+The default outline colour is white 
 
+Definition at line 32 of file Panel.\+cpp.
 
-Definition at line 51 of file Panel.\+cpp.
-
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=349pt]{class_gui_1_1_panel_aca9c00bbd5446807e1531d9745e5dbb7_icgraph}
+\end{center}
+\end{figure}
 \mbox{\Hypertarget{class_gui_1_1_panel_ad45e1553cd8201100d5373ed64b4d88b}\label{class_gui_1_1_panel_ad45e1553cd8201100d5373ed64b4d88b}} 
 \index{Gui::Panel@{Gui::Panel}!setOutlineThickness@{setOutlineThickness}}
 \index{setOutlineThickness@{setOutlineThickness}!Gui::Panel@{Gui::Panel}}
@@ -536,10 +535,18 @@ Set the outline thickness of the panel.
 {\em outline\+Thickness} & New outline thickness\\
 \hline
 \end{DoxyParams}
-The outline thickness is zero by default 
+The default outline thickness is 0 
 
-Definition at line 55 of file Panel.\+cpp.
+Definition at line 37 of file Panel.\+cpp.
 
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_panel_ad45e1553cd8201100d5373ed64b4d88b_icgraph}
+\end{center}
+\end{figure}
 \mbox{\Hypertarget{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}\label{class_gui_1_1_panel_a8adb6a486b07598a755d0d91911ec918}} 
 \index{Gui::Panel@{Gui::Panel}!setPosition@{setPosition}}
 \index{setPosition@{setPosition}!Gui::Panel@{Gui::Panel}}
@@ -557,10 +564,9 @@ Set the position of the panel.
 \end{DoxyParams}
 
 
-Definition at line 28 of file Panel.\+cpp.
+Definition at line 17 of file Panel.\+cpp.
 
-Here is the caller graph for this function\+:
-\nopagebreak
+Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -577,12 +583,11 @@ Here is the caller graph for this function\+:
 
 Reveal a hidden panel. 
 
+The panel will not automatically be shown on a render target. It needs to be drawn after being revealed 
 
+Definition at line 88 of file Panel.\+cpp.
 
-Definition at line 92 of file Panel.\+cpp.
-
-Here is the call graph for this function\+:
-\nopagebreak
+Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -607,21 +612,21 @@ Subscribe all child elements to an event.
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
-{\em event} & Event to listen for \\
+{\em event} & Event to subscribe child elements to \\
 \hline
 {\em callback} & Function to execute when event is fired\\
 \hline
 \end{DoxyParams}
-This function will make all child elements of the panel to listen for an event and execute a callback when that event is raised 
+This function will make all child elements of the panel to listen for an event and execute a callback when that event is fired 
 
-Definition at line 134 of file Panel.\+h.
+Definition at line 151 of file Panel.\+h.
 
-\mbox{\Hypertarget{class_gui_1_1_panel_aa1e547b53d176d9819d58080a3e3d032}\label{class_gui_1_1_panel_aa1e547b53d176d9819d58080a3e3d032}} 
+\mbox{\Hypertarget{class_gui_1_1_panel_aa052ce8a7176e3788b528bd0fe12798f}\label{class_gui_1_1_panel_aa052ce8a7176e3788b528bd0fe12798f}} 
 \index{Gui::Panel@{Gui::Panel}!subscribeChildToEvent@{subscribeChildToEvent}}
 \index{subscribeChildToEvent@{subscribeChildToEvent}!Gui::Panel@{Gui::Panel}}
 \doxysubsubsection{\texorpdfstring{subscribeChildToEvent()}{subscribeChildToEvent()}}
 {\footnotesize\ttfamily template$<$typename... Args$>$ \\
-void Gui\+::\+Panel\+::subscribe\+Child\+To\+Event (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name\+Of\+Child,  }\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void Gui\+::\+Panel\+::subscribe\+Child\+To\+Event (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{child\+Element\+Name,  }\item[{const std\+::string \&}]{event,  }\item[{\mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback}}$<$ Args... $>$}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -634,23 +639,23 @@ Subscribe a child element to an event.
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
-{\em event} & Event to register callback function on \\
+{\em event} & Event to subscribe child element to \\
 \hline
-{\em callback} & Function to be executed when event event is raised \\
+{\em callback} & Function to execute when the event is fired \\
 \hline
-{\em child\+Element\+Name} & Child element alias\\
+{\em child\+Element\+Name} & Child element to subscribe to an event\\
 \hline
 \end{DoxyParams}
-This function will attempt to register a child element to an event. If the child element is not found in the collection, this operation is will cancel. When the event is raised the provided callback function will be invoked 
+This function will attempt to register a child element to an event such that the provided callback function is executed when the event is raised. This operation will be ignored if the child element to subscribe to an event does not exist in the panel 
 
-Definition at line 154 of file Panel.\+h.
+Definition at line 171 of file Panel.\+h.
 
 Here is the call graph for this function\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{class_gui_1_1_panel_aa1e547b53d176d9819d58080a3e3d032_cgraph}
+\includegraphics[width=350pt]{class_gui_1_1_panel_aa052ce8a7176e3788b528bd0fe12798f_cgraph}
 \end{center}
 \end{figure}
 

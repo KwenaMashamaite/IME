@@ -11,7 +11,7 @@ Inheritance diagram for Gui\+::Button\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=163pt]{class_gui_1_1_button__inherit__graph}
+\includegraphics[width=250pt]{class_gui_1_1_button__inherit__graph}
 \end{center}
 \end{figure}
 
@@ -21,7 +21,7 @@ Collaboration diagram for Gui\+::Button\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=163pt]{class_gui_1_1_button__coll__graph}
+\includegraphics[width=250pt]{class_gui_1_1_button__coll__graph}
 \end{center}
 \end{figure}
 \doxysubsection*{Public Member Functions}
@@ -36,9 +36,7 @@ void \mbox{\hyperlink{class_gui_1_1_button_ad27f90f656606c70d842580c3185c25e}{se
 void \mbox{\hyperlink{class_gui_1_1_button_ad6b13e9fa02c3e86dcad104be91a2321}{set\+Hover\+Fill\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} fill\+Colour)
 \begin{DoxyCompactList}\small\item\em Set the colour of the button when the mouse cursor enters it. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_button_a3e1f28a90a5b59e683537c6fb5815c1a}{set\+Hover\+Outline\+Colour}} (\mbox{\hyperlink{struct_gui_1_1_colour}{Colour}} outline\+Colour)
-\begin{DoxyCompactList}\small\item\em Set the outline colour of the button when the mouse cursor enters the button. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_button_a3f2aaab57b75feb468012ee4117c0e56}{reset\+Default}} ()
-\begin{DoxyCompactList}\small\item\em Remove all default handlers. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Set the outline colour of the button when the mouse cursor enters the button. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
 
@@ -62,7 +60,7 @@ Create a button.
 
 The button has no text, is located at (0, 0), has the dimensions (0, 0) and a character size of 25 by default 
 
-Definition at line 5 of file Button.\+cpp.
+Definition at line 3 of file Button.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135}\label{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135}} 
 \index{Gui::Button@{Gui::Button}!Button@{Button}}
@@ -79,30 +77,21 @@ Create a button.
 {\em button\+Text} & Text to be displayed on the button\\
 \hline
 \end{DoxyParams}
-The button has the dimensions of the button text, a character size of 25 and it\textquotesingle{}s position is (0, 0) by default 
+The button has the dimensions of the button text, a character size of 30 and it\textquotesingle{}s position is (0, 0) by default 
 
-Definition at line 8 of file Button.\+cpp.
+Definition at line 6 of file Button.\+cpp.
 
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_gui_1_1_button_a61ee0d09672a9f230c227f8f96ff5135_cgraph}
+\end{center}
+\end{figure}
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_gui_1_1_button_a3f2aaab57b75feb468012ee4117c0e56}\label{class_gui_1_1_button_a3f2aaab57b75feb468012ee4117c0e56}} 
-\index{Gui::Button@{Gui::Button}!resetDefault@{resetDefault}}
-\index{resetDefault@{resetDefault}!Gui::Button@{Gui::Button}}
-\doxysubsubsection{\texorpdfstring{resetDefault()}{resetDefault()}}
-{\footnotesize\ttfamily void Gui\+::\+Button\+::reset\+Default (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-Remove all default handlers. 
-
-This function will remove all default handlers from the button. That is, the default behavior of the button will be disabled. Handlers that have been added externally will not be removed and will still continue to receive notifications when events are raised. \begin{DoxyNote}{Note}
-This operation cannot be undone 
-\end{DoxyNote}
-
-
-Definition at line 93 of file Button.\+cpp.
-
 \mbox{\Hypertarget{class_gui_1_1_button_ad6b13e9fa02c3e86dcad104be91a2321}\label{class_gui_1_1_button_ad6b13e9fa02c3e86dcad104be91a2321}} 
 \index{Gui::Button@{Gui::Button}!setHoverFillColour@{setHoverFillColour}}
 \index{setHoverFillColour@{setHoverFillColour}!Gui::Button@{Gui::Button}}
@@ -120,7 +109,7 @@ Set the colour of the button when the mouse cursor enters it.
 \end{DoxyParams}
 The button colour changes to dim grey by default on mouse enter. The colour changes back to the way it was prior to \char`\"{}mouse\+Enter\char`\"{} on \char`\"{}mouse\+Leave\char`\"{} 
 
-Definition at line 81 of file Button.\+cpp.
+Definition at line 48 of file Button.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_button_a3e1f28a90a5b59e683537c6fb5815c1a}\label{class_gui_1_1_button_a3e1f28a90a5b59e683537c6fb5815c1a}} 
 \index{Gui::Button@{Gui::Button}!setHoverOutlineColour@{setHoverOutlineColour}}
@@ -139,7 +128,7 @@ Set the outline colour of the button when the mouse cursor enters the button.
 \end{DoxyParams}
 The buttons outline colour changes to light sky blue by default on \char`\"{}mouse\+Enter\char`\"{}. The colour changes back to the way it was prior to \char`\"{}mouse\+Enter\char`\"{} on \char`\"{}mouse\+Leave\char`\"{} 
 
-Definition at line 89 of file Button.\+cpp.
+Definition at line 56 of file Button.\+cpp.
 
 \mbox{\Hypertarget{class_gui_1_1_button_ad27f90f656606c70d842580c3185c25e}\label{class_gui_1_1_button_ad27f90f656606c70d842580c3185c25e}} 
 \index{Gui::Button@{Gui::Button}!setHoverTextFillColour@{setHoverTextFillColour}}
@@ -158,7 +147,7 @@ Set the colour of the button text when the mouse cursor enters the button.
 \end{DoxyParams}
 The buttons text colour changes to dark grey by default on \char`\"{}mouse\+Enter\char`\"{}. The colour changes back to the way it was prior to \char`\"{}mouse\+Enter\char`\"{} on \char`\"{}mouse\+Leave\char`\"{} 
 
-Definition at line 85 of file Button.\+cpp.
+Definition at line 52 of file Button.\+cpp.
 
 
 

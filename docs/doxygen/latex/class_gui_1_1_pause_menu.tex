@@ -29,10 +29,8 @@ Collaboration diagram for Gui\+::Pause\+Menu\+:
 \item 
 \mbox{\hyperlink{class_gui_1_1_pause_menu_a475a26f2415946ed038bbd3766c679b4}{Pause\+Menu}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
 \begin{DoxyCompactList}\small\item\em Create a new Pause Menu object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_pause_menu_a2689dbe6eebae7b683a7951bda87ff50}{draw}} () override
-\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the menu on a render target. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_pause_menu_acf16f1fcc390a74f4e4d1b9a5ae8a6ef}{clear}} () override
-\begin{DoxyCompactList}\small\item\em Remove all \mbox{\hyperlink{namespace_gui}{Gui}} elements and layouts of the menu from a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_gui_1_1_pause_menu_a1785b433ece64711459cb048f04497ea}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
+\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the menu on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -60,10 +58,9 @@ Create a new Pause Menu object.
 \end{DoxyParams}
 
 
-Definition at line 5 of file Pause\+Menu.\+cpp.
+Definition at line 4 of file Pause\+Menu.\+cpp.
 
-Here is the call graph for this function\+:
-\nopagebreak
+Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -73,42 +70,37 @@ Here is the call graph for this function\+:
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_gui_1_1_pause_menu_acf16f1fcc390a74f4e4d1b9a5ae8a6ef}\label{class_gui_1_1_pause_menu_acf16f1fcc390a74f4e4d1b9a5ae8a6ef}} 
-\index{Gui::PauseMenu@{Gui::PauseMenu}!clear@{clear}}
-\index{clear@{clear}!Gui::PauseMenu@{Gui::PauseMenu}}
-\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
-{\footnotesize\ttfamily void Gui\+::\+Pause\+Menu\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
-
-
-
-Remove all \mbox{\hyperlink{namespace_gui}{Gui}} elements and layouts of the menu from a render target. 
-
-
-
-Implements \mbox{\hyperlink{class_gui_1_1_i_menu_adae941ebd6c323198db72d5707e7fd74}{Gui\+::\+I\+Menu}}.
-
-
-
-Definition at line 44 of file Pause\+Menu.\+cpp.
-
-\mbox{\Hypertarget{class_gui_1_1_pause_menu_a2689dbe6eebae7b683a7951bda87ff50}\label{class_gui_1_1_pause_menu_a2689dbe6eebae7b683a7951bda87ff50}} 
+\mbox{\Hypertarget{class_gui_1_1_pause_menu_a1785b433ece64711459cb048f04497ea}\label{class_gui_1_1_pause_menu_a1785b433ece64711459cb048f04497ea}} 
 \index{Gui::PauseMenu@{Gui::PauseMenu}!draw@{draw}}
 \index{draw@{draw}!Gui::PauseMenu@{Gui::PauseMenu}}
 \doxysubsubsection{\texorpdfstring{draw()}{draw()}}
-{\footnotesize\ttfamily void Gui\+::\+Pause\+Menu\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Gui\+::\+Pause\+Menu\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
 Draw all G\+UI elements and layouts of the menu on a render target. 
 
 
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Target to draw pause menu on \\
+\hline
+\end{DoxyParams}
 
-Implements \mbox{\hyperlink{class_gui_1_1_i_menu_aa85a630bbea3694341a96525023f50f3}{Gui\+::\+I\+Menu}}.
+
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}{Gui\+::\+I\+Drawable}}.
 
 
 
-Definition at line 36 of file Pause\+Menu.\+cpp.
+Definition at line 32 of file Pause\+Menu.\+cpp.
 
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{class_gui_1_1_pause_menu_a1785b433ece64711459cb048f04497ea_cgraph}
+\end{center}
+\end{figure}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

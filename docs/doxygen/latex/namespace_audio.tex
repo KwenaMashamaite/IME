@@ -8,12 +8,22 @@ Interface for audio players.
 \doxysubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
+class \mbox{\hyperlink{class_audio_1_1_audio_manager}{Audio\+Manager}}
+\item 
 class \mbox{\hyperlink{class_audio_1_1_i_audio_player}{I\+Audio\+Player}}
 \item 
 class \mbox{\hyperlink{class_audio_1_1_music_player}{Music\+Player}}
 \item 
 class \mbox{\hyperlink{class_audio_1_1_sound_effect_player}{Sound\+Effect\+Player}}
 \end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Status}} \{ \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac9dbb2b7c84159b632d71e512eba8428}{Status\+::\+Playing}}, 
+\mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ae99180abf47a8b3a856e0bcb2656990a}{Status\+::\+Paused}}, 
+\mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac23e2b09ebe6bf4cb5e2a9abe85c0be2}{Status\+::\+Stopped}}
+ \}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{namespace_audio}{Audio}} status. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -26,3 +36,33 @@ Stream audio files from disk.
 This class is ideal for playing long and big audio file such as background music. The audio file is not loaded in memory but rather streamed from the disk. The file must remain accessible on the disk for as long as its being used. You can use Audio\+::\+Sound\+Effect\+P\+Layer to play short sounds such as gun shots and explosions
 
 This class loads the audio file to be played in memory. Therefore, it is advised to use it with short audio files that can be quickly loaded form the disk and into the program. Example, gun shots and explosions. If long audio files are used with this class you might experience audio latency and other issues. It is advised to use \mbox{\hyperlink{class_audio_1_1_music_player}{Audio\+::\+Music\+Player}} for long sounds such as background music. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}\label{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}} 
+\index{Audio@{Audio}!Status@{Status}}
+\index{Status@{Status}!Audio@{Audio}}
+\doxysubsubsection{\texorpdfstring{Status}{Status}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Audio\+::\+Status}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+\mbox{\hyperlink{namespace_audio}{Audio}} status. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Playing@{Playing}!Audio@{Audio}}\index{Audio@{Audio}!Playing@{Playing}}}\mbox{\Hypertarget{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac9dbb2b7c84159b632d71e512eba8428}\label{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac9dbb2b7c84159b632d71e512eba8428}} 
+Playing&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Paused@{Paused}!Audio@{Audio}}\index{Audio@{Audio}!Paused@{Paused}}}\mbox{\Hypertarget{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ae99180abf47a8b3a856e0bcb2656990a}\label{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ae99180abf47a8b3a856e0bcb2656990a}} 
+Paused&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Stopped@{Stopped}!Audio@{Audio}}\index{Audio@{Audio}!Stopped@{Stopped}}}\mbox{\Hypertarget{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac23e2b09ebe6bf4cb5e2a9abe85c0be2}\label{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25ac23e2b09ebe6bf4cb5e2a9abe85c0be2}} 
+Stopped&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 15 of file I\+Audio\+Player.\+h.
+
