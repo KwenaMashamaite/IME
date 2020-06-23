@@ -106,7 +106,7 @@ namespace Gui {
          */
         template <typename ...Args>
         static int addListener(const std::string& event, Callback<Args...> callback){
-            eventEmitter_.addListener(event, callback);
+            eventEmitter_.addEventListener(event, callback);
         }
 
         /**

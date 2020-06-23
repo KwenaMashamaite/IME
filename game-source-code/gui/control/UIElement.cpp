@@ -61,43 +61,43 @@ void Gui::UIElement::initEvents() {
 
     //Notify listeners when the element is clicked. A click event always occurs after a
     //mouse up event, which occurs after a mouse down event (mouseDown->mouseUp->click)
-    addListener("mouseUp", Callback<>([this] {
+    addEventListener("mouseUp", Callback<>([this] {
         emit("click");
     }));
 
     //Automatically disable/enable the element when its visibility state changes. User
     // must not interact with a hidden element
-    addListener("visibilityChanged", Callback<bool>([this](bool isHidden){
+    addEventListener("visibilityChanged", Callback<bool>([this](bool isHidden) {
         setEnable(!isHidden);
     }));
 
     ////////////////COSMETIC EVENTS ////////////////////////////////////
 
-    addListener("textLocalBoundsChanged", Callback<>([this] {
+    addEventListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
 
-    addListener("textFontChanged", Callback<std::string>([this](const std::string&) {
+    addEventListener("textFontChanged", Callback<std::string>([this](const std::string &) {
         onTextDimensionsChange();
     }));
 
-    addListener("textContentChanged", Callback<std::string>([this](const std::string&) {
+    addEventListener("textContentChanged", Callback<std::string>([this](const std::string &) {
         onTextDimensionsChange();
     }));
 
-    addListener("textCharSizeChanged", Callback<unsigned int>([this](unsigned int) {
+    addEventListener("textCharSizeChanged", Callback<unsigned int>([this](unsigned int) {
         onTextDimensionsChange();
     }));
 
-    addListener("marginChanged", Callback<Margin>([this](Margin) {
+    addEventListener("marginChanged", Callback<Margin>([this](Margin) {
         onElementDimensionChange();
     }));
 
-    addListener("paddingChanged", Callback<Padding>([this](Padding) {
+    addEventListener("paddingChanged", Callback<Padding>([this](Padding) {
         onElementDimensionChange();
     }));
 
-    addListener("outlineThicknessChanged", Callback<float>([this](float) {
+    addEventListener("outlineThicknessChanged", Callback<float>([this](float) {
         onElementDimensionChange();
     }));
 }

@@ -4,7 +4,7 @@
 #include <algorithm>
 
 Gui::Panel::Panel(float x, float y) : isHidden_(false){
-    addListener("outlineThicknessChanged", Callback<>([this](){
+    addEventListener("outlineThicknessChanged", Callback<>([this]() {
         setPosition(getPosition());
     }));
     setFillColour({0, 0, 0, 0}); //Transparent

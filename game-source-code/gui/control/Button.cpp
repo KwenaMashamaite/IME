@@ -20,16 +20,16 @@ Gui::Button::Button(const std::string& buttonText)
 }
 
 void Gui::Button::initializeDefaultBehavior() {
-    addListener("mouseDown", Callback<>([this] {
+    addEventListener("mouseDown", Callback<>([this] {
         setTextFillColour({0, 0, 0}); //Black
     }));
 
-    addListener("click", Callback<>([this] {
+    addEventListener("click", Callback<>([this] {
         setFillColour(onHoverColours_.fillColour); //Back to hover colour, button not exited
         setTextFillColour(onHoverColours_.TextColour);
     }));
 
-    addListener("mouseEnter", Callback<>([this] {
+    addEventListener("mouseEnter", Callback<>([this] {
         defaultColours_.fillColour = getFillColour();
         defaultColours_.TextColour = getTextFillColour();
         defaultColours_.OutlineColour = getOutlineColour();
@@ -38,7 +38,7 @@ void Gui::Button::initializeDefaultBehavior() {
         setOutlineColour(onHoverColours_.OutlineColour);
     }));
 
-    addListener("mouseLeave",Callback<>([this] {
+    addEventListener("mouseLeave", Callback<>([this] {
         setFillColour(defaultColours_.fillColour);
         setTextFillColour(defaultColours_.TextColour);
         setOutlineColour(defaultColours_.OutlineColour);
