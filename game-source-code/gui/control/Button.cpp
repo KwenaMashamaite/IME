@@ -43,6 +43,15 @@ void Gui::Button::initializeDefaultBehavior() {
         setTextFillColour(defaultColours_.TextColour);
         setOutlineColour(defaultColours_.OutlineColour);
     }));
+
+    addEventListener("interactivityChanged",Callback<bool>([this](bool isEnabled) {
+        if (!isHidden()) {
+            if (!isEnabled) {
+                setHoverTextFillColour({0, 0, 0}); //Black
+                setFillColour({105, 105, 105}); //Dim Grey
+            }
+        }
+    }));
 }
 
 void Gui::Button::setHoverFillColour(Gui::Colour fillColour) {
