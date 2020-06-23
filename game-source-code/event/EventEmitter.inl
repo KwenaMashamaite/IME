@@ -12,9 +12,8 @@ int EventEmitter::on(const std::string &event, Callback<Args...> callback) {
 }
 
 template<typename... Args>
-void EventEmitter::addOnceListener(const std::string &event, Callback<Args...> callback) {
-    static const auto isCallbackInvokedOnce = true;
-    addListener(event, callback, isCallbackInvokedOnce);
+int EventEmitter::addOnceEventListener(const std::string &event, Callback<Args...> callback) {
+    return addListener(event, callback, true);
 }
 
 template<typename...Args>

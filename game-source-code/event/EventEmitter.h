@@ -60,6 +60,7 @@ public:
      * @brief Add a listener to an event
      * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
+     * @return Listener's identification number
      *
      * The listener will only be invoked once and subsequently removed
      * from the event. This means that the callback will only execute
@@ -68,7 +69,7 @@ public:
      * event is fired
      */
      template <typename ...Args>
-    void addOnceListener(const std::string &event, Callback<Args...> callback);
+    int addOnceEventListener(const std::string &event, Callback<Args...> callback);
 
     /**
      * @brief  Remove a listener from an event

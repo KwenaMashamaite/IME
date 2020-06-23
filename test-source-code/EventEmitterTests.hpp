@@ -142,7 +142,7 @@ TEST_CASE("A once event listener is removed from an event after it executes"){
     auto eventEmitter = EventEmitter();
     auto counter = 0u;
     auto increaseCounterByOne = [&counter]{++counter;};
-    eventEmitter.addOnceListener("increaseCounterButtonClicked", Callback<>(increaseCounterByOne));
+    eventEmitter.addOnceEventListener("increaseCounterButtonClicked", Callback<>(increaseCounterByOne));
     eventEmitter.emit("increaseCounterButtonClicked");
     eventEmitter.emit("increaseCounterButtonClicked");
     eventEmitter.emit("increaseCounterButtonClicked");
