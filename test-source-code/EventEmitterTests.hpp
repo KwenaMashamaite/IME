@@ -156,7 +156,7 @@ TEST_CASE("A once event listener is removed from an event after it executes"){
 TEST_CASE("A callback function can be removed from an event"){
     auto eventEmitter = EventEmitter();
     auto handlerId = eventEmitter.addEventListener("click", Callback<>([] {}));
-    CHECK(eventEmitter.removeListener("click", handlerId));
+    CHECK(eventEmitter.removeEventListener("click", handlerId));
 }
 
 TEST_CASE("An event listener that is removed from an event does not execute"){
@@ -167,7 +167,7 @@ TEST_CASE("An event listener that is removed from an event does not execute"){
     }));
     eventEmitter.emit("test");
     CHECK_EQ(testString, "callback function executed");
-    eventEmitter.removeListener("test", handlerId);
+    eventEmitter.removeEventListener("test", handlerId);
     testString = "";
     eventEmitter.emit("test");
     CHECK_NE(testString, "callback function executed");
@@ -177,5 +177,5 @@ TEST_CASE("Removing a non-existent handler from an event returns false"){
     auto eventEmitter = EventEmitter();
     eventEmitter.addEventListener("test", Callback<>([] {}));
     auto invalidHandlerId = -99;
-    CHECK_FALSE(eventEmitter.removeListener("test", invalidHandlerId));
+    CHECK_FALSE(eventEmitter.removeEventListener("test", invalidHandlerId));
 }

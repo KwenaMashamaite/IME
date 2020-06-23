@@ -79,7 +79,7 @@ public:
      *         if the specified event does not have a listener with
      *         the specified id
      */
-     bool removeListener(const std::string &event, int listenerId);
+     bool removeEventListener(const std::string &event, int listenerId);
 
      /**
       * @brief Remove all listeners of an event

@@ -41,7 +41,7 @@ void EventEmitter::emit(const std::string &event, Args... args) {
             if (listenerPtr && listenerPtr->callback_) {
                 listenerPtr->callback_(args...);
                 if (listenerPtr->isCalledOnce_)
-                    removeListener(event, listenerPtr->id_);
+                    removeEventListener(event, listenerPtr->id_);
             }
         }
     }
