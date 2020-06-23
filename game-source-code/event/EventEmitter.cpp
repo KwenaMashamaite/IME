@@ -19,7 +19,7 @@ bool EventEmitter::removeEventListener(const std::string &event, int listenerId)
     return false;
 }
 
-bool EventEmitter::removeAllListeners(const std::string &event) {
+bool EventEmitter::removeAllEventListeners(const std::string &event) {
     auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;

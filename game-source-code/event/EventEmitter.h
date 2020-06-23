@@ -89,7 +89,7 @@ public:
       *
       * @warning Exercise caution when using this function
       */
-     bool removeAllListeners(const std::string &event);
+     bool removeAllEventListeners(const std::string &event);
 
     /**
      * @brief Fire an event
