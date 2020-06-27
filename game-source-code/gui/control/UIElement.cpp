@@ -30,8 +30,8 @@ void Gui::UIElement::initialize() {
 void Gui::UIElement::initEvents() {
     ///////////////INTERACTION EVENTS /////////////////////////////
 
-    //Notify listeners when mouse cursor enters or leaves element
-    Window::addEventListener("mouseMoved", Callback<int, int>([this](int x, int y) {
+    //Notify event listeners when the mouse cursor enters or leaves the element
+    Window::addEventListener("mouseMoved",Callback<int, int>([this](int x, int y) {
         if (!isHidden() && isEnabled()) {
             if (contains(x, y) && !isSelected()) {
                 setSelected(true);
@@ -43,30 +43,54 @@ void Gui::UIElement::initEvents() {
         }
     }));
 
-    //Notify listeners when element is pressed
-    Window::addEventListener("mouseButtonPressed",  Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
-                emit("mouseDown");
-        })
-    );
+    //Notify event listeners when the element is pressed
+    Window::addEventListener("mouseButtonPressed", Callback<Mouse::Button>(
+        [this](Mouse::Button pressedButton) {
+            if (isSelected() && isEnabled()) {
+                switch (pressedButton) {
+                    case Mouse::Button::LMouseButton:
+                        emit("leftMouseDown");
+                        break;
+                    case Mouse::Button::RMouseButton:
+                        emit("rightMouseDown");
+                        break;
+                    case Mouse::Button::MiddleButton:
+                        emit("middleMouseDown");
+                        break;
+                }
+            }
+        }
+    ));
 
-    //notify listeners when element is released
+    //notify event listeners when the element is released
     Window::addEventListener("mouseButtonReleased", Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
-                emit("mouseUp");
-        })
-    );
+        [this](Mouse::Button releasedButton) {
+            if (isSelected() && isEnabled()) {
+                switch (releasedButton) {
+                    case Mouse::Button::LMouseButton:
+                        emit("leftMouseUp");
+                        break;
+                    case Mouse::Button::RMouseButton:
+                        emit("rightMouseUp");
+                        break;
+                    case Mouse::Button::MiddleButton:
+                        emit("middleMouseUp");
+                        break;
+                }
+            }
+        }
+    ));
 
-    //Notify listeners when the element is clicked. A click event always occurs after a
-    //mouse up event, which occurs after a mouse down event (mouseDown->mouseUp->click)
-    addEventListener("mouseUp", Callback<>([this] {
+    //Notify event listeners when the element is clicked. A click event always occurs
+    //after a mouse up event, which occurs after a mouse down event
+    //(mouseDown->mouseUp->click)
+    addEventListener("leftMouseUp", Callback<>([this] {
         emit("click");
     }));
 
-    //Automatically disable/enable the element when its visibility state changes. User
-    // must not interact with a hidden element
+
+    //Automatically disable/enable the element when its visibility state changes.
+    //A user must not interact with a hidden element
     addEventListener("visibilityChanged", Callback<bool>([this](bool isHidden) {
         setEnable(!isHidden);
     }));
