@@ -1,5 +1,6 @@
 #include "gui/window/Window.h"
 #include "gui/menu/MainMenu.h"
+#include "gui/control/Button.h"
 #include "gui/menu/PauseMenu.h"
 
 using Gui::StackPanel;
@@ -11,7 +12,7 @@ int main(){
     auto mainMenu = Gui::MainMenu(window);
 
     //Close the window when the windows close button is clicked
-    window.addListener("Closed", Callback<>([&window] {
+    window.addEventListener("Closed", Callback<>([&window] {
         window.close();
     }));
 

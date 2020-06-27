@@ -31,7 +31,7 @@ void Gui::UIElement::initEvents() {
     ///////////////INTERACTION EVENTS /////////////////////////////
 
     //Notify listeners when mouse cursor enters or leaves element
-    Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
+    Window::addEventListener("mouseMoved", Callback<int, int>([this](int x, int y) {
         if (!isHidden() && isEnabled()) {
             if (contains(x, y) && !isSelected()) {
                 setSelected(true);
@@ -44,7 +44,7 @@ void Gui::UIElement::initEvents() {
     }));
 
     //Notify listeners when element is pressed
-    Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
+    Window::addEventListener("mouseButtonPressed",  Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
                 emit("mouseDown");
@@ -52,7 +52,7 @@ void Gui::UIElement::initEvents() {
     );
 
     //notify listeners when element is released
-    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
+    Window::addEventListener("mouseButtonReleased", Callback<Mouse::Button>(
         [this](Mouse::Button button) {
             if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
                 emit("mouseUp");
