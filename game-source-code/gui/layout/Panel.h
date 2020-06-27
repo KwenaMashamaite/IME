@@ -108,7 +108,7 @@ namespace Gui {
          * only difference is that the panel and it's child elements will
          * not be shown on the render when after they have been drawn
          */
-        void hide();
+        void hide() override;
 
         /**
          * @brief Reveal a hidden panel
@@ -116,7 +116,13 @@ namespace Gui {
          * The panel will not automatically be shown on a render target. It
          * needs to be drawn after being revealed
          */
-        void show();
+        void show() override;
+
+        /**
+         * @brief Check if panel is hidden or not
+         * @return True if panel is hidden, false if panel is not hidden
+         */
+        bool isHidden() const override;
 
         /**
          * @brief Get access to an element in the panel

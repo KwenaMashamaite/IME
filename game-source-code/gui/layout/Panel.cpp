@@ -127,3 +127,7 @@ Gui::Panel::ConstIterator Gui::Panel::cBegin() const {
 Gui::Panel::ConstIterator Gui::Panel::cEnd() const {
     return uiElements_.cend();
 }
+
+bool Gui::Panel::isHidden() const {
+    return isHidden_;
+}

@@ -264,7 +264,7 @@ namespace Gui {
          * @brief Check if UI element is hidden on a render target or not
          * @return True if UI element is hidden, false if it is not hidden
          */
-        bool isHidden() const;
+        bool isHidden() const override;
 
         /**
          * @brief Check if element is enabled or disabled
@@ -302,7 +302,7 @@ namespace Gui {
          *
          * @note Hiding an element disables it, @see setEnable(bool)
          */
-        void hide();
+        void hide() override;
 
         /**
          * @brief Make a hidden element reappear on a render target
@@ -310,7 +310,7 @@ namespace Gui {
          * revealing a hidden UI element does not automatically show
          * it on the render target, a call to draw() must be made
          */
-        void show();
+        void show() override ;
 
         /**
          * @brief Abstract Destructor
