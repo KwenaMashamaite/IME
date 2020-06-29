@@ -1,115 +1,127 @@
 #include "DockPanel.h"
 #include <cassert>
 
-Gui::DockPanel::DockPanel(float x, float y) : Panel(x, y), lastDockedPosition_(-1)
-{}
+using PanelsContainer = std::map<Gui::DockPanel::DockPosition, std::unique_ptr<Gui::Panel>>;
 
-void Gui::DockPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
-    const static auto numOfDockPosition = 4u;
-    if (lastDockedPosition_ >= 0 && lastDockedPosition_ < numOfDockPosition)
-        getPanelAt(static_cast<DockPosition>(lastDockedPosition_))->addElement(alias, std::move(guiElement));
+Gui::DockPanel::DockPanel(float x, float y)
+    : Panel(x, y),
+      defaultPanelPos_(DockPosition::LeftEdge)
+{
+    addEventListener("newPanelAdded", Callback<DockPosition, bool>(
+        [this](DockPosition dockPosition, bool isLastPanelToBeDocked){
+            auto& newPanel = getPanelAt(dockPosition);
+            const auto& leftEdgePanel = getPanelAt(DockPosition::LeftEdge);
+            const auto& rightEdgePanel = getPanelAt(DockPosition::RightEdge);
+            const auto& topEdgePanel = getPanelAt(DockPosition::TopEdge);
+            const auto& bottomEdgePanel = getPanelAt(DockPosition::BottomEdge);
+
+            //Get the panel on the opposite edge of the newly docked panel
+            const auto& panelOnOpposite = [&dockPosition, this]() -> const std::unique_ptr<Panel>&{
+                switch (dockPosition) {
+                    case DockPosition::LeftEdge:
+                        return getPanelAt(DockPosition::RightEdge);
+                    case DockPosition::RightEdge:
+                        return getPanelAt(DockPosition::LeftEdge);
+                    case DockPosition::TopEdge:
+                        return getPanelAt(DockPosition::BottomEdge);
+                    case DockPosition::BottomEdge:
+                        return getPanelAt(DockPosition::TopEdge);
+                }
+            }();
+
+            //Set the position of the new panel
+            [&]{
+                auto newPosition = Position{-999, -999}; //Random position outside screen
+                switch (dockPosition) {
+                    case DockPosition::LeftEdge:
+                    case DockPosition::RightEdge:
+                        newPosition.y = topEdgePanel ? topEdgePanel->getPosition().y
+                            + topEdgePanel->getDimensions().height : 0;
+
+                        if (dockPosition == DockPosition::LeftEdge)
+                            newPosition.x = 0;
+                        else
+                            newPosition.x = isLastPanelToBeDocked ? leftEdgePanel->getPosition().x
+                                + leftEdgePanel->getDimensions().width
+                                : Window::getDimensions().width - newPanel->getDimensions().width;
+                        break;
+                    case DockPosition::TopEdge:
+                    case DockPosition::BottomEdge:
+                        newPosition.x = leftEdgePanel ? leftEdgePanel->getPosition().x
+                            + leftEdgePanel->getDimensions().width : 0;
+
+                        if (dockPosition == DockPosition::TopEdge)
+                            newPosition.y = 0;
+                        else
+                            newPosition.y = isLastPanelToBeDocked ? topEdgePanel->getPosition().y
+                                + topEdgePanel->getDimensions().height
+                                : Window::getDimensions().height - newPanel->getDimensions().height;
+                        break;
+                }
+                newPanel->setPosition(newPosition);
+            }();
+
+            //Set the new dimensions of the panel
+            [&]{
+                auto newPanelSize = newPanel->getDimensions();
+                switch (dockPosition) {
+                    case DockPosition::LeftEdge:
+                    case DockPosition::RightEdge:
+                        newPanelSize.height = Window::getDimensions().height
+                            - (topEdgePanel ? topEdgePanel->getDimensions().height : 0)
+                            - (bottomEdgePanel ? bottomEdgePanel->getDimensions().height : 0);
+
+                        if (isLastPanelToBeDocked)
+                            newPanelSize.width = Window::getDimensions().width
+                                - panelOnOpposite->getDimensions().width;
+                        break;
+                    case DockPosition::TopEdge:
+                    case DockPosition::BottomEdge:
+                        newPanelSize.width = Window::getDimensions().width
+                            - (leftEdgePanel ? leftEdgePanel->getDimensions().width : 0)
+                            - (rightEdgePanel ? rightEdgePanel->getDimensions().width : 0);
+
+                        if (isLastPanelToBeDocked)
+                            newPanelSize.height = Window::getDimensions().height
+                                - panelOnOpposite->getDimensions().height;
+                        break;
+                }
+                newPanel->setDimensions(newPanelSize);
+            }();
+    }));
+}
+
+void Gui::DockPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
+    if (getPanelAt(defaultPanelPos_))
+        getPanelAt(defaultPanelPos_)->addElement(alias, std::move((uiElement)));
 }
 
 void Gui::DockPanel::dock(DockPosition dockPosition, std::unique_ptr<Panel> panel) {
-    assert(panel && "nullptrs cannot be added to Dock Panel");
-    switch (dockPosition){
-        case DockPosition::LeftEdge:
-            dock(DockPosition::LeftEdge, panel, Position{0u, 0u});
-            leftEdgeDock_ = std::move(panel);
-            break;
-        case DockPosition::RightEdge:
-            dock(DockPosition::RightEdge, panel, Position{static_cast<float>(
-                getDimensions().width -
-                panel->getDimensions().width), 0.0f
-            });
-            rightEdgeDock_ = std::move(panel);
-            break;
-        case DockPosition::TopEdge:
-            dock(DockPosition::TopEdge, panel, Position{0u, 0u});
-            topEdgeDock_ = std::move(panel);
-            break;
-        case DockPosition::BottomEdge:
-            dock(DockPosition::BottomEdge, panel, Position{0u, static_cast<float>(
-                    getDimensions().height - panel->getDimensions().height)
-            });
-            bottomEdgeDock_ = std::move(panel);
-            break;
-    }
-    lastDockedPosition_ = static_cast<int>(dockPosition);
+    assert(panel && "Docked panel cannot be null");
+    static const auto maxNumOfDockPositions = 4u;
+    auto isLastPanelToBeDocked = dockedPanels_.size() == maxNumOfDockPositions;
+    dockedPanels_.insert(std::pair(dockPosition, std::move(panel)));
+    emit("newPanelAdded", dockPosition, isLastPanelToBeDocked);
 }
 
-void Gui::DockPanel::dock(DockPosition dockPosition,const std::unique_ptr<Panel> &panel,
-        Position defaultPos)
-{
-    if (dockPosition == DockPosition::LeftEdge || dockPosition == DockPosition::RightEdge){
-        panel->setDimensions(Dimensions{
-            panel->getDimensions().width,
-            getDimensions().height
-            - (topEdgeDock_ ? topEdgeDock_->getDimensions().height : 0)
-            - (bottomEdgeDock_ ? bottomEdgeDock_->getDimensions().height : 0)
-        });
-        panel->setPosition({defaultPos.x, topEdgeDock_ ? topEdgeDock_->getDimensions().height : defaultPos.y});
-
-        if (isLastToBeDocked(dockPosition)){
-            if (dockPosition == DockPosition::RightEdge) {
-                panel->setDimensions({getDimensions().width - leftEdgeDock_->getDimensions().width, getDimensions().height});
-                panel->setPosition({leftEdgeDock_->getDimensions().width, topEdgeDock_->getDimensions().height});
-            }else {
-                panel->setDimensions({getDimensions().width - rightEdgeDock_->getDimensions().width, getDimensions().height});
-                panel->setPosition({0.0f, topEdgeDock_->getDimensions().height});
-            }
-        }
-
-    }else{
-        panel->setDimensions(Dimensions{
-            getDimensions().width
-            - (leftEdgeDock_ ? leftEdgeDock_->getDimensions().width : 0)
-            - (rightEdgeDock_ ? rightEdgeDock_->getDimensions().width : 0),
-            panel->getDimensions().height
-        });
-        panel->setPosition({leftEdgeDock_ ? leftEdgeDock_->getDimensions().width : defaultPos.x, defaultPos.y});
-
-        if (isLastToBeDocked(dockPosition)){
-            if (dockPosition == DockPosition::TopEdge) {
-                panel->setDimensions({getDimensions().width, getDimensions().height - bottomEdgeDock_->getDimensions().height});
-                panel->setPosition({leftEdgeDock_->getDimensions().width, 0.0f});
-            }else {
-                panel->setDimensions({getDimensions().width, getDimensions().height - topEdgeDock_->getDimensions().height});
-                panel->setPosition({leftEdgeDock_->getDimensions().width, topEdgeDock_->getDimensions().height});
-            }
-        }
-    }
+void Gui::DockPanel::setDefaultPanelPos(Gui::DockPanel::DockPosition dockPosition) {
+    defaultPanelPos_ = dockPosition;
 }
 
 void Gui::DockPanel::draw(Gui::Window &renderTarget) {
-    if (topEdgeDock_) topEdgeDock_->draw(renderTarget);
-    if (bottomEdgeDock_) bottomEdgeDock_->draw(renderTarget);
-    if (leftEdgeDock_) leftEdgeDock_->draw(renderTarget);
-    if (rightEdgeDock_) rightEdgeDock_->draw(renderTarget);
+    std::for_each(dockedPanels_.begin(), dockedPanels_.end(), [&](auto& panel){
+        if (panel.second)
+            renderTarget.draw(*(panel.second));
+    });
+}
+
+Gui::DockPanel::DockPosition Gui::DockPanel::getDefaultPanelPos() const {
+    return defaultPanelPos_;
 }
 
 const std::unique_ptr<Gui::Panel>& Gui::DockPanel::getPanelAt(DockPosition dockPosition) {
-    switch (dockPosition){
-        case DockPosition::LeftEdge:
-            return leftEdgeDock_;
-        case DockPosition::RightEdge:
-            return rightEdgeDock_;
-        case DockPosition::TopEdge:
-            return topEdgeDock_;
-        case DockPosition::BottomEdge:
-            return bottomEdgeDock_;
-    }
-}
-
-bool Gui::DockPanel::isLastToBeDocked(DockPosition dockPosition) const{
-    switch (dockPosition){
-        case DockPosition::LeftEdge:
-            return (rightEdgeDock_ && topEdgeDock_ && bottomEdgeDock_);
-        case DockPosition::RightEdge:
-            return (leftEdgeDock_ && topEdgeDock_ && bottomEdgeDock_);
-        case DockPosition::TopEdge:
-            return (bottomEdgeDock_ && leftEdgeDock_ && rightEdgeDock_);
-        case DockPosition::BottomEdge:
-            return (topEdgeDock_ && leftEdgeDock_ && rightEdgeDock_);
-    }
+    auto found = dockedPanels_.find(dockPosition);
+    if (found != dockedPanels_.end())
+        return found->second;
+    return null_ptr;
 }
