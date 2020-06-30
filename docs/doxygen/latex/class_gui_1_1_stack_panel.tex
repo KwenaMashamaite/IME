@@ -10,7 +10,7 @@ Inheritance diagram for Gui\+::Stack\+Panel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=168pt]{class_gui_1_1_stack_panel__inherit__graph}
+\includegraphics[width=250pt]{class_gui_1_1_stack_panel__inherit__graph}
 \end{center}
 \end{figure}
 
@@ -19,15 +19,24 @@ Collaboration diagram for Gui\+::Stack\+Panel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=168pt]{class_gui_1_1_stack_panel__coll__graph}
+\includegraphics[width=250pt]{class_gui_1_1_stack_panel__coll__graph}
 \end{center}
 \end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Orientation}} \{ \mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861a06ce2a25e5d12c166a36f654dbea6012}{Orientation\+::\+Vertical}}, 
+\mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861ac1b5fa03ecdb95d4a45dd1c40b02527f}{Orientation\+::\+Horizontal}}
+ \}
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_gui_1_1_stack_panel_ab226cfa5473bdf3f4fe1580aa660ce25}{Stack\+Panel}} (float x, float y, \mbox{\hyperlink{namespace_gui_aad5ab01630f5db2f62d8480c7eca827e}{Orientation}} orientation)
+\mbox{\hyperlink{class_gui_1_1_stack_panel_a9789506d0bba49bae44e182f79d343c2}{Stack\+Panel}} (\mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Orientation}} orientation)
+\begin{DoxyCompactList}\small\item\em Create a new Stack \mbox{\hyperlink{class_gui_1_1_panel}{Panel}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_gui_1_1_stack_panel_ab226cfa5473bdf3f4fe1580aa660ce25}{Stack\+Panel}} (float x, float y, \mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Orientation}} orientation)
 \begin{DoxyCompactList}\small\item\em Create a new Stack \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_stack_panel_a98c16c37ae3e8035a8d6eaf38c727094}{add\+Element}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element) override
+void \mbox{\hyperlink{class_gui_1_1_stack_panel_a948e6356f78765c35ca76c3677a882d3}{add\+Element}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ ui\+Element) override
 \begin{DoxyCompactList}\small\item\em Add a UI element to the panel. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
@@ -35,16 +44,58 @@ void \mbox{\hyperlink{class_gui_1_1_stack_panel_a98c16c37ae3e8035a8d6eaf38c72709
 \doxysubsection{Detailed Description}
 
 
-Definition at line 16 of file Stack\+Panel.\+h.
+Definition at line 11 of file Stack\+Panel.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}\label{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}} 
+\index{Gui::StackPanel@{Gui::StackPanel}!Orientation@{Orientation}}
+\index{Orientation@{Orientation}!Gui::StackPanel@{Gui::StackPanel}}
+\doxysubsubsection{\texorpdfstring{Orientation}{Orientation}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Gui\+::\+Stack\+Panel\+::\+Orientation}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Vertical@{Vertical}!Gui::StackPanel@{Gui::StackPanel}}\index{Gui::StackPanel@{Gui::StackPanel}!Vertical@{Vertical}}}\mbox{\Hypertarget{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861a06ce2a25e5d12c166a36f654dbea6012}\label{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861a06ce2a25e5d12c166a36f654dbea6012}} 
+Vertical&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Horizontal@{Horizontal}!Gui::StackPanel@{Gui::StackPanel}}\index{Gui::StackPanel@{Gui::StackPanel}!Horizontal@{Horizontal}}}\mbox{\Hypertarget{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861ac1b5fa03ecdb95d4a45dd1c40b02527f}\label{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861ac1b5fa03ecdb95d4a45dd1c40b02527f}} 
+Horizontal&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 15 of file Stack\+Panel.\+h.
 
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_gui_1_1_stack_panel_a9789506d0bba49bae44e182f79d343c2}\label{class_gui_1_1_stack_panel_a9789506d0bba49bae44e182f79d343c2}} 
+\index{Gui::StackPanel@{Gui::StackPanel}!StackPanel@{StackPanel}}
+\index{StackPanel@{StackPanel}!Gui::StackPanel@{Gui::StackPanel}}
+\doxysubsubsection{\texorpdfstring{StackPanel()}{StackPanel()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Gui\+::\+Stack\+Panel\+::\+Stack\+Panel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Orientation}}}]{orientation }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Create a new Stack \mbox{\hyperlink{class_gui_1_1_panel}{Panel}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em orientation} & Specify how the UI elements are stacked to each other The default position is (0, 0) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 6 of file Stack\+Panel.\+cpp.
+
 \mbox{\Hypertarget{class_gui_1_1_stack_panel_ab226cfa5473bdf3f4fe1580aa660ce25}\label{class_gui_1_1_stack_panel_ab226cfa5473bdf3f4fe1580aa660ce25}} 
 \index{Gui::StackPanel@{Gui::StackPanel}!StackPanel@{StackPanel}}
 \index{StackPanel@{StackPanel}!Gui::StackPanel@{Gui::StackPanel}}
-\doxysubsubsection{\texorpdfstring{StackPanel()}{StackPanel()}}
-{\footnotesize\ttfamily Gui\+::\+Stack\+Panel\+::\+Stack\+Panel (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{\mbox{\hyperlink{namespace_gui_aad5ab01630f5db2f62d8480c7eca827e}{Orientation}}}]{orientation }\end{DoxyParamCaption})}
+\doxysubsubsection{\texorpdfstring{StackPanel()}{StackPanel()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Gui\+::\+Stack\+Panel\+::\+Stack\+Panel (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{\mbox{\hyperlink{class_gui_1_1_stack_panel_a526e782bfbe90b4c96ae098056d3b861}{Orientation}}}]{orientation }\end{DoxyParamCaption})}
 
 
 
@@ -61,24 +112,16 @@ Create a new Stack \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} object.
 \end{DoxyParams}
 
 
-Definition at line 6 of file Stack\+Panel.\+cpp.
+Definition at line 9 of file Stack\+Panel.\+cpp.
 
-Here is the call graph for this function\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_gui_1_1_stack_panel_ab226cfa5473bdf3f4fe1580aa660ce25_cgraph}
-\end{center}
-\end{figure}
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_gui_1_1_stack_panel_a98c16c37ae3e8035a8d6eaf38c727094}\label{class_gui_1_1_stack_panel_a98c16c37ae3e8035a8d6eaf38c727094}} 
+\mbox{\Hypertarget{class_gui_1_1_stack_panel_a948e6356f78765c35ca76c3677a882d3}\label{class_gui_1_1_stack_panel_a948e6356f78765c35ca76c3677a882d3}} 
 \index{Gui::StackPanel@{Gui::StackPanel}!addElement@{addElement}}
 \index{addElement@{addElement}!Gui::StackPanel@{Gui::StackPanel}}
 \doxysubsubsection{\texorpdfstring{addElement()}{addElement()}}
-{\footnotesize\ttfamily void Gui\+::\+Stack\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{alias,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Gui\+::\+Stack\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{alias,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{ui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -88,7 +131,7 @@ Add a UI element to the panel.
 \begin{DoxyParams}{Parameters}
 {\em alias} & Name that can be used to refer to element \\
 \hline
-{\em gui\+Element} & Element to be added \\
+{\em ui\+Element} & Element to be added \\
 \hline
 \end{DoxyParams}
 
@@ -97,8 +140,10 @@ Implements \mbox{\hyperlink{class_gui_1_1_panel_a87e8ad3bd9b6d2c72c777993af696dc
 
 
 
-Definition at line 20 of file Stack\+Panel.\+cpp.
+Definition at line 85 of file Stack\+Panel.\+cpp.
 
+Here is the caller graph for this function\+:
+% FIG 0
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

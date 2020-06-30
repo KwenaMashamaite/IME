@@ -2,17 +2,11 @@
 #include "gui/control/Button.h"
 
 Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget)
-    : renderTarget_(renderTarget), isCleared_(false)
+    : renderTarget_(renderTarget)
 {
-    pauseMenuButtonsPanel_ = std::make_unique<StackPanel>(0.0f, 0.0f, StackPanel::Orientation::Vertical);
-    pauseMenuButtonsPanel_->setFillColour({0, 0, 0});
-
+    pauseMenuButtonsPanel_ = std::make_unique<StackPanel>(StackPanel::Orientation::Vertical);
+    pauseMenuButtonsPanel_->setFillColour({0, 0, 0, 0});
     createButtons();
-    auto centreOfScreen = Position{
-        Window::getDimensions().width / 2.0f - pauseMenuButtonsPanel_->getDimensions().width / 2.0f,
-        Window::getDimensions().height / 2.0f - pauseMenuButtonsPanel_->getDimensions().height / 2.0f
-    };
-    pauseMenuButtonsPanel_->setPosition(centreOfScreen);
 }
 
 void Gui::PauseMenu::createButtons() {
@@ -27,8 +21,25 @@ void Gui::PauseMenu::createButtons() {
 
     pauseMenuButtonsPanel_->addElement("unpauseButton", std::move(unpauseButton));
     pauseMenuButtonsPanel_->addElement("exitButton", std::move(exitButton));
+
+    pauseMenuButtonsPanel_->setPosition({
+        Window::getDimensions().width / 2.0f - pauseMenuButtonsPanel_->getDimensions().width / 2.0f,
+        Window::getDimensions().height / 2.0f - pauseMenuButtonsPanel_->getDimensions().height / 2.0f
+    });
 }
 
 void Gui::PauseMenu::draw(Window &renderTarget) {
     renderTarget.draw(*pauseMenuButtonsPanel_);
+}
+
+void Gui::PauseMenu::hide() {
+
+}
+
+void Gui::PauseMenu::show() {
+
+}
+
+bool Gui::PauseMenu::isHidden() const {
+    return false;
 }

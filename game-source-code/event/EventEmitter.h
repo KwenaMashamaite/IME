@@ -41,17 +41,17 @@ public:
 	 * behavior
      */
     template<typename...Args>
-    int addListener(const std::string &event, Callback<Args...> callback);
+    int addEventListener(const std::string &event, Callback<Args...> callback);
 
     /**
      * @brief Add listener to an event
      *
-     * This function does the same thing as the addListener() function.
+     * This function does the same thing as the addEventListener() function.
      * It just provides a slightly more readable syntax. For example:
      *
      *  @example:
      *  returnButton.on("click", showMainMenu) as opposed to
-     *  returnButton.addListener("click", showMainMenu)
+     *  returnButton.addEventListener("click", showMainMenu)
      */
     template<typename...Args>
     int on(const std::string &event, Callback<Args...> callback);
@@ -60,15 +60,16 @@ public:
      * @brief Add a listener to an event
      * @param event Event to add listener to
      * @param callback Function to execute when the event is fired
+     * @return Listener's identification number
      *
      * The listener will only be invoked once and subsequently removed
      * from the event. This means that the callback will only execute
-     * when an event is raised for the first time. Use addListener() or
+     * when an event is raised for the first time. Use addEventListener() or
      * the on() function if the callback is to be invoked each time an
      * event is fired
      */
      template <typename ...Args>
-    void addOnceListener(const std::string &event, Callback<Args...> callback);
+    int addOnceEventListener(const std::string &event, Callback<Args...> callback);
 
     /**
      * @brief  Remove a listener from an event
@@ -79,7 +80,7 @@ public:
      *         if the specified event does not have a listener with
      *         the specified id
      */
-     bool removeListener(const std::string &event, int listenerId);
+     bool removeEventListener(const std::string &event, int listenerId);
 
      /**
       * @brief Remove all listeners of an event
@@ -89,7 +90,7 @@ public:
       *
       * @warning Exercise caution when using this function
       */
-     bool removeAllListeners(const std::string &event);
+     bool removeAllEventListeners(const std::string &event);
 
     /**
      * @brief Fire an event

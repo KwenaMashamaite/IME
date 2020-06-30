@@ -1,5 +1,4 @@
 #include "UIElement.h"
-#include "input/Mouse.h"
 #include "resources/ResourceManager.h"
 #include "utility/Utility.h"
 
@@ -7,7 +6,7 @@ Gui::UIElement::UIElement() : UIElement("")
 {}
 
 Gui::UIElement::UIElement(const std::string &textContent)
-    : isHidden_(false), isSelected_(false), isEnabled_(true)
+    : isHidden_(false)
 {
     setText(textContent);
     initialize();
@@ -17,6 +16,7 @@ void Gui::UIElement::initialize() {
     initEvents();
     setTextFont("secret-code.ttf");
     setTextCharSize(25u);
+    setTextAlignment(TextAlignment::Left);
     parentRectangle_.setFillColor({0, 0, 0, 0}); //Transparent
     setFillColour({220, 220, 220}); //Gainsboro
     setOutlineColour({128, 128, 128}); //Grey
@@ -28,77 +28,8 @@ void Gui::UIElement::initialize() {
 }
 
 void Gui::UIElement::initEvents() {
-    ///////////////INTERACTION EVENTS /////////////////////////////
-
-    //Notify listeners when mouse cursor enters or leaves element
-    Window::addListener("mouseMoved", Callback<int, int>([this](int x, int y) {
-        if (!isHidden() && isEnabled()) {
-            if (contains(x, y) && !isSelected()) {
-                setSelected(true);
-                emit("mouseEnter");
-            } else if (!contains(x, y) && isSelected()) {
-                setSelected(false);
-                emit("mouseLeave");
-            }
-        }
-    }));
-
-    //Notify listeners when element is pressed
-    Window::addListener("mouseButtonPressed",  Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
-                emit("mouseDown");
-        })
-    );
-
-    //notify listeners when element is released
-    Window::addListener("mouseButtonReleased", Callback<Mouse::Button>(
-        [this](Mouse::Button button) {
-            if (isSelected() && isEnabled() && button == Mouse::Button::LMouseButton)
-                emit("mouseUp");
-        })
-    );
-
-    //Notify listeners when the element is clicked. A click event always occurs after a
-    //mouse up event, which occurs after a mouse down event (mouseDown->mouseUp->click)
-    addListener("mouseUp", Callback<>([this] {
-        emit("click");
-    }));
-
-    //Automatically disable/enable the element when its visibility state changes. User
-    // must not interact with a hidden element
-    addListener("visibilityChanged", Callback<bool>([this](bool isHidden){
-        setEnable(!isHidden);
-    }));
-
-    ////////////////COSMETIC EVENTS ////////////////////////////////////
-
-    addListener("textLocalBoundsChanged", Callback<>([this] {
+    addEventListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
-    }));
-
-    addListener("textFontChanged", Callback<std::string>([this](const std::string&) {
-        onTextDimensionsChange();
-    }));
-
-    addListener("textContentChanged", Callback<std::string>([this](const std::string&) {
-        onTextDimensionsChange();
-    }));
-
-    addListener("textCharSizeChanged", Callback<unsigned int>([this](unsigned int) {
-        onTextDimensionsChange();
-    }));
-
-    addListener("marginChanged", Callback<Margin>([this](Margin) {
-        onElementDimensionChange();
-    }));
-
-    addListener("paddingChanged", Callback<Padding>([this](Padding) {
-        onElementDimensionChange();
-    }));
-
-    addListener("outlineThicknessChanged", Callback<float>([this](float) {
-        onElementDimensionChange();
     }));
 }
 
@@ -108,6 +39,8 @@ void Gui::UIElement::setPadding(float padding) {
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new padding
     emit("paddingChanged", padding_);
 }
 
@@ -117,6 +50,8 @@ void Gui::UIElement::setMargin(float margin) {
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new margin
     emit("marginChanged", margin_);
 }
 
@@ -139,29 +74,29 @@ void Gui::UIElement::setPosition(Position position) {
 
 void Gui::UIElement::setTextFont(const std::string &textFont) {
     text_.setFont(ResourceManager::getFont(textFont));
+    updateDimensions();
     emit("textFontChanged", textFont);
     emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
+    updateDimensions();
     emit("textCharSizeChanged", charSize);
     emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setText(const std::string &textContent) {
     text_.setString(textContent);
+    updateDimensions();
     emit("textContentChanged", textContent);
 }
 
 void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     border_.setOutlineThickness(outlineThickness);
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new outline thickness
     emit("outlineThicknessChanged", outlineThickness);
-}
-
-void Gui::UIElement::setEnable(bool isEnable) {
-    isEnabled_ = isEnable;
-    emit("interactivityChanged", isEnabled_);
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -177,6 +112,56 @@ void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
 void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
     border_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
     emit("outlineColourChanged", outlineColour);
+}
+
+void Gui::UIElement::setTextAlignment(Gui::TextAlignment textAlignment) {
+    if (textAlignment_ == textAlignment)
+        return;
+    else
+        textAlignment_ = textAlignment;
+
+    switch (textAlignment) {
+        case TextAlignment::Left:
+            text_.setPosition(border_.getPosition().x, border_.getPosition().y + padding_.top
+            );
+            setPadding({
+                0.0f,
+                border_.getLocalBounds().width - text_.getLocalBounds().width
+                - 2 * border_.getOutlineThickness(),
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+        case TextAlignment::Right:
+            text_.setPosition(
+                (border_.getPosition().x + border_.getLocalBounds().width) - text_.getLocalBounds().width,
+                border_.getPosition().y + getPadding().top
+            );
+            setPadding({
+                border_.getLocalBounds().width - text_.getLocalBounds().width
+                - 2 * border_.getOutlineThickness(),
+                0.0f,
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+        case TextAlignment::Center:
+            text_.setPosition(
+                border_.getPosition().x - border_.getOutlineThickness()
+                + (getDimensions().width / 2.0f - text_.getGlobalBounds().width / 2.0f),
+                border_.getPosition().y + getPadding().top
+            );
+            setPadding({
+                text_.getPosition().x - border_.getPosition().x,
+                border_.getPosition().x + border_.getLocalBounds().width
+                - (text_.getPosition().x  + text_.getLocalBounds().width)
+                - 2 * border_.getOutlineThickness(),
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+    }
+    emit("textAlignmentChanged", textAlignment_);
 }
 
 Gui::Padding Gui::UIElement::getPadding() const {
@@ -209,6 +194,10 @@ Gui::Colour Gui::UIElement::getOutlineColour() const {
     return Utility::convert3rdPartyColourToOwnColour(border_.getOutlineColor());
 }
 
+Gui::TextAlignment Gui::UIElement::getTextAlignment() const {
+    return textAlignment_;
+}
+
 void Gui::UIElement::toggleVisibility() {
     if (isHidden_)
         show();
@@ -218,10 +207,6 @@ void Gui::UIElement::toggleVisibility() {
 
 bool Gui::UIElement::isHidden() const {
     return isHidden_;
-}
-
-bool Gui::UIElement::isEnabled() const{
-    return isEnabled_;
 }
 
 bool Gui::UIElement::contains(float x, float y) const{
@@ -261,7 +246,7 @@ void Gui::UIElement::show() {
     }
 }
 
-void Gui::UIElement::onTextDimensionsChange() {
+void Gui::UIElement::updateDimensions() {
     border_.setSize(sf::Vector2f(
         text_.getGlobalBounds().width + padding_.left + padding_.right,
         text_.getGlobalBounds().height + padding_.top + padding_.bottom
@@ -271,20 +256,6 @@ void Gui::UIElement::onTextDimensionsChange() {
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
     emit("dimensionsChanged", getDimensions());
-}
-
-void Gui::UIElement::onElementDimensionChange() {
-    onTextDimensionsChange(); //Update padding and margin
-    setPosition(getPosition().x, getPosition().y); //Update padding and margin
-}
-
-void Gui::UIElement::setSelected(bool isSelected) {
-    isSelected_ = isSelected;
-    emit("selectionChanged", isSelected_);
-}
-
-bool Gui::UIElement::isSelected() const {
-    return isSelected_;
 }
 
 Gui::UIElement::~UIElement() = default;

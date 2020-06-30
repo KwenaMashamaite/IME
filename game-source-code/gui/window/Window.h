@@ -105,8 +105,8 @@ namespace Gui {
          * @return listener's identification number
          */
         template <typename ...Args>
-        static int addListener(const std::string& event, Callback<Args...> callback){
-            eventEmitter_.addListener(event, callback);
+        static int addEventListener(const std::string& event, Callback<Args...> callback){
+            eventEmitter_.addEventListener(event, callback);
         }
 
         /**
@@ -118,8 +118,8 @@ namespace Gui {
          *         false if the specified event does not have a
          *         listener with the specified id
          */
-        static bool removeListener(const std::string& event, int callbackId){
-            return eventEmitter_.removeListener(event, callbackId);
+        static bool removeEventListener(const std::string& event, int callbackId){
+            return eventEmitter_.removeEventListener(event, callbackId);
         }
 
         /**

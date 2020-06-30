@@ -13,6 +13,15 @@ Inheritance diagram for Audio\+::I\+Audio\+Player\+:\nopagebreak
 \includegraphics[width=328pt]{class_audio_1_1_i_audio_player__inherit__graph}
 \end{center}
 \end{figure}
+
+
+Collaboration diagram for Audio\+::I\+Audio\+Player\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_audio_1_1_i_audio_player__coll__graph}
+\end{center}
+\end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -24,6 +33,14 @@ virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b
 \begin{DoxyCompactList}\small\item\em Pause the currently playing audio. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}{resume}} ()=0
 \begin{DoxyCompactList}\small\item\em Resume paused audio. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_adb7c385689091a7231dd0cf262ed87bb}{set\+Volume}} (float volume)=0
+\begin{DoxyCompactList}\small\item\em Set the volume of the audio. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_audio_1_1_i_audio_player_affdb02f0118b6c864774441c2c56b8fa}{set\+Loop}} (bool is\+Looped)=0
+\begin{DoxyCompactList}\small\item\em Loop/unloop audio. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Status}} \mbox{\hyperlink{class_audio_1_1_i_audio_player_ac81225369c92ecaf851d512df09cdf66}{get\+Status}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the current status of the audio file. \end{DoxyCompactList}\item 
+virtual float \mbox{\hyperlink{class_audio_1_1_i_audio_player_a75abdf3880631000c398ca5a1651391a}{get\+Volume}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the volume of an audio file. \end{DoxyCompactList}\item 
 virtual \mbox{\hyperlink{class_audio_1_1_i_audio_player_a78bde1a7e4b0f47d2ec6c38b1d3fde73}{$\sim$\+I\+Audio\+Player}} ()=default
 \begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -31,7 +48,7 @@ virtual \mbox{\hyperlink{class_audio_1_1_i_audio_player_a78bde1a7e4b0f47d2ec6c38
 \doxysubsection{Detailed Description}
 
 
-Definition at line 11 of file I\+Audio\+Player.\+h.
+Definition at line 21 of file I\+Audio\+Player.\+h.
 
 
 
@@ -49,6 +66,40 @@ Destructor.
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_ac81225369c92ecaf851d512df09cdf66}\label{class_audio_1_1_i_audio_player_ac81225369c92ecaf851d512df09cdf66}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!getStatus@{getStatus}}
+\index{getStatus@{getStatus}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{getStatus()}{getStatus()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Status}} Audio\+::\+I\+Audio\+Player\+::get\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the current status of the audio file. 
+
+\begin{DoxyReturn}{Returns}
+Current status of the audio file 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a62a5a453a7bb031a7d4a0cb0e5c12d27}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a4c62c16b78f51e5ba48906bc5173d306}{Audio\+::\+Sound\+Effect\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_a75abdf3880631000c398ca5a1651391a}\label{class_audio_1_1_i_audio_player_a75abdf3880631000c398ca5a1651391a}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!getVolume@{getVolume}}
+\index{getVolume@{getVolume}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{getVolume()}{getVolume()}}
+{\footnotesize\ttfamily virtual float Audio\+::\+I\+Audio\+Player\+::get\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the volume of an audio file. 
+
+\begin{DoxyReturn}{Returns}
+Volume of an audio file 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a1bdbba5e430ef2cec9a66fe07504dde3}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_acbb8bac8dcfb2e03b67ace48e71f3646}{Audio\+::\+Sound\+Effect\+Player}}.
+
 \mbox{\Hypertarget{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}\label{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f5aeec2fce440}} 
 \index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!pause@{pause}}
 \index{pause@{pause}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
@@ -61,7 +112,7 @@ Pause the currently playing audio.
 
 
 
-Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}{Audio\+::\+Sound\+Effect\+Player}}.
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a0ac4bb58f357ed660e5ade734abf8faa}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_afc13c0fde6d8e1aea13b756c16dcb8fe}{Audio\+::\+Sound\+Effect\+Player}}.
 
 \mbox{\Hypertarget{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}\label{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a27d4def19fc8a}} 
 \index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!play@{play}}
@@ -80,7 +131,7 @@ Play audio.
 \end{DoxyParams}
 
 
-Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad7326591f50b3d149efbab20633eb718}{Audio\+::\+Sound\+Effect\+Player}}.
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_aae8289bc6831b7c361b87e1c9f281e78}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad7326591f50b3d149efbab20633eb718}{Audio\+::\+Sound\+Effect\+Player}}.
 
 \mbox{\Hypertarget{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}\label{class_audio_1_1_i_audio_player_a3084aae367de0acc9414dc5472589a13}} 
 \index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!resume@{resume}}
@@ -94,7 +145,45 @@ Resume paused audio.
 
 
 
-Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a8e516556ca5ed60fc8d85994d36df9d4}{Audio\+::\+Sound\+Effect\+Player}}.
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a6d0076a1db008d4eb4737af1586b3dcc}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a8e516556ca5ed60fc8d85994d36df9d4}{Audio\+::\+Sound\+Effect\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_affdb02f0118b6c864774441c2c56b8fa}\label{class_audio_1_1_i_audio_player_affdb02f0118b6c864774441c2c56b8fa}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!setLoop@{setLoop}}
+\index{setLoop@{setLoop}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{setLoop()}{setLoop()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::set\+Loop (\begin{DoxyParamCaption}\item[{bool}]{is\+Looped }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Loop/unloop audio. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+Looped} & Set to true to loop audio, false to unloop audio \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_sound_effect_player_a470667e663866294c9712cfc595236fc}{Audio\+::\+Sound\+Effect\+Player}}, and \mbox{\hyperlink{class_audio_1_1_music_player_a62b4e0fad4e56e2bcf9eb395904d7ec9}{Audio\+::\+Music\+Player}}.
+
+\mbox{\Hypertarget{class_audio_1_1_i_audio_player_adb7c385689091a7231dd0cf262ed87bb}\label{class_audio_1_1_i_audio_player_adb7c385689091a7231dd0cf262ed87bb}} 
+\index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!setVolume@{setVolume}}
+\index{setVolume@{setVolume}!Audio::IAudioPlayer@{Audio::IAudioPlayer}}
+\doxysubsubsection{\texorpdfstring{setVolume()}{setVolume()}}
+{\footnotesize\ttfamily virtual void Audio\+::\+I\+Audio\+Player\+::set\+Volume (\begin{DoxyParamCaption}\item[{float}]{volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the volume of the audio. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Volume to set \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a0935da7a3cfd15f6fe84fb2d9debf7ec}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_adfcaf7862bfa2e7b646671a8695b5140}{Audio\+::\+Sound\+Effect\+Player}}.
 
 \mbox{\Hypertarget{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}\label{class_audio_1_1_i_audio_player_adaded10b4aecb11b20242c7856d40297}} 
 \index{Audio::IAudioPlayer@{Audio::IAudioPlayer}!stop@{stop}}
@@ -108,7 +197,7 @@ Stop the currently playing or paused audio.
 
 
 
-Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b07901c4cd9d88b2}{Audio\+::\+Sound\+Effect\+Player}}.
+Implemented in \mbox{\hyperlink{class_audio_1_1_music_player_a0f01afbb64563af699358d23d7e7080b}{Audio\+::\+Music\+Player}}, and \mbox{\hyperlink{class_audio_1_1_sound_effect_player_ad11bb002eff2a4c7b07901c4cd9d88b2}{Audio\+::\+Sound\+Effect\+Player}}.
 
 
 

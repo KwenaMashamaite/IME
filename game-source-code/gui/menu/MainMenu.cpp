@@ -46,7 +46,7 @@ void Gui::MainMenu::createTitle() {
 }
 
 void Gui::MainMenu::createNavigationButtons() {
-    struct ButtonDetails{std::string name; std::string value;};
+    struct ButtonDetails{std::string name; std::string text;};
     auto navigationButtons = std::vector<ButtonDetails>{
         {"play-btn", "PLAY"},
         {"instructions-btn", "INSTRUCTIONS"},
@@ -56,7 +56,7 @@ void Gui::MainMenu::createNavigationButtons() {
     };
     auto buttonsPanel = std::make_unique<StackPanel>( StackPanel::Orientation::Vertical);
     std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
-        auto button = std::make_unique<Button>(buttonInfo.value);
+        auto button = std::make_unique<Button>(buttonInfo.text);
         button->setTextCharSize(25);
         button->setTextFont("basson.ttf");
         button->setMargin({0, 0, 0, 40});
@@ -151,4 +151,16 @@ void Gui::MainMenu::createReturnButton() {
     returnButton->setPosition(1, 1);
     returnButton->on("click", Callback<>([this](){state_ = State::Main;}));
     panels_["onClickInfoPanel"]->addElement("return-btn", std::move(returnButton));
+}
+
+void Gui::MainMenu::hide() {
+
+}
+
+void Gui::MainMenu::show() {
+
+}
+
+bool Gui::MainMenu::isHidden() const {
+    return false;
 }

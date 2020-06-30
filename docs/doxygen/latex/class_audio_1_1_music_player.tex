@@ -25,16 +25,22 @@ Collaboration diagram for Audio\+::Music\+Player\+:\nopagebreak
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}{play}} (const std\+::string \&filename) override
+void \mbox{\hyperlink{class_audio_1_1_music_player_aae8289bc6831b7c361b87e1c9f281e78}{play}} (const std\+::string \&filename) override
 \begin{DoxyCompactList}\small\item\em play music file \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}{set\+Loop}} (bool is\+Loop)
+void \mbox{\hyperlink{class_audio_1_1_music_player_a62b4e0fad4e56e2bcf9eb395904d7ec9}{set\+Loop}} (bool is\+Loop) override
 \begin{DoxyCompactList}\small\item\em Loop/unloop music. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}{pause}} () override
-\begin{DoxyCompactList}\small\item\em Pause the Music. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}{resume}} () override
+void \mbox{\hyperlink{class_audio_1_1_music_player_a0ac4bb58f357ed660e5ade734abf8faa}{pause}} () override
+\begin{DoxyCompactList}\small\item\em Pause the \mbox{\hyperlink{class_music}{Music}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_a6d0076a1db008d4eb4737af1586b3dcc}{resume}} () override
 \begin{DoxyCompactList}\small\item\em Resume paused music. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}{stop}} () override
-\begin{DoxyCompactList}\small\item\em Stop playing or paused music. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_audio_1_1_music_player_a0f01afbb64563af699358d23d7e7080b}{stop}} () override
+\begin{DoxyCompactList}\small\item\em Stop playing or paused music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_audio_1_1_music_player_a0935da7a3cfd15f6fe84fb2d9debf7ec}{set\+Volume}} (float volume) override
+\begin{DoxyCompactList}\small\item\em Set the audio volume. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Status}} \mbox{\hyperlink{class_audio_1_1_music_player_a62a5a453a7bb031a7d4a0cb0e5c12d27}{get\+Status}} () const override
+\begin{DoxyCompactList}\small\item\em Get the current status of the audio file. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_audio_1_1_music_player_a1bdbba5e430ef2cec9a66fe07504dde3}{get\+Volume}} () const override
+\begin{DoxyCompactList}\small\item\em Get the volume of the music. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -45,15 +51,57 @@ Definition at line 21 of file Music\+Player.\+h.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}\label{class_audio_1_1_music_player_a8ee90290a9643e0831930782fe030b62}} 
+\mbox{\Hypertarget{class_audio_1_1_music_player_a62a5a453a7bb031a7d4a0cb0e5c12d27}\label{class_audio_1_1_music_player_a62a5a453a7bb031a7d4a0cb0e5c12d27}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!getStatus@{getStatus}}
+\index{getStatus@{getStatus}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{getStatus()}{getStatus()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_audio_afb12c0028c35dcb2569b4f2d11a80c25}{Audio\+::\+Status}} Music\+Player\+::get\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the current status of the audio file. 
+
+\begin{DoxyReturn}{Returns}
+Current status of the audio file 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ac81225369c92ecaf851d512df09cdf66}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 48 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_a1bdbba5e430ef2cec9a66fe07504dde3}\label{class_audio_1_1_music_player_a1bdbba5e430ef2cec9a66fe07504dde3}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!getVolume@{getVolume}}
+\index{getVolume@{getVolume}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{getVolume()}{getVolume()}}
+{\footnotesize\ttfamily float Music\+Player\+::get\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the volume of the music. 
+
+\begin{DoxyReturn}{Returns}
+Volume of the music 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_a75abdf3880631000c398ca5a1651391a}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 61 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_a0ac4bb58f357ed660e5ade734abf8faa}\label{class_audio_1_1_music_player_a0ac4bb58f357ed660e5ade734abf8faa}} 
 \index{Audio::MusicPlayer@{Audio::MusicPlayer}!pause@{pause}}
 \index{pause@{pause}!Audio::MusicPlayer@{Audio::MusicPlayer}}
 \doxysubsubsection{\texorpdfstring{pause()}{pause()}}
-{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::pause (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Music\+Player\+::pause (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Pause the Music. 
+Pause the \mbox{\hyperlink{class_music}{Music}}. 
 
 
 
@@ -61,13 +109,13 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae0d0b2a2f019d6d84b5f
 
 
 
-Definition at line 14 of file Music\+Player.\+cpp.
+Definition at line 17 of file Music\+Player.\+cpp.
 
-\mbox{\Hypertarget{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}\label{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355}} 
+\mbox{\Hypertarget{class_audio_1_1_music_player_aae8289bc6831b7c361b87e1c9f281e78}\label{class_audio_1_1_music_player_aae8289bc6831b7c361b87e1c9f281e78}} 
 \index{Audio::MusicPlayer@{Audio::MusicPlayer}!play@{play}}
 \index{play@{play}!Audio::MusicPlayer@{Audio::MusicPlayer}}
 \doxysubsubsection{\texorpdfstring{play()}{play()}}
-{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::play (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Music\+Player\+::play (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -75,7 +123,7 @@ play music file
 
 
 \begin{DoxyParams}{Parameters}
-{\em filename} & File name of the Music to play \\
+{\em filename} & File name of the \mbox{\hyperlink{class_music}{Music}} to play \\
 \hline
 \end{DoxyParams}
 
@@ -86,18 +134,13 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_ae4d04223f1722ec821a2
 
 Definition at line 4 of file Music\+Player.\+cpp.
 
-Here is the call graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_audio_1_1_music_player_ae0e766bec79e100e0c72ceec4e171355_cgraph}
-\end{center}
-\end{figure}
-\mbox{\Hypertarget{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}\label{class_audio_1_1_music_player_a5f4b15754806a61f40d6e22a8c155965}} 
+Here is the call graph for this function\+:
+% FIG 0
+\mbox{\Hypertarget{class_audio_1_1_music_player_a6d0076a1db008d4eb4737af1586b3dcc}\label{class_audio_1_1_music_player_a6d0076a1db008d4eb4737af1586b3dcc}} 
 \index{Audio::MusicPlayer@{Audio::MusicPlayer}!resume@{resume}}
 \index{resume@{resume}!Audio::MusicPlayer@{Audio::MusicPlayer}}
 \doxysubsubsection{\texorpdfstring{resume()}{resume()}}
-{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::resume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Music\+Player\+::resume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -109,13 +152,13 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_a3084aae367de0acc9414
 
 
 
-Definition at line 19 of file Music\+Player.\+cpp.
+Definition at line 24 of file Music\+Player.\+cpp.
 
-\mbox{\Hypertarget{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}\label{class_audio_1_1_music_player_aa21def2e328dad57f22336b5e4ca9b60}} 
+\mbox{\Hypertarget{class_audio_1_1_music_player_a62b4e0fad4e56e2bcf9eb395904d7ec9}\label{class_audio_1_1_music_player_a62b4e0fad4e56e2bcf9eb395904d7ec9}} 
 \index{Audio::MusicPlayer@{Audio::MusicPlayer}!setLoop@{setLoop}}
 \index{setLoop@{setLoop}!Audio::MusicPlayer@{Audio::MusicPlayer}}
 \doxysubsubsection{\texorpdfstring{setLoop()}{setLoop()}}
-{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::set\+Loop (\begin{DoxyParamCaption}\item[{bool}]{is\+Loop }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Music\+Player\+::set\+Loop (\begin{DoxyParamCaption}\item[{bool}]{is\+Loop }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -123,18 +166,50 @@ Loop/unloop music.
 
 
 \begin{DoxyParams}{Parameters}
-{\em is\+Loop} & Set to true to loop music, false to unloop music \\
+{\em is\+Loop} & Set to true to loop music, false to unloop music\\
 \hline
 \end{DoxyParams}
+The music is not looped by default 
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_affdb02f0118b6c864774441c2c56b8fa}{Audio\+::\+I\+Audio\+Player}}.
 
 
-Definition at line 9 of file Music\+Player.\+cpp.
 
-\mbox{\Hypertarget{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}\label{class_audio_1_1_music_player_adcbdb47fad533b0b54705a1311950777}} 
+Definition at line 10 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_a0935da7a3cfd15f6fe84fb2d9debf7ec}\label{class_audio_1_1_music_player_a0935da7a3cfd15f6fe84fb2d9debf7ec}} 
+\index{Audio::MusicPlayer@{Audio::MusicPlayer}!setVolume@{setVolume}}
+\index{setVolume@{setVolume}!Audio::MusicPlayer@{Audio::MusicPlayer}}
+\doxysubsubsection{\texorpdfstring{setVolume()}{setVolume()}}
+{\footnotesize\ttfamily void Music\+Player\+::set\+Volume (\begin{DoxyParamCaption}\item[{float}]{volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the audio volume. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Volume to set\\
+\hline
+\end{DoxyParams}
+The volume must be between 0 (mute) and 100 (full volume) The default volume is 100.
+
+\begin{DoxyNote}{Note}
+The volume must be set after playing the song 
+\end{DoxyNote}
+
+
+Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_adb7c385689091a7231dd0cf262ed87bb}{Audio\+::\+I\+Audio\+Player}}.
+
+
+
+Definition at line 40 of file Music\+Player.\+cpp.
+
+\mbox{\Hypertarget{class_audio_1_1_music_player_a0f01afbb64563af699358d23d7e7080b}\label{class_audio_1_1_music_player_a0f01afbb64563af699358d23d7e7080b}} 
 \index{Audio::MusicPlayer@{Audio::MusicPlayer}!stop@{stop}}
 \index{stop@{stop}!Audio::MusicPlayer@{Audio::MusicPlayer}}
 \doxysubsubsection{\texorpdfstring{stop()}{stop()}}
-{\footnotesize\ttfamily void Audio\+::\+Music\+Player\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Music\+Player\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -146,7 +221,7 @@ Implements \mbox{\hyperlink{class_audio_1_1_i_audio_player_adaded10b4aecb11b2024
 
 
 
-Definition at line 24 of file Music\+Player.\+cpp.
+Definition at line 33 of file Music\+Player.\+cpp.
 
 
 

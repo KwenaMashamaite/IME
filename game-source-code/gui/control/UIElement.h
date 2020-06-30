@@ -48,6 +48,15 @@ namespace Gui {
         unsigned int opacity = 255;
     };
 
+    /**
+     * @brief Position of the text within the elements border
+     */
+    enum class TextAlignment{
+        Left,
+        Right,
+        Center
+    };
+
     class UIElement : public EventEmitter, public IDrawable{
     public:
         /**
@@ -168,20 +177,6 @@ namespace Gui {
         void setOutlineThickness(float outlineThickness);
 
         /**
-         * @brief Enable or disable the element
-         * @param isEnable Set true to enable the element, false to
-         *        disable the element
-         *
-         * The element is enabled by default
-         *
-         * @note Disabling the element cancels all the interaction events.
-         *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
-         *       and "mouseDown" events will not fire while the element is
-         *       disabled.
-         */
-        void setEnable(bool isEnable);
-
-        /**
         * @brief Set the fill colour of the element
         * @param fillColour New fill colour of the element
         *
@@ -204,6 +199,12 @@ namespace Gui {
          * The default outline colour is grey
          */
         void setOutlineColour(Colour outlineColour);
+
+        /**
+         * @brief Set text alignment
+         * @param textAlignment Text alignment to set
+         */
+        void setTextAlignment(TextAlignment textAlignment);
 
         /**
          * @brief Get the padding set on the element
@@ -251,6 +252,12 @@ namespace Gui {
         Colour getOutlineColour() const;
 
         /**
+         * @brief Get the text alignment
+         * @return Text alignment
+         */
+        TextAlignment getTextAlignment() const;
+
+        /**
          * @brief Toggle the visibility of the element
          *
          * This function will make the element invisible if its currently
@@ -264,16 +271,7 @@ namespace Gui {
          * @brief Check if UI element is hidden on a render target or not
          * @return True if UI element is hidden, false if it is not hidden
          */
-        bool isHidden() const;
-
-        /**
-         * @brief Check if element is enabled or disabled
-         * @return True if element is enabled, false if element is disabled
-         *
-         * @note A disabled element cannot be interacted with using the mouse.
-         *       @see setEnable(bool)
-         */
-        bool isEnabled() const;
+        bool isHidden() const override;
 
         /**
         * @brief Check if coordinates lie inside the element
@@ -299,10 +297,8 @@ namespace Gui {
          * will be carried out behind the scene. Calling draw() on a
          * hidden element has no effect. That is, the element will
          * not appear on the render target
-         *
-         * @note Hiding an element disables it, @see setEnable(bool)
          */
-        void hide();
+        void hide() override;
 
         /**
          * @brief Make a hidden element reappear on a render target
@@ -310,7 +306,7 @@ namespace Gui {
          * revealing a hidden UI element does not automatically show
          * it on the render target, a call to draw() must be made
          */
-        void show();
+        void show() override ;
 
         /**
          * @brief Abstract Destructor
@@ -352,29 +348,7 @@ namespace Gui {
          * This function will update the element when the text font,
          * text content, text character size etc.. changes
         */
-        void onTextDimensionsChange();
-
-        /**
-         * @brief Update the element when it's dimensions changes
-         *
-         * This function will update the elements dimensions when the
-         * margin, outline thickness or padding of the element changes
-         */
-        void onElementDimensionChange();
-
-        /**
-         * @brief Select/deselect element
-         * @param isSelected Set true to select element, false to deselect element
-         *
-         * The element is not selected by default
-         */
-        void setSelected(bool isSelected);
-
-        /**
-         * @brief Check if element is selected or not
-         * @return True if element is selected, false if element is not selected
-         */
-        bool isSelected() const;
+        void updateDimensions();
 
     private:
         //White space around element
@@ -387,12 +361,10 @@ namespace Gui {
         sf::RectangleShape parentRectangle_;
         //Defines the perimeter of the elements border
         sf::RectangleShape border_;
+        //Text position within the border
+        TextAlignment textAlignment_;
         //Display state of element
         bool isHidden_;
-        //Selected state
-        bool isSelected_;
-        //Enabled state
-        bool isEnabled_;
     };
 }
 

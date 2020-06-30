@@ -2,20 +2,18 @@
 // should be placed in .cpp file to avoid the "multiple definition" error
 
 template<typename... Args>
-int EventEmitter::addListener(const std::string &event, Callback<Args...> callback) {
-    static const auto isCallbackInvokedOnce = false;
-    return addListener(event, callback, isCallbackInvokedOnce);
+int EventEmitter::addEventListener(const std::string &event, Callback<Args...> callback) {
+    return addListener(event, callback, false);
 }
 
 template<typename... Args>
 int EventEmitter::on(const std::string &event, Callback<Args...> callback) {
-    return addListener(event, callback);
+    return addEventListener(event, callback);
 }
 
 template<typename... Args>
-void EventEmitter::addOnceListener(const std::string &event, Callback<Args...> callback) {
-    static const auto isCallbackInvokedOnce = true;
-    addListener(event, callback, isCallbackInvokedOnce);
+int EventEmitter::addOnceEventListener(const std::string &event, Callback<Args...> callback) {
+    return addListener(event, callback, true);
 }
 
 template<typename...Args>
@@ -42,7 +40,7 @@ void EventEmitter::emit(const std::string &event, Args... args) {
             if (listenerPtr && listenerPtr->callback_) {
                 listenerPtr->callback_(args...);
                 if (listenerPtr->isCalledOnce_)
-                    removeListener(event, listenerPtr->id_);
+                    removeEventListener(event, listenerPtr->id_);
             }
         }
     }

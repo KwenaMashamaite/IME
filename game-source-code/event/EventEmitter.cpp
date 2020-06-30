@@ -1,7 +1,7 @@
 #include "EventEmitter.h"
 #include <algorithm>
 
-bool EventEmitter::removeListener(const std::string &event, int listenerId) {
+bool EventEmitter::removeEventListener(const std::string &event, int listenerId) {
     if (listenerId > previousListenerId)
         return false;
     auto eventIter = eventList_.find(event);
@@ -19,7 +19,7 @@ bool EventEmitter::removeListener(const std::string &event, int listenerId) {
     return false;
 }
 
-bool EventEmitter::removeAllListeners(const std::string &event) {
+bool EventEmitter::removeAllEventListeners(const std::string &event) {
     auto iter = eventList_.find(event);
     if (iter != eventList_.end()) {
         auto& listeners = iter->second;

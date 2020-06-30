@@ -14,3 +14,15 @@ void Gui::GameWinMenu::draw(Gui::Window &renderTarget) {
 
     renderTarget.draw(message);
 }
+
+void Gui::GameWinMenu::hide() {
+
+}
+
+void Gui::GameWinMenu::show() {
+
+}
+
+bool Gui::GameWinMenu::isHidden() const {
+    return false;
+}

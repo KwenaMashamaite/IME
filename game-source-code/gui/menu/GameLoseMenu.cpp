@@ -14,3 +14,15 @@ Gui::GameLoseMenu::GameLoseMenu() {
 void Gui::GameLoseMenu::draw(Gui::Window &renderTarget) {
     renderTarget.draw(*message_);
 }
+
+void Gui::GameLoseMenu::hide() {
+
+}
+
+void Gui::GameLoseMenu::show() {
+
+}
+
+bool Gui::GameLoseMenu::isHidden() const {
+    return false;
+}

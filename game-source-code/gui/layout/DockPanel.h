@@ -7,7 +7,7 @@
 
 #include "Panel.h"
 #include <memory>
-#include <unordered_map>
+#include <map>
 
 namespace Gui {
     class DockPanel final : public Panel {
@@ -45,18 +45,35 @@ namespace Gui {
         void dock(DockPosition dockPosition, std::unique_ptr<Panel> panel);
 
         /**
-         * @brief Add a GUI element to the panel that was previously
-         *        docked
-         * @param alias Name that can be used to refer to element
-         * @param guiElement GUI element to be added
+         * @brief Set the position of the default panel for adding
+         *        UI elements
+         * @param dockPosition The position of the panel to set as
+         *        default
          *
-         * This function will add a UI element to the panel that was
-         * last docked, that is, the panel that was added to the Dock
-         * panel during the last call to the dock method. If no panel
-         * was previously docked, the UI element will be ignored
+         * All UI elements added to the @class DockPanel using the
+         * addElement() function will be added to the default panel.
+         * Initially, the panel on the left edge is set os the default
+         * panel
+         */
+        void setDefaultPanelPos(DockPosition dockPosition);
+
+        /**
+         * @brief Get the position of the default panel
+         * @return The position of the default panel
+         */
+        DockPosition getDefaultPanelPos() const;
+
+        /**
+         * @brief Add a GUI element to the default panel
+         * @param alias Name that can be used to refer to element
+         * @param uiElement UI element to be added
+         *
+         * This function will add a UI element to the panel that is
+         * set as the default. The UI element will not be added If
+         * the default panel has not been docked yet
          */
         void addElement(const std::string &alias,
-                std::unique_ptr<UIElement> guiElement) override;
+                std::unique_ptr<UIElement> uiElement) override;
 
         /**
          *@brief  Get access to a GUI layout panel at a specific edge
@@ -77,42 +94,12 @@ namespace Gui {
         void draw(Window &renderTarget) override;
 
     private:
-        //Panel docked on the top edge of the dock panel
-        std::unique_ptr<Panel> topEdgeDock_;
-        //Panel docked on the bottom edge of the dock panel
-        std::unique_ptr<Panel> bottomEdgeDock_;
-        //Panel docked on the left edge of the dock panel
-        std::unique_ptr<Panel> leftEdgeDock_;
-        //Panel docked on the right edge of the dock panel
-        std::unique_ptr<Panel> rightEdgeDock_;
-        //Position of the panel added during the last call to dock
-        int lastDockedPosition_;
-
-        /**
-         * @brief Helper function for docking panels
-         * @param dockPosition Is the position where the panel should
-         *        be docked
-         * @param panel Panel to be docked
-         * @param defaultPos Position of the panel if currently there's
-         *        no panel docked
-         *
-         * This function will dock the provided panel at the default
-         * position if there are no panels already docked to other
-         * edges of the dock panel. The dimensions and position of the
-         * panel to be docked will be adjusted accordingly if there are
-         * panels already docked on other edges of the dock panel. The
-         * last panel to be docked will occupy the remaining space
-         */
-        void dock(DockPosition dockPosition, const std::unique_ptr<Panel>& panel,
-                Position defaultPos);
-
-        /**
-         * @brief  Check if a docking area is the last to be occupied
-         * @param  dockPosition Position to be checked
-         * @return True if docking area is the last to be occupied,
-         *         otherwise false
-         */
-        bool isLastToBeDocked(DockPosition dockPosition) const;
+        //Stores docked panels
+        std::map<DockPosition, std::unique_ptr<Panel>> dockedPanels_;
+        //Position of the default panel
+        DockPosition defaultPanelPos_;
+        //null unique pointer
+        const std::unique_ptr<Panel> null_ptr;
     };
 }
 
