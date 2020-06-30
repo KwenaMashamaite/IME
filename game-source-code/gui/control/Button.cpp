@@ -47,7 +47,7 @@ void Gui::Button::initializeDefaultBehavior() {
     addEventListener("interactivityChanged",Callback<bool>([this](bool isEnabled) {
         if (!isHidden()) {
             if (!isEnabled) {
-                setHoverTextFillColour({0, 0, 0}); //Black
+                setTextFillColour({0, 0, 0}); //Black
                 setFillColour({105, 105, 105}); //Dim Grey
             }
         }
