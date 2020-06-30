@@ -348,15 +348,7 @@ namespace Gui {
          * This function will update the element when the text font,
          * text content, text character size etc.. changes
         */
-        void onTextDimensionsChange();
-
-        /**
-         * @brief Update the element when it's dimensions changes
-         *
-         * This function will update the elements dimensions when the
-         * margin, outline thickness or padding of the element changes
-         */
-        void onElementDimensionChange();
+        void updateDimensions();
 
     private:
         //White space around element

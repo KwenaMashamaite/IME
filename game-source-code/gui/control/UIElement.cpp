@@ -31,30 +31,6 @@ void Gui::UIElement::initEvents() {
     addEventListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
-
-    addEventListener("textFontChanged", Callback<std::string>([this](const std::string &) {
-        onTextDimensionsChange();
-    }));
-
-    addEventListener("textContentChanged", Callback<std::string>([this](const std::string &) {
-        onTextDimensionsChange();
-    }));
-
-    addEventListener("textCharSizeChanged", Callback<unsigned int>([this](unsigned int) {
-        onTextDimensionsChange();
-    }));
-
-    addEventListener("marginChanged", Callback<Margin>([this](Margin) {
-        onElementDimensionChange();
-    }));
-
-    addEventListener("paddingChanged", Callback<Padding>([this](Padding) {
-        onElementDimensionChange();
-    }));
-
-    addEventListener("outlineThicknessChanged", Callback<float>([this](float) {
-        onElementDimensionChange();
-    }));
 }
 
 void Gui::UIElement::setPadding(float padding) {
@@ -63,6 +39,8 @@ void Gui::UIElement::setPadding(float padding) {
 
 void Gui::UIElement::setPadding(const Gui::Padding &padding) {
     padding_ = padding;
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new padding
     emit("paddingChanged", padding_);
 }
 
@@ -72,6 +50,8 @@ void Gui::UIElement::setMargin(float margin) {
 
 void Gui::UIElement::setMargin(const Gui::Margin &margin) {
     margin_ = margin;
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new margin
     emit("marginChanged", margin_);
 }
 
@@ -94,23 +74,28 @@ void Gui::UIElement::setPosition(Position position) {
 
 void Gui::UIElement::setTextFont(const std::string &textFont) {
     text_.setFont(ResourceManager::getFont(textFont));
+    updateDimensions();
     emit("textFontChanged", textFont);
     emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setTextCharSize(unsigned int charSize) {
     text_.setCharacterSize(charSize);
+    updateDimensions();
     emit("textCharSizeChanged", charSize);
     emit("textLocalBoundsChanged");
 }
 
 void Gui::UIElement::setText(const std::string &textContent) {
     text_.setString(textContent);
+    updateDimensions();
     emit("textContentChanged", textContent);
 }
 
 void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     border_.setOutlineThickness(outlineThickness);
+    updateDimensions();
+    setPosition(getPosition().x, getPosition().y); //Reposition to indicate new outline thickness
     emit("outlineThicknessChanged", outlineThickness);
 }
 
@@ -261,7 +246,7 @@ void Gui::UIElement::show() {
     }
 }
 
-void Gui::UIElement::onTextDimensionsChange() {
+void Gui::UIElement::updateDimensions() {
     border_.setSize(sf::Vector2f(
         text_.getGlobalBounds().width + padding_.left + padding_.right,
         text_.getGlobalBounds().height + padding_.top + padding_.bottom
@@ -271,11 +256,6 @@ void Gui::UIElement::onTextDimensionsChange() {
         border_.getGlobalBounds().height + margin_.top + margin_.bottom
     ));
     emit("dimensionsChanged", getDimensions());
-}
-
-void Gui::UIElement::onElementDimensionChange() {
-    onTextDimensionsChange(); //Update padding and margin
-    setPosition(getPosition().x, getPosition().y); //Update padding and margin
 }
 
 Gui::UIElement::~UIElement() = default;
