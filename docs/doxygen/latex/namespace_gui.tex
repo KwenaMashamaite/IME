@@ -12,6 +12,8 @@ class \mbox{\hyperlink{class_gui_1_1_button}{Button}}
 \item 
 class \mbox{\hyperlink{class_gui_1_1_canvas}{Canvas}}
 \item 
+class \mbox{\hyperlink{class_gui_1_1_clickable_u_i_element}{Clickable\+U\+I\+Element}}
+\item 
 struct \mbox{\hyperlink{struct_gui_1_1_colour}{Colour}}
 \begin{DoxyCompactList}\small\item\em Represents R\+GB combination colour. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_gui_1_1_dock_panel}{Dock\+Panel}}
@@ -43,13 +45,25 @@ class \mbox{\hyperlink{class_gui_1_1_text_block}{Text\+Block}}
 class \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}}
 \item 
 class \mbox{\hyperlink{class_gui_1_1_window}{Window}}
+\item 
+class \mbox{\hyperlink{class_gui_1_1_window_close_pop_up_menu}{Window\+Close\+Pop\+Up\+Menu}}
 \end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86}{Text\+Alignment}} \{ \mbox{\hyperlink{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a945d5e233cf7d6240f6b783b36a374ff}{Text\+Alignment\+::\+Left}}, 
+\mbox{\hyperlink{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a92b09c7c48c520c3c55e497875da437c}{Text\+Alignment\+::\+Right}}, 
+\mbox{\hyperlink{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a4f1f6016fc9f3f2353c0cc7c67b292bd}{Text\+Alignment\+::\+Center}}
+ \}
+\begin{DoxyCompactList}\small\item\em Position of the text within the elements border. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 UI element that can perform actions. 
 
 \mbox{\hyperlink{class_gui_1_1_window}{Window}} that can serve as a target for 2D drawing.
+
+Confirmation menu when a request to close window is made.
 
 Menu displayed when the game is paused.
 
@@ -74,3 +88,33 @@ Interface for drawable G\+UI elements.
 Class for drawing game graphics (textures, texts, sprites, images, etc)
 
 UI element that can display single and multiple lines of text. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86}\label{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86}} 
+\index{Gui@{Gui}!TextAlignment@{TextAlignment}}
+\index{TextAlignment@{TextAlignment}!Gui@{Gui}}
+\doxysubsubsection{\texorpdfstring{TextAlignment}{TextAlignment}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86}{Gui\+::\+Text\+Alignment}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Position of the text within the elements border. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Left@{Left}!Gui@{Gui}}\index{Gui@{Gui}!Left@{Left}}}\mbox{\Hypertarget{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a945d5e233cf7d6240f6b783b36a374ff}\label{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a945d5e233cf7d6240f6b783b36a374ff}} 
+Left&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Right@{Right}!Gui@{Gui}}\index{Gui@{Gui}!Right@{Right}}}\mbox{\Hypertarget{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a92b09c7c48c520c3c55e497875da437c}\label{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a92b09c7c48c520c3c55e497875da437c}} 
+Right&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Center@{Center}!Gui@{Gui}}\index{Gui@{Gui}!Center@{Center}}}\mbox{\Hypertarget{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a4f1f6016fc9f3f2353c0cc7c67b292bd}\label{namespace_gui_a6a8ac4337f0e3ea1778393c616f61c86a4f1f6016fc9f3f2353c0cc7c67b292bd}} 
+Center&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 54 of file U\+I\+Element.\+h.
+

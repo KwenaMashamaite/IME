@@ -1,0 +1,107 @@
+\hypertarget{class_gui_1_1_i_drawable}{}\doxysection{Gui\+::I\+Drawable Class Reference}
+\label{class_gui_1_1_i_drawable}\index{Gui::IDrawable@{Gui::IDrawable}}
+
+
+{\ttfamily \#include $<$I\+Drawable.\+h$>$}
+
+
+
+Inheritance diagram for Gui\+::I\+Drawable\+:
+% FIG 0
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)=0
+\begin{DoxyCompactList}\small\item\em Draw object on a render target. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_i_drawable_a65f7bd663d30804d2f472f0c1d1ea26d}{hide}} ()=0
+\begin{DoxyCompactList}\small\item\em Hide object from a render target. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_gui_1_1_i_drawable_acb42a60ba84df005f732f3db70349ed6}{show}} ()=0
+\begin{DoxyCompactList}\small\item\em Show a hidden object. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{class_gui_1_1_i_drawable_a0788184a57f3936475008848a1743cf0}{is\+Hidden}} () const =0
+\begin{DoxyCompactList}\small\item\em Check is object is hidden or not. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file I\+Drawable.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}\label{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76}} 
+\index{Gui::IDrawable@{Gui::IDrawable}!draw@{draw}}
+\index{draw@{draw}!Gui::IDrawable@{Gui::IDrawable}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily virtual void Gui\+::\+I\+Drawable\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Draw object on a render target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em render\+Target} & Target to draw object on \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_gui_1_1_u_i_element_a9df9031012a4c382eb8008d3f432f603}{Gui\+::\+U\+I\+Element}}, \mbox{\hyperlink{class_gui_1_1_panel_aaf008241b3d4b8cc5247178395f0f457}{Gui\+::\+Panel}}, \mbox{\hyperlink{class_gui_1_1_dock_panel_a75fc94d8985f54ad6cfcfe9a23cbe670}{Gui\+::\+Dock\+Panel}}, \mbox{\hyperlink{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4}{Gui\+::\+Main\+Menu}}, \mbox{\hyperlink{class_gui_1_1_window_close_pop_up_menu_ae0d818d1afd694b03de25f4e7e19e668}{Gui\+::\+Window\+Close\+Pop\+Up\+Menu}}, \mbox{\hyperlink{class_gui_1_1_pause_menu_a1785b433ece64711459cb048f04497ea}{Gui\+::\+Pause\+Menu}}, \mbox{\hyperlink{class_gui_1_1_game_lose_menu_ad63f90fe62f7d907875ee1dee5be05c5}{Gui\+::\+Game\+Lose\+Menu}}, and \mbox{\hyperlink{class_gui_1_1_game_win_menu_af4dab08e4e59f965f84c10b46c298d10}{Gui\+::\+Game\+Win\+Menu}}.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9f06b76_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_gui_1_1_i_drawable_a65f7bd663d30804d2f472f0c1d1ea26d}\label{class_gui_1_1_i_drawable_a65f7bd663d30804d2f472f0c1d1ea26d}} 
+\index{Gui::IDrawable@{Gui::IDrawable}!hide@{hide}}
+\index{hide@{hide}!Gui::IDrawable@{Gui::IDrawable}}
+\doxysubsubsection{\texorpdfstring{hide()}{hide()}}
+{\footnotesize\ttfamily virtual void Gui\+::\+I\+Drawable\+::hide (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Hide object from a render target. 
+
+A hidden object will not be drawn on a render target when calling draw(\+Window) 
+
+Implemented in \mbox{\hyperlink{class_gui_1_1_u_i_element_ae5793df70a5753d772d4bcd4ab54ab64}{Gui\+::\+U\+I\+Element}}, \mbox{\hyperlink{class_gui_1_1_panel_a54d1b1215b7708cf5ea017bda81490b4}{Gui\+::\+Panel}}, \mbox{\hyperlink{class_gui_1_1_main_menu_afce70bf8012ac192e99ffc965789e5ef}{Gui\+::\+Main\+Menu}}, \mbox{\hyperlink{class_gui_1_1_window_close_pop_up_menu_a9d71046cc66caf57325cd57e7e156396}{Gui\+::\+Window\+Close\+Pop\+Up\+Menu}}, \mbox{\hyperlink{class_gui_1_1_pause_menu_aeeb4e14d475b2d3ebbb5871cf7d9081b}{Gui\+::\+Pause\+Menu}}, \mbox{\hyperlink{class_gui_1_1_game_lose_menu_ad38f4e1094b2037fc0e4d0b57c97fe90}{Gui\+::\+Game\+Lose\+Menu}}, and \mbox{\hyperlink{class_gui_1_1_game_win_menu_a83efffd6ee672bb31deea632ff7da30d}{Gui\+::\+Game\+Win\+Menu}}.
+
+\mbox{\Hypertarget{class_gui_1_1_i_drawable_a0788184a57f3936475008848a1743cf0}\label{class_gui_1_1_i_drawable_a0788184a57f3936475008848a1743cf0}} 
+\index{Gui::IDrawable@{Gui::IDrawable}!isHidden@{isHidden}}
+\index{isHidden@{isHidden}!Gui::IDrawable@{Gui::IDrawable}}
+\doxysubsubsection{\texorpdfstring{isHidden()}{isHidden()}}
+{\footnotesize\ttfamily virtual bool Gui\+::\+I\+Drawable\+::is\+Hidden (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Check is object is hidden or not. 
+
+\begin{DoxyReturn}{Returns}
+True if object is hidden, false if object is not hidden 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_gui_1_1_u_i_element_ab6e6cd95eeeb07cc1e758894a6a78d86}{Gui\+::\+U\+I\+Element}}, \mbox{\hyperlink{class_gui_1_1_panel_a129585ae67ce888f17dabe4e1d7753d9}{Gui\+::\+Panel}}, \mbox{\hyperlink{class_gui_1_1_main_menu_a06ff654f6f7261c7de9af1bdc83dfda5}{Gui\+::\+Main\+Menu}}, \mbox{\hyperlink{class_gui_1_1_window_close_pop_up_menu_aaadfde3a570a51798e507858d747a052}{Gui\+::\+Window\+Close\+Pop\+Up\+Menu}}, \mbox{\hyperlink{class_gui_1_1_pause_menu_a802ee098a5f02ec1c06ef83284936fac}{Gui\+::\+Pause\+Menu}}, \mbox{\hyperlink{class_gui_1_1_game_lose_menu_a651a812da42323240f752c9ce84ad1a9}{Gui\+::\+Game\+Lose\+Menu}}, and \mbox{\hyperlink{class_gui_1_1_game_win_menu_aba5cc540efab8e27cd78081e0ab2164a}{Gui\+::\+Game\+Win\+Menu}}.
+
+\mbox{\Hypertarget{class_gui_1_1_i_drawable_acb42a60ba84df005f732f3db70349ed6}\label{class_gui_1_1_i_drawable_acb42a60ba84df005f732f3db70349ed6}} 
+\index{Gui::IDrawable@{Gui::IDrawable}!show@{show}}
+\index{show@{show}!Gui::IDrawable@{Gui::IDrawable}}
+\doxysubsubsection{\texorpdfstring{show()}{show()}}
+{\footnotesize\ttfamily virtual void Gui\+::\+I\+Drawable\+::show (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Show a hidden object. 
+
+This function will reveal an object that was hidden prior to function call. Calling this function on an object that is not hidden has no effect. This function does not show the object on a render target, it only allows the object to be drawn on a render target 
+
+Implemented in \mbox{\hyperlink{class_gui_1_1_u_i_element_a9b926d44da66a5eecfe5247128288648}{Gui\+::\+U\+I\+Element}}, \mbox{\hyperlink{class_gui_1_1_panel_ad715dcdf0a013f026cabe437f2d90651}{Gui\+::\+Panel}}, \mbox{\hyperlink{class_gui_1_1_main_menu_aee7d407db8d93473ea49f6ee156e8e6b}{Gui\+::\+Main\+Menu}}, \mbox{\hyperlink{class_gui_1_1_window_close_pop_up_menu_a6dd00f15530eafc167253cbae27841e0}{Gui\+::\+Window\+Close\+Pop\+Up\+Menu}}, \mbox{\hyperlink{class_gui_1_1_pause_menu_ada6923104d5e619fc713ac6ca9891588}{Gui\+::\+Pause\+Menu}}, \mbox{\hyperlink{class_gui_1_1_game_lose_menu_a0509ad9699ee92024afb9c18429d3098}{Gui\+::\+Game\+Lose\+Menu}}, and \mbox{\hyperlink{class_gui_1_1_game_win_menu_a1760eb35cc904dd226dea98a1df5556e}{Gui\+::\+Game\+Win\+Menu}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/gui/\mbox{\hyperlink{_i_drawable_8h}{I\+Drawable.\+h}}\end{DoxyCompactItemize}

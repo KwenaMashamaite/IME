@@ -1,7 +1,7 @@
 \hypertarget{_c_1_2_users_2_brandon_2_desktop_2_projects_2_s_f_m_l-2_85_80-_game-_development-_template_2game5dae6c7d13f6c6d94bb88cba85272b94}{}\doxysection{C\+:/\+Users/\+Brandon/\+Desktop/\+Projects/\+S\+F\+M\+L-\/2.\+5.\+0-\/\+Game-\/\+Development-\/\+Template/game-\/source-\/code/event/\+Event\+Emitter.\+h}
-Add listener to an event\+This function does the same thing as the add\+Listener() function. It just provides a slightly more readable syntax. For example\+:
+Add listener to an event\+This function does the same thing as the add\+Event\+Listener() function. It just provides a slightly more readable syntax. For example\+:
 
-return\+Button.\+on(\char`\"{}click\char`\"{}, show\+Main\+Menu) as opposed to return\+Button.\+add\+Listener(\char`\"{}click\char`\"{}, show\+Main\+Menu)
+return\+Button.\+on(\char`\"{}click\char`\"{}, show\+Main\+Menu) as opposed to return\+Button.\+add\+Event\+Listener(\char`\"{}click\char`\"{}, show\+Main\+Menu)
 
 
 \begin{DoxyCodeInclude}{0}
@@ -21,24 +21,24 @@ return\+Button.\+on(\char`\"{}click\char`\"{}, show\+Main\+Menu) as opposed to r
 \DoxyCodeLine{\textcolor{keyword}{class }\mbox{\hyperlink{class_event_emitter}{EventEmitter}} \{}
 \DoxyCodeLine{\textcolor{keyword}{public}:}
 \DoxyCodeLine{    \textcolor{keyword}{template}<\textcolor{keyword}{typename}...Args>}
-\DoxyCodeLine{    \textcolor{keywordtype}{int} \mbox{\hyperlink{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}{addListener}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback);}
+\DoxyCodeLine{    \textcolor{keywordtype}{int} \mbox{\hyperlink{class_event_emitter_a72241ee1ff712e3462ed5c75e0ec48a5}{addEventListener}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback);}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{keyword}{template}<\textcolor{keyword}{typename}...Args>}
 \DoxyCodeLine{    \textcolor{keywordtype}{int} \mbox{\hyperlink{class_event_emitter_a457e1a200331d1ce0286e6718e057e4b}{on}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback);}
 \DoxyCodeLine{}
 \DoxyCodeLine{     \textcolor{keyword}{template} <\textcolor{keyword}{typename} ...Args>}
-\DoxyCodeLine{    \textcolor{keywordtype}{void} \mbox{\hyperlink{class_event_emitter_aabdeca68669f8d263530d98f89fcd59b}{addOnceListener}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback);}
+\DoxyCodeLine{    \textcolor{keywordtype}{int} \mbox{\hyperlink{class_event_emitter_a979808fbae4aaebe43b718089027dd99}{addOnceEventListener}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback);}
 \DoxyCodeLine{}
-\DoxyCodeLine{     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_event_emitter_a1a470fee5274eb7913b6e20f0338e56d}{removeListener}}(\textcolor{keyword}{const} std::string \&event, \textcolor{keywordtype}{int} listenerId);}
+\DoxyCodeLine{     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_event_emitter_adf7111bdf643d74ad370b98d12e7310a}{removeEventListener}}(\textcolor{keyword}{const} std::string \&event, \textcolor{keywordtype}{int} listenerId);}
 \DoxyCodeLine{}
-\DoxyCodeLine{     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_event_emitter_a9d5bb84b27c0d5d1cca12a8ed0072602}{removeAllListeners}}(\textcolor{keyword}{const} std::string \&event);}
+\DoxyCodeLine{     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_event_emitter_a8ff7eb0bb0af87f42d85130da476829a}{removeAllEventListeners}}(\textcolor{keyword}{const} std::string \&event);}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{keyword}{template}<\textcolor{keyword}{typename}...Args>}
 \DoxyCodeLine{    \textcolor{keywordtype}{void} \mbox{\hyperlink{class_event_emitter_aa5c1edb36ee818d48c2175a1e7e77612}{emit}}(\textcolor{keyword}{const} std::string \&event, Args...args);}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{keyword}{private}:}
 \DoxyCodeLine{    \textcolor{keyword}{template}<\textcolor{keyword}{typename}...Args>}
-\DoxyCodeLine{    \textcolor{keywordtype}{int} \mbox{\hyperlink{class_event_emitter_a2d69c0d05a6987b8d1a41162e8e4a7a0}{addListener}}(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback,}
+\DoxyCodeLine{    \textcolor{keywordtype}{int} addListener(\textcolor{keyword}{const} std::string \&event, \mbox{\hyperlink{_event_emitter_8h_a0ad41c1dff9a75eec436fbec96bfd896}{Callback<Args...>}} callback,}
 \DoxyCodeLine{            \textcolor{keywordtype}{bool} isCalledOnce);}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{keyword}{private}:}

@@ -6,8 +6,7 @@
 
 
 
-Inheritance diagram for Gui\+::Dock\+Panel\+:
-\nopagebreak
+Inheritance diagram for Gui\+::Dock\+Panel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -16,8 +15,7 @@ Inheritance diagram for Gui\+::Dock\+Panel\+:
 \end{figure}
 
 
-Collaboration diagram for Gui\+::Dock\+Panel\+:
-\nopagebreak
+Collaboration diagram for Gui\+::Dock\+Panel\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -36,15 +34,19 @@ enum \mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_gui_1_1_dock_panel_a19cf20b6f6f3942565f087529494dd5e}{Dock\+Panel}} (float x, float y)
+\mbox{\hyperlink{class_gui_1_1_dock_panel_ae6bdae362f698964db07860311103f68}{Dock\+Panel}} (float x, float y)
 \begin{DoxyCompactList}\small\item\em Create a new \mbox{\hyperlink{class_gui_1_1_dock_panel}{Dock\+Panel}} object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_dock_panel_a0a54bccc57bc83f04a51676af7605570}{dock}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} dock\+Position, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$ panel)
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_a72e21b9c67748d59402ecdfe0806e340}{dock}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} dock\+Position, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$ panel)
 \begin{DoxyCompactList}\small\item\em Add a G\+UI layout panel to the Dock panel. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e6e9895f5d6}{add\+Element}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ gui\+Element) override
-\begin{DoxyCompactList}\small\item\em Add a G\+UI element to the panel that was previously docked. \end{DoxyCompactList}\item 
-const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$ \& \mbox{\hyperlink{class_gui_1_1_dock_panel_ae0c59d13017924578bb62abfe7d73802}{get\+Panel\+At}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} dock\+Position)
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_a35422cb0a9b0588b85ed211bc7df2244}{set\+Default\+Panel\+Pos}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} dock\+Position)
+\item 
+\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} \mbox{\hyperlink{class_gui_1_1_dock_panel_abb02beee7f201015f41b31d9745eb5dd}{get\+Default\+Panel\+Pos}} () const
+\begin{DoxyCompactList}\small\item\em Get the position of the default panel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_af373dc7e8123eecfa4d8b7e1ead758a3}{add\+Element}} (const std\+::string \&alias, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$ ui\+Element) override
+\begin{DoxyCompactList}\small\item\em Add a G\+UI element to the default panel. \end{DoxyCompactList}\item 
+const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$ \& \mbox{\hyperlink{class_gui_1_1_dock_panel_a02bb115107cffb783121c6dab245a7ec}{get\+Panel\+At}} (\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}} dock\+Position)
 \begin{DoxyCompactList}\small\item\em Get access to a G\+UI layout panel at a specific edge of the Dock panel. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
+void \mbox{\hyperlink{class_gui_1_1_dock_panel_a75fc94d8985f54ad6cfcfe9a23cbe670}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
 \begin{DoxyCompactList}\small\item\em Render G\+UI layout panels on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
@@ -92,11 +94,11 @@ Definition at line 18 of file Dock\+Panel.\+h.
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_gui_1_1_dock_panel_a19cf20b6f6f3942565f087529494dd5e}\label{class_gui_1_1_dock_panel_a19cf20b6f6f3942565f087529494dd5e}} 
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_ae6bdae362f698964db07860311103f68}\label{class_gui_1_1_dock_panel_ae6bdae362f698964db07860311103f68}} 
 \index{Gui::DockPanel@{Gui::DockPanel}!DockPanel@{DockPanel}}
 \index{DockPanel@{DockPanel}!Gui::DockPanel@{Gui::DockPanel}}
 \doxysubsubsection{\texorpdfstring{DockPanel()}{DockPanel()}}
-{\footnotesize\ttfamily Gui\+::\+Dock\+Panel\+::\+Dock\+Panel (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Dock\+Panel\+::\+Dock\+Panel (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
 
 
 
@@ -111,41 +113,43 @@ Create a new \mbox{\hyperlink{class_gui_1_1_dock_panel}{Dock\+Panel}} object.
 \end{DoxyParams}
 
 
-Definition at line 4 of file Dock\+Panel.\+cpp.
+Definition at line 6 of file Dock\+Panel.\+cpp.
 
+Here is the call graph for this function\+:
+% FIG 0
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e6e9895f5d6}\label{class_gui_1_1_dock_panel_a096dc8b5b49bdd5ac0cf0e6e9895f5d6}} 
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_af373dc7e8123eecfa4d8b7e1ead758a3}\label{class_gui_1_1_dock_panel_af373dc7e8123eecfa4d8b7e1ead758a3}} 
 \index{Gui::DockPanel@{Gui::DockPanel}!addElement@{addElement}}
 \index{addElement@{addElement}!Gui::DockPanel@{Gui::DockPanel}}
 \doxysubsubsection{\texorpdfstring{addElement()}{addElement()}}
-{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{alias,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{gui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Dock\+Panel\+::add\+Element (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{alias,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_u_i_element}{U\+I\+Element}} $>$}]{ui\+Element }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Add a G\+UI element to the panel that was previously docked. 
+Add a G\+UI element to the default panel. 
 
 
 \begin{DoxyParams}{Parameters}
 {\em alias} & Name that can be used to refer to element \\
 \hline
-{\em gui\+Element} & G\+UI element to be added\\
+{\em ui\+Element} & UI element to be added\\
 \hline
 \end{DoxyParams}
-This function will add a UI element to the panel that was last docked, that is, the panel that was added to the Dock panel during the last call to the dock method. If no panel was previously docked, the UI element will be ignored 
+This function will add a UI element to the panel that is set as the default. The UI element will not be added If the default panel has not been docked yet 
 
 Implements \mbox{\hyperlink{class_gui_1_1_panel_a87e8ad3bd9b6d2c72c777993af696dcb}{Gui\+::\+Panel}}.
 
 
 
-Definition at line 7 of file Dock\+Panel.\+cpp.
+Definition at line 94 of file Dock\+Panel.\+cpp.
 
-\mbox{\Hypertarget{class_gui_1_1_dock_panel_a0a54bccc57bc83f04a51676af7605570}\label{class_gui_1_1_dock_panel_a0a54bccc57bc83f04a51676af7605570}} 
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a72e21b9c67748d59402ecdfe0806e340}\label{class_gui_1_1_dock_panel_a72e21b9c67748d59402ecdfe0806e340}} 
 \index{Gui::DockPanel@{Gui::DockPanel}!dock@{dock}}
 \index{dock@{dock}!Gui::DockPanel@{Gui::DockPanel}}
 \doxysubsubsection{\texorpdfstring{dock()}{dock()}}
-{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::dock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}}}]{dock\+Position,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$}]{panel }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Dock\+Panel\+::dock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}}}]{dock\+Position,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Panel}} $>$}]{panel }\end{DoxyParamCaption})}
 
 
 
@@ -163,13 +167,13 @@ If a panel was already docked at the specified position, it will be replaced. Th
 \end{DoxyNote}
 
 
-Definition at line 13 of file Dock\+Panel.\+cpp.
+Definition at line 99 of file Dock\+Panel.\+cpp.
 
-\mbox{\Hypertarget{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}\label{class_gui_1_1_dock_panel_a14012d260228f9293c53f8ef2b6b77ec}} 
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a75fc94d8985f54ad6cfcfe9a23cbe670}\label{class_gui_1_1_dock_panel_a75fc94d8985f54ad6cfcfe9a23cbe670}} 
 \index{Gui::DockPanel@{Gui::DockPanel}!draw@{draw}}
 \index{draw@{draw}!Gui::DockPanel@{Gui::DockPanel}}
 \doxysubsubsection{\texorpdfstring{draw()}{draw()}}
-{\footnotesize\ttfamily void Gui\+::\+Dock\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Gui\+::\+Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily void Dock\+Panel\+::draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_window}{Gui\+::\+Window}} \&}]{render\+Target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
@@ -186,13 +190,32 @@ Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9
 
 
 
-Definition at line 84 of file Dock\+Panel.\+cpp.
+Definition at line 111 of file Dock\+Panel.\+cpp.
 
-\mbox{\Hypertarget{class_gui_1_1_dock_panel_ae0c59d13017924578bb62abfe7d73802}\label{class_gui_1_1_dock_panel_ae0c59d13017924578bb62abfe7d73802}} 
+Here is the call graph for this function\+:
+% FIG 1
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_abb02beee7f201015f41b31d9745eb5dd}\label{class_gui_1_1_dock_panel_abb02beee7f201015f41b31d9745eb5dd}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!getDefaultPanelPos@{getDefaultPanelPos}}
+\index{getDefaultPanelPos@{getDefaultPanelPos}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{getDefaultPanelPos()}{getDefaultPanelPos()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Gui\+::\+Dock\+Panel\+::\+Dock\+Position}} Dock\+Panel\+::get\+Default\+Panel\+Pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the position of the default panel. 
+
+\begin{DoxyReturn}{Returns}
+The position of the default panel 
+\end{DoxyReturn}
+
+
+Definition at line 118 of file Dock\+Panel.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a02bb115107cffb783121c6dab245a7ec}\label{class_gui_1_1_dock_panel_a02bb115107cffb783121c6dab245a7ec}} 
 \index{Gui::DockPanel@{Gui::DockPanel}!getPanelAt@{getPanelAt}}
 \index{getPanelAt@{getPanelAt}!Gui::DockPanel@{Gui::DockPanel}}
 \doxysubsubsection{\texorpdfstring{getPanelAt()}{getPanelAt()}}
-{\footnotesize\ttfamily const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Gui\+::\+Panel}} $>$ \& Gui\+::\+Dock\+Panel\+::get\+Panel\+At (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}}}]{dock\+Position }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily const std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{class_gui_1_1_panel}{Gui\+::\+Panel}} $>$ \& Dock\+Panel\+::get\+Panel\+At (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}}}]{dock\+Position }\end{DoxyParamCaption})}
 
 
 
@@ -208,7 +231,19 @@ A pointer to the specified panel if it exists, otherwise a null pointer
 \end{DoxyReturn}
 
 
-Definition at line 91 of file Dock\+Panel.\+cpp.
+Definition at line 122 of file Dock\+Panel.\+cpp.
+
+Here is the caller graph for this function\+:
+% FIG 2
+\mbox{\Hypertarget{class_gui_1_1_dock_panel_a35422cb0a9b0588b85ed211bc7df2244}\label{class_gui_1_1_dock_panel_a35422cb0a9b0588b85ed211bc7df2244}} 
+\index{Gui::DockPanel@{Gui::DockPanel}!setDefaultPanelPos@{setDefaultPanelPos}}
+\index{setDefaultPanelPos@{setDefaultPanelPos}!Gui::DockPanel@{Gui::DockPanel}}
+\doxysubsubsection{\texorpdfstring{setDefaultPanelPos()}{setDefaultPanelPos()}}
+{\footnotesize\ttfamily void Dock\+Panel\+::set\+Default\+Panel\+Pos (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_gui_1_1_dock_panel_abc9a3c4256b093cf4ac85728d318b919}{Dock\+Position}}}]{dock\+Position }\end{DoxyParamCaption})}
+
+
+
+Definition at line 107 of file Dock\+Panel.\+cpp.
 
 
 

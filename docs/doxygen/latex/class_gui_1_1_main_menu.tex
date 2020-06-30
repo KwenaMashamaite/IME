@@ -6,8 +6,7 @@
 
 
 
-Inheritance diagram for Gui\+::Main\+Menu\+:
-\nopagebreak
+Inheritance diagram for Gui\+::Main\+Menu\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -16,8 +15,7 @@ Inheritance diagram for Gui\+::Main\+Menu\+:
 \end{figure}
 
 
-Collaboration diagram for Gui\+::Main\+Menu\+:
-\nopagebreak
+Collaboration diagram for Gui\+::Main\+Menu\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,7 +28,13 @@ Collaboration diagram for Gui\+::Main\+Menu\+:
 \mbox{\hyperlink{class_gui_1_1_main_menu_a4b8c627c92fa1a2672df2703e4e188ba}{Main\+Menu}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target)
 \begin{DoxyCompactList}\small\item\em Construct a new Main Menu object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4}{draw}} (\mbox{\hyperlink{class_gui_1_1_window}{Window}} \&render\+Target) override
-\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the main menu on a render target. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Draw all G\+UI elements and layouts of the main menu on a render target. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_main_menu_afce70bf8012ac192e99ffc965789e5ef}{hide}} () override
+\begin{DoxyCompactList}\small\item\em Hide menu from a render target. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_gui_1_1_main_menu_aee7d407db8d93473ea49f6ee156e8e6b}{show}} () override
+\begin{DoxyCompactList}\small\item\em Reveal a hidden menu. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_gui_1_1_main_menu_a06ff654f6f7261c7de9af1bdc83dfda5}{is\+Hidden}} () const override
+\begin{DoxyCompactList}\small\item\em Check if menu is hidden or not. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -86,14 +90,76 @@ Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a6dacc229410146b99c01c4c0a9
 
 Definition at line 118 of file Main\+Menu.\+cpp.
 
-Here is the call graph for this function\+:
-\nopagebreak
+Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=323pt]{class_gui_1_1_main_menu_ad2f9dd71b729d40bb0e4124ba7b0edb4_cgraph}
 \end{center}
 \end{figure}
+\mbox{\Hypertarget{class_gui_1_1_main_menu_afce70bf8012ac192e99ffc965789e5ef}\label{class_gui_1_1_main_menu_afce70bf8012ac192e99ffc965789e5ef}} 
+\index{Gui::MainMenu@{Gui::MainMenu}!hide@{hide}}
+\index{hide@{hide}!Gui::MainMenu@{Gui::MainMenu}}
+\doxysubsubsection{\texorpdfstring{hide()}{hide()}}
+{\footnotesize\ttfamily void Gui\+::\+Main\+Menu\+::hide (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Hide menu from a render target. 
+
+A hidden menu will not be drawn on a render target when calling the function draw(\+Window). Also, A hidden menu cannot be interacted with graphically. That is, interaction with the mouse cursor is disabled while the menu is hidden. However, some states of the menu may be changed while it is hidden but they will not be reflected graphically 
+
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a65f7bd663d30804d2f472f0c1d1ea26d}{Gui\+::\+I\+Drawable}}.
+
+
+
+Definition at line 156 of file Main\+Menu.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_main_menu_a06ff654f6f7261c7de9af1bdc83dfda5}\label{class_gui_1_1_main_menu_a06ff654f6f7261c7de9af1bdc83dfda5}} 
+\index{Gui::MainMenu@{Gui::MainMenu}!isHidden@{isHidden}}
+\index{isHidden@{isHidden}!Gui::MainMenu@{Gui::MainMenu}}
+\doxysubsubsection{\texorpdfstring{isHidden()}{isHidden()}}
+{\footnotesize\ttfamily bool Gui\+::\+Main\+Menu\+::is\+Hidden (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Check if menu is hidden or not. 
+
+\begin{DoxyReturn}{Returns}
+True if menu is hidden, otherwise false 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_a0788184a57f3936475008848a1743cf0}{Gui\+::\+I\+Drawable}}.
+
+
+
+Definition at line 164 of file Main\+Menu.\+cpp.
+
+\mbox{\Hypertarget{class_gui_1_1_main_menu_aee7d407db8d93473ea49f6ee156e8e6b}\label{class_gui_1_1_main_menu_aee7d407db8d93473ea49f6ee156e8e6b}} 
+\index{Gui::MainMenu@{Gui::MainMenu}!show@{show}}
+\index{show@{show}!Gui::MainMenu@{Gui::MainMenu}}
+\doxysubsubsection{\texorpdfstring{show()}{show()}}
+{\footnotesize\ttfamily void Gui\+::\+Main\+Menu\+::show (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Reveal a hidden menu. 
+
+\begin{DoxyNote}{Note}
+This function does not show the menu on a render target, it only allows the menu to be drawn when calling draw(\+Window). 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_gui_1_1_main_menu_afce70bf8012ac192e99ffc965789e5ef}{hide()}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{class_gui_1_1_i_drawable_acb42a60ba84df005f732f3db70349ed6}{Gui\+::\+I\+Drawable}}.
+
+
+
+Definition at line 160 of file Main\+Menu.\+cpp.
+
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
