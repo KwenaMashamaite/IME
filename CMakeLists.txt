@@ -73,7 +73,10 @@ set(SOURCE_FILES
         game-source-code/gui/menu/GameWinMenu.cpp
         game-source-code/gui/menu/GameWinMenu.h
         game-source-code/audio/AudioManager.cpp
-        game-source-code/audio/AudioManager.h)
+        game-source-code/audio/AudioManager.h
+        game-source-code/gui/menu/WindowClosePopUpMenu.cpp
+        game-source-code/gui/menu/WindowClosePopUpMenu.h
+        )
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
