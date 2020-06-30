@@ -48,6 +48,15 @@ namespace Gui {
         unsigned int opacity = 255;
     };
 
+    /**
+     * @brief Position of the text within the elements border
+     */
+    enum class TextAlignment{
+        Left,
+        Right,
+        Center
+    };
+
     class UIElement : public EventEmitter, public IDrawable{
     public:
         /**
@@ -206,6 +215,12 @@ namespace Gui {
         void setOutlineColour(Colour outlineColour);
 
         /**
+         * @brief Set text alignment
+         * @param textAlignment Text alignment to set
+         */
+        void setTextAlignment(TextAlignment textAlignment);
+
+        /**
          * @brief Get the padding set on the element
          * @return Padding set on th element
          */
@@ -249,6 +264,12 @@ namespace Gui {
          * @return Outline colour of the element
          */
         Colour getOutlineColour() const;
+
+        /**
+         * @brief Get the text alignment
+         * @return Text alignment
+         */
+        TextAlignment getTextAlignment() const;
 
         /**
          * @brief Toggle the visibility of the element
@@ -387,6 +408,8 @@ namespace Gui {
         sf::RectangleShape parentRectangle_;
         //Defines the perimeter of the elements border
         sf::RectangleShape border_;
+        //Text position within the border
+        TextAlignment textAlignment_;
         //Display state of element
         bool isHidden_;
         //Selected state

@@ -17,6 +17,7 @@ void Gui::UIElement::initialize() {
     initEvents();
     setTextFont("secret-code.ttf");
     setTextCharSize(25u);
+    setTextAlignment(TextAlignment::Left);
     parentRectangle_.setFillColor({0, 0, 0, 0}); //Transparent
     setFillColour({220, 220, 220}); //Gainsboro
     setOutlineColour({128, 128, 128}); //Grey
@@ -203,6 +204,56 @@ void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
     emit("outlineColourChanged", outlineColour);
 }
 
+void Gui::UIElement::setTextAlignment(Gui::TextAlignment textAlignment) {
+    if (textAlignment_ == textAlignment)
+        return;
+    else
+        textAlignment_ = textAlignment;
+
+    switch (textAlignment) {
+        case TextAlignment::Left:
+            text_.setPosition(border_.getPosition().x, border_.getPosition().y + padding_.top
+            );
+            setPadding({
+                0.0f,
+                border_.getLocalBounds().width - text_.getLocalBounds().width
+                - 2 * border_.getOutlineThickness(),
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+        case TextAlignment::Right:
+            text_.setPosition(
+                (border_.getPosition().x + border_.getLocalBounds().width) - text_.getLocalBounds().width,
+                border_.getPosition().y + getPadding().top
+            );
+            setPadding({
+                border_.getLocalBounds().width - text_.getLocalBounds().width
+                - 2 * border_.getOutlineThickness(),
+                0.0f,
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+        case TextAlignment::Center:
+            text_.setPosition(
+                border_.getPosition().x - border_.getOutlineThickness()
+                + (getDimensions().width / 2.0f - text_.getGlobalBounds().width / 2.0f),
+                border_.getPosition().y + getPadding().top
+            );
+            setPadding({
+                text_.getPosition().x - border_.getPosition().x,
+                border_.getPosition().x + border_.getLocalBounds().width
+                - (text_.getPosition().x  + text_.getLocalBounds().width)
+                - 2 * border_.getOutlineThickness(),
+                getPadding().top,
+                getPadding().bottom
+            });
+            break;
+    }
+    emit("textAlignmentChanged", textAlignment_);
+}
+
 Gui::Padding Gui::UIElement::getPadding() const {
     return padding_;
 }
@@ -231,6 +282,10 @@ Gui::Colour Gui::UIElement::getTextFillColour() const {
 
 Gui::Colour Gui::UIElement::getOutlineColour() const {
     return Utility::convert3rdPartyColourToOwnColour(border_.getOutlineColor());
+}
+
+Gui::TextAlignment Gui::UIElement::getTextAlignment() const {
+    return textAlignment_;
 }
 
 void Gui::UIElement::toggleVisibility() {
