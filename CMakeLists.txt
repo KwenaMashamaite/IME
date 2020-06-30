@@ -76,6 +76,8 @@ set(SOURCE_FILES
         game-source-code/audio/AudioManager.h
         game-source-code/gui/menu/WindowClosePopUpMenu.cpp
         game-source-code/gui/menu/WindowClosePopUpMenu.h
+        game-source-code/gui/control/ClickableUIElement.cpp
+        game-source-code/gui/control/ClickableUIElement.h
         )
 
 #add the doctest unit testing framework

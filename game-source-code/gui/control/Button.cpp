@@ -4,7 +4,7 @@ Gui::Button::Button() : Button("")
 {}
 
 Gui::Button::Button(const std::string& buttonText)
-    : UIElement(buttonText)
+    : ClickableUIElement(buttonText)
 {
     //Colours of the button when the mouse cursor enters it (may be changed at run-time)
     onHoverColours_.fillColour = {105, 105, 105}; //Dim gray

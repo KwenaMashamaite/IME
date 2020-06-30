@@ -5,11 +5,11 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "UIElement.h"
+#include "ClickableUIElement.h"
 #include <string>
 
 namespace Gui {
-    class Button final : public UIElement {
+    class Button final : public ClickableUIElement {
     public:
         /**
          * @brief Create a button

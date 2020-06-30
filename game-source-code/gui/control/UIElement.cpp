@@ -1,5 +1,4 @@
 #include "UIElement.h"
-#include "input/Mouse.h"
 #include "resources/ResourceManager.h"
 #include "utility/Utility.h"
 
@@ -7,7 +6,7 @@ Gui::UIElement::UIElement() : UIElement("")
 {}
 
 Gui::UIElement::UIElement(const std::string &textContent)
-    : isHidden_(false), isSelected_(false), isEnabled_(true)
+    : isHidden_(false)
 {
     setText(textContent);
     initialize();
@@ -29,75 +28,6 @@ void Gui::UIElement::initialize() {
 }
 
 void Gui::UIElement::initEvents() {
-    ///////////////INTERACTION EVENTS /////////////////////////////
-
-    //Notify event listeners when the mouse cursor enters or leaves the element
-    Window::addEventListener("mouseMoved",Callback<int, int>([this](int x, int y) {
-        if (!isHidden() && isEnabled()) {
-            if (contains(x, y) && !isSelected()) {
-                setSelected(true);
-                emit("mouseEnter");
-            } else if (!contains(x, y) && isSelected()) {
-                setSelected(false);
-                emit("mouseLeave");
-            }
-        }
-    }));
-
-    //Notify event listeners when the element is pressed
-    Window::addEventListener("mouseButtonPressed", Callback<Mouse::Button>(
-        [this](Mouse::Button pressedButton) {
-            if (isSelected() && isEnabled()) {
-                switch (pressedButton) {
-                    case Mouse::Button::LMouseButton:
-                        emit("leftMouseDown");
-                        break;
-                    case Mouse::Button::RMouseButton:
-                        emit("rightMouseDown");
-                        break;
-                    case Mouse::Button::MiddleButton:
-                        emit("middleMouseDown");
-                        break;
-                }
-            }
-        }
-    ));
-
-    //notify event listeners when the element is released
-    Window::addEventListener("mouseButtonReleased", Callback<Mouse::Button>(
-        [this](Mouse::Button releasedButton) {
-            if (isSelected() && isEnabled()) {
-                switch (releasedButton) {
-                    case Mouse::Button::LMouseButton:
-                        emit("leftMouseUp");
-                        break;
-                    case Mouse::Button::RMouseButton:
-                        emit("rightMouseUp");
-                        break;
-                    case Mouse::Button::MiddleButton:
-                        emit("middleMouseUp");
-                        break;
-                }
-            }
-        }
-    ));
-
-    //Notify event listeners when the element is clicked. A click event always occurs
-    //after a mouse up event, which occurs after a mouse down event
-    //(mouseDown->mouseUp->click)
-    addEventListener("leftMouseUp", Callback<>([this] {
-        emit("click");
-    }));
-
-
-    //Automatically disable/enable the element when its visibility state changes.
-    //A user must not interact with a hidden element
-    addEventListener("visibilityChanged", Callback<bool>([this](bool isHidden) {
-        setEnable(!isHidden);
-    }));
-
-    ////////////////COSMETIC EVENTS ////////////////////////////////////
-
     addEventListener("textLocalBoundsChanged", Callback<>([this] {
         text_.setOrigin(text_.getLocalBounds().left, text_.getLocalBounds().top);
     }));
@@ -182,11 +112,6 @@ void Gui::UIElement::setText(const std::string &textContent) {
 void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     border_.setOutlineThickness(outlineThickness);
     emit("outlineThicknessChanged", outlineThickness);
-}
-
-void Gui::UIElement::setEnable(bool isEnable) {
-    isEnabled_ = isEnable;
-    emit("interactivityChanged", isEnabled_);
 }
 
 void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
@@ -299,10 +224,6 @@ bool Gui::UIElement::isHidden() const {
     return isHidden_;
 }
 
-bool Gui::UIElement::isEnabled() const{
-    return isEnabled_;
-}
-
 bool Gui::UIElement::contains(float x, float y) const{
     //For some reasons SFML doesn't account for the outline thickness when
     //getting the position, so we need to account for it
@@ -355,15 +276,6 @@ void Gui::UIElement::onTextDimensionsChange() {
 void Gui::UIElement::onElementDimensionChange() {
     onTextDimensionsChange(); //Update padding and margin
     setPosition(getPosition().x, getPosition().y); //Update padding and margin
-}
-
-void Gui::UIElement::setSelected(bool isSelected) {
-    isSelected_ = isSelected;
-    emit("selectionChanged", isSelected_);
-}
-
-bool Gui::UIElement::isSelected() const {
-    return isSelected_;
 }
 
 Gui::UIElement::~UIElement() = default;

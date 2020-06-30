@@ -177,20 +177,6 @@ namespace Gui {
         void setOutlineThickness(float outlineThickness);
 
         /**
-         * @brief Enable or disable the element
-         * @param isEnable Set true to enable the element, false to
-         *        disable the element
-         *
-         * The element is enabled by default
-         *
-         * @note Disabling the element cancels all the interaction events.
-         *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
-         *       and "mouseDown" events will not fire while the element is
-         *       disabled.
-         */
-        void setEnable(bool isEnable);
-
-        /**
         * @brief Set the fill colour of the element
         * @param fillColour New fill colour of the element
         *
@@ -288,15 +274,6 @@ namespace Gui {
         bool isHidden() const override;
 
         /**
-         * @brief Check if element is enabled or disabled
-         * @return True if element is enabled, false if element is disabled
-         *
-         * @note A disabled element cannot be interacted with using the mouse.
-         *       @see setEnable(bool)
-         */
-        bool isEnabled() const;
-
-        /**
         * @brief Check if coordinates lie inside the element
         * @param x X coordinate to be checked
         * @param y Y coordinate to be checked
@@ -320,8 +297,6 @@ namespace Gui {
          * will be carried out behind the scene. Calling draw() on a
          * hidden element has no effect. That is, the element will
          * not appear on the render target
-         *
-         * @note Hiding an element disables it, @see setEnable(bool)
          */
         void hide() override;
 
@@ -383,20 +358,6 @@ namespace Gui {
          */
         void onElementDimensionChange();
 
-        /**
-         * @brief Select/deselect element
-         * @param isSelected Set true to select element, false to deselect element
-         *
-         * The element is not selected by default
-         */
-        void setSelected(bool isSelected);
-
-        /**
-         * @brief Check if element is selected or not
-         * @return True if element is selected, false if element is not selected
-         */
-        bool isSelected() const;
-
     private:
         //White space around element
         Margin margin_;
@@ -412,10 +373,6 @@ namespace Gui {
         TextAlignment textAlignment_;
         //Display state of element
         bool isHidden_;
-        //Selected state
-        bool isSelected_;
-        //Enabled state
-        bool isEnabled_;
     };
 }
 

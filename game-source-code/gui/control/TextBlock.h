@@ -16,12 +16,6 @@ namespace Gui {
          * @param textContent text to be displayed inside the text block
          */
         explicit TextBlock(const std::string &textContent);
-
-    private:
-        /**
-         * @brief Prevent the text block from interacting with the mouse cursor
-         */
-        using UIElement::setEnable;
     };
 }
 
