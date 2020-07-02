@@ -30,13 +30,13 @@ void Gui::ClickableUIElement::initEvents() {
         [this](Mouse::Button pressedButton) {
             if (isSelected() && isEnabled()) {
                 switch (pressedButton) {
-                    case Mouse::Button::LMouseButton:
+                    case Mouse::Button::Left:
                         emit("leftMouseDown");
                         break;
-                    case Mouse::Button::RMouseButton:
+                    case Mouse::Button::Right:
                         emit("rightMouseDown");
                         break;
-                    case Mouse::Button::MiddleButton:
+                    case Mouse::Button::Middle:
                         emit("middleMouseDown");
                         break;
                 }
@@ -49,13 +49,13 @@ void Gui::ClickableUIElement::initEvents() {
         [this](Mouse::Button releasedButton) {
             if (isSelected() && isEnabled()) {
                 switch (releasedButton) {
-                    case Mouse::Button::LMouseButton:
+                    case Mouse::Button::Left:
                         emit("leftMouseUp");
                         break;
-                    case Mouse::Button::RMouseButton:
+                    case Mouse::Button::Right:
                         emit("rightMouseUp");
                         break;
-                    case Mouse::Button::MiddleButton:
+                    case Mouse::Button::Middle:
                         emit("middleMouseUp");
                         break;
                 }

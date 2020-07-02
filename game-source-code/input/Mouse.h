@@ -11,9 +11,9 @@ public:
      * @brief Mouse Buttons
      */
     enum class Button{
-        LMouseButton,
-        RMouseButton,
-        MiddleButton
+        Left,
+        Right,
+        Middle
     };
 
     /**
