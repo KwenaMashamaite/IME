@@ -7,7 +7,7 @@
 
 #include "common/Common.h"
 #include "event/EventEmitter.h"
-#include "gui/IDrawable.h"
+#include "gui/common/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 

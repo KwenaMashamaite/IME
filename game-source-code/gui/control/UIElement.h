@@ -6,8 +6,8 @@
 #define UIELEMENT_H
 
 #include "../window/Window.h"
+#include "../common/IDrawable.h"
 #include "event/EventEmitter.h"
-#include "gui/IDrawable.h"
 #include "common/Common.h"
 #include <string>
 #include <SFML/Graphics.hpp>

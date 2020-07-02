@@ -6,8 +6,8 @@
 #define PANEL_H
 
 #include "../control/UIElement.h"
+#include "../common/IDrawable.h"
 #include "event/EventEmitter.h"
-#include "gui/IDrawable.h"
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <memory>

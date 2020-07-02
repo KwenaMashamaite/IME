@@ -5,7 +5,7 @@
 #ifndef IMENU_H
 #define IMENU_H
 
-#include "gui/IDrawable.h"
+#include "../common/IDrawable.h"
 
 namespace Gui {
     class IMenu : public IDrawable {
