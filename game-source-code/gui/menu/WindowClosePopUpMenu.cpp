@@ -2,7 +2,6 @@
 #include "WindowClosePopUpMenu.h"
 #include "../control/Button.h"
 #include "../control/TextBlock.h"
-#include "input/Keyboard.h"
 
 Gui::WindowClosePopUpMenu::WindowClosePopUpMenu(Window& renderTarget)
     : renderTarget_(renderTarget),

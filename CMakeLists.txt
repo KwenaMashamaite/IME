@@ -37,10 +37,10 @@ set(SOURCE_FILES
         game-source-code/utility/FileReader.cpp
         game-source-code/scoreboard/Scoreboard.h
         game-source-code/scoreboard/Scoreboard.cpp
-        game-source-code/input/Keyboard.h
-        game-source-code/input/Keyboard.cpp
-        game-source-code/input/Mouse.h
-        game-source-code/input/Mouse.cpp
+        game-source-code/gui/input/Keyboard.h
+        game-source-code/gui/input/Keyboard.cpp
+        game-source-code/gui/input/Mouse.h
+        game-source-code/gui/input/Mouse.cpp
         game-source-code/gui/layout/Canvas.cpp
         game-source-code/gui/layout/Canvas.h
         game-source-code/gui/layout/DockPanel.h
@@ -66,7 +66,7 @@ set(SOURCE_FILES
         game-source-code/utility/Utility.h
         test-source-code/EventEmitterTests.hpp
         game-source-code/main/main.cpp
-        #test-source-code/WindowTests.hpp
+        test-source-code/WindowTests.hpp
         game-source-code/gui/IDrawable.h
         game-source-code/gui/menu/GameLoseMenu.cpp
         game-source-code/gui/menu/GameLoseMenu.h

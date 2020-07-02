@@ -1,6 +1,6 @@
 #include "Window.h"
-#include "input/Mouse.h"
-#include "input/Keyboard.h"
+#include "../input/Mouse.h"
+#include "../input/Keyboard.h"
 #include <cassert>
 
 Common::Dimensions Gui::Window::dimensions_{0u, 0u};

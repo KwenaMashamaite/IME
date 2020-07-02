@@ -1,5 +1,5 @@
 #include "ClickableUIElement.h"
-#include "input/Mouse.h"
+#include "../input/Mouse.h"
 
 Gui::ClickableUIElement::ClickableUIElement()
     : ClickableUIElement("")
