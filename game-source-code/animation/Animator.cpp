@@ -25,10 +25,11 @@ void Animator::addAnimation(Animator::Animations animations) {
 //@todo Reset var totaltime due to some condition (Overflow risk)
 void Animator::update(float deltaTime) {
     totalTime_ += deltaTime;
-    auto getCurrentFrameIndex = [this](){
+    auto getCurrentFrameIndex = [this]{
         auto numOfAnimFrames = currentAnimation_->getNumOfFrames();
         auto currentFrameIndex = static_cast<unsigned int>(
-            (currentAnimation_->getDuration() / totalTime_) * numOfAnimFrames);
+            (totalTime_ / currentAnimation_->getDuration()) * numOfAnimFrames
+        );
 
         if (currentAnimation_->isLooped())
             return currentFrameIndex %= numOfAnimFrames;
