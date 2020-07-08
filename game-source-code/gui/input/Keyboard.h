@@ -89,7 +89,7 @@ public:
     }
 
     /**
-      * @brief  Remove a listener from a window event
+      * @brief  Remove an event listener from an event
       * @param  event Event to remove listener from
       * @param  listenerId Identification number of the listener
       *         to be removed
