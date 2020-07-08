@@ -33,8 +33,10 @@ void Animator::update(float deltaTime) {
 
         if (currentAnimation_->isLooped())
             return currentFrameIndex %= numOfAnimFrames;
-        else if(currentFrameIndex >= numOfAnimFrames)
+        else if (currentFrameIndex >= numOfAnimFrames) {
+            eventEmitter_.emit("animationFinished");
             return --numOfAnimFrames;
+        }
         return currentFrameIndex;
     };
     target_.setTextureRect(currentAnimation_->getFrameAt(getCurrentFrameIndex()));

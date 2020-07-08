@@ -9,6 +9,7 @@
 #define ANIMATOR_H
 
 #include "Animation.h"
+#include "event/EventEmitter.h"
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -63,6 +64,20 @@ public:
      */
     sf::Sprite getCurrentAnimSprite() const;
 
+    /**
+     * @brief Add an event listener to an animation finished event
+     * @tparam Args Parameter pack
+     * @param callback Function to execute when the animation finishes
+     * @return Event listeners identification number
+     *
+     * The callback function will only be executed once - when the animation
+     * finishes
+     */
+    template<typename...Args>
+    void onAnimationFinish(Callback<Args...> callback){
+        eventEmitter_.addOnceEventListener("animationFinished", callback);
+    }
+
 private:
     //Animation sprite
     sf::Sprite target_;
@@ -72,6 +87,8 @@ private:
     std::shared_ptr<Animation> currentAnimation_;
     //Elapsed time so far
     float totalTime_;
+    //Event publisher
+    EventEmitter eventEmitter_;
 };
 
 #endif
