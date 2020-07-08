@@ -36,26 +36,29 @@ Gui::DockPanel::DockPanel(float x, float y)
                     case DockPosition::LeftEdge:
                     case DockPosition::RightEdge:
                         newPosition.y = topEdgePanel ? topEdgePanel->getPosition().y
-                            + topEdgePanel->getDimensions().height : 0;
+                            + topEdgePanel->getDimensions().height
+                            - topEdgePanel->getOutlineThickness(): 0;
 
                         if (dockPosition == DockPosition::LeftEdge)
                             newPosition.x = 0;
                         else
                             newPosition.x = isLastPanelToBeDocked ? leftEdgePanel->getPosition().x
-                                + leftEdgePanel->getDimensions().width
-                                : Window::getDimensions().width - newPanel->getDimensions().width;
+                                + leftEdgePanel->getDimensions().width - leftEdgePanel->getOutlineThickness()
+                                : Window::getDimensions().width - (newPanel->getDimensions().width
+                                    + 2 * newPanel->getOutlineThickness());
                         break;
                     case DockPosition::TopEdge:
                     case DockPosition::BottomEdge:
                         newPosition.x = leftEdgePanel ? leftEdgePanel->getPosition().x
-                            + leftEdgePanel->getDimensions().width : 0;
+                            + leftEdgePanel->getDimensions().width - leftEdgePanel->getOutlineThickness(): 0;
 
                         if (dockPosition == DockPosition::TopEdge)
                             newPosition.y = 0;
                         else
                             newPosition.y = isLastPanelToBeDocked ? topEdgePanel->getPosition().y
-                                + topEdgePanel->getDimensions().height
-                                : Window::getDimensions().height - newPanel->getDimensions().height;
+                                + topEdgePanel->getDimensions().height - topEdgePanel->getOutlineThickness()
+                                : Window::getDimensions().height - (newPanel->getDimensions().height
+                                    + 2 * newPanel->getOutlineThickness());
                         break;
                 }
                 newPanel->setPosition(newPosition);
@@ -68,21 +71,25 @@ Gui::DockPanel::DockPanel(float x, float y)
                     case DockPosition::LeftEdge:
                     case DockPosition::RightEdge:
                         newPanelSize.height = Window::getDimensions().height
+                            - 2 * newPanel->getOutlineThickness()
                             - (topEdgePanel ? topEdgePanel->getDimensions().height : 0)
                             - (bottomEdgePanel ? bottomEdgePanel->getDimensions().height : 0);
 
                         if (isLastPanelToBeDocked)
                             newPanelSize.width = Window::getDimensions().width
+                                - 2 * newPanel->getOutlineThickness()
                                 - panelOnOpposite->getDimensions().width;
                         break;
                     case DockPosition::TopEdge:
                     case DockPosition::BottomEdge:
                         newPanelSize.width = Window::getDimensions().width
+                            - 2 * newPanel->getOutlineThickness()
                             - (leftEdgePanel ? leftEdgePanel->getDimensions().width : 0)
                             - (rightEdgePanel ? rightEdgePanel->getDimensions().width : 0);
 
                         if (isLastPanelToBeDocked)
                             newPanelSize.height = Window::getDimensions().height
+                                - 2 * newPanel->getOutlineThickness()
                                 - panelOnOpposite->getDimensions().height;
                         break;
                 }
@@ -98,9 +105,9 @@ void Gui::DockPanel::addElement(const std::string &alias, std::unique_ptr<UIElem
 
 void Gui::DockPanel::dock(DockPosition dockPosition, std::unique_ptr<Panel> panel) {
     assert(panel && "Docked panel cannot be null");
+    dockedPanels_.insert(std::pair(dockPosition, std::move(panel)));
     static const auto maxNumOfDockPositions = 4u;
     auto isLastPanelToBeDocked = dockedPanels_.size() == maxNumOfDockPositions;
-    dockedPanels_.insert(std::pair(dockPosition, std::move(panel)));
     emit("newPanelAdded", dockPosition, isLastPanelToBeDocked);
 }
 
