@@ -33,8 +33,8 @@ set(SOURCE_FILES
         game-source-code/gui/layout/StackPanel.h
         game-source-code/gui/control/Button.cpp
         game-source-code/gui/control/Button.h
-        game-source-code/utility/FileReader.h
-        game-source-code/utility/FileReader.cpp
+        game-source-code/resources/FileReader.h
+        game-source-code/resources/FileReader.cpp
         game-source-code/scoreboard/Scoreboard.h
         game-source-code/scoreboard/Scoreboard.cpp
         game-source-code/gui/input/Keyboard.h

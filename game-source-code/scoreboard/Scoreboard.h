@@ -5,8 +5,8 @@
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
 
-#include "utility/FileReader.h"
 #include <vector>
+#include <string>
 
 class Scoreboard{
 public:

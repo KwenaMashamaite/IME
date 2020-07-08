@@ -1,4 +1,5 @@
 #include "Scoreboard.h"
+#include "resources/FileReader.h"
 #include <algorithm>
 #include <sstream>
 

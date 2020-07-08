@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "scoreboard/Scoreboard.h"
+#include "resources/FileReader.h"
 #include "../control/Button.h"
 #include "../control/TextBlock.h"
 #include "../layout/DockPanel.h"

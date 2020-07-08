@@ -1,4 +1,4 @@
-#include "utility/FileReader.h"
+#include "FileReader.h"
 #include "exceptions/Exceptions.h"
 
 void Utility::FileReader::readFileInto(std::stringstream& buffer, const std::string& filename){
