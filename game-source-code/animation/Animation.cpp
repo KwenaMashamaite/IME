@@ -1,10 +1,11 @@
 #include "Animation.h"
 
-Animation::Animation(const std::string &spriteSheetFilename,
-        Dimensions frameSize,
-        Position startPos,
+Animation::Animation(const std::string& name,
+        const std::string& spriteSheetFilename,
+        Dimensions frameSize, Position startPos,
         unsigned int numOfFrames,
-        float duration) : spriteSheet_(spriteSheetFilename), duration_(duration), isLooped_(false)
+        float duration) : name_(name), spriteSheet_(spriteSheetFilename),
+        duration_(duration), isLooped_(false)
 {
     createFrames(numOfFrames, startPos, frameSize);
 }
@@ -44,4 +45,8 @@ sf::IntRect Animation::getFrameAt(unsigned int index) const {
 
 unsigned int Animation::getNumOfFrames() const {
     return frames_.size();
+}
+
+const std::string &Animation::getName() const {
+    return name_;
 }

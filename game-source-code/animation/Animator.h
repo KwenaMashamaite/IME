@@ -18,7 +18,7 @@
 
 class Animator {
 public:
-    using Animations = std::initializer_list<std::pair<std::string, std::shared_ptr<Animation>>>;
+    using Animations = std::initializer_list<std::shared_ptr<Animation>>;
 
     /**
      * @brief Constructor
@@ -27,14 +27,13 @@ public:
 
     /**
      * @brief Add animation
-     * @param name Name of the animation
      * @param animation Animation to be added
      *
      * The animation that's added first becomes the current animation
      * by default. The name of the animation must be unique (Must not
      * be the same as that of previously added animations)
      */
-    void addAnimation(const std::string& name, std::shared_ptr<Animation> animation);
+    void addAnimation(std::shared_ptr<Animation> animation);
 
     /**
      * @brief Add multiple animations at the same time

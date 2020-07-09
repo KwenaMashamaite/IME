@@ -17,6 +17,7 @@ class Animation {
 public:
     /**
      * @brief Create a new animation
+     * @param name Name of the animation
      * @param spriteSheetFilename Texture file with animation frames
      * @param frameSize Size of each animation frame
      * @param startPos Position of the first frame on the sprite sheet
@@ -31,7 +32,8 @@ public:
      * and height of the sprite sheet. Lastly, all animation frames must
      * be the same size otherwise, incorrect frames will be animated
      */
-    Animation(const std::string& spriteSheetFilename,
+    Animation(const std::string& name,
+            const std::string& spriteSheetFilename,
             Dimensions frameSize,
             Position startPos,
             unsigned int numOfFrames,
@@ -84,9 +86,17 @@ public:
      */
     unsigned int getNumOfFrames() const;
 
+    /**
+     * @brief Get the name of the animation
+     * @return Name of the animation
+     */
+    const std::string& getName() const;
+
 private:
     //Animation frames
     std::vector<sf::IntRect> frames_;
+    //Name of the animation
+    std::string name_;
     //Animation spritesheet filename
     std::string spriteSheet_;
     //Total duration time of the animation

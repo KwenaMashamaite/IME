@@ -7,17 +7,18 @@ Animator::Animator()
     : totalTime_(0.0f)
 {}
 
-void Animator::addAnimation(const std::string &name, std::shared_ptr<Animation> animation) {
+void Animator::addAnimation(std::shared_ptr<Animation> animation) {
     assert(animation && "A null animation cannot be added to an Animator");
-    animations_.insert(std::pair(name, std::move(animation)));
+    auto animationName = animation->getName();
+    animations_.insert(std::pair(animationName, std::move(animation)));
     if (animations_.size() == 1)
-        changeAnimation(name);
+        changeAnimation(animationName);
 }
 
 void Animator::addAnimation(Animator::Animations animations) {
     std::for_each(animations.begin(), animations.end(),
         [this](const auto& animation) {
-            addAnimation(animation.first, animation.second);
+            addAnimation(animation);
         }
     );
 }
