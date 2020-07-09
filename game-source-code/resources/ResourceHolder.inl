@@ -27,9 +27,9 @@ inline void ResourceHolder<sf::Music>::load(const std::string &filename){
 
 template <typename T>
 std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
-    auto pairFound = resourceHolder_.find(filename);
-    if(pairFound != resourceHolder_.end())
-        return (pairFound->second);
+    auto found = resourceHolder_.find(filename);
+    if (found != resourceHolder_.end())
+        return found->second;
     else{
         load(filename); //Either throws an exception or succeeds
         return get(filename); //Return resource that just got loaded
