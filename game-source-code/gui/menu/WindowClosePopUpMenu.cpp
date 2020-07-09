@@ -10,7 +10,7 @@ Gui::WindowClosePopUpMenu::WindowClosePopUpMenu(Window& renderTarget)
 {
     panel_.setOutlineThickness(2.0f);
     auto question = std::make_unique<TextBlock>("Are you sure you want to quit the application?");
-    question->setTextCharSize(20u);
+    question->setTextCharSize(15u);
     question->setOutlineThickness(1.0f);
     question->setPadding(1.0f);
     question->setOutlineColour({0, 0, 0});
