@@ -22,8 +22,10 @@ void Animator::addAnimation(Animator::Animations animations) {
     );
 }
 
-//@todo Reset var totaltime due to some condition (Overflow risk)
 void Animator::update(float deltaTime) {
+    if (currentAnimation_ == nullptr)
+        return;
+
     totalTime_ += deltaTime;
     auto getCurrentFrameIndex = [this]{
         auto numOfAnimFrames = currentAnimation_->getNumOfFrames();
@@ -34,6 +36,7 @@ void Animator::update(float deltaTime) {
         if (currentAnimation_->isLooped())
             return currentFrameIndex %= numOfAnimFrames;
         else if (currentFrameIndex >= numOfAnimFrames) {
+            currentAnimation_ = nullptr;
             eventEmitter_.emit("animationFinished");
             return --numOfAnimFrames;
         }
@@ -53,5 +56,7 @@ void Animator::changeAnimation(const std::string &animation) {
 }
 
 sf::Sprite Animator::getCurrentAnimSprite() const {
+    if (currentAnimation_ == nullptr)
+        return sf::Sprite();
     return target_;
 }
