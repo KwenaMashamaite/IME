@@ -64,17 +64,44 @@ public:
     sf::Sprite getCurrentAnimSprite() const;
 
     /**
-     * @brief Add an event listener to an animation finished event
+     * @brief Add a function to execute when an animation starts
      * @tparam Args Parameter pack
+     * @param name Name of the animation
+     * @param callback Function to execute when the animation starts
+     * @return Event listeners identification number
+     *
+     * The animation starts on the first call to the update(float) function
+     * and the callback is invoked when an animation starts for the first.
+     * This means that for looped animations,  the "animationStart" event
+     * will not fire when the animation restarts
+     */
+    template<typename...Args>
+    int onAnimationStart(const std::string& name, Callback<Args...> callback){
+        return eventEmitter_.addEventListener(name + "AnimationStarted", callback);
+    }
+
+    /**
+     * @brief Add a function to execute when an animation finishes
+     * @tparam Args Parameter pack
+     * @param name Name of the animation
      * @param callback Function to execute when the animation finishes
      * @return Event listeners identification number
      *
-     * The callback function will only be executed once - when the animation
-     * finishes
+     * The callback function is only executed for animations that are not
+     * looped
      */
     template<typename...Args>
-    void onAnimationFinish(Callback<Args...> callback){
-        eventEmitter_.addOnceEventListener("animationFinished", callback);
+    int onAnimationFinish(const std::string& name, Callback<Args...> callback){
+        return eventEmitter_.addEventListener(name + "AnimationFinished", callback);
+    }
+
+    /**
+     * @brief Remove an event listener from an animation event
+     * @param name Name of the animation to remove listener from
+     * @param id Identification number of the event listener
+     */
+    bool removeEventListenerFromAnimation(const std::string& name, int id){
+        return eventEmitter_.removeEventListener(name, id);
     }
 
 private:

@@ -27,6 +27,9 @@ void Animator::update(float deltaTime) {
     if (currentAnimation_ == nullptr)
         return;
 
+    if (totalTime_ == 0.0f)
+        eventEmitter_.emit(currentAnimation_->getName() + "AnimationStarted");
+
     totalTime_ += deltaTime;
     auto getCurrentFrameIndex = [this]{
         auto numOfAnimFrames = currentAnimation_->getNumOfFrames();
@@ -37,8 +40,9 @@ void Animator::update(float deltaTime) {
         if (currentAnimation_->isLooped())
             return currentFrameIndex %= numOfAnimFrames;
         else if (currentFrameIndex >= numOfAnimFrames) {
+            totalTime_ = 0.0f;
+            eventEmitter_.emit(currentAnimation_->getName() + "AnimationFinished");
             currentAnimation_ = nullptr;
-            eventEmitter_.emit("animationFinished");
             return --numOfAnimFrames;
         }
         return currentFrameIndex;
