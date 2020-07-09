@@ -38,12 +38,17 @@ public:
     /**
      * @brief Add multiple animations at the same time
      * @param animations Animations to be added
+     *
+     * @see addAnimation(std::shared_ptr<Animation>)
      */
     void addAnimation(Animations animations);
 
     /**
-	 * @brief Update animation
-	 * @param deltaTime Time passed since animation update
+	 * @brief Update the current animation
+	 * @param deltaTime Time passed since last animation update
+     *
+     * This function starts the current animation the first time its called.
+     * Subsequent calls determine which frame to display
 	 */
     void update(float deltaTime);
 
