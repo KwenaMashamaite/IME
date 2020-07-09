@@ -15,7 +15,7 @@ void ResourceHolder<T>::load(const std::string& filename){
     resourceHolder_.insert(std::make_pair(filename, std::move(resource)));
 }
 
-template <>
+template <> //Function template specialization (sf::Music is streamed from disk rather than loaded into memory)
 inline void ResourceHolder<sf::Music>::load(const std::string &filename){
     auto music = std::make_shared<sf::Music>();
     if(!(*music).openFromFile(filePath_ + filename))
