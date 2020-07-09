@@ -9,12 +9,10 @@ ResourceHolder<T>::ResourceHolder(const std::string& filePath, PassKey)
 
 template <class T>
 void ResourceHolder<T>::load(const std::string& filename){
-    auto resource = T();
-    if (!resource.loadFromFile(filePath_ + filename))
+    auto resource = std::make_shared<T>();
+    if (!(*resource).loadFromFile(filePath_ + filename))
         throw FileNotFound("cannot find file " + filePath_ + filename);
-    resourceHolder_.insert(
-        std::make_pair(filename, std::move(std::make_shared<T>(resource)))
-    );
+    resourceHolder_.insert(std::make_pair(filename, std::move(resource)));
 }
 
 template <>
