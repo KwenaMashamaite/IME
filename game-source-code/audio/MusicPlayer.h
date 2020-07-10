@@ -42,7 +42,7 @@ namespace Audio {
         /**
          * @brief Resume paused music
          */
-        void resume() override;
+        void play() override;
 
         /**
          * @brief Stop playing or paused music

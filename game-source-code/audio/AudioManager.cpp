@@ -70,7 +70,7 @@ void Audio::AudioManager::setLoopFor(const std::string &filename, bool isLooped)
 void Audio::AudioManager::playAll() {
     std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
         [](const auto& audioPlayer) {
-            audioPlayer.second->resume();
+            audioPlayer.second->play();
     });
 }
 

@@ -21,7 +21,7 @@ void Audio::SoundEffectPlayer::pause() {
     }
 }
 
-void Audio::SoundEffectPlayer::resume() {
+void Audio::SoundEffectPlayer::play() {
     if (soundEffect_.getStatus() == sf::Sound::Status::Paused
         || soundEffect_.getStatus() == sf::Sound::Status::Stopped)
     {

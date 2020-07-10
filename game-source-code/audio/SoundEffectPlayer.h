@@ -39,7 +39,7 @@ namespace Audio {
         /**
          * @brief Resume sound effect
          */
-        void resume() override;
+        void play() override;
 
         /**
          * @brief Set the audio volume

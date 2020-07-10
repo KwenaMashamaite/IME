@@ -37,9 +37,9 @@ namespace Audio {
         virtual void pause() = 0;
 
         /**
-         * @brief Resume paused audio
+         * @brief Play paused or stopped audio file
          */
-        virtual void resume() = 0;
+        virtual void play() = 0;
 
         /**
          * @brief Set the volume of the audio

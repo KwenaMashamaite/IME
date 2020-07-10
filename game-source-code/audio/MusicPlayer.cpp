@@ -21,7 +21,7 @@ void Audio::MusicPlayer::pause(){
     }
 }
 
-void Audio::MusicPlayer::resume(){
+void Audio::MusicPlayer::play(){
     if (song_ && (song_->getStatus() == sf::Music::Status::Paused
         || song_->getStatus() == sf::Music::Status::Stopped))
     {
