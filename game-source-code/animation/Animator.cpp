@@ -54,7 +54,7 @@ void Animator::changeAnimation(const std::string &animation) {
 }
 
 sf::Sprite Animator::getCurrentAnimSprite() const {
-    if (currentAnimation_ == nullptr)
+    if (currentAnimation_ == nullptr || totalTime_ == 0.0f)
         return sf::Sprite();
     return animationSprite_;
 }
