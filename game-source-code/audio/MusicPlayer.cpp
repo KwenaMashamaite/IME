@@ -56,9 +56,11 @@ Audio::Status Audio::MusicPlayer::getStatus() const {
                 return Status::Stopped;
         }
     }
+    return Audio::Status::Stopped;
 }
 
 float Audio::MusicPlayer::getVolume() const {
     if (song_)
         return song_->getVolume();
+    return 0.0f;
 }
