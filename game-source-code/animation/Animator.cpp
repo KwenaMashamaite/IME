@@ -47,14 +47,14 @@ void Animator::update(float deltaTime) {
         }
         return currentFrameIndex;
     };
-    target_.setTextureRect(currentAnimation_->getFrameAt(getCurrentFrameIndex()));
+    animationSprite_.setTextureRect(currentAnimation_->getFrameAt(getCurrentFrameIndex()));
 }
 
 void Animator::changeAnimation(const std::string &animation) {
     auto found = animations_.find(animation);
     if (found != animations_.end()){
         auto newAnimation = found->second;
-        target_.setTexture(ResourceManager::getTexture(newAnimation->getSpriteSheet()));
+        animationSprite_.setTexture(ResourceManager::getTexture(newAnimation->getSpriteSheet()));
         currentAnimation_ = newAnimation;
         totalTime_ = 0.0f;
     }
@@ -63,5 +63,5 @@ void Animator::changeAnimation(const std::string &animation) {
 sf::Sprite Animator::getCurrentAnimSprite() const {
     if (currentAnimation_ == nullptr)
         return sf::Sprite();
-    return target_;
+    return animationSprite_;
 }

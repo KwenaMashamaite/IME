@@ -111,7 +111,7 @@ public:
 
 private:
     //Animation sprite
-    sf::Sprite target_;
+    sf::Sprite animationSprite_;
     //Animations container
     std::unordered_map<std::string, std::shared_ptr<Animation>> animations_;
     //Pointer to the currently running animation
