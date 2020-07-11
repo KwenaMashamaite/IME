@@ -53,6 +53,14 @@ public:
     void update(float deltaTime);
 
     /**
+     * @brief Finish the currently playing animation
+     *
+     * This function will stop the animation and jump straight to the last
+     * animation frame
+     */
+    void finishAnimation();
+
+    /**
 	 * @brief Change the current animation
 	 * @param animation New animation
      *

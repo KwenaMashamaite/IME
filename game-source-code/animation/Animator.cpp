@@ -24,30 +24,23 @@ void Animator::addAnimation(Animator::Animations animations) {
 }
 
 void Animator::update(float deltaTime) {
-    if (currentAnimation_ == nullptr)
-        return;
+    if (currentAnimation_ != nullptr) {
+        if (totalTime_ == 0.0f)
+            eventEmitter_.emit(currentAnimation_->getName() + "AnimationStarted");
 
-    if (totalTime_ == 0.0f)
-        eventEmitter_.emit(currentAnimation_->getName() + "AnimationStarted");
-
-    totalTime_ += deltaTime;
-    auto getCurrentFrameIndex = [this]{
+        totalTime_ += deltaTime;
         auto numOfAnimFrames = currentAnimation_->getNumOfFrames();
         auto currentFrameIndex = static_cast<unsigned int>(
-            (totalTime_ / currentAnimation_->getDuration()) * numOfAnimFrames
-        );
+            (totalTime_ / currentAnimation_->getDuration()) * numOfAnimFrames);
 
         if (currentAnimation_->isLooped())
-            return currentFrameIndex %= numOfAnimFrames;
+            currentFrameIndex %= numOfAnimFrames;
         else if (currentFrameIndex >= numOfAnimFrames) {
-            totalTime_ = 0.0f;
-            eventEmitter_.emit(currentAnimation_->getName() + "AnimationFinished");
-            currentAnimation_ = nullptr;
-            return --numOfAnimFrames;
+            finishAnimation();
+            return;
         }
-        return currentFrameIndex;
-    };
-    animationSprite_.setTextureRect(currentAnimation_->getFrameAt(getCurrentFrameIndex()));
+        animationSprite_.setTextureRect(currentAnimation_->getFrameAt(currentFrameIndex));
+    }
 }
 
 void Animator::changeAnimation(const std::string &animation) {
@@ -64,4 +57,15 @@ sf::Sprite Animator::getCurrentAnimSprite() const {
     if (currentAnimation_ == nullptr)
         return sf::Sprite();
     return animationSprite_;
+}
+
+void Animator::finishAnimation() {
+    if (currentAnimation_ != nullptr && totalTime_ != 0.0f){
+        totalTime_ = 0.0f;
+        animationSprite_.setTextureRect(
+            currentAnimation_->getFrameAt(currentAnimation_->getNumOfFrames() - 1)
+        );
+        eventEmitter_.emit(currentAnimation_->getName() + "AnimationFinished");
+        currentAnimation_ = nullptr;
+    }
 }
