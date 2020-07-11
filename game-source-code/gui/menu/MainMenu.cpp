@@ -91,16 +91,16 @@ void Gui::MainMenu::initNavigationButtonActions() {
     auto textBuffer =  std::stringstream();
 
     //// INSTRUCTIONS BUTTON ///////
-    fileReader.readFileInto(textBuffer, "static/instructions.txt");
+    fileReader.readFileInto(textBuffer, "resources/textFiles/instructions.txt");
     updateInfoPanelOnButtonClick("instructions-btn", textBuffer.str());
 
     //// CONTROLS BUTTON //////////
     textBuffer.str("");
-    fileReader.readFileInto(textBuffer, "static/controls.txt");
+    fileReader.readFileInto(textBuffer, "resources/textFiles/controls.txt");
     updateInfoPanelOnButtonClick("controls-btn", textBuffer.str());
 
     //// HIGHSCORES BUTTON ///////
-    auto scoreBoard = Scoreboard("static/highscores.txt");
+    auto scoreBoard = Scoreboard("resources/textFiles/highscores.txt");
     auto numOfScores = std::distance(scoreBoard.cBegin(), scoreBoard.cEnd());
     auto highscoresText =  std::string("TOP " + std::to_string(numOfScores) + " HIGHSCORES");
     std::for_each(scoreBoard.cBegin(), scoreBoard.cEnd(),
