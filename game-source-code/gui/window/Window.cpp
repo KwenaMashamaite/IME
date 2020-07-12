@@ -32,7 +32,7 @@ void Gui::Window::processEvents() {
     while (window_.pollEvent(event)) {
         switch (event.type){
             case sf::Event::Closed:
-                eventEmitter_.emit("Closed");
+                eventEmitter_.emit("closed");
                 break;
             case sf::Event::MouseEntered:
                 eventEmitter_.emit("mouseEntered");

@@ -6,7 +6,7 @@ int main(){
     window.create("test", 800, 600);
 
     //Close the window when the windows close button is clicked
-    window.addEventListener("Closed", Callback<>([&window] {
+    window.addEventListener("closed", Callback<>([&window] {
         static auto closeConfirmationMenu = Gui::WindowClosePopUpMenu(window);
         window.draw(closeConfirmationMenu);
     }));
