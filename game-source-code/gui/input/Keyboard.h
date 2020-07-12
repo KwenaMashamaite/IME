@@ -1,3 +1,6 @@
+/**
+ * @brief Class for caphandling keyboard inputs
+ */
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
