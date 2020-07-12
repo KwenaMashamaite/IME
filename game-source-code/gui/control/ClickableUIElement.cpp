@@ -63,13 +63,20 @@ void Gui::ClickableUIElement::initEvents() {
         }
     ));
 
+    //Deselect UI element if it's selected and mouse cursor leaves window
+    Window::addEventListener("mouseLeft", Callback<>([this]{
+        if (isSelected()) {
+            setSelected(false);
+            emit("mouseLeave");
+        }
+    }));
+
     //Notify event listeners when the element is clicked. A click event always occurs
     //after a mouse up event, which occurs after a mouse down event
     //(mouseDown->mouseUp->click)
     addEventListener("leftMouseUp", Callback<>([this] {
         emit("click");
     }));
-
 
     //Automatically disable/enable the element when its visibility state changes.
     //A user must not interact with a hidden element
