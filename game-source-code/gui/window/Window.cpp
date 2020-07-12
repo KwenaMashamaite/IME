@@ -34,6 +34,24 @@ void Gui::Window::processEvents() {
             case sf::Event::Closed:
                 eventEmitter_.emit("Closed");
                 break;
+            case sf::Event::MouseEntered:
+                eventEmitter_.emit("mouseEntered");
+                break;
+            case sf::Event::MouseLeft:
+                eventEmitter_.emit("mouseLeft");
+                break;
+            case sf::Event::LostFocus:
+                eventEmitter_.emit("lostFocus");
+                break;
+            case sf::Event::GainedFocus:
+                eventEmitter_.emit("gainedFocus");
+                break;
+            case sf::Event::Resized:
+                eventEmitter_.emit("resized", event.size.width, event.size.height);
+                break;
+            case sf::Event::TextEntered:
+                eventEmitter_.emit("textEntered", event.text);
+                break;
             case sf::Event::KeyPressed:
                 eventEmitter_.emit("keyPressed",
                      static_cast<Keyboard::Key>(static_cast<unsigned int>(event.key.code))
