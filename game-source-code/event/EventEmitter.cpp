@@ -4,15 +4,16 @@
 bool EventEmitter::removeEventListener(const std::string &event, int listenerId) {
     if (listenerId > previousListenerId)
         return false;
-    auto eventIter = eventList_.find(event);
-    if (eventIter != eventList_.end()) {
-        auto& listeners = eventIter->second;
-        auto listenerIter = std::find_if(listeners.begin(), listeners.end(),
-            [listenerId](std::shared_ptr<IListener>& listener){
+    auto foundEvent = eventList_.find(event);
+    if (foundEvent != eventList_.end()) {
+        auto& listeners = foundEvent->second;
+        auto foundListener = std::find_if(listeners.begin(), listeners.end(),
+            [listenerId](std::shared_ptr<IListener>& listener) {
                 return listener->id_ == listenerId;
-        });
-        if (listenerIter != listeners.end()) {
-            listeners.erase(listenerIter);
+            }
+        );
+        if (foundListener != listeners.end()) {
+            listeners.erase(foundListener);
             return true;
         }
     }
@@ -20,9 +21,9 @@ bool EventEmitter::removeEventListener(const std::string &event, int listenerId)
 }
 
 bool EventEmitter::removeAllEventListeners(const std::string &event) {
-    auto iter = eventList_.find(event);
-    if (iter != eventList_.end()) {
-        auto& listeners = iter->second;
+    auto found = eventList_.find(event);
+    if (found != eventList_.end()) {
+        auto& listeners = found->second;
         listeners.clear();
         return true;
     }

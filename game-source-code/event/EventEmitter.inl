@@ -20,9 +20,9 @@ template<typename...Args>
 int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
     auto listenerId = ++previousListenerId;
     auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
-    auto iter = eventList_.find(event);
-    if (iter != eventList_.end()) {
-        auto& listeners = iter->second;
+    auto found = eventList_.find(event);
+    if (found != eventList_.end()) {
+        auto& listeners = found->second;
         listeners.push_back(std::move(listener));
     }else
         eventList_.insert(std::pair(event, std::vector<std::shared_ptr<IListener>>{std::move(listener)}));
@@ -32,9 +32,9 @@ int EventEmitter::addListener(const std::string &event, Callback<Args...> callba
 
 template<typename... Args>
 void EventEmitter::emit(const std::string &event, Args... args) {
-    auto iter = eventList_.find(event);
-    if (iter != eventList_.end()) {
-        auto& listeners = iter->second;
+    auto found = eventList_.find(event);
+    if (found != eventList_.end()) {
+        auto& listeners = found->second;
         for (auto& listenerBasePtr : listeners) {
             auto listenerPtr = std::dynamic_pointer_cast<Listener<Args...>>(listenerBasePtr);
             if (listenerPtr && listenerPtr->callback_) {
