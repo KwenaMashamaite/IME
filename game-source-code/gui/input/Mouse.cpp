@@ -42,7 +42,7 @@ int Mouse::onMouseDown(Mouse::Button button, Callback<> callback) {
         std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
 }
 
-int Mouse::onMouseUp(Mouse::Button button, Callback<> callback) {
+int Mouse::onButtonUp(Mouse::Button button, Callback<> callback) {
     if (!isEventEmitterInitialized_) //Initialize event publishing
         initEventEmitter();
     return  eventEmitter_.addEventListener(

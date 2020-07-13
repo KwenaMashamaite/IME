@@ -35,7 +35,7 @@ public:
      *
      * A mouse up event only occurs for the right and middle mouse button
      */
-    static int onMouseUp(Button button, Callback<> callback);
+    static int onButtonUp(Button button, Callback<> callback);
 
     /**
      * @brief Add an event listener to mouse down event
