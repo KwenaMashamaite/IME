@@ -45,7 +45,7 @@ public:
      *
      * A mouse down event only occurs when the mouse button is pressed and
      * released immediately. If the button is not released immediately, a
-     * mouse held event will be generated @see onMouseHeld(Callback)
+     * mouse held event will be generated @see onButtonHeld(Callback)
      */
     static int onButtonDown(Button button, Callback<> callback);
 
@@ -60,7 +60,7 @@ public:
      * mouse down event and will continue to fire as long as the mouse button
      * remains down
      */
-    static int onMouseHeld(Button button, Callback<> callback);
+    static int onButtonHeld(Button button, Callback<> callback);
 
     /**
      * @brief Add an event listener to a mouse click event

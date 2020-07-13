@@ -61,7 +61,7 @@ int Mouse::onMouseMove(Callback<int, int> callback) {
     return eventEmitter_.addEventListener("mouseMoved", std::move(callback));
 }
 
-int Mouse::onMouseHeld(Mouse::Button button, Callback<> callback) {
+int Mouse::onButtonHeld(Mouse::Button button, Callback<> callback) {
     if (!isEventEmitterInitialized_) //Initialize event publishing
         initEventEmitter();
     return eventEmitter_.addEventListener(
