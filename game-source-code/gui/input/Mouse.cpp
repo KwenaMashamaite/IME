@@ -35,7 +35,7 @@ bool Mouse::isButtonPressed(Button button){
     return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
 }
 
-int Mouse::onMouseDown(Mouse::Button button, Callback<> callback) {
+int Mouse::onButtonDown(Mouse::Button button, Callback<> callback) {
     if (!isEventEmitterInitialized_) //Initialize event publishing
         initEventEmitter();
     return eventEmitter_.addEventListener(

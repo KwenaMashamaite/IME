@@ -47,7 +47,7 @@ public:
      * released immediately. If the button is not released immediately, a
      * mouse held event will be generated @see onMouseHeld(Callback)
      */
-    static int onMouseDown(Button button, Callback<> callback);
+    static int onButtonDown(Button button, Callback<> callback);
 
     /**
      * @brief Add an event listener to a mouse held event
