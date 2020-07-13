@@ -26,17 +26,17 @@ void Gui::ClickableUIElement::initEvents() {
     }));
 
     //Notify event listeners when the element is pressed
-    Window::addEventListener("mouseButtonPressed", Callback<Mouse::Button>(
-        [this](Mouse::Button pressedButton) {
+    Window::addEventListener("mouseButtonPressed", Callback<Input::Mouse::Button>(
+        [this](Input::Mouse::Button pressedButton) {
             if (isSelected() && isEnabled()) {
                 switch (pressedButton) {
-                    case Mouse::Button::Left:
+                    case Input::Mouse::Button::Left:
                         emit("leftMouseDown");
                         break;
-                    case Mouse::Button::Right:
+                    case Input::Mouse::Button::Right:
                         emit("rightMouseDown");
                         break;
-                    case Mouse::Button::Middle:
+                    case Input::Mouse::Button::Middle:
                         emit("middleMouseDown");
                         break;
                 }
@@ -45,17 +45,17 @@ void Gui::ClickableUIElement::initEvents() {
     ));
 
     //notify event listeners when the element is released
-    Window::addEventListener("mouseButtonReleased", Callback<Mouse::Button>(
-        [this](Mouse::Button releasedButton) {
+    Window::addEventListener("mouseButtonReleased", Callback<Input::Mouse::Button>(
+        [this](Input::Mouse::Button releasedButton) {
             if (isSelected() && isEnabled()) {
                 switch (releasedButton) {
-                    case Mouse::Button::Left:
+                    case Input::Mouse::Button::Left:
                         emit("leftMouseUp");
                         break;
-                    case Mouse::Button::Right:
+                    case Input::Mouse::Button::Right:
                         emit("rightMouseUp");
                         break;
-                    case Mouse::Button::Middle:
+                    case Input::Mouse::Button::Middle:
                         emit("middleMouseUp");
                         break;
                 }

@@ -54,12 +54,12 @@ void Gui::Window::processEvents() {
                 break;
             case sf::Event::KeyPressed:
                 eventEmitter_.emit("keyPressed",
-                     static_cast<Keyboard::Key>(static_cast<unsigned int>(event.key.code))
+                     static_cast<Input::Keyboard::Key>(static_cast<unsigned int>(event.key.code))
                 );
                 break;
             case sf::Event::KeyReleased:
                 eventEmitter_.emit("keyReleased",
-                     static_cast<Keyboard::Key>(static_cast<unsigned int>(event.key.code))
+                     static_cast<Input::Keyboard::Key>(static_cast<unsigned int>(event.key.code))
                 );
                 break;
             case sf::Event::MouseMoved:
@@ -67,12 +67,12 @@ void Gui::Window::processEvents() {
                 break;
             case sf::Event::MouseButtonPressed:
                 eventEmitter_.emit("mouseButtonPressed",
-                     static_cast<Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
+                     static_cast<Input::Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
                 );
                 break;
             case sf::Event::MouseButtonReleased:
                 eventEmitter_.emit("mouseButtonReleased",
-                     static_cast<Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
+                     static_cast<Input::Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
                 );
                 break;
             default:
