@@ -1,5 +1,8 @@
 #include "ResourceManager.h"
+#include "common/Common.h"
 #include <algorithm>
+
+using Common::FilePath;
 
 ResourceHolder<sf::Texture> ResourceManager::texturesHolder_{FilePath::TEXTURES_PATH, {}};
 ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffersHolder_{FilePath::SOUNDS_PATH, {}};

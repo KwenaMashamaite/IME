@@ -1,15 +1,6 @@
 /**
  * @brief Class for managing resources (textures, fonts, sound buffers,
  *        images and music)
- *
- * The resources to be loaded must be placed in the executables folder
- * as follows:
- *
- * 1. fonts = executables/resources/fonts
- * 2. textures = executables/resources/images
- * 3. images = executables/resources/images
- * 4. sound buffers = executables/resources/sounds
- * 5. music = executables/resources/music
 */
 
 #ifndef RESOURCEMANAGER_H
@@ -123,14 +114,6 @@ private:
     static ResourceHolder<sf::Image> imagesHolder_;
     //Stores music
     static ResourceHolder<sf::Music> musicHolder_;
-
-    // Resource file path
-    struct FilePath{
-        static constexpr auto TEXTURES_PATH = "resources/images/";
-        static constexpr auto SOUNDS_PATH = "resources/sounds/";
-        static constexpr auto MUSIC_PATH = "resources/music/";
-        static constexpr auto FONTS_PATH = "resources/fonts/";
-    };
 };
 
 #endif
