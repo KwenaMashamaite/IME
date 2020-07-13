@@ -3,7 +3,7 @@
  *
  * This class allows us to play multiple audio files of different types
  * (Music or SoundEffect, @see @class Music and @class SoundEffectPlayer)
- * simultaneously. Each audio file is played in a seperate thread
+ * simultaneously. Each audio file is played in a separate thread
  */
 
 #ifndef AUDIOMANAGER_H
