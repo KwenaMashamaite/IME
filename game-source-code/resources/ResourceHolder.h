@@ -77,6 +77,12 @@ public:
      */
     std::shared_ptr<T> get(const std::string& filename);
 
+    /**
+     * @brief Get the number of stored resources
+     * @return The number of stored resources
+     */
+    unsigned int getSize() const;
+
 private:
     //Resource container
     std::unordered_map<std::string, std::shared_ptr<T> > resourceHolder_;

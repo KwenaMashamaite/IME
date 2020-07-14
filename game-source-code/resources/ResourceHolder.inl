@@ -43,3 +43,8 @@ bool ResourceHolder<T>::remove(const std::string &filename) {
     }
     return false;
 }
+
+template<class T>
+unsigned int ResourceHolder<T>::getSize() const {
+    return resourceHolder_.size();
+}
