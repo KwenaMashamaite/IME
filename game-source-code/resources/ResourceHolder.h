@@ -12,6 +12,11 @@
 
 class ResourceManager; //Forward declaration
 
+namespace Audio{ //Forward declaration
+    class SoundEffectPlayer;
+    class MusicPlayer;
+}
+
 template <class T>
 class ResourceHolder : sf::NonCopyable {
 private:
@@ -27,6 +32,8 @@ private:
 	 */
     class PassKey{
         friend class ResourceManager;
+        friend class Audio::MusicPlayer;
+        friend class Audio::SoundEffectPlayer;
         PassKey(){}
         PassKey(const PassKey&){}
         PassKey& operator=(const PassKey&) = delete;
