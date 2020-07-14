@@ -13,6 +13,7 @@
 #define MUSICPLAYER_H
 
 #include "IAudioPlayer.h"
+#include "resources/ResourceHolder.h"
 #include <SFML/Audio.hpp>
 #include <string>
 #include <memory>
@@ -21,8 +22,17 @@ namespace Audio {
     class MusicPlayer final : public IAudioPlayer{
     public:
         /**
+         * @brief Constructor
+         * @param musicPath Path where music files are located
+         */
+        explicit MusicPlayer(const std::string& musicPath);
+
+        /**
          * @brief play music file
          * @param filename File name of the Music to play
+         *
+         * This function will play an audio file if currently there's no audio
+         * file playing. The function will change the audio file if
          */
         void play(const std::string &filename) override;
 
@@ -72,9 +82,75 @@ namespace Audio {
          */
         float getVolume() const override;
 
+        /**
+         * @brief Set the path to where the music is located
+         * @param path Path to the music files
+         */
+        void setPath(const std::string &path) override;
+
+
+        /**
+         * @brief Load music into the music player
+         * @param filenames Names of the music to load
+         * @throw FileNotFound if a single song cannot be located in the specified
+         *        path, @see setPath(std::string)
+         */
+        void load(std::initializer_list<std::string> filenames) override;
+
+        /**
+         * @brief Check if the music is looped or not
+         * @return True if song is looped, false if song is not looped
+         */
+        bool isLooped() const override;
+
+        /**
+         * @brief Get the path to the music files
+         * @return Path to the music files
+         */
+        const std::string& getAudioFilePath() const override;
+
+        /**
+         * @brief Get the name of the song that's currently selected
+         * @return Name of the currently selected song
+         *
+         * A song is selected if its playing, paused or stopped. This function
+         * will return an empty string if there's no selected song
+         */
+        const std::string &getCurrentAudioFileName() const override;
+
+        /**
+         * @brief Get the duration of the current song
+         * @return Duration of the current song
+         */
+        float getDuration() const override;
+
+        /**
+         * @brief Change the playing position of the current song
+         * @param position New playing position
+         *
+         * The position must be between the start of the song and the end (duration)
+         */
+        void seek(float position) override;
+
+        /**
+         * @brief Get the current playing position
+         * @return Current playing position
+         */
+        float getPosition() const override;
+
+        void next() override;
+
+        void prev() override;
+
     private:
+        //Path where music files are located
+        std::string musicFilePath_;
+        //Stores loaded music files
+        ResourceHolder<sf::Music> musicFiles_;
         //pointer to playing music
         std::shared_ptr<sf::Music> song_;
+        //Name of the current audio file
+        std::string currentMusicFileName_;
     };
 }
 

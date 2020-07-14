@@ -2,6 +2,12 @@
 #include "resources/ResourceManager.h"
 #include <algorithm>
 
+Audio::AudioManager::AudioManager(const std::string &musicFilePath,
+    const std::string &soundEffectFilePath)
+    : musicFilesPath_(musicFilePath),
+    soundEffectFilesPath_(soundEffectFilePath)
+    {}
+
 void Audio::AudioManager::loadAudioFiles(AudioType audioType,
      std::initializer_list<std::string> filenames)
  {
@@ -25,9 +31,9 @@ void Audio::AudioManager::play(const std::string& filename) {
     if (found != audioFilenames_.end()) {
         std::unique_ptr<IAudioPlayer> audioPlayer;
         if (found->second == AudioType::Music)
-            audioPlayer = std::make_unique<MusicPlayer>();
+            audioPlayer = std::make_unique<Audio::MusicPlayer>(musicFilesPath_);
         else
-            audioPlayer = std::make_unique<SoundEffectPlayer>();
+            audioPlayer = std::make_unique<Audio::SoundEffectPlayer>(soundEffectFilesPath_);
 
         audioPlayer->play(filename);
         audioPlayers_.insert(std::pair(filename, std::move(audioPlayer)));

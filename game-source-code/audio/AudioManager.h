@@ -28,6 +28,8 @@ namespace Audio {
             Music
         };
 
+        AudioManager(const std::string& musicFilePath, const std::string& soundEffectFilePath);
+
         /**
          * @brief Load audio files
          * @param audioType The type of audio file to be loaded
@@ -122,6 +124,10 @@ namespace Audio {
         std::unordered_map<std::string, AudioType> audioFilenames_;
         //Currently playing audio files - Each audio has its own player
         std::unordered_map<std::string, std::unique_ptr<IAudioPlayer>> audioPlayers_;
+        //Location of the music files
+        std::string musicFilesPath_;
+        //Location of the sound effects
+        std::string soundEffectFilesPath_;
     };
 }
 

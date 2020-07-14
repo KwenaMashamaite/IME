@@ -14,12 +14,14 @@
 #define SOUNDEFFECTPLAYER_H
 
 #include "IAudioPlayer.h"
+#include "resources/ResourceHolder.h"
 #include <string>
 #include <SFML/Audio.hpp>
 
 namespace Audio {
     class SoundEffectPlayer final : public IAudioPlayer{
     public:
+        explicit SoundEffectPlayer(const std::string& path);
         /**
          * @brief Play sound
          * @param filename File name of the sound to play
@@ -70,9 +72,79 @@ namespace Audio {
          */
         float getVolume() const override;
 
+        /**
+         * @brief Set the path to the sound effects on disk
+         * @param path New path to the sound effect
+         */
+        void setPath(const std::string &path) override;
+
+        /**
+         * @brief Load sound effects into the player
+         * @param soundEffectNames Names of the sound effects to load
+         */
+        void load(std::initializer_list<std::string> soundEffectNames) override;
+
+        /**
+         * @brief Check if the sound effect is looped or not
+         * @return True if sound effect is looped, false if sound effect is
+         *         not looped
+         */
+        bool isLooped() const override;
+
+        /**
+         * @brief Get the duration of the sound effect
+         * @return Duration of the sound effect
+         */
+        float getDuration() const override;
+
+        /**
+         * @brief Change the playing position of the sound effect
+         * @param position New playing position
+         *
+         * The playing position must be between zero and the duration
+         */
+        void seek(float position) override;
+
+        /**
+         * @brief Get the path to the sound effects on disk
+         * @return Path to the sound effect on disk
+         */
+        const std::string& getAudioFilePath() const override;
+
+        /**
+         * @brief Get the name of the currently sound effect
+         * @return The name of the current sound effect
+         *
+         * The current sound effect is the one that is currently playing, paused
+         * or stopped
+         */
+        const std::string& getCurrentAudioFileName() const override;
+
+        /**
+         * @brief Get the current playing position of the sound effect
+         * @return Current playing position of the sound effect
+         */
+        float getPosition() const override;
+
+        /**
+         * @brief Play the next music file
+         */
+        void next() override;
+
+        /**
+         * @brief Play the previous music file
+         */
+        void prev() override;
+
     private:
+        //Path to the sound effects on disk
+        std::string path_;
+        //Stores sound effects to be played
+        ResourceHolder<sf::SoundBuffer> soundEffects_;
         //Currently playing sound
-        sf::Sound soundEffect_;
+        sf::Sound currentSoundEffect_;
+        //Nam eof the current sound effect
+        std::string currentEffectName_;
     };
 }
 
