@@ -56,6 +56,14 @@ public:
     void load(const std::string& filename);
 
     /**
+     * @brief Remove the resource from the resource holder
+     * @param filename File name of the resource to be removed
+     * @return True if the resource was successfully removed, false if the
+     *         resource with the specified file name does not exist
+     */
+    bool remove(const std::string& filename);
+
+    /**
      * @brief Get a resource
      * @param filename File name of the resource to be retrieved
      * @throws FileNotFound If the the file cannot be found on the disk

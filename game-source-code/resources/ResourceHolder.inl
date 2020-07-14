@@ -33,3 +33,13 @@ std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
         return get(filename); //Return resource that just got loaded
     }
 }
+
+template<class T>
+bool ResourceHolder<T>::remove(const std::string &filename) {
+    auto found = resourceHolder_.find(filename);
+    if (found != resourceHolder_.end()) {
+        resourceHolder_.erase(found);
+        return true;
+    }
+    return false;
+}
