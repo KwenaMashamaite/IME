@@ -16,6 +16,16 @@ namespace Gui {
          * @param textContent text to be displayed inside the text block
          */
         explicit TextBlock(const std::string &textContent);
+
+        /**
+         * @brief Get the type of the UI element
+         * @return Type of the UI element
+         */
+        const std::string &getType() const override;
+
+    private:
+        //Type of the UI element
+        std::string type_;
     };
 }
 

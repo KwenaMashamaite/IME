@@ -258,6 +258,12 @@ namespace Gui {
         TextAlignment getTextAlignment() const;
 
         /**
+         * @brief Get the type of the UI element
+         * @return Type of the UI element
+         */
+        virtual const std::string& getType() const = 0;
+
+        /**
          * @brief Toggle the visibility of the element
          *
          * This function will make the element invisible if its currently

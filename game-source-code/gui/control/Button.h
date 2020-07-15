@@ -63,6 +63,12 @@ namespace Gui {
          */
         void setHoverOutlineColour(Colour outlineColour);
 
+        /**
+         * @brief Get the type of the UI element
+         * @return Type of the UI element
+         */
+        const std::string &getType() const override;
+
     private:
         /**
          * @brief Initialize the default behaviour of the button
@@ -75,6 +81,8 @@ namespace Gui {
         void initializeDefaultBehavior();
 
     private:
+        //Type of the UI element
+        std::string type_;
         //Group of colours
         struct Colours{
             Colour fillColour;
