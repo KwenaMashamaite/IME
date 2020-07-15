@@ -25,7 +25,7 @@ void Gui::MainMenu::createInfoPanel(){
     onClickInfoPanel->setDimensions(Window::getDimensions());
     onClickInfoPanel->setFillColour({0, 0, 0, 0});
     auto infoPanelTextBlock = std::make_unique<TextBlock>("");
-    infoPanelTextBlock->setFillColour({0, 0, 0, 0});
+    infoPanelTextBlock->setBackgroundColour({0, 0, 0, 0});
     infoPanelTextBlock->setTextFont("europe-underground-dark.ttf");
     infoPanelTextBlock->setPosition(Window::getDimensions().width / 2, Window::getDimensions().height / 2);
     onClickInfoPanel->addElement("infoTextBlock", std::move(infoPanelTextBlock));
@@ -35,7 +35,7 @@ void Gui::MainMenu::createInfoPanel(){
 void Gui::MainMenu::createTitle() {
     auto title = std::make_unique<TextBlock>("GAME TITLE");
     title->setTextFont("basson.ttf");
-    title->setFillColour({0, 0, 0, 0});
+    title->setBackgroundColour({0, 0, 0, 0});
     title->setTextCharSize(80u);
 
     auto titlePanel = std::make_unique<StackPanel>(StackPanel::Orientation::Horizontal);
@@ -61,8 +61,8 @@ void Gui::MainMenu::createNavigationButtons() {
         button->setTextCharSize(25);
         button->setTextFont("basson.ttf");
         button->setMargin({0, 0, 0, 40});
-        button->setFillColour({0, 0, 0, 0});
-        button->setHoverFillColour({0, 0, 0, 0});
+        button->setBackgroundColour({0, 0, 0, 0});
+        button->setHoverBackgroundColour({0, 0, 0, 0});
         buttonsPanel->addElement(buttonInfo.name, std::move(button));
     });
     buttonsPanel->setPosition({

@@ -30,27 +30,26 @@ namespace Gui {
         explicit Button(const std::string& buttonText);
 
         /**
-         * @brief Set the colour of the button text when the
-         *        mouse cursor enters the button
-         * @param textFillColour Button text colour to set
+         * @brief Set the text colour of the button when the mouse cursor
+         *        enters it
+         * @param textColour Button text colour to set
          *
          * The buttons text colour changes to dark grey by default
          * on "mouseEnter". The colour changes back to the way it
          * was prior to "mouseEnter" on "mouseLeave"
          */
-        void setHoverTextFillColour(Colour textFillColour);
+        void setHoverTextColour(Colour textColour);
 
         /**
-         * @brief Set the colour of the button when the mouse
+         * @brief Set the back ground colour of the button when the mouse
          *        cursor enters it
-         * @param fillColour Button colour to set
+         * @param backgroundColour Background colour to set
          *
          * The button colour changes to dim grey by default on mouse
          * enter. The colour changes back to the way it was
          * prior to "mouseEnter" on "mouseLeave"
-         *
          */
-        void setHoverFillColour(Colour fillColour);
+        void setHoverBackgroundColour(Colour backgroundColour);
 
         /**
          * @brief Set the outline colour of the button when the
@@ -85,9 +84,9 @@ namespace Gui {
         std::string type_;
         //Group of colours
         struct Colours{
-            Colour fillColour;
-            Colour TextColour;
-            Colour OutlineColour;
+            Colour backgroundColour;
+            Colour textColour;
+            Colour outlineColour;
         };
 
         //Button colours when the mouse cursor interacts with it

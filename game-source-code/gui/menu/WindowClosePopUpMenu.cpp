@@ -14,7 +14,7 @@ Gui::WindowClosePopUpMenu::WindowClosePopUpMenu(Window& renderTarget)
     question->setOutlineThickness(1.0f);
     question->setPadding(1.0f);
     question->setOutlineColour({0, 0, 0});
-    question->setFillColour({51, 74, 78});
+    question->setBackgroundColour({51, 74, 78});
     question->setTextFont("europe-underground-dark.ttf");
     panel_.addElement("question", std::move(question));
 

@@ -18,9 +18,9 @@ void Gui::UIElement::initialize() {
     setTextCharSize(25u);
     setTextAlignment(TextAlignment::Left);
     parentRectangle_.setFillColor({0, 0, 0, 0}); //Transparent
-    setFillColour({220, 220, 220}); //Gainsboro
+    setBackgroundColour({220, 220, 220}); //Gainsboro
     setOutlineColour({128, 128, 128}); //Grey
-    setTextFillColour({0, 0, 0}); //Black
+    setTextColour({0, 0, 0}); //Black
     setOutlineThickness(0.0f);
     setPadding(0.0f);
     setMargin(0.0f);
@@ -100,14 +100,14 @@ void Gui::UIElement::setOutlineThickness(float outlineThickness) {
     emit("outlineThicknessChanged", outlineThickness);
 }
 
-void Gui::UIElement::setFillColour(Gui::Colour fillColour) {
-    border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
-    emit("fillColourChanged", fillColour);
+void Gui::UIElement::setBackgroundColour(Gui::Colour backgroundColour) {
+    border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(backgroundColour));
+    emit("backgroundColourChanged", backgroundColour);
 }
 
-void Gui::UIElement::setTextFillColour(Gui::Colour textFillColour) {
-    text_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(textFillColour));
-    emit("textFillColourChanged", textFillColour);
+void Gui::UIElement::setTextColour(Gui::Colour textColour) {
+    text_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(textColour));
+    emit("textColourChanged", textColour);
 }
 
 void Gui::UIElement::setOutlineColour(Gui::Colour outlineColour) {
@@ -183,11 +183,11 @@ Dimensions Gui::UIElement::getDimensions() const {
             parentRectangle_.getGlobalBounds().height};
 }
 
-Gui::Colour Gui::UIElement::getFillColour() const {
+Gui::Colour Gui::UIElement::getBackgroundColour() const {
     return Utility::convert3rdPartyColourToOwnColour(border_.getFillColor());
 }
 
-Gui::Colour Gui::UIElement::getTextFillColour() const {
+Gui::Colour Gui::UIElement::getTextColour() const {
     return Utility::convert3rdPartyColourToOwnColour(text_.getFillColor());
 }
 

@@ -177,20 +177,20 @@ namespace Gui {
         void setOutlineThickness(float outlineThickness);
 
         /**
-        * @brief Set the fill colour of the element
-        * @param fillColour New fill colour of the element
+        * @brief Set the background colour of the element
+        * @param backgroundColour New background colour of the element
         *
-        * The default fill colour is gainsboro
+        * The default background colour is gainsboro
         */
-        void setFillColour(Colour fillColour);
+        void setBackgroundColour(Colour backgroundColour);
 
         /**
-         * @brief Set the fill colour of the element's text
-         * @param textFillColour New text fill colour
+         * @brief Set the colour of the element's text
+         * @param textColour New text colour
          *
-         * The default text fill colour is black
+         * The default text colour is black
          */
-        void setTextFillColour(Colour textFillColour);
+        void setTextColour(Colour textColour);
 
         /**
          * @brief Set the outline colour of the element
@@ -234,16 +234,16 @@ namespace Gui {
         Dimensions getDimensions() const;
 
         /**
-         * @brief Get the fill colour of the element
-         * @return Fill colour of the element
+         * @brief Get the background colour of the element
+         * @return Background colour of the element
          */
-        Colour getFillColour() const;
+        Colour getBackgroundColour() const;
 
         /**
-         * @brief Get the fill colour of the element's text
-         * @return Fill colour of the element's text
+         * @brief Get the text colour of the element
+         * @return Text colour of the element
          */
-        Colour getTextFillColour() const;
+        Colour getTextColour() const;
 
         /**
          * @brief Get the outline colour of the element
