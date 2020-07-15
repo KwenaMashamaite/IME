@@ -29,3 +29,10 @@ bool EventEmitter::removeAllEventListeners(const std::string &event) {
     }
     return false;
 }
+
+int EventEmitter::getNumOfEventListenersFor(const std::string& event) const {
+    auto found = eventList_.find(event);
+    if (found != eventList_.end())
+        return found->second.size();
+    return -1;
+}

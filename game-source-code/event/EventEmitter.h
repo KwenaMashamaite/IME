@@ -101,6 +101,14 @@ public:
     template<typename...Args>
     void emit(const std::string &event, Args...args);
 
+    /**
+     * @brief Get the number of event listeners currently registered to an event
+     * @param event Event to get number of event listeners for
+     * @return Number of event listeners registered to an event or -1 if no such
+     *         event exists
+     */
+    int getNumOfEventListenersFor(const std::string& event) const;
+
 private:
     /**
      * @brief  Add a listener (callback) to an event
