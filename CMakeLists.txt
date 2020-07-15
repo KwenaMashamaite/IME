@@ -19,6 +19,7 @@ set(SOURCE_FILES
         game-source-code/event/EventEmitter.cpp
         game-source-code/event/EventEmitter.h
         game-source-code/audio/AudioPlayer.h
+        game-source-code/audio/AudioPlayer.cpp
         game-source-code/audio/SoundEffectPlayer.cpp
         game-source-code/audio/SoundEffectPlayer.h
         game-source-code/audio/MusicPlayer.cpp
@@ -78,7 +79,7 @@ set(SOURCE_FILES
         game-source-code/gui/menu/WindowClosePopUpMenu.h
         game-source-code/gui/control/ClickableUIElement.cpp
         game-source-code/gui/control/ClickableUIElement.h
-        game-source-code/gui/control/RectangleContainer.cpp game-source-code/gui/control/RectangleContainer.h game-source-code/gui/common/Container.h game-source-code/gui/control/TextInput.cpp game-source-code/gui/control/TextInput.h game-source-code/gui/control/Label.cpp game-source-code/gui/control/Label.h game-source-code/audio/AudioPlayer.cpp)
+        )
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
