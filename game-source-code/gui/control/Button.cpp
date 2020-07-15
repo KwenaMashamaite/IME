@@ -44,11 +44,21 @@ void Gui::Button::initializeDefaultBehavior() {
         setOutlineColour(defaultColours_.outlineColour);
     }));
 
+    // Grey out button when it is disabled
     addEventListener("interactivityChanged",Callback<bool>([this](bool isEnabled) {
         if (!isHidden()) {
             if (!isEnabled) {
-                setTextColour({0, 0, 0}); //Black
+                //Save currently set colours before overriding them
+                defaultColours_.backgroundColour = getBackgroundColour();
+                defaultColours_.textColour = getTextColour();
+                defaultColours_.outlineColour = getOutlineColour();
+                setTextColour({0, 0, 0, 127}); //Black
                 setBackgroundColour({105, 105, 105}); //Dim Grey
+                setOutlineColour({128, 128, 128}); //Grey
+            }else { //Restore previous colours when button is re-enabled
+                setTextColour(defaultColours_.textColour);
+                setBackgroundColour(defaultColours_.backgroundColour);
+                setOutlineColour(defaultColours_.outlineColour);
             }
         }
     }));
