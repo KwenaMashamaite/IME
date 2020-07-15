@@ -2,11 +2,9 @@
 #include "SoundEffectPlayer.h"
 
 Audio::SoundEffectPlayer::SoundEffectPlayer(const std::string &path)
-    : path_(path),
+    : AudioPlayer(path),
       soundEffects_(ResourceHolder<sf::SoundBuffer>(path, {})),
-      currentEffectName_(""),
-      isMuted_(false),
-      volumeBeforeMute_(100.0f)
+      currentEffectName_("")
       {}
 
 void Audio::SoundEffectPlayer::play(const std::string &filename){
@@ -70,10 +68,6 @@ float Audio::SoundEffectPlayer::getVolume() const {
     return currentSoundEffect_.getVolume();
 }
 
-void Audio::SoundEffectPlayer::setPath(const std::string &audioFilePath) {
-    path_ = audioFilePath;
-}
-
 void Audio::SoundEffectPlayer::load(const std::initializer_list<std::string>& audioFiles) {
     std::for_each(audioFiles.begin(), audioFiles.end(), [this](const auto& filename){
         soundEffects_.load(filename);
@@ -92,10 +86,6 @@ float Audio::SoundEffectPlayer::getDuration() const {
 
 void Audio::SoundEffectPlayer::seek(float position) {
     currentSoundEffect_.setPlayingOffset(sf::seconds(position));
-}
-
-const std::string &Audio::SoundEffectPlayer::getAudioFilePath() const {
-    return path_;
 }
 
 const std::string &Audio::SoundEffectPlayer::getCurrentAudioFileName() const {
@@ -120,29 +110,3 @@ void Audio::SoundEffectPlayer::prev() {
     }
 }
 
-bool Audio::SoundEffectPlayer::isMuted() const {
-    return isMuted_;
-}
-
-void Audio::SoundEffectPlayer::adjustVolume(float offset) {
-    auto currentVolume = getVolume();
-    if (currentVolume + offset > 100.0f)
-        setVolume(100.0f);
-    else if (currentVolume + offset < 0.0f)
-        setVolume(0.0f);
-    else
-        setVolume(currentVolume + offset);
-}
-
-void Audio::SoundEffectPlayer::setMute(bool mute) {
-    if (mute && !isMuted_) {
-        isMuted_ = true;
-        volumeBeforeMute_ = getVolume();
-        setVolume(0.0f);
-        emit("muteChanged", isMuted_);
-    }else if (!mute && isMuted_){
-        isMuted_ = false;
-        setVolume(volumeBeforeMute_);
-        emit("muteChanged", isMuted_);
-    }
-}

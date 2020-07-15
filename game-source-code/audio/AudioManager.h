@@ -9,7 +9,7 @@
 #ifndef AUDIOMANAGER_H
 #define AUDIOMANAGER_H
 
-#include "IAudioPlayer.h"
+#include "AudioPlayer.h"
 #include "MusicPlayer.h"
 #include "SoundEffectPlayer.h"
 #include <unordered_map>
@@ -123,7 +123,7 @@ namespace Audio {
         //Filenames of the audio files to be played
         std::unordered_map<std::string, AudioType> audioFilenames_;
         //Currently playing audio files - Each audio has its own player
-        std::unordered_map<std::string, std::unique_ptr<IAudioPlayer>> audioPlayers_;
+        std::unordered_map<std::string, std::unique_ptr<AudioPlayer>> audioPlayers_;
         //Location of the music files
         std::string musicFilesPath_;
         //Location of the sound effects

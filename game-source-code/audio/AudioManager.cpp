@@ -29,7 +29,7 @@ void Audio::AudioManager::play(const std::string& filename) {
 
     auto found = audioFilenames_.find(filename);
     if (found != audioFilenames_.end()) {
-        std::unique_ptr<IAudioPlayer> audioPlayer;
+        std::unique_ptr<AudioPlayer> audioPlayer;
         if (found->second == AudioType::Music)
             audioPlayer = std::make_unique<Audio::MusicPlayer>(musicFilesPath_);
         else

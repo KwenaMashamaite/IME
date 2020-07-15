@@ -19,13 +19,19 @@ namespace Audio {
         Stopped
     };
 
-    class IAudioPlayer : public EventEmitter{
+    class AudioPlayer : public EventEmitter{
     public:
         /**
-         * @brief Set the path to the audio files
-         * @param audioFilePath Path to the audio files
+         * @brief Constructor
+         * @param path Path where audio files are located
          */
-        virtual void setPath(const std::string& audioFilePath) = 0;
+        AudioPlayer(const std::string& path);
+
+        /**
+         * @brief Set the path to the audio files
+         * @param audioFilesPath Path to the audio files
+         */
+        void setPath(const std::string& audioFilesPath);
 
         /**
          * @brief Load audio files into player
@@ -94,7 +100,7 @@ namespace Audio {
          * @return True if audio player is muted or false if audio player is
          *         not muted
          */
-        virtual bool isMuted() const = 0;
+        bool isMuted() const;
 
         /**
          * @brief Turn the volume up/down by a given offset
@@ -105,7 +111,7 @@ namespace Audio {
          * decreases the volume. This function will unmmute the audio player
          * if its muted
          */
-        virtual void adjustVolume(float offset) = 0;
+        void adjustVolume(float offset);
 
         /**
          * @brief Get the duration of the current audio file
@@ -145,7 +151,7 @@ namespace Audio {
          * @brief Get the path to the audio files
          * @return Path to the audio files
          */
-        virtual const std::string& getAudioFilePath() const = 0;
+        const std::string& getAudioFilePath() const;
 
         /**
          * @brief Get the name of the current audio file
@@ -157,12 +163,12 @@ namespace Audio {
          * @brief Mute or ummute the audio
          * @param mute True to mute the audio or false to unmute the audio
          */
-        virtual void setMute(bool mute) = 0;
+        void setMute(bool mute);
 
         /**
          * @brief Destructor
          */
-        virtual ~IAudioPlayer() = default;
+        virtual ~AudioPlayer() = default;
 
     protected:
         /**
@@ -174,6 +180,14 @@ namespace Audio {
          * in undesired and incorrect behavior
          */
         using::EventEmitter::emit;
+
+    private:
+        //Path o where audio files are located on the disk
+        std::string path_;
+        //Muted state
+        bool isMuted_;
+        //Volume of the music player before it was muted
+        float volumeBeforeMute_;
     };
 }
 

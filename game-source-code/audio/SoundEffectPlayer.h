@@ -13,13 +13,13 @@
 #ifndef SOUNDEFFECTPLAYER_H
 #define SOUNDEFFECTPLAYER_H
 
-#include "IAudioPlayer.h"
+#include "AudioPlayer.h"
 #include "resources/ResourceHolder.h"
 #include <string>
 #include <SFML/Audio.hpp>
 
 namespace Audio {
-    class SoundEffectPlayer final : public IAudioPlayer{
+    class SoundEffectPlayer final : public AudioPlayer{
     public:
         explicit SoundEffectPlayer(const std::string& path);
         /**
@@ -73,12 +73,6 @@ namespace Audio {
         float getVolume() const override;
 
         /**
-         * @brief Set the path to the sound effects on disk
-         * @param path New path to the sound effect
-         */
-        void setPath(const std::string &path) override;
-
-        /**
          * @brief Load sound effects into the player
          * @param soundEffectNames Names of the sound effects to load
          */
@@ -106,12 +100,6 @@ namespace Audio {
         void seek(float position) override;
 
         /**
-         * @brief Get the path to the sound effects on disk
-         * @return Path to the sound effect on disk
-         */
-        const std::string& getAudioFilePath() const override;
-
-        /**
          * @brief Get the name of the currently sound effect
          * @return The name of the current sound effect
          *
@@ -136,45 +124,13 @@ namespace Audio {
          */
         void prev() override;
 
-        /**
-         * @brief Check if the player is muted or not
-         * @return True if the player is muted, false if not muted
-         */
-        bool isMuted() const override;
-
-        /**
-         * @brief Turn the volume up/down by a given offset
-         * @param offset Value to increase/decrease the volume by
-         *
-         * This function adds on to the current volume of the audio player.
-         * A positive offset increases the volume while a negative offset
-         * decreases the volume. This function will unmmute the audio player
-         * if its muted
-         */
-        void adjustVolume(float offset) override;
-
-        /**
-         * @brief Mute the audio player
-         * @param mute True to mute the player or false to unmute the player
-         *
-         * Muting an already muted audio player has no effect. Similarly,
-         * unmuting an unmuted audio player has no effect
-         */
-        void setMute(bool mute) override;
-
     private:
-        //Path to the sound effects on disk
-        std::string path_;
         //Stores sound effects to be played
         ResourceHolder<sf::SoundBuffer> soundEffects_;
         //Currently playing sound
         sf::Sound currentSoundEffect_;
         //Nam eof the current sound effect
         std::string currentEffectName_;
-        //Muted state
-        bool isMuted_;
-        //Volume of the music player before it was muted
-        float volumeBeforeMute_;
     };
 }
 

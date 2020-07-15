@@ -12,14 +12,14 @@
 #ifndef MUSICPLAYER_H
 #define MUSICPLAYER_H
 
-#include "IAudioPlayer.h"
+#include "AudioPlayer.h"
 #include "resources/ResourceHolder.h"
 #include <SFML/Audio.hpp>
 #include <string>
 #include <memory>
 
 namespace Audio {
-    class MusicPlayer final : public IAudioPlayer{
+    class MusicPlayer final : public AudioPlayer{
     public:
         /**
          * @brief Constructor
@@ -83,13 +83,6 @@ namespace Audio {
         float getVolume() const override;
 
         /**
-         * @brief Set the path to where the music is located
-         * @param path Path to the music files
-         */
-        void setPath(const std::string &path) override;
-
-
-        /**
          * @brief Load music into the music player
          * @param filenames Names of the music to load
          * @throw FileNotFound if a single song cannot be located in the specified
@@ -102,12 +95,6 @@ namespace Audio {
          * @return True if song is looped, false if song is not looped
          */
         bool isLooped() const override;
-
-        /**
-         * @brief Get the path to the music files
-         * @return Path to the music files
-         */
-        const std::string& getAudioFilePath() const override;
 
         /**
          * @brief Get the name of the song that's currently selected
@@ -148,33 +135,6 @@ namespace Audio {
          */
         void prev() override;
 
-        /**
-         * @brief Mute the music player
-         * @param mute True to mute the music player or false to unmute the
-         *        music player
-         *
-         * Muting an already muted audio player has no effect. Similarly,
-         * unmuting an unmuted audio player has no effect
-         */
-        void setMute(bool mute) override;
-
-        /**
-         * @brief Check if music player is muted or not
-         * @return True if music player is muted, false if not muted
-         */
-        bool isMuted() const override;
-
-        /**
-         * @brief Turn the volume up/down by a given offset
-         * @param offset Value to increase/decrease the volume by
-         *
-         * This function adds on to the current volume of the audio player.
-         * A positive offset increases the volume while a negative offset
-         * decreases the volume. This function will unmmute the audio player
-         * if its muted
-         */
-        void adjustVolume(float offset) override;
-
     private:
         //Path where music files are located
         std::string musicFilePath_;
@@ -184,10 +144,6 @@ namespace Audio {
         std::shared_ptr<sf::Music> song_;
         //Name of the current audio file
         std::string currentMusicFileName_;
-        //Muted state
-        bool isMuted_;
-        //Volume of the music player before it was muted
-        float volumeBeforeMute_;
     };
 }
 

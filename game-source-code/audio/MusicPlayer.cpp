@@ -1,12 +1,11 @@
 #include "resources/ResourceManager.h"
 #include "MusicPlayer.h"
+#include "AudioPlayer.h"
 
-Audio::MusicPlayer::MusicPlayer(const std::string &musicPath) :
-    musicFilePath_(musicPath),
-    musicFiles_(ResourceHolder<sf::Music>(musicPath, {})),
-    currentMusicFileName_(""),
-    isMuted_(false),
-    volumeBeforeMute_(100.0f)
+Audio::MusicPlayer::MusicPlayer(const std::string &musicPath)
+    : AudioPlayer(musicPath),
+      musicFiles_(ResourceHolder<sf::Music>(musicPath, {})),
+      currentMusicFileName_("")
 {}
 
 void Audio::MusicPlayer::play(const std::string &song){
@@ -77,11 +76,6 @@ float Audio::MusicPlayer::getVolume() const {
     return 100.0f; //Default volume is maximum
 }
 
-void Audio::MusicPlayer::setPath(const std::string &path) {
-    if (!path.empty())
-        musicFilePath_ = path;
-}
-
 void Audio::MusicPlayer::load(const std::initializer_list<std::string>& filenames) {
     std::for_each(filenames.begin(), filenames.end(), [this](const auto& filename) {
         musicFiles_.load(filename);
@@ -92,10 +86,6 @@ bool Audio::MusicPlayer::isLooped() const {
     if (song_)
         return song_->getLoop();
     return false;
-}
-
-const std::string &Audio::MusicPlayer::getAudioFilePath() const {
-    return musicFilePath_;
 }
 
 const std::string &Audio::MusicPlayer::getCurrentAudioFileName() const {
@@ -136,31 +126,4 @@ void Audio::MusicPlayer::prev() {
             play();
         }
     }
-}
-
-void Audio::MusicPlayer::setMute(bool mute) {
-    if (mute && !isMuted_) {
-        isMuted_ = true;
-        volumeBeforeMute_ = getVolume();
-        setVolume(0.0f);
-        emit("muteChanged", isMuted_);
-    }else if (!mute && isMuted_){
-        isMuted_ = false;
-        setVolume(volumeBeforeMute_);
-        emit("muteChanged", isMuted_);
-    }
-}
-
-bool Audio::MusicPlayer::isMuted() const {
-    return isMuted_;
-}
-
-void Audio::MusicPlayer::adjustVolume(float offset) {
-    auto currentVolume = getVolume();
-    if (currentVolume + offset > 100.0f)
-        setVolume(100.0f);
-    else if (currentVolume + offset < 0.0f)
-        setVolume(0.0f);
-    else
-        setVolume(currentVolume + offset);
 }
