@@ -258,6 +258,12 @@ namespace Gui {
         TextAlignment getTextAlignment() const;
 
         /**
+         * @brief Get the name of the current text font
+         * @return Name of the current text font
+         */
+        const std::string& getFontName() const;
+
+        /**
          * @brief Get the type of the UI element
          * @return Type of the UI element
          */
@@ -361,6 +367,8 @@ namespace Gui {
         Margin margin_;
         //Space between the border and elements text content
         Padding padding_;
+        //Name of the text font
+        std::string textFontName_;
         //Elements text content
         sf::Text text_;
         //Defines the perimeter of the entire element (includes margin and padding)

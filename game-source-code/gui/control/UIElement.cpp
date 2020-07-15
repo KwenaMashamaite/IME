@@ -73,9 +73,10 @@ void Gui::UIElement::setPosition(Position position) {
 }
 
 void Gui::UIElement::setTextFont(const std::string &textFont) {
-    text_.setFont(ResourceManager::getFont(textFont));
+    textFontName_ = textFont;
+    text_.setFont(ResourceManager::getFont(textFontName_));
     updateDimensions();
-    emit("textFontChanged", textFont);
+    emit("textFontChanged", textFontName_);
     emit("textLocalBoundsChanged");
 }
 
@@ -196,6 +197,10 @@ Gui::Colour Gui::UIElement::getOutlineColour() const {
 
 Gui::TextAlignment Gui::UIElement::getTextAlignment() const {
     return textAlignment_;
+}
+
+const std::string &Gui::UIElement::getFontName() const {
+    return textFontName_;
 }
 
 void Gui::UIElement::toggleVisibility() {
