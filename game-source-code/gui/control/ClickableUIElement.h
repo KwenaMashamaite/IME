@@ -28,7 +28,7 @@ namespace Gui {
          * @note Disabling the element cancels all the interaction events.
          *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
          *       and "mouseDown" events will not fire while the element is
-         *       disabled.
+         *       disabled
          */
         void setEnabled(bool isEnable);
 
@@ -45,8 +45,8 @@ namespace Gui {
           * @return True if element is enabled, false if element is disabled
           *
           * @note A disabled element cannot be interacted with using the mouse.
-          * @see setEnabled(bool). Also, Hiding an element disables it,
-          * @see setEnabled(bool) and hide() in @class UIElement
+          * @see setEnabled(bool). Also, Hiding an element disables it, @see hide()
+          * in @class UIElement
           */
         bool isEnabled() const;
 
