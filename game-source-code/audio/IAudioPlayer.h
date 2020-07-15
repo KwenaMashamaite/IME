@@ -58,7 +58,7 @@ namespace Audio {
         /**
          * @brief Play next audio file
          *
-         * This function does nothign if there is no more auduio files to play
+         * This function does nothing if there's no more audio files to play
          */
         virtual void next() = 0;
 
@@ -70,6 +70,9 @@ namespace Audio {
         /**
          * @brief Set the volume of the audio
          * @param volume Volume to set
+         *
+         * This function completely overrides the current volume. To adjust the
+         * volume by a certain offset @see setVolumeOffset
          */
         virtual void setVolume(float volume) = 0;
 
@@ -87,18 +90,36 @@ namespace Audio {
         virtual bool isLooped() const = 0;
 
         /**
-         * @brief Get the duration of the audio file
-         * @return Duration of the audio file
+         * @brief Check if audio player is muted or not
+         * @return True if audio player is muted or false if audio player is
+         *         not muted
+         */
+        virtual bool isMuted() const = 0;
+
+        /**
+         * @brief Turn the volume up/down by a given offset
+         * @param offset Value to increase/decrease the volume by
+         *
+         * This function adds on to the current volume of the audio player.
+         * A positive offset increases the volume while a negative offset
+         * decreases the volume. This function will unmmute the audio player
+         * if its muted
+         */
+        virtual void adjustVolume(float offset) = 0;
+
+        /**
+         * @brief Get the duration of the current audio file
+         * @return Duration of the current audio file
          *
          * The duration is in seconds
          */
         virtual float getDuration() const = 0;
 
         /**
-         * @brief Get the current position of the audio file
-         * @return Current position of the audio file
+         * @brief Get the current playing position of the audio file
+         * @return Current playing position of the audio file
          */
-        virtual float getPosition() const = 0;
+        virtual float getPlayingPosition() const = 0;
 
         /**
          * @brief Change the current playing position of the audio file
@@ -131,6 +152,12 @@ namespace Audio {
          * @return Name of the current audio file
          */
         virtual const std::string& getCurrentAudioFileName() const = 0;
+
+        /**
+         * @brief Mute or ummute the audio
+         * @param mute True to mute the audio or false to unmute the audio
+         */
+        virtual void setMute(bool mute) = 0;
 
         /**
          * @brief Destructor

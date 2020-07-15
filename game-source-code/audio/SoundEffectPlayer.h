@@ -124,7 +124,7 @@ namespace Audio {
          * @brief Get the current playing position of the sound effect
          * @return Current playing position of the sound effect
          */
-        float getPosition() const override;
+        float getPlayingPosition() const override;
 
         /**
          * @brief Play the next music file
@@ -136,6 +136,32 @@ namespace Audio {
          */
         void prev() override;
 
+        /**
+         * @brief Check if the player is muted or not
+         * @return True if the player is muted, false if not muted
+         */
+        bool isMuted() const override;
+
+        /**
+         * @brief Turn the volume up/down by a given offset
+         * @param offset Value to increase/decrease the volume by
+         *
+         * This function adds on to the current volume of the audio player.
+         * A positive offset increases the volume while a negative offset
+         * decreases the volume. This function will unmmute the audio player
+         * if its muted
+         */
+        void adjustVolume(float offset) override;
+
+        /**
+         * @brief Mute the audio player
+         * @param mute True to mute the player or false to unmute the player
+         *
+         * Muting an already muted audio player has no effect. Similarly,
+         * unmuting an unmuted audio player has no effect
+         */
+        void setMute(bool mute) override;
+
     private:
         //Path to the sound effects on disk
         std::string path_;
@@ -145,6 +171,10 @@ namespace Audio {
         sf::Sound currentSoundEffect_;
         //Nam eof the current sound effect
         std::string currentEffectName_;
+        //Muted state
+        bool isMuted_;
+        //Volume of the music player before it was muted
+        float volumeBeforeMute_;
     };
 }
 

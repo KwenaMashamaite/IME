@@ -136,7 +136,7 @@ namespace Audio {
          * @brief Get the current playing position
          * @return Current playing position
          */
-        float getPosition() const override;
+        float getPlayingPosition() const override;
 
         /**
          * @brief Play the next song
@@ -148,6 +148,33 @@ namespace Audio {
          */
         void prev() override;
 
+        /**
+         * @brief Mute the music player
+         * @param mute True to mute the music player or false to unmute the
+         *        music player
+         *
+         * Muting an already muted audio player has no effect. Similarly,
+         * unmuting an unmuted audio player has no effect
+         */
+        void setMute(bool mute) override;
+
+        /**
+         * @brief Check if music player is muted or not
+         * @return True if music player is muted, false if not muted
+         */
+        bool isMuted() const override;
+
+        /**
+         * @brief Turn the volume up/down by a given offset
+         * @param offset Value to increase/decrease the volume by
+         *
+         * This function adds on to the current volume of the audio player.
+         * A positive offset increases the volume while a negative offset
+         * decreases the volume. This function will unmmute the audio player
+         * if its muted
+         */
+        void adjustVolume(float offset) override;
+
     private:
         //Path where music files are located
         std::string musicFilePath_;
@@ -157,6 +184,10 @@ namespace Audio {
         std::shared_ptr<sf::Music> song_;
         //Name of the current audio file
         std::string currentMusicFileName_;
+        //Muted state
+        bool isMuted_;
+        //Volume of the music player before it was muted
+        float volumeBeforeMute_;
     };
 }
 

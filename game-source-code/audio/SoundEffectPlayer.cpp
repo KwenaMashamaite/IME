@@ -4,7 +4,9 @@
 Audio::SoundEffectPlayer::SoundEffectPlayer(const std::string &path)
     : path_(path),
       soundEffects_(ResourceHolder<sf::SoundBuffer>(path, {})),
-      currentEffectName_("")
+      currentEffectName_(""),
+      isMuted_(false),
+      volumeBeforeMute_(100.0f)
       {}
 
 void Audio::SoundEffectPlayer::play(const std::string &filename){
@@ -89,7 +91,7 @@ float Audio::SoundEffectPlayer::getDuration() const {
 }
 
 void Audio::SoundEffectPlayer::seek(float position) {
-    currentSoundEffect_.setPosition(position, 0.0f, 0.0f);
+    currentSoundEffect_.setPlayingOffset(sf::seconds(position));
 }
 
 const std::string &Audio::SoundEffectPlayer::getAudioFilePath() const {
@@ -100,8 +102,8 @@ const std::string &Audio::SoundEffectPlayer::getCurrentAudioFileName() const {
     return currentEffectName_;
 }
 
-float Audio::SoundEffectPlayer::getPosition() const {
-    return currentSoundEffect_.getPosition().x;
+float Audio::SoundEffectPlayer::getPlayingPosition() const {
+    return currentSoundEffect_.getPlayingOffset().asSeconds();
 }
 
 void Audio::SoundEffectPlayer::next() {
@@ -115,5 +117,32 @@ void Audio::SoundEffectPlayer::prev() {
     else{ //Restart
         stop();
         play();
+    }
+}
+
+bool Audio::SoundEffectPlayer::isMuted() const {
+    return isMuted_;
+}
+
+void Audio::SoundEffectPlayer::adjustVolume(float offset) {
+    auto currentVolume = getVolume();
+    if (currentVolume + offset > 100.0f)
+        setVolume(100.0f);
+    else if (currentVolume + offset < 0.0f)
+        setVolume(0.0f);
+    else
+        setVolume(currentVolume + offset);
+}
+
+void Audio::SoundEffectPlayer::setMute(bool mute) {
+    if (mute && !isMuted_) {
+        isMuted_ = true;
+        volumeBeforeMute_ = getVolume();
+        setVolume(0.0f);
+        emit("muteChanged", isMuted_);
+    }else if (!mute && isMuted_){
+        isMuted_ = false;
+        setVolume(volumeBeforeMute_);
+        emit("muteChanged", isMuted_);
     }
 }

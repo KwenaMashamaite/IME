@@ -4,7 +4,9 @@
 Audio::MusicPlayer::MusicPlayer(const std::string &musicPath) :
     musicFilePath_(musicPath),
     musicFiles_(ResourceHolder<sf::Music>(musicPath, {})),
-    currentMusicFileName_("")
+    currentMusicFileName_(""),
+    isMuted_(false),
+    volumeBeforeMute_(100.0f)
 {}
 
 void Audio::MusicPlayer::play(const std::string &song){
@@ -48,6 +50,8 @@ void Audio::MusicPlayer::stop() {
 void Audio::MusicPlayer::setVolume(float volume) {
     if (song_ && song_->getVolume() != volume
         && (volume >=0 && volume <= 100)) {
+        if (isMuted())
+            setMute(false);
         song_->setVolume(volume);
         emit("volumeChanged", volume);
     }
@@ -106,14 +110,14 @@ float Audio::MusicPlayer::getDuration() const {
 
 void Audio::MusicPlayer::seek(float position) {
     if (song_) {
-        song_->setPosition(position, 0.0f, 0.0f);
+        song_->setPlayingOffset(sf::seconds(position));
         emit("playingPositionChanged", position);
     }
 }
 
-float Audio::MusicPlayer::getPosition() const {
+float Audio::MusicPlayer::getPlayingPosition() const {
     if (song_)
-        song_->getPosition().x;
+        song_->getPlayingOffset().asSeconds();
     return 0.0f;
 }
 
@@ -132,4 +136,31 @@ void Audio::MusicPlayer::prev() {
             play();
         }
     }
+}
+
+void Audio::MusicPlayer::setMute(bool mute) {
+    if (mute && !isMuted_) {
+        isMuted_ = true;
+        volumeBeforeMute_ = getVolume();
+        setVolume(0.0f);
+        emit("muteChanged", isMuted_);
+    }else if (!mute && isMuted_){
+        isMuted_ = false;
+        setVolume(volumeBeforeMute_);
+        emit("muteChanged", isMuted_);
+    }
+}
+
+bool Audio::MusicPlayer::isMuted() const {
+    return isMuted_;
+}
+
+void Audio::MusicPlayer::adjustVolume(float offset) {
+    auto currentVolume = getVolume();
+    if (currentVolume + offset > 100.0f)
+        setVolume(100.0f);
+    else if (currentVolume + offset < 0.0f)
+        setVolume(0.0f);
+    else
+        setVolume(currentVolume + offset);
 }
