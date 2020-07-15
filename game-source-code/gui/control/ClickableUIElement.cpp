@@ -95,6 +95,10 @@ void Gui::ClickableUIElement::setSelected(bool isSelected) {
     emit("selectionChanged", isSelected_);
 }
 
+void Gui::ClickableUIElement::toggleEnabled() {
+    setEnabled(!isEnabled());
+}
+
 bool Gui::ClickableUIElement::isEnabled() const{
     return isEnabled_;
 }

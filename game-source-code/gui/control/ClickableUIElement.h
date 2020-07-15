@@ -51,6 +51,11 @@ namespace Gui {
         bool isEnabled() const;
 
         /**
+         * @brief Disable element if its currently enabled and vice versa
+         */
+        void toggleEnabled();
+
+        /**
          * @brief Check if element is selected or not
          * @return True if element is selected, false if element is not selected
          */
