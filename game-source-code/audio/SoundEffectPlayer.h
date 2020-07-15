@@ -82,7 +82,7 @@ namespace Audio {
          * @brief Load sound effects into the player
          * @param soundEffectNames Names of the sound effects to load
          */
-        void load(std::initializer_list<std::string> soundEffectNames) override;
+        void load(const std::initializer_list<std::string>& soundEffectNames) override;
 
         /**
          * @brief Check if the sound effect is looped or not

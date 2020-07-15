@@ -78,7 +78,7 @@ void Audio::MusicPlayer::setPath(const std::string &path) {
         musicFilePath_ = path;
 }
 
-void Audio::MusicPlayer::load(std::initializer_list<std::string> filenames) {
+void Audio::MusicPlayer::load(const std::initializer_list<std::string>& filenames) {
     std::for_each(filenames.begin(), filenames.end(), [this](const auto& filename) {
         musicFiles_.load(filename);
     });

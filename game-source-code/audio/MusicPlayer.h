@@ -95,7 +95,7 @@ namespace Audio {
          * @throw FileNotFound if a single song cannot be located in the specified
          *        path, @see setPath(std::string)
          */
-        void load(std::initializer_list<std::string> filenames) override;
+        void load(const std::initializer_list<std::string>& filenames) override;
 
         /**
          * @brief Check if the music is looped or not
@@ -138,8 +138,14 @@ namespace Audio {
          */
         float getPosition() const override;
 
+        /**
+         * @brief Play the next song
+         */
         void next() override;
 
+        /**
+         * @brief Play the previous song
+         */
         void prev() override;
 
     private:

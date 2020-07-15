@@ -32,7 +32,7 @@ namespace Audio {
          * @param audioFileNames Names of the audio files to load
          * @throw FileNotFound if an audio file cannot be found in the specified path
          */
-        virtual void load(std::initializer_list<std::string> audioFiles) = 0;
+        virtual void load(const std::initializer_list<std::string>& audioFiles) = 0;
 
         /**
          * @brief Play audio

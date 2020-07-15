@@ -72,7 +72,7 @@ void Audio::SoundEffectPlayer::setPath(const std::string &audioFilePath) {
     path_ = audioFilePath;
 }
 
-void Audio::SoundEffectPlayer::load(std::initializer_list<std::string> audioFiles) {
+void Audio::SoundEffectPlayer::load(const std::initializer_list<std::string>& audioFiles) {
     std::for_each(audioFiles.begin(), audioFiles.end(), [this](const auto& filename){
         soundEffects_.load(filename);
     });
