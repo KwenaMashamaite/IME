@@ -7,6 +7,7 @@
 
 #include "IMenu.h"
 #include "../layout/Panel.h"
+#include "factory/GuiFactory.h"
 #include <memory>
 #include <map>
 
@@ -15,9 +16,8 @@ namespace Gui {
     public:
         /**
          * @brief Construct a new Main Menu object
-         * @param renderTarget Render target to draw menu on
          */
-        explicit MainMenu(Window &renderTarget);
+        MainMenu();
 
         /**
          * @brief Draw all GUI elements and layouts of the main menu
@@ -106,8 +106,6 @@ namespace Gui {
         void updateInfoPanel(const std::string& newInfo);
 
     private:
-        //Reference to the games render target
-        Window& renderTarget_;
         //Container for all main menu panels
         std::map<std::string, std::unique_ptr<Panel>> panels_;
 
@@ -122,6 +120,5 @@ namespace Gui {
         State state_;
     };
 }
-
 
 #endif

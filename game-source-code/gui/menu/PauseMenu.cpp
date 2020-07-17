@@ -1,22 +1,20 @@
 #include "PauseMenu.h"
 #include "gui/control/Button.h"
 
-Gui::PauseMenu::PauseMenu(Gui::Window &renderTarget)
-    : renderTarget_(renderTarget)
-{
-    pauseMenuButtonsPanel_ = std::make_unique<StackPanel>(StackPanel::Orientation::Vertical);
+Gui::PauseMenu::PauseMenu(){
+    pauseMenuButtonsPanel_ = std::move(getGuiFactory()->getPanel<StackPanel>( 0, 0, StackPanel::Orientation::Vertical));
     pauseMenuButtonsPanel_->setFillColour({0, 0, 0, 0});
     createButtons();
 }
 
 void Gui::PauseMenu::createButtons() {
-    auto unpauseButton = std::make_unique<Button>("UNPAUSE");
-    unpauseButton->on("click", Callback<>([this](){
+    auto unpauseButton = getGuiFactory()->getUIElement<Button>("UNPAUSE");
+    unpauseButton->on("click", Callback<>([]{
         //@TODO - Return to game
     }));
-    auto exitButton = std::make_unique<Button>("EXIT");
-    exitButton->on("click", Callback<>([this](){
-        renderTarget_.close();
+    auto exitButton = getGuiFactory()->getUIElement<Button>("EXIT");
+    exitButton->on("click", Callback<>([]{
+        //@todo close window
     }));
 
     pauseMenuButtonsPanel_->addElement("unpauseButton", std::move(unpauseButton));

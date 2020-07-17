@@ -13,9 +13,8 @@ namespace Gui {
     public:
         /**
          * @brief Create a new Pause Menu object
-         * @param renderTarget Target to draw menu on
          */
-        explicit PauseMenu(Window &renderTarget);
+        PauseMenu();
 
         /**
          * @brief Draw pause menu on render target
@@ -55,10 +54,8 @@ namespace Gui {
         void createButtons();
 
     private:
-        //Games render target
-        Window& renderTarget_;
         //Layout panel for the menus UI elements
-        std::unique_ptr<StackPanel> pauseMenuButtonsPanel_;
+        std::unique_ptr<Panel> pauseMenuButtonsPanel_;
     };
 }
 

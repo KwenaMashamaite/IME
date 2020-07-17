@@ -60,6 +60,7 @@ set(SOURCE_FILES
         game-source-code/utility/Clock.cpp
         game-source-code/utility/Clock.h
         game-source-code/gui/menu/IMenu.h
+        game-source-code/gui/menu/IMenu.cpp
         game-source-code/gui/menu/MainMenu.cpp
         game-source-code/gui/menu/MainMenu.h
         game-source-code/gui/menu/PauseMenu.cpp
@@ -79,6 +80,8 @@ set(SOURCE_FILES
         game-source-code/gui/menu/WindowClosePopUpMenu.h
         game-source-code/gui/control/ClickableUIElement.cpp
         game-source-code/gui/control/ClickableUIElement.h
+        game-source-code/factory/GuiFactory.inl
+        game-source-code/factory/GuiFactory.h
         )
 
 #add the doctest unit testing framework

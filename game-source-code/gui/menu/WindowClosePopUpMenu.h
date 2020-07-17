@@ -16,9 +16,8 @@ namespace Gui {
     public:
         /**
          * @brief Create a new pop-up Menu object
-         * @param renderTarget Target to draw menu on
          */
-        explicit WindowClosePopUpMenu(Window& renderTarget);
+        WindowClosePopUpMenu();
 
         /**
          * @brief Draw menu on render target
@@ -52,10 +51,8 @@ namespace Gui {
         bool isHidden() const override;
 
     private:
-        //Reference to a render target
-        Window& renderTarget_;
-        //Menu panels
-        StackPanel panel_;
+        //Menu panel
+        std::unique_ptr<Panel> panel_;
         //Visibility state
         bool isHidden_;
     };

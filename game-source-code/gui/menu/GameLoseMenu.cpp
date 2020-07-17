@@ -1,7 +1,7 @@
 #include "GameLoseMenu.h"
 
 Gui::GameLoseMenu::GameLoseMenu() {
-    message_ = std::make_unique<TextBlock>("You lost the game");
+    message_ = getGuiFactory()->getUIElement<TextBlock>("You lost the game");
     message_->setTextCharSize(40);
     message_->setTextColour({151, 75, 105});
     message_->setBackgroundColour({0, 0, 0, 0});

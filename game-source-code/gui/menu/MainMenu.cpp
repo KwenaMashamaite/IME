@@ -1,17 +1,11 @@
 #include "MainMenu.h"
 #include "scoreboard/Scoreboard.h"
 #include "resources/FileReader.h"
-#include "../control/Button.h"
-#include "../control/TextBlock.h"
-#include "../layout/DockPanel.h"
-#include "../layout/StackPanel.h"
-#include "../layout/Canvas.h"
 #include <algorithm>
 #include <cassert>
 
-Gui::MainMenu::MainMenu(Window &renderTarget)
-    : renderTarget_(renderTarget),
-      state_(State::Main)
+Gui::MainMenu::MainMenu()
+    : state_(State::Main)
 {
     createInfoPanel();
     createTitle();
@@ -21,10 +15,10 @@ Gui::MainMenu::MainMenu(Window &renderTarget)
 }
 
 void Gui::MainMenu::createInfoPanel(){
-    auto onClickInfoPanel = std::make_unique<Canvas>(0, 0);
+    auto onClickInfoPanel = getGuiFactory()->getPanel<Canvas>( 0, 0);
     onClickInfoPanel->setDimensions(Window::getDimensions());
     onClickInfoPanel->setFillColour({0, 0, 0, 0});
-    auto infoPanelTextBlock = std::make_unique<TextBlock>("");
+    auto infoPanelTextBlock = getGuiFactory()->getUIElement<TextBlock>("");
     infoPanelTextBlock->setBackgroundColour({0, 0, 0, 0});
     infoPanelTextBlock->setTextFont("europe-underground-dark.ttf");
     infoPanelTextBlock->setPosition(Window::getDimensions().width / 2, Window::getDimensions().height / 2);
@@ -33,12 +27,12 @@ void Gui::MainMenu::createInfoPanel(){
 }
 
 void Gui::MainMenu::createTitle() {
-    auto title = std::make_unique<TextBlock>("GAME TITLE");
+    auto title = std::move(getGuiFactory()->getUIElement<TextBlock>("GAME TITLE"));
     title->setTextFont("basson.ttf");
     title->setBackgroundColour({0, 0, 0, 0});
     title->setTextCharSize(80u);
 
-    auto titlePanel = std::make_unique<StackPanel>(StackPanel::Orientation::Horizontal);
+    auto titlePanel = getGuiFactory()->getPanel<StackPanel>( StackPanel::Orientation::Horizontal);
     titlePanel->addElement("title", std::move(title));
     titlePanel->setPosition({
         Window::getDimensions().width / 2 - titlePanel->getDimensions().width / 2, 0
@@ -57,7 +51,8 @@ void Gui::MainMenu::createNavigationButtons() {
     };
     auto buttonsPanel = std::make_unique<StackPanel>( StackPanel::Orientation::Vertical);
     std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
-        auto button = std::make_unique<Button>(buttonInfo.text);
+        //Convert std::unique_ptr<UIElement> to std::unique_ptr<Button>
+        std::unique_ptr<Button> button(dynamic_cast<Button*>((getGuiFactory()->getUIElement<Button>(buttonInfo.text)).release()));
         button->setTextCharSize(25);
         button->setTextFont("basson.ttf");
         button->setMargin({0, 0, 0, 40});
@@ -112,7 +107,7 @@ void Gui::MainMenu::initNavigationButtonActions() {
 
     //// EXIT BUTTON ///////////
     navButtonsPanel->subscribeChildToEvent("exit-btn", "click", Callback<>([this]{
-        renderTarget_.close();
+        //@todo Close application
     }));
 }
 
@@ -145,7 +140,7 @@ void Gui::MainMenu::updateInfoPanel(const std::string& newInfo) {
 }
 
 void Gui::MainMenu::createReturnButton() {
-    auto returnButton = std::make_unique<Button>("<-back");
+    auto returnButton = getGuiFactory()->getUIElement<Button>("<-back");
     returnButton->setTextCharSize(18u);
     returnButton->setOutlineThickness(2.0f);
     returnButton->setTextFont("europe-underground-dark.ttf");

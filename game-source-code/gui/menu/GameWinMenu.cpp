@@ -3,16 +3,16 @@
 #include "../control/TextBlock.h"
 
 void Gui::GameWinMenu::draw(Gui::Window &renderTarget) {
-    static auto message = TextBlock("You won the game!!");
-    message.setTextCharSize(40);
-    message.setTextColour({151, 75, 105});
-    message.setBackgroundColour({0, 0, 0, 0});
-    message.setPosition(
-        Window::getDimensions().width / 2 - message.getDimensions().width / 2,
-        Window::getDimensions().height / 2 - message.getDimensions().height / 2
+    static auto message = getGuiFactory()->getUIElement<TextBlock>("You won the game!!");
+    message->setTextCharSize(40);
+    message->setTextColour({151, 75, 105});
+    message->setBackgroundColour({0, 0, 0, 0});
+    message->setPosition(
+        Window::getDimensions().width / 2 - message->getDimensions().width / 2,
+        Window::getDimensions().height / 2 - message->getDimensions().height / 2
     );
 
-    renderTarget.draw(message);
+    renderTarget.draw(*message);
 }
 
 void Gui::GameWinMenu::hide() {

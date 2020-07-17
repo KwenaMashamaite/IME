@@ -48,7 +48,7 @@ namespace Gui {
         bool isHidden() const override;
 
     private:
-        std::unique_ptr<TextBlock> message_;
+        std::unique_ptr<UIElement> message_;
     };
 }
 
