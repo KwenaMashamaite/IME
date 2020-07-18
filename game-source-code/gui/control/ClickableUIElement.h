@@ -33,14 +33,6 @@ namespace Gui {
         void setEnabled(bool isEnable);
 
         /**
-          * @brief Select/deselect element
-          * @param isSelected Set true to select element, false to deselect element
-          *
-          * The element is not selected by default
-          */
-        void setSelected(bool isSelected);
-
-        /**
           * @brief Check if element is enabled or disabled
           * @return True if element is enabled, false if element is disabled
           *
@@ -56,12 +48,6 @@ namespace Gui {
         void toggleEnabled();
 
         /**
-         * @brief Check if element is selected or not
-         * @return True if element is selected, false if element is not selected
-         */
-        bool isSelected() const;
-
-        /**
          * @brief Destructor
          */
         virtual ~ClickableUIElement() = 0;
@@ -73,8 +59,8 @@ namespace Gui {
         void initEvents();
 
     private:
-        //Selected state
-        bool isSelected_;
+        //Hover state
+        bool isMouseOverElement_;
         //Enabled state
         bool isEnabled_;
     };

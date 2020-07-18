@@ -6,7 +6,7 @@ Gui::ClickableUIElement::ClickableUIElement()
 {}
 
 Gui::ClickableUIElement::ClickableUIElement(const std::string &text)
-    : UIElement(text), isSelected_(false), isEnabled_(true)
+    : UIElement(text), isMouseOverElement_(false), isEnabled_(true)
 {
     initEvents();
 }
@@ -15,11 +15,11 @@ void Gui::ClickableUIElement::initEvents() {
     //Check if mouse cursor has entered element or not
     Window::addEventListener("mouseMoved",Callback<int, int>([this](int x, int y) {
         if (!isHidden() && isEnabled()) {
-            if (contains(x, y) && !isSelected()) {
-                setSelected(true);
+            if (contains(x, y) && !isMouseOverElement_) {
+                isMouseOverElement_ = true;
                 emit("mouseEnter");
-            } else if (!contains(x, y) && isSelected()) {
-                setSelected(false);
+            } else if (!contains(x, y) && isMouseOverElement_) {
+                isMouseOverElement_ = false;
                 emit("mouseLeave");
             }
         }
@@ -28,7 +28,7 @@ void Gui::ClickableUIElement::initEvents() {
     //Notify event listeners when the element is pressed
     Window::addEventListener("mouseButtonPressed", Callback<Input::Mouse::Button>(
         [this](Input::Mouse::Button pressedButton) {
-            if (isSelected() && isEnabled()) {
+            if (isMouseOverElement_) {
                 switch (pressedButton) {
                     case Input::Mouse::Button::Left:
                         emit("leftMouseDown");
@@ -47,7 +47,7 @@ void Gui::ClickableUIElement::initEvents() {
     //notify event listeners when the element is released
     Window::addEventListener("mouseButtonReleased", Callback<Input::Mouse::Button>(
         [this](Input::Mouse::Button releasedButton) {
-            if (isSelected() && isEnabled()) {
+            if (isMouseOverElement_) {
                 switch (releasedButton) {
                     case Input::Mouse::Button::Left:
                         emit("leftMouseUp");
@@ -65,8 +65,8 @@ void Gui::ClickableUIElement::initEvents() {
 
     //Deselect UI element if it's selected and mouse cursor leaves window
     Window::addEventListener("mouseLeft", Callback<>([this]{
-        if (isSelected()) {
-            setSelected(false);
+        if (isMouseOverElement_) {
+            isMouseOverElement_ = false;
             emit("mouseLeave");
         }
     }));
@@ -86,13 +86,14 @@ void Gui::ClickableUIElement::initEvents() {
 }
 
 void Gui::ClickableUIElement::setEnabled(bool isEnable) {
-    isEnabled_ = isEnable;
-    emit("interactivityChanged", isEnabled_);
-}
-
-void Gui::ClickableUIElement::setSelected(bool isSelected) {
-    isSelected_ = isSelected;
-    emit("selectionChanged", isSelected_);
+    if (isEnabled_ != isEnable) {
+        if (!isEnable && isMouseOverElement_) {
+            isMouseOverElement_ = false;
+            emit("mouseLeave");
+        }
+        isEnabled_ = isEnable;
+        emit("interactivityChanged", isEnabled_);
+    }
 }
 
 void Gui::ClickableUIElement::toggleEnabled() {
@@ -101,10 +102,6 @@ void Gui::ClickableUIElement::toggleEnabled() {
 
 bool Gui::ClickableUIElement::isEnabled() const{
     return isEnabled_;
-}
-
-bool Gui::ClickableUIElement::isSelected() const {
-    return isSelected_;
 }
 
 Gui::ClickableUIElement::~ClickableUIElement() = default;

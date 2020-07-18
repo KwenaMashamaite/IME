@@ -4,7 +4,7 @@ Gui::Button::Button() : Button("")
 {}
 
 Gui::Button::Button(const std::string& buttonText)
-    : ClickableUIElement(buttonText), type_("Button")
+    : ClickableUIElement(buttonText), type_("Button"), isSelected_(false)
 {
     //Colours of the button when the mouse cursor enters it (may be changed at run-time)
     onHoverColours_.backgroundColour = {105, 105, 105}; //Dim gray
@@ -30,6 +30,7 @@ void Gui::Button::initializeDefaultBehavior() {
     }));
 
     addEventListener("mouseEnter", Callback<>([this] {
+        setSelected(true);
         defaultColours_.backgroundColour = getBackgroundColour();
         defaultColours_.textColour = getTextColour();
         defaultColours_.outlineColour = getOutlineColour();
@@ -39,6 +40,7 @@ void Gui::Button::initializeDefaultBehavior() {
     }));
 
     addEventListener("mouseLeave", Callback<>([this] {
+        setSelected(false);
         setBackgroundColour(defaultColours_.backgroundColour);
         setTextColour(defaultColours_.textColour);
         setOutlineColour(defaultColours_.outlineColour);
@@ -64,6 +66,13 @@ void Gui::Button::initializeDefaultBehavior() {
     }));
 }
 
+void Gui::Button::setSelected(bool isSelected) {
+    if (isSelected != isSelected_) {
+        isSelected_ = isSelected;
+        emit("selectionChanged", isSelected_);
+    }
+}
+
 void Gui::Button::setHoverBackgroundColour(Gui::Colour backgroundColour) {
     onHoverColours_.backgroundColour = backgroundColour;
 }
@@ -78,4 +87,8 @@ void Gui::Button::setHoverOutlineColour(Gui::Colour outlineColour) {
 
 const std::string &Gui::Button::getType() const {
     return type_;
+}
+
+bool Gui::Button::isSelected() const {
+    return isSelected_;
 }

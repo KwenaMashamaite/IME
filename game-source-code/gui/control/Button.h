@@ -68,6 +68,12 @@ namespace Gui {
          */
         const std::string &getType() const override;
 
+        /**
+         * @brief Check if button is selected or not
+         * @return True if button is selected or false if button is not selected
+         */
+        bool isSelected() const;
+
     private:
         /**
          * @brief Initialize the default behaviour of the button
@@ -79,9 +85,20 @@ namespace Gui {
          */
         void initializeDefaultBehavior();
 
+        /**
+          * @brief Select/deselect button
+          * @param isSelected Set true to select button, false to deselect button
+          *
+          * The button is not selected by default
+          */
+        void setSelected(bool isSelected);
+
     private:
         //Type of the UI element
         std::string type_;
+        //Selected state
+        bool isSelected_;
+
         //Group of colours
         struct Colours{
             Colour backgroundColour;
