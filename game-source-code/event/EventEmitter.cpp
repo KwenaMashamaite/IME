@@ -36,3 +36,8 @@ int EventEmitter::getNumOfEventListenersFor(const std::string& event) const {
         return found->second.size();
     return -1;
 }
+
+
+bool EventEmitter::hasEvent(const std::string &event) const {
+    return eventList_.find(event) == eventList_.end();
+}

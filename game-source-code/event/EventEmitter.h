@@ -102,6 +102,13 @@ public:
     void emit(const std::string &event, Args...args);
 
     /**
+     * @brief Check if an event exists or not
+     * @param event Name of the event to check
+     * @return True if event exists or false if the event does not exist
+     */
+    bool hasEvent(const std::string& event) const;
+
+    /**
      * @brief Get the number of event listeners currently registered to an event
      * @param event Event to get number of event listeners for
      * @return Number of event listeners registered to an event or -1 if no such
