@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "scoreboard/Scoreboard.h"
 #include "resources/FileReader.h"
+#include "core/Engine.h"
 #include <algorithm>
 #include <cassert>
 
@@ -19,7 +20,9 @@ void Gui::MainMenu::createInfoPanel(){
     onClickInfoPanel->setDimensions(Window::getDimensions());
     onClickInfoPanel->setFillColour({0, 0, 0, 0});
     auto infoPanelTextBlock = getGuiFactory()->getUIElement<TextBlock>("");
-    infoPanelTextBlock->setBackgroundColour({0, 0, 0, 0});
+    infoPanelTextBlock->setBackgroundColour({128, 128, 128, 10});
+    infoPanelTextBlock->setOutlineColour({0, 0, 0, 15});
+    infoPanelTextBlock->setOutlineThickness(2.0f);
     infoPanelTextBlock->setTextFont("europe-underground-dark.ttf");
     infoPanelTextBlock->setPosition(Window::getDimensions().width / 2, Window::getDimensions().height / 2);
     onClickInfoPanel->addElement("infoTextBlock", std::move(infoPanelTextBlock));
@@ -79,7 +82,7 @@ void Gui::MainMenu::initNavigationButtonActions() {
 
     ////////PLAY BUTTON ///////////
     navButtonsPanel->subscribeChildToEvent("play-btn", "click", Callback<>([this]{
-        //@TODO - START GAME
+        Engine::changeState("playing");
     }));
 
     auto fileReader = Utility::FileReader();
@@ -107,7 +110,7 @@ void Gui::MainMenu::initNavigationButtonActions() {
 
     //// EXIT BUTTON ///////////
     navButtonsPanel->subscribeChildToEvent("exit-btn", "click", Callback<>([this]{
-        //@todo Close application
+        Engine::changeState("quit");
     }));
 }
 

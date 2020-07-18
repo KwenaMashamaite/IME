@@ -1,7 +1,4 @@
-#include <iostream>
 #include "WindowClosePopUpMenu.h"
-#include "../control/Button.h"
-#include "../control/TextBlock.h"
 
 Gui::WindowClosePopUpMenu::WindowClosePopUpMenu()
     : panel_(getGuiFactory()->getPanel<StackPanel>(StackPanel::Orientation::Vertical)),
@@ -21,17 +18,11 @@ Gui::WindowClosePopUpMenu::WindowClosePopUpMenu()
     yesButton->setMargin({0, 0, 0, 0.05f});
     yesButton->setOutlineThickness(1.0f);
     yesButton->setTextFont("philosopher.ttf");
-    yesButton->on("click", Callback<>([this]{
-        //@todo - Close application
-    }));
     panel_->addElement("yes-btn", std::move(yesButton));
 
     auto noButton = std::make_unique<Button>("no");
     noButton->setOutlineThickness(1.0f);
     noButton->setTextFont("philosopher.ttf");
-    noButton->on("click", Callback<>([this]{
-        hide();
-    }));
     panel_->addElement("no-btn", std::move(noButton));
 
     panel_->setPosition({
@@ -45,12 +36,7 @@ Gui::WindowClosePopUpMenu::WindowClosePopUpMenu()
 }
 
 void Gui::WindowClosePopUpMenu::draw(Gui::Window &renderTarget) {
-    show(); //Menu is hidden if user previously chose not to close application
-    while (renderTarget.isOpen() && !isHidden()){
-        renderTarget.processEvents();
-        renderTarget.draw(*panel_);
-        renderTarget.display();
-    }
+    renderTarget.draw(*panel_);
 }
 
 void Gui::WindowClosePopUpMenu::hide() {
@@ -69,4 +55,10 @@ void Gui::WindowClosePopUpMenu::show() {
 
 bool Gui::WindowClosePopUpMenu::isHidden() const {
     return isHidden_;
+}
+
+void Gui::WindowClosePopUpMenu::onClick(const std::string &button,
+    Callback<> callback)
+{
+    panel_->subscribeChildToEvent(button, "click", std::move(callback));
 }

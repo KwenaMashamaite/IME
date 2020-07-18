@@ -50,6 +50,13 @@ namespace Gui {
          */
         bool isHidden() const override;
 
+        /**
+         * @brief Add an event listener to a menu button
+         * @param button Name of the button
+         * @param callback Function to execute when the button is clicked
+         */
+        void onClick(const std::string& button, Callback<> callback);
+
     private:
         //Menu panel
         std::unique_ptr<Panel> panel_;

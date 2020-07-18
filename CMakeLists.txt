@@ -82,7 +82,13 @@ set(SOURCE_FILES
         game-source-code/gui/control/ClickableUIElement.h
         game-source-code/factory/GuiFactory.inl
         game-source-code/factory/GuiFactory.h
-        )
+        game-source-code/core/State.h
+        game-source-code/core/Engine.h
+        game-source-code/core/Engine.cpp
+        game-source-code/core/states/MainMenuState.cpp
+        game-source-code/core/states/MainMenuState.h
+        game-source-code/core/states/QuitingState.cpp
+        game-source-code/core/states/QuitingState.h)
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
