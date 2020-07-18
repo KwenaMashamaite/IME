@@ -8,7 +8,7 @@ ResourceHolder<T>::ResourceHolder(const std::string& filePath, PassKey)
 {}
 
 template <class T>
-void ResourceHolder<T>::load(const std::string& filename){
+void ResourceHolder<T>::loadFromFile(const std::string& filename){
     auto resource = std::make_shared<T>();
     if (!(*resource).loadFromFile(filePath_ + filename))
         throw FileNotFound("cannot find file " + filePath_ + filename);
@@ -16,7 +16,7 @@ void ResourceHolder<T>::load(const std::string& filename){
 }
 
 template <> //Function template specialization (sf::Music is streamed from disk rather than loaded into memory)
-inline void ResourceHolder<sf::Music>::load(const std::string &filename){
+inline void ResourceHolder<sf::Music>::loadFromFile(const std::string &filename){
     auto music = std::make_shared<sf::Music>();
     if(!(*music).openFromFile(filePath_ + filename))
         throw FileNotFound("cannot find file " + filePath_ + filename);
@@ -29,7 +29,7 @@ std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
     if (found != resourceHolder_.end())
         return found->second;
     else{
-        load(filename); //Either throws an exception or succeeds
+        loadFromFile(filename); //Either throws an exception or succeeds
         return get(filename); //Return resource that just got loaded
     }
 }

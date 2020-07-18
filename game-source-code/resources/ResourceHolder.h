@@ -52,15 +52,14 @@ public:
 
     /**
      * @brief Load a resource from the disk and store it in a buffer
-     * @param filename File name of the resource to load
+     * @param filename File name of the resource to loadFromFile
      * @throws FileNotFound If the file cannot be found on the disk
      *
-     * If the path of the resource matches the one provided in the
-     * constructor then the file name can be specified without the
-     * path (e.g textureOne.png), otherwise the file path is required
-     * (e.g resources/textures/textureOne.png).
+     * This function will look for the resource in the directory specified
+     * during instantiation. A FileNotFound exception will be raised if the
+     * resource cannot be found
      */
-    void load(const std::string& filename);
+    void loadFromFile(const std::string& filename);
 
     /**
      * @brief Remove the resource from the resource holder
@@ -77,7 +76,7 @@ public:
      * @return Shared pointer to a resource in a buffer
      *
      * If the requested resource is not found in the buffer, an
-     * attempt will be made to load it from the disk. If it cannot
+     * attempt will be made to loadFromFile it from the disk. If it cannot
      * be loaded from the disk, then a "FileNotFound" exception will
      * be thrown. This implies that the returned pointer can never be
      * a nullptr. Therefore, nullptr checks are not necessary

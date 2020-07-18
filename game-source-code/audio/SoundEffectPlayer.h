@@ -73,10 +73,10 @@ namespace Audio {
         float getVolume() const override;
 
         /**
-         * @brief Load sound effects into the player
+         * @brief Load sound effects from the hard drive into the player
          * @param soundEffectNames Names of the sound effects to load
          */
-        void load(const std::initializer_list<std::string>& soundEffectNames) override;
+        void loadFromFile(const std::initializer_list<std::string>& soundEffectNames) override;
 
         /**
          * @brief Check if the sound effect is looped or not

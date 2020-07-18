@@ -33,7 +33,7 @@ namespace Audio {
         /**
          * @brief Load audio files
          * @param audioType The type of audio file to be loaded
-         * @param filenames File names of the audio files to be load
+         * @param filenames File names of the audio files to be loaded
          * @throw FileNotFound if the specified audio files cannot be found on disk
          *
          * Use AudioType::Music for long and big audio files and AudioType::SoundEffect

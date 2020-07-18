@@ -13,9 +13,9 @@ void Audio::AudioManager::loadAudioFiles(AudioType audioType,
  {
     std::for_each(filenames.begin(), filenames.end(), [=](const auto& filename){
         if (audioType == AudioType::Music)
-            ResourceManager::load(ResourceId::MUSIC, filename);
+            ResourceManager::loadFromFile(ResourceId::MUSIC, filename);
         else
-             ResourceManager::load(ResourceId::SOUND_BUFFER, filename);
+            ResourceManager::loadFromFile(ResourceId::SOUND_BUFFER, filename);
 
         audioFilenames_.insert(std::pair(filename, audioType));
     });

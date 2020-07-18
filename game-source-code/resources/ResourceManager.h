@@ -1,5 +1,5 @@
 /**
- * @brief Class for managing resources (textures, fonts, sound buffers,
+ * @brief Class for loading and storing resources (textures, fonts, sound buffers,
  *        images and music)
 */
 
@@ -25,7 +25,7 @@ enum class ResourceId{
 class ResourceManager final{
 public:
     /**
-     * @brief Load a resource from the disk into a cache
+     * @brief Load a resource from the hard drive
      * @param identifier Type of the resource to be loaded
      * @param filename File name of the resource to be loaded
      * @throws FileNotFound If the resource cannot be found on the disk
@@ -33,20 +33,19 @@ public:
      * Loading a resource from the disk prior to retrieving it
      * later in the program is much faster and efficient as the
      * resource is cached (i.e, a copy of the resource is stored
-     * in the program rather than having to load it from the disk
+     * in the program rather than having to loadFromFile it from the disk
      * every time it's needed).
      */
-    static void load(ResourceId identifier, const std::string &filename);
+    static void loadFromFile(ResourceId identifier, const std::string &filename);
 
     /**
-     * @brief  load multiple resources of the same type from the
-     *         disk and store them in a cache
+     * @brief  loadFromFile multiple resources of the same type from the hard drive
      * @param  identifier Type of the resource to be loaded
      * @param  filenames File names of the resources to be loaded
      * @throws FileNotFound If one of the files cannot be found
      *         on the disk
      */
-    static void load(ResourceId identifier,
+    static void loadFromFile(ResourceId identifier,
             const std::initializer_list<std::string> &filenames);
 
     /**
@@ -56,7 +55,7 @@ public:
      * @return Constant reference to a sf::font
      *
      * If the requested font is not cached, an attempt will be
-     * made to load it from the disk
+     * made to loadFromFile it from the disk
      */
     static const sf::Font &getFont(const std::string &fileName);
 
@@ -68,7 +67,7 @@ public:
      * @return Constant reference to a sf::Texture
      *
      * If the requested texture is not cached, an attempt will
-     * be made to load it from the disk
+     * be made to loadFromFile it from the disk
      */
     static const sf::Texture &getTexture(const std::string &fileName);
 
@@ -80,7 +79,7 @@ public:
      * @return Constant reference to a sf::SoundBuffer
      *
      * If the requested sound buffer is not cached, an attempt will
-     * be made to load it from the disk
+     * be made to loadFromFile it from the disk
      */
     static const sf::SoundBuffer &getSoundBuffer(const std::string &fileName);
 
@@ -91,7 +90,7 @@ public:
      * @return constant reference to an sf::Image
      *
      * If the requested image is not cached, an attempt will be made
-     * to load it from the disk
+     * to loadFromFile it from the disk
      */
     static const sf::Image &getImage(const std::string &fileName);
 

@@ -23,7 +23,7 @@ namespace Audio {
     public:
         /**
          * @brief Constructor
-         * @param path Path where audio files are located
+         * @param path Path to where audio files will be loaded from
          */
         AudioPlayer(const std::string& path);
 
@@ -34,11 +34,11 @@ namespace Audio {
         void setPath(const std::string& audioFilesPath);
 
         /**
-         * @brief Load audio files into player
+         * @brief Load audio files from hard drive into player
          * @param audioFileNames Names of the audio files to load
          * @throw FileNotFound if an audio file cannot be found in the specified path
          */
-        virtual void load(const std::initializer_list<std::string>& audioFiles) = 0;
+        virtual void loadFromFile(const std::initializer_list<std::string>& audioFiles) = 0;
 
         /**
          * @brief Play audio

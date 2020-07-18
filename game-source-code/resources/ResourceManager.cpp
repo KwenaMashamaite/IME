@@ -10,32 +10,32 @@ ResourceHolder<sf::Font> ResourceManager::fontsHolder_{FilePath::FONTS_PATH, {}}
 ResourceHolder<sf::Image> ResourceManager::imagesHolder_{FilePath::TEXTURES_PATH, {}};
 ResourceHolder<sf::Music> ResourceManager::musicHolder_{FilePath::MUSIC_PATH, {}};
 
-void ResourceManager::load(ResourceId identifier, const std::string &filename){
+void ResourceManager::loadFromFile(ResourceId identifier, const std::string &filename){
     switch (identifier){
         case ResourceId::TEXTURE:
-            texturesHolder_.load(filename);
+            texturesHolder_.loadFromFile(filename);
             break;
         case ResourceId::SOUND_BUFFER:
-            soundBuffersHolder_.load(filename);
+            soundBuffersHolder_.loadFromFile(filename);
             break;
         case ResourceId::IMAGE:
-            imagesHolder_.load(filename);
+            imagesHolder_.loadFromFile(filename);
             break;
         case ResourceId::FONT:
-            fontsHolder_.load(filename);
+            fontsHolder_.loadFromFile(filename);
             break;
         case ResourceId::MUSIC:
-            musicHolder_.load(filename);
+            musicHolder_.loadFromFile(filename);
             break;
     }
 }
 
-void ResourceManager::load(ResourceId identifier,
-    const std::initializer_list<std::string>& filenames)
+void ResourceManager::loadFromFile(ResourceId identifier,
+        const std::initializer_list<std::string>& filenames)
 {
     std::for_each(filenames.begin(), filenames.end(),
         [=](const std::string& filename) {
-            load(identifier, filename);
+            loadFromFile(identifier, filename);
     });
 }
 

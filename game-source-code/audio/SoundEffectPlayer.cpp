@@ -68,9 +68,9 @@ float Audio::SoundEffectPlayer::getVolume() const {
     return currentSoundEffect_.getVolume();
 }
 
-void Audio::SoundEffectPlayer::load(const std::initializer_list<std::string>& audioFiles) {
+void Audio::SoundEffectPlayer::loadFromFile(const std::initializer_list<std::string>& audioFiles) {
     std::for_each(audioFiles.begin(), audioFiles.end(), [this](const auto& filename){
-        soundEffects_.load(filename);
+        soundEffects_.loadFromFile(filename);
     });
 }
 

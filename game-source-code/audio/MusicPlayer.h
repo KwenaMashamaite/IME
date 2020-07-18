@@ -83,12 +83,17 @@ namespace Audio {
         float getVolume() const override;
 
         /**
-         * @brief Load music into the music player
-         * @param filenames Names of the music to load
-         * @throw FileNotFound if a single song cannot be located in the specified
-         *        path, @see setPath(std::string)
+         * @brief Stream music from an audio file on the hard drive
+         * @param filenames Names of the audio file to stream music from
+         * @throw FileNotFound if a single audio file cannot be located in the
+         *        path specified during instantiation or using @see setPath()
+         *
+         * @warning This function does not load music files into the program.
+         * They are streamed continuously from the hard drive. Therefore, they
+         * must remain accessible until the Audio::MusicPlayer object is
+         * destroyed or no longer needs them
          */
-        void load(const std::initializer_list<std::string>& filenames) override;
+        void loadFromFile(const std::initializer_list<std::string>& filenames) override;
 
         /**
          * @brief Check if the music is looped or not

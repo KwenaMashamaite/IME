@@ -1,6 +1,5 @@
 #include "resources/ResourceManager.h"
 #include "MusicPlayer.h"
-#include "AudioPlayer.h"
 
 Audio::MusicPlayer::MusicPlayer(const std::string &musicPath)
     : AudioPlayer(musicPath),
@@ -10,7 +9,7 @@ Audio::MusicPlayer::MusicPlayer(const std::string &musicPath)
 
 void Audio::MusicPlayer::play(const std::string &song){
     if (currentMusicFileName_ !=song) {
-        song_ = musicFiles_.get(song); //Throws exception if song is not loaded
+        song_ = musicFiles_.get(song);
         currentMusicFileName_ = song;
         play();
     }
@@ -76,9 +75,9 @@ float Audio::MusicPlayer::getVolume() const {
     return 100.0f; //Default volume is maximum
 }
 
-void Audio::MusicPlayer::load(const std::initializer_list<std::string>& filenames) {
+void Audio::MusicPlayer::loadFromFile(const std::initializer_list<std::string>& filenames) {
     std::for_each(filenames.begin(), filenames.end(), [this](const auto& filename) {
-        musicFiles_.load(filename);
+        musicFiles_.loadFromFile(filename);
     });
 }
 
