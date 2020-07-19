@@ -10,6 +10,9 @@
 /// Event listener registration tests
 /////////////////////////////////////////////////////////////////
 
+using IME::EventEmitter;
+using IME::Callback;
+
 //This test must always be the first test as the handler id counter belongs to the class
 //not the object
 TEST_CASE("The first event listener has an identification number of one (1)"){

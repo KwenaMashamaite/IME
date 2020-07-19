@@ -83,6 +83,7 @@ set(SOURCE_FILES
         game-source-code/factory/GuiFactory.inl
         game-source-code/factory/GuiFactory.h
         game-source-code/core/State.h
+        game-source-code/core/State.cpp
         game-source-code/core/Engine.h
         game-source-code/core/Engine.cpp
         game-source-code/core/states/MainMenuState.cpp

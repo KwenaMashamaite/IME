@@ -5,7 +5,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-namespace Common{
+namespace IME::Common{
     /**
      * @brief Dimensions
      */

@@ -1,7 +1,7 @@
 #include "FileReader.h"
 #include "exceptions/Exceptions.h"
 
-void Utility::FileReader::readFileInto(std::stringstream& buffer, const std::string& filename){
+void IME::Utility::FileReader::readFileInto(std::stringstream& buffer, const std::string& filename){
     inFile_.open(filename);
 	if(!inFile_.good())
 		throw FileNotFound("Cannot find file, " + filename);
@@ -9,7 +9,7 @@ void Utility::FileReader::readFileInto(std::stringstream& buffer, const std::str
 	inFile_.close();
 }
 
-void Utility::FileReader::writeToFile(const std::stringstream& buffer, const std::string& filename){
+void IME::Utility::FileReader::writeToFile(const std::stringstream& buffer, const std::string& filename){
     outFile_.open(filename);
 	if(!outFile_.good())
         throw FileNotFound("Cannot find file, " + filename);

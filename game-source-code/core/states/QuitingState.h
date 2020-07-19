@@ -8,33 +8,45 @@
 #include "../State.h"
 #include "gui/menu/WindowClosePopUpMenu.h"
 
-class QuitingState : public State {
-public:
-    /**
-     * @brief Constructor
-     */
-    QuitingState();
+namespace IME {
+    class QuitingState : public State {
+    public:
+        /**
+         * @brief Constructor
+         */
+        QuitingState(Engine &engine);
 
-    /**
-     * @brief Update the state
-     */
-    void update() override;
+        /**
+         * @brief Update the state
+         */
+        void update() override;
 
-    /**
-     * @brief Update state in fixed time steps
-     * @param deltaTime Time passed since last update
-     */
-    void fixedUpdate(float deltaTime) override;
+        /**
+         * @brief Update state in fixed time steps
+         * @param deltaTime Time passed since last update
+         */
+        void fixedUpdate(float deltaTime) override;
 
-    /**
-     * @brief Render the state on a render target
-     * @param renderTarget Target to render state on
-     */
-    void render(Gui::Window &renderTarget) override;
+        /**
+         * @brief Render the state on a render target
+         * @param renderTarget Target to render state on
+         */
+        void render(Gui::Window &renderTarget) override;
 
-private:
-    //
-    Gui::WindowClosePopUpMenu windowCloseConfirmationMenu_;
-};
+        void initialize() override;
+
+        void pause() override;
+
+        void resume() override;
+
+        bool isInitialized() const override;
+
+        void reset() const override;
+
+    private:
+        //
+        Gui::WindowClosePopUpMenu windowCloseConfirmationMenu_;
+    };
+}
 
 #endif

@@ -3,13 +3,15 @@
 #include "core/states/QuitingState.h"
 #include "core/Engine.h"
 
+using IME::Callback;
+
 int main(){
-    auto window = Gui::Window();
+    auto window = IME::Gui::Window();
     window.create("test", 800, 600);
 
-    auto gameEngine = Engine(window);
-    gameEngine.addState("mainMenu", std::make_shared<MainMenuState>());
-    gameEngine.addState("quit", std::make_shared<QuitingState>());
+    auto gameEngine = IME::Engine(window);
+    gameEngine.addState("mainMenu", std::make_shared<IME::MainMenuState>(gameEngine));
+    gameEngine.addState("quit", std::make_shared<IME::QuitingState>(gameEngine));
     gameEngine.changeState("mainMenu");
 
     window.addEventListener("closed", Callback<>([&gameEngine] {

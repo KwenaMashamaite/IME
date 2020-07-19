@@ -1,7 +1,7 @@
 #include "doctest.h"
 #include "../game-source-code/gui/window/Window.h"
 
-using Gui::Window;
+using IME::Gui::Window;
 
 TEST_CASE("A window that is not created is not open"){
     auto window = Window();

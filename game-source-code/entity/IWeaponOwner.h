@@ -5,26 +5,28 @@
 #ifndef IWEAPONWIELDER_H
 #define IWEAPONWIELDER_H
 
-class IWeapon; //Forward declaration
+namespace IME {
+    class IWeapon; //Forward declaration
 
 #include <memory>
 
-class IWeaponOwner{
-public:
-    /**
-     * @brief Give an entity a weapon
-     * @param weapon Weapon to give to entity
-     *
-     * If the entity does not currently poses a weapon, the newly added
-     * weapon becomes the default weapon, otherwise the weapon is added
-     * to the entity's collection of weapons
-     */
-    virtual void addWeapon(std::unique_ptr<IWeapon> weapon) = 0;
+    class IWeaponOwner {
+    public:
+        /**
+         * @brief Give an entity a weapon
+         * @param weapon Weapon to give to entity
+         *
+         * If the entity does not currently poses a weapon, the newly added
+         * weapon becomes the default weapon, otherwise the weapon is added
+         * to the entity's collection of weapons
+         */
+        virtual void addWeapon(std::unique_ptr<IWeapon> weapon) = 0;
 
-    /**
-     * @brief Use default weapon
-     */
-    virtual void use() = 0;
-};
+        /**
+         * @brief Use default weapon
+         */
+        virtual void use() = 0;
+    };
+}
 
 #endif
