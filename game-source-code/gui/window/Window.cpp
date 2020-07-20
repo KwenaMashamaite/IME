@@ -11,12 +11,12 @@ namespace IME{
         isInstantiated_ = true;
     }
 
-    void Gui::Window::create(const std::string& name, float width, float height){
+    void Gui::Window::create(const std::string& title, float width, float height, Style style){
         assert(width >= 0.0f && "Window width cannot be negative");
         assert(height >= 0.0f && "Window height cannot be negative");
         dimensions_ = {width, height};
         window_.create(sf::VideoMode(static_cast<unsigned int>(width),
-            static_cast<unsigned int>(height)),name,sf::Style::Close
+            static_cast<unsigned int>(height)), title, static_cast<unsigned int>(style)
         );
     }
 

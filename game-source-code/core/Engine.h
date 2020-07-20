@@ -13,13 +13,23 @@ namespace IME {
     class Engine {
     public:
         /**
-         * @brief Initialize the engine
-         * @param window
+         * @brief Constructor
          */
-        explicit Engine(Gui::Window &window);
+        Engine();
+
+        /**
+         * @brief Initialize base engine
+         *
+         * This function will perform all the necessary initialization and
+         * create the engines render target. @note The engine will not run
+         * without initialization
+         */
+        void init();
 
         /**
          * @brief Start the main loop
+         *
+         * @note There must be at least one state added for the engine to run
          */
         void run();
 
@@ -30,27 +40,30 @@ namespace IME {
 
         /**
          * @brief Check if engine is running or not
-         * @return True if engine is running or false if the engine is not running
+         * @return True if engine is running or false if the engine is not
+         *         running
          */
         bool isRunning();
 
         /**
          * @brief Add a state to the engine
-         * @param name Name of the state
+         * @param stateName Name of the state
          * @param state State to be added
          *
-         * The name of the state must be unique. If a state with the same name as
-         * the argument already exists, then the provided state will not be added,
-         * In addition the state pointer must not be null
+         * The stateName of the state must be unique. If a state with the same
+         * stateName as the argument already exists, then the provided state
+         * will not be added, In addition the state pointer must not be null.
+         * @note The first state to be added becomes the current/active state
          */
-        void addState(const std::string &name, std::shared_ptr<State> state);
+        void addState(const std::string &stateName, std::shared_ptr<State> state);
 
         /**
          * @brief Remove a state
-         * @param name Name of the state to remove
-         * @return True if the state was removed or false is the state does not exist
+         * @param stateName Name of the state to remove
+         * @return True if the state was removed or false is the state does
+         *         not exist
          */
-        bool removeState(const std::string &name);
+        bool removeState(const std::string &stateName);
 
         /**
          * @brief Check if a state is added to the engine or not
@@ -62,15 +75,22 @@ namespace IME {
         /**
          * @brief Change the current state
          * @param newState Name of the state to change to
-         * @return True if the state was changed, false if the specified state does
-         *         not exist
+         * @return True if the state was changed, false if the specified
+         *         state does not exist
          */
         bool changeState(const std::string &newState);
 
         /**
+         * @brief Get window used by the engine to render objects
+         * @return Window used by engine as a render target
+         */
+        const Gui::Window& getRenderTarget() const;
+
+        /**
          * @brief Get access to a state
          * @param name Name of the state to get access to
-         * @return A pointer to the requested state if it exists, otherwise a nullptr
+         * @return A pointer to the requested state if it exists, otherwise
+         *         a nullptr
          */
         std::shared_ptr<State> getState(const std::string &name);
 
@@ -86,14 +106,22 @@ namespace IME {
          */
         const std::string &getPreviousStateName();
 
-        virtual void loadAssets() {};
-
         /**
          * @brief Destructor
          */
-        virtual ~Engine();
+        virtual ~Engine() = 0;
 
     private:
+        /**
+         * @brief Load engine settings from the hard drive
+         */
+        void loadSettings();
+
+        /**
+         * @brief Initialize the render target
+         */
+        void initRenderTarget();
+
         /**
          * @brief Update current frame
          */
@@ -106,11 +134,13 @@ namespace IME {
 
     private:
         //Engines render target
-        Gui::Window &window_;
+        Gui::Window window_;
         //State of the engine
         bool isRunning_;
         //Engine states
         std::unordered_map<std::string, std::shared_ptr<State>> states_;
+        //Engine settings
+        std::unordered_map<std::string, std::string> settings_;
         //Name of the current state
         std::string currentState_;
         //Name of the previous state

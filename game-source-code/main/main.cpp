@@ -5,16 +5,18 @@
 
 using IME::Callback;
 
-int main(){
-    auto window = IME::Gui::Window();
-    window.create("test", 800, 600);
+class TestEngine : public IME::Engine{
 
-    auto gameEngine = IME::Engine(window);
+};
+
+int main(){
+    auto gameEngine = TestEngine();
+    gameEngine.init();
     gameEngine.addState("mainMenu", std::make_shared<IME::MainMenuState>(gameEngine));
     gameEngine.addState("quit", std::make_shared<IME::QuitingState>(gameEngine));
     gameEngine.changeState("mainMenu");
 
-    window.addEventListener("closed", Callback<>([&gameEngine] {
+    gameEngine.getRenderTarget().addEventListener("closed", Callback<>([&gameEngine] {
         gameEngine.changeState("quit");
     }));
 

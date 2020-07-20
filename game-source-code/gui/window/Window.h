@@ -19,6 +19,17 @@ namespace IME{
         class Window : sf::NonCopyable {
         public:
             /**
+             * @brief Window styles
+             */
+            enum class Style{
+                None = 0,       // No border / title bar (this flag and all others are mutually exclusive)
+                Titlebar = 1 << 0,   // Title bar + fixed border
+                Resize = 1 << 1,     // Title bar + resizable border + maximize button
+                Close = 1 << 2,      // Title bar + close button
+                Fullscreen = 1 << 3 // Fullscreen mode
+            };
+
+            /**
              * @brief Constructor
              *
              * @warning Only a single instance of the class can exist
@@ -30,14 +41,15 @@ namespace IME{
 
             /**
              * @brief Create a render window
-             * @param name Name of the render window
+             * @param title Title of the window
              * @param width Width of the window
              * @param height Height of the window
+             * @param style Style of the window
              *
              * The dimensions of the window must be positive, otherwise
              * the program will be terminated prematurely
              */
-            void create(const std::string &name, float width, float height);
+            void create(const std::string &title, float width, float height, Style style);
 
             /**
              * @brief Set the frame rate limit of the window
