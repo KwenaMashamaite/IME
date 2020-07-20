@@ -74,11 +74,13 @@ namespace IME {
         isRunning_ = false;
     }
 
-    void Engine::addState(const std::string &stateName, std::shared_ptr<State> state) {
+    void Engine::addState(const std::string &newState, std::shared_ptr<State> state) {
         assert(state && "A game state cannot be null");
-        states_.insert(std::pair(stateName, std::move(state)));
-        if (states_.size() == 1)
-            currentState_ = stateName;
+        states_.insert(std::pair(newState, std::move(state)));
+        if (states_.size() == 1) {
+            states_[newState]->initialize();
+            currentState_ = newState;
+        }
     }
 
     bool Engine::removeState(const std::string &stateName) {

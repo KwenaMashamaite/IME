@@ -3,19 +3,13 @@
 #include "core/Engine.h"
 
 namespace IME {
-    QuitingState::QuitingState(Engine &engine) : State(engine) {
-        windowCloseConfirmationMenu_.onClick("yes-btn", [this] {
-            getApp().stop();
-        });
-
-        windowCloseConfirmationMenu_.onClick("no-btn", [this] {
-            auto prevState = getApp().getPreviousStateName();
-            getApp().changeState(prevState);
-        });
-    }
+    QuitingState::QuitingState(Engine &engine) :
+        MenuState(engine), isInitialized_{false},
+        panel_(getGuiFactory()->getPanel<Gui::StackPanel>(Gui::StackPanel::Orientation::Vertical))
+    {}
 
     void QuitingState::render(Gui::Window &renderTarget) {
-        renderTarget.draw(windowCloseConfirmationMenu_);
+        renderTarget.draw(*panel_);
     }
 
     void QuitingState::update() {}
@@ -23,19 +17,56 @@ namespace IME {
     void QuitingState::fixedUpdate(float deltaTime) {}
 
     void QuitingState::initialize() {
+        panel_->setOutlineThickness(2.0f);
+        auto question = std::make_unique<Gui::TextBlock>("Are you sure you want to quit the application?");
+        question->setTextCharSize(15u);
+        question->setOutlineThickness(1.0f);
+        question->setPadding(1.0f);
+        question->setOutlineColour({0, 0, 0});
+        question->setBackgroundColour({51, 74, 78});
+        question->setTextFont("europe-underground-dark.ttf");
+        panel_->addElement("question", std::move(question));
 
+        auto yesButton = std::make_unique<Gui::Button>("yes");
+        yesButton->setMargin({0, 0, 0, 0.05f});
+        yesButton->setOutlineThickness(1.0f);
+        yesButton->setTextFont("philosopher.ttf");
+        yesButton->on("click", Callback<>([this] {
+            getApp().stop();
+        }));
+        panel_->addElement("yes-btn", std::move(yesButton));
+
+        auto noButton = std::make_unique<Gui::Button>("no");
+        noButton->setOutlineThickness(1.0f);
+        noButton->setTextFont("philosopher.ttf");
+        noButton->on("click", Callback<>([this] {
+            auto prevState = getApp().getPreviousStateName();
+            getApp().changeState(prevState);
+        }));
+        panel_->addElement("no-btn", std::move(noButton));
+
+        panel_->setPosition({
+            getApp().getRenderTarget().getDimensions().width / 2.0f - panel_->getDimensions().width / 2.0f,
+            getApp().getRenderTarget().getDimensions().height / 2.0f -panel_->getDimensions().height / 2.0f
+        });
+
+        //Needs to be set after because the stack panel modifies the size of UI elements
+        panel_->getElement("yes-btn")->setTextAlignment(Gui::TextAlignment::Center);
+        panel_->getElement("no-btn")->setTextAlignment(Gui::TextAlignment::Center);
+
+        isInitialized_ = true;
     }
 
     void QuitingState::pause() {
-
+        panel_->hide();
     }
 
     void QuitingState::resume() {
-
+        panel_->show();
     }
 
     bool QuitingState::isInitialized() const {
-        return false;
+        return isInitialized_;
     }
 
     void QuitingState::reset() const {

@@ -5,11 +5,10 @@
 #ifndef QUITINGSTATE_H
 #define QUITINGSTATE_H
 
-#include "../State.h"
-#include "gui/menu/WindowClosePopUpMenu.h"
+#include "MenuState.h"
 
 namespace IME {
-    class QuitingState : public State {
+    class QuitingState : public MenuState {
     public:
         /**
          * @brief Constructor
@@ -44,8 +43,10 @@ namespace IME {
         void reset() const override;
 
     private:
-        //
-        Gui::WindowClosePopUpMenu windowCloseConfirmationMenu_;
+        //Menu panel
+        std::unique_ptr<Gui::Panel> panel_;
+        //Visibility state
+        bool isInitialized_;
     };
 }
 

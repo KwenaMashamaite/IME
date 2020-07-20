@@ -21,8 +21,9 @@ namespace IME {
          * @brief Initialize base engine
          *
          * This function will perform all the necessary initialization and
-         * create the engines render target. @note The engine will not run
-         * without initialization
+         * create the engines render target, therefore calling the function
+         * @see getRenderTarget() prior to this function may lead to undefined
+         * behaviour. @note The engine will not run without initialization
          */
         void init();
 
@@ -47,15 +48,15 @@ namespace IME {
 
         /**
          * @brief Add a state to the engine
-         * @param stateName Name of the state
+         * @param newState Name of the state
          * @param state State to be added
          *
-         * The stateName of the state must be unique. If a state with the same
-         * stateName as the argument already exists, then the provided state
+         * The newState of the state must be unique. If a state with the same
+         * newState as the argument already exists, then the provided state
          * will not be added, In addition the state pointer must not be null.
          * @note The first state to be added becomes the current/active state
          */
-        void addState(const std::string &stateName, std::shared_ptr<State> state);
+        void addState(const std::string &newState, std::shared_ptr<State> state);
 
         /**
          * @brief Remove a state

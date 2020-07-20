@@ -61,8 +61,6 @@ set(SOURCE_FILES
         game-source-code/utility/Clock.h
         game-source-code/gui/menu/IMenu.h
         game-source-code/gui/menu/IMenu.cpp
-        game-source-code/gui/menu/MainMenu.cpp
-        game-source-code/gui/menu/MainMenu.h
         game-source-code/gui/menu/PauseMenu.cpp
         game-source-code/gui/menu/PauseMenu.h
         game-source-code/utility/Utility.h
@@ -76,8 +74,6 @@ set(SOURCE_FILES
         game-source-code/gui/menu/GameWinMenu.h
         game-source-code/audio/AudioManager.cpp
         game-source-code/audio/AudioManager.h
-        game-source-code/gui/menu/WindowClosePopUpMenu.cpp
-        game-source-code/gui/menu/WindowClosePopUpMenu.h
         game-source-code/gui/control/ClickableUIElement.cpp
         game-source-code/gui/control/ClickableUIElement.h
         game-source-code/factory/GuiFactory.inl
@@ -89,7 +85,9 @@ set(SOURCE_FILES
         game-source-code/core/states/MainMenuState.cpp
         game-source-code/core/states/MainMenuState.h
         game-source-code/core/states/QuitingState.cpp
-        game-source-code/core/states/QuitingState.h)
+        game-source-code/core/states/MenuState.cpp
+        game-source-code/core/states/MenuState.h
+        )
 
 #add the doctest unit testing framework
 include_directories(C:/doctest-1.2.9/doctest)
