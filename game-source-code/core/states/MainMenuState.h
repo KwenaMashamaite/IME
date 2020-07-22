@@ -2,6 +2,7 @@
 #define MAINMENUSTATE_H
 
 #include "MenuState.h"
+#include "audio/MusicPlayer.h"
 
 namespace IME {
     class MainMenuState : public MenuState {
@@ -53,7 +54,7 @@ namespace IME {
         /**
          *
          */
-        void reset() const override;
+        void reset() override;
 
     private:
         /**
@@ -110,20 +111,29 @@ namespace IME {
         void updateInfoPanel(const std::string &newInfo);
 
     private:
-        //
+        //Initialization state
         bool isInitialized_;
         //Container for all main menu panels
         std::map<std::string, std::unique_ptr<Gui::Panel>> panels_;
+        //Main menu music player
+        Audio::MusicPlayer musicPlayer_;
 
         /**
          * @brief States the menu can be in
          */
-        enum class State {
+        enum class View {
+            None,
             Main,
             Info
         };
-        //Current State of the main menu
-        State state_;
+        //Current View of the main menu
+        View currentView_;
+
+        /**
+         * @brief Change the current view of the main menu
+         * @param view View to change to
+         */
+        void changeView(View view);
     };
 }
 

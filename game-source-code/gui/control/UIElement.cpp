@@ -235,20 +235,14 @@ namespace IME::Gui{
     void UIElement::hide() {
         if (!isHidden()) {
             isHidden_ = true;
-            Utility::makeInvisible(parentRectangle_);
-            Utility::makeInvisible(border_);
-            Utility::makeInvisible(text_);
-            emit("visibilityChanged", isHidden_);
+            emit("hidden");
         }
     }
 
     void UIElement::show() {
         if (isHidden()) {
             isHidden_ = false;
-            Utility::makeVisible(parentRectangle_);
-            Utility::makeVisible(border_);
-            Utility::makeVisible(text_);
-            emit("visibilityChanged", isHidden_);
+            emit("shown");
         }
     }
 

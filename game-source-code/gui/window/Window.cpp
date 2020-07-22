@@ -105,4 +105,8 @@ namespace IME{
     Gui::Window::~Window(){
         isInstantiated_ = false;
     }
+
+    Common::Dimensions Gui::Window::getDimensions() {
+        return dimensions_;
+    }
 }

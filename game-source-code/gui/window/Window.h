@@ -64,7 +64,7 @@ namespace IME{
              * @brief Get the dimensions of the window
              * @return Dimensions of the window
              */
-            static Dimensions getDimensions(){ return dimensions_;}
+            static Dimensions getDimensions();
 
             /**
              * @brief Check if the window is open or not

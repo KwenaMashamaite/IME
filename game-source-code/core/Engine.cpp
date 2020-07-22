@@ -6,7 +6,9 @@
 #include <cassert>
 
 namespace IME {
-    Engine::Engine() : isRunning_{false}
+    Engine::Engine(const std::string &gameName)
+        : isRunning_{false},
+          appName_{gameName}
     {}
 
     void Engine::init() {
@@ -160,6 +162,10 @@ namespace IME {
 
     const Gui::Window &Engine::getRenderTarget() const {
         return window_;
+    }
+
+    const std::string &Engine::getAppName() const {
+        return appName_;
     }
 
     Engine::~Engine() = default;

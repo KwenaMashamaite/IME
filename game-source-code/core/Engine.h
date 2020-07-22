@@ -14,8 +14,9 @@ namespace IME {
     public:
         /**
          * @brief Constructor
+         * @param gameName Name of the application
          */
-        Engine();
+        Engine(const std::string &gameName);
 
         /**
          * @brief Initialize base engine
@@ -108,6 +109,12 @@ namespace IME {
         const std::string &getPreviousStateName();
 
         /**
+         * @brief Get the name of the game
+         * @return Name of the game
+         */
+        const std::string& getAppName() const;
+
+        /**
          * @brief Destructor
          */
         virtual ~Engine() = 0;
@@ -146,6 +153,8 @@ namespace IME {
         std::string currentState_;
         //Name of the previous state
         std::string prevState_;
+        //Name of the application
+        std::string appName_;
     };
 }
 

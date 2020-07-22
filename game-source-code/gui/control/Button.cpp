@@ -48,21 +48,24 @@ namespace IME::Gui {
         }));
 
         // Grey out button when it is disabled
-        addEventListener("interactivityChanged",Callback<bool>([this](bool isEnabled) {
+        addEventListener("disabled",Callback<>([this] {
             if (!isHidden()) {
-                if (!isEnabled) {
-                    //Save currently set colours before overriding them
-                    defaultColours_.backgroundColour = getBackgroundColour();
-                    defaultColours_.textColour = getTextColour();
-                    defaultColours_.outlineColour = getOutlineColour();
-                    setTextColour({0, 0, 0, 127}); //Black
-                    setBackgroundColour({105, 105, 105}); //Dim Grey
-                    setOutlineColour({128, 128, 128}); //Grey
-                }else { //Restore previous colours when button is re-enabled
-                    setTextColour(defaultColours_.textColour);
-                    setBackgroundColour(defaultColours_.backgroundColour);
-                    setOutlineColour(defaultColours_.outlineColour);
-                }
+                //Save currently set colours before overriding them
+                defaultColours_.backgroundColour = getBackgroundColour();
+                defaultColours_.textColour = getTextColour();
+                defaultColours_.outlineColour = getOutlineColour();
+                setTextColour({0, 0, 0, 127}); //Black
+                setBackgroundColour({105, 105, 105}); //Dim Grey
+                setOutlineColour({128, 128, 128}); //Grey
+            }
+        }));
+
+        // Restore button colours to the way they were before it was disabled
+        addEventListener("enabled", Callback<>([this] {
+            if (!isHidden()) {
+                setTextColour(defaultColours_.textColour);
+                setBackgroundColour(defaultColours_.backgroundColour);
+                setOutlineColour(defaultColours_.outlineColour);
             }
         }));
     }
@@ -70,7 +73,8 @@ namespace IME::Gui {
     void Button::setSelected(bool isSelected) {
         if (isSelected != isSelected_) {
             isSelected_ = isSelected;
-            emit("selectionChanged", isSelected_);
+            if (isSelected_)
+                emit("selectionChanged", isSelected_);
         }
     }
 

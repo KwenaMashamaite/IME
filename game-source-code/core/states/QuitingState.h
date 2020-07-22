@@ -40,7 +40,7 @@ namespace IME {
 
         bool isInitialized() const override;
 
-        void reset() const override;
+        void reset() override;
 
     private:
         //Menu panel

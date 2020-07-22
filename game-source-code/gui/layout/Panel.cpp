@@ -78,22 +78,20 @@ namespace IME::Gui {
     void Panel::hide() {
         if (!isHidden_) {
             isHidden_ = true;
-            Utility::makeInvisible(panel_);
             std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
                 uiElem.second->hide();
             });
-            emit("visibilityChanged", isHidden_);
+            emit("hidden");
         }
     }
 
     void Panel::show() {
         if (isHidden_) {
             isHidden_ = false;
-            Utility::makeVisible(panel_);
             std::for_each(uiElements_.begin(), uiElements_.end(), [](auto &uiElem) {
                 uiElem.second->show();
             });
-            emit("visibilityChanged", isHidden_);
+            emit("shown");
         }
     }
 

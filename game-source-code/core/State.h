@@ -65,7 +65,7 @@ namespace IME {
         /**
          * @brief Reset state without re-initialization
          */
-        virtual void reset() const = 0;
+        virtual void reset() = 0;
 
         /**
          * @brief Destructor

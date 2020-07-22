@@ -13,7 +13,7 @@ namespace IME::Gui{
     }
 
     void ClickableUIElement::initEvents() {
-        //Check if mouse cursor has entered element or not
+        //Check if mouse cursor has entered element or left element after entering it
         Window::addEventListener("mouseMoved",Callback<int, int>([this](int x, int y) {
             if (!isHidden() && isEnabled()) {
                 if (contains(x, y) && !isMouseOverElement_) {
@@ -26,7 +26,8 @@ namespace IME::Gui{
             }
         }));
 
-        //Notify event listeners when the element is pressed
+        // Notify event listeners when the the mouse is depressed while the
+        // mouse cursor is over the element
         Window::addEventListener("mouseButtonPressed", Callback<Input::Mouse::Button>(
             [this](Input::Mouse::Button pressedButton) {
                 if (isMouseOverElement_) {
@@ -45,7 +46,8 @@ namespace IME::Gui{
             }
         ));
 
-        //notify event listeners when the element is released
+        // notify event listeners when the mouse is released while the mouse
+        // cursor is over the element.
         Window::addEventListener("mouseButtonReleased", Callback<Input::Mouse::Button>(
             [this](Input::Mouse::Button releasedButton) {
                 if (isMouseOverElement_) {
@@ -64,7 +66,7 @@ namespace IME::Gui{
             }
         ));
 
-        //Deselect UI element if it's selected and mouse cursor leaves window
+        // Deselect UI element if it's selected and mouse cursor leaves application window
         Window::addEventListener("mouseLeft", Callback<>([this]{
             if (isMouseOverElement_) {
                 isMouseOverElement_ = false;
@@ -72,28 +74,45 @@ namespace IME::Gui{
             }
         }));
 
-        //Notify event listeners when the element is clicked. A click event always occurs
-        //after a mouse up event, which occurs after a mouse down event
-        //(mouseDown->mouseUp->click)
+        // Notify event listeners when the element is clicked. A click event
+        // always occur after a mouse up event, which occurs after a mouse
+        // down event (mouseDown->mouseUp->click)
         addEventListener("leftMouseUp", Callback<>([this] {
             emit("click");
         }));
 
-        //Automatically disable/enable the element when its visibility state changes.
-        //A user must not interact with a hidden element
-        addEventListener("visibilityChanged", Callback<bool>([this](bool isHidden) {
-            setEnabled(!isHidden);
+        // Disable the element when its hidden. A hidden element must not be
+        // interacted with using the mouse cursor. Disabling it prevents the
+        // element from receiving events while it is hidden
+        addEventListener("hidden", Callback<>([this] {
+            setEnabled(false);
+        }));
+
+        // Enable the element when its shown. This allows the element to
+        // receive events, thus allowing interaction with the mouse cursor
+        addEventListener("shown", Callback<>([this] {
+            setEnabled(true);
+        }));
+
+        // Publish a mouse leave event when the element is disabled and the
+        // mouse cursor is over the element. This forces the mouse to leave
+        // the element even though graphically the mouse is still over the
+        // element
+        addEventListener("disabled", Callback<>([this] {
+            if (isMouseOverElement_) {
+                isMouseOverElement_ = false;
+                emit("mouseLeave");
+            }
         }));
     }
 
     void ClickableUIElement::setEnabled(bool isEnable) {
         if (isEnabled_ != isEnable) {
-            if (!isEnable && isMouseOverElement_) {
-                isMouseOverElement_ = false;
-                emit("mouseLeave");
-            }
             isEnabled_ = isEnable;
-            emit("interactivityChanged", isEnabled_);
+            if (isEnabled_)
+                emit("enabled");
+            else
+                emit("disabled");
         }
     }
 

@@ -10,8 +10,11 @@ namespace IME {
     MainMenuState::MainMenuState(Engine &engine)
         : MenuState(engine),
           isInitialized_(false),
-          state_(State::Main)
-    {}
+          musicPlayer_{"resources/music/"},
+          currentView_(View::None)
+    {
+        musicPlayer_.loadFromFile({"mainMenubackgroundMusic.wav"});
+    }
 
     void MainMenuState::initialize() {
         createInfoPanel();
@@ -19,20 +22,25 @@ namespace IME {
         createReturnButton();
         createNavigationButtons();
         initNavigationButtonActions();
+        changeView(View::Main);
+        musicPlayer_.setLoop(true);
+        musicPlayer_.play("mainMenubackgroundMusic.wav");
         isInitialized_ = true;
     }
 
     void MainMenuState::render(Gui::Window &renderTarget) {
+        renderTarget.clear({32, 28, 28});
         static auto drawer = Gui::Drawer(renderTarget);
-        renderTarget.clear();
         drawer.drawBackground("mainMenuBackground.png");
-        switch (state_){
-            case State::Main:
+        switch (currentView_){
+            case View::Main:
                 renderTarget.draw(*(panels_["titlePanel"]));
                 renderTarget.draw(*(panels_["navButtonsPanel"]));
                 break;
-            case State::Info:
+            case View::Info:
                 renderTarget.draw(*(panels_["onClickInfoPanel"]));
+                break;
+            case View::None:
                 break;
         }
     }
@@ -48,18 +56,20 @@ namespace IME {
     void MainMenuState::pause() {
         //Buttons need to be hidden because they can still be interacted with if only cleared
         panels_["navButtonsPanel"]->hide();
+        musicPlayer_.pause();
     }
 
     void MainMenuState::resume() {
         panels_["navButtonsPanel"]->show();
+        musicPlayer_.play();
     }
 
     bool MainMenuState::isInitialized() const {
         return isInitialized_;
     }
 
-    void MainMenuState::reset() const {
-        //Nothing to reset
+    void MainMenuState::reset() {
+        musicPlayer_.stop();
     }
 
     void MainMenuState::createInfoPanel(){
@@ -67,6 +77,7 @@ namespace IME {
         onClickInfoPanel->setDimensions(getApp().getRenderTarget().getDimensions());
         onClickInfoPanel->setFillColour({0, 0, 0, 0});
         auto infoPanelTextBlock = getGuiFactory()->getUIElement<Gui::TextBlock>("");
+        infoPanelTextBlock->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
         infoPanelTextBlock->setBackgroundColour({128, 128, 128, 10});
         infoPanelTextBlock->setOutlineColour({0, 0, 0, 15});
         infoPanelTextBlock->setOutlineThickness(2.0f);
@@ -80,10 +91,10 @@ namespace IME {
     }
 
     void MainMenuState::createTitle() {
-        auto title = std::move(getGuiFactory()->getUIElement<Gui::TextBlock>("GAME TITLE"));
+        auto title = std::move(getGuiFactory()->getUIElement<Gui::TextBlock>(getApp().getAppName()));
         title->setTextFont("basson.ttf");
         title->setBackgroundColour({0, 0, 0, 0});
-        title->setTextCharSize(80u);
+        title->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 13.0f / 100.0f);
 
         auto titlePanel = getGuiFactory()->getPanel<Gui::StackPanel>( Gui::StackPanel::Orientation::Horizontal);
         titlePanel->addElement("title", std::move(title));
@@ -105,9 +116,9 @@ namespace IME {
         auto buttonsPanel = std::make_unique<Gui::StackPanel>( Gui::StackPanel::Orientation::Vertical);
         std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
             auto button = getGuiFactory()->getUIElement<Gui::Button>(buttonInfo.text);
-            button->setTextCharSize(25);
+            button->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
             button->setTextFont("basson.ttf");
-            button->setMargin({0, 0, 0, 40});
+            button->setMargin({0, 0, 0, getApp().getRenderTarget().getDimensions().height * 5.0f / 100.0f});
             button->setBackgroundColour({0, 0, 0, 0});
             button->setHoverBackgroundColour({0, 0, 0, 0});
             buttonsPanel->addElement(buttonInfo.name, std::move(button));
@@ -123,7 +134,7 @@ namespace IME {
         auto& navButtonsPanel = panels_["navButtonsPanel"];
         auto updateInfoPanelOnButtonClick = [this, &navButtonsPanel](const std::string& childName, const std::string& text){
             navButtonsPanel->subscribeChildToEvent(childName, "click", Callback<>([this, text]{
-                state_ = State::Info;
+                changeView(View::Info);
                 updateInfoPanel(text);
             }));
         };
@@ -176,11 +187,25 @@ namespace IME {
 
     void MainMenuState::createReturnButton() {
         auto returnButton = getGuiFactory()->getUIElement<Gui::Button>("<-back");
-        returnButton->setTextCharSize(18u);
+        returnButton->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 3.0f / 100.0f);
         returnButton->setOutlineThickness(2.0f);
         returnButton->setTextFont("europe-underground-dark.ttf");
         returnButton->setPosition(1, 1);
-        returnButton->on("click", Callback<>([this](){state_ = State::Main;}));
+        returnButton->on("click", Callback<>([this](){ changeView(View::Main);}));
         panels_["onClickInfoPanel"]->addElement("return-btn", std::move(returnButton));
+    }
+
+    void MainMenuState::changeView(MainMenuState::View view) {
+        currentView_ = view;
+        switch (view) {
+            case View::Main:
+                panels_["navButtonsPanel"]->show();
+                break;
+            case View::Info:
+                panels_["navButtonsPanel"]->hide();
+                break;
+            case View::None:
+                break;
+        }
     }
 }

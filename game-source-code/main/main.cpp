@@ -6,7 +6,8 @@
 using IME::Callback;
 
 class TestEngine : public IME::Engine{
-
+public:
+    TestEngine() : Engine("ENGINE TITLE") {}
 };
 
 int main(){
