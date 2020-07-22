@@ -20,15 +20,25 @@ namespace IME {
         Utility::FileReader().readFileInto(settings, settingsPath + "settings.txt");
         std::string setting;
         while (std::getline(settings, setting)) {
-            auto separatorPos = setting.find_first_of('=');
-            if (separatorPos != std::string::npos) {
-                auto name = setting.substr(0, separatorPos);
-                auto value = setting.substr(separatorPos + 1);
-                settings_.insert(std::pair(name, value));
-            } else {
-                throw InvalidArgument(R"(The entry ')" + setting + R"(')" + " in " + settingsPath
-                    + "settings.txt" + R"( is invalid because it's missing a separator '=')");
-            }
+            static auto errorMessage = [&](const std::string& appendMessage = ""){
+                return R"(The entry ')" + setting + R"(')" + " in " + settingsPath
+                    + "settings.txt is invalid because " + appendMessage;
+            };
+
+            ////Skip lines that are empty or begin with a comment or whitespaces
+            if (setting.empty() || setting[0] == '/' || setting[0] == '*' || setting[0] == ' ')
+                continue;
+
+            if (setting.find_first_of(' ') == std::string::npos) {
+                auto separatorPos = setting.find_first_of('=');
+                if (separatorPos != std::string::npos) {
+                    auto name = setting.substr(0, separatorPos);
+                    auto value = setting.substr(separatorPos + 1);
+                    settings_.insert(std::pair(name, value));
+                } else
+                    throw InvalidArgument(errorMessage(R"("it's missing a separator '=')"));
+            } else
+                throw InvalidArgument( errorMessage("it contains whitespaces"));
         }
     }
 
