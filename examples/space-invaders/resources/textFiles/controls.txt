@@ -1,0 +1,10 @@
+MOVEMENT:
+	Left/Right = Move player left/right
+	Up/Down    = Move player up/down
+
+SHOOTING:
+	Space bar  = Use primary weapon
+
+GAME:
+	P          = Pause/Resume
+	
