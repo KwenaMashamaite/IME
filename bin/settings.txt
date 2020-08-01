@@ -1,0 +1,32 @@
+/**********************************************************
+ * Use // or /* ... */ to add comments
+ *
+ * The entries must not contain any whitespaces or special 
+ * characters. The entry name and the value must be separated
+ * with an equal sign (=) : name=value
+ *
+ * example:
+ *  title = my cool game (invalid - Contains whitespaces)
+ *  title=my_cool_game (invalid - contains special characters)
+ *  title myCoolGame (invalid - Equal sign not used as a seperator)
+ *  title=myCoolGame (valid)
+ *
+ *  For optional entries:
+ *   0 = no/false
+ *   1 = yes/true
+ *
+ *  example:
+ *  fullscreen=1 (Creates window in fullscreen mode)
+ *  fullscreen=0 (Window not created in fullscreen mode)
+ *
+ * This file must contain at least the following entries:
+ * 1. title 
+ * 2. width
+ * 3. height
+ * 4. fullscreen
+ ***********************************************************/
+
+title=example
+fullscreen=0
+width=1000
+height=700

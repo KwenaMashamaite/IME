@@ -56,3 +56,6 @@ obj/
 ### CMAKE BUILD FILES ###
 build
 cmake-build-debug
+
+### Dependencies ###
+extlibs
