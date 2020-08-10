@@ -60,6 +60,25 @@ namespace IME{
         return animationSprite_;
     }
 
+    int Animator::onAnimationStart(const std::string &name, Callback<> callback) {
+        return eventEmitter_.addEventListener(name + "AnimationStarted", std::move(callback));
+    }
+
+    int Animator::onAnimationFinish(const std::string &name, Callback<> callback) {
+        return eventEmitter_.addEventListener(name + "AnimationFinished", std::move(callback));
+    }
+
+    bool Animator::removeEventListener(const std::string &name, const std::string &onTrigger, int id) {
+        auto fullEventName = name;
+        if (onTrigger == "start")
+            fullEventName += "AnimationStarted";
+        else if (onTrigger == "finish")
+            fullEventName += "AnimationFinished";
+        else
+            return false;
+        return eventEmitter_.removeEventListener(fullEventName, id);
+    }
+
     void Animator::finishAnimation() {
         if (currentAnimation_ != nullptr && totalTime_ != 0.0f){
             totalTime_ = 0.0f;
