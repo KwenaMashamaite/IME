@@ -3,13 +3,13 @@
 #define PLAYINGSTATE_H
 
 #include "IME/core/engine/State.h"
-#include "gui/layout/DockPanel.h"
-#include "scoreboard/Scoreboard.h"
+#include "IME/gui/layout/DockPanel.h"
+#include "IME/utility/Scoreboard.h"
 
 namespace SI {
-    class PlayingState : public State{
+    class PlayingState : public IME::State{
     public:
-        PlayingState(Engine &engine);
+        PlayingState(IME::Engine &engine);
 
         void initialize() override;
 
@@ -17,7 +17,7 @@ namespace SI {
 
         void fixedUpdate(float deltaTime) override;
 
-        void render(Gui::Window &renderTarget) override;
+        void render(IME::Gui::Window &renderTarget) override;
 
         void pause() override;
 
@@ -28,9 +28,9 @@ namespace SI {
         void reset() override;
 
     private:
-        std::unique_ptr<Gui::DockPanel> container_;
-        Scoreboard scoreboard_;
         bool isInitialized_;
+        std::unique_ptr<IME::Gui::Panel> container_;
+        IME::Scoreboard scoreboard_;
     };
 }
 

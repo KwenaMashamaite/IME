@@ -1,19 +1,23 @@
 #include "MainMenuState.h"
-#include "gui/drawer/Drawer.h"
-#include "scoreboard/Scoreboard.h"
-#include "resources/FileReader.h"
-#include "core/Engine.h"
+#include "IME/utility/Scoreboard.h"
+#include "IME/gui/drawer/Drawer.h"
+#include "IME/core/resources/FileReader.h"
+#include "IME/core/engine/Engine.h"
+#include "IME/gui/control/TextBlock.h"
+#include "IME/gui/control/Button.h"
+#include "IME/gui/layout/Canvas.h"
+#include "IME/gui/layout/StackPanel.h"
 #include <algorithm>
 #include <cassert>
 
 namespace SI {
     MainMenuState::MainMenuState(IME::Engine &engine)
-        : State(engine),
-          isInitialized_(false),
-          musicPlayer_{"resources/music/"},
-          currentView_(View::None)
+            : State(engine),
+              isInitialized_(false),
+              musicPlayer_{"resources/music/"},
+              currentView_(View::None)
     {
-        musicPlayer_.loadFromFile({"mainMenubackgroundMusic.wav"});
+        //musicPlayer_.loadFromFile({"mainMenubackgroundMusic.ogg"});
     }
 
     void MainMenuState::initialize() {
@@ -24,14 +28,14 @@ namespace SI {
         initNavigationButtonActions();
         changeView(View::Main);
         musicPlayer_.setLoop(true);
-        musicPlayer_.play("mainMenubackgroundMusic.wav");
+        //musicPlayer_.play("mainMenubackgroundMusic.ogg");
         isInitialized_ = true;
     }
 
-    void MainMenuState::render(Gui::Window &renderTarget) {
+    void MainMenuState::render(IME::Gui::Window &renderTarget) {
         renderTarget.clear({32, 28, 28});
-        static auto drawer = Gui::Drawer(renderTarget);
-        drawer.drawBackground("mainMenuBackground.png");
+        static auto drawer = IME::Gui::Drawer(renderTarget);
+        //drawer.drawBackground("mainMenuBackground.png");
         switch (currentView_){
             case View::Main:
                 renderTarget.draw(*(panels_["titlePanel"]));
@@ -73,10 +77,10 @@ namespace SI {
     }
 
     void MainMenuState::createInfoPanel(){
-        auto onClickInfoPanel = getApp().getGuiFactory()->getPanel<Gui::Canvas>( 0, 0);
+        auto onClickInfoPanel = getApp().getGuiFactory()->getPanel<IME::Gui::Canvas>( 0, 0);
         onClickInfoPanel->setDimensions(getApp().getRenderTarget().getDimensions());
         onClickInfoPanel->setFillColour({0, 0, 0, 0});
-        auto infoPanelTextBlock = getApp().getGuiFactory()->getUIElement<Gui::TextBlock>("");
+        auto infoPanelTextBlock = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("");
         infoPanelTextBlock->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
         infoPanelTextBlock->setBackgroundColour({128, 128, 128, 10});
         infoPanelTextBlock->setOutlineColour({0, 0, 0, 15});
@@ -91,12 +95,12 @@ namespace SI {
     }
 
     void MainMenuState::createTitle() {
-        auto title = getApp().getGuiFactory()->getUIElement<Gui::TextBlock>(getApp().getAppName());
+        auto title = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(getApp().getAppName());
         title->setTextFont("basson.ttf");
         title->setBackgroundColour({0, 0, 0, 0});
         title->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 13.0f / 100.0f);
 
-        auto titlePanel = getApp().getGuiFactory()->getPanel<Gui::StackPanel>( Gui::StackPanel::Orientation::Horizontal);
+        auto titlePanel = getApp().getGuiFactory()->getPanel<IME::Gui::StackPanel>( IME::Gui::StackPanel::Orientation::Horizontal);
         titlePanel->addElement("title", std::move(title));
         titlePanel->setPosition({
             getApp().getRenderTarget().getDimensions().width / 2 - titlePanel->getDimensions().width / 2, 0
@@ -107,15 +111,16 @@ namespace SI {
     void MainMenuState::createNavigationButtons() {
         struct ButtonDetails{std::string name; std::string text;};
         auto navigationButtons = std::vector<ButtonDetails>{
-            {"play-btn", "PLAY"},
-            {"instructions-btn", "INSTRUCTIONS"},
-            {"highscores-btn", "HIGHSCORES"},
-            {"controls-btn", "CONTROLS"},
-            {"exit-btn", "EXIT"}
+                {"play-btn", "PLAY"},
+                {"instructions-btn", "INSTRUCTIONS"},
+                {"highscores-btn", "HIGHSCORES"},
+                {"controls-btn", "CONTROLS"},
+                {"exit-btn", "EXIT"}
         };
-        auto buttonsPanel = std::make_unique<Gui::StackPanel>( Gui::StackPanel::Orientation::Vertical);
+        auto buttonsPanel = std::make_unique<IME::Gui::StackPanel>( IME::Gui::StackPanel::Orientation::Vertical);
         std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
-            auto button = getApp().getGuiFactory()->getUIElement<Gui::Button>(buttonInfo.text);
+
+            std::unique_ptr<IME::Gui::Button> button(dynamic_cast<IME::Gui::Button*>((getApp().getGuiFactory()->getUIElement<IME::Gui::Button>(buttonInfo.text)).release()));
             button->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
             button->setTextFont("basson.ttf");
             button->setMargin({0, 0, 0, getApp().getRenderTarget().getDimensions().height * 5.0f / 100.0f});
@@ -126,48 +131,48 @@ namespace SI {
         buttonsPanel->setPosition({
             getApp().getRenderTarget().getDimensions().width / 2 - buttonsPanel->getDimensions().width / 2,
             getApp().getRenderTarget().getDimensions().height / 2 - buttonsPanel->getDimensions().height / 2
-        });
+                                  });
         panels_.insert(std::pair("navButtonsPanel", std::move(buttonsPanel)));
     }
 
     void MainMenuState::initNavigationButtonActions() {
         auto& navButtonsPanel = panels_["navButtonsPanel"];
         auto updateInfoPanelOnButtonClick = [this, &navButtonsPanel](const std::string& childName, const std::string& text){
-            navButtonsPanel->subscribeChildToEvent(childName, "click", Callback<>([this, text]{
+            navButtonsPanel->subscribeChildToEvent(childName, "click", IME::Callback<>([this, text]{
                 changeView(View::Info);
                 updateInfoPanel(text);
             }));
         };
 
         ////////PLAY BUTTON ///////////
-        navButtonsPanel->subscribeChildToEvent("play-btn", "click", Callback<>([this]{
+        navButtonsPanel->subscribeChildToEvent("play-btn", "click", IME::Callback<>([this]{
             getApp().changeState("playing");
         }));
 
-        auto fileReader = Utility::FileReader();
+        auto fileReader = IME::Utility::FileReader();
         auto textBuffer =  std::stringstream();
 
         //// INSTRUCTIONS BUTTON ///////
-        fileReader.readFileInto(textBuffer, "resources/textFiles/instructions.txt");
+        fileReader.readFileInto(textBuffer, "files/instructions.txt");
         updateInfoPanelOnButtonClick("instructions-btn", textBuffer.str());
 
         //// CONTROLS BUTTON //////////
         textBuffer.str("");
-        fileReader.readFileInto(textBuffer, "resources/textFiles/controls.txt");
+        fileReader.readFileInto(textBuffer, "files/controls.txt");
         updateInfoPanelOnButtonClick("controls-btn", textBuffer.str());
 
         //// HIGHSCORES BUTTON ///////
-        auto scoreBoard = Scoreboard("resources/textFiles/highscores.txt");
+        auto scoreBoard =   IME::Scoreboard("files/highscores.txt");
         auto numOfScores = std::distance(scoreBoard.cBegin(), scoreBoard.cEnd());
         auto highscoresText =  std::string("TOP " + std::to_string(numOfScores) + " HIGHSCORES");
         std::for_each(scoreBoard.cBegin(), scoreBoard.cEnd(),
             [this, &highscoresText, counter = 1u](unsigned int score) mutable{
-            highscoresText.append("\n" + std::to_string(counter++) + ". " + std::to_string(score));
+                highscoresText.append("\n" + std::to_string(counter++) + ". " + std::to_string(score));
         });
         updateInfoPanelOnButtonClick("highscores-btn", highscoresText);
 
         //// EXIT BUTTON ///////////
-        navButtonsPanel->subscribeChildToEvent("exit-btn", "click", Callback<>([this]{
+        navButtonsPanel->subscribeChildToEvent("exit-btn", "click", IME::Callback<>([this]{
             getApp().changeState("quit");
         }));
     }
@@ -179,19 +184,19 @@ namespace SI {
             auto& infoElement = panels_["onClickInfoPanel"]->getElement("infoTextBlock");
             infoElement->setText(newInfo);
             infoElement->setPosition(
-                getApp().getRenderTarget().getDimensions().width / 2 - infoElement->getDimensions().width / 2,
-                getApp().getRenderTarget().getDimensions().height / 2 - infoElement->getDimensions().height / 2
+                getApp().getRenderTarget().getDimensions().width / 2 - infoElement->getSize().width / 2,
+                getApp().getRenderTarget().getDimensions().height / 2 - infoElement->getSize().height / 2
             );
         }
     }
 
     void MainMenuState::createReturnButton() {
-        auto returnButton = getApp().getGuiFactory()->getUIElement<Gui::Button>("<--");
+        auto returnButton = getApp().getGuiFactory()->getUIElement<IME::Gui::Button>("main menu");
         returnButton->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 3.0f / 100.0f);
         returnButton->setOutlineThickness(2.0f);
         returnButton->setTextFont("europe-underground-dark.ttf");
         returnButton->setPosition(1, 1);
-        returnButton->on("click", Callback<>([this](){ changeView(View::Main);}));
+        returnButton->on("click", IME::Callback<>([this](){ changeView(View::Main);}));
         panels_["onClickInfoPanel"]->addElement("return-btn", std::move(returnButton));
     }
 

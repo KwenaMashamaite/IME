@@ -1,0 +1,24 @@
+###################################################
+# Lines that start with '#' are comments.
+#
+# The syntax for the file is as follows:
+# 	key=value
+#
+# key is the name of a variable whilst value is an
+# entry associated with that key. The key must not 
+# contain any whitespaces or special characters. For
+# option values use 1 for yes/true and 0 for no/false
+#
+####################################################
+
+# Title of the game window
+title=Space Invaders
+
+# Game window fullscreen option
+fullscreen=0
+
+# Width of the game window
+width=1000
+
+# Height of the game window
+height=700

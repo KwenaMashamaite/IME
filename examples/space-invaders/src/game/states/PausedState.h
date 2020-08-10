@@ -1,12 +1,14 @@
-
+/**
+ * @brief
+ */
 
 #ifndef PAUSEDSTATE_H
 #define PAUSEDSTATE_H
 
-#include "core/states/MenuState.h'
+#include "IME/core/engine/State.h"
 
 namespace SI {
-    class PausedState : public MenuState{
+    class PausedState {
 
     };
 }

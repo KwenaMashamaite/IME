@@ -4,10 +4,11 @@
 #include "IME/core/engine/Engine.h"
 
 namespace SI {
-    class SpaceInvadersGame : public IME::Engine {
+    class SpaceInvaders : public IME::Engine {
     public:
+        SpaceInvaders();
 
+        void initialize();
     };
 }
-
 #endif

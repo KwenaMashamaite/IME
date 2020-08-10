@@ -1,14 +1,12 @@
-//
-// Created by Brandon on 2020/07/18.
-//
-
-#ifndef UNIT_TESTS_GAMEOVERSTATE_H
-#define UNIT_TESTS_GAMEOVERSTATE_H
 
 
-class GameOverState {
+#ifndef GAMEOVERSTATE_H
+#define GAMEOVERSTATE_H
 
-};
+namespace SI {
+    class GameOverState {
 
+    };
+}
 
-#endif //UNIT_TESTS_GAMEOVERSTATE_H
+#endif

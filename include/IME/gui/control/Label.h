@@ -2,21 +2,22 @@
 #define LABEL_H
 
 #include "UIElement.h"
+namespace IME {
+    namespace Gui {
+        class Label : public UIElement {
+        private:
+            Label();
 
-namespace Gui {
-    class Label : public UIElement {
-    private:
-        Label();
+            /**
+             *
+             * @param text
+             */
+            explicit Label(std::string text);
 
-        /**
-         *
-         * @param text
-         */
-        explicit Label(std::string text);
+        public:
 
-    public:
-
-    };
+        };
+    }
 }
 
 #endif

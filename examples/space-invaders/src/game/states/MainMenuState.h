@@ -3,7 +3,7 @@
 
 #include "IME/core/engine/State.h"
 #include "IME/gui/layout/Panel.h"
-#include "IME/audio/MusicPlayer.h"
+#include "IME/core/audio/MusicPlayer.h"
 
 namespace SI {
     class MainMenuState : public IME::State {
@@ -34,7 +34,7 @@ namespace SI {
          * @brief
          * @param renderTarget
          */
-        void render(Gui::Window &renderTarget) override;
+        void render(IME::Gui::Window &renderTarget) override;
 
         /**
          *

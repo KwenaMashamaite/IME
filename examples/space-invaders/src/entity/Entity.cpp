@@ -42,7 +42,7 @@ namespace SI {
         return numOfLives_ <= 0u;
     }
 
-    IEntity::Direction Entity::getDirection() const {
+    IME::IEntity::Direction Entity::getDirection() const {
         return direction_;
     }
 

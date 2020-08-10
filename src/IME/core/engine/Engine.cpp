@@ -30,19 +30,18 @@ namespace IME {
             };
 
             ////Skip lines that are empty or begin with a comment or whitespaces
-            if (setting.empty() || setting[0] == '/' || setting[0] == '*' || setting[0] == ' ')
+            if (setting.empty() || setting[0] == '#' || setting[0] == ' ')
                 continue;
 
-            if (setting.find_first_of(' ') == std::string::npos) {
-                auto separatorPos = setting.find_first_of('=');
-                if (separatorPos != std::string::npos) {
-                    auto name = setting.substr(0, separatorPos);
-                    auto value = setting.substr(separatorPos + 1);
-                    settings_.insert(std::pair(name, value));
-                } else
-                    throw InvalidArgument(errorMessage(R"("it's missing a separator '=')"));
+            auto separatorPos = setting.find_first_of('=');
+            if (separatorPos != std::string::npos) {
+                auto key = setting.substr(0, separatorPos);
+                if (key.find_first_of(' ') != std::string::npos)
+                    throw InvalidArgument(errorMessage("key contains whitespaces"));
+                auto value = setting.substr(separatorPos + 1);
+                settings_.insert(std::pair(key, value));
             } else
-                throw InvalidArgument( errorMessage("it contains whitespaces"));
+                throw InvalidArgument(errorMessage(R"("it's missing a separator '=')"));
         }
         verifySettings();
     }

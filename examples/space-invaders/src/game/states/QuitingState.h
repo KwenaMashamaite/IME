@@ -44,10 +44,10 @@ namespace SI {
         void reset() override;
 
     private:
+        //Initialization state
+        bool isInitialized_;
         //Menu panel
         std::unique_ptr<IME::Gui::Panel> panel_;
-        //Visibility state
-        bool isInitialized_;
     };
 }
 

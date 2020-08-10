@@ -1,14 +1,17 @@
 #include <iostream>
 #include "QuitingState.h"
-#include "core/Engine.h"
+#include "IME/core/engine/Engine.h"
+#include "IME/gui/control/TextBlock.h"
+#include "IME/gui/control/Button.h"
+#include "IME/gui/layout/StackPanel.h"
 
 namespace SI {
-    QuitingState::QuitingState(Engine &engine) :
-        State(engine), isInitialized_{false},
-        panel_{getApp().getGuiFactory()->getPanel<Gui::StackPanel>(Gui::StackPanel::Orientation::Vertical)}
+    QuitingState::QuitingState(IME::Engine &engine) :
+            State(engine), isInitialized_{false},
+            panel_{getApp().getGuiFactory()->getPanel<IME::Gui::StackPanel>(IME::Gui::StackPanel::Orientation::Vertical)}
     {}
 
-    void QuitingState::render(Gui::Window &renderTarget) {
+    void QuitingState::render(IME::Gui::Window &renderTarget) {
         renderTarget.draw(*panel_);
     }
 
@@ -18,33 +21,33 @@ namespace SI {
 
     void QuitingState::initialize() {
         panel_->setOutlineThickness(2.0f);
-        auto question = getApp().getGuiFactory()->getUIElement<Gui::TextBlock>("Are you sure you want to quit the application?");
+        auto question = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("Are you sure you want to quit the application?");
         question->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 2.5f / 100.0f);
         question->setOutlineThickness(1.0f);
         question->setPadding(1.0f);
         question->setOutlineColour({0, 0, 0});
-        question->setBackgroundColour({51, 74, 78});
+        question->setBackgroundColour({151, 74, 78});
         question->setTextFont("europe-underground-dark.ttf");
         panel_->addElement("question", std::move(question));
 
         auto buttonsTextSize = getApp().getRenderTarget().getDimensions().height * 3.5f / 100.0f;
         auto buttonsTextFont = "philosopher.ttf";
         auto buttonsOutlineThickness = 1.0f;
-        auto yesButton = getApp().getGuiFactory()->getUIElement<Gui::Button>("yes");
+        auto yesButton = getApp().getGuiFactory()->getUIElement<IME::Gui::Button>("yes");
         yesButton->setTextCharSize(buttonsTextSize);
         yesButton->setMargin({0, 0, 0, 0.01f});
         yesButton->setOutlineThickness(buttonsOutlineThickness);
         yesButton->setTextFont(buttonsTextFont);
-        yesButton->on("click", Callback<>([this] {
+        yesButton->on("click", IME::Callback<>([this] {
             getApp().stop();
         }));
         panel_->addElement("yes-btn", std::move(yesButton));
 
-        auto noButton = getApp().getGuiFactory()->getUIElement<Gui::Button>("no");
+        auto noButton = getApp().getGuiFactory()->getUIElement<IME::Gui::Button>("no");
         noButton->setTextCharSize(buttonsTextSize);
         noButton->setOutlineThickness(buttonsOutlineThickness);
         noButton->setTextFont(buttonsTextFont);
-        noButton->on("click", Callback<>([this] {
+        noButton->on("click", IME::Callback<>([this] {
             auto prevState = getApp().getPreviousStateName();
             getApp().changeState(prevState);
         }));
@@ -56,8 +59,8 @@ namespace SI {
         });
 
         //Needs to be set after because the stack panel modifies the size of UI elements
-        panel_->getElement("yes-btn")->setTextAlignment(Gui::TextAlignment::Center);
-        panel_->getElement("no-btn")->setTextAlignment(Gui::TextAlignment::Center);
+        panel_->getElement("yes-btn")->setTextAlignment(IME::Gui::TextAlignment::Center);
+        panel_->getElement("no-btn")->setTextAlignment(IME::Gui::TextAlignment::Center);
 
         isInitialized_ = true;
     }

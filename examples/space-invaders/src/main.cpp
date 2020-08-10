@@ -1,7 +1,7 @@
-#include "game/SpaceInvadersGame.h"
+#include "game/SpaceInvaders.h"
 
 int main(){
-    auto spaceInvaders = SI::SpaceInvadersGame();
+    auto spaceInvaders = SI::SpaceInvaders();
     spaceInvaders.initialize();
     spaceInvaders.run();
 
