@@ -11,8 +11,8 @@ namespace IME::Gui {
 
         setPadding(2.0f);
         setOutlineThickness(1.0f);
-        setTextColour({0, 0, 0}); // Black
-        setBackgroundColour({255, 255, 255}); // White
+        setTextColour(Colour::Black);
+        setBackgroundColour(Colour::White);
         setOutlineColour(defaultOutlineColour_); // Grey
         init();
     }

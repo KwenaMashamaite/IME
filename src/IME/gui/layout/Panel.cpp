@@ -1,18 +1,19 @@
 #include "IME/gui/layout/Panel.h"
-#include "IME/utility/Utility.h"
+#include "IME/utility/Helpers.h"
 #include <cassert>
 #include <algorithm>
 
 namespace IME::Gui {
     Panel::Panel(float x, float y) : isHidden_(false){
-        addEventListener("outlineThicknessChanged", Callback<>([this]() {
-            setPosition(getPosition());
-        }));
-        setFillColour({0, 0, 0, 0}); //Transparent
-        setOutlineColour({255, 255, 255}); //White
+        setFillColour(Colour::Transparent);
+        setOutlineColour(Colour::White);
         setDimensions({0.0f, 0.0f});
         setOutlineThickness(0.0f);
         setPosition({x, y});
+
+        addEventListener("outlineThicknessChanged", Callback<>([this]() {
+            setPosition(getPosition());
+        }));
     }
 
     void Panel::setPosition(const Position &position) {

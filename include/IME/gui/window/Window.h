@@ -8,6 +8,7 @@
 #include "IME/common/Common.h"
 #include "IME/event/EventEmitter.h"
 #include "IME/gui/common/IDrawable.h"
+#include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
@@ -51,10 +52,9 @@ namespace IME{
             /**
              * @brief Constructor
              *
-             * @warning Only a single instance of the class can exist
-             *          at a time. Attempting to instantiate the class
-             *          while there is an active instance will terminate
-             *          the program
+             * @warning Only a single instance of the class can exist at a time.
+             * Attempting to instantiate the class while there is an active
+             * instance will terminate the program
              */
             Window();
 
@@ -133,7 +133,7 @@ namespace IME{
              * @brief Clear the entire window with a single colour
              * @param colour Colour to clear window with
              */
-            void clear(sf::Color colour = sf::Color::Black);
+            void clear(Colour colour = Colour::Black);
 
             /**
              * @brief Add a listener to a window event

@@ -1,6 +1,6 @@
 #include "IME/gui/control/UIElement.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/utility/Utility.h"
+#include "IME/utility/Helpers.h"
 
 namespace IME::Gui {
     UIElement::UIElement() : UIElement("")
@@ -21,7 +21,7 @@ namespace IME::Gui {
         parentRectangle_.setFillColor({0, 0, 0, 0}); //Transparent
         setBackgroundColour({220, 220, 220}); //Gainsboro
         setOutlineColour({128, 128, 128}); //Grey
-        setTextColour({0, 0, 0}); //Black
+        setTextColour(Colour::Black); //Black
         setOutlineThickness(0.0f);
         setPadding(0.0f);
         setMargin(0.0f);

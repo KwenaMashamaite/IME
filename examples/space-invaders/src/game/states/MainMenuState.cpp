@@ -79,7 +79,7 @@ namespace SI {
     void MainMenuState::createInfoPanel(){
         auto onClickInfoPanel = getApp().getGuiFactory()->getPanel<IME::Gui::Canvas>( 0, 0);
         onClickInfoPanel->setDimensions(getApp().getRenderTarget().getDimensions());
-        onClickInfoPanel->setFillColour({0, 0, 0, 0});
+        onClickInfoPanel->setFillColour(IME::Gui::Colour::Transparent);
         auto infoPanelTextBlock = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("");
         infoPanelTextBlock->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
         infoPanelTextBlock->setBackgroundColour({128, 128, 128, 10});
@@ -97,7 +97,7 @@ namespace SI {
     void MainMenuState::createTitle() {
         auto title = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(getApp().getAppName());
         title->setTextFont("basson.ttf");
-        title->setBackgroundColour({0, 0, 0, 0});
+        title->setBackgroundColour(IME::Gui::Colour::Transparent);
         title->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 13.0f / 100.0f);
 
         auto titlePanel = getApp().getGuiFactory()->getPanel<IME::Gui::StackPanel>( IME::Gui::StackPanel::Orientation::Horizontal);
@@ -124,8 +124,8 @@ namespace SI {
             button->setTextCharSize(getApp().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
             button->setTextFont("basson.ttf");
             button->setMargin({0, 0, 0, getApp().getRenderTarget().getDimensions().height * 5.0f / 100.0f});
-            button->setBackgroundColour({0, 0, 0, 0});
-            button->setHoverBackgroundColour({0, 0, 0, 0});
+            button->setBackgroundColour(IME::Gui::Colour::Transparent);
+            button->setHoverBackgroundColour(IME::Gui::Colour::Transparent);
             buttonsPanel->addElement(buttonInfo.name, std::move(button));
         });
         buttonsPanel->setPosition({

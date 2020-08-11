@@ -3,8 +3,8 @@
 namespace IME::Gui {
     TextBlock::TextBlock(const std::string &textContent)
             : UIElement(textContent) {
-        setBackgroundColour({255, 255, 255}); //White
-        setTextColour({0, 0, 0}); //Black
+        setBackgroundColour(Colour::White);
+        setTextColour(Colour::Black);
     }
 
     std::string TextBlock::getType() const {

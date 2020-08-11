@@ -1,18 +1,19 @@
 #include "IME/gui/window/Window.h"
 #include "IME/gui/input/Mouse.h"
 #include "IME/gui/input/Keyboard.h"
+#include "IME/utility/Helpers.h"
 #include <SFML/Window/Event.hpp>
 #include <cassert>
 
-namespace IME{
-    Common::Dimensions Gui::Window::dimensions_{0u, 0u};
+namespace IME::Gui {
+    Common::Dimensions Window::dimensions_{0u, 0u};
 
-    Gui::Window::Window(){
+    Window::Window() {
         assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
         isInstantiated_ = true;
     }
 
-    void Gui::Window::create(const std::string& title, float width, float height, Style style){
+    void Window::create(const std::string& title, float width, float height, Style style) {
         assert(width >= 0.0f && "Window width cannot be negative");
         assert(height >= 0.0f && "Window height cannot be negative");
         dimensions_ = {width, height};
@@ -21,21 +22,21 @@ namespace IME{
         );
     }
 
-    void Gui::Window::setFramerateLimit(unsigned int framerateLimit) {
+    void Window::setFramerateLimit(unsigned int framerateLimit) {
         window_.setFramerateLimit(framerateLimit);
     }
 
-    void Gui::Window::setCursorType(Gui::Window::CursorType cursorType) {
+    void Window::setCursorType(Window::CursorType cursorType) {
         auto static cursor = sf::Cursor();
-        if (cursor.loadFromSystem(static_cast<sf::Cursor::Type>(cursorType)));
+        if (cursor.loadFromSystem(static_cast<sf::Cursor::Type>(cursorType)))
             window_.setMouseCursor(cursor);
     }
 
-    bool Gui::Window::isOpen() const{
+    bool Window::isOpen() const{
         return window_.isOpen();
     }
 
-    void Gui::Window::processEvents() {
+    void Window::processEvents() {
         sf::Event event;
         while (window_.pollEvent(event)) {
             switch (event.type){
@@ -89,31 +90,31 @@ namespace IME{
         }
     }
 
-    void Gui::Window::close(){
+    void Window::close() {
         window_.close();
     }
 
-    void Gui::Window::display(){
+    void Window::display() {
         window_.display();
     }
 
-    void Gui::Window::clear(sf::Color colour){
-        window_.clear(colour);
+    void Window::clear(Colour colour) {
+        window_.clear(Utility::convertOwnColourTo3rdPartyColour(colour));
     }
 
-    void Gui::Window::draw(const sf::Drawable &drawable) {
+    void Window::draw(const sf::Drawable &drawable) {
         window_.draw(drawable);
     }
 
-    void Gui::Window::draw(Gui::IDrawable &drawable) {
+    void Window::draw(IDrawable &drawable) {
         drawable.draw(*this);
     }
 
-    Gui::Window::~Window(){
+    Window::~Window() {
         isInstantiated_ = false;
     }
 
-    Common::Dimensions Gui::Window::getDimensions() {
+    Common::Dimensions Window::getDimensions() {
         return dimensions_;
     }
 }

@@ -7,6 +7,7 @@
 
 #include "../window/Window.h"
 #include "../common/IDrawable.h"
+#include "../common/Colour.h"
 #include "IME/event/EventEmitter.h"
 #include "IME/common/Common.h"
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -37,16 +38,6 @@ namespace IME {
             float right = 0.0f;
             float top = 0.0f;
             float bottom = 0.0f;
-        };
-
-        /**
-         * @brief Represents RGB combination colour
-         */
-        struct Colour {
-            unsigned int red = 0;
-            unsigned int green = 0;
-            unsigned int blue = 0;
-            unsigned int opacity = 255;
         };
 
         /**
