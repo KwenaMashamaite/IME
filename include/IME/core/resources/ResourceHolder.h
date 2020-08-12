@@ -68,7 +68,7 @@ namespace IME {
          *         resource with the specified file name does not exist or the
          *         resource is still used elsewhere
          */
-        bool remove(const std::string& filename);
+        bool unload(const std::string& filename);
 
         /**
          * @brief Get a resource
