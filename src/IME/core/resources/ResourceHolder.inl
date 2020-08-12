@@ -39,7 +39,7 @@ namespace IME {
     template<class T>
     bool ResourceHolder<T>::remove(const std::string &filename) {
         auto found = resourceHolder_.find(filename);
-        if (found != resourceHolder_.end()) {
+        if (found != resourceHolder_.end() && found->second.use_count() == 1) {
             resourceHolder_.erase(found);
             return true;
         }

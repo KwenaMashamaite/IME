@@ -65,7 +65,8 @@ namespace IME {
          * @brief Remove the resource from the resource holder
          * @param filename File name of the resource to be removed
          * @return True if the resource was successfully removed, false if the
-         *         resource with the specified file name does not exist
+         *         resource with the specified file name does not exist or the
+         *         resource is still used elsewhere
          */
         bool remove(const std::string& filename);
 
