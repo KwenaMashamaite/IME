@@ -15,19 +15,19 @@ namespace IME{
      * @brief Resource identifiers (Types of resources that can be handled
      *        by resource manager)
     */
-    enum class ResourceId{
-        TEXTURE,
-        FONT,
-        IMAGE,
-        SOUND_BUFFER,
-        MUSIC
+    enum class ResourceType {
+        Texture,
+        Font,
+        Image,
+        SoundBuffer,
+        Music
     };
 
     class ResourceManager final{
     public:
         /**
          * @brief Load a resource from the hard drive
-         * @param identifier Type of the resource to be loaded
+         * @param type Type of the resource to be loaded
          * @param filename File name of the resource to be loaded
          * @throws FileNotFound If the resource cannot be found on the disk
          *
@@ -37,17 +37,18 @@ namespace IME{
          * in the program rather than having to loadFromFile it from the disk
          * every time it's needed).
          */
-        static void loadFromFile(ResourceId identifier, const std::string &filename);
+        static void loadFromFile(ResourceType type, const std::string &filename);
 
         /**
-         * @brief  loadFromFile multiple resources of the same type from the hard drive
-         * @param  identifier Type of the resource to be loaded
+         * @brief  loadFromFile multiple resources of the same type from
+         *         the hard drive
+         * @param  type Type of the resource to be loaded
          * @param  filenames File names of the resources to be loaded
          * @throws FileNotFound If one of the files cannot be found
          *         on the disk
          */
-        static void loadFromFile(ResourceId identifier,
-                const std::initializer_list<std::string> &filenames);
+        static void loadFromFile(ResourceType type,
+            const std::initializer_list<std::string> &filenames);
 
         /**
          * @brief Get a font

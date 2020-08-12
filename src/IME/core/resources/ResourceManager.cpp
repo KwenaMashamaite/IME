@@ -11,32 +11,32 @@ namespace IME{
     ResourceHolder<sf::Image> ResourceManager::imagesHolder_{FilePath::TEXTURES_PATH, {}};
     ResourceHolder<sf::Music> ResourceManager::musicHolder_{FilePath::MUSIC_PATH, {}};
 
-    void ResourceManager::loadFromFile(ResourceId identifier, const std::string &filename){
-        switch (identifier){
-            case ResourceId::TEXTURE:
+    void ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
+        switch (type){
+            case ResourceType::Texture:
                 texturesHolder_.loadFromFile(filename);
                 break;
-            case ResourceId::SOUND_BUFFER:
+            case ResourceType::SoundBuffer:
                 soundBuffersHolder_.loadFromFile(filename);
                 break;
-            case ResourceId::IMAGE:
+            case ResourceType::Image:
                 imagesHolder_.loadFromFile(filename);
                 break;
-            case ResourceId::FONT:
+            case ResourceType::Font:
                 fontsHolder_.loadFromFile(filename);
                 break;
-            case ResourceId::MUSIC:
+            case ResourceType::Music:
                 musicHolder_.loadFromFile(filename);
                 break;
         }
     }
 
-    void ResourceManager::loadFromFile(ResourceId identifier,
-            const std::initializer_list<std::string>& filenames)
+    void ResourceManager::loadFromFile(ResourceType type,
+           const std::initializer_list<std::string>& filenames)
     {
         std::for_each(filenames.begin(), filenames.end(),
             [=](const std::string& filename) {
-                loadFromFile(identifier, filename);
+                loadFromFile(type, filename);
         });
     }
 
