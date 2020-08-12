@@ -21,6 +21,7 @@ namespace IME {
 
     template<typename...Args>
     int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
+        static auto previousListenerId = 0u;
         auto listenerId = ++previousListenerId;
         auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
         if (hasEvent(event))

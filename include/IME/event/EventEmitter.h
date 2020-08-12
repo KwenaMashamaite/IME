@@ -145,11 +145,8 @@ namespace IME {
         std::pair<bool, int>  eventHasListener(const std::string& event, int listenerId) const;
 
     private:
-        //Event listeners identification number counter
-        inline static auto previousListenerId = 0;
-
         //Base class for template class
-        struct IListener{
+        struct IListener {
             explicit IListener(int id) : id_(id){}
             virtual ~IListener() = default;
             int id_;
@@ -157,7 +154,7 @@ namespace IME {
 
         //Listener of an event
         template <typename ...Args>
-        struct Listener : public IListener{
+        struct Listener : public IListener {
             Listener(int id, Callback<Args...> callback, bool isCalledOnce = false)
                 : IListener(id), callback_(callback), isCalledOnce_(isCalledOnce){}
 
