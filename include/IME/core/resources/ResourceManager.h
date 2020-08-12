@@ -51,6 +51,15 @@ namespace IME{
             const std::initializer_list<std::string> &filenames);
 
         /**
+         * @brief Get the number of objects currently using a resource
+         * @param type Type of the resource
+         * @param filename Filename of the resource
+         * @return The number of objects currently using a resource or
+         *         -1 if the resource does not exist
+         */
+        static int getUseCount(ResourceType type, const std::string& filename);
+
+        /**
          * @brief Get a font
          * @param fileName File name of the font (without path)
          * @throws FileNotFound If the font cannot be found on the disk

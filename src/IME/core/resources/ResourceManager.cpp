@@ -59,4 +59,19 @@ namespace IME{
     std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string& filename){
         return musicHolder_.get(filename);
     }
+
+    int ResourceManager::getUseCount(ResourceType type, const std::string &filename) {
+        switch (type) {
+            case ResourceType::Texture:
+                return texturesHolder_.getUseCountFor(filename);
+            case ResourceType::Font:
+                return fontsHolder_.getUseCountFor(filename);
+            case ResourceType::Image:
+                return imagesHolder_.getUseCountFor(filename);
+            case ResourceType::SoundBuffer:
+                return soundBuffersHolder_.getUseCountFor(filename);
+            case ResourceType::Music:
+                return musicHolder_.getUseCountFor(filename);
+        }
+    }
 }

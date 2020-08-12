@@ -85,6 +85,14 @@ namespace IME {
         std::shared_ptr<T> get(const std::string& filename);
 
         /**
+         * @brief Get the number of objects currently using a resource
+         * @param filename Filename of the resource to get use count for
+         * @return The number of objects currently using the specified
+         *         resource or -1 if the resource does not exist
+         */
+        int getUseCountFor(const std::string filename) const;
+
+        /**
          * @brief Get the number of stored resources
          * @return The number of stored resources
          */

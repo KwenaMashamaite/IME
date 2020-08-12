@@ -50,4 +50,12 @@ namespace IME {
     unsigned int ResourceHolder<T>::getSize() const {
         return resourceHolder_.size();
     }
+
+    template<class T>
+    int ResourceHolder<T>::getUseCountFor(const std::string filename) const {
+        auto found = resourceHolder_.find(filename);
+        if (found != resourceHolder_.end())
+            return found->second.use_count();
+        return -1;
+    }
 }
