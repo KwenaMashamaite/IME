@@ -60,6 +60,21 @@ namespace IME{
         return musicHolder_.get(filename);
     }
 
+    bool ResourceManager::unload(ResourceType type, const std::string &filename) {
+        switch (type) {
+            case ResourceType::Texture:
+                return texturesHolder_.unload(filename);
+            case ResourceType::Font:
+                return fontsHolder_.unload(filename);
+            case ResourceType::Image:
+                return imagesHolder_.unload(filename);
+            case ResourceType::SoundBuffer:
+                return soundBuffersHolder_.unload(filename);
+            case ResourceType::Music:
+                return musicHolder_.unload(filename);
+        }
+    }
+
     int ResourceManager::getUseCount(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:

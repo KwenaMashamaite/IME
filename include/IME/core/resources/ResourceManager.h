@@ -51,6 +51,19 @@ namespace IME{
             const std::initializer_list<std::string> &filenames);
 
         /**
+         * @brief Unload a resource
+         * @param type  Type of the resource to unload
+         * @param filename Filename of the resource to remove
+         * @return True if the unloading succeeded otherwise false
+         *
+         * The unloading will fail if the resource is still referenced somewhere
+         * in the program or the resource does not exist in the ResourceManager
+         * This function is destructive. This means that the resource will be
+         * completely destroyed and must be reloaded from the disk if required
+         */
+        static bool unload(ResourceType type, const std::string& filename);
+
+        /**
          * @brief Get the number of objects currently using a resource
          * @param type Type of the resource
          * @param filename Filename of the resource
