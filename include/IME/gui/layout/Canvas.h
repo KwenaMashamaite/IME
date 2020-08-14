@@ -28,9 +28,9 @@ namespace IME {
              * be placed. @note A UI element that extends outside the edges
              * of the panel will NOT be added to the panel
              */
-            void addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) override;
+            bool addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) override;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

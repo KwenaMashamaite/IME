@@ -10,6 +10,7 @@ namespace SI {
         IME::Engine::init();
         addState("mainMenu", std::make_shared<MainMenuState>(*this));
         addState("quit", std::make_shared<QuitingState>(*this));
+        changeState("mainMenu");
 
         getRenderTarget().addEventListener("closed", IME::Callback<>([this]{
             changeState("quit");

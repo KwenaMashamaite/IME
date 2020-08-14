@@ -5,20 +5,19 @@
 #ifndef IENTITY_H
 #define IENTITY_H
 
-#include "IME/common/Common.h"
+#include "IME/common/Definitions.h"
 #include <string>
 
-namespace IME{
-    using Common::Position;
-    using Common::Dimensions;
-    using Common::EntityType;
+namespace IME {
+    using Definitions::Position;
+    using Definitions::Dimensions;
 
-    class IEntity{
+    class IEntity {
     public:
         /**
-         * @brief Directions in which an enity can face
+         * @brief Directions in which an entity can face
          */
-        enum class Direction{
+        enum class Direction {
             Left,
             Right,
             Up,
@@ -90,7 +89,7 @@ namespace IME{
          * @brief Get the type of the entity
          * @return The type of the entity
          */
-        virtual EntityType getEntityType() = 0;
+        virtual std::string getEntityType() = 0;
 
         /**
          * @brief Get the remaining life of the entity
@@ -111,6 +110,6 @@ namespace IME{
          */
         virtual ~IEntity() = default;
     };
-}
+} // namespace IME
 
 #endif

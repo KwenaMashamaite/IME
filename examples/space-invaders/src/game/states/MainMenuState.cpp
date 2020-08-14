@@ -1,7 +1,7 @@
 #include "MainMenuState.h"
 #include "IME/utility/Scoreboard.h"
 #include "IME/gui/drawer/Drawer.h"
-#include "IME/core/resources/FileReader.h"
+#include "IME/core/resources/DiskFileReader.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/gui/control/TextBlock.h"
 #include "IME/gui/control/Button.h"
@@ -149,16 +149,16 @@ namespace SI {
             getApp().changeState("playing");
         }));
 
-        auto fileReader = IME::Utility::FileReader();
+        auto fileReader = IME::Utility::DiskFileReader();
         auto textBuffer =  std::stringstream();
 
         //// INSTRUCTIONS BUTTON ///////
-        fileReader.readFileInto(textBuffer, "files/instructions.txt");
+        fileReader.readFileInto("files/instructions.txt", textBuffer);
         updateInfoPanelOnButtonClick("instructions-btn", textBuffer.str());
 
         //// CONTROLS BUTTON //////////
         textBuffer.str("");
-        fileReader.readFileInto(textBuffer, "files/controls.txt");
+        fileReader.readFileInto("files/controls.txt", textBuffer);
         updateInfoPanelOnButtonClick("controls-btn", textBuffer.str());
 
         //// HIGHSCORES BUTTON ///////

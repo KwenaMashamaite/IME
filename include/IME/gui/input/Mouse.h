@@ -84,7 +84,7 @@ namespace IME {
             //State of the event emitter (Since class can be used without instance)
             inline static auto isEventEmitterInitialized_{false};
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

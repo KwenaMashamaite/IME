@@ -7,10 +7,15 @@
 #define RESOURCEMANAGER_H
 
 #include "ResourceHolder.h"
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <string>
 #include <initializer_list>
 
-namespace IME{
+namespace IME {
     /**
      * @brief Resource identifiers (Types of resources that can be handled
      *        by resource manager)
@@ -23,7 +28,7 @@ namespace IME{
         Music
     };
 
-    class ResourceManager final{
+    class ResourceManager final {
     public:
         /**
          * @brief Load a resource from the hard drive

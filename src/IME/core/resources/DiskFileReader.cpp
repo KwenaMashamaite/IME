@@ -1,7 +1,7 @@
-#include "IME/core/resources/FileReader.h"
+#include "IME/core/resources/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 
-void IME::Utility::FileReader::readFileInto(std::stringstream& buffer, const std::string& filename){
+void IME::Utility::DiskFileReader::readFileInto(const std::string &filename, std::stringstream& buffer){
     inFile_.open(filename);
 	if(!inFile_.good())
 		throw FileNotFound("Cannot find file, " + filename);
@@ -9,7 +9,7 @@ void IME::Utility::FileReader::readFileInto(std::stringstream& buffer, const std
 	inFile_.close();
 }
 
-void IME::Utility::FileReader::writeToFile(const std::stringstream& buffer, const std::string& filename){
+void IME::Utility::DiskFileReader::writeToFile(const std::stringstream& buffer, const std::string& filename){
     outFile_.open(filename);
 	if(!outFile_.good())
         throw FileNotFound("Cannot find file, " + filename);

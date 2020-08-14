@@ -23,15 +23,13 @@ namespace SI {
     public:
         /**
          * @brief Create a new entity object
-         * @param entityType The type of this entity
          * @param position Position of the entity
          * @param direction Initial Direction of the entity
          * @param boundRect Dimensions of the entity's bounding box
          * @param texture Filename of the texture that graphically represents the entity
          * @param numOfLives Number of lives an entity must have
          */
-        Entity(IME::EntityType entityType,
-               const IME::Position &position,
+        Entity(const IME::Position &position,
                Direction direction,
                const IME::Dimensions &boundRect,
                const std::string &texture,
@@ -99,12 +97,6 @@ namespace SI {
         IME::Position getPosition() const override;
 
         /**
-         * @brief Get the type of the entity
-         * @return The type of the entity
-         */
-        IME::EntityType getEntityType() override;
-
-        /**
          * @brief Get the remaining life of the entity
          * @return The remaining life of the entity
          */
@@ -126,8 +118,6 @@ namespace SI {
         Direction direction_;
         //Life of the entity
         unsigned int numOfLives_;
-        //The type of this entity
-        IME::EntityType entityType_;
     };
 }
 

@@ -78,7 +78,8 @@ namespace IME::Gui{
         // always occur after a mouse up event, which occurs after a mouse
         // down event (mouseDown->mouseUp->click)
         addEventListener("leftMouseUp", Callback<>([this] {
-            emit("click");
+            if (isMouseOverElement_)
+                emit("click");
         }));
 
         // Disable the element when its hidden. A hidden element must not be

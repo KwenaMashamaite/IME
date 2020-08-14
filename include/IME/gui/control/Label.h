@@ -17,7 +17,7 @@ namespace IME {
         public:
 
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

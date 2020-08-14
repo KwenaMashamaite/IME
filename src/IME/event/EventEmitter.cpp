@@ -4,10 +4,8 @@
 namespace IME {
     bool EventEmitter::removeEventListener(const std::string &event, int listenerId) {
         if (hasEvent(event)) {
-            auto [found, index] = eventHasListener(event, listenerId);
-            if (found) {
-                auto& eventListeners = eventList_[event];
-                eventListeners.erase(eventListeners.begin() + index);
+            if (auto [found, index] = hasEventListener(event, listenerId); found) {
+                eventList_.at(event).erase(eventList_.at(event).begin() + index);
                 return true;
             }
         }
@@ -16,7 +14,7 @@ namespace IME {
 
     bool EventEmitter::removeAllEventListeners(const std::string &event) {
         if (hasEvent(event)) {
-            eventList_[event].clear();
+            eventList_.at(event).clear();
             return true;
         }
         return false;
@@ -32,11 +30,13 @@ namespace IME {
         return eventList_.find(event) != eventList_.end();
     }
 
-    std::pair<bool, int> EventEmitter::eventHasListener(const std::string &event, int listenerId) const {
+    std::pair<bool, int> EventEmitter::hasEventListener(const std::string &event, int listenerId) const {
         if (hasEvent(event)) {
             auto &eventListeners = eventList_.at(event);
-            auto found = std::find_if(eventListeners.begin(), eventListeners.end(),
-                [listenerId](auto &listener) { return listener->id_ == listenerId;});
+            auto found = std::find_if(eventListeners.begin(), eventListeners.end(), [=](const auto &listener) {
+                return listener->id_ == listenerId;
+            });
+
             if (found != eventListeners.end())
                 return {true, std::distance(eventListeners.begin(), found)};
         }

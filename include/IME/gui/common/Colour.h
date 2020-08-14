@@ -42,7 +42,7 @@ namespace IME{
             unsigned int blue = 0;
             unsigned int opacity = 255;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

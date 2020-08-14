@@ -41,7 +41,7 @@ namespace IME {
              * @param alias Name that can be used to refer to element
              * @param uiElement Element to be added
              */
-            void addElement(const std::string &alias,
+            bool addElement(const std::string &alias,
                     std::unique_ptr<UIElement> uiElement) override;
 
         private:
@@ -85,7 +85,7 @@ namespace IME {
             //Panel orientation state
             Orientation orientation_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

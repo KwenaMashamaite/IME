@@ -49,8 +49,8 @@ namespace IME {
         template<class T, typename... Args>
         std::unique_ptr<T> instantiate(Args&&...args) const;
     };
-}
 
-#include "IME/factory/GuiFactory.inl"
+    #include "IME/factory/GuiFactory.inl"
+} // namespace IME
 
 #endif

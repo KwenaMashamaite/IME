@@ -6,7 +6,7 @@
 #include <cassert>
 
 namespace IME::Gui {
-    Common::Dimensions Window::dimensions_{0u, 0u};
+    Dimensions Window::dimensions_{0u, 0u};
 
     Window::Window() {
         assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
@@ -99,7 +99,7 @@ namespace IME::Gui {
     }
 
     void Window::clear(Colour colour) {
-        window_.clear(Utility::convertOwnColourTo3rdPartyColour(colour));
+        window_.clear(Utility::convertTo3rdPartyColour(colour));
     }
 
     void Window::draw(const sf::Drawable &drawable) {
@@ -114,7 +114,7 @@ namespace IME::Gui {
         isInstantiated_ = false;
     }
 
-    Common::Dimensions Window::getDimensions() {
+    Dimensions Window::getDimensions() {
         return dimensions_;
     }
 }

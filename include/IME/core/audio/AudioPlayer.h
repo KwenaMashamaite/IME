@@ -63,18 +63,6 @@ namespace IME {
             virtual void play() = 0;
 
             /**
-             * @brief Play next audio file
-             *
-             * This function does nothing if there's no more audio files to play
-             */
-            virtual void next() = 0;
-
-            /**
-             * @brief Play previous audio file
-             */
-            virtual void prev() = 0;
-
-            /**
              * @brief Set the volume of the audio
              * @param volume Volume to set
              *
@@ -195,7 +183,7 @@ namespace IME {
             //Volume of the music player before it was muted
             float volumeBeforeMute_;
         };
-    }
-}
+    } // namespace Audio
+} // namespace IME
 
 #endif

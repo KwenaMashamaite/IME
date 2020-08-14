@@ -1,18 +1,18 @@
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/common/Common.h"
+#include "IME/common/Definitions.h"
 #include <algorithm>
 
-namespace IME{
-    using Common::FilePath;
+using IME::Definitions::FilePath;
 
-    ResourceHolder<sf::Texture> ResourceManager::texturesHolder_{FilePath::TEXTURES_PATH, {}};
-    ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffersHolder_{FilePath::SOUNDS_PATH, {}};
-    ResourceHolder<sf::Font> ResourceManager::fontsHolder_{FilePath::FONTS_PATH, {}};
-    ResourceHolder<sf::Image> ResourceManager::imagesHolder_{FilePath::TEXTURES_PATH, {}};
-    ResourceHolder<sf::Music> ResourceManager::musicHolder_{FilePath::MUSIC_PATH, {}};
+namespace IME {
+    ResourceHolder<sf::Texture> ResourceManager::texturesHolder_{FilePath::TexturesPath};
+    ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffersHolder_{FilePath::SoundEffectsPath};
+    ResourceHolder<sf::Font> ResourceManager::fontsHolder_{FilePath::FontsPath};
+    ResourceHolder<sf::Image> ResourceManager::imagesHolder_{FilePath::ImagesPath};
+    ResourceHolder<sf::Music> ResourceManager::musicHolder_{FilePath::MusicPath};
 
     void ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
-        switch (type){
+        switch (type) {
             case ResourceType::Texture:
                 texturesHolder_.loadFromFile(filename);
                 break;
@@ -56,7 +56,7 @@ namespace IME{
         return *(soundBuffersHolder_.get(fileName));
     }
 
-    std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string& filename){
+    std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string& filename) {
         return musicHolder_.get(filename);
     }
 

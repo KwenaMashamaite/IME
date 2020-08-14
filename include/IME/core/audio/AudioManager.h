@@ -17,7 +17,7 @@
 #include <memory>
 #include <string>
 
-namespace IME{
+namespace IME {
     namespace Audio {
         class AudioManager {
         public:
@@ -35,10 +35,12 @@ namespace IME{
              * @brief Load audio files
              * @param audioType The type of audio file to be loaded
              * @param filenames File names of the audio files to be loaded
-             * @throw FileNotFound if the specified audio files cannot be found on disk
+             * @throw FileNotFound if the specified audio files cannot be
+             *        found on disk
              *
-             * Use AudioType::Music for long and big audio files and AudioType::SoundEffect
-             * for small, short audio files. @see @class MusicPlayer and @class SoundEffectPlayer
+             * Use AudioType::Music for long and big audio files and
+             * AudioType::SoundEffect for small, short audio files.
+             * @see @class MusicPlayer and @class SoundEffectPlayer
              */
             void loadAudioFiles(AudioType audioType, std::initializer_list<std::string> filenames);
 
@@ -48,7 +50,7 @@ namespace IME{
              *
              * The audio file must be loaded first otherwise nothing will play
              * @see loadAudioFiles(AudioType, std::initializer_list<std::string>)
-             * The audio file will be played in a seperate thread. This means
+             * The audio file will be played in a separate thread. This means
              * that, the main thread is not blocked and other audio file may be
              * played simultaneously
              */
@@ -72,8 +74,10 @@ namespace IME{
             /**
              * @brief Remove an audio file from an audio player
              * @param filename Filename of the audio to remove
+             * @return True if audio file was removed or false if the specified
+             *         audio file does not exist
              */
-            void remove(const std::string& filename);
+            bool remove(const std::string& filename);
 
             /**
              * @brief Loop/unloop an audio file
@@ -130,6 +134,7 @@ namespace IME{
             //Location of the sound effects
             std::string soundEffectFilesPath_;
         };
-    }
-}
+    } // namespace Audio
+} // namespace IME
+
 #endif

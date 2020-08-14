@@ -71,7 +71,7 @@ namespace IME {
             //Enabled state
             bool isEnabled_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

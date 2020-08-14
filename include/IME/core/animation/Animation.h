@@ -5,14 +5,14 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "IME/common/Common.h"
+#include "IME/common/Definitions.h"
+#include <SFML/Graphics/Rect.hpp>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 namespace IME {
-    using Common::Dimensions;
-    using Common::Position;
+    using Definitions::Dimensions;
+    using Definitions::Position;
 
     class Animation {
     public:
@@ -116,6 +116,6 @@ namespace IME {
         void createFrames(unsigned int numOfFrames, Position startingPos,
               Dimensions frameSize);
     };
-}
+} // namespace IME
 
 #endif

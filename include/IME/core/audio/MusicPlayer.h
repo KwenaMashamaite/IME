@@ -131,16 +131,6 @@ namespace IME{
              */
             float getPlayingPosition() const override;
 
-            /**
-             * @brief Play the next song
-             */
-            void next() override;
-
-            /**
-             * @brief Play the previous song
-             */
-            void prev() override;
-
         private:
             //Path where music files are located
             std::string musicFilePath_;
@@ -151,7 +141,7 @@ namespace IME{
             //Name of the current audio file
             std::string currentMusicFileName_;
         };
-    }
-}
+    } // namespace Audio
+} // namespace IME
 
 #endif

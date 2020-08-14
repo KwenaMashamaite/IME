@@ -61,7 +61,7 @@ namespace IME::Gui {
                     newPanelWidth = (newUIElem->getSize().width > currentPanelWidth
                         ? newUIElem->getSize().width : currentPanelWidth);
                     newPanelHeight = currentPanelHeight + newUIElem->getSize().height;
-                }else{
+                }else {
                     newPanelWidth = currentPanelWidth + newUIElem->getSize().width;
                     newPanelHeight = (newUIElem->getSize().height > currentPanelHeight
                         ? newUIElem->getSize().height : currentPanelHeight);
@@ -82,9 +82,9 @@ namespace IME::Gui {
         }));
     }
 
-    void StackPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
+    bool StackPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
         assert(uiElement && "GUI elements added to stack panel cannot be null");
-        add(alias, std::move(uiElement));
+        return add(alias, std::move(uiElement));
     }
 
     void StackPanel::setElemPosRelativeTo(const std::unique_ptr<UIElement> &uiElem,

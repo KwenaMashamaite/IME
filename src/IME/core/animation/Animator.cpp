@@ -8,12 +8,9 @@ namespace IME{
         : totalTime_(0.0f)
     {}
 
-    void Animator::addAnimation(std::shared_ptr<Animation> animation) {
+    bool Animator::addAnimation(std::shared_ptr<Animation> animation) {
         assert(animation && "A null animation cannot be added to an Animator");
-        auto animationName = animation->getName();
-        animations_.insert(std::pair(animationName, std::move(animation)));
-        if (animations_.size() == 1)
-            changeAnimation(animationName);
+        return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
 
     void Animator::addAnimation(Animator::Animations animations) {
@@ -45,8 +42,7 @@ namespace IME{
     }
 
     void Animator::changeAnimation(const std::string &animation) {
-        auto found = animations_.find(animation);
-        if (found != animations_.end()){
+        if (auto found = animations_.find(animation); found != animations_.end()){
             auto newAnimation = found->second;
             animationSprite_.setTexture(ResourceManager::getTexture(newAnimation->getSpriteSheet()));
             currentAnimation_ = newAnimation;

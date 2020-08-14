@@ -3,7 +3,7 @@
 namespace IME::Audio{
     SoundEffectPlayer::SoundEffectPlayer(const std::string &path)
         : AudioPlayer(path),
-          soundEffects_(ResourceHolder<sf::SoundBuffer>(path, {})),
+          soundEffects_(ResourceHolder<sf::SoundBuffer>(path)),
           currentEffectName_("")
           {}
 
@@ -94,19 +94,5 @@ namespace IME::Audio{
 
     float SoundEffectPlayer::getPlayingPosition() const {
         return currentSoundEffect_.getPlayingOffset().asSeconds();
-    }
-
-    void SoundEffectPlayer::next() {
-        if (soundEffects_.getSize() > 1)
-            ;//@todo play next song
-    }
-
-    void SoundEffectPlayer::prev() {
-        if (soundEffects_.getSize() > 1u && getDuration() <= 1.0f)
-            ; //@todo Play previous song
-        else{ //Restart
-            stop();
-            play();
-        }
     }
 }

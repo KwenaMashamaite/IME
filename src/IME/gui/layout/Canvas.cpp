@@ -3,7 +3,7 @@
 namespace IME::Gui {
     Canvas::Canvas(float x, float y) : Panel(x, y) {}
 
-    void Canvas::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
+    bool Canvas::addElement(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
         auto isElementInsidePanel = [&]{
             return guiElement->getPosition().x >= getPosition().x
                    && guiElement->getPosition().x <= getPosition().x + getDimensions().width
@@ -14,6 +14,7 @@ namespace IME::Gui {
         }();
 
         if (isElementInsidePanel)
-            add(alias, std::move(guiElement));
+            return add(alias, std::move(guiElement));
+        return false;
     }
 }

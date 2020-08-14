@@ -14,7 +14,7 @@ namespace IME{
         private:
             Utility::Clock blinkCounter_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

@@ -7,8 +7,7 @@ namespace IME{
     {}
 
     void Audio::AudioPlayer::adjustVolume(float offset) {
-        auto currentVolume = getVolume();
-        if (currentVolume + offset > 100.0f)
+        if (auto currentVolume = getVolume(); currentVolume + offset > 100.0f)
             setVolume(100.0f);
         else if (currentVolume + offset < 0.0f)
             setVolume(0.0f);
@@ -22,7 +21,7 @@ namespace IME{
             volumeBeforeMute_ = getVolume();
             setVolume(0.0f);
             EventEmitter::emit("muted");
-        }else if (!mute && isMuted_){
+        } else if (!mute && isMuted_) {
             isMuted_ = false;
             setVolume(volumeBeforeMute_);
             EventEmitter::emit("unmuted");

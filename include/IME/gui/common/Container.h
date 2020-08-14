@@ -1,41 +1,40 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
-#include "common/Common.h"
+#include "IME/common/Definitions.h"
 #include <string>
 
-using Common::Position;
-using Common::Dimensions;
+namespace IME {
+    using Definitions::Position;
+    using Definitions::Dimensions;
 
-namespace Gui {
-    class Container {
-    public:
-        /**
-         * @brief Set the title
-         * @param title Title to set
-         */
-        void setTitle(const std::string &title);
+    namespace Gui {
+        class Container {
+        public:
+            /**
+             * @brief Set the title
+             * @param title Title to set
+             */
+            void setTitle(const std::string &title);
 
-        void setTitleFont(const std::string& font);
+            void setTitleFont(const std::string &font);
 
-        void setTitleTextSize(unsigned int textSize);
+            void setTitleTextSize(unsigned int textSize);
 
-        void setTitleAlignment(TextAlignment);
+            void remove(const std::string& uiElemName);
 
-        void insert(const std::string& name, std::unique_ptr<UIElement> uiElem);
+            void setPosition(int x, int y);
 
-        void remove(const uiElemName);
+            void setPosition(const Position &position);
 
-        void setPosition(int x, int y);
+            void setDimension(const Dimensions dimensions);
 
-        void setPosition(const Position &position);
+            Position getPosition() const;
 
-        void setDimension(const Dimensions dimensions);
+            Dimensions getDimensions() const;
 
-        Position getPosition() const;
+        };
+    } // namespace Gui
+} // namespace IME
 
-        Dimensions getDimensions() const;
-
-    };
-}
 #endif

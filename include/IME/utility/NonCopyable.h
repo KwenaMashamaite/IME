@@ -1,5 +1,5 @@
-#ifndef IME_NONCOPYABLE_H
-#define IME_NONCOPYABLE_H
+#ifndef NONCOPYABLE_H
+#define NONCOPYABLE_H
 
 namespace IME {
     namespace Utility {
@@ -26,7 +26,7 @@ namespace IME {
              */
             ~NonCopyable() = default;
         };
-    }
-}
+    } // namespace Utility
+} // namespace IME
 
 #endif

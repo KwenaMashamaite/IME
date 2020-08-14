@@ -4,12 +4,12 @@
 namespace IME::Audio{
     MusicPlayer::MusicPlayer(const std::string &musicPath)
         : AudioPlayer(musicPath),
-          musicFiles_(ResourceHolder<sf::Music>(musicPath, {})),
+          musicFiles_(ResourceHolder<sf::Music>(musicPath)),
           currentMusicFileName_("")
     {}
 
     void MusicPlayer::play(const std::string &song){
-        if (currentMusicFileName_ !=song) {
+        if (currentMusicFileName_ != song) {
             song_ = musicFiles_.get(song);
             currentMusicFileName_ = song;
             play();
@@ -109,22 +109,5 @@ namespace IME::Audio{
         if (song_)
             song_->getPlayingOffset().asSeconds();
         return 0.0f;
-    }
-
-    void MusicPlayer::next() {
-        if (musicFiles_.getSize() > 1){
-            //@todo Play next song
-        }
-    }
-
-    void MusicPlayer::prev() {
-        if (song_){
-            if (musicFiles_.getSize() > 1u && getDuration() <= 1.0f)
-                ;//@todo Play previous song
-            else{ //Restart
-                stop();
-                play();
-            }
-        }
     }
 }

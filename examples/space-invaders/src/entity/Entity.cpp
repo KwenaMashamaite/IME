@@ -1,11 +1,10 @@
 #include "Entity.h"
 
 namespace SI {
-    Entity::Entity(IME::EntityType entityType,const IME::Position &position, Direction direction,
+    Entity::Entity(const IME::Position &position, Direction direction,
         const IME::Dimensions &boundRect, const std::string &texture,
         unsigned int numOfLives)
-        : entityType_(entityType),
-          position_(position),
+        : position_(position),
           boundingRect_(boundRect),
           texture_(texture),
           numOfLives_(numOfLives),
@@ -52,10 +51,6 @@ namespace SI {
 
     unsigned int Entity::getRemainingLives() const {
         return numOfLives_;
-    }
-
-    IME::EntityType Entity::getEntityType() {
-        return entityType_;
     }
 
     Entity::~Entity() = default;

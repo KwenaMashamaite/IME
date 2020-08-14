@@ -48,7 +48,7 @@ namespace IME {
             //Reference to a render target
             Window& renderTarget_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

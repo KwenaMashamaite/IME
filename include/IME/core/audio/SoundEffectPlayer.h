@@ -120,16 +120,6 @@ namespace IME{
              */
             float getPlayingPosition() const override;
 
-            /**
-             * @brief Play the next music file
-             */
-            void next() override;
-
-            /**
-             * @brief Play the previous music file
-             */
-            void prev() override;
-
         private:
             //Stores sound effects to be played
             ResourceHolder<sf::SoundBuffer> soundEffects_;
@@ -138,7 +128,7 @@ namespace IME{
             //Nam eof the current sound effect
             std::string currentEffectName_;
         };
-    }
-}
+    } // namespace Audio
+} // namespace IME
 
 #endif

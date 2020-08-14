@@ -24,7 +24,7 @@ namespace IME {
              */
             std::string getType() const override;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

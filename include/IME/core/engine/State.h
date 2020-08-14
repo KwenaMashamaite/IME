@@ -83,6 +83,6 @@ namespace IME {
         //Reference to the game engine
         Engine &app_;
     };
-}
+} // namespace IME
 
 #endif

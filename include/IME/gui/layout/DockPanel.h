@@ -73,7 +73,7 @@ namespace IME {
              * set as the default. The UI element will not be added If
              * the default panel has not been docked yet
              */
-            void addElement(const std::string &alias,
+            bool addElement(const std::string &alias,
                     std::unique_ptr<UIElement> uiElement) override;
 
             /**
@@ -102,7 +102,7 @@ namespace IME {
             //null unique pointer
             const std::unique_ptr<Panel> null_ptr;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

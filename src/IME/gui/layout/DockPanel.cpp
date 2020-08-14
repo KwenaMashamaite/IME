@@ -99,14 +99,15 @@ namespace IME::Gui {
         }));
     }
 
-    void DockPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
+    bool DockPanel::addElement(const std::string &alias, std::unique_ptr<UIElement> uiElement) {
         if (getPanelAt(defaultPanelPos_))
-            getPanelAt(defaultPanelPos_)->addElement(alias, std::move((uiElement)));
+            return getPanelAt(defaultPanelPos_)->addElement(alias, std::move((uiElement)));
+        return false;
     }
 
     void DockPanel::dock(DockPosition dockPosition, std::unique_ptr<Panel> panel) {
         assert(panel && "Docked panel cannot be null");
-        dockedPanels_.insert(std::pair(dockPosition, std::move(panel)));
+        dockedPanels_.insert({dockPosition, std::move(panel)});
         static const auto maxNumOfDockPositions = 4u;
         auto isLastPanelToBeDocked = dockedPanels_.size() == maxNumOfDockPositions;
         emit("newPanelAdded", dockPosition, isLastPanelToBeDocked);
@@ -128,9 +129,8 @@ namespace IME::Gui {
     }
 
     const std::unique_ptr<Panel>& DockPanel::getPanelAt(DockPosition dockPosition) {
-        auto found = dockedPanels_.find(dockPosition);
-        if (found != dockedPanels_.end())
-            return found->second;
+        if (dockedPanels_.find(dockPosition) != dockedPanels_.end())
+            return dockedPanels_.at(dockPosition);
         return null_ptr;
     }
 }

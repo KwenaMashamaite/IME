@@ -5,7 +5,7 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace IME {
@@ -24,6 +24,6 @@ namespace IME {
     public:
         explicit InvalidArgument(const std::string& message) : std::runtime_error(message) {}
     };
-}
+} // namespace IME
 
 #endif

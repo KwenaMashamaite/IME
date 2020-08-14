@@ -5,8 +5,9 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include <SFML/Graphics/Color.hpp>
 #include "IME/gui/common/Colour.h"
+#include <SFML/Graphics/Color.hpp>
+#include <unordered_map>
 
 namespace IME {
     namespace Utility{
@@ -19,7 +20,7 @@ namespace IME {
          * colour. This means that the colour after the conversion is
          * the same as the one before the conversion
          */
-        static sf::Color convertOwnColourTo3rdPartyColour(Gui::Colour color){
+        static sf::Color convertTo3rdPartyColour(Gui::Colour color){
             return {static_cast<sf::Uint8>(color.red),
                     static_cast<sf::Uint8>(color.green),
                     static_cast<sf::Uint8>(color.blue),
@@ -35,8 +36,13 @@ namespace IME {
          * colour. This means that the colour after the conversion is
          * the same as the one before the conversion
          */
-        static Gui::Colour convert3rdPartyColourToOwnColour(sf::Color thirdPartyColour){
+        static Gui::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour){
             return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
+        }
+
+        template <typename T, typename U, typename V>
+        bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item){
+            return unorderedMap.find(item) != unorderedMap.end();
         }
     }
 }

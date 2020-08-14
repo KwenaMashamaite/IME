@@ -117,19 +117,6 @@ namespace IME {
          */
         int getNumOfEventListenersFor(const std::string& event) const;
 
-    private:
-        /**
-         * @brief  Add a listener (callback) to an event
-         * @tparam Args Template parameter pack name
-         * @param  event Event to add listener to
-         * @param  callback Function to execute when the event is fired
-         * @param  isCalledOnce True if listener is called only when the event
-         *         is raised for the first time, false for multiple times
-         * @return listener's identification number
-         */
-        template<typename...Args>
-        int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce);
-
         /**
          * @brief Check if an event has a certain event listener
          * @param event Name of the event
@@ -142,7 +129,21 @@ namespace IME {
          * @warning If the first element of the pair is false, the second element
          * is invalid (Function will return a negative index)
          */
-        std::pair<bool, int>  eventHasListener(const std::string& event, int listenerId) const;
+        std::pair<bool, int>  hasEventListener(const std::string& event, int listenerId) const;
+
+    private:
+
+        /**
+         * @brief  Add a listener (callback) to an event
+         * @tparam Args Template parameter pack name
+         * @param  event Event to add listener to
+         * @param  callback Function to execute when the event is fired
+         * @param  isCalledOnce True if listener is called only when the event
+         *         is raised for the first time, false for multiple times
+         * @return listener's identification number
+         */
+        template<typename...Args>
+        int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce);
 
     private:
         //Base class for template class
@@ -165,8 +166,8 @@ namespace IME {
         using Listeners = std::vector<std::shared_ptr<IListener>>;
         std::unordered_map<std::string, Listeners> eventList_;
     };
-}
 
-#include "IME/event/EventEmitter.inl"
+    #include "IME/event/EventEmitter.inl"
+} // namespace IME
 
 #endif

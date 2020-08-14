@@ -81,6 +81,6 @@ namespace IME {
         //highscores file path on the disk
         std::string highScoresFile_;
     };
-}
+} // namespace IME
 
 #endif

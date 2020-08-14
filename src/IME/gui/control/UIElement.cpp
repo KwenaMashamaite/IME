@@ -102,17 +102,17 @@ namespace IME::Gui {
     }
 
     void UIElement::setBackgroundColour(Colour backgroundColour) {
-        border_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(backgroundColour));
+        border_.setFillColor(Utility::convertTo3rdPartyColour(backgroundColour));
         emit("backgroundColourChanged", backgroundColour);
     }
 
     void UIElement::setTextColour(Colour textColour) {
-        text_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(textColour));
+        text_.setFillColor(Utility::convertTo3rdPartyColour(textColour));
         emit("textColourChanged", textColour);
     }
 
     void UIElement::setOutlineColour(Colour outlineColour) {
-        border_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
+        border_.setOutlineColor(Utility::convertTo3rdPartyColour(outlineColour));
         emit("outlineColourChanged", outlineColour);
     }
 
@@ -185,15 +185,15 @@ namespace IME::Gui {
     }
 
     Colour UIElement::getBackgroundColour() const {
-        return Utility::convert3rdPartyColourToOwnColour(border_.getFillColor());
+        return Utility::convertFrom3rdPartyColour(border_.getFillColor());
     }
 
     Colour UIElement::getTextColour() const {
-        return Utility::convert3rdPartyColourToOwnColour(text_.getFillColor());
+        return Utility::convertFrom3rdPartyColour(text_.getFillColor());
     }
 
     Colour UIElement::getOutlineColour() const {
-        return Utility::convert3rdPartyColourToOwnColour(border_.getOutlineColor());
+        return Utility::convertFrom3rdPartyColour(border_.getOutlineColor());
     }
 
     std::string UIElement::getText() const {

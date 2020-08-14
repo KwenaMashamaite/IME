@@ -68,6 +68,6 @@ namespace IME {
         //Event publisher for collision events
         EventEmitter eventEmitter_;
     };
-}
+} // namespace IME
 
 #endif

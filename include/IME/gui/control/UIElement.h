@@ -5,19 +5,19 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include "../window/Window.h"
-#include "../common/IDrawable.h"
-#include "../common/Colour.h"
+#include "IME/gui/window/Window.h"
+#include "IME/gui/common/IDrawable.h"
+#include "IME/gui/common/Colour.h"
 #include "IME/event/EventEmitter.h"
-#include "IME/common/Common.h"
+#include "IME/common/Definitions.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <string>
 
 namespace IME {
     namespace Gui {
-        using Common::Position;
-        using Common::Dimensions;
+        using Definitions::Position;
+        using Definitions::Dimensions;
         /**
          * @brief Represents the whitespace around the borders
          *        of the GUI element
@@ -389,7 +389,7 @@ namespace IME {
             //Display state of element
             bool isHidden_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

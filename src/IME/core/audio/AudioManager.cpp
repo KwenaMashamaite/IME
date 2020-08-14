@@ -1,5 +1,8 @@
 #include "IME/core/audio/AudioManager.h"
+#include "IME/utility/Helpers.h"
 #include <algorithm>
+
+using IME::Utility::findIn;
 
 namespace IME::Audio{
     AudioManager::AudioManager(const std::string &musicFilePath,
@@ -17,60 +20,54 @@ namespace IME::Audio{
             else
                 ResourceManager::loadFromFile(ResourceType::SoundBuffer, filename);
 
-            audioFilenames_.insert(std::pair(filename, audioType));
+            audioFilenames_.insert({filename, audioType});
         });
     }
 
     void AudioManager::play(const std::string& filename) {
-        if (audioPlayers_.find(filename) != audioPlayers_.end()) {
+        if (findIn(audioPlayers_, filename)) {
             audioPlayers_[filename]->play(filename);
             return;
         }
 
-        auto found = audioFilenames_.find(filename);
-        if (found != audioFilenames_.end()) {
+        if (findIn(audioFilenames_, filename)) {
             std::unique_ptr<AudioPlayer> audioPlayer;
-            if (found->second == AudioType::Music)
+            if (audioFilenames_.at(filename) == AudioType::Music)
                 audioPlayer = std::make_unique<Audio::MusicPlayer>(musicFilesPath_);
             else
                 audioPlayer = std::make_unique<Audio::SoundEffectPlayer>(soundEffectFilesPath_);
 
             audioPlayer->play(filename);
-            audioPlayers_.insert(std::pair(filename, std::move(audioPlayer)));
+            audioPlayers_.insert({filename, std::move(audioPlayer)});
         }
     }
 
     void AudioManager::pause(const std::string& filename) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end())
-            found->second->pause();
+        if (findIn(audioPlayers_, filename))
+            audioPlayers_.at(filename)->pause();
     }
 
     void AudioManager::stop(const std::string& filename) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end()) {
-            found->second->stop();
-        }
+        if (findIn(audioPlayers_, filename))
+            audioPlayers_.at(filename)->stop();
     }
 
-    void AudioManager::remove(const std::string &filename) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end()) {
-            found->second->stop();
-            audioPlayers_.erase(found);
+    bool AudioManager::remove(const std::string &filename) {
+        if (findIn(audioPlayers_, filename)) {
+            audioPlayers_.at(filename)->stop();
+            return audioPlayers_.erase(filename);
         }
+        return false;
     }
 
     void AudioManager::setVolumeFor(const std::string &filename, float volume) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end())
-            found->second->setVolume(volume);
+        if (findIn(audioPlayers_, filename))
+            audioPlayers_.at(filename)->setVolume(volume);
     }
 
     void AudioManager::setLoopFor(const std::string &filename, bool isLooped) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end())
-            found->second->setLoop(isLooped);
+        if (findIn(audioPlayers_, filename))
+            audioPlayers_.at(filename)->setLoop(isLooped);
     }
 
     void AudioManager::playAll() {
@@ -97,9 +94,8 @@ namespace IME::Audio{
     }
 
     float AudioManager::getVolumeFor(const std::string &filename) {
-        auto found = audioPlayers_.find(filename);
-        if (found != audioPlayers_.end())
-            return found->second->getVolume();
+        if (findIn(audioPlayers_, filename))
+            return audioPlayers_.at(filename)->getVolume();
         return 0.0f;
     }
 }

@@ -5,8 +5,6 @@
 #ifndef RECTANGLECONTAINER_H
 #define RECTANGLECONTAINER_H
 
-#include "IME/common/Common.h"
-
 namespace Gui {
     class RectangleContainer {
     public:
@@ -26,6 +24,6 @@ namespace Gui {
     private:
 
     };
-}
+} // namespace IME
 
 #endif

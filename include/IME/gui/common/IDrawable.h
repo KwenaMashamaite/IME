@@ -43,7 +43,7 @@ namespace IME {
              */
             virtual bool isHidden() const = 0;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

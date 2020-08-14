@@ -10,13 +10,14 @@
 
 #include "Animation.h"
 #include "IME/event/EventEmitter.h"
+#include <SFML/Graphics/Sprite.hpp>
 #include <string>
 #include <memory>
 #include <unordered_map>
 #include <initializer_list>
 #include <utility>
 
-namespace IME{
+namespace IME {
     class Animator {
     public:
         using Animations = std::initializer_list<std::shared_ptr<Animation>>;
@@ -27,14 +28,12 @@ namespace IME{
         Animator();
 
         /**
-         * @brief Add animation
+         * @brief Add an animation to the animator
          * @param animation Animation to be added
-         *
-         * The animation that's added first becomes the current animation
-         * by default. The name of the animation must be unique (Must not
-         * be the same as that of previously added animations)
+         * @return True if the animation was added or false if an animation
+         *         with the same name as the specified animation already exists
          */
-        void addAnimation(std::shared_ptr<Animation> animation);
+        bool addAnimation(std::shared_ptr<Animation> animation);
 
         /**
          * @brief Add multiple animations at the same time
@@ -121,6 +120,6 @@ namespace IME{
         //Event publisher
         EventEmitter eventEmitter_;
     };
-}
+} // namespace IME
 
 #endif

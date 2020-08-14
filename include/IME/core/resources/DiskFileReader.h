@@ -2,30 +2,26 @@
  * @brief Reads/writes data to/from the disk drive
  */
 
-#ifndef FILEREADER_H
-#define FILEREADER_H
+#ifndef DISKFILEREADER_H
+#define DISKFILEREADER_H
 
 #include <fstream>
 #include <sstream>
 #include <string>
 
-namespace IME{
+namespace IME {
     namespace Utility {
-        class FileReader {
+        class DiskFileReader {
         public:
             /**
              * @brief Read data from a file on the disk
-             * @param buffer Stores the contents of the read file
              * @param filename Name of the file to read data from
+             * @param buffer Stores the contents of the read file
              * @throws FileNotFound If the file cannot be found on the disk
              *
-             * The file name must be preceded by the path to the file.
-             * In addition, the file to be read must be in the same
-             * folder as the generated executable file (or be in a
-             * subfolder of the generated executable file's  folder),
-             * otherwise a "FileNotFound" exception will be thrown
+             * The file name must be preceded by the path to the file
              */
-            void readFileInto(std::stringstream &buffer, const std::string &filename);
+            void readFileInto(const std::string &filename, std::stringstream &buffer);
 
             /**
              * @brief Write data to a file on the disk
@@ -34,10 +30,6 @@ namespace IME{
              * @throws FileNotFound If the file cannot be found on the disk
              *
              * The file name must be preceded by the path to the file.
-             * In addition, the file to be written must be in the same
-             * folder as the generated executable file (or be in a subfolder
-             * of the generated executable file's folder), otherwise a
-             * "FileNotFound" exception will be thrown.
              *
              * @note This function will overwrite any data that was previously
              * stored on the file
@@ -50,7 +42,7 @@ namespace IME{
             //Writes to file
             std::ofstream outFile_;
         };
-    }
-}
+    } // namespace Utility
+} // namespace IME
 
 #endif

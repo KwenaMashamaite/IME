@@ -35,13 +35,7 @@ namespace IME {
          * @brief Initialize base engine
          * @throw InvalidArgument if at least one of the mandatory settings
          *        is missing in the settings file provided during instantiation
-         *        @see Engine(const std::string&, const std::string&) or if the
-         *        settings file does not follow the standard entry conventions:
-         *        1. The setting name and the value must be separated by an
-         *           equal sign (=)
-         *        2. No whitespaces in settings entry
-         *        @example: width=720 (valid)
-         *                  width = 720 (invalid)
+         *        @see Engine(const std::string&, const std::string&)
          *
          * This function will perform all the necessary initialization and
          * create the engines render target, therefore calling the function
@@ -71,23 +65,24 @@ namespace IME {
 
         /**
          * @brief Add a state to the engine
-         * @param newState Name of the state
+         * @param name Name of the state
          * @param state State to be added
+         * @return True if the state was added or false if a state with the
+         *         same name already exists
          *
-         * The newState of the state must be unique. If a state with the same
-         * newState as the argument already exists, then the provided state
-         * will not be added, In addition the state pointer must not be null.
-         * @note The first state to be added becomes the current/active state
+         * The name of the state must be unique. If a state with the same name
+         * as the argument already exists, then the provided state will not be
+         * added, In addition the state pointer must not be null.
          */
-        void addState(const std::string &newState, std::shared_ptr<State> state);
+        bool addState(const std::string &name, std::shared_ptr<State> state);
 
         /**
-         * @brief Remove a state
-         * @param stateName Name of the state to remove
+         * @brief Remove a state from the engine
+         * @param name Name of the state to remove
          * @return True if the state was removed or false is the state does
          *         not exist
          */
-        bool removeState(const std::string &stateName);
+        bool removeState(const std::string &name);
 
         /**
          * @brief Check if a state is added to the engine or not
@@ -98,11 +93,11 @@ namespace IME {
 
         /**
          * @brief Change the current state
-         * @param newState Name of the state to change to
+         * @param newStateName Name of the state to change to
          * @return True if the state was changed, false if the specified
          *         state does not exist
          */
-        bool changeState(const std::string &newState);
+        bool changeState(const std::string &newStateName);
 
         /**
          * @brief Get window used by the engine to render objects
@@ -198,10 +193,10 @@ namespace IME {
         //Engine settings
         std::unordered_map<std::string, std::string> settings_;
         //Name of the current state
-        std::string currentState_;
+        std::string currentStateName_;
         //Name of the previous state
-        std::string prevState_;
+        std::string prevStateName_;
     };
-}
+} // namespace IME
 
 #endif

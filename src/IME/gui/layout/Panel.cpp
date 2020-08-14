@@ -27,12 +27,12 @@ namespace IME::Gui {
     }
 
     void Panel::setFillColour(Colour fillColour) {
-        panel_.setFillColor(Utility::convertOwnColourTo3rdPartyColour(fillColour));
+        panel_.setFillColor(Utility::convertTo3rdPartyColour(fillColour));
         emit("fillColourChanged", fillColour);
     }
 
     void Panel::setOutlineColour(Colour outlineColour) {
-        panel_.setOutlineColor(Utility::convertOwnColourTo3rdPartyColour(outlineColour));
+        panel_.setOutlineColor(Utility::convertTo3rdPartyColour(outlineColour));
         emit("outlineColourChanged", outlineColour);
     }
 
@@ -58,18 +58,18 @@ namespace IME::Gui {
         return uiElements_.size();
     }
 
-    void Panel::add(const std::string &alias, std::unique_ptr<UIElement> guiElement) {
-        assert(guiElement && "GUI elements added to panel cannot be null");
-        auto found = findUIElement(alias);
-        if (found == uiElements_.end()) {
-            uiElements_.push_back(std::pair(alias, std::move(guiElement)));
+    bool Panel::add(const std::string &name, std::unique_ptr<UIElement> uiElement) {
+        assert(uiElement && "GUI elements added to panel cannot be null");
+        if (findUIElement(name) == uiElements_.end()) {
+            uiElements_.push_back(std::pair(name, std::move(uiElement)));
             emit("newElementAdded", std::prev(uiElements_.end()));
+            return true;
         }
+        return false;
     }
 
-    void Panel::removeElement(const std::string &uiElement) {
-        auto found = findUIElement(uiElement);
-        if (found != uiElements_.end()) {
+    bool Panel::removeElement(const std::string &name) {
+        if (auto found = findUIElement(name); found != uiElements_.end()) {
             auto elementName = found->first;
             uiElements_.erase(found);
             emit("elementRemoved", elementName);
@@ -96,9 +96,8 @@ namespace IME::Gui {
         }
     }
 
-    const std::unique_ptr<Gui::UIElement>& Panel::getElement(const std::string &uiElementAlias) {
-        auto found = findUIElement(uiElementAlias);
-        if (found != uiElements_.end())
+    const std::unique_ptr<Gui::UIElement>& Panel::getElement(const std::string &name) {
+        if (auto found = findUIElement(name); found != uiElements_.end())
             return found->second;
         return null_Ptr;
     }

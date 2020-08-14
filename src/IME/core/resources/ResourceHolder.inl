@@ -1,61 +1,55 @@
-#include "IME/core/exceptions/Exceptions.h"
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <utility>
+template<class T>
+ResourceHolder<T>::ResourceHolder(const std::string &filePath)
+    : filePath_(filePath) {}
 
-namespace IME {
-    template<class T>
-    ResourceHolder<T>::ResourceHolder(const std::string &filePath, PassKey)
-        : filePath_(filePath) {}
+template<class T>
+bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
+    auto resource = std::make_shared<T>();
+    if (!(*resource).loadFromFile(filePath_ + filename))
+        throw FileNotFound("cannot find file " + filePath_ + filename);
+    return resourceHolder_.insert({filename, std::move(resource)}).second;
+}
 
-    template<class T>
-    void ResourceHolder<T>::loadFromFile(const std::string &filename) {
-        auto resource = std::make_shared<T>();
-        if (!(*resource).loadFromFile(filePath_ + filename))
-            throw FileNotFound("cannot find file " + filePath_ + filename);
-        resourceHolder_.insert(std::make_pair(filename, std::move(resource)));
+//sf::Music doesn't support "loadFromFile". The music is streamed directly from the disk
+template<>
+inline bool ResourceHolder<sf::Music>::loadFromFile(const std::string &filename) {
+    auto music = std::make_shared<sf::Music>();
+    if (!(*music).openFromFile(filePath_ + filename))
+        throw FileNotFound("cannot find file " + filePath_ + filename);
+    return resourceHolder_.insert({filename, std::move(music)}).second;
+}
+
+template<class T>
+bool ResourceHolder<T>::unload(const std::string &filename) {
+    if (getUseCountFor(filename) == 0) //Destroy resource only if its not being used outside the class
+        return resourceHolder_.erase(filename);
+    return false;
+}
+
+template<class T>
+std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
+    if (!hasResource(filename))
+        loadFromFile(filename); //Either throws an exception or succeeds
+    return resourceHolder_.at(filename);
+}
+
+template<class T>
+unsigned int ResourceHolder<T>::getSize() const {
+    return resourceHolder_.size();
+}
+
+template<class T>
+int ResourceHolder<T>::getUseCountFor(const std::string &filename) const {
+    if (hasResource(filename)) {
+        auto useCount = resourceHolder_.at(filename).use_count();
+        if (useCount == 1) // No external pointers to the resource, only the internal pointer
+            return 0;
+        return useCount;
     }
+    return -1;
+}
 
-    //sf::Music is streamed directly from the hard drive
-    template<>
-    inline void ResourceHolder<sf::Music>::loadFromFile(const std::string &filename) {
-        auto music = std::make_shared<sf::Music>();
-        if (!(*music).openFromFile(filePath_ + filename))
-            throw FileNotFound("cannot find file " + filePath_ + filename);
-        resourceHolder_.insert(std::make_pair(filename, std::move(music)));
-    }
-
-    template<typename T>
-    std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
-        auto found = resourceHolder_.find(filename);
-        if (found != resourceHolder_.end())
-            return found->second;
-        else {
-            loadFromFile(filename); //Either throws an exception or succeeds
-            return get(filename); //Return resource that just got loaded
-        }
-    }
-
-    template<class T>
-    bool ResourceHolder<T>::unload(const std::string &filename) {
-        auto found = resourceHolder_.find(filename);
-        if (found != resourceHolder_.end() && found->second.use_count() == 1) {
-            resourceHolder_.erase(found);
-            return true;
-        }
-        return false;
-    }
-
-    template<class T>
-    unsigned int ResourceHolder<T>::getSize() const {
-        return resourceHolder_.size();
-    }
-
-    template<class T>
-    int ResourceHolder<T>::getUseCountFor(const std::string filename) const {
-        auto found = resourceHolder_.find(filename);
-        if (found != resourceHolder_.end())
-            return found->second.use_count();
-        return -1;
-    }
+template<class T>
+bool ResourceHolder<T>::hasResource(const std::string &filename) const {
+    return Utility::findIn(resourceHolder_, filename);
 }

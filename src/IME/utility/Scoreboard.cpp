@@ -1,5 +1,5 @@
 #include "IME/utility/Scoreboard.h"
-#include "IME/core/resources/FileReader.h"
+#include "IME/core/resources/DiskFileReader.h"
 #include <algorithm>
 #include <sstream>
 
@@ -7,7 +7,7 @@ namespace IME {
     Scoreboard::Scoreboard(const std::string &filename)
             : currentScore_(0u), highScoresFile_(filename) {
         auto highScores = std::stringstream();
-        Utility::FileReader().readFileInto(highScores, highScoresFile_);
+        Utility::DiskFileReader().readFileInto(highScoresFile_, highScores);
         auto highscore = std::string();
         while (std::getline(highScores, highscore))
             highScores_.push_back(std::stoi(highscore));
@@ -22,15 +22,13 @@ namespace IME {
             highScores_.back()) {//Highscores stored in descending order
             highScores_.pop_back();
             highScores_.push_back(currentScore_);
-            std::sort(std::begin(highScores_), std::end(highScores_),
-                      std::greater<>());
+            std::sort(std::begin(highScores_), std::end(highScores_),std::greater<>());
             auto newHighscoreList = std::stringstream();
             newHighscoreList << std::to_string(highScores_.front());
             std::for_each(++highScores_.begin(), highScores_.end(),[&](unsigned int score) {
                 newHighscoreList << "\n" + std::to_string(score);
             });
-            Utility::FileReader().writeToFile(newHighscoreList,
-                                              highScoresFile_);
+            Utility::DiskFileReader().writeToFile(newHighscoreList, highScoresFile_);
         }
     }
 

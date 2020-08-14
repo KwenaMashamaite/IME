@@ -85,20 +85,22 @@ namespace IME {
 
             /**
              * @brief Add a UI element to the panel
-             * @param alias Name that can be used to refer to element
-             * @param guiElement Element to add to panel
+             * @param name Name that can be used to refer to element
+             * @param uiElement Element to add to panel
+             * @return True if element was added or false if an element with the
+             *         same name already exists
              */
-            virtual void addElement(const std::string &alias,
-                    std::unique_ptr<UIElement> guiElement) = 0;
+            virtual bool addElement(const std::string &name,
+                std::unique_ptr<UIElement> uiElement) = 0;
 
             /**
              * @brief Remove a UI element from the panel
-             * @param uiElement Name of the element to be removed
+             * @param name Name of the element to be removed
              *
              * This function is destructive. This means that the element
              * will be removed completely
              */
-            void removeElement(const std::string& uiElement);
+            bool removeElement(const std::string& name);
 
             /**
              * @brief Hide the panel from a render target
@@ -127,7 +129,7 @@ namespace IME {
 
             /**
              * @brief Get access to an element in the panel
-             * @param uiElement Name of the element to get access to
+             * @param name Name of the element to get access to
              * @return A pointer to the requested UI element if it exist in the
              *         panel, otherwise a null pointer if the element cannot be
              *         found in the panel
@@ -136,7 +138,7 @@ namespace IME {
              *       advisable to keep the pointer after it has been accessed as
              *       it can be invalidated by removing the element from the panel
              */
-            const std::unique_ptr<UIElement>& getElement(const std::string& uiElement);
+            const std::unique_ptr<UIElement>& getElement(const std::string& name);
 
             /**
              * @brief Render the panel and it's UI elements on a render target
@@ -201,15 +203,17 @@ namespace IME {
 
             /**
              * @brief Add UI element to underlying data structure
-             * @param alias Name of the UI element
-             * @param guiElement Element to be added
+             * @param name Name of the UI element
+             * @param uiElement Element to be added
+             * @return True if element was added or false if an element with the
+             *         same name already exists
              *
              * This function will try to add a UI element to the panel. If the
              * alias for the UI element to be added is already present in the
              * collection, that UI element wil not be added to the panel. In
              * other words, aliases for UI elements must be unique
              */
-            void add(const std::string &alias, std::unique_ptr<UIElement> guiElement);
+            bool add(const std::string &name, std::unique_ptr<UIElement> guiElement);
 
             /**
              * @brief Get access to a UI element inside the collection
@@ -246,7 +250,7 @@ namespace IME {
             //Visibility state of the panel
             bool isHidden_;
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif

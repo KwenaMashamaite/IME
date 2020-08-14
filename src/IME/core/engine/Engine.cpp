@@ -1,8 +1,9 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/core/engine/State.h"
-#include "IME/core/resources/FileReader.h"
+#include "IME/core/resources/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/Clock.h"
+#include "IME/utility/Helpers.h"
 #include <cassert>
 
 namespace IME {
@@ -21,8 +22,8 @@ namespace IME {
 
     void Engine::loadSettings() {
         auto settings = std::stringstream();
-        Utility::FileReader().readFileInto(settings, settingFile_);
-        std::string setting;
+        Utility::DiskFileReader().readFileInto(settingFile_, settings);
+        auto setting = std::string("");
         while (std::getline(settings, setting)) {
             static auto errorMessage = [&](const std::string& errorMessage){
                 return R"(The entry ')" + setting + R"(')" + " in " + settingFile_
@@ -33,8 +34,7 @@ namespace IME {
             if (setting.empty() || setting[0] == '#' || setting[0] == ' ')
                 continue;
 
-            auto separatorPos = setting.find_first_of('=');
-            if (separatorPos != std::string::npos) {
+            if (auto separatorPos = setting.find_first_of('='); separatorPos != std::string::npos) {
                 auto key = setting.substr(0, separatorPos);
                 if (key.find_first_of(' ') != std::string::npos)
                     throw InvalidArgument(errorMessage("key contains whitespaces"));
@@ -65,13 +65,14 @@ namespace IME {
         auto isFullscreen = static_cast<bool>(std::stoi(settings_["fullscreen"]));
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
             window_.create(settings_["title"], desktopWidth, desktopHeight, Gui::Window::Style::Fullscreen);
-        }else{
+        } else {
             if (width > desktopWidth)
                 width = desktopWidth;
             if (height > desktopHeight)
                 height = desktopHeight;
             window_.create(settings_["title"], width, height, Gui::Window::Style::Close);
         }
+        window_.setFramerateLimit(60);
     }
 
     void Engine::run() {
@@ -84,7 +85,7 @@ namespace IME {
                 window_.processEvents();
                 if (deltaTime >= frameTime) { //Fixed time step update
                     if (getCurrentState())
-                        states_[currentState_]->fixedUpdate(deltaTime);
+                        states_[currentStateName_]->fixedUpdate(deltaTime);
                     deltaTime = 0.0;
                 }
                 update();
@@ -99,36 +100,27 @@ namespace IME {
         isRunning_ = false;
     }
 
-    void Engine::addState(const std::string &newState, std::shared_ptr<State> state) {
+    bool Engine::addState(const std::string &name, std::shared_ptr<State> state) {
         assert(state && "A game state cannot be null");
-        states_.insert(std::pair(newState, std::move(state)));
-        if (states_.size() == 1) {
-            states_[newState]->initialize();
-            currentState_ = newState;
-        }
+        return states_.insert({name, std::move(state)}).second;
     }
 
-    bool Engine::removeState(const std::string &stateName) {
-        auto found = states_.find(stateName);
-        if (found != states_.end()) {
-            states_.erase(found);
-            return true;
-        }
-        return false;
+    bool Engine::removeState(const std::string &name) {
+        return states_.erase(name);
     }
 
-    bool Engine::changeState(const std::string &newState) {
-        if (newState != currentState_) {
-            auto found = states_.find(newState);
-            if (found != states_.end()) {
-                states_[currentState_]->pause();
-                if (states_[newState]->isInitialized())
-                    states_[newState]->resume();
+    bool Engine::changeState(const std::string &newStateName) {
+        if (newStateName != currentStateName_) {
+            if (auto newState = getState(newStateName); newState) {
+                if (getCurrentState())
+                    getCurrentState()->pause();
+                if (newState->isInitialized())
+                    newState->resume();
                 else
-                    states_[newState]->initialize();
+                    newState->initialize();
 
-                prevState_ = currentState_;
-                currentState_ = newState;
+                prevStateName_ = currentStateName_;
+                currentStateName_ = newStateName;
                 return true;
             }
         }
@@ -136,14 +128,13 @@ namespace IME {
     }
 
     const std::shared_ptr<State> Engine::getState(const std::string &name) const {
-        auto found = states_.find(name);
-        if (found != states_.end())
+        if (auto found = states_.find(name); found != states_.end())
             return found->second;
         return nullptr;
     }
 
     const std::shared_ptr<State> Engine::getCurrentState() const {
-        return std::move(getState(currentState_));
+        return std::move(getState(currentStateName_));
     }
 
     const std::shared_ptr<const GuiFactory> & IME::Engine::getGuiFactory() const {
@@ -157,16 +148,14 @@ namespace IME {
     void Engine::update() {
         if (!isRunning_)
             window_.close();
-        else {
-            if (getCurrentState()) {
-                states_[currentState_]->update();
-            }
-        }
+        else
+            if (getCurrentState())
+                states_[currentStateName_]->update();
     }
 
     void Engine::render() {
         if (getCurrentState())
-            states_[currentState_]->render(window_);
+            states_[currentStateName_]->render(window_);
     }
 
     bool Engine::isRunning() const {
@@ -174,7 +163,7 @@ namespace IME {
     }
 
     const std::string &Engine::getPreviousStateName() const {
-        return prevState_;
+        return prevStateName_;
     }
 
     const Gui::Window &Engine::getRenderTarget() const {

@@ -5,17 +5,17 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "IME/common/Common.h"
+#include "IME/common/Definitions.h"
 #include "IME/event/EventEmitter.h"
 #include "IME/gui/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
-namespace IME{
+namespace IME {
     namespace Gui {
-        using Common::Position;
-        using Common::Dimensions;
+        using Definitions::Position;
+        using Definitions::Dimensions;
 
         class Window : sf::NonCopyable {
         public:
@@ -178,7 +178,7 @@ namespace IME{
             //Event Emitter
             inline static EventEmitter eventEmitter_{};
         };
-    }
-}
+    } // namespace Gui
+} // namespace IME
 
 #endif
