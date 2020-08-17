@@ -13,19 +13,55 @@
 using IME::EventEmitter;
 using IME::Callback;
 
-//This test must always be the first test as the handler id counter belongs to the class
-//not the object
-TEST_CASE("The first event listener has an identification number of one (1)"){
+TEST_CASE("Only the first event listener has an identification number of one"){
     auto eventEmitter = EventEmitter();
-    auto clickEventHandlerId = eventEmitter.addEventListener("click", Callback<>([]() {}));
-    CHECK_EQ(clickEventHandlerId, 1);
+    CHECK_EQ(eventEmitter.addEventListener("event", Callback<>([]{})), 1);
+    CHECK_NE(eventEmitter.addEventListener("event", Callback<>([]{})), 1);
+    auto eventEmitter2 = EventEmitter();
+    CHECK_NE(eventEmitter2.addEventListener("event", Callback<>([]{})), 1);
+}
+
+TEST_CASE("Event listener counter increases by one when an event listener is added") {
+    auto eventEmitter = EventEmitter();
+    auto handlerOneId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    auto handlerTwoId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    auto handlerThreeId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    auto handlerFourId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    CHECK_EQ(handlerTwoId, handlerOneId + 1);
+    CHECK_EQ(handlerThreeId, handlerTwoId + 1);
+    CHECK_EQ(handlerFourId, handlerThreeId + 1);
+}
+
+TEST_CASE("Issued identification numbers are valid"){
+    auto eventEmitter = EventEmitter();
+    auto handlerId = eventEmitter.addEventListener("event", Callback<>([]{}));
+}
+
+TEST_CASE("Adding an event listener to a non-existent event creates that event"){
+    auto eventEmitter = EventEmitter();
+    CHECK_FALSE(eventEmitter.hasEvent("event"));
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    CHECK(eventEmitter.hasEvent("event"));
+}
+
+TEST_CASE("Adding a listern to an event increases that events listener count by one"){
+    auto eventEmitter = EventEmitter();
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    eventEmitter.addEventListener("event", Callback<>([]{}));
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 5);
 }
 
 TEST_CASE("The first event listeners of different events have different identification numbers"){
     auto eventEmitter = EventEmitter();
-    auto clickListenerId = eventEmitter.addEventListener("click", Callback<int, int>([](int xCoord,int yCoord) {}));
-    auto nameChangeListenerId = eventEmitter.addEventListener("nameChanged", Callback<std::string>([](std::string newName) {}));
-    CHECK_NE(clickListenerId, nameChangeListenerId);
+    auto eventListOneId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    auto eventListTwoId = eventEmitter.addEventListener("event1", Callback<>([]{}));
+    auto eventListThreeId = eventEmitter.addEventListener("event2", Callback<>([]{}));
+    CHECK_NE(eventListOneId, eventListTwoId);
+    CHECK_NE(eventListOneId, eventListThreeId);
+    CHECK_NE(eventListTwoId, eventListThreeId);
 }
 
 TEST_CASE("The same callback function is treated as a unique handler when added to an event multiple times"){

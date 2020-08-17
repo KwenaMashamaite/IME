@@ -10,5 +10,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 //Include unit tests to run
-#include "WindowTests.hpp"
-#include "EventEmitterTests.hpp"
+#include "event/EventEmitterTests.hpp"
+#include "gui/GuiTests.hpp"
+#include "audio/AudioTests.hpp"

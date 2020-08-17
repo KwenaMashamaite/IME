@@ -7,4 +7,5 @@ set(CMAKE_CXX_STANDARD 17)
 include(GNUInstallDirs)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/IME)
+add_subdirectory(${PROJECT_SOURCE_DIR}/tests)
 add_subdirectory(${PROJECT_SOURCE_DIR}/examples)
