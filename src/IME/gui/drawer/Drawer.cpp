@@ -11,7 +11,7 @@ namespace IME::Gui {
         auto entity = entityAnimatorPair.first;
         auto entityAnimator = entityAnimatorPair.second;
         if (entity && entity->isAlive()) {
-            auto entitySprite = entityAnimator.getCurrentAnimSprite();
+            /*auto entitySprite = entityAnimator.getCurrentAnimSprite();
             auto entityOrientationAngle = [&entity]() {
                 switch (entity->getDirection()) {
                     case IEntity::Direction::Left:return -90.0f;
@@ -29,7 +29,7 @@ namespace IME::Gui {
 
             entitySprite.rotate(entityOrientationAngle);
             entitySprite.setPosition(entity->getPosition().x, entity->getPosition().y);
-            renderTarget_.draw(entitySprite);
+            renderTarget_.draw(entitySprite);*/
         }
     }
 

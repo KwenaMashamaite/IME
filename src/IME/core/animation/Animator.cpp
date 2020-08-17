@@ -4,8 +4,8 @@
 #include <cassert>
 
 namespace IME{
-    Animator::Animator()
-        : totalTime_(0.0f)
+    Animator::Animator(Sprite& target)
+        : animationTarget_(target), totalTime_(0.0f)
     {}
 
     bool Animator::addAnimation(std::shared_ptr<Animation> animation) {
@@ -37,23 +37,18 @@ namespace IME{
                 finishAnimation();
                 return;
             }
-            animationSprite_.setTextureRect(currentAnimation_->getFrameAt(currentFrameIndex));
+            auto currentFrame = currentAnimation_->getFrameAt(currentFrameIndex);
+            animationTarget_.setTextureRect(currentFrame.left, currentFrame.top, currentFrame.width, currentFrame.height);
         }
     }
 
     void Animator::changeAnimation(const std::string &animation) {
         if (auto found = animations_.find(animation); found != animations_.end()){
             auto newAnimation = found->second;
-            animationSprite_.setTexture(ResourceManager::getTexture(newAnimation->getSpriteSheet()));
+            animationTarget_.setTexture(newAnimation->getSpriteSheet());
             currentAnimation_ = newAnimation;
             totalTime_ = 0.0f;
         }
-    }
-
-    sf::Sprite Animator::getCurrentAnimSprite() const {
-        if (currentAnimation_ == nullptr || totalTime_ == 0.0f)
-            return sf::Sprite();
-        return animationSprite_;
     }
 
     int Animator::onAnimationStart(const std::string &name, Callback<> callback) {
@@ -78,9 +73,8 @@ namespace IME{
     void Animator::finishAnimation() {
         if (currentAnimation_ != nullptr && totalTime_ != 0.0f){
             totalTime_ = 0.0f;
-            animationSprite_.setTextureRect(
-                currentAnimation_->getFrameAt(currentAnimation_->getNumOfFrames() - 1)
-            );
+            auto lastFrame = currentAnimation_->getFrameAt(currentAnimation_->getNumOfFrames() - 1);
+            animationTarget_.setTextureRect(lastFrame.left, lastFrame.top, lastFrame.width, lastFrame.height);
             auto animationName = currentAnimation_->getName();
             currentAnimation_ = nullptr;
             eventEmitter_.emit(animationName + "AnimationFinished");

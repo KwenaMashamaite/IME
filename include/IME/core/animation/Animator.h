@@ -10,7 +10,7 @@
 
 #include "Animation.h"
 #include "IME/event/EventEmitter.h"
-#include <SFML/Graphics/Sprite.hpp>
+#include "IME/core/Sprite.h"
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -24,8 +24,9 @@ namespace IME {
 
         /**
          * @brief Constructor
+         * @param target Sprite to animate
          */
-        Animator();
+        explicit Animator(Sprite& target);
 
         /**
          * @brief Add an animation to the animator
@@ -71,12 +72,6 @@ namespace IME {
         void changeAnimation(const std::string& animation);
 
         /**
-         * @brief Get the animation representation
-         * @return The animation representation sprite
-         */
-        sf::Sprite getCurrentAnimSprite() const;
-
-        /**
          * @brief Add a function to execute when an animation starts
          * @param name Name of the animation
          * @param callback Function to execute when the animation starts
@@ -110,7 +105,7 @@ namespace IME {
 
     private:
         //Animation sprite
-        sf::Sprite animationSprite_;
+        Sprite animationTarget_;
         //Animations container
         std::unordered_map<std::string, std::shared_ptr<Animation>> animations_;
         //Pointer to the currently running animation
