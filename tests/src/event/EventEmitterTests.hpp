@@ -21,22 +21,6 @@ TEST_CASE("Only the first event listener has an identification number of one"){
     CHECK_NE(eventEmitter2.addEventListener("event", Callback<>([]{})), 1);
 }
 
-TEST_CASE("Event listener counter increases by one when an event listener is added") {
-    auto eventEmitter = EventEmitter();
-    auto handlerOneId = eventEmitter.addEventListener("event", Callback<>([]{}));
-    auto handlerTwoId = eventEmitter.addEventListener("event", Callback<>([]{}));
-    auto handlerThreeId = eventEmitter.addEventListener("event", Callback<>([]{}));
-    auto handlerFourId = eventEmitter.addEventListener("event", Callback<>([]{}));
-    CHECK_EQ(handlerTwoId, handlerOneId + 1);
-    CHECK_EQ(handlerThreeId, handlerTwoId + 1);
-    CHECK_EQ(handlerFourId, handlerThreeId + 1);
-}
-
-TEST_CASE("Issued identification numbers are valid"){
-    auto eventEmitter = EventEmitter();
-    auto handlerId = eventEmitter.addEventListener("event", Callback<>([]{}));
-}
-
 TEST_CASE("Adding an event listener to a non-existent event creates that event"){
     auto eventEmitter = EventEmitter();
     CHECK_FALSE(eventEmitter.hasEvent("event"));
@@ -44,14 +28,59 @@ TEST_CASE("Adding an event listener to a non-existent event creates that event")
     CHECK(eventEmitter.hasEvent("event"));
 }
 
-TEST_CASE("Adding a listern to an event increases that events listener count by one"){
+TEST_CASE("Creating duplicate events ony creates one event") {
     auto eventEmitter = EventEmitter();
     eventEmitter.addEventListener("event", Callback<>([]{}));
     eventEmitter.addEventListener("event", Callback<>([]{}));
     eventEmitter.addEventListener("event", Callback<>([]{}));
+    CHECK_EQ(eventEmitter.getNumberOfEvents(), 1);
+}
+
+TEST_CASE("Multiple event listeners can be registered with the same event"){
+    auto eventEmitter = EventEmitter();
     eventEmitter.addEventListener("event", Callback<>([]{}));
+    eventEmitter.addEventListener("event", Callback<int>([](int){}));
+    eventEmitter.addEventListener("event", Callback<int, char>([](int, char){}));
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 3);
+}
+
+TEST_CASE("An event does not exist unless created") {
+    auto eventEmitterOne = EventEmitter();
+    eventEmitterOne.addEventListener("event", Callback<>([]{}));
+    auto eventEmitterTwo = EventEmitter();
+    CHECK_FALSE(eventEmitterTwo.hasEvent("event"));
+}
+
+TEST_CASE("Events with the same name can be created in different instances") {
+    auto eventEmitterOne = EventEmitter();
+    auto eventEmitterTwo = EventEmitter();
+    eventEmitterOne.addEventListener("event", Callback<>([]{}));
+    eventEmitterTwo.addEventListener("event", Callback<>([]{}));
+    CHECK(eventEmitterOne.hasEvent("event"));
+    CHECK(eventEmitterTwo.hasEvent("event"));
+}
+
+TEST_CASE("Issued identification numbers are valid"){
+    auto eventEmitter = EventEmitter();
+    auto handlerId = eventEmitter.addEventListener("event", Callback<>([]{}));
+    CHECK(eventEmitter.hasEventListener("event", handlerId).first);
+}
+
+TEST_CASE("Event listener counter increases by one when a listener is added to any event") {
+    auto eventEmitter = EventEmitter();
+    auto handlerOneId = eventEmitter.addEventListener("eventOne", Callback<>([]{}));
+    auto handlerTwoId = eventEmitter.addEventListener("eventTwo", Callback<>([]{}));
+    auto handlerThreeId = eventEmitter.addEventListener("eventThree", Callback<>([]{}));
+    auto handlerFourId = eventEmitter.addEventListener("eventFour", Callback<>([]{}));
+    CHECK_EQ(handlerTwoId, handlerOneId + 1);
+    CHECK_EQ(handlerThreeId, handlerTwoId + 1);
+    CHECK_EQ(handlerFourId, handlerThreeId + 1);
+}
+
+TEST_CASE("An event is created with a single event listener") {
+    auto eventEmitter = EventEmitter();
     eventEmitter.addEventListener("event", Callback<>([]{}));
-    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 5);
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 1);
 }
 
 TEST_CASE("The first event listeners of different events have different identification numbers"){
@@ -64,21 +93,22 @@ TEST_CASE("The first event listeners of different events have different identifi
     CHECK_NE(eventListTwoId, eventListThreeId);
 }
 
-TEST_CASE("The same callback function is treated as a unique handler when added to an event multiple times"){
+TEST_CASE("The same callback function is treated as a unique event listener"){
+    auto doSomething = std::function<void()>([](){});
     auto eventEmitter = EventEmitter();
-    auto doSomething = [](){/*Code that does something*/};
-    CHECK_NE(eventEmitter.addEventListener("somethingChanged", Callback<>(doSomething)),
-            eventEmitter.addEventListener("somethingChanged",Callback<>(doSomething)));
+    auto handlerOneId = eventEmitter.addEventListener("event", doSomething);
+    auto handlerTwoId = eventEmitter.addEventListener("event", doSomething);
+    CHECK(handlerOneId != handlerTwoId);
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 2);
 }
 
-TEST_CASE("Multiple listeners can be registered with the same event"){
-    struct Button : public EventEmitter{};
-    auto button = Button();
-    auto listenerOneId = button.addEventListener("click", Callback<int, int>([](int, int) {}));
-    auto listenerTwoId = button.addEventListener("click", Callback<int, int>([](int, int) {}));
-    auto listenerThreeId = button.addEventListener("click", Callback<int, int>([](int, int) {}));
-    CHECK_EQ(listenerTwoId, listenerOneId + 1);
-    CHECK_EQ(listenerThreeId, listenerTwoId + 1);
+TEST_CASE("The same callback function can be added to different events") {
+    auto doSomething = std::function<void()>([](){});
+    auto eventEmitter = EventEmitter();
+    eventEmitter.addEventListener("event", doSomething);
+    eventEmitter.addEventListener("eventTwo", doSomething);
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("event"), 1);
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("eventTwo"), 1);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -98,11 +128,11 @@ TEST_CASE("Raising an event executes a callback function registered to that even
 TEST_CASE("Raising an event executes all listeners of that event"){
     auto eventEmitter = EventEmitter();
     auto counter = 0u;
-    eventEmitter.addEventListener("increaseCounterButtonPressed", Callback<>([&counter]() { counter += 1; }));
-    eventEmitter.addEventListener("increaseCounterButtonPressed", Callback<>([&counter]() { counter += 5; }));
-    eventEmitter.addEventListener("increaseCounterButtonPressed", Callback<>([&counter]() { counter += 4; }));
-    eventEmitter.addEventListener("increaseCounterButtonPressed", Callback<>([&counter]() { counter += 10; }));
-    eventEmitter.emit("increaseCounterButtonPressed");
+    eventEmitter.addEventListener("increaseCounter", Callback<>([&counter]() { counter += 1; }));
+    eventEmitter.addEventListener("increaseCounter", Callback<>([&counter]() { counter += 5; }));
+    eventEmitter.addEventListener("increaseCounter", Callback<>([&counter]() { counter += 4; }));
+    eventEmitter.addEventListener("increaseCounter", Callback<>([&counter]() { counter += 10; }));
+    eventEmitter.emit("increaseCounter");
     CHECK_EQ(counter, 20u);
 }
 
@@ -115,7 +145,6 @@ TEST_CASE("A callback function is not executed if the event is not raised"){
     CHECK_EQ(testString, "callback function not executed");
 }
 
-//What to take away from this test is that argument types must match Parameter types exactly
 TEST_CASE("Raising an event with different parameter types to that of the callback does not execute it"){
     auto eventEmitter = EventEmitter();
     auto testString = std::string("callback function not executed");
@@ -150,10 +179,11 @@ TEST_CASE("Both the 'addEventListener' and the 'on' function register event list
     };
     auto mouse = Mouse();
     auto mouseClickCoordinates = std::make_pair(-1, -1);
-    bool isMouseClicked = false;
     mouse.addEventListener("click", Callback<int, int>([&](int x, int y) {
         mouseClickCoordinates = {x, y};
     }));
+
+    bool isMouseClicked = false;
     mouse.on("click", Callback<int, int>([&isMouseClicked](int x, int y){
         isMouseClicked = true;
     }));
@@ -164,28 +194,35 @@ TEST_CASE("Both the 'addEventListener' and the 'on' function register event list
     CHECK(isMouseClicked);
 }
 
-TEST_CASE("Event listeners can be invoked multiple times"){
+TEST_CASE("An event listener can be invoked multiple times"){
     auto eventEmitter = EventEmitter();
-    auto counter = 0u;
-    auto increaseCounterByOne = [&counter]{++counter;};
-    eventEmitter.addEventListener("increaseCounterButtonClicked", Callback<>(increaseCounterByOne));
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    CHECK_EQ(counter, 5u);
+    auto numOfTimeCallbackInvoked = 0u;
+    auto increaseCounterByOne = [&numOfTimeCallbackInvoked]{++numOfTimeCallbackInvoked;};
+    eventEmitter.addEventListener("event", Callback<>(increaseCounterByOne));
+    eventEmitter.emit("event");
+    eventEmitter.emit("event");
+    eventEmitter.emit("event");
+    CHECK_EQ(numOfTimeCallbackInvoked, 3u);
 }
 
-TEST_CASE("A once event listener is removed from an event after it executes"){
+TEST_CASE("A once event listener is invoked only once"){
     auto eventEmitter = EventEmitter();
-    auto counter = 0u;
-    auto increaseCounterByOne = [&counter]{++counter;};
-    eventEmitter.addOnceEventListener("increaseCounterButtonClicked", Callback<>(increaseCounterByOne));
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    eventEmitter.emit("increaseCounterButtonClicked");
-    CHECK_EQ(counter, 1u);
+    auto numOfTimeCallbackInvoked = 0u;
+    auto increaseCounterByOne = [&numOfTimeCallbackInvoked]{++numOfTimeCallbackInvoked;};
+    eventEmitter.addOnceEventListener("event", Callback<>(increaseCounterByOne));
+    eventEmitter.emit("event");
+    eventEmitter.emit("event");
+    eventEmitter.emit("event");
+    CHECK_EQ(numOfTimeCallbackInvoked, 1);
+}
+
+TEST_CASE("A once event listener is removed from the event list after invocation") {
+    auto eventEmitter = EventEmitter();
+    auto onceHandlerId = eventEmitter.addOnceEventListener("once", Callback<>([]{}));
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("once"), 1);
+    eventEmitter.emit("once");
+    CHECK_EQ(eventEmitter.getNumOfEventListenersFor("once"), 0);
+    CHECK_FALSE(eventEmitter.hasEventListener("once", onceHandlerId).first);
 }
 
 /////////////////////////////////////////////////////////////////

@@ -118,6 +118,12 @@ namespace IME {
         int getNumOfEventListenersFor(const std::string& event) const;
 
         /**
+         * @brief Get the current number of events
+         * @return Current umber of events
+         */
+        int getNumberOfEvents() const;
+
+        /**
          * @brief Check if an event has a certain event listener
          * @param event Name of the event
          * @param listenerId Identification number of the listener to be checked

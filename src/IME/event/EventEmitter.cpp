@@ -26,6 +26,10 @@ namespace IME {
         return -1;
     }
 
+    int EventEmitter::getNumberOfEvents() const {
+        return eventList_.size();
+    }
+
     bool EventEmitter::hasEvent(const std::string &event) const {
         return eventList_.find(event) != eventList_.end();
     }
