@@ -57,7 +57,7 @@ namespace IME {
          * from the disk, a "FileNotFound" exception will be raised. This means
          * that the returned pointer can never be a nullptr.
          */
-        std::shared_ptr<T> get(const std::string& filename);
+        [[nodiscard]] std::shared_ptr<T> get(const std::string& filename);
 
         /**
          * @brief Check if a resource exists or not
