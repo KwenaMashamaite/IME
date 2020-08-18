@@ -71,6 +71,14 @@ namespace IME {
             void create(const std::string &title, float width, float height, Style style);
 
             /**
+             * @brief Change the window's icon
+             * @param filename Filename of the window icon to set
+             *
+             * The OS default icon is used by default
+             */
+            bool setIcon(const std::string& filename);
+
+            /**
              * @brief Set the frame rate limit of the window
              * @param framerateLimit Frame rate limit
              *

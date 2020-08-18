@@ -18,6 +18,8 @@ namespace IME {
     void Engine::init() {
         loadSettings();
         initRenderTarget();
+        window_.setFramerateLimit(60);
+        window_.setIcon("icon.png");
     }
 
     void Engine::loadSettings() {
@@ -72,7 +74,6 @@ namespace IME {
                 height = desktopHeight;
             window_.create(settings_["title"], width, height, Gui::Window::Style::Close);
         }
-        window_.setFramerateLimit(60);
     }
 
     void Engine::run() {

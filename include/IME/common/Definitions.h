@@ -38,7 +38,7 @@ namespace IME {
             static constexpr auto SoundEffectsPath = "resources/soundEffects/";
             static constexpr auto MusicPath = "resources/music/";
             static constexpr auto FontsPath = "resources/fonts/";
-            static constexpr auto ImagesPath = "resources/images/";
+            static constexpr auto ImagesPath = "resources/textures/";
             static constexpr auto SettingsPath = "files/";
         };
     }  // namespace IME

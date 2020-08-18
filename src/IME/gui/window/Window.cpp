@@ -2,6 +2,7 @@
 #include "IME/gui/input/Mouse.h"
 #include "IME/gui/input/Keyboard.h"
 #include "IME/utility/Helpers.h"
+#include "IME/core/resources/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
 #include <cassert>
 
@@ -20,6 +21,16 @@ namespace IME::Gui {
         window_.create(sf::VideoMode(static_cast<unsigned int>(width),
             static_cast<unsigned int>(height)), title, static_cast<unsigned int>(style)
         );
+    }
+
+    bool Window::setIcon(const std::string &filename) {
+        try {
+            auto icon = ResourceManager::getImage(filename);
+            window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+            return true;
+        } catch (FileNotFound) { // Use current icon, If not set prior, OS icon will be used
+            return false;
+        }
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {
