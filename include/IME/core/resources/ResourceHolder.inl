@@ -3,6 +3,11 @@ ResourceHolder<T>::ResourceHolder(const std::string &filePath)
     : filePath_(filePath) {}
 
 template<class T>
+void ResourceHolder<T>::setPath(const std::string &filepath) {
+    filePath_ = filepath;
+}
+
+template<class T>
 bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
     auto resource = std::make_shared<T>();
     if (!(*resource).loadFromFile(filePath_ + filename))
@@ -47,6 +52,11 @@ int ResourceHolder<T>::getUseCountFor(const std::string &filename) const {
         return useCount;
     }
     return -1;
+}
+
+template<class T>
+const std::string &ResourceHolder<T>::getPath() const {
+    return filePath_;
 }
 
 template<class T>

@@ -19,12 +19,18 @@ namespace IME {
     public:
         /**
          * @brief Ensures resources can be located
-         * @param filePath Path of the resource to store
-         *
-         * The file path must be relative to the generated executable file's
-         * root directory (folder in which the .exe file sits).
+         * @param filePath Path to the resource to store
          */
         ResourceHolder(const std::string &filePath);
+
+        /**
+         * @brief Change the path where resources are located on the disk
+         * @param filepath Path to the resources to store
+         *
+         * This new path is where the program will search for resources when
+         * loading them
+         */
+        void setPath(const std::string& filepath);
 
         /**
          * @brief Load a resource from the disk and store it in a buffer
@@ -69,10 +75,20 @@ namespace IME {
         /**
          * @brief Get the number of objects currently using a resource
          * @param filename Filename of the resource to get use count for
-         * @return The number of objects currently using the specified
-         *         resource or -1 if the resource does not exist
+         * @return The number of objects currently using the specified resource
+         *         or -1 if the resource does not exist
          */
         int getUseCountFor(const std::string& filename) const;
+
+        /**
+         * @brief Get the disk path to the resources being held
+         * @return Disk path to the resource
+         *
+         * This path is where the program looks for the specified resources when
+         * loading them. @note Whether the path is absolute or relative depends
+         * on the argument given to the constructor during instantiation
+         */
+        const std::string& getPath() const;
 
         /**
          * @brief Get the number of resources in the resource holder
