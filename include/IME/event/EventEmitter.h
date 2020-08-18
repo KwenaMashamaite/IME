@@ -127,18 +127,12 @@ namespace IME {
          * @brief Check if an event has a certain event listener
          * @param event Name of the event
          * @param listenerId Identification number of the listener to be checked
-         * @return A pair, of which the first element is a bool that is true if
-         *         if the event has the event listener, otherwise false and the
-         *         second is an int which is the index of the found event listener
-         *         in the @event listener list
-         *
-         * @warning If the first element of the pair is false, the second element
-         * is invalid (Function will return a negative index)
+         * @return True if the specified event has an event listener with the specified
+         *         id, otherwise false
          */
-        std::pair<bool, int>  hasEventListener(const std::string& event, int listenerId) const;
+        bool hasEventListener(const std::string& event, int listenerId) const;
 
     private:
-
         /**
          * @brief  Add a listener (callback) to an event
          * @tparam Args Template parameter pack name
@@ -150,6 +144,20 @@ namespace IME {
          */
         template<typename...Args>
         int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce);
+
+         /**
+         * @brief Check if an event has a certain event listener
+         * @param event Name of the event
+         * @param listenerId Identification number of the listener to be checked
+         * @return A pair, of which the first element is a bool that is true if
+         *         the specified event has an event listener with the specified id, 
+                   otherwise false and the second is an int which is the index of 
+                   the found event listener in the specified event listeners list
+         *
+         * @warning If the first element of the pair is false, the second element
+         * is invalid (Function will return a negative index)
+         */
+        std::pair<bool, int>  hasListener(const std::string& event, int listenerId) const;
 
     private:
         //Base class for template class

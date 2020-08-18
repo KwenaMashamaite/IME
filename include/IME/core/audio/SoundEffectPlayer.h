@@ -124,7 +124,7 @@ namespace IME{
             //Stores sound effects to be played
             ResourceHolder<sf::SoundBuffer> soundEffects_;
             //Currently playing sound
-            sf::Sound currentSoundEffect_;
+            sf::Sound soundEffect_;
             //Nam eof the current sound effect
             std::string currentEffectName_;
         };
