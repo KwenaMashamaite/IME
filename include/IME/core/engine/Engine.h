@@ -7,10 +7,9 @@
 
 #include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
+#include "StateManager.h"
 
 namespace IME {
-    class State; //Forward declaration
-
     class Engine {
     public:
         /**
@@ -64,40 +63,10 @@ namespace IME {
         bool isRunning() const;
 
         /**
-         * @brief Add a state to the engine
-         * @param name Name of the state
-         * @param state State to be added
-         * @return True if the state was added or false if a state with the
-         *         same name already exists
-         *
-         * The name of the state must be unique. If a state with the same name
-         * as the argument already exists, then the provided state will not be
-         * added, In addition the state pointer must not be null.
+         * @brief Get the name of the game
+         * @return Name of the game
          */
-        bool addState(const std::string &name, std::shared_ptr<State> state);
-
-        /**
-         * @brief Remove a state from the engine
-         * @param name Name of the state to remove
-         * @return True if the state was removed or false is the state does
-         *         not exist
-         */
-        bool removeState(const std::string &name);
-
-        /**
-         * @brief Check if a state is added to the engine or not
-         * @param name Name of the state to check
-         * @return True if state exists or false if state does not exist
-         */
-        bool stateExists(const std::string &name) const;
-
-        /**
-         * @brief Change the current state
-         * @param newStateName Name of the state to change to
-         * @return True if the state was changed, false if the specified
-         *         state does not exist
-         */
-        bool changeState(const std::string &newStateName);
+        const std::string& getAppName() const;
 
         /**
          * @brief Get window used by the engine to render objects
@@ -106,30 +75,10 @@ namespace IME {
         const Gui::Window& getRenderTarget() const;
 
         /**
-         * @brief Get access to a state
-         * @param name Name of the state to get access to
-         * @return A pointer to the requested state if it exists, otherwise
-         *         a nullptr
+         * @brief Get access to the engines state manager
+         * @return Engines state manager
          */
-        const std::shared_ptr<State> getState(const std::string &name) const;
-
-        /**
-         * @brief Get the current state
-         * @return Pointer to the current state if any, otherwise a nullptr
-         */
-        const std::shared_ptr<State> getCurrentState() const;
-
-        /**
-         * @brief Get the name of the state prior to the current state change
-         * @return Name of the previous state
-         */
-        const std::string &getPreviousStateName() const;
-
-        /**
-         * @brief Get the name of the game
-         * @return Name of the game
-         */
-        const std::string& getAppName() const;
+        StateManager& getStateManager();
 
         /**
          * @brief Get a factory for creating gui components
@@ -189,13 +138,9 @@ namespace IME {
         //Factory for instantiating GUI components
         static std::shared_ptr<const GuiFactory> guiFactory_;
         //Engine states
-        std::unordered_map<std::string, std::shared_ptr<State>> states_;
+        StateManager statesManager_;
         //Engine settings
         std::unordered_map<std::string, std::string> settings_;
-        //Name of the current state
-        std::string currentStateName_;
-        //Name of the previous state
-        std::string prevStateName_;
     };
 } // namespace IME
 

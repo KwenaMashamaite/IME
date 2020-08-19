@@ -28,9 +28,8 @@ namespace IME::Gui {
             auto icon = ResourceManager::getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
             return true;
-        } catch (FileNotFound) { // Use current icon, If not set prior, OS icon will be used
-            return false;
-        }
+        } catch (...) {} // Use current icon, If not set prior, OS icon will be used
+        return false;
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {

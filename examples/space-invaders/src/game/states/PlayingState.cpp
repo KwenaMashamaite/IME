@@ -5,20 +5,16 @@
 
 namespace SI {
     PlayingState::PlayingState(IME::Engine &engine)
-            : State(engine),
-              isInitialized_(false),
-              scoreboard_{"resources/textFiles/highscores.txt"} {}
+        : State(engine),
+          isInitialized_(false),
+          scoreboard_{"resources/textFiles/highscores.txt"} {}
 
     void PlayingState::initialize() {
-        container_ = getApp().getGuiFactory()->getPanel<IME::Gui::DockPanel>(0, 0);
-        auto headerPanel = getApp().getGuiFactory()->getPanel<IME::Gui::StackPanel>(
-                IME::Gui::StackPanel::Orientation::Horizontal);
-        auto lives = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(
-                "LIVES: 5");
-        auto currentScore = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(
-                std::to_string(scoreboard_.getCurrentScore()));
-        auto topHighScore = getApp().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(
-                std::to_string(scoreboard_.getTopScore()));
+        container_ = app().getGuiFactory()->getPanel<IME::Gui::DockPanel>(0, 0);
+        auto headerPanel = app().getGuiFactory()->getPanel<IME::Gui::StackPanel>(IME::Gui::StackPanel::Orientation::Horizontal);
+        auto lives = app().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("LIVES: 5");
+        auto currentScore = app().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(std::to_string(scoreboard_.getCurrentScore()));
+        auto topHighScore = app().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(std::to_string(scoreboard_.getTopScore()));
         headerPanel->addElement("lives", std::move(lives));
         headerPanel->addElement("current-score", std::move(currentScore));
         headerPanel->addElement("high-score", std::move(topHighScore));

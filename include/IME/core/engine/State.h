@@ -77,7 +77,7 @@ namespace IME {
          * @brief Get a reference to the game engine
          * @return Reference to a game engine
          */
-        Engine &getApp() const;
+        Engine &app() const;
 
     private:
         //Reference to the game engine

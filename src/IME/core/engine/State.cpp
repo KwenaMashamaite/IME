@@ -3,7 +3,7 @@
 namespace IME {
     State::State(Engine &app) : app_(app) {}
 
-    Engine &State::getApp() const {
+    Engine &State::app() const {
         return app_;
     }
 }

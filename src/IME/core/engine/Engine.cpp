@@ -1,10 +1,8 @@
 #include "IME/core/engine/Engine.h"
-#include "IME/core/engine/State.h"
 #include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/Clock.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace IME {
     std::shared_ptr<const GuiFactory> IME::Engine::guiFactory_(std::make_shared<GuiFactory>());
@@ -77,16 +75,16 @@ namespace IME {
     }
 
     void Engine::run() {
-        if (!isRunning_ && !states_.empty()) {
+        if (!isRunning_ && !statesManager_.isEmpty()) {
             isRunning_ = true;
             auto const frameTime = 1.0f / 60.0f;
             auto clock = Utility::Clock();
             auto deltaTime = clock.restart();
-            while (window_.isOpen() && isRunning_ && !states_.empty()) {
+            while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
                 window_.processEvents();
                 if (deltaTime >= frameTime) { //Fixed time step update
-                    if (getCurrentState())
-                        states_[currentStateName_]->fixedUpdate(deltaTime);
+                    if (auto currentState = statesManager_.getCurrentState(); currentState)
+                        currentState->fixedUpdate(deltaTime);
                     deltaTime = 0.0;
                 }
                 update();
@@ -101,74 +99,32 @@ namespace IME {
         isRunning_ = false;
     }
 
-    bool Engine::addState(const std::string &name, std::shared_ptr<State> state) {
-        assert(state && "A game state cannot be null");
-        return states_.insert({name, std::move(state)}).second;
-    }
-
-    bool Engine::removeState(const std::string &name) {
-        return states_.erase(name);
-    }
-
-    bool Engine::changeState(const std::string &newStateName) {
-        if (newStateName != currentStateName_) {
-            if (auto newState = getState(newStateName); newState) {
-                if (getCurrentState())
-                    getCurrentState()->pause();
-                if (newState->isInitialized())
-                    newState->resume();
-                else
-                    newState->initialize();
-
-                prevStateName_ = currentStateName_;
-                currentStateName_ = newStateName;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    const std::shared_ptr<State> Engine::getState(const std::string &name) const {
-        if (auto found = states_.find(name); found != states_.end())
-            return found->second;
-        return nullptr;
-    }
-
-    const std::shared_ptr<State> Engine::getCurrentState() const {
-        return std::move(getState(currentStateName_));
-    }
-
     const std::shared_ptr<const GuiFactory> & IME::Engine::getGuiFactory() const {
         return guiFactory_;
-    }
-
-    bool Engine::stateExists(const std::string &name) const {
-        return getState(name) == nullptr;
     }
 
     void Engine::update() {
         if (!isRunning_)
             window_.close();
         else
-            if (getCurrentState())
-                states_[currentStateName_]->update();
+            statesManager_.getCurrentState()->update();
     }
 
     void Engine::render() {
-        if (getCurrentState())
-            states_[currentStateName_]->render(window_);
+        if (isRunning_)
+            statesManager_.getCurrentState()->render(window_);
     }
 
     bool Engine::isRunning() const {
         return isRunning_;
     }
 
-    const std::string &Engine::getPreviousStateName() const {
-        return prevStateName_;
-    }
-
     const Gui::Window &Engine::getRenderTarget() const {
         return window_;
+    }
+
+    StateManager &Engine::getStateManager() {
+        return statesManager_;
     }
 
     const std::string &Engine::getAppName() const {
