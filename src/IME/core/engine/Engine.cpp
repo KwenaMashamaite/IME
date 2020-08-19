@@ -1,8 +1,7 @@
 #include "IME/core/engine/Engine.h"
-#include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/Clock.h"
-#include "IME/utility/Helpers.h"
+#include "IME/utility/ConfigFileParser.h"
 
 namespace IME {
     std::shared_ptr<const GuiFactory> IME::Engine::guiFactory_(std::make_shared<GuiFactory>());
@@ -21,36 +20,15 @@ namespace IME {
     }
 
     void Engine::loadSettings() {
-        auto settings = std::stringstream();
-        Utility::DiskFileReader().readFileInto(settingFile_, settings);
-        auto setting = std::string("");
-        while (std::getline(settings, setting)) {
-            static auto errorMessage = [&](const std::string& errorMessage){
-                return R"(The entry ')" + setting + R"(')" + " in " + settingFile_
-                    + " is invalid because " + errorMessage;
-            };
-
-            ////Skip lines that are empty or begin with a comment or whitespaces
-            if (setting.empty() || setting[0] == '#' || setting[0] == ' ')
-                continue;
-
-            if (auto separatorPos = setting.find_first_of('='); separatorPos != std::string::npos) {
-                auto key = setting.substr(0, separatorPos);
-                if (key.find_first_of(' ') != std::string::npos)
-                    throw InvalidArgument(errorMessage("key contains whitespaces"));
-                auto value = setting.substr(separatorPos + 1);
-                settings_.insert(std::pair(key, value));
-            } else
-                throw InvalidArgument(errorMessage(R"("it's missing a separator '=')"));
-        }
+        settings_ = Utility::ConfigFileParser().parse(settingFile_);
         verifySettings();
     }
 
     void Engine::verifySettings() const {
         auto mandatorySettings = {"title", "width", "height", "fullscreen"};
         std::for_each(mandatorySettings.begin(), mandatorySettings.end(),
-            [this](const std::string setting){
-                if (settings_.find(setting) == settings_.end())
+            [this](const std::string setting) {
+                if (!settings_.hasProperty(setting) && settings_.getValueFor(setting).empty())
                     throw InvalidArgument(R"(Missing mandatory setting ')"
                         + setting + R"(' in )" + settingFile_);
             }
@@ -60,17 +38,18 @@ namespace IME {
     void Engine::initRenderTarget() {
         auto desktopWidth = sf::VideoMode::getDesktopMode().width;
         auto desktopHeight = sf::VideoMode::getDesktopMode().height;
-        auto width = std::stof(settings_["width"]);
-        auto height = std::stof(settings_["height"]);
-        auto isFullscreen = static_cast<bool>(std::stoi(settings_["fullscreen"]));
+        auto title = settings_.getValueFor("title");
+        auto width = std::stof(settings_.getValueFor("width"));
+        auto height = std::stof(settings_.getValueFor("height"));
+        auto isFullscreen = static_cast<bool>(std::stoi(settings_.getValueFor("fullscreen")));
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
-            window_.create(settings_["title"], desktopWidth, desktopHeight, Gui::Window::Style::Fullscreen);
+            window_.create(title, desktopWidth, desktopHeight, Gui::Window::Style::Fullscreen);
         } else {
             if (width > desktopWidth)
                 width = desktopWidth;
             if (height > desktopHeight)
                 height = desktopHeight;
-            window_.create(settings_["title"], width, height, Gui::Window::Style::Close);
+            window_.create(title, width, height, Gui::Window::Style::Close);
         }
     }
 
