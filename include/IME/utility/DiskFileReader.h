@@ -11,6 +11,14 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Modes in which a file can be written to in
+         */
+        enum class WriteMode {
+            Overwrite, // Overwrites file content with new data
+            Append     // Appends (At the end of file) new data to existing data
+        };
+
         class DiskFileReader {
         public:
             /**
@@ -19,7 +27,7 @@ namespace IME {
              * @param buffer Stores the contents of the read file
              * @throws FileNotFound If the file cannot be found on the disk
              *
-             * The file name must be preceded by the path to the file
+             * @note The file name must be preceded by the path to the file
              */
             void readFileInto(const std::string &filename, std::stringstream &buffer);
 
@@ -27,14 +35,13 @@ namespace IME {
              * @brief Write data to a file on the disk
              * @param buffer Contents to write to file
              * @param filename Name of the file to write data to
+             * @param mode Mode in which file is opened in
              * @throws FileNotFound If the file cannot be found on the disk
              *
-             * The file name must be preceded by the path to the file.
-             *
-             * @note This function will overwrite any data that was previously
-             * stored on the file
+             * @note The file name must be preceded by the path to the file.
              */
-            void writeToFile(const std::stringstream &buffer, const std::string &filename);
+            void writeToFile(const std::stringstream &buffer,const std::string &filename,
+                WriteMode mode = WriteMode::Overwrite);
 
         private:
             //Reads from file
