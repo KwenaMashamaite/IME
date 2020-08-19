@@ -2,23 +2,40 @@
 # Lines that start with '#' are comments.
 #
 # The syntax for the file is as follows:
-# 	key=value
+# 	key:type=value
 #
-# key is the name of a variable whilst value is an
-# entry associated with that key. The key must not 
-# contain any whitespaces or special characters. For
-# option values use 1 for yes/true and 0 for no/false
+# key is the name of a variable, type is the type of
+# the key (only fundamental types are allowed!!) and 
+# value is an entry associated with that key. The 
+# key must not contain any whitespaces or special 
+# characters. For boolean types use 1 for yes/true
+# and 0 for no/false.
 #
 ####################################################
 
 # Title of the game window
-title=Space Invaders
+title:string=Space Invaders
 
 # Game window fullscreen option
-fullscreen=0
+fullscreen:bool=0
 
 # Width of the game window
-width=1000
+width:int=1000
 
 # Height of the game window
-height=700
+height:int=700
+
+# Fonts path
+fontsPath:string=resources/fonts
+
+# ImagePath
+imagePath:string=resources/images
+
+# Music PATH
+musicPath:string=resources/music
+
+# Sound effects path
+sfxPath:string=resources/sfx
+
+# Highscores path
+highscoresPath:string=files

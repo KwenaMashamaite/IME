@@ -8,6 +8,7 @@
 #include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
 #include "StateManager.h"
+#include "IME/utility/PropertiesContainer.h"
 
 namespace IME {
     class Engine {
@@ -140,7 +141,7 @@ namespace IME {
         //Engine states
         StateManager statesManager_;
         //Engine settings
-        std::unordered_map<std::string, std::string> settings_;
+        Utility::PropertyContainer settings_;
     };
 } // namespace IME
 

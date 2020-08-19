@@ -25,6 +25,32 @@ namespace IME {
             float y;
         };
 
+
+        /**
+         * @brief Property
+         */
+        struct Property {
+            std::string name;
+            std::string type;
+            std::string value;
+
+            /**
+             * @brief Equality comparison operator
+             */
+            bool operator==(const Property& other) {
+                return name == other.name
+                    && type == other.type
+                    && value== other.value;
+            }
+
+            /**
+             * @brief
+             */
+            bool operator!=(const Property& other) {
+                return name != other.name;
+            }
+        };
+
         /**
          * @brief Object type
          */
