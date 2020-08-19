@@ -5,7 +5,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "IME/factory/GuiFactory.h"
+#include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
 
 namespace IME {

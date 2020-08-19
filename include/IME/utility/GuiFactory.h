@@ -50,7 +50,7 @@ namespace IME {
         std::unique_ptr<T> instantiate(Args&&...args) const;
     };
 
-    #include "IME/factory/GuiFactory.inl"
+    #include "IME/utility/GuiFactory.inl"
 } // namespace IME
 
 #endif

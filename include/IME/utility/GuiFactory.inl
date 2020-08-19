@@ -1,6 +1,5 @@
 template<class T, typename... Args>
-std::unique_ptr<Gui::UIElement>
-GuiFactory::getUIElement(Args &&... args) const {
+std::unique_ptr<Gui::UIElement> GuiFactory::getUIElement(Args &&... args) const {
     return std::move(instantiate<T>(std::forward<Args>(args)...));
 }
 
