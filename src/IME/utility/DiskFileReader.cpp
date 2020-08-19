@@ -1,4 +1,4 @@
-#include "IME/core/resources/DiskFileReader.h"
+#include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 
 void IME::Utility::DiskFileReader::readFileInto(const std::string &filename, std::stringstream& buffer){

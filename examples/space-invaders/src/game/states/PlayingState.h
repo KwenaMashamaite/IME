@@ -4,7 +4,7 @@
 
 #include "IME/core/engine/State.h"
 #include "IME/gui/layout/DockPanel.h"
-#include "IME/utility/Scoreboard.h"
+#include "IME/core/Scoreboard.h"
 
 namespace SI {
     class PlayingState : public IME::State{

@@ -1,5 +1,5 @@
-#include "IME/utility/Scoreboard.h"
-#include "IME/core/resources/DiskFileReader.h"
+#include "IME/core/Scoreboard.h"
+#include "IME/utility/DiskFileReader.h"
 #include <algorithm>
 #include <sstream>
 

@@ -1,6 +1,6 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/core/engine/State.h"
-#include "IME/core/resources/DiskFileReader.h"
+#include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/Clock.h"
 #include "IME/utility/Helpers.h"
