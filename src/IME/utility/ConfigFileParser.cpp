@@ -11,6 +11,10 @@ namespace IME::Utility {
         return {false, std::string::npos};
     }
 
+    bool hasWhiteSpace(const std::string& str){
+        return hasCharacter(str, ' ').first;
+    }
+
     PropertyContainer ConfigFileParser::parse(const std::string &filename) {
         auto properties = PropertyContainer();
         auto configurations = std::stringstream();
@@ -32,6 +36,8 @@ namespace IME::Utility {
                 if (auto[found, equalSignPos] = hasCharacter(typeAndValue,'='); found) {
                     auto type = typeAndValue.substr(0, equalSignPos);
                     auto value = typeAndValue.substr(equalSignPos + 1);
+                    if (hasWhiteSpace(key) || hasWhiteSpace(type))
+                        throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
                     properties.addProperty(key, type, value);
                 } else
                     throw InvalidArgument(errorMessage(R"(type and value not separated by '=')"));
