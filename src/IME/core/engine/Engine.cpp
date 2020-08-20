@@ -1,5 +1,4 @@
 #include "IME/core/engine/Engine.h"
-#include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
 
@@ -19,6 +18,10 @@ namespace IME {
         initRenderTarget();
         window_.setFramerateLimit(60);
         window_.setIcon("icon.png");
+
+        auto musicPath = settings_.getValueFor("musicPath");
+        auto sfxPath = settings_.getValueFor("sfxPath");
+        audioManager_ = std::make_unique<Audio::AudioManager>(musicPath, sfxPath);
     }
 
     void Engine::loadSettings() {
@@ -123,6 +126,10 @@ namespace IME {
 
     const std::string &Engine::getAppName() const {
         return appName_;
+    }
+
+    Audio::AudioManager &Engine::getAudioManager() {
+        return *audioManager_;
     }
 
     Engine::~Engine() = default;

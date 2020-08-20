@@ -8,6 +8,7 @@
 #include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
 #include "IME/core/resources/ResourceManager.h"
+#include "IME/core/audio/AudioManager.h"
 #include "IME/utility/PropertiesContainer.h"
 #include "StateManager.h"
 
@@ -79,6 +80,12 @@ namespace IME {
         ResourceManager& getResourceManager();
 
         /**
+         * @brief Get access to the engines audio manager
+         * @return Engines audio manager
+         */
+        Audio::AudioManager& getAudioManager();
+
+        /**
          * @brief Get a factory for creating gui components
          * @return Pointer to a gui factory
          */
@@ -142,6 +149,8 @@ namespace IME {
         static std::shared_ptr<const GuiFactory> guiFactory_;
         //Engine states
         StateManager statesManager_;
+        //Engines audio manager
+        std::unique_ptr<Audio::AudioManager> audioManager_;
         //Engines resource manager
         std::shared_ptr<ResourceManager> resourceManager_;
         //Engine settings
