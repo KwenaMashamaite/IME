@@ -5,11 +5,11 @@
 # 	key:type=value
 #
 # key is the name of a variable, type is the type of
-# the key (only fundamental types are allowed!!) and 
-# value is an entry associated with that key. The 
-# key must not contain any whitespaces or special 
-# characters. For boolean types use 1 for yes/true
-# and 0 for no/false.
+# the key (in lowercase - only fundamental types are 
+# allowed) and value is an entry associated with that
+# key. The key must not contain any whitespaces or
+# special characters. For boolean types use 1 for yes
+# or true and 0 for no or false.
 #
 ####################################################
 

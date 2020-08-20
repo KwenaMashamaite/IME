@@ -15,6 +15,11 @@ namespace IME::Utility {
         return hasCharacter(str, ' ').first;
     }
 
+    bool isFundamentalType(const std::string& type) {
+        return (type == "string" || type == "int" || type == "char" || type == "float"
+            || type == "double" || type == "bool");
+    }
+
     PropertyContainer ConfigFileParser::parse(const std::string &filename) {
         auto properties = PropertyContainer();
         auto configurations = std::stringstream();
@@ -38,6 +43,8 @@ namespace IME::Utility {
                     auto value = typeAndValue.substr(equalSignPos + 1);
                     if (hasWhiteSpace(key) || hasWhiteSpace(type))
                         throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
+                    if (!isFundamentalType(type))
+                        throw InvalidArgument(errorMessage("'" + type + "'" + " is not a fundamental type"));
                     properties.addProperty(key, type, value);
                 } else
                     throw InvalidArgument(errorMessage(R"(type and value not separated by '=')"));
