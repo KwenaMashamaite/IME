@@ -13,7 +13,9 @@ namespace IME {
     {}
 
     void Engine::init() {
+        //Order is important!, some operations requires others to finish first
         loadSettings();
+        initResourceManager();
         initRenderTarget();
         window_.setFramerateLimit(60);
         window_.setIcon("icon.png");
@@ -51,6 +53,15 @@ namespace IME {
                 height = desktopHeight;
             window_.create(title, width, height, Gui::Window::Style::Close);
         }
+    }
+
+    void Engine::initResourceManager() {
+        resourceManager_ = ResourceManager::getInstance();
+        resourceManager_->setPath(ResourceType::Font, settings_.getValueFor("fontsPath"));
+        resourceManager_->setPath(ResourceType::Texture, settings_.getValueFor("imagesPath"));
+        resourceManager_->setPath(ResourceType::Image, settings_.getValueFor("imagesPath"));
+        resourceManager_->setPath(ResourceType::SoundBuffer, settings_.getValueFor("sfxPath"));
+        resourceManager_->setPath(ResourceType::Music, settings_.getValueFor("musicPath"));
     }
 
     void Engine::run() {
@@ -104,6 +115,10 @@ namespace IME {
 
     StateManager &Engine::getStateManager() {
         return statesManager_;
+    }
+
+    ResourceManager &Engine::getResourceManager() {
+        return *resourceManager_;
     }
 
     const std::string &Engine::getAppName() const {

@@ -7,8 +7,9 @@
 
 #include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
-#include "StateManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include "IME/utility/PropertiesContainer.h"
+#include "StateManager.h"
 
 namespace IME {
     class Engine {
@@ -18,16 +19,6 @@ namespace IME {
          * @param gameName Name of the application
          * @param settingsFilename Name of the file (including the path) that
          *        contains the engines settings
-         *
-         * The settings file must contain at least the following mandatory
-         * settings:
-         *     "title"      - Title of the render window
-         *     "width"      - Width of the render window
-         *     "height"     - Height of the render window
-         *     "fullscreen" - Whether the render window should be constructed
-         *                    in fullscreen mode or not,
-         *
-         * otherwise the initialization of the base engine will fail @see init(void)
          */
         Engine(const std::string &gameName, const std::string &settingsFilename);
 
@@ -82,6 +73,12 @@ namespace IME {
         StateManager& getStateManager();
 
         /**
+         * @brief Get access to the engines resource manager
+         * @return Engines resource manager
+         */
+        ResourceManager& getResourceManager();
+
+        /**
          * @brief Get a factory for creating gui components
          * @return Pointer to a gui factory
          */
@@ -118,6 +115,11 @@ namespace IME {
         void initRenderTarget();
 
         /**
+         * @brief Initialize the resource manager
+         */
+        void initResourceManager();
+
+        /**
          * @brief Update current frame
          */
         void update();
@@ -140,6 +142,8 @@ namespace IME {
         static std::shared_ptr<const GuiFactory> guiFactory_;
         //Engine states
         StateManager statesManager_;
+        //Engines resource manager
+        std::shared_ptr<ResourceManager> resourceManager_;
         //Engine settings
         Utility::PropertyContainer settings_;
     };

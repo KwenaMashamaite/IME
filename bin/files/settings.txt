@@ -25,17 +25,17 @@ width:int=1000
 # Height of the game window
 height:int=700
 
-# Fonts path
-fontsPath:string=resources/fonts
+# Path to fonts
+fontsPath:string=resources/fonts/
 
-# ImagePath
-imagePath:string=resources/images
+# Path to image files
+imagesPath:string=resources/images/
 
-# Music PATH
-musicPath:string=resources/music
+# Path to music files
+musicPath:string=resources/music/
 
-# Sound effects path
-sfxPath:string=resources/sfx
+# Path to sound effects
+sfxPath:string=resources/sfx/
 
 # Highscores path
-highscoresPath:string=files
+highscoresPath:string=files/
