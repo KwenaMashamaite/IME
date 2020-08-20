@@ -48,6 +48,6 @@ namespace IME {
     }
 
     bool StateManager::hasState(const std::string &name) const {
-        return getState(name) == nullptr;;
+        return getState(name) != nullptr;;
     }
 }
