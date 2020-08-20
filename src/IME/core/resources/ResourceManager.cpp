@@ -5,28 +5,28 @@
 using IME::Definitions::FilePath;
 
 namespace IME {
-    ResourceHolder<sf::Texture> ResourceManager::texturesHolder_{FilePath::TexturesPath};
-    ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffersHolder_{FilePath::SoundEffectsPath};
-    ResourceHolder<sf::Font> ResourceManager::fontsHolder_{FilePath::FontsPath};
-    ResourceHolder<sf::Image> ResourceManager::imagesHolder_{FilePath::ImagesPath};
-    ResourceHolder<sf::Music> ResourceManager::musicHolder_{FilePath::MusicPath};
+    ResourceHolder<sf::Texture> ResourceManager::textures_{FilePath::TexturesPath};
+    ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffers_{FilePath::SoundEffectsPath};
+    ResourceHolder<sf::Font> ResourceManager::fonts_{FilePath::FontsPath};
+    ResourceHolder<sf::Image> ResourceManager::images_{FilePath::ImagesPath};
+    ResourceHolder<sf::Music> ResourceManager::music_{FilePath::MusicPath};
 
     void ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
         switch (type) {
             case ResourceType::Texture:
-                texturesHolder_.loadFromFile(filename);
+                textures_.loadFromFile(filename);
                 break;
             case ResourceType::SoundBuffer:
-                soundBuffersHolder_.loadFromFile(filename);
+                soundBuffers_.loadFromFile(filename);
                 break;
             case ResourceType::Image:
-                imagesHolder_.loadFromFile(filename);
+                images_.loadFromFile(filename);
                 break;
             case ResourceType::Font:
-                fontsHolder_.loadFromFile(filename);
+                fonts_.loadFromFile(filename);
                 break;
             case ResourceType::Music:
-                musicHolder_.loadFromFile(filename);
+                music_.loadFromFile(filename);
                 break;
         }
     }
@@ -41,52 +41,52 @@ namespace IME {
     }
 
     const sf::Font &ResourceManager::getFont(const std::string &fileName) {
-        return *(fontsHolder_.get(fileName));
+        return *(fonts_.get(fileName));
     }
 
     const sf::Texture &ResourceManager::getTexture(const std::string &fileName) {
-        return *(texturesHolder_.get(fileName));
+        return *(textures_.get(fileName));
     }
 
     const sf::Image &ResourceManager::getImage(const std::string &fileName) {
-        return *(imagesHolder_.get(fileName));
+        return *(images_.get(fileName));
     }
 
     const sf::SoundBuffer &ResourceManager::getSoundBuffer(const std::string &fileName) {
-        return *(soundBuffersHolder_.get(fileName));
+        return *(soundBuffers_.get(fileName));
     }
 
     std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string& filename) {
-        return musicHolder_.get(filename);
+        return music_.get(filename);
     }
 
     bool ResourceManager::unload(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:
-                return texturesHolder_.unload(filename);
+                return textures_.unload(filename);
             case ResourceType::Font:
-                return fontsHolder_.unload(filename);
+                return fonts_.unload(filename);
             case ResourceType::Image:
-                return imagesHolder_.unload(filename);
+                return images_.unload(filename);
             case ResourceType::SoundBuffer:
-                return soundBuffersHolder_.unload(filename);
+                return soundBuffers_.unload(filename);
             case ResourceType::Music:
-                return musicHolder_.unload(filename);
+                return music_.unload(filename);
         }
     }
 
     int ResourceManager::getUseCount(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:
-                return texturesHolder_.getUseCountFor(filename);
+                return textures_.getUseCountFor(filename);
             case ResourceType::Font:
-                return fontsHolder_.getUseCountFor(filename);
+                return fonts_.getUseCountFor(filename);
             case ResourceType::Image:
-                return imagesHolder_.getUseCountFor(filename);
+                return images_.getUseCountFor(filename);
             case ResourceType::SoundBuffer:
-                return soundBuffersHolder_.getUseCountFor(filename);
+                return soundBuffers_.getUseCountFor(filename);
             case ResourceType::Music:
-                return musicHolder_.getUseCountFor(filename);
+                return music_.getUseCountFor(filename);
         }
     }
 }

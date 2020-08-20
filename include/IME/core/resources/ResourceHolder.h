@@ -8,7 +8,11 @@
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/utility/Helpers.h"
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Audio/Music.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <unordered_map>
 #include <memory>
 #include <utility>
@@ -108,6 +112,13 @@ namespace IME {
     };
 
     #include "IME/core/resources/ResourceHolder.inl"
+
+    // Common resource holders
+    using FontHolder = ResourceHolder<sf::Font>;
+    using TextureHolder = ResourceHolder<sf::Texture>;
+    using ImageHolder = ResourceHolder<sf::Image>;
+    using MusicHolder = ResourceHolder<sf::Music>;
+    using SoundBufferHolder = ResourceHolder<sf::SoundBuffer>;
 } // namespace IME
 
 #endif

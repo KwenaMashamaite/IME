@@ -133,15 +133,15 @@ namespace IME {
 
     private:
         //Stores textures
-        static ResourceHolder<sf::Texture> texturesHolder_;
+        static TextureHolder textures_;
         //Stores sound buffers
-        static ResourceHolder<sf::SoundBuffer> soundBuffersHolder_;
+        static SoundBufferHolder soundBuffers_;
         //Stores fonts
-        static ResourceHolder<sf::Font> fontsHolder_;
+        static FontHolder fonts_;
         //Stores images
-        static ResourceHolder<sf::Image> imagesHolder_;
+        static ImageHolder images_;
         //Stores music
-        static ResourceHolder<sf::Music> musicHolder_;
+        static MusicHolder music_;
     };
 }
 
