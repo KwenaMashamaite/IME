@@ -111,6 +111,12 @@ namespace IME::Gui {
         }
     }
 
+    void Panel::handleEvent(sf::Event event) {
+        std::for_each(uiElements_.begin(), uiElements_.end(), [=](auto& uiElement) {
+            uiElement.second->handleEvent(event);
+        });
+    }
+
     Panel::UIElementContainer::iterator Panel::findUIElement(const std::string &uiElemAlias) {
         return std::find_if(uiElements_.begin(), uiElements_.end(),
             [this, &uiElemAlias](const auto& uiElement){

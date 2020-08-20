@@ -67,6 +67,14 @@ namespace IME {
         resourceManager_->setPath(ResourceType::Music, settings_.getValueFor("musicPath"));
     }
 
+    void Engine::processEvents() {
+        sf::Event event;
+        while (window_.pollEvent(event)){
+            if (statesManager_.getCurrentState())
+                statesManager_.getCurrentState()->handleEvent(event);
+        }
+    }
+
     void Engine::run() {
         if (!isRunning_ && !statesManager_.isEmpty()) {
             isRunning_ = true;
@@ -74,7 +82,7 @@ namespace IME {
             auto clock = Utility::Clock();
             auto deltaTime = clock.restart();
             while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
-                window_.processEvents();
+                processEvents();
                 if (deltaTime >= frameTime) { //Fixed time step update
                     if (auto currentState = statesManager_.getCurrentState(); currentState)
                         currentState->fixedUpdate(deltaTime);

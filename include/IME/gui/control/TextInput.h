@@ -44,6 +44,17 @@ namespace IME {
             void setSize(Dimensions size);
 
             /**
+             * @brief Handle an event
+             * @param event Event to handle
+             *
+             * @note If overridden, this function must be called in the body of
+             * the overriding function so that the base class can also handle
+             * its events. Failure to do so may result in inconsistent and
+             * incorrect behavior
+             */
+            void handleEvent(sf::Event event) override;
+
+            /**
              * @brief Check if element is focused or not
              * @return True if element is focused. Otherwise, false
              */

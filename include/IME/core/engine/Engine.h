@@ -127,6 +127,11 @@ namespace IME {
         void initResourceManager();
 
         /**
+         * @brief Process events for the current frame
+         */
+        void processEvents();
+
+        /**
          * @brief Update current frame
          */
         void update();

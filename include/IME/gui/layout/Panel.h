@@ -8,6 +8,7 @@
 #include "../control/UIElement.h"
 #include "../common/IDrawable.h"
 #include "IME/event/EventEmitter.h"
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <memory>
@@ -145,6 +146,15 @@ namespace IME {
              * @param renderTarget Render target to draw panel on
              */
             void draw(Window &renderTarget) override;
+
+            /**
+             * @brief Handle event for all contained UI elements
+             * @param event Event to handle
+             *
+             * This function will pass the event to all the contained UI elements
+             * such that each UI element handles the event
+             */
+            void handleEvent(sf::Event event);
 
             /**
              * @brief Subscribe all child elements to an event

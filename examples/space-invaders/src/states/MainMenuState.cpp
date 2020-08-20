@@ -59,12 +59,10 @@ namespace SI {
 
     void MainMenuState::pause() {
         //Buttons need to be hidden because they can still be interacted with if only cleared
-        panels_["navButtonsPanel"]->hide();
         musicPlayer_.pause();
     }
 
     void MainMenuState::resume() {
-        panels_["navButtonsPanel"]->show();
         musicPlayer_.play();
     }
 
@@ -211,5 +209,10 @@ namespace SI {
             case View::None:
                 break;
         }
+    }
+
+    void MainMenuState::handleEvent(sf::Event event) {
+        for (auto& panel : panels_)
+            panel.second->handleEvent(event);
     }
 }

@@ -51,4 +51,8 @@ namespace SI {
     void PlayingState::reset() {
 
     }
+
+    void PlayingState::handleEvent(sf::Event event) {
+
+    }
 }

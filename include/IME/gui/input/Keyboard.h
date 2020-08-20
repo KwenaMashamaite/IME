@@ -6,6 +6,7 @@
 #define KEYBOARD_H
 
 #include "IME/event/EventEmitter.h"
+#include <SFML/Window/Event.hpp>
 
 namespace IME {
     namespace Input {
@@ -44,9 +45,13 @@ namespace IME {
             };
 
             /**
-             * @brief Constructor
+             * @brief Handle event
+             * @param event Event to handle
+             *
+             * This function must be called once per frame in order for the object
+             * to determine if a key was pressed or released or neither
              */
-            Keyboard();
+            void update(sf::Event event);
 
             /**
              * @brief Check if key is pressed or not
@@ -66,7 +71,7 @@ namespace IME {
               * A key down event fires when a key is pressed on the keyboard and
               * continues to fire while that key is held down
               */
-            static int onKeyDown(Key key, Callback<> callback);
+            int onKeyDown(Key key, Callback<> callback);
 
             /**
               * @brief Add an event listener to a key up event
@@ -77,7 +82,7 @@ namespace IME {
               * A key up event fires when a key is released on the keyboard. This event
               * always fires after a key down event @see onKeyDown(Key, Callback)
               */
-            static int onKeyUp(Key key, Callback<> callback);
+            int onKeyUp(Key key, Callback<> callback);
 
             /**
               * @brief  Remove an event listener from an event
@@ -87,20 +92,11 @@ namespace IME {
               * @return True if a listener was removed from an event, false if the
               *         specified event does not have a listener with the specified id
               */
-            static bool
-            removeEventListener(const std::string &event, Key key, int callbackId);
-
-        private:
-            /**
-             * @brief Initialize the event emitter for event publishing
-             */
-            static void initEventEmitter();
+            bool removeEventListener(const std::string &event, Key key, int callbackId);
 
         private:
             //Event Emitter/publisher
-            inline static EventEmitter eventEmitter_{};
-            //State of the event emitter (Since class can be used without instance)
-            inline static auto isEventEmitterInitialized_{false};
+            EventEmitter eventEmitter_;
         };
     } // namespace Gui
 } // namespace IME

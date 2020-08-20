@@ -19,6 +19,8 @@ namespace SI {
 
         void render(IME::Gui::Window &renderTarget) override;
 
+        void handleEvent(sf::Event event) override;
+
         void pause() override;
 
         void resume() override;

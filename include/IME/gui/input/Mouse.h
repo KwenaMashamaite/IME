@@ -6,6 +6,7 @@
 #define MOUSE_H
 
 #include "IME/event/EventEmitter.h"
+#include <SFML/Window/Event.hpp>
 
 namespace IME {
     namespace Input {
@@ -30,6 +31,15 @@ namespace IME {
             static bool isButtonPressed(Button button);
 
             /**
+            * @brief Handle event
+            * @param event Event to handle
+            *
+            * This function must be called once per frame in order for the object
+            * to determine if a mouse was pressed, released or moved
+            */
+            void update(sf::Event event);
+
+            /**
              * @brief Add an event listener to a mouse button up event
              * @param button Mouse button to listen for
              * @param callback Function to execute when the mouse button is released
@@ -38,7 +48,7 @@ namespace IME {
              * A button up event fires when a mouse button is released. This event always
              * fires after a mouse button down event @see onButtonDown(Button, Callback)
              */
-            static int onButtonUp(Button button, Callback<> callback);
+            int onButtonUp(Button button, Callback<> callback);
 
             /**
              * @brief Add an event listener to mouse button down event
@@ -49,7 +59,7 @@ namespace IME {
              * A button down event fires when you depress a mouse button. @note This
              * event does not fire repetitively while the mouse button remains depressed
              */
-            static int onButtonDown(Button button, Callback<> callback);
+            int onButtonDown(Button button, Callback<> callback);
 
             /**
              * @brief Add an event listener to a mouse move event
@@ -59,7 +69,7 @@ namespace IME {
              * The callback function will be invoked with the new position (int, int)
              * of the mouse cursor
              */
-            static int onMouseMove(Callback<int, int> callback);
+            int onMouseMove(Callback<int, int> callback);
 
             /**
               * @brief  Remove an event listener from an event
@@ -69,20 +79,12 @@ namespace IME {
               * @return True if a listener was removed from an event, false if the
               *         specified event does not have a listener with the specified id
               */
-            static bool removeEventListener(const std::string &event, Button button,
+            bool removeEventListener(const std::string &event, Button button,
                 int listenerId);
 
         private:
-            /**
-             * @brief Initialize the event emitter for event publishing
-             */
-            static void initEventEmitter();
-
-        private:
             //Event Emitter/publisher
-            inline static EventEmitter eventEmitter_{};
-            //State of the event emitter (Since class can be used without instance)
-            inline static auto isEventEmitterInitialized_{false};
+            EventEmitter eventEmitter_{};
         };
     } // namespace Gui
 } // namespace IME

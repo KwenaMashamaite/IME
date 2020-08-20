@@ -258,6 +258,10 @@ namespace IME::Gui {
         }
     }
 
+    void UIElement::handleEvent(sf::Event event) {
+
+    }
+
     void UIElement::updateDimensions() {
         border_.setSize(sf::Vector2f(
             text_.getGlobalBounds().width + padding_.left + padding_.right,

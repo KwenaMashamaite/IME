@@ -82,4 +82,8 @@ namespace SI {
     void QuitingState::reset() {
 
     }
+
+    void QuitingState::handleEvent(sf::Event event) {
+        panel_->handleEvent(event);
+    }
 }

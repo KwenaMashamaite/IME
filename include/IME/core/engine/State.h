@@ -5,8 +5,9 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <string>
 #include "IME/gui/window/Window.h"
+#include <SFML/Window/Event.hpp>
+#include <string>
 
 namespace IME {
     class Engine;
@@ -48,6 +49,12 @@ namespace IME {
          * requested and this object is the current state
          */
         virtual void pause() = 0;
+
+        /**
+         * @brief Handle an event
+         * @param event Event to handle
+         */
+        virtual void handleEvent(sf::Event event) = 0;
 
         /**
          * @brief Resume a paused state

@@ -1,4 +1,4 @@
-#include "game/SpaceInvaders.h"
+#include "SpaceInvaders.h"
 
 int main(){
     auto spaceInvaders = SI::SpaceInvaders();

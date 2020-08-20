@@ -23,28 +23,6 @@ namespace IME::Gui {
             setFocus(true);
         }));
 
-        // Unfocus the element if focused and the mouse is left clicked outside of the element
-        Window::addEventListener("mouseButtonPressed", Callback<Input::Mouse::Button>(
-            [this](Input::Mouse::Button pressedButton) {
-                if (pressedButton == Input::Mouse::Button::Left && !isMouseOverElement() && isFocused())
-                    setFocus(false);
-            }
-        ));
-
-        // Update text when the keyboard is pressed and the element is focused
-        Window::addEventListener("textEntered", Callback<char>([this](char character){
-            if (isFocused()) {
-                static constexpr auto enterKeyCode = 13;
-                static constexpr auto backspaceKeyCode = 8;
-                if (static_cast<int>(character) != enterKeyCode) {
-                    if (static_cast<int>(character) == backspaceKeyCode)
-                        popBack();
-                    else
-                        append(character);
-                }
-            }
-        }));
-
         // Clear placeholder when element gains focus and no text has been entered
         addEventListener("focused", Callback<>([this]{
             if (!isPlaceholderCleared()){
@@ -146,6 +124,29 @@ namespace IME::Gui {
                 emit("textEntered", text.substr(0, caretPos));
             else
                 emit("textEntered", text);
+        }
+    }
+
+    void TextInput::handleEvent(sf::Event event) {
+        ClickableUIElement::handleEvent(event);
+
+        if (event.type == sf::Event::TextEntered) {
+            if (auto character = static_cast<char>(event.text.unicode); isFocused()) {
+                static constexpr auto enterKeyCode = 13;
+                static constexpr auto backspaceKeyCode = 8;
+                if (static_cast<int>(character) != enterKeyCode) {
+                    if (static_cast<int>(character) == backspaceKeyCode)
+                        popBack();
+                    else
+                        append(character);
+                }
+            }
+        } else if (event.type ==  sf::Event::MouseButtonPressed) {
+            auto pressedButton = static_cast<Input::Mouse::Button>(
+                    static_cast<unsigned int>(event.mouseButton.button));
+            if (pressedButton == Input::Mouse::Button::Left &&
+                !isMouseOverElement() && isFocused())
+                setFocus(false);
         }
     }
 }

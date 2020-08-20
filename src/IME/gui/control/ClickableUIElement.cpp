@@ -13,67 +13,6 @@ namespace IME::Gui{
     }
 
     void ClickableUIElement::initEvents() {
-        //Check if mouse cursor has entered element or left element after entering it
-        Window::addEventListener("mouseMoved",Callback<int, int>([this](int x, int y) {
-            if (!isHidden() && isEnabled()) {
-                if (contains(x, y) && !isMouseOverElement_) {
-                    isMouseOverElement_ = true;
-                    emit("mouseEnter");
-                } else if (!contains(x, y) && isMouseOverElement_) {
-                    isMouseOverElement_ = false;
-                    emit("mouseLeave");
-                }
-            }
-        }));
-
-        // Notify event listeners when the the mouse is depressed while the
-        // mouse cursor is over the element
-        Window::addEventListener("mouseButtonPressed", Callback<Input::Mouse::Button>(
-            [this](Input::Mouse::Button pressedButton) {
-                if (isMouseOverElement_) {
-                    switch (pressedButton) {
-                        case Input::Mouse::Button::Left:
-                            emit("leftMouseDown");
-                            break;
-                        case Input::Mouse::Button::Right:
-                            emit("rightMouseDown");
-                            break;
-                        case Input::Mouse::Button::Middle:
-                            emit("middleMouseDown");
-                            break;
-                    }
-                }
-            }
-        ));
-
-        // notify event listeners when the mouse is released while the mouse
-        // cursor is over the element.
-        Window::addEventListener("mouseButtonReleased", Callback<Input::Mouse::Button>(
-            [this](Input::Mouse::Button releasedButton) {
-                if (isMouseOverElement_) {
-                    switch (releasedButton) {
-                        case Input::Mouse::Button::Left:
-                            emit("leftMouseUp");
-                            break;
-                        case Input::Mouse::Button::Right:
-                            emit("rightMouseUp");
-                            break;
-                        case Input::Mouse::Button::Middle:
-                            emit("middleMouseUp");
-                            break;
-                    }
-                }
-            }
-        ));
-
-        // Deselect UI element if it's selected and mouse cursor leaves application window
-        Window::addEventListener("mouseLeft", Callback<>([this]{
-            if (isMouseOverElement_) {
-                isMouseOverElement_ = false;
-                emit("mouseLeave");
-            }
-        }));
-
         // Notify event listeners when the element is clicked. A click event
         // always occur after a mouse up event, which occurs after a mouse
         // down event (mouseDown->mouseUp->click)
@@ -128,6 +67,67 @@ namespace IME::Gui{
 
     bool ClickableUIElement::isMouseOverElement() const {
         return isMouseOverElement_;
+    }
+
+    void ClickableUIElement::handleEvent(sf::Event event) {
+        UIElement::handleEvent(event);
+
+        switch (event.type) {
+            case sf::Event::MouseButtonPressed:
+                if (isMouseOverElement_) {
+                    auto pressedButton = static_cast<Input::Mouse::Button>(
+                            static_cast<unsigned int>(event.mouseButton.button));
+                    switch (pressedButton) {
+                        case Input::Mouse::Button::Left:
+                            emit("leftMouseDown");
+                            break;
+                        case Input::Mouse::Button::Right:
+                            emit("rightMouseDown");
+                            break;
+                        case Input::Mouse::Button::Middle:
+                            emit("middleMouseDown");
+                            break;
+                    }
+                }
+                break;
+            case sf::Event::MouseButtonReleased:
+                if (isMouseOverElement_) {
+                    auto releasedButton = static_cast<Input::Mouse::Button>(
+                            static_cast<unsigned int>(event.mouseButton.button));
+                    switch (releasedButton) {
+                        case Input::Mouse::Button::Left:
+                            emit("leftMouseUp");
+                            break;
+                        case Input::Mouse::Button::Right:
+                            emit("rightMouseUp");
+                            break;
+                        case Input::Mouse::Button::Middle:
+                            emit("middleMouseUp");
+                            break;
+                    }
+                }
+                break;
+            case sf::Event::MouseMoved:
+                //Check if mouse cursor has entered element or left element after entering it
+                if (auto x = event.mouseMove.x, y = event.mouseMove.y; !isHidden() && isEnabled()) {
+                    if (contains(x, y) && !isMouseOverElement_) {
+                        isMouseOverElement_ = true;
+                        emit("mouseEnter");
+                    } else if (!contains(x, y) && isMouseOverElement_) {
+                        isMouseOverElement_ = false;
+                        emit("mouseLeave");
+                    }
+                }
+                break;
+            case sf::Event::MouseLeft:
+                if (isMouseOverElement_) {
+                    isMouseOverElement_ = false;
+                    emit("mouseLeave");
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     ClickableUIElement::~ClickableUIElement() = default;

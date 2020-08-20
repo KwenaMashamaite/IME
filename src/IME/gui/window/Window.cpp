@@ -1,6 +1,4 @@
 #include "IME/gui/window/Window.h"
-#include "IME/gui/input/Mouse.h"
-#include "IME/gui/input/Keyboard.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
@@ -46,58 +44,8 @@ namespace IME::Gui {
         return window_.isOpen();
     }
 
-    void Window::processEvents() {
-        sf::Event event;
-        while (window_.pollEvent(event)) {
-            switch (event.type){
-                case sf::Event::Closed:
-                    eventEmitter_.emit("closed");
-                    break;
-                case sf::Event::MouseEntered:
-                    eventEmitter_.emit("mouseEntered");
-                    break;
-                case sf::Event::MouseLeft:
-                    eventEmitter_.emit("mouseLeft");
-                    break;
-                case sf::Event::LostFocus:
-                    eventEmitter_.emit("lostFocus");
-                    break;
-                case sf::Event::GainedFocus:
-                    eventEmitter_.emit("gainedFocus");
-                    break;
-                case sf::Event::Resized:
-                    eventEmitter_.emit("resized", event.size.width, event.size.height);
-                    break;
-                case sf::Event::TextEntered:
-                    eventEmitter_.emit("textEntered", static_cast<char>(event.text.unicode));
-                    break;
-                case sf::Event::KeyPressed:
-                    eventEmitter_.emit("keyPressed",
-                         static_cast<Input::Keyboard::Key>(static_cast<unsigned int>(event.key.code))
-                    );
-                    break;
-                case sf::Event::KeyReleased:
-                    eventEmitter_.emit("keyReleased",
-                         static_cast<Input::Keyboard::Key>(static_cast<unsigned int>(event.key.code))
-                    );
-                    break;
-                case sf::Event::MouseMoved:
-                    eventEmitter_.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
-                    break;
-                case sf::Event::MouseButtonPressed:
-                    eventEmitter_.emit("mouseButtonPressed",
-                         static_cast<Input::Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
-                    );
-                    break;
-                case sf::Event::MouseButtonReleased:
-                    eventEmitter_.emit("mouseButtonReleased",
-                         static_cast<Input::Mouse::Button>(static_cast<unsigned int>(event.mouseButton.button))
-                    );
-                    break;
-                default:
-                    break;
-            }
-        }
+    bool Gui::Window::pollEvent(sf::Event& event){
+        return window_.pollEvent(event);
     }
 
     void Window::close() {

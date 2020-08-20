@@ -6,7 +6,6 @@
 #define WINDOW_H
 
 #include "IME/common/Definitions.h"
-#include "IME/event/EventEmitter.h"
 #include "IME/gui/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -106,14 +105,11 @@ namespace IME {
             bool isOpen() const;
 
             /**
-             * @brief Process window events
-             *
-             * This function will notify all event listeners if any events
-             * have been captured by the window.
-             * @note Calling this function will empty the event queue for
-             *       that frame
+             * @brief Check if the event queue is empty or not.
+             * @param event Event queue to be checked
+             * @return true if event queue is not empty, false if it is empty
              */
-            void processEvents();
+            bool pollEvent(sf::Event &event);
 
             /**
              * @brief Close the window
@@ -144,31 +140,6 @@ namespace IME {
             void clear(Colour colour = Colour::Black);
 
             /**
-             * @brief Add a listener to a window event
-             * @tparam Args Template parameter pack name
-             * @param event Event to add listener to
-             * @param callback Function to execute when the event is fired
-             * @return listener's identification number
-             */
-            template <typename ...Args>
-            static int addEventListener(const std::string& event, Callback<Args...> callback){
-                eventEmitter_.addEventListener(event, callback);
-            }
-
-            /**
-             * @brief  Remove a listener from a window event
-             * @param  event Event to remove listener from
-             * @param  listenerId Identification number of the listener
-             *         to be removed
-             * @return True if a listener was removed from an event,
-             *         false if the specified event does not have a
-             *         listener with the specified id
-             */
-            static bool removeEventListener(const std::string& event, int callbackId){
-                return eventEmitter_.removeEventListener(event, callbackId);
-            }
-
-            /**
              * @brief Destructor.
              *
              * Ensures a new Window instance can be created when an existing
@@ -183,8 +154,6 @@ namespace IME {
             static Dimensions dimensions_;
             //Instantiation state
             inline static auto isInstantiated_ = false;
-            //Event Emitter
-            inline static EventEmitter eventEmitter_{};
         };
     } // namespace Gui
 } // namespace IME
