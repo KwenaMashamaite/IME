@@ -48,7 +48,7 @@ namespace IME {
          * @param filename File name of the resource to be removed
          * @return True if the resource was successfully removed, false if the
          *         resource with the specified file name does not exist or the
-         *         resource is still used elsewhere
+         *         resource is still used elsewhere @see get(const std::string&)
          */
         bool unload(const std::string& filename);
 
@@ -62,6 +62,10 @@ namespace IME {
          * attempt will be made to load it from the disk. If it cannot be loaded
          * from the disk, a "FileNotFound" exception will be raised. This means
          * that the returned pointer can never be a nullptr.
+         *
+         * @warning The returned pointer must be kept alive for as long as the
+         * resource is being used, otherwise the resource might be unloaded from
+         * the program while its in use. The outcome of such an event is undefined
          */
         [[nodiscard]] std::shared_ptr<T> get(const std::string& filename);
 
