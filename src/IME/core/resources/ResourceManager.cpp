@@ -1,15 +1,10 @@
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/common/Definitions.h"
 #include <algorithm>
 
-using IME::Definitions::FilePath;
-
 namespace IME {
-    ResourceHolder<sf::Texture> ResourceManager::textures_{FilePath::TexturesPath};
-    ResourceHolder<sf::SoundBuffer> ResourceManager::soundBuffers_{FilePath::SoundEffectsPath};
-    ResourceHolder<sf::Font> ResourceManager::fonts_{FilePath::FontsPath};
-    ResourceHolder<sf::Image> ResourceManager::images_{FilePath::ImagesPath};
-    ResourceHolder<sf::Music> ResourceManager::music_{FilePath::MusicPath};
+    ResourceManager::ResourceManager()
+        : fonts_(""), textures_(""), images_(""), soundBuffers_(""), music_("")
+    {}
 
     void ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
         switch (type) {
@@ -88,5 +83,32 @@ namespace IME {
             case ResourceType::Music:
                 return music_.getUseCountFor(filename);
         }
+    }
+
+    void ResourceManager::setPath(ResourceType type, const std::string path) {
+        switch (type) {
+            case ResourceType::Texture:
+                textures_.setPath(path);
+                break;
+            case ResourceType::Font:
+                fonts_.setPath(path);
+                break;
+            case ResourceType::Image:
+                images_.setPath(path);
+                break;
+            case ResourceType::SoundBuffer:
+                soundBuffers_.setPath(path);
+                break;
+            case ResourceType::Music:
+                music_.setPath(path);
+                break;
+        }
+    }
+
+    std::shared_ptr<ResourceManager> ResourceManager::getInstance() {
+        static std::weak_ptr<ResourceManager> instance_;
+        if (const auto result = instance_.lock())
+            return result;
+        return (instance_ = std::shared_ptr<ResourceManager>(new ResourceManager())).lock();
     }
 }

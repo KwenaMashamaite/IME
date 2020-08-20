@@ -75,7 +75,7 @@ namespace IME::Gui {
 
     void UIElement::setTextFont(const std::string &textFont) {
         textFontName_ = textFont;
-        text_.setFont(ResourceManager::getFont(textFontName_));
+        text_.setFont(ResourceManager::getInstance()->getFont(textFontName_));
         updateDimensions();
         emit("textFontChanged", textFontName_);
         emit("textLocalBoundsChanged");

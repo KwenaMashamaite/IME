@@ -42,7 +42,7 @@ namespace IME {
          * in the program rather than having to loadFromFile it from the disk
          * every time it's needed).
          */
-        static void loadFromFile(ResourceType type, const std::string &filename);
+        void loadFromFile(ResourceType type, const std::string &filename);
 
         /**
          * @brief  loadFromFile multiple resources of the same type from
@@ -52,7 +52,7 @@ namespace IME {
          * @throws FileNotFound If one of the files cannot be found
          *         on the disk
          */
-        static void loadFromFile(ResourceType type,
+        void loadFromFile(ResourceType type,
             const std::initializer_list<std::string> &filenames);
 
         /**
@@ -66,7 +66,17 @@ namespace IME {
          * This function is destructive. This means that the resource will be
          * completely destroyed and must be reloaded from the disk if required
          */
-        static bool unload(ResourceType type, const std::string& filename);
+        bool unload(ResourceType type, const std::string& filename);
+
+        /**
+         * @brief Set the path where resources are located on the disk
+         * @param type Type of the resource to set path for
+         * @param path New path to resources on th disk
+         *
+         * The class will look for resources of the specified type in the new path
+         * when loading them
+         */
+        void setPath(ResourceType type, const std::string path);
 
         /**
          * @brief Get the number of objects currently using a resource
@@ -75,7 +85,7 @@ namespace IME {
          * @return The number of objects currently using a resource or
          *         -1 if the resource does not exist
          */
-        static int getUseCount(ResourceType type, const std::string& filename);
+        int getUseCount(ResourceType type, const std::string& filename);
 
         /**
          * @brief Get a font
@@ -86,7 +96,7 @@ namespace IME {
          * If the requested font is not cached, an attempt will be
          * made to loadFromFile it from the disk
          */
-        static const sf::Font &getFont(const std::string &fileName);
+        const sf::Font &getFont(const std::string &fileName);
 
         /**
          * @brief Get a texture
@@ -98,7 +108,7 @@ namespace IME {
          * If the requested texture is not cached, an attempt will
          * be made to loadFromFile it from the disk
          */
-        static const sf::Texture &getTexture(const std::string &fileName);
+        const sf::Texture &getTexture(const std::string &fileName);
 
         /**
          * @brief  Get a sound buffer
@@ -110,7 +120,7 @@ namespace IME {
          * If the requested sound buffer is not cached, an attempt will
          * be made to loadFromFile it from the disk
          */
-        static const sf::SoundBuffer &getSoundBuffer(const std::string &fileName);
+        const sf::SoundBuffer &getSoundBuffer(const std::string &fileName);
 
         /**
          * @brief Get an image
@@ -121,7 +131,7 @@ namespace IME {
          * If the requested image is not cached, an attempt will be made
          * to loadFromFile it from the disk
          */
-        static const sf::Image &getImage(const std::string &fileName);
+        const sf::Image &getImage(const std::string &fileName);
 
         /**
          * @brief Get music
@@ -129,19 +139,46 @@ namespace IME {
          * @throws FileNotFound If the music cannot be found on the disk
          * @return A shared pointer to sf::music
          */
-        static std::shared_ptr<sf::Music> getMusic(const std::string &fileName);
+        std::shared_ptr<sf::Music> getMusic(const std::string &fileName);
+
+        /**
+         * @brief Get class instance
+         * @return Shared pointer to class instance
+         */
+        static std::shared_ptr<ResourceManager> getInstance();
+
+        /**
+         * @brief Destructor
+         */
+        ~ResourceManager() = default;
+
+    private:
+        /**
+         * @brief Default constructor
+         */
+        ResourceManager();
+
+        /**
+         * @brief Copy constructor
+         */
+        ResourceManager(const ResourceManager&) = delete;
+
+        /**
+         * @brief Assignment operator
+         */
+        ResourceManager& operator=(const ResourceManager&) = delete;
 
     private:
         //Stores textures
-        static TextureHolder textures_;
+        TextureHolder textures_;
         //Stores sound buffers
-        static SoundBufferHolder soundBuffers_;
+        SoundBufferHolder soundBuffers_;
         //Stores fonts
-        static FontHolder fonts_;
+        FontHolder fonts_;
         //Stores images
-        static ImageHolder images_;
+        ImageHolder images_;
         //Stores music
-        static MusicHolder music_;
+        MusicHolder music_;
     };
 }
 

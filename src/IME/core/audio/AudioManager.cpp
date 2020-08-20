@@ -16,9 +16,9 @@ namespace IME::Audio{
      {
         std::for_each(filenames.begin(), filenames.end(), [=](const auto& filename){
             if (audioType == AudioType::Music)
-                ResourceManager::loadFromFile(ResourceType::Music, filename);
+                ResourceManager::getInstance()->loadFromFile(ResourceType::Music, filename);
             else
-                ResourceManager::loadFromFile(ResourceType::SoundBuffer, filename);
+                ResourceManager::getInstance()->loadFromFile(ResourceType::SoundBuffer, filename);
 
             audioFilenames_.insert({filename, audioType});
         });

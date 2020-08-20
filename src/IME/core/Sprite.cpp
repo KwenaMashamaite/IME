@@ -16,7 +16,7 @@ namespace IME {
     }
 
     void Sprite::setTexture(const std::string &filename) {
-        sprite_.setTexture(ResourceManager::getTexture(filename));
+        sprite_.setTexture(ResourceManager::getInstance()->getTexture(filename));
     }
 
     Position Sprite::getPosition() const {

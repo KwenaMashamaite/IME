@@ -25,7 +25,7 @@ namespace IME::Gui {
 
     bool Window::setIcon(const std::string &filename) {
         try {
-            auto icon = ResourceManager::getImage(filename);
+            auto icon = ResourceManager::getInstance()->getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
             return true;
         } catch (...) {} // Use current icon, If not set prior, OS icon will be used

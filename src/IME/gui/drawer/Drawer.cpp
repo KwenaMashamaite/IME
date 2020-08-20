@@ -42,7 +42,7 @@ namespace IME::Gui {
     }
 
     void Drawer::drawBackground(const std::string &backgroundTexture) {
-        auto background = sf::Sprite(ResourceManager::getTexture(backgroundTexture),
+        auto background = sf::Sprite(ResourceManager::getInstance()->getTexture(backgroundTexture),
             sf::IntRect(0, 0,
                 renderTarget_.getDimensions().width,
                 renderTarget_.getDimensions().height)
