@@ -1,19 +1,18 @@
 #include "IME/gui/control/Label.h"
-#include <algorithm>
-
-const auto maxNumOfCharacters = 250u;
 
 namespace IME::Gui {
-    Label::Label() : Label("") {}
+    Label::Label() : Label("")
+    {}
 
-    Label::Label(std::string text) : UIElement("") {
-        /*if (text.size() >= maxNumOfCharacters)
-            text = std::move(text.substr(0, maxNumOfCharacters));
-
-        auto found = std::find(text.begin(), text.end(), "\n");
-        if (found != text.end())
-            setText(text.substr(0, std::distance(text.begin(), found) - 1));
+    Label::Label(const std::string& text) : UIElement("") {
+        auto newLineCharPos = text.find_first_of('\n');
+        if (newLineCharPos != std::string::npos)
+            setText(text.substr(0, newLineCharPos));
         else
-            setText(text);*/
+            setText(text);
+    }
+
+    std::string Label::getType() const {
+        return "Label";
     }
 }
