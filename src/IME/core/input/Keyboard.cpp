@@ -1,4 +1,4 @@
-#include "IME/gui/input/Keyboard.h"
+#include "IME/core/input/Keyboard.h"
 #include <SFML/Window/Keyboard.hpp>
 
 namespace IME::Input {

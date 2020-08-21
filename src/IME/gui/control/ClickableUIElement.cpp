@@ -1,5 +1,5 @@
 #include "IME/gui/control/ClickableUIElement.h"
-#include "IME/gui/input/Mouse.h"
+#include "IME/core/input/Mouse.h"
 
 namespace IME::Gui{
     ClickableUIElement::ClickableUIElement()

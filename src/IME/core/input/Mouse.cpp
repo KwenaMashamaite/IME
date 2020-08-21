@@ -1,4 +1,4 @@
-#include "IME/gui/input/Mouse.h"
+#include "IME/core/input/Mouse.h"
 #include <SFML/Window/Mouse.hpp>
 
 namespace IME::Input {
