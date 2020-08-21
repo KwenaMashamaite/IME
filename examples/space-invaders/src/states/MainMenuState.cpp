@@ -116,8 +116,7 @@ namespace SI {
         };
         auto buttonsPanel = std::make_unique<IME::Gui::StackPanel>( IME::Gui::StackPanel::Orientation::Vertical);
         std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
-
-            std::unique_ptr<IME::Gui::Button> button(dynamic_cast<IME::Gui::Button*>((app().getGuiFactory()->getUIElement<IME::Gui::Button>(buttonInfo.text)).release()));
+            auto button = std::make_unique<IME::Gui::Button>(buttonInfo.text);
             button->setTextCharSize(app().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
             button->setTextFont("basson.ttf");
             button->setMargin({0, 0, 0, app().getRenderTarget().getDimensions().height * 5.0f / 100.0f});
