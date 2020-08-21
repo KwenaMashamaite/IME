@@ -91,7 +91,7 @@ namespace IME::Gui {
     void UIElement::setText(const std::string &textContent) {
         text_.setString(textContent);
         updateDimensions();
-        emit("textContentChanged", textContent);
+        emit("textChanged", textContent);
     }
 
     void UIElement::setOutlineThickness(float outlineThickness) {
