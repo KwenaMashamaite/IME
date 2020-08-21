@@ -10,7 +10,7 @@
 namespace IME {
     namespace Gui {
         class Label : public UIElement {
-        private:
+        public:
             /**
              * @brief Create a label with an empty text
              */
