@@ -212,7 +212,9 @@ namespace SI {
     }
 
     void MainMenuState::handleEvent(sf::Event event) {
-        for (auto& panel : panels_)
-            panel.second->handleEvent(event);
+        if (currentView_ == View::Main)
+            panels_["navButtonsPanel"]->handleEvent(event);
+        else if (currentView_ == View::Info)
+            panels_["onClickInfoPanel"]->handleEvent(event);
     }
 }
