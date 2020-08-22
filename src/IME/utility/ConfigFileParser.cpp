@@ -27,8 +27,8 @@ namespace IME::Utility {
         auto configEntry = std::string();
         while (std::getline(configurations, configEntry)) {
             static auto errorMessage = [&](const std::string& errorMessage) {
-                return R"(The entry ')" + configEntry + R"(')" + " in " + filename
-                       + " is invalid because " + errorMessage;
+                return R"(The entry ")" + configEntry + R"(" in ")" + filename
+                       + R"(" is invalid because ")" + errorMessage + R"(")";
             };
 
             ////Skip lines that are empty or begin with a comment or whitespaces

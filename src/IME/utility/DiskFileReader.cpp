@@ -6,7 +6,7 @@ void IME::Utility::DiskFileReader::readFileInto(const std::string &filename,
 {
     inFile_.open(filename);
 	if(!inFile_.good())
-		throw FileNotFound("Cannot find file, " + filename);
+		throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
 	buffer << inFile_.rdbuf(); //Read file content
 	inFile_.close();
 }
@@ -20,7 +20,7 @@ void IME::Utility::DiskFileReader::writeToFile(const std::stringstream &buffer,
         outFile_.open(filename, std::ios::app);
 
 	if(!outFile_.good())
-        throw FileNotFound("Cannot find file, " + filename);
+        throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
 	outFile_ << buffer.str(); //Write data to file
     outFile_.close();
 }
