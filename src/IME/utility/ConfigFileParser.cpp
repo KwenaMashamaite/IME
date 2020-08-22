@@ -45,6 +45,8 @@ namespace IME::Utility {
                         throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
                     if (!isFundamentalType(type))
                         throw InvalidArgument(errorMessage("'" + type + "'" + " is not a fundamental type"));
+                    if(hasWhiteSpace(value) && type != "string")
+                        throw InvalidArgument(errorMessage("the value contains whitespace(s) and its not of type string"));
                     properties.addProperty(key, type, value);
                 } else
                     throw InvalidArgument(errorMessage(R"(type and value not separated by '=')"));
