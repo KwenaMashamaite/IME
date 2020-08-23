@@ -26,7 +26,8 @@ namespace IME {
                 Titlebar = 1 << 0,   // Title bar + fixed border
                 Resize = 1 << 1,     // Title bar + resizable border + maximize button
                 Close = 1 << 2,      // Title bar + close button
-                Fullscreen = 1 << 3  // Fullscreen mode
+                Fullscreen = 1 << 3,  // Fullscreen mode
+                Default = Titlebar | Resize | Close ///< Default window style
             };
 
             /**
@@ -67,7 +68,8 @@ namespace IME {
              * The dimensions of the window must be positive, otherwise
              * the program will be terminated prematurely
              */
-            void create(const std::string &title, float width, float height, Style style);
+            void create(const std::string &title, float width, float height,
+                    Style style = Style::Default);
 
             /**
              * @brief Change the window's icon
