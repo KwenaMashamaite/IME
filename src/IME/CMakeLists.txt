@@ -23,7 +23,7 @@ set(SFML_DIR "${PROJECT_SOURCE_DIR}/extlibs/SFML/lib/cmake/SFML")
 link_directories(SFML_LIBRARY_DIR)
 include_directories(SFML_INCLUDE_DIR)
 
-find_package(SFML 2.5.0 COMPONENTS system window graphics audio)
+find_package(SFML 2.5.1 COMPONENTS system window graphics audio)
 
 if(SFML_FOUND)
     target_link_libraries (ime PUBLIC sfml-graphics sfml-window sfml-system sfml-audio)
