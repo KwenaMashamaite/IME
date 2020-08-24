@@ -78,7 +78,7 @@ namespace IME {
         /**
          * @brief Destroy all states
          */
-        bool clear();
+        void clear();
 
         /**
          * @brief Check if state manager is empty or not

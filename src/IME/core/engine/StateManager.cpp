@@ -43,6 +43,10 @@ namespace IME {
         return prevStateName_;
     }
 
+    void StateManager::clear() {
+        states_.clear();
+    }
+
     std::shared_ptr<State> StateManager::getCurrentState() const {
         return std::move(getState(currentStateName_));
     }
