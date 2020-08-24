@@ -58,6 +58,12 @@ namespace IME {
         std::shared_ptr<State> getState(const std::string &name) const;
 
         /**
+         * @brief Get the current number of states
+         * @return The current number of states
+         */
+        int getSize() const;
+
+        /**
          * @brief Get the current state
          * @return Pointer to the current state if any, otherwise a nullptr
          */
@@ -68,6 +74,11 @@ namespace IME {
         * @return Name of the previous state
         */
         const std::string &getPreviousStateName() const;
+
+        /**
+         * @brief Destroy all states
+         */
+        bool clear();
 
         /**
          * @brief Check if state manager is empty or not

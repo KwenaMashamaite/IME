@@ -35,6 +35,10 @@ namespace IME {
         return nullptr;
     }
 
+    int StateManager::getSize() const {
+        return states_.size();
+    }
+
     const std::string &StateManager::getPreviousStateName() const {
         return prevStateName_;
     }
