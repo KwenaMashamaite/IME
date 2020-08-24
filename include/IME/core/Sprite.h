@@ -56,6 +56,8 @@ namespace IME {
          */
         void setTextureRect(int left, int top, int width, int height);
 
+        void setColour(Gui::Colour colour);
+
         /**
          * @brief Get the position of the object
          * @return Position of the object
@@ -67,6 +69,8 @@ namespace IME {
          * @return The size of the object
          */
         Dimensions getSize() const;
+
+        Gui::Colour getColour() const;
 
         /**
          * @brief Rotate object

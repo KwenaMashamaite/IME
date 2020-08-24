@@ -38,7 +38,7 @@ namespace IME {
     void Sprite::hide() {
         if (!isHidden_) {
             isHidden_ = true;
-            spriteColour_ = Utility::convertFrom3rdPartyColour(sprite_.getColor());
+            spriteColour_ = getColour();
             sprite_.setColor(sf::Color::Transparent);
         }
     }
@@ -46,7 +46,7 @@ namespace IME {
     void Sprite::show() {
         if (isHidden_) {
             isHidden_ = false;
-            sprite_.setColor(Utility::convertTo3rdPartyColour(spriteColour_));
+            setColour(spriteColour_);
         }
     }
 
@@ -56,5 +56,13 @@ namespace IME {
 
     void Sprite::rotate(float angle) {
         sprite_.rotate(angle);
+    }
+
+    void Sprite::setColour(Gui::Colour colour) {
+        sprite_.setColor(Utility::convertTo3rdPartyColour(colour));
+    }
+
+    Gui::Colour Sprite::getColour() const {
+        return Utility::convertFrom3rdPartyColour(sprite_.getColor());
     }
 }
