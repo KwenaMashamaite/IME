@@ -55,15 +55,8 @@ namespace IME {
              * @param messageType Log message type
              * @param msg Message to be logged
              *
-             * This function will precede the log message with the message type
-             * (in caps) and a colon. If the message type is MessageType::General,
-             * then the log message will be logged as it is.
-             *
-             * @example:
-             *  log message "Assets loaded successfully"
-             *  log message type = MessageType::Status
-             *
-             *  Disk file output = STATUS: Assets loaded successfully
+             * This function will precede the log message with the date and time
+             * when the message was logged and message type.
              */
             void log(MessageType messageType, const std::string& msg) override;
 
