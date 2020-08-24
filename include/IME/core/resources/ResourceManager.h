@@ -76,7 +76,7 @@ namespace IME {
          * The class will look for resources of the specified type in the new path
          * when loading them
          */
-        void setPath(ResourceType type, const std::string path);
+        void setPath(ResourceType type, const std::string& path);
 
         /**
          * @brief Get the number of objects currently using a resource

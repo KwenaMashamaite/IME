@@ -85,7 +85,7 @@ namespace IME {
         }
     }
 
-    void ResourceManager::setPath(ResourceType type, const std::string path) {
+    void ResourceManager::setPath(ResourceType type, const std::string& path) {
         switch (type) {
             case ResourceType::Texture:
                 textures_.setPath(path);
