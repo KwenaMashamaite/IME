@@ -82,6 +82,14 @@ namespace IME {
             bool removeEventListener(const std::string &event, Button button,
                 int listenerId);
 
+            /**
+             * @brief Remove a mouse moved event listener
+             * @param id Identification number of the event listener
+             * @return True if the event listener was removed or false if the
+             *         event listener does not exist
+             */
+            bool removeMouseMovedListener(int id);
+
         private:
             //Event Emitter/publisher
             EventEmitter eventEmitter_{};

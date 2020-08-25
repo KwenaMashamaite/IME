@@ -38,4 +38,9 @@ namespace IME::Input {
                 std::to_string(static_cast<int>(button)) + "Up", listenerId);
         return false;
     }
+
+
+    bool Mouse::removeMouseMovedListener(int id) {
+        return eventEmitter_.removeEventListener("mouseMoved", id);
+    }
 }
