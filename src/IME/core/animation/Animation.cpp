@@ -6,7 +6,7 @@ namespace IME{
             Dimensions frameSize, Position startPos,
             unsigned int numOfFrames,
             float duration) : name_(name), spriteSheet_(spriteSheetFilename),
-            duration_(duration), isLooped_(false)
+            frameSize_(frameSize), duration_(duration), isLooped_(false)
     {
         createFrames(numOfFrames, startPos, frameSize);
     }
@@ -50,5 +50,9 @@ namespace IME{
 
     const std::string &Animation::getName() const {
         return name_;
+    }
+
+    Dimensions Animation::getFrameSize() const {
+        return frameSize_;
     }
 }

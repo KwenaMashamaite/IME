@@ -93,6 +93,12 @@ namespace IME {
          */
         const std::string &getName() const;
 
+        /**
+         * @brief Get the size of each animation frame
+         * @return The size of each animation frame
+         */
+        Dimensions getFrameSize() const;
+
     private:
         //Animation frames
         std::vector<sf::IntRect> frames_;
@@ -100,6 +106,7 @@ namespace IME {
         std::string name_;
         //Animation spritesheet filename
         std::string spriteSheet_;
+        Dimensions frameSize_;
         //Total duration time of the animation
         float duration_;
         //Looping state
