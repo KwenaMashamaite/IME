@@ -4,9 +4,10 @@ namespace IME{
     Animation::Animation(const std::string& name,
             const std::string& spriteSheetFilename,
             Dimensions frameSize, Position startPos,
-            unsigned int numOfFrames,
-            float duration) : name_(name), spriteSheet_(spriteSheetFilename),
-            frameSize_(frameSize), duration_(duration), isLooped_(false)
+            unsigned int numOfFrames, float duration,
+            Arrangement arrangement) : name_(name), spriteSheet_(spriteSheetFilename),
+            frameSize_(frameSize), duration_(duration), isLooped_(false),
+            arrangement_(arrangement)
     {
         createFrames(numOfFrames, startPos, frameSize);
     }
@@ -32,7 +33,10 @@ namespace IME{
                 frameSize.width,
                 frameSize.height
             );
-            currentPosition.x += frameSize.width;
+            if (arrangement_ == Arrangement::Horizontal)
+                currentPosition.x += frameSize.width;
+            else
+                currentPosition.y += frameSize.height;
         }
     }
 

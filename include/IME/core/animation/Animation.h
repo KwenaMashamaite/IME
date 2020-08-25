@@ -14,6 +14,14 @@ namespace IME {
     using Definitions::Dimensions;
     using Definitions::Position;
 
+    /**
+     * @brief Defines how the frames are arranged
+     */
+    enum class Arrangement {
+        Horizontal,
+        Vertical
+    };
+
     class Animation {
     public:
         /**
@@ -23,8 +31,8 @@ namespace IME {
          * @param frameSize Size of each animation frame
          * @param startPos Position of the first frame on the sprite sheet
          * @param numOfFrames Number of animation frames
-         * @param duration How long the animation plays before it
-         *        stops/loops around
+         * @param duration How long the animation plays before it stops/loops around
+         * @param arrangement How the frames are arranged on the spritesheet
          *
          * The starting position must lie on the sprite sheet. In addition, the
          * sprite sheet must be large enough to accommodate all the animation
@@ -38,7 +46,8 @@ namespace IME {
                   Dimensions frameSize,
                   Position startPos,
                   unsigned int numOfFrames,
-                  float duration);
+                  float duration,
+                  Arrangement arrangement = Arrangement::Horizontal);
 
         /**
          * @brief Get the filename of the animation sprite sheet
@@ -111,6 +120,8 @@ namespace IME {
         float duration_;
         //Looping state
         bool isLooped_;
+        //The arrangement of the frames on the sprite sheet
+        Arrangement arrangement_;
 
         /**
          * @brief Create animation frames
