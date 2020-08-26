@@ -73,10 +73,11 @@ namespace IME {
 
     void Engine::processEvents() {
         sf::Event event;
-        if (event.type == sf::Event::Closed)
-            window_.close();
         while (window_.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window_.close();
             statesManager_.getActiveState()->handleEvent(event);
+            inputManager_.handleEvent(event);
         }
     }
 
@@ -175,6 +176,10 @@ namespace IME {
 
     Audio::AudioManager &Engine::getAudioManager() {
         return *audioManager_;
+    }
+
+    Input::InputManager &Engine::getInputManager() {
+        return inputManager_;
     }
 
     Engine::~Engine() = default;
