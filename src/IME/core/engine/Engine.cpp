@@ -1,14 +1,17 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/utility/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
+#include <assert.h>
 
 namespace IME {
     std::shared_ptr<const GuiFactory> IME::Engine::guiFactory_(std::make_shared<GuiFactory>());
 
     Engine::Engine(const std::string &gameName, const std::string &settingsFilename)
         : isRunning_{false},
+          isInitialized_{false},
           appName_{gameName},
-          settingFile_{settingsFilename}
+          settingFile_{settingsFilename},
+          shouldPop_{false}
     {}
 
     void Engine::init() {
@@ -22,6 +25,7 @@ namespace IME {
         auto musicPath = settings_.getValueFor("musicPath");
         auto sfxPath = settings_.getValueFor("sfxPath");
         audioManager_ = std::make_unique<Audio::AudioManager>(musicPath, sfxPath);
+        isInitialized_ = true;
     }
 
     void Engine::loadSettings() {
@@ -69,28 +73,33 @@ namespace IME {
 
     void Engine::processEvents() {
         sf::Event event;
-        while (window_.pollEvent(event)){
-            if (statesManager_.getCurrentState())
-                statesManager_.getCurrentState()->handleEvent(event);
+        if (event.type == sf::Event::Closed)
+            window_.close();
+        while (window_.pollEvent(event)) {
+            statesManager_.getActiveState()->handleEvent(event);
         }
     }
 
     void Engine::run() {
-        if (!isRunning_ && !statesManager_.isEmpty()) {
+        assert(isInitialized_ && "Engine cannot run uninitialized");
+
+        if (!statesManager_.isEmpty()) {
+            statesManager_.getActiveState()->initialize();
             isRunning_ = true;
             auto const frameTime = 1.0f / 60.0f;
             auto clock = Utility::Clock();
             auto deltaTime = clock.restart();
             while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
                 processEvents();
-                if (deltaTime >= frameTime) { //Fixed time step update
-                    if (auto currentState = statesManager_.getCurrentState(); currentState)
-                        currentState->fixedUpdate(deltaTime);
+                if (deltaTime >= frameTime) {
+                    statesManager_.getActiveState()->fixedUpdate(deltaTime);
                     deltaTime = 0.0;
                 }
+                window_.clear();
                 update();
                 render();
-                window_.display();
+                display();
+                postFrameRenderUpdate();
                 deltaTime += clock.restart();
             }
         }
@@ -100,39 +109,67 @@ namespace IME {
         isRunning_ = false;
     }
 
+    void Engine::update() {
+        statesManager_.getActiveState()->update();
+    }
+
+    void Engine::render() {
+        statesManager_.getActiveState()->render(window_);
+    }
+
+    void Engine::display() {
+        window_.display();
+    }
+
+    void Engine::pushState(std::shared_ptr<State> state) {
+        if (!isRunning_)
+            statesManager_.pushState(std::move(state));
+        else
+            stateToPush_ = std::move(state);
+    }
+
+    void Engine::popState() {
+        shouldPop_ = true;
+    }
+
+    Definitions::Dimensions Engine::getWindowSize() const {
+        return window_.getDimensions();
+    }
+
     const std::shared_ptr<const GuiFactory> & IME::Engine::getGuiFactory() const {
         return guiFactory_;
     }
 
-    void Engine::update() {
-        if (!isRunning_)
-            window_.close();
-        else
-            statesManager_.getCurrentState()->update();
-    }
+    void Engine::postFrameRenderUpdate() {
+        // Don't use if-else because popping and pushing are not mutually exclusive
+        if (shouldPop_) {
+            shouldPop_ = false;
+            statesManager_.popState();
+            if (!statesManager_.isEmpty() && !statesManager_.getActiveState()->isInitialized())
+                statesManager_.getActiveState()->initialize();
+        }
 
-    void Engine::render() {
-        if (isRunning_)
-            statesManager_.getCurrentState()->render(window_);
+        if (stateToPush_) { // A state push request has been made
+            stateToPush_->initialize();
+            statesManager_.pushState(std::move(stateToPush_));
+        }
+
+        if (!isRunning_) {
+            window_.close();
+            audioManager_->stopAll();
+            statesManager_.clear();
+        }
     }
 
     bool Engine::isRunning() const {
         return isRunning_;
     }
 
-    const Gui::Window &Engine::getRenderTarget() const {
-        return window_;
-    }
-
-    StateManager &Engine::getStateManager() {
-        return statesManager_;
-    }
-
     ResourceManager &Engine::getResourceManager() {
         return *resourceManager_;
     }
 
-    const std::string &Engine::getAppName() const {
+    const std::string &Engine::getGameName() const {
         return appName_;
     }
 

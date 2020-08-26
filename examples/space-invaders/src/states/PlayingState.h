@@ -4,6 +4,7 @@
 
 #include "IME/core/engine/State.h"
 #include "IME/gui/layout/DockPanel.h"
+#include "IME/gui/control/Button.h"
 #include "IME/core/Scoreboard.h"
 
 namespace SI {
@@ -29,9 +30,12 @@ namespace SI {
 
         void reset() override;
 
+        void exit() override;
+
     private:
         bool isInitialized_;
         std::unique_ptr<IME::Gui::Panel> container_;
+        std::unique_ptr<IME::Gui::Button> button;
         IME::Scoreboard scoreboard_;
     };
 }

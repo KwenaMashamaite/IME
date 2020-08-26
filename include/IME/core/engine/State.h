@@ -15,13 +15,15 @@ namespace IME {
     class State {
     public:
         /**
-         *
-         * @param engine
+         * @brief Constructor
+         * @param engine Reference to the game
          */
         State(Engine &engine);
 
         /**
          * @brief Initialize state
+         *
+         * This function will be called by the engine when the game starts
          */
         virtual void initialize() = 0;
 
@@ -75,6 +77,16 @@ namespace IME {
         virtual void reset() = 0;
 
         /**
+         * @brief Exit a state
+         *
+         * This function will be called by the engine before the state
+         * is destroyed. It may be useful if there are some cleanup
+         * procedures that need to be taken care of before the object
+         * is destroyed
+         */
+        virtual void exit() = 0;
+
+        /**
          * @brief Destructor
          */
         virtual ~State() = default;
@@ -84,7 +96,7 @@ namespace IME {
          * @brief Get a reference to the game engine
          * @return Reference to a game engine
          */
-        Engine &app() const;
+        Engine &engine() const;
 
     private:
         //Reference to the game engine

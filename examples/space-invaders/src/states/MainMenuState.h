@@ -52,6 +52,8 @@ namespace SI {
          */
         void resume() override;
 
+        void exit() override;
+
         /**
          *
          * @return

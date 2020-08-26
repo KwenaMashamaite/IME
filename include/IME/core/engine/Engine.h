@@ -39,39 +39,56 @@ namespace IME {
         /**
          * @brief Start the main loop
          *
-         * @note There must be at least one state added for the engine to run
+         * There must be at least one state added for the engine to run. The
+         * engine must also be initialized first before running it, @see init()
          */
         void run();
 
         /**
          * @brief Stop the engine
+         *
+         * This function will remove all states that have been added to the
+         * engine. The initialization state will not be reset. Therefore the
+         * engine may be restarted without re-initialization after it ha been
+         * stopped
          */
         void stop();
 
         /**
          * @brief Check if engine is running or not
-         * @return True if engine is running or false if the engine is not
-         *         running
+         * @return True if engine is running, otherwise false
          */
         bool isRunning() const;
 
         /**
-         * @brief Get the name of the game
-         * @return Name of the game
+         * @brief Get the name of the app the engine is running
+         * @return Name of the game the engine is running
          */
-        const std::string& getAppName() const;
+        const std::string& getGameName() const;
 
         /**
-         * @brief Get window used by the engine to render objects
-         * @return Window used by engine as a render target
+         * @brief Add a state
+         * @param name Name of the state
+         * @param state State to be added
+         * @return True if the state was added or false if a state with the
+         *         same name already exists
+         *
+         * The state will be pushed at the end of the current frame
          */
-        const Gui::Window& getRenderTarget() const;
+        void pushState(std::shared_ptr<State> state);
 
         /**
-         * @brief Get access to the engines state manager
-         * @return Engines state manager
+         * @brief Remove a state from the engine
+         *
+         * The state will be popped at the end of the current frame
          */
-        StateManager& getStateManager();
+        void popState();
+
+        /**
+         * @brief Get the size of the engines render target
+         * @return The size of the engines render target
+         */
+        Definitions::Dimensions getWindowSize() const;
 
         /**
          * @brief Get access to the engines resource manager
@@ -141,6 +158,16 @@ namespace IME {
          */
         void render();
 
+        /**
+         * @brief Display current frame
+         */
+        void display();
+
+        /**
+         * @brief Update the engine after rendering the current frame
+         */
+        void postFrameRenderUpdate();
+
     private:
         //Engines render target
         Gui::Window window_;
@@ -150,6 +177,8 @@ namespace IME {
         std::string settingFile_;
         //State of the engine
         bool isRunning_;
+        //Initilization state
+        bool isInitialized_;
         //Factory for instantiating GUI components
         static std::shared_ptr<const GuiFactory> guiFactory_;
         //Engine states
@@ -160,6 +189,10 @@ namespace IME {
         std::shared_ptr<ResourceManager> resourceManager_;
         //Engine settings
         Utility::PropertyContainer settings_;
+        //Hold a state to be pushed to engine state
+        std::shared_ptr<State> stateToPush_;
+        //Flag for popping
+        bool shouldPop_;
     };
 } // namespace IME
 

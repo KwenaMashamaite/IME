@@ -41,6 +41,8 @@ namespace SI {
 
         void resume() override;
 
+        void exit() override;
+
         bool isInitialized() const override;
 
         void reset() override;

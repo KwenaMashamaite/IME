@@ -7,6 +7,7 @@
 #include "IME/gui/control/Button.h"
 #include "IME/gui/layout/Canvas.h"
 #include "IME/gui/layout/StackPanel.h"
+#include "PlayingState.h"
 #include <algorithm>
 #include <cassert>
 
@@ -16,9 +17,7 @@ namespace SI {
           isInitialized_(false),
           musicPlayer_{"resources/music/"},
           currentView_(View::None)
-    {
-        //musicPlayer_.loadFromFile({"mainMenubackgroundMusic.ogg"});
-    }
+    {}
 
     void MainMenuState::initialize() {
         createInfoPanel();
@@ -27,7 +26,6 @@ namespace SI {
         createNavigationButtons();
         initNavigationButtonActions();
         changeView(View::Main);
-        musicPlayer_.setLoop(true);
         //musicPlayer_.play("mainMenubackgroundMusic.ogg");
         isInitialized_ = true;
     }
@@ -35,7 +33,7 @@ namespace SI {
     void MainMenuState::render(IME::Gui::Window &renderTarget) {
         renderTarget.clear({32, 28, 28});
         static auto drawer = IME::Gui::Drawer(renderTarget);
-        //drawer.drawBackground("mainMenuBackground.png");
+        drawer.drawBackground("mainMenuBackground.jpg");
         switch (currentView_){
             case View::Main:
                 renderTarget.draw(*(panels_["titlePanel"]));
@@ -66,6 +64,10 @@ namespace SI {
         musicPlayer_.play();
     }
 
+    void MainMenuState::exit() {
+
+    }
+
     bool MainMenuState::isInitialized() const {
         return isInitialized_;
     }
@@ -75,34 +77,34 @@ namespace SI {
     }
 
     void MainMenuState::createInfoPanel(){
-        auto onClickInfoPanel = app().getGuiFactory()->getPanel<IME::Gui::Canvas>(0, 0);
-        onClickInfoPanel->setDimensions(app().getRenderTarget().getDimensions());
+        auto onClickInfoPanel = engine().getGuiFactory()->getPanel<IME::Gui::Canvas>(0, 0);
+        onClickInfoPanel->setDimensions(IME::Gui::Window::getDimensions());
         onClickInfoPanel->setFillColour(IME::Gui::Colour::Transparent);
-        auto infoPanelTextBlock = app().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("");
-        infoPanelTextBlock->setTextCharSize(app().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
+        auto infoPanelTextBlock = engine().getGuiFactory()->getUIElement<IME::Gui::TextBlock>("");
+        infoPanelTextBlock->setTextCharSize(engine().getWindowSize().height * 4.0f / 100.0f);
         infoPanelTextBlock->setBackgroundColour({128, 128, 128, 10});
         infoPanelTextBlock->setOutlineColour({0, 0, 0, 15});
         infoPanelTextBlock->setOutlineThickness(2.0f);
         infoPanelTextBlock->setTextFont("europe-underground-dark.ttf");
-        infoPanelTextBlock->setPosition({app().getRenderTarget().getDimensions().width / 2,
-            app().getRenderTarget().getDimensions().height / 2
-        });
+        infoPanelTextBlock->setPosition({engine().getWindowSize().width / 2,engine().getWindowSize().height / 2});
         onClickInfoPanel->addElement("infoTextBlock", std::move(infoPanelTextBlock));
         panels_.insert(std::pair("onClickInfoPanel", std::move(onClickInfoPanel)));
     }
 
-    void MainMenuState::createTitle() {
-        auto title = app().getGuiFactory()->getUIElement<IME::Gui::TextBlock>(app().getAppName());
-        title->setTextFont("basson.ttf");
-        title->setBackgroundColour(IME::Gui::Colour::Transparent);
-        title->setTextCharSize(app().getRenderTarget().getDimensions().height * 13.0f / 100.0f);
 
-        auto titlePanel = app().getGuiFactory()->getPanel<IME::Gui::StackPanel>(IME::Gui::StackPanel::Orientation::Horizontal);
+    void MainMenuState::createTitle() {
+        auto title = engine().getGuiFactory()->getUIElement<IME::Gui::Label>(engine().getGameName());
+        //title->setTextFont("basson.ttf");
+        title->setMargin({0, 0, 20, 0});
+        title->setBackgroundColour(IME::Gui::Colour::Transparent);
+        title->setTextCharSize(engine().getWindowSize().height * 13.0f / 100.0f);
+
+        auto titlePanel = engine().getGuiFactory()->getPanel<IME::Gui::StackPanel>(IME::Gui::StackPanel::Orientation::Horizontal);
         titlePanel->addElement("title", std::move(title));
         titlePanel->setPosition({
-            app().getRenderTarget().getDimensions().width / 2 - titlePanel->getDimensions().width / 2, 0
+            engine().getWindowSize().width / 2 - titlePanel->getDimensions().width / 2, 0
         });
-        panels_.insert(std::pair("titlePanel", std::move(titlePanel)));
+        panels_.insert({"titlePanel", std::move(titlePanel)});
     }
 
     void MainMenuState::createNavigationButtons() {
@@ -117,16 +119,18 @@ namespace SI {
         auto buttonsPanel = std::make_unique<IME::Gui::StackPanel>( IME::Gui::StackPanel::Orientation::Vertical);
         std::for_each(navigationButtons.begin(), navigationButtons.end(), [&](auto& buttonInfo){
             auto button = std::make_unique<IME::Gui::Button>(buttonInfo.text);
-            button->setTextCharSize(app().getRenderTarget().getDimensions().height * 4.0f / 100.0f);
-            button->setTextFont("basson.ttf");
-            button->setMargin({0, 0, 0, app().getRenderTarget().getDimensions().height * 5.0f / 100.0f});
+            button->setTextCharSize(engine().getWindowSize().height * 4.0f / 100.0f);
+            button->setTextFont("europe-underground-dark.ttf");
+            button->setMargin({0, 0, 0,engine().getWindowSize().height * 5.0f / 100.0f});
             button->setBackgroundColour(IME::Gui::Colour::Transparent);
+            button->setTextColour({28, 28, 28, 185});
             button->setHoverBackgroundColour(IME::Gui::Colour::Transparent);
+            button->setHoverTextColour({0 , 100, 0, 180});
             buttonsPanel->addElement(buttonInfo.name, std::move(button));
         });
         buttonsPanel->setPosition({
-        app().getRenderTarget().getDimensions().width / 2 - buttonsPanel->getDimensions().width / 2,
-        app().getRenderTarget().getDimensions().height / 2 - buttonsPanel->getDimensions().height / 2
+        engine().getWindowSize().width / 2 - buttonsPanel->getDimensions().width / 2,
+        engine().getWindowSize().height / 2 - buttonsPanel->getDimensions().height / 2
         });
         panels_.insert(std::pair("navButtonsPanel", std::move(buttonsPanel)));
     }
@@ -141,8 +145,9 @@ namespace SI {
         };
 
         ////////PLAY BUTTON ///////////
-        navButtonsPanel->subscribeChildToEvent("play-btn", "click", IME::Callback<>([this]{
-            app().getStateManager().changeState("playing");
+        navButtonsPanel->subscribeChildToEvent("play-btn", "click", IME::Callback<>([this] {
+            engine().popState();
+            engine().pushState(std::move(std::make_shared<PlayingState>(engine())));
         }));
 
         auto fileReader = IME::Utility::DiskFileReader();
@@ -169,7 +174,7 @@ namespace SI {
 
         //// EXIT BUTTON ///////////
         navButtonsPanel->subscribeChildToEvent("exit-btn", "click", IME::Callback<>([this]{
-            app().getStateManager().changeState("quit");
+            engine().popState();
         }));
     }
 
@@ -180,15 +185,15 @@ namespace SI {
             auto& infoElement = panels_["onClickInfoPanel"]->getElement("infoTextBlock");
             infoElement->setText(newInfo);
             infoElement->setPosition(
-                app().getRenderTarget().getDimensions().width / 2 - infoElement->getSize().width / 2,
-                app().getRenderTarget().getDimensions().height / 2 - infoElement->getSize().height / 2
+                engine().getWindowSize().width / 2 - infoElement->getSize().width / 2,
+                engine().getWindowSize().height / 2 - infoElement->getSize().height / 2
             );
         }
     }
 
     void MainMenuState::createReturnButton() {
-        auto returnButton = app().getGuiFactory()->getUIElement<IME::Gui::Button>("main menu");
-        returnButton->setTextCharSize(app().getRenderTarget().getDimensions().height * 3.0f / 100.0f);
+        auto returnButton = engine().getGuiFactory()->getUIElement<IME::Gui::Button>("back");
+        returnButton->setTextCharSize(engine().getWindowSize().height * 3.0f / 100.0f);
         returnButton->setOutlineThickness(2.0f);
         returnButton->setTextFont("europe-underground-dark.ttf");
         returnButton->setPosition(1, 1);
@@ -200,10 +205,10 @@ namespace SI {
         currentView_ = view;
         switch (view) {
             case View::Main:
-                panels_["navButtonsPanel"]->show();
+                panels_.at("navButtonsPanel")->show();
                 break;
             case View::Info:
-                panels_["navButtonsPanel"]->hide();
+                panels_.at("navButtonsPanel")->hide();
                 break;
             case View::None:
                 break;
@@ -212,8 +217,8 @@ namespace SI {
 
     void MainMenuState::handleEvent(sf::Event event) {
         if (currentView_ == View::Main)
-            panels_["navButtonsPanel"]->handleEvent(event);
+            panels_.at("navButtonsPanel")->handleEvent(event);
         else if (currentView_ == View::Info)
-            panels_["onClickInfoPanel"]->handleEvent(event);
+            panels_.at("onClickInfoPanel")->handleEvent(event);
     }
 }
