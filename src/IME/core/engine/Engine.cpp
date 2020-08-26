@@ -82,27 +82,26 @@ namespace IME {
     }
 
     void Engine::run() {
-        assert(isInitialized_ && "Engine cannot run uninitialized");
+        assert(isInitialized_ && "ERROR: Failed to start engine because its not initialized");
+        assert(!statesManager_.isEmpty() && "ERROR: Failed to start engine because it has no states");
 
-        if (!statesManager_.isEmpty()) {
-            statesManager_.getActiveState()->initialize();
-            isRunning_ = true;
-            auto const frameTime = 1.0f / 60.0f;
-            auto clock = Utility::Clock();
-            auto deltaTime = clock.restart();
-            while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
-                processEvents();
-                if (deltaTime >= frameTime) {
-                    statesManager_.getActiveState()->fixedUpdate(deltaTime);
-                    deltaTime = 0.0;
-                }
-                window_.clear();
-                update();
-                render();
-                display();
-                postFrameRenderUpdate();
-                deltaTime += clock.restart();
+        statesManager_.getActiveState()->initialize();
+        isRunning_ = true;
+        auto const frameTime = 1.0f / 60.0f;
+        auto clock = Utility::Clock();
+        auto deltaTime = clock.restart();
+        while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
+            processEvents();
+            if (deltaTime >= frameTime) {
+                statesManager_.getActiveState()->fixedUpdate(deltaTime);
+                deltaTime = 0.0;
             }
+            window_.clear();
+            update();
+            render();
+            display();
+            postFrameUpdate();
+            deltaTime += clock.restart();
         }
     }
 
@@ -141,7 +140,7 @@ namespace IME {
         return guiFactory_;
     }
 
-    void Engine::postFrameRenderUpdate() {
+    void Engine::postFrameUpdate() {
         // Don't use if-else because popping and pushing are not mutually exclusive
         if (shouldPop_) {
             shouldPop_ = false;

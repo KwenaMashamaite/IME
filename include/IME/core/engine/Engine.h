@@ -173,7 +173,7 @@ namespace IME {
         /**
          * @brief Update the engine after rendering the current frame
          */
-        void postFrameRenderUpdate();
+        void postFrameUpdate();
 
     private:
         //Engines render target
