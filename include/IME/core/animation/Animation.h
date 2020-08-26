@@ -66,10 +66,10 @@ namespace IME {
          * from contiguous frames of the same size
          * @see addFrame(Position, Dimensions, unsigned int, Arrangement)
          */
-        void addFrames(std::initializer_list<Frame> frames);
+        void addFrames(const std::initializer_list<Frame>& frames);
 
         /**
-         * @brief Loop/unloop animation
+         * @brief Loop/unloop the animation
          * @param isLooped True to loop animation, otherwise set to false
          *
          * Animation is not looped by default
@@ -80,9 +80,20 @@ namespace IME {
          * @brief Set the duration of the animation
          * @param duration Duration to set
          *
+         * This function will overwrite the previous duration. To add to the
+         * current duration @see adjustDuration(float)
          * If the duration is negative, the animation will last zero seconds
          */
         void setDuration(float duration);
+
+        /**
+         * @brief Offset the current duration by a value
+         * @param offset Value to offset duration width
+         *
+         * This function does not overwrite the current duration, it  adds
+         * or subtracts from it
+         */
+        void adjustDuration(float offset);
 
         /**
          * @brief Check if animation is looped or not
@@ -130,18 +141,6 @@ namespace IME {
         Dimensions getFrameSizeAt(unsigned int index) const;
 
     private:
-        //Animation frames
-        std::vector<sf::IntRect> frames_;
-        //Name of the animation
-        std::string name_;
-        //Animation spritesheet filename
-        std::string spriteSheet_;
-        Dimensions frameSize_;
-        //Total duration time of the animation
-        float duration_;
-        //Looping state
-        bool isLooped_;
-
         /**
          * @brief Create animation frames
          * @param numOfFrames Number of frames to create
@@ -151,6 +150,18 @@ namespace IME {
          * This function creates empty frames (not textured) contiguously.
          */
         void addFrame(Frame frame);
+
+    private:
+        //Animation frames
+        std::vector<sf::IntRect> frames_;
+        //Name of the animation
+        std::string name_;
+        //Animation sprite sheet filename
+        std::string spriteSheet_;
+        //Total duration of the animation
+        float duration_;
+        //Looping state
+        bool isLooped_;
     };
 } // namespace IME
 

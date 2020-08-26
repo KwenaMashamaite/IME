@@ -20,7 +20,6 @@ namespace IME{
             else
                 currentPosition.y += frameSize.height;
         }
-
     }
 
     void Animation::setLoop(bool isLooped) {
@@ -28,10 +27,14 @@ namespace IME{
     }
 
     void Animation::setDuration(float duration) {
-        if (duration < 0)
+        if (duration < 0.0f)
             duration_ = 0.0f;
         else
             duration_ = duration;
+    }
+
+    void Animation::adjustDuration(float offset) {
+        setDuration(getDuration() + offset);
     }
 
     bool Animation::isLooped() const {
@@ -61,11 +64,10 @@ namespace IME{
 
     Dimensions Animation::getFrameSizeAt(unsigned int index) const {
         return {static_cast<float>(frames_.at(index).width),
-                static_cast<float>(frames_.at(index).height)
-        };
+                static_cast<float>(frames_.at(index).height)};
     }
 
-    void Animation::addFrames(std::initializer_list<Frame> frames) {
+    void Animation::addFrames(const std::initializer_list<Frame>& frames) {
         for (const auto& frame : frames)
             addFrame(frame);
     }
