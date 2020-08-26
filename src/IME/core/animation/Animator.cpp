@@ -42,13 +42,15 @@ namespace IME{
         }
     }
 
-    void Animator::changeAnimation(const std::string &animation) {
+    bool Animator::changeAnimation(const std::string &animation) {
         if (auto found = animations_.find(animation); found != animations_.end()){
             auto newAnimation = found->second;
             animationTarget_.setTexture(newAnimation->getSpriteSheet());
             currentAnimation_ = newAnimation;
             totalTime_ = 0.0f;
+            return true;
         }
+        return false;
     }
 
     int Animator::onAnimationStart(const std::string &name, Callback<> callback) {

@@ -64,12 +64,10 @@ namespace IME {
         /**
          * @brief Change the current animation
          * @param animation New animation
-         *
-         * The new animation must have been added to the animator
-         * beforehand. Otherwise the current animation will continue
-         * playing
+         * @return True if animation was changed or false if animation does
+         *          not exist
          */
-        void changeAnimation(const std::string& animation);
+        bool changeAnimation(const std::string& animation);
 
         /**
          * @brief Add a function to execute when an animation starts
