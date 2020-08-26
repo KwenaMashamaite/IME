@@ -24,30 +24,17 @@ namespace IME {
 
     class Animation {
     public:
+        using Frame = std::pair<Position, Dimensions>;
         /**
          * @brief Create a new animation
          * @param name Name of the animation
          * @param spriteSheetFilename Texture file with animation frames
-         * @param frameSize Size of each animation frame
-         * @param startPos Position of the first frame on the sprite sheet
-         * @param numOfFrames Number of animation frames
          * @param duration How long the animation plays before it stops/loops around
-         * @param arrangement How the frames are arranged on the spritesheet
          *
-         * The starting position must lie on the sprite sheet. In addition, the
-         * sprite sheet must be large enough to accommodate all the animation
-         * frames. In other words, the dimensions of a frame and the number of
-         * frames must be such that none of the frames extend beyond the width
-         * and height of the sprite sheet. Lastly, all animation frames must
-         * be the same size otherwise, incorrect frames will be animated
+         * The sprite sheet must be large enough to accommodate all the animation
+         * frames.
          */
-        Animation(const std::string &name,
-                  const std::string &spriteSheetFilename,
-                  Dimensions frameSize,
-                  Position startPos,
-                  unsigned int numOfFrames,
-                  float duration,
-                  Arrangement arrangement = Arrangement::Horizontal);
+        Animation(const std::string &name, const std::string &spriteSheetFilename, float duration);
 
         /**
          * @brief Get the filename of the animation sprite sheet
@@ -56,12 +43,46 @@ namespace IME {
         std::string getSpriteSheet() const;
 
         /**
+         * @brief Add an animation frame
+         * @param startPos Position of the first frame on the sprite sheet
+         * @param frameSize Size of each animation frame
+         * @param numOfFrames Number of animation frames
+         * @param arrangement How the frames are arranged on the sprite sheet
+         *
+         * This function will create contiguous frames of the same size. To
+         * create an animation from frames at different position on the sprite
+         * sheet and different frame sizes @see addFrame(std::initializer_list<Frame>)
+         */
+        void addFrames(Position startPos, Dimensions frameSize, unsigned int numOfFrames,
+            Arrangement arrangement = Arrangement::Horizontal);
+
+        /**
+         * @brief Add frames to the animation
+         * @param frames Frames to add
+         *
+         * This function allows creation of animation from non contiguous frames
+         * of different sizes. As a result frame coordinates and frame sizes must
+         * be provided for each frame that will be created. To create an animation
+         * from contiguous frames of the same size
+         * @see addFrame(Position, Dimensions, unsigned int, Arrangement)
+         */
+        void addFrames(std::initializer_list<Frame> frames);
+
+        /**
          * @brief Loop/unloop animation
          * @param isLooped True to loop animation, otherwise set to false
          *
          * Animation is not looped by default
          */
         void setLoop(bool isLooped);
+
+        /**
+         * @brief Set the duration of the animation
+         * @param duration Duration to set
+         *
+         * If the duration is negative, the animation will last zero seconds
+         */
+        void setDuration(float duration);
 
         /**
          * @brief Check if animation is looped or not
@@ -106,7 +127,7 @@ namespace IME {
          * @brief Get the size of each animation frame
          * @return The size of each animation frame
          */
-        Dimensions getFrameSize() const;
+        Dimensions getFrameSizeAt(unsigned int index) const;
 
     private:
         //Animation frames
@@ -120,8 +141,6 @@ namespace IME {
         float duration_;
         //Looping state
         bool isLooped_;
-        //The arrangement of the frames on the sprite sheet
-        Arrangement arrangement_;
 
         /**
          * @brief Create animation frames
@@ -131,8 +150,7 @@ namespace IME {
          *
          * This function creates empty frames (not textured) contiguously.
          */
-        void createFrames(unsigned int numOfFrames, Position startingPos,
-              Dimensions frameSize);
+        void addFrame(Frame frame);
     };
 } // namespace IME
 
