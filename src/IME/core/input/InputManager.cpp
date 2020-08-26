@@ -43,7 +43,7 @@ namespace IME::Input {
         return mouse_.removeEventListener(event, button, id);
     }
 
-    void InputManager::update(sf::Event event) {
+    void InputManager::handleEvent(sf::Event event) {
         keyboard_.update(event);
         mouse_.update(event);
     }

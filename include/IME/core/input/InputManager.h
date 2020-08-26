@@ -92,7 +92,7 @@ namespace IME {
              * that event listeners are notified. Failure to call this function
              * will result in key event listeners not being called
              */
-            void update(sf::Event event);
+            void handleEvent(sf::Event event);
 
         private:
             //Managed keyboard
