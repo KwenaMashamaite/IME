@@ -19,16 +19,16 @@
 
 namespace IME {
     namespace Audio {
+        /**
+         * @brief Types of audio files managed by the audio manager
+         */
+        enum class AudioType{
+            SoundEffect,
+            Music
+        };
+
         class AudioManager {
         public:
-            /**
-             * @brief Audio type
-             */
-            enum class AudioType{
-                SoundEffect,
-                Music
-            };
-
             AudioManager(const std::string& musicFilePath, const std::string& soundEffectFilePath);
 
             /**
@@ -46,6 +46,7 @@ namespace IME {
 
             /**
              * @brief Play an audio file
+             * @param audioType Type of the audio file to play
              * @param filename Filename of the audio to play
              *
              * The audio file must be loaded first otherwise nothing will play
@@ -54,67 +55,88 @@ namespace IME {
              * that, the main thread is not blocked and other audio file may be
              * played simultaneously
              */
-            void play(const std::string& filename);
+            void play(const AudioType &audioType, const std::string &filename);
 
             /**
-             * @brief Pause playing audio file
-             * @param filename Filename of the audio to pause
+             * @brief Play all audio files of a certain type
+             * @param audioType Type of the audio files to play
              */
-            void pause(const std::string& filename);
+            void playAll(AudioType audioType);
 
             /**
-             * @brief Stop playing audio file
-             * @param filename Filename of the audio to stop
+             * @brief Pause all playing audio files of a certain type
+             * @param audioType Type of the audio files to pause
+             */
+            void pauseAll(const AudioType &audioType);
+
+            /**
+             * @brief Stop all playing/paused audio files of a certain type
+             * @param audioType Type of the audio file to stop
              *
              * Stopping an audio file (playing/paused) will reset the current
              * playing position to the beginning
              */
-            void stop(const std::string& filename);
-
-            /**
-             * @brief Remove an audio file from an audio player
-             * @param filename Filename of the audio to remove
-             * @return True if audio file was removed or false if the specified
-             *         audio file does not exist
-             */
-            bool remove(const std::string& filename);
+            void stopAll(const AudioType &audioType);
 
             /**
              * @brief Loop/unloop an audio file
-             * @param filename Filename of the audio to set loop for
+             * @param audioType Type of the audio to set loop for
              * @param isLooped Set true to loop and false to unloop
              *
              * All audio files are not looped by default
              */
-            void setLoopFor(const std::string& filename, bool isLooped);
+            void setLoopFor(const AudioType &audioType, bool isLooped);
 
             /**
              * @brief Set the volume for an audio file
-             * @param filename Filename of the audio to set volume for
+             * @param audioType Type of the audio file to set volume for
              * @param volume Volume to set, (mute) 0 <= volume <= 100 (max)
              *
              * The default volume is 100 (max)
              */
-            void setVolumeFor(const std::string& filename, float volume);
+            void setVolumeFor(const AudioType &audioType, float volume);
 
             /**
              * @brief Get the volume of an audio file
-             * @param filename Audio file to get volume of
+             * @param audioType Type of the audio file to get volume for
              * @return Volume of an audio file
-             *
-             * This function will return zero
              */
-            float getVolumeFor(const std::string& filename);
+            float getVolumeFor(const AudioType &audioType);
+
+            /**
+             * @brief Set the maximum volume for all audio players
+             * @param volume The new maximum volume
+             *
+             * This function will overwrite the previous volume. To offset
+             * the volume by a constant @see adjustMaxVolume(float). The
+             * maximum volume for all audio players is 100.0 by default
+             */
+            void setMaxVolume(float volume);
+
+            /**
+             * @brief Offset the maximum volume for all audio players
+             * @param offset Volume offset
+             *
+             * This function will add/subtract to/from the current volume.
+             * To overwrite the volume @see setMaxVolume(float)
+             */
+            void adjustMaxVolume(float offset);
+
+            /**
+             * @brief Get the maximum volume for all audio players
+             * @return The maximum volume for all audio players
+             */
+            float getMaxVolume() const;
 
             /**
              * @brief Play all paused/stopped audio files
              */
-            void playAll();
+            void playAllAudio();
 
             /**
              * @brief Pause all playing audio files
              */
-            void pauseAll();
+            void pauseAllAudio();
 
             /**
              * @brief Stop all playing audio files
@@ -122,17 +144,22 @@ namespace IME {
              * Stopping an audio file (playing/paused) will reset the current
              * playing position to the beginning
              */
-            void stopAll();
+            void stopAllAudio();
+
+            /**
+             * @param Mute or unmute all audio players
+             *
+             * Muted audio files will continue playing
+             */
+            void setMute(bool isMuted);
 
         private:
-            //Filenames of the audio files to be played
-            std::unordered_map<std::string, AudioType> audioFilenames_;
-            //Currently playing audio files - Each audio has its own player
-            std::unordered_map<std::string, std::unique_ptr<AudioPlayer>> audioPlayers_;
-            //Location of the music files
-            std::string musicFilesPath_;
-            //Location of the sound effects
-            std::string soundEffectFilesPath_;
+            //Maximum volume all audio players
+            float maxVolume_;
+            //Handles music
+            MusicPlayer musicPlayer_;
+            //Handles sound effects
+            SoundEffectPlayer sfxPlayer_;
         };
     } // namespace Audio
 } // namespace IME

@@ -1,101 +1,101 @@
 #include "IME/core/audio/AudioManager.h"
-#include "IME/utility/Helpers.h"
-#include <algorithm>
-
-using IME::Utility::findIn;
 
 namespace IME::Audio{
     AudioManager::AudioManager(const std::string &musicFilePath,
         const std::string &soundEffectFilePath)
-        : musicFilesPath_(musicFilePath),
-        soundEffectFilesPath_(soundEffectFilePath)
+        : musicPlayer_(musicFilePath), sfxPlayer_(soundEffectFilePath),
+          maxVolume_(100.0f)
         {}
 
     void AudioManager::loadAudioFiles(AudioType audioType,
          std::initializer_list<std::string> filenames)
      {
-        std::for_each(filenames.begin(), filenames.end(), [=](const auto& filename){
-            if (audioType == AudioType::Music)
-                ResourceManager::getInstance()->loadFromFile(ResourceType::Music, filename);
-            else
-                ResourceManager::getInstance()->loadFromFile(ResourceType::SoundBuffer, filename);
-
-            audioFilenames_.insert({filename, audioType});
-        });
+        if (audioType == AudioType::Music)
+            musicPlayer_.loadFromFile(filenames);
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.loadFromFile(filenames);
     }
 
-    void AudioManager::play(const std::string& filename) {
-        if (findIn(audioPlayers_, filename)) {
-            audioPlayers_[filename]->play(filename);
-            return;
+    void AudioManager::play(const AudioType &audioType, const std::string &filename) {
+        if (audioType == AudioType::Music)
+            musicPlayer_.play(filename);
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.play(filename);
+    }
+
+    void AudioManager::pauseAll(const AudioType &audioType) {
+        if (audioType == AudioType::Music)
+            musicPlayer_.pause();
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.pause();
+    }
+
+    void AudioManager::stopAll(const AudioType &audioType) {
+        if (audioType == AudioType::Music)
+            musicPlayer_.stop();
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.stop();
+    }
+
+    void AudioManager::setVolumeFor(const AudioType &audioType, float volume) {
+        if (volume > maxVolume_)
+            volume = maxVolume_;
+        if (audioType == AudioType::Music)
+            musicPlayer_.setVolume(volume);
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.setVolume(volume);
+    }
+
+    void AudioManager::setLoopFor(const AudioType &audioType, bool isLooped) {
+        if (audioType == AudioType::Music)
+            musicPlayer_.setLoop(isLooped);
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.setLoop(isLooped);
+    }
+
+    void AudioManager::playAllAudio() {
+        musicPlayer_.play();
+        sfxPlayer_.play();
+    }
+
+    void AudioManager::pauseAllAudio() {
+        musicPlayer_.pause();
+        sfxPlayer_.stop();
+    }
+
+    void AudioManager::stopAllAudio() {
+        musicPlayer_.stop();
+        sfxPlayer_.stop();
+    }
+
+    void AudioManager::setMute(bool isMuted) {
+        musicPlayer_.setMute(isMuted);
+        sfxPlayer_.setMute(isMuted);
+    }
+
+    float AudioManager::getVolumeFor(const AudioType &audioType) {
+        switch (audioType) {
+            case AudioType::SoundEffect:
+                return sfxPlayer_.getVolume();
+            case AudioType::Music:
+                return musicPlayer_.getVolume();
         }
-
-        if (findIn(audioFilenames_, filename)) {
-            std::unique_ptr<AudioPlayer> audioPlayer;
-            if (audioFilenames_.at(filename) == AudioType::Music)
-                audioPlayer = std::make_unique<Audio::MusicPlayer>(musicFilesPath_);
-            else
-                audioPlayer = std::make_unique<Audio::SoundEffectPlayer>(soundEffectFilesPath_);
-
-            audioPlayer->play(filename);
-            audioPlayers_.insert({filename, std::move(audioPlayer)});
-        }
     }
 
-    void AudioManager::pause(const std::string& filename) {
-        if (findIn(audioPlayers_, filename))
-            audioPlayers_.at(filename)->pause();
+    void AudioManager::setMaxVolume(float volume) {
+        if (volume > 100.0f)
+            maxVolume_ = 100.0f;
+        else if (volume < 0.0f)
+            maxVolume_ = 0.0f;
+        else
+            maxVolume_ = volume;
     }
 
-    void AudioManager::stop(const std::string& filename) {
-        if (findIn(audioPlayers_, filename))
-            audioPlayers_.at(filename)->stop();
+    void AudioManager::adjustMaxVolume(float offset) {
+        setMaxVolume(getMaxVolume() + offset);
     }
 
-    bool AudioManager::remove(const std::string &filename) {
-        if (findIn(audioPlayers_, filename)) {
-            audioPlayers_.at(filename)->stop();
-            return audioPlayers_.erase(filename);
-        }
-        return false;
-    }
-
-    void AudioManager::setVolumeFor(const std::string &filename, float volume) {
-        if (findIn(audioPlayers_, filename))
-            audioPlayers_.at(filename)->setVolume(volume);
-    }
-
-    void AudioManager::setLoopFor(const std::string &filename, bool isLooped) {
-        if (findIn(audioPlayers_, filename))
-            audioPlayers_.at(filename)->setLoop(isLooped);
-    }
-
-    void AudioManager::playAll() {
-        std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
-            [](const auto& audioPlayer) {
-                audioPlayer.second->play();
-        });
-    }
-
-    void AudioManager::pauseAll() {
-        std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
-            [](const auto& audioPlayer) {
-                audioPlayer.second->pause();
-            }
-        );
-    }
-
-    void AudioManager::stopAll() {
-        std::for_each(audioPlayers_.begin(), audioPlayers_.end(),
-            [](const auto& audioPlayer) {
-                audioPlayer.second->stop();
-            }
-        );
-    }
-
-    float AudioManager::getVolumeFor(const std::string &filename) {
-        if (findIn(audioPlayers_, filename))
-            return audioPlayers_.at(filename)->getVolume();
-        return 0.0f;
+    float AudioManager::getMaxVolume() const {
+        return maxVolume_;
     }
 }

@@ -156,7 +156,7 @@ namespace IME {
 
         if (!isRunning_) {
             window_.close();
-            audioManager_->stopAll();
+            audioManager_->stopAllAudio();
             statesManager_.clear();
         }
     }
