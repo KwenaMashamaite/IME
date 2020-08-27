@@ -9,6 +9,8 @@ void ResourceHolder<T>::setPath(const std::string &filepath) {
 
 template<class T>
 bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
+    if (hasResource(filename))
+        return true;
     auto resource = std::make_shared<T>();
     if (!(*resource).loadFromFile(filePath_ + filename))
         throw FileNotFound(R"(cannot find file ")" + filePath_ + filename + R"(")");
@@ -18,6 +20,8 @@ bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
 //sf::Music doesn't support "loadFromFile". The music is streamed directly from the disk
 template<>
 inline bool ResourceHolder<sf::Music>::loadFromFile(const std::string &filename) {
+    if (hasResource(filename))
+        return true;
     auto music = std::make_shared<sf::Music>();
     if (!(*music).openFromFile(filePath_ + filename))
         throw FileNotFound(R"(cannot find file ")" + filePath_ + filename + R"(")");
