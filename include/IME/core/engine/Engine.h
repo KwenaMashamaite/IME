@@ -53,7 +53,7 @@ namespace IME {
          * engine may be restarted without re-initialization after it ha been
          * stopped
          */
-        void stop();
+        void quit();
 
         /**
          * @brief Check if engine is running or not

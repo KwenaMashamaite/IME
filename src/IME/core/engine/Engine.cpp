@@ -105,7 +105,7 @@ namespace IME {
         }
     }
 
-    void Engine::stop() {
+    void Engine::quit() {
         isRunning_ = false;
     }
 
