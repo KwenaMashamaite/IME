@@ -64,11 +64,11 @@ namespace IME {
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
-        resourceManager_->setPath(ResourceType::Font, settings_.getValueFor("fontsPath"));
-        resourceManager_->setPath(ResourceType::Texture, settings_.getValueFor("imagesPath"));
-        resourceManager_->setPath(ResourceType::Image, settings_.getValueFor("imagesPath"));
-        resourceManager_->setPath(ResourceType::SoundBuffer, settings_.getValueFor("sfxPath"));
-        resourceManager_->setPath(ResourceType::Music, settings_.getValueFor("musicPath"));
+        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor("fontsPath"));
+        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor("imagesPath"));
+        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor("imagesPath"));
+        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor("sfxPath"));
+        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor("musicPath"));
     }
 
     void Engine::processEvents() {
