@@ -175,6 +175,16 @@ namespace IME {
          */
         void postFrameUpdate();
 
+    protected:
+        /**
+         * @brief Handle window close event
+         *
+         * This function will be called by the engine when a request to
+         * close the window is made by the user. The default behavior stops
+         * the engine
+         */
+        virtual void onWindowClose();
+
     private:
         //Engines render target
         Gui::Window window_;

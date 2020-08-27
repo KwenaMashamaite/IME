@@ -75,7 +75,7 @@ namespace IME {
         sf::Event event;
         while (window_.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                window_.close();
+                onWindowClose();
             statesManager_.getActiveState()->handleEvent(event);
             inputManager_.handleEvent(event);
         }
@@ -163,6 +163,10 @@ namespace IME {
 
     bool Engine::isRunning() const {
         return isRunning_;
+    }
+
+    void Engine::onWindowClose() {
+        quit();
     }
 
     ResourceManager &Engine::getResourceManager() {
