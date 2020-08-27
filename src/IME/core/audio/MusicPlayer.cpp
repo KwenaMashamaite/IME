@@ -4,13 +4,12 @@
 namespace IME::Audio{
     MusicPlayer::MusicPlayer(const std::string &musicPath)
         : AudioPlayer(musicPath),
-          musicFiles_(ResourceHolder<sf::Music>(musicPath)),
           currentMusicFileName_("")
     {}
 
     void MusicPlayer::play(const std::string &song){
         if (currentMusicFileName_ != song) {
-            song_ = musicFiles_.get(song);
+            song_ = ResourceManager::getInstance()->getMusic(song);
             currentMusicFileName_ = song;
             play();
         }
@@ -77,9 +76,12 @@ namespace IME::Audio{
     }
 
     void MusicPlayer::loadFromFile(const std::initializer_list<std::string>& filenames) {
+        auto prevMusicPath = ResourceManager::getInstance()->getPathFor(ResourceType::Music);
+        ResourceManager::getInstance()->setPathFor(ResourceType::Music,getAudioFilePath());
         std::for_each(filenames.begin(), filenames.end(), [this](const auto& filename) {
-            musicFiles_.loadFromFile(filename);
+            ResourceManager::getInstance()->loadFromFile(ResourceType::Music, filename);
         });
+        ResourceManager::getInstance()->setPathFor(ResourceType::Music, prevMusicPath);
     }
 
     bool MusicPlayer::isLooped() const {

@@ -1,15 +1,15 @@
 #include "IME/core/audio/SoundEffectPlayer.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace IME::Audio{
     SoundEffectPlayer::SoundEffectPlayer(const std::string &path)
         : AudioPlayer(path),
-          soundEffects_(ResourceHolder<sf::SoundBuffer>(path)),
           currentEffectName_("")
           {}
 
     void SoundEffectPlayer::play(const std::string &filename){
         if (currentEffectName_ != filename) {
-            soundEffect_.setBuffer(*soundEffects_.get(filename));
+            soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
             currentEffectName_ = filename;
             play();
         }
@@ -68,10 +68,12 @@ namespace IME::Audio{
         return soundEffect_.getVolume();
     }
 
-    void SoundEffectPlayer::loadFromFile(const std::initializer_list<std::string>& audioFiles) {
-        std::for_each(audioFiles.begin(), audioFiles.end(), [this](const auto& filename){
-            soundEffects_.loadFromFile(filename);
-        });
+    void SoundEffectPlayer::loadFromFile(const std::initializer_list<std::string>& audioFileNames) {
+        auto prevSfxPath = ResourceManager::getInstance()->getPathFor(ResourceType::SoundBuffer);
+        ResourceManager::getInstance()->setPathFor(ResourceType::SoundBuffer,getAudioFilePath());
+        for (const auto& filename : audioFileNames)
+            ResourceManager::getInstance()->loadFromFile(ResourceType::SoundBuffer, filename);
+        ResourceManager::getInstance()->setPathFor(ResourceType::SoundBuffer, prevSfxPath);
     }
 
     bool SoundEffectPlayer::isLooped() const {

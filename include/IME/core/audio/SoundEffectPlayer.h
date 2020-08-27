@@ -14,9 +14,8 @@
 #define SOUNDEFFECTPLAYER_H
 
 #include "AudioPlayer.h"
-#include "IME/core/resources/ResourceManager.h"
-#include <string>
 #include <SFML/Audio.hpp>
+#include <string>
 
 namespace IME{
     namespace Audio {
@@ -62,7 +61,7 @@ namespace IME{
              * @brief Loop/unloop sound effect
              * @param isLooped Set to true to loop audio, false to unloop audio
              *
-             * The sund effect s not looped by default
+             * The sound effect s not looped by default
              */
             void setLoop(bool isLooped) override;
 
@@ -80,9 +79,9 @@ namespace IME{
 
             /**
              * @brief Load sound effects from the hard drive into the player
-             * @param soundEffectNames Names of the sound effects to load
+             * @param audioFileNames Names of the sound effects to load
              */
-            void loadFromFile(const std::initializer_list<std::string>& soundEffectNames) override;
+            void loadFromFile(const std::initializer_list<std::string>& audioFileNames) override;
 
             /**
              * @brief Check if the sound effect is looped or not
@@ -121,11 +120,9 @@ namespace IME{
             float getPlayingPosition() const override;
 
         private:
-            //Stores sound effects to be played
-            ResourceHolder<sf::SoundBuffer> soundEffects_;
             //Currently playing sound
             sf::Sound soundEffect_;
-            //Nam eof the current sound effect
+            //Name of the current sound effect
             std::string currentEffectName_;
         };
     } // namespace Audio

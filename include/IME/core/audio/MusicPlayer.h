@@ -13,12 +13,11 @@
 #define MUSICPLAYER_H
 
 #include "AudioPlayer.h"
-#include "IME/core/resources/ResourceHolder.h"
 #include <SFML/Audio.hpp>
 #include <string>
 #include <memory>
 
-namespace IME{
+namespace IME {
     namespace Audio {
         class MusicPlayer final : public AudioPlayer{
         public:
@@ -132,10 +131,6 @@ namespace IME{
             float getPlayingPosition() const override;
 
         private:
-            //Path where music files are located
-            std::string musicFilePath_;
-            //Stores loaded music files
-            ResourceHolder<sf::Music> musicFiles_;
             //pointer to playing music
             std::shared_ptr<sf::Music> song_;
             //Name of the current audio file
