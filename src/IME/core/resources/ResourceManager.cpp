@@ -70,6 +70,21 @@ namespace IME {
         }
     }
 
+    const std::string &ResourceManager::getPathFor(ResourceType type) const {
+        switch (type) {
+            case ResourceType::Texture:
+                return textures_.getPath();
+            case ResourceType::Font:
+                return fonts_.getPath();
+            case ResourceType::Image:
+                return images_.getPath();
+            case ResourceType::SoundBuffer:
+                return soundBuffers_.getPath();
+            case ResourceType::Music:
+                return music_.getPath();
+        }
+    }
+
     int ResourceManager::getUseCount(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:
@@ -85,7 +100,7 @@ namespace IME {
         }
     }
 
-    void ResourceManager::setPath(ResourceType type, const std::string& path) {
+    void ResourceManager::setPathFor(ResourceType type, const std::string& path) {
         switch (type) {
             case ResourceType::Texture:
                 textures_.setPath(path);
