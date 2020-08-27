@@ -14,6 +14,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <unordered_map>
+#include <string>
 #include <memory>
 #include <utility>
 
@@ -55,6 +56,20 @@ namespace IME {
          *         resource is still used elsewhere @see get(const std::string&)
          */
         bool unload(const std::string& filename);
+
+        /**
+         * @brief Remove all resources from the resource holder
+         * @return @return True if all the resource were removed or false if the
+         *         resource holder is empty or some of the resources are still
+         *         used elsewhere @see get(const std::string&)
+         *
+         * @note This function may partially remove some resources and leave
+         * others depending on the usage status of the resource. Therefore
+         * a return of false does not necessarily mean that no resources were
+         * unloaded. Use this function when you absolutely  know that the stored
+         * resources are not being utilised, otherwise use @see unload(const td::string&)
+         */
+        bool unloadAll();
 
         /**
          * @brief Get a resource

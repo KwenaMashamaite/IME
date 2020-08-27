@@ -32,6 +32,16 @@ bool ResourceHolder<T>::unload(const std::string &filename) {
 }
 
 template<class T>
+bool ResourceHolder<T>::unloadAll() {
+    if (resourceHolder_.empty())
+        return false;
+
+    for (auto& [key, value] : resourceHolder_)
+        unload(key);
+    return resourceHolder_.size() > 0;
+}
+
+template<class T>
 std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
     if (!hasResource(filename))
         loadFromFile(filename); //Either throws an exception or succeeds
