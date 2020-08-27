@@ -158,6 +158,7 @@ namespace IME {
             window_.close();
             audioManager_->stopAllAudio();
             statesManager_.clear();
+            isInitialized_ = false;
         }
     }
 
