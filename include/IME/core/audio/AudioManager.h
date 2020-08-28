@@ -12,6 +12,7 @@
 #include "AudioPlayer.h"
 #include "MusicPlayer.h"
 #include "SoundEffectPlayer.h"
+#include "IME/event/EventEmitter.h"
 #include <unordered_map>
 #include <initializer_list>
 #include <memory>
@@ -153,13 +154,29 @@ namespace IME {
              */
             void setMute(bool isMuted);
 
+            /**
+             * @brief Add an event listener to a mute event
+             * @param callback Function to execute when mute state changes
+             */
+            void onMute(Callback<bool> callback);
+
+            /**
+             * @brief Add an event listener to a volume change event
+             * @param callback Function to execute when volume changes
+             */
+            void onVolumeChanged(Callback<float> callback);
+
         private:
             //Maximum volume all audio players
             float maxVolume_;
+            //Mute state
+            bool isMuted_;
             //Handles music
             MusicPlayer musicPlayer_;
             //Handles sound effects
             SoundEffectPlayer sfxPlayer_;
+            //Event emitter
+            EventEmitter eventEmitter_;
         };
     } // namespace Audio
 } // namespace IME

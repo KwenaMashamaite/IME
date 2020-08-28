@@ -4,7 +4,7 @@ namespace IME::Audio{
     AudioManager::AudioManager(const std::string &musicFilePath,
         const std::string &soundEffectFilePath)
         : musicPlayer_(musicFilePath), sfxPlayer_(soundEffectFilePath),
-          maxVolume_(100.0f)
+          maxVolume_(100.0f), isMuted_(false)
         {}
 
     void AudioManager::loadAudioFiles(AudioType audioType,
@@ -69,8 +69,11 @@ namespace IME::Audio{
     }
 
     void AudioManager::setMute(bool isMuted) {
+        if (isMuted_ == isMuted)
+            return;
         musicPlayer_.setMute(isMuted);
         sfxPlayer_.setMute(isMuted);
+        eventEmitter_.emit("muteChanged", isMuted_);
     }
 
     float AudioManager::getVolumeFor(const AudioType &audioType) {
@@ -83,12 +86,15 @@ namespace IME::Audio{
     }
 
     void AudioManager::setMaxVolume(float volume) {
-        if (volume > 100.0f)
-            maxVolume_ = 100.0f;
-        else if (volume < 0.0f)
-            maxVolume_ = 0.0f;
-        else
-            maxVolume_ = volume;
+        if (maxVolume_ != volume) {
+            if (volume > 100.0f)
+                maxVolume_ = 100.0f;
+            else if (volume < 0.0f)
+                maxVolume_ = 0.0f;
+            else
+                maxVolume_ = volume;
+            eventEmitter_.emit("volumeChanged", maxVolume_);
+        }
     }
 
     void AudioManager::adjustMaxVolume(float offset) {
@@ -97,5 +103,20 @@ namespace IME::Audio{
 
     float AudioManager::getMaxVolume() const {
         return maxVolume_;
+    }
+
+    void AudioManager::playAll(AudioType audioType) {
+        if (audioType == AudioType::Music)
+            musicPlayer_.play();
+        else if (audioType == AudioType::SoundEffect)
+            sfxPlayer_.play();
+    }
+
+    void AudioManager::onMute(Callback<bool> callback) {
+        eventEmitter_.addEventListener("muteChanged", std::move(callback));
+    }
+
+    void AudioManager::onVolumeChanged(Callback<float> callback) {
+        eventEmitter_.addEventListener("volumeChanged", std::move(callback));
     }
 }

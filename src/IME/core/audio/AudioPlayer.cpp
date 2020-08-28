@@ -20,11 +20,11 @@ namespace IME{
             isMuted_ = true;
             volumeBeforeMute_ = getVolume();
             setVolume(0.0f);
-            EventEmitter::emit("muted");
+            emit("muted");
         } else if (!mute && isMuted_) {
             isMuted_ = false;
             setVolume(volumeBeforeMute_);
-            EventEmitter::emit("unmuted");
+            emit("unmuted");
         }
     }
 
