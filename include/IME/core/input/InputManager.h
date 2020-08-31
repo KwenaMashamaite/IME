@@ -20,13 +20,6 @@ namespace IME {
             bool isKeyPressed(Keyboard::Key key) const;
 
             /**
-             * @brief Check if a mouse button is currently pressed or not
-             * @param button Mouse button to check
-             * @return True if mouse button is pressed, otherwise false
-             */
-            bool isMouseDown(Mouse::Button button) const;
-
-            /**
              * @brief Add a key listener to a key event
              * @param event Name of the event to add key listener to
              * @param key Key to listen for
@@ -35,6 +28,33 @@ namespace IME {
              *         specified key event is invalid
              */
             int addKeyListener(const std::string& event, Keyboard::Key key, Callback<> callback);
+
+            /**
+             * @brief Add a key listener to any key pressed event
+             * @param callback Function to execute when any key is pressed
+             * @return The event listeners identification number
+             *
+             * This event only fires after a depressed key is released
+             */
+            int addAnyKeyPressedListener(Callback<> callback);
+
+            /**
+             * @brief Remove a key event listener from a key event
+             * @param event Event to remove listener from
+             * @param key The key the event listener was listening for
+             * @param id The identification number of the event listener
+             * @return True if the key listener was removed or false if the
+              *        specified event does not have a key listener with the
+              *        specified id
+             */
+            bool removeKeyListener(const std::string& event, Keyboard::Key key, int id);
+
+            /**
+             * @brief Check if a mouse button is currently pressed or not
+             * @param button Mouse button to check
+             * @return True if mouse button is pressed, otherwise false
+             */
+            bool isMouseDown(Mouse::Button button) const;
 
             /**
              * @brief Add a mouse listener to a mouse event
@@ -52,17 +72,6 @@ namespace IME {
              * @return The event listeners identification number
              */
             int addMouseMovedListener(Callback<int, int> callback);
-
-            /**
-             * @brief Remove a key event listener from a key event
-             * @param event Event to remove listener from
-             * @param key The key the event listener was listening for
-             * @param id The identification number of the event listener
-             * @return True if the key listener was removed or false if the
-              *        specified event does not have a key listener with the
-              *        specified id
-             */
-            bool removeKeyListener(const std::string& event, Keyboard::Key key, int id);
 
             /**
              * @brief Remove a mouse event listener from a mouse event

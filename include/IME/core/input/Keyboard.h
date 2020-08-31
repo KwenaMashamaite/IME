@@ -63,6 +63,16 @@ namespace IME {
             static bool isKeyPressed(Key key);
 
             /**
+             * @brief Add an event listener to any key pressed event
+             * @param callback Function to execute when the key is pressed
+             * @return The event listeners identification number
+             *
+             * @note This event will only be triggered when the key is depressed
+             * and released
+             */
+            int onAnyKeyPressed(Callback<> callback);
+
+            /**
               * @brief Add an event listener to a key down event
               * @param key Key to listen for
               * @param callback Function to execute when the key is down
