@@ -1,5 +1,5 @@
 /**
- * @brief
+ * @brief Tile map Tile
  */
 
 #ifndef TILE_H
@@ -10,6 +10,8 @@
 #include "IME/utility/PropertiesContainer.h"
 #include "IME/core/Sprite.h"
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <memory>
 
 namespace IME {
     using Definitions::Dimensions;
@@ -45,6 +47,15 @@ namespace IME {
         Position getPosition() const;
 
         /**
+         * @brief Set the texture of the tile
+         * @param filename Filename of the texture to set
+         *
+         * The texture must be the same size as the tile or only the section
+         * corresponding to the texture rectangle size and texture rect
+         */
+        void setTexture(const std::string& filename);
+
+        /**
          * @brief Set the position of the tile in coordinates
          * @param position Position to set
          */
@@ -57,18 +68,30 @@ namespace IME {
         Dimensions getSize() const;
 
         /**
-         * @brief Set a tile property
-         * @param property Property to set
+         * @brief Set the texture rect of the tile
+         * @param position Position of the texture rect
+         * @param size Size of the texture rect
+         *
+         * The size of the texture rectangle must not be larger than the
+         * size of the tile, otherwise it will automatically be reduced
+         * to the tile size
          */
-        void setProperty(const Property& property);
+        void setTextureRect(const std::string& filename, Position position, Dimensions size);
 
         /**
-         * @brief Get a tile property
-         * @param name Name of the property to retrieve
-         * @return Specified property or an empty property if a property with
-         *         the specified name doesnt exist
+         * @brief Assign tile a token
+         * @param Token to assign to be assigned
+         *
+         * This token will be used by the tile map renderer to figure out
+         * which tile from the tilset to display for this tile
          */
-        Property getProperty(const std::string& name);
+        void setToken(const char &token);
+
+        /**
+         * @brief Get the tiles token
+         * @return The tiles token
+         */
+        const char& getToken() const;
 
         /**
          * @brief Draw tile
@@ -93,23 +116,21 @@ namespace IME {
         bool isHidden() const override;
 
         /**
-         * @brief Set the texture rect of the tile
-         * @param position Position of the texture rect
-         * @param size Size of the texture rect
-         */
-        void setTextureRect(Position position, Dimensions size);
-
-        /**
          * @brief Destructor
          */
         ~Tile() = default;
 
     private:
-        Utility::PropertyContainer properties_;
+        //Tiles token
+        char token_;
+        //
         std::string textureFile_;
         //Tile representation
         Sprite sprite_;
+        //Tile border
         sf::RectangleShape tileBoarder_;
+        //Tetxure for the tile
+        std::shared_ptr<sf::Texture> texture_;
     };
 }
 

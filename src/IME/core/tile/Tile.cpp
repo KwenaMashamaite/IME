@@ -1,5 +1,6 @@
 #include "IME/core/tile/Tile.h"
 #include "IME/gui/window/Window.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace IME {
     Tile::Tile(const Dimensions &size, const Position &position)
@@ -23,12 +24,12 @@ namespace IME {
         tileBoarder_.setPosition(position.x, position.y);
     }
 
-    void Tile::setProperty(const Property &property) {
-        properties_.addProperty(property);
+    void Tile::setToken(const char &token) {
+        token_ = token;
     }
 
-    Property Tile::getProperty(const std::string &name) {
-        return properties_.getProperty(name);
+    const char &Tile::getToken() const {
+        return token_;
     }
 
     void Tile::draw(Gui::Window &renderTarget) {
@@ -47,7 +48,15 @@ namespace IME {
         return false;
     }
 
-    void Tile::setTextureRect(Position position, Dimensions size) {
+    void Tile::setTextureRect(const std::string& filename, Position position, Dimensions size) {
+        if (size.width > getSize().width)
+            size.width = getSize().width;
+
+        if (size.height > getSize().height)
+            size.height = getSize().height;
+
+        //texture_ = std::make_shared<sf::Texture>(ResourceManager::getInstance()->getTexture(filename));
+        //tileBoarder_.setTexture(texture_.get());
         tileBoarder_.setTextureRect({
             static_cast<int>(position.x),
             static_cast<int>(position.y),

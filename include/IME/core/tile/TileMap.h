@@ -1,5 +1,5 @@
 /**
- * @brief
+ * @brief Tile map
  */
 
 #ifndef TILEMAP_H
@@ -22,7 +22,7 @@ namespace IME {
     //Alias for 2D vector
     using Map = std::vector<std::vector<char>>;
 
-    class TileMap : public IDrawable {
+    class TileMap {
     public:
         /**
          * @brief Create a tile map
@@ -77,6 +77,15 @@ namespace IME {
         Tile& getTile(const Position& position);
 
         /**
+         * @brief Set the background of the tile amp
+         * @param filename Name of the background image
+         *
+         * The image must be the same size as the tile set, otherwise it will
+         * be cropped or stretched
+         */
+        void setBackground(const std::string& filename);
+
+        /**
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
          * @return The tile at the specified index
@@ -89,23 +98,23 @@ namespace IME {
          * @brief Render tile map on a render target
          * @param renderTarget Target to render tile map on
          */
-        void draw(Gui::Window &renderTarget) override;
+        void draw(Gui::Window &renderTarget);
 
         /**
          * @brief Hide a shown tile map
          */
-        void hide() override;
+        void hide(const std::string& layer);
 
         /**
          * @brief Show a hidden tile map
          */
-        void show() override;
+        void show(const std::string& layer);
 
         /**
          * @brief Check if tile map is hidden or not
          * @return True if tile map is hidden, otherwise false
          */
-        bool isHidden() const override;
+        bool isHidden(const std::string& layer) const;
 
     private:
         /**
@@ -157,8 +166,18 @@ namespace IME {
         Map mapData_;
         //Tile set the visual grid is constructed from
         std::string tileSet_;
-        //Visual grid
+        //Background image (first layer)
+        std::string background_;
+        //Visual grid (second layer)
         std::vector<std::vector<Tile>> tiledMap_;
+        //Objects (third layer)
+        std::vector<Sprite> objects_;
+        //First layer render state
+        bool isBackgroundDrawable_;
+        //Second layer render state
+        bool isTilesDrawable_;
+        //Third layer render state
+        bool isObjectsDrawable_;
     };
 }
 

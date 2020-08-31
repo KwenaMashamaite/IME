@@ -1,9 +1,11 @@
 #include "IME/core/tile/TileMap.h"
 #include "IME/core/tile/TileMapParser.h"
 #include "IME/gui/window/Window.h"
+#include "IME/gui/drawer/Drawer.h"
 
 namespace IME {
     TileMap::TileMap(const std::string& tileSet, unsigned int tileWidth, unsigned int tileHeight)
+        : isBackgroundDrawable_(true), isTilesDrawable_(true), isObjectsDrawable_(true)
     {
         tileSet_ = tileSet;
         mapPos_ = {0, 0};
@@ -13,6 +15,10 @@ namespace IME {
     Tile& TileMap::getTile(const Position &position) {
         if (auto index = getIndexFromPosition(position); isIndexValid(index))
             return getTile(index);
+    }
+
+    void TileMap::setBackground(const std::string &filename) {
+        background_ = filename;
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
@@ -62,30 +68,40 @@ namespace IME {
     void TileMap::createTiledMap() {
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Tile>{};
-            for (auto j = 0u; j < mapData_[i].size(); j++)
-                row.emplace_back(Tile(tileSize_, {j * tileSize_.width, i * tileSize_.height}));
+            for (auto j = 0u; j < mapData_[i].size(); j++) {
+                auto tile = Tile(tileSize_, {j * tileSize_.width,i * tileSize_.height});
+                tile.setToken(mapData_[i][j]);
+                row.emplace_back(tile);
+            }
             tiledMap_.push_back(row);
         }
     }
 
     void TileMap::draw(Gui::Window &renderTarget) {
-        std::for_each(tiledMap_.begin(), tiledMap_.end(), [&](auto& row) {
-            std::for_each(row.begin(), row.end(), [&](auto& tile) {
-                renderTarget.draw(tile);
+        //Draw background (first layer)
+        if (isBackgroundDrawable_ && !background_.empty()) {
+            auto background = Sprite();
+            background.setTexture(background_);
+            background.setTextureRect(0, 0, mapSizeInPixels_.width, mapSizeInPixels_.height);
+            background.setPosition(mapPos_.x, mapPos_.y);
+            renderTarget.draw(background);
+        }
+
+        //Draw tiles (second layer)
+        if (isTilesDrawable_) {
+            std::for_each(tiledMap_.begin(), tiledMap_.end(), [&](auto &row) {
+                std::for_each(row.begin(), row.end(), [&](auto &tile) {
+                    renderTarget.draw(tile);
+                });
             });
-        });
-    }
+        }
 
-    void TileMap::hide() {
-
-    }
-
-    void TileMap::show() {
-
-    }
-
-    bool TileMap::isHidden() const {
-        return false;
+        //Draw objects (third layer)
+        if (isObjectsDrawable_) {
+            std::for_each(objects_.begin(), objects_.end(), [&](auto &sprite) {
+                renderTarget.draw(sprite);
+            });
+        }
     }
 
     void TileMap::setTile(Index index, Tile &&tile) {
@@ -94,5 +110,33 @@ namespace IME {
 
     Tile& TileMap::getTile(const Index &index) {
         return tiledMap_[index.row][index.colm];
+    }
+
+    void TileMap::hide(const std::string &layer) {
+        if (layer == "background")
+            isBackgroundDrawable_ = false;
+        else if (layer == "tiles")
+            isTilesDrawable_ = false;
+        else if (layer == "objects")
+            isObjectsDrawable_ = false;
+    }
+
+    void TileMap::show(const std::string &layer) {
+        if (layer == "background")
+            isBackgroundDrawable_ = true;
+        else if (layer == "tiles")
+            isTilesDrawable_ = true;
+        else if (layer == "objects")
+            isObjectsDrawable_ = true;
+    }
+
+    bool TileMap::isHidden(const std::string &layer) const {
+        if (layer == "background")
+            return isBackgroundDrawable_;
+        else if (layer == "tiles")
+            return isTilesDrawable_;
+        else if (layer == "objects")
+            return isObjectsDrawable_;
+        return false;
     }
 }
