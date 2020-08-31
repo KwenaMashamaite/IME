@@ -6,7 +6,7 @@
 #define TILE_H
 
 #include "IME/common/Definitions.h"
-#include "IME/gui/common/IDrawable.h"
+#include "IME/common/IDrawable.h"
 #include "IME/utility/PropertiesContainer.h"
 #include "IME/core/Sprite.h"
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -16,7 +16,7 @@ namespace IME {
     using Definitions::Position;
     using Definitions::Property;
 
-    class Tile : public Gui::IDrawable {
+    class Tile : public IDrawable {
     public:
         /**
          * @brief Construct a tile

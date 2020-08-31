@@ -6,7 +6,7 @@
 #define TILEMAP_H
 
 #include "IME/common/Definitions.h"
-#include "IME/gui/common/IDrawable.h"
+#include "IME/common/IDrawable.h"
 #include "Tile.h"
 #include <vector>
 
@@ -22,7 +22,7 @@ namespace IME {
     //Alias for 2D vector
     using Map = std::vector<std::vector<char>>;
 
-    class TileMap : public Gui::IDrawable {
+    class TileMap : public IDrawable {
     public:
         /**
          * @brief Create a tile map

@@ -6,7 +6,7 @@
 #define UIELEMENT_H
 
 #include "IME/gui/window/Window.h"
-#include "IME/gui/common/IDrawable.h"
+#include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include "IME/event/EventEmitter.h"
 #include "IME/common/Definitions.h"

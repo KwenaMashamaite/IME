@@ -6,7 +6,7 @@
 #define WINDOW_H
 
 #include "IME/common/Definitions.h"
-#include "IME/gui/common/IDrawable.h"
+#include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
