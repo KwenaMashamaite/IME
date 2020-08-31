@@ -53,8 +53,9 @@ namespace IME {
         /**
          * @brief Load map data from a file on the disk
          * @param filename Name of the file that contains the map data
+         * @param separator Character used to separate map data
          */
-        void loadFromFile(const std::string& filename);
+        void loadFromFile(const std::string& filename, const char& separator = '\0');
 
         /**
          * @brief Load map data from a vector

@@ -38,8 +38,8 @@ namespace IME {
         return {x, y};
     }
 
-    void TileMap::loadFromFile(const std::string &filename) {
-        mapData_ = TileMapParser().parse(filename);
+    void TileMap::loadFromFile(const std::string &filename, const char& separator) {
+        mapData_ = TileMapParser().parse(filename, separator);
         computeDimensions();
         createTiledMap();
     }
