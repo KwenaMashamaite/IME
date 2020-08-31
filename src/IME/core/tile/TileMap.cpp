@@ -139,4 +139,14 @@ namespace IME {
             return isObjectsDrawable_;
         return false;
     }
+
+    bool TileMap::addObject(Index index, Sprite &object) {
+        if (isIndexValid(index)) {
+            auto& targetTile = getTile(index);
+            object.setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
+            objects_.push_back(object);
+            return true;
+        }
+        return false;
+    }
 }

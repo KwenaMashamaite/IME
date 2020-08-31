@@ -70,6 +70,15 @@ namespace IME {
         void setTile(Index index, Tile&& tile);
 
         /**
+         * @brief Add an object to the tile map
+         * @param index Index of the tile to add the object to
+         * @param object Object to add to the tile map
+         * @return True if the object has been added or false if the index is
+         *         invalid
+         */
+        bool addObject(Index index, Sprite& object);
+
+        /**
          * @brief Get the tile at at certain position
          * @param position Position of the tile to retrieve
          * @return The tile at the specified position
@@ -170,8 +179,8 @@ namespace IME {
         std::string background_;
         //Visual grid (second layer)
         std::vector<std::vector<Tile>> tiledMap_;
-        //Objects (third layer)
-        std::vector<Sprite> objects_;
+        //References to objects (third layer)
+        std::vector<std::reference_wrapper<Sprite>> objects_;
         //First layer render state
         bool isBackgroundDrawable_;
         //Second layer render state
