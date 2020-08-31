@@ -1,6 +1,6 @@
 #include "IME/gui/window/Window.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
 #include <cassert>
 

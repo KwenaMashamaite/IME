@@ -5,8 +5,8 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
 
-#include "Keyboard.h"
-#include "Mouse.h"
+#include "IME/core/input/Keyboard.h"
+#include "IME/core/input/Mouse.h"
 
 namespace IME {
     namespace Input {

@@ -1,5 +1,5 @@
 #include "IME/core/audio/SoundEffectPlayer.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio{
     SoundEffectPlayer::SoundEffectPlayer(const std::string &path)

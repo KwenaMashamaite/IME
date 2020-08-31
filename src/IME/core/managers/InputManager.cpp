@@ -1,4 +1,4 @@
-#include "IME/core/input/InputManager.h"
+#include "IME/core/managers/InputManager.h"
 
 namespace IME::Input {
     int InputManager::addKeyListener(const std::string &event, Keyboard::Key key,

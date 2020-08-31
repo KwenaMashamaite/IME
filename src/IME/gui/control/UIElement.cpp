@@ -1,5 +1,5 @@
 #include "IME/gui/control/UIElement.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
 namespace IME::Gui {

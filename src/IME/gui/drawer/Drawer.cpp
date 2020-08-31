@@ -1,5 +1,5 @@
 #include "IME/gui/drawer/Drawer.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 #include <algorithm>
 #include <SFML/Graphics.hpp>
 

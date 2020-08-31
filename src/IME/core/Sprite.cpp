@@ -1,7 +1,7 @@
 #include "IME/core/Sprite.h"
 #include "IME/gui/window/Window.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME {
     Sprite::Sprite() : isHidden_(false)

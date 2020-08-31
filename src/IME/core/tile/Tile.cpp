@@ -1,6 +1,6 @@
 #include "IME/core/tile/Tile.h"
 #include "IME/gui/window/Window.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME {
     Tile::Tile(const Dimensions &size, const Position &position)

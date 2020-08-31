@@ -1,5 +1,5 @@
 #include "IME/core/audio/MusicPlayer.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio{
     MusicPlayer::MusicPlayer(const std::string &musicPath)

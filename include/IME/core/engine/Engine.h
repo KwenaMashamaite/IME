@@ -7,9 +7,9 @@
 
 #include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
-#include "IME/core/resources/ResourceManager.h"
-#include "IME/core/audio/AudioManager.h"
-#include "IME/core/input/InputManager.h"
+#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/managers/AudioManager.h"
+#include "IME/core/managers/InputManager.h"
 #include "IME/utility/PropertiesContainer.h"
 #include "StateManager.h"
 
