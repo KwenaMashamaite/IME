@@ -10,6 +10,7 @@ namespace IME {
         tileBoarder_.setOutlineThickness(-1.0f);
         tileBoarder_.setFillColor(sf::Color::Transparent);
         setPosition(position);
+        setTextureRect({0, 0}, size);
     }
 
     Dimensions Tile::getSize() const {
@@ -22,6 +23,7 @@ namespace IME {
 
     void Tile::setPosition(const Position &position) {
         tileBoarder_.setPosition(position.x, position.y);
+        sprite_.setPosition(position.x + getSize().width / 2.0f, position.y + getSize().height / 2.0f);
     }
 
     void Tile::setToken(const char &token) {
@@ -34,6 +36,7 @@ namespace IME {
 
     void Tile::draw(Gui::Window &renderTarget) {
         renderTarget.draw(tileBoarder_);
+        renderTarget.draw(sprite_);
     }
 
     void Tile::hide() {
@@ -45,23 +48,20 @@ namespace IME {
     }
 
     bool Tile::isHidden() const {
-        return false;
+        return sprite_.isHidden();
     }
 
-    void Tile::setTextureRect(const std::string& filename, Position position, Dimensions size) {
+    void Tile::setTextureRect(Position position, Dimensions size) {
         if (size.width > getSize().width)
             size.width = getSize().width;
 
         if (size.height > getSize().height)
             size.height = getSize().height;
 
-        //texture_ = std::make_shared<sf::Texture>(ResourceManager::getInstance()->getTexture(filename));
-        //tileBoarder_.setTexture(texture_.get());
-        tileBoarder_.setTextureRect({
-            static_cast<int>(position.x),
-            static_cast<int>(position.y),
-            static_cast<int>(size.width),
-            static_cast<int>(size.height)
-        });
+        sprite_.setTextureRect(position.x, position.y, size.width, size.height);
+    }
+
+    void Tile::setTexture(const std::string &filename) {
+        sprite_.setTexture(filename);
     }
 }

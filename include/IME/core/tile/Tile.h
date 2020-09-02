@@ -85,8 +85,10 @@ namespace IME {
          * The size of the texture rectangle must not be larger than the
          * size of the tile, otherwise it will automatically be reduced
          * to the tile size
+         *
+         * The texture rectangle is (0, 0, tileWidth, tileHeight) by default
          */
-        void setTextureRect(const std::string& filename, Position position, Dimensions size);
+        void setTextureRect(Position position, Dimensions size);
 
         /**
          * @brief Assign tile a token
