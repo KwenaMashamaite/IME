@@ -58,6 +58,27 @@ namespace IME {
 
         void setColour(Gui::Colour colour);
 
+        // \brief set the local origin of the object
+        ///
+        /// The origin of an object defines the center point for
+        /// all transformations (position, scale, rotation).
+        /// The coordinates of this point must be relative to the
+        /// top-left corner of the object, and ignore all
+        /// transformations (position, scale, rotation).
+        /// The default origin of a transformable object is (0, 0).
+
+        /**
+         * @brief Set the local origin of the object
+         * @param x X coordinate of the new origin
+         * @param y Y coordinate of the new origin
+         *
+         * The origin defines the center point for all transformations (position,
+         * scale, rotation). The coordinates of this point must be relative to
+         * the top-left corner of the object, and ignore all transformations
+         * (position, scale, rotation). The origin is (0, 0) by default
+         */
+        void setOrigin(float x, float y);
+
         /**
          * @brief Get the position of the object
          * @return Position of the object

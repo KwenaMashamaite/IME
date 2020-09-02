@@ -65,4 +65,8 @@ namespace IME {
     Gui::Colour Sprite::getColour() const {
         return Utility::convertFrom3rdPartyColour(sprite_.getColor());
     }
+
+    void Sprite::setOrigin(float x, float y) {
+        sprite_.setOrigin(x, y);
+    }
 }
