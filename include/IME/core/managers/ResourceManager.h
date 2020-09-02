@@ -39,15 +39,15 @@ namespace IME {
          * Loading a resource from the disk prior to retrieving it
          * later in the program is much faster and efficient as the
          * resource is cached (i.e, a copy of the resource is stored
-         * in the program rather than having to loadFromFile it from the disk
+         * in the program rather than having to load it from the disk
          * every time it's needed).
          */
         void loadFromFile(ResourceType type, const std::string &filename);
 
         /**
-         * @brief  loadFromFile multiple resources of the same type from
+         * @brief  load multiple resources of the same type from
          *         the hard drive
-         * @param  type Type of the resource to be loaded
+         * @param  type Type of the resources to be loaded
          * @param  filenames File names of the resources to be loaded
          * @throws FileNotFound If one of the files cannot be found
          *         on the disk
@@ -62,7 +62,7 @@ namespace IME {
          * @return True if the unloading succeeded otherwise false
          *
          * The unloading will fail if the resource is still referenced somewhere
-         * in the program or the resource does not exist in the ResourceManager
+         * in the program or the resource does not exist in the ResourceManager.
          * This function is destructive. This means that the resource will be
          * completely destroyed and must be reloaded from the disk if required
          */
@@ -101,7 +101,7 @@ namespace IME {
          * @return Constant reference to a sf::font
          *
          * If the requested font is not cached, an attempt will be
-         * made to loadFromFile it from the disk
+         * made to load it from the disk
          */
         const sf::Font &getFont(const std::string &fileName);
 
@@ -113,7 +113,7 @@ namespace IME {
          * @return Constant reference to a sf::Texture
          *
          * If the requested texture is not cached, an attempt will
-         * be made to loadFromFile it from the disk
+         * be made to load it from the disk
          */
         const sf::Texture &getTexture(const std::string &fileName);
 
@@ -125,7 +125,7 @@ namespace IME {
          * @return Constant reference to a sf::SoundBuffer
          *
          * If the requested sound buffer is not cached, an attempt will
-         * be made to loadFromFile it from the disk
+         * be made to load it from the disk
          */
         const sf::SoundBuffer &getSoundBuffer(const std::string &fileName);
 
@@ -136,7 +136,7 @@ namespace IME {
          * @return constant reference to an sf::Image
          *
          * If the requested image is not cached, an attempt will be made
-         * to loadFromFile it from the disk
+         * to load it from the disk
          */
         const sf::Image &getImage(const std::string &fileName);
 

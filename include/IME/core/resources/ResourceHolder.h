@@ -39,7 +39,7 @@ namespace IME {
 
         /**
          * @brief Load a resource from the disk and store it in a buffer
-         * @param filename File name of the resource to loadFromFile
+         * @param filename File name of the resource to load
          * @throws FileNotFound If the file cannot be found on the disk
          *
          * This function will look for the resource in the file path specified
