@@ -41,6 +41,16 @@ namespace IME {
         Tile& operator=(const Tile& other) = default;
 
         /**
+         * @brief Move constructor
+         */
+        Tile(Tile&& other) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Tile& operator=(Tile&& other) = default;
+
+        /**
          * @brief Get the position of the tile
          * @return The position of the tile
          */

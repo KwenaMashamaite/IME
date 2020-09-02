@@ -105,7 +105,8 @@ namespace IME {
     }
 
     void TileMap::setTile(Index index, Tile &&tile) {
-        tiledMap_[index.row][index.colm] = tile;
+        if (isIndexValid(index))
+            tiledMap_[index.row][index.colm] = std::move(tile);
     }
 
     Tile& TileMap::getTile(const Index &index) {
