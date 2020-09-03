@@ -7,10 +7,8 @@
 
 #include "IME/common/Definitions.h"
 #include "IME/common/IDrawable.h"
-#include "IME/utility/PropertiesContainer.h"
 #include "IME/core/Sprite.h"
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <memory>
 
 namespace IME {
@@ -135,14 +133,10 @@ namespace IME {
     private:
         //Tiles token
         char token_;
-        //
-        std::string textureFile_;
         //Tile representation
         Sprite sprite_;
         //Tile border
         sf::RectangleShape tileBoarder_;
-        //Tetxure for the tile
-        std::shared_ptr<sf::Texture> texture_;
     };
 }
 
