@@ -1,13 +1,13 @@
+#include <iostream>
 #include "IME/core/tile/TileMap.h"
 #include "IME/core/tile/TileMapParser.h"
 #include "IME/gui/window/Window.h"
-#include "IME/gui/drawer/Drawer.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME {
-    TileMap::TileMap(const std::string& tileSet, unsigned int tileWidth, unsigned int tileHeight)
+    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
         : isBackgroundDrawable_(true), isTilesDrawable_(true), isObjectsDrawable_(true)
     {
-        tileSet_ = tileSet;
         mapPos_ = {0, 0};
         tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
     }
@@ -59,6 +59,11 @@ namespace IME {
     void TileMap::setPosition(int x, int y) {
         mapPos_.x = x;
         mapPos_.y = y;
+    }
+
+    void TileMap::setTileset(const std::string &filename) {
+        ResourceManager::getInstance()->loadFromFile(ResourceType::Texture, filename);
+        tileSet_ = filename;
     }
 
     Position TileMap::getPosition() const {
@@ -149,5 +154,26 @@ namespace IME {
             return true;
         }
         return false;
+    }
+
+    void TileMap::setTokenTile(const char &token, Position startPos, Dimensions size) {
+        tokenData_.insert({token, {startPos, size}});
+    }
+
+    bool TileMap::isValidToken(const char &token) const {
+        return tokenData_.find(token) != tokenData_.end();
+    }
+
+    void TileMap::paint() {
+        for (auto& row : tiledMap_) {
+            for (auto& tile : row) {
+                if (auto token = tile.getToken(); isValidToken(token)) {
+                    std::cout << token << std::endl;
+                    tile.setTexture(tileSet_);
+                    auto [startPos, size] = tokenData_.at(token);
+                    tile.setTextureRect(startPos, size);
+                }
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@
 #include "IME/common/Definitions.h"
 #include "IME/common/IDrawable.h"
 #include "Tile.h"
+#include <unordered_map>
 #include <vector>
 
 namespace IME {
@@ -26,14 +27,12 @@ namespace IME {
     public:
         /**
          * @brief Create a tile map
-         * @param tileSet Tile set for constructing the map
          * @param tileWidth With of each tile in the map
          * @param tileHeight height of each tile in the map
          *
          * The tile map has the position (0, 0) by default
-         *
          */
-        TileMap(const std::string& tileSet, unsigned int tileWidth, unsigned int tileHeight);
+        TileMap(unsigned int tileWidth, unsigned int tileHeight);
 
         /**
          * @brief Set the position of the tile map
@@ -43,6 +42,12 @@ namespace IME {
          * The position is (0, 0) by default
          */
         void setPosition(int x, int y);
+
+        /**
+         * @brief Set the maps tileset
+         * @param filename File name of the tileset
+         */
+        void setTileset(const std::string& filename);
 
         /**
          * @brief Get the position of the tile map
@@ -62,6 +67,29 @@ namespace IME {
          * @param map Vector to load data from
          */
         void loadFromVector(const Map& map);
+
+        /**
+         * @brief Associate a token with a tileset tile
+         * @param token The token to associate tileset tile with
+         * @param startPos The starting position of the tileset tile
+         * @param size The size of the tileset tile
+         *
+         * Any tile in the tilemap with the specified token will be textured with
+         * the corresponding tileset tile when painted @see paint()
+         */
+        void setTokenTile(const char& token, Position startPos, Dimensions size);
+
+        /**
+         * @brief Texture the tilemap
+         *
+         * This function will texture each tile in the tile map with a texture
+         * corresponding to the tiles token. @note The token must be linked to
+         * a tile prior to calling this function otherwise the tile will be left
+         * untextured. All tiles are untextured by default.
+         *
+         * @see setTokenTile(const char&, Position, Dimensions)
+         */
+        void paint();
 
         /**
          * @brief Replace a tile at a certain index
@@ -135,6 +163,16 @@ namespace IME {
         bool isIndexValid(const Index &index) const;
 
         /**
+         * @brief Check if a token s valid or not
+         * @param token Token to check
+         * @return True if token is valid, otherwise false
+         *
+         * @note A token is valid if it has been linked to a tile on the maps
+         * tile set
+         */
+        bool isValidToken(const char& token) const;
+
+        /**
          * @brief Create the visual gird
          */
         void createTiledMap();
@@ -182,6 +220,8 @@ namespace IME {
         std::vector<std::vector<Tile>> tiledMap_;
         //References to objects (third layer)
         std::vector<std::reference_wrapper<Sprite>> objects_;
+        //Holds token tile data
+        std::unordered_map<char, std::pair<Position, Dimensions>> tokenData_;
         //First layer render state
         bool isBackgroundDrawable_;
         //Second layer render state
