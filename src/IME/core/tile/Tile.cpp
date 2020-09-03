@@ -23,7 +23,8 @@ namespace IME {
 
     void Tile::setPosition(const Position &position) {
         tileBoarder_.setPosition(position.x, position.y);
-        sprite_.setPosition(position.x + getSize().width / 2.0f, position.y + getSize().height / 2.0f);
+        sprite_.setPosition(getPosition().x + getSize().width / 2.0f,
+            getPosition().y + getSize().height / 2.0f);
     }
 
     void Tile::setToken(const char &token) {
@@ -59,6 +60,7 @@ namespace IME {
             size.height = getSize().height;
 
         sprite_.setTextureRect(position.x, position.y, size.width, size.height);
+        sprite_.setOrigin(sprite_.getSize().width / 2.0f, sprite_.getSize().height / 2.0f);
     }
 
     void Tile::setTexture(const std::string &filename) {
