@@ -132,13 +132,11 @@ namespace IME {
         /**
          * @brief Check if all the mandatory settings have been loaded from
          *        the hard drive
-         * @throw InvalidArgument if at least one of the mandatory settings
-         *        is missing
          *
          * These settings are the screen title, screen width, screen height and
          * fullscreen flag
          */
-        void verifySettings() const;
+        void processSettings();
 
         /**
          * @brief Initialize the render target

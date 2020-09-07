@@ -1,6 +1,7 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/utility/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
+#include "IME/utility/ConsoleLogger.h"
 #include <assert.h>
 
 namespace IME {
@@ -20,7 +21,7 @@ namespace IME {
         initResourceManager();
         initRenderTarget();
         window_.setFramerateLimit(60);
-        window_.setIcon("icon.png");
+        window_.setIcon(settings_.getValueFor("iconPath") + "icon.png");
 
         auto musicPath = settings_.getValueFor("musicPath");
         auto sfxPath = settings_.getValueFor("sfxPath");
@@ -30,18 +31,26 @@ namespace IME {
 
     void Engine::loadSettings() {
         settings_ = Utility::ConfigFileParser().parse(settingFile_);
-        verifySettings();
+        processSettings();
     }
 
-    void Engine::verifySettings() const {
-        auto mandatorySettings = {"title", "width", "height", "fullscreen"};
-        std::for_each(mandatorySettings.begin(), mandatorySettings.end(),
-            [this](const std::string setting) {
-                if (!settings_.hasProperty(setting) && settings_.getValueFor(setting).empty())
-                    throw InvalidArgument(R"(Missing mandatory setting ')"
-                        + setting + R"(' in )" + settingFile_);
-            }
-        );
+    void Engine::processSettings() {
+        static auto setDefaultValueIfNotSet = [this](const std::string& setting,
+            const std::string& defaultValue) mutable {
+                static auto consoleLogger = Utility::ConsoleLogger();
+                if (!settings_.hasProperty(setting) && settings_.getValueFor(setting).empty()) {
+                    consoleLogger.log(Utility::MessageType::Warning,
+                        R"(Missing or invalid ")" + setting + R"(" entry in ")" + settingFile_
+                        + R"(", using default value: ")" + setting + "=" + defaultValue + R"(")");
+                    settings_.addProperty(setting, "string", defaultValue);
+                }
+        };
+
+        setDefaultValueIfNotSet("title", "Infinite Motion Engine");
+        setDefaultValueIfNotSet("width", "600.0f");
+        setDefaultValueIfNotSet("height", "600.0f");
+        setDefaultValueIfNotSet("fullscreen", "0");
+        setDefaultValueIfNotSet("iconPath", "/");
     }
 
     void Engine::initRenderTarget() {
