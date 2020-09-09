@@ -29,8 +29,9 @@ namespace IME {
 
         /**
          * @brief Update the state
+         * @param deltaTime Time passed since last update
          */
-        virtual void update() = 0;
+        virtual void update(float deltaTime) = 0;
 
         /**
          * @brief Update state in fixed time steps

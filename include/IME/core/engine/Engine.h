@@ -155,8 +155,14 @@ namespace IME {
 
         /**
          * @brief Update current frame
+         * @param deltaTime Time passed since last frame update
          */
-        void update();
+        void update(float deltaTime);
+
+        /**
+         * @brief Clear contents of the previous frame from the render window
+         */
+        void clear();
 
         /**
          * @brief Render current frame

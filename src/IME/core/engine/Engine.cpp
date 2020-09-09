@@ -98,19 +98,24 @@ namespace IME {
         isRunning_ = true;
         auto const frameTime = 1.0f / 60.0f;
         auto clock = Utility::Clock();
-        auto deltaTime = clock.restart();
+        auto elapsedTime = 0.0f, deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
+        auto prevTime = clock.restart();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
+            now = clock.getElapsedTimeInSeconds();
+            deltaTime = now - prevTime;
+            prevTime = now;
+            accumulator += deltaTime;
             processEvents();
-            if (deltaTime >= frameTime) {
-                statesManager_.getActiveState()->fixedUpdate(deltaTime);
-                deltaTime = 0.0;
+            while (accumulator >= frameTime) {
+                statesManager_.getActiveState()->fixedUpdate(frameTime);
+                accumulator -= frameTime;
             }
-            window_.clear();
-            update();
+            update(deltaTime);
+            clear();
             render();
             display();
             postFrameUpdate();
-            deltaTime += clock.restart();
+            elapsedTime += deltaTime;
         }
     }
 
@@ -118,8 +123,12 @@ namespace IME {
         isRunning_ = false;
     }
 
-    void Engine::update() {
-        statesManager_.getActiveState()->update();
+    void Engine::update(float deltaTime) {
+        statesManager_.getActiveState()->update(deltaTime);
+    }
+
+    void Engine::clear() {
+        window_.clear();
     }
 
     void Engine::render() {
