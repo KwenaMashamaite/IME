@@ -7,7 +7,7 @@
 namespace IME::Gui {
     Dimensions Window::dimensions_{0u, 0u};
 
-    Window::Window() {
+    Window::Window() : frameRateLimit_(0) {
         assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
         isInstantiated_ = true;
     }
@@ -31,7 +31,16 @@ namespace IME::Gui {
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {
-        window_.setFramerateLimit(framerateLimit);
+        frameRateLimit_ = framerateLimit;
+        window_.setFramerateLimit(frameRateLimit_);
+    }
+
+    void Window::setVsyncEnabled(bool isVsyncEnabled) {
+        window_.setVerticalSyncEnabled(isVsyncEnabled);
+    }
+
+    unsigned int Window::getFramerateLimit() const {
+        return frameRateLimit_;
     }
 
     void Window::setCursorType(Window::CursorType cursorType) {

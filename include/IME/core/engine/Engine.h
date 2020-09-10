@@ -5,12 +5,11 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "IME/utility/GuiFactory.h"
 #include "IME/gui/window/Window.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/core/managers/AudioManager.h"
 #include "IME/core/managers/InputManager.h"
-#include "IME/utility/PropertiesContainer.h"
+#include "IME/common/PropertiesContainer.h"
 #include "StateManager.h"
 
 namespace IME {
@@ -19,10 +18,17 @@ namespace IME {
         /**
          * @brief Constructor
          * @param gameName Name of the application
-         * @param settingsFilename Name of the file (including the path) that
+         * @param settingsFile Name of the file (including the path) that
          *        contains the engines settings
          */
-        Engine(const std::string &gameName, const std::string &settingsFilename);
+        Engine(const std::string &gameName, const std::string &settingsFile);
+
+        /**
+         * @brief Constructor
+         * @param gameName Name of the game to be run by the engine
+         * @param settings Engine settings
+         */
+        Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
          * @brief Initialize base engine
@@ -36,6 +42,14 @@ namespace IME {
          * behaviour. @note The engine will not run without initialization
          */
         void init();
+
+        /**
+         * @brief Limit the frame rate of the engines render target
+         * @param fpsLimit The new frame limit
+         *
+         * By default the frame rate is not limited
+         */
+        void setFPSLimit(float fpsLimit);
 
         /**
          * @brief Start the main loop
@@ -62,17 +76,23 @@ namespace IME {
         bool isRunning() const;
 
         /**
-         * @brief Get the name of the app the engine is running
-         * @return Name of the game the engine is running
+         * @brief Get the engines configuration entries
+         * @return The engines configuration entries
+         *
+         * This entries are used to initialize the engine
          */
-        const std::string& getGameName() const;
+        const PropertyContainer& getSettings() const;
+
+        /**
+         * @brief Get frames per second (FPS) limit
+         * @return FPS limit
+         */
+        float getFPSLimit() const;
 
         /**
          * @brief Add a state
          * @param name Name of the state
          * @param state State to be added
-         * @return True if the state was added or false if a state with the
-         *         same name already exists
          *
          * The state will be pushed at the end of the current frame
          */
@@ -84,12 +104,6 @@ namespace IME {
          * The state will be popped at the end of the current frame
          */
         void popState();
-
-        /**
-         * @brief Get the size of the engines render target
-         * @return The size of the engines render target
-         */
-        Definitions::Dimensions getWindowSize() const;
 
         /**
          * @brief Get access to the engines resource manager
@@ -108,12 +122,6 @@ namespace IME {
          * @return Engines input manager
          */
         Input::InputManager& getInputManager();
-
-        /**
-         * @brief Get a factory for creating gui components
-         * @return Pointer to a gui factory
-         */
-        const std::shared_ptr<const GuiFactory>& getGuiFactory() const;
 
         /**
          * @brief Destructor
@@ -196,12 +204,12 @@ namespace IME {
         std::string appName_;
         //Filename of the engine settings (including path)
         std::string settingFile_;
-        //State of the engine
+        //lags whether settings are provided or loaded from file
+        bool isSettingsLoadedFromFile_;
+        //Running state
         bool isRunning_;
-        //Initilization state
+        //Initialization state
         bool isInitialized_;
-        //Factory for instantiating GUI components
-        static std::shared_ptr<const GuiFactory> guiFactory_;
         //Engine states
         StateManager statesManager_;
         //Engines audio manager
@@ -211,7 +219,7 @@ namespace IME {
         //Engines input manager
         Input::InputManager inputManager_;
         //Engine settings
-        Utility::PropertyContainer settings_;
+        PropertyContainer settings_;
         //Hold a state to be pushed to engine state
         std::shared_ptr<State> stateToPush_;
         //Flag for popping

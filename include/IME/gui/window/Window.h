@@ -5,7 +5,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -13,9 +14,6 @@
 
 namespace IME {
     namespace Gui {
-        using Definitions::Position;
-        using Definitions::Dimensions;
-
         class Window : sf::NonCopyable {
         public:
             /**
@@ -89,6 +87,26 @@ namespace IME {
             void setFramerateLimit(unsigned int framerateLimit);
 
             /**
+             * @brief Enable or disable vertical synchronization
+             * @param isVsyncEnabled True to enable Vsync or false to disable it
+             *
+             * Activating vertical synchronization will limit the number
+             * of frames displayed to the refresh rate of the monitor.
+             * This can avoid some visual artifacts, and limit the framerate
+             * to a good value (but not constant across different computers).
+             *
+             * Vertical synchronization is disabled by default.
+             */
+            void setVsyncEnabled(bool isVsyncEnabled);
+
+            /**
+             * @brief Get the frame rate limit of the window
+             * @return The frame rate limit if it has been set, otherwise -1
+             *         if the frame rate is not limited
+             */
+            unsigned int getFramerateLimit() const;
+
+            /**
              * @brief Change the displayed mouse cursor type
              * @param cursorType Mouse cursor type to display
              */
@@ -154,6 +172,8 @@ namespace IME {
             sf::RenderWindow window_;
             //Dimensions of the window
             static Dimensions dimensions_;
+            //Frame rate limit
+            unsigned int frameRateLimit_;
             //Instantiation state
             inline static auto isInstantiated_ = false;
         };

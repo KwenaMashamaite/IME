@@ -1,4 +1,3 @@
-#include <iostream>
 #include "IME/core/tile/TileMap.h"
 #include "IME/core/tile/TileMapParser.h"
 #include "IME/gui/window/Window.h"
@@ -13,7 +12,7 @@ namespace IME {
     }
 
     Tile& TileMap::getTile(const Position &position) {
-        if (auto index = getIndexFromPosition(position); isIndexValid(index))
+        if (auto index = getIndexFromPosition(position); isValidIndex(index))
             return getTile(index);
     }
 
@@ -21,7 +20,7 @@ namespace IME {
         background_ = filename;
     }
 
-    bool TileMap::isIndexValid(const Index &index) const {
+    bool TileMap::isValidIndex(const Index &index) const {
         auto [row, colm] = index;
         return !(row > numOfRows_ || row < 0 || colm > numOfColms_ || colm < 0);
     }
@@ -110,8 +109,22 @@ namespace IME {
     }
 
     void TileMap::setTile(Index index, Tile &&tile) {
-        if (isIndexValid(index))
+        if (isValidIndex(index))
             tiledMap_[index.row][index.colm] = std::move(tile);
+    }
+
+    void TileMap::setForbidden(const Index &index, bool isForbidden) {
+        if (isValidIndex(index))
+            tiledMap_[index.row][index.colm].setCollideable(isForbidden);
+    }
+
+    void TileMap::setForbidden(const char &token, bool isForbidden) {
+        std::for_each(tiledMap_.begin(), tiledMap_.end(), [=](auto& row) {
+            std::for_each(row.begin(), row.end(), [=](auto& tile) {
+                if (tile.getToken() == token)
+                    tile.setCollideable(isForbidden);
+            });
+        });
     }
 
     Tile& TileMap::getTile(const Index &index) {
@@ -146,8 +159,14 @@ namespace IME {
         return false;
     }
 
+    bool TileMap::isForbidden(const Index &index) const {
+        if (!isValidIndex(index))
+            return tiledMap_[index.row][index.colm].isCollideable();
+        return false;
+    }
+
     bool TileMap::addObject(Index index, Sprite &object) {
-        if (isIndexValid(index)) {
+        if (isValidIndex(index)) {
             auto& targetTile = getTile(index);
             object.setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
             objects_.push_back(object);
@@ -168,7 +187,6 @@ namespace IME {
         for (auto& row : tiledMap_) {
             for (auto& tile : row) {
                 if (auto token = tile.getToken(); isValidToken(token)) {
-                    std::cout << token << std::endl;
                     tile.setTexture(tileSet_);
                     auto [startPos, size] = tokenData_.at(token);
                     tile.setTextureRect(startPos, size);

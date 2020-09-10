@@ -25,6 +25,9 @@ width:int=1000
 # Height of the game window
 height:int=700
 
+# FPS limit
+fpsLimit:int=60
+
 # Path to fonts
 fontsPath:string=resources/fonts/
 

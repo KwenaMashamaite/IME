@@ -12,11 +12,20 @@ namespace IME::Gui {
         initEvents();
     }
 
+    void StackPanel::setTitle(const std::string &title) {
+        title_.setText(title);
+    }
+
+    std::string StackPanel::getTitle() const {
+        return title_.getText();
+    }
+
     void StackPanel::initEvents() {
         //Move child elements with the panel when it changes position
         on("positionChanged", Callback<Position>([this](Position newPos){
             if (cBegin() != cEnd()) {
-                (*(cBegin()->second)).setPosition(newPos.x, newPos.y);
+                title_.setPosition(newPos);
+                (*(cBegin()->second)).setPosition(newPos.x, title_.getPosition().y + title_.getSize().height);
                 for (auto iter = ++cBegin(); iter != cEnd(); ++iter)
                     setElemPosRelativeTo(iter->second, std::prev(iter,  1)->second);
             }
@@ -112,5 +121,10 @@ namespace IME::Gui {
                 uiElem->getPadding().right, uiElem->getPadding().top, bottomPadding
             });
         }
+    }
+
+    void StackPanel::draw(Window &renderTarget) {
+        renderTarget.draw(title_);
+        Panel::draw(renderTarget);
     }
 }

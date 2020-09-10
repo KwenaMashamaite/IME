@@ -5,6 +5,7 @@
 namespace IME {
     Tile::Tile(const Dimensions &size, const Position &position)
     {
+        isCollideable_ = false;
         tileBoarder_.setSize(sf::Vector2f{size.width, size.height});
         tileBoarder_.setOutlineColor(sf::Color::White);
         tileBoarder_.setOutlineThickness(-1.0f);
@@ -65,5 +66,13 @@ namespace IME {
 
     void Tile::setTexture(const std::string &filename) {
         sprite_.setTexture(filename);
+    }
+
+    bool Tile::isCollideable() const {
+        return isCollideable_;
+    }
+
+    void Tile::setCollideable(bool isCollideable) {
+        isCollideable_ = isCollideable;
     }
 }

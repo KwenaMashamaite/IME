@@ -5,16 +5,14 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
 #include "Tile.h"
 #include <unordered_map>
 #include <vector>
 
 namespace IME {
-    using Definitions::Position;
-    using Definitions::Dimensions;
-
     struct Index {
         int row;
         int colm;
@@ -99,6 +97,26 @@ namespace IME {
         void setTile(Index index, Tile&& tile);
 
         /**
+         * @brief Flag a tile as forbidden or not
+         * @param index Index of the tile to flag
+         * @param isForbidden True to forbid tile entry, otherwise false
+         *
+         * Forbidden tiles are collideable. i.e, objects cannot enter them.
+         * Tilemap Tiles are passable by default
+         */
+        void setForbidden(const Index &index, bool isForbidden);
+
+        /**
+         * @brief Flag tiles with a certain token as forbidden or not
+         * @param token Token of the tiles to flag
+         * @param isForbidden True to forbid tile entry, otherwise false
+         *
+         * Forbidden tiles are collideable. i.e, objects cannot enter them.
+         * Tilemap Tiles are passable by default
+         */
+        void setForbidden(const char& token, bool isForbidden);
+
+        /**
          * @brief Add an object to the tile map
          * @param index Index of the tile to add the object to
          * @param object Object to add to the tile map
@@ -154,21 +172,28 @@ namespace IME {
          */
         bool isHidden(const std::string& layer) const;
 
+        /**
+         * @brief Check if a tile is forbidden or not
+         * @param index Index of the tile to be checked
+         * @return True if tile is forbidden, otherwise false
+         */
+        bool isForbidden(const Index& index) const;
+
     private:
         /**
-         * @brief Check if the index is within bounds or not
+         * @brief Check if the index is within bounds of the tilemap or not
          * @param index Index to check
          * @return True if the index is within bounds, otherwise false
          */
-        bool isIndexValid(const Index &index) const;
+        bool isValidIndex(const Index &index) const;
 
         /**
-         * @brief Check if a token s valid or not
+         * @brief Check if a token is valid or not
          * @param token Token to check
          * @return True if token is valid, otherwise false
          *
-         * @note A token is valid if it has been linked to a tile on the maps
-         * tile set
+         * A token is valid if it has been linked to a tile on the tilemap's
+         * tileset
          */
         bool isValidToken(const char& token) const;
 

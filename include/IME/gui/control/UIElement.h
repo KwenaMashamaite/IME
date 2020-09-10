@@ -9,7 +9,8 @@
 #include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include "IME/event/EventEmitter.h"
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Event.hpp>
@@ -17,8 +18,6 @@
 
 namespace IME {
     namespace Gui {
-        using Definitions::Position;
-        using Definitions::Dimensions;
         /**
          * @brief Represents the whitespace around the borders
          *        of the GUI element

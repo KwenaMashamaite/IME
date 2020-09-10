@@ -5,13 +5,15 @@
 #ifndef IENTITY_H
 #define IENTITY_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Dimensions.h"
+#include "IME/common/Position.h"
+#include "IME/core/IEntityState.h"
+#include "IME/event/EventEmitter.h"
+#include <stack>
 #include <string>
+#include <memory>
 
 namespace IME {
-    using Definitions::Position;
-    using Definitions::Dimensions;
-
     class IEntity {
     public:
         /**
@@ -36,21 +38,6 @@ namespace IME {
          * @param dir new direction of the entity
          */
         virtual void setDirection(Direction dir) = 0;
-
-        /**
-         * @brief Set the texture of the entity
-         * @param texture Texture to be set
-         *
-         * The texture is the name of the file that graphically
-         * represents the entity
-         */
-        virtual void setTexture(const std::string& texture) = 0;
-
-        /**
-         * @brief Get the texture of the entity
-         * @return Texture of the entity
-         */
-        virtual const std::string& getTexture() const = 0;
 
         /**
          * @brief Get the dimensions of the entity's bounding box
@@ -89,7 +76,7 @@ namespace IME {
          * @brief Get the type of the entity
          * @return The type of the entity
          */
-        virtual std::string getEntityType() = 0;
+        virtual std::string getType() = 0;
 
         /**
          * @brief Get the remaining life of the entity
@@ -105,10 +92,29 @@ namespace IME {
          */
         bool isCollideWith(IEntity& other) const;
 
+        void reset();
+
+        void update();
+
+        void pushState(std::shared_ptr<IEntityState> state);
+
+        void popState();
+
+        /**
+         * @brief
+         * @param entity
+         */
+        virtual void onCollide(Callback<IEntity&> callback) {
+
+        };
+
         /**
          * @brief Destructor
          */
         virtual ~IEntity() = default;
+
+    private:
+        std::stack<std::shared_ptr<IEntityState>> states_;
     };
 } // namespace IME
 

@@ -5,17 +5,14 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
 #include "IME/core/Sprite.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <memory>
 
 namespace IME {
-    using Definitions::Dimensions;
-    using Definitions::Position;
-    using Definitions::Property;
-
     class Tile : public IDrawable {
     public:
         /**
@@ -98,6 +95,14 @@ namespace IME {
         void setToken(const char &token);
 
         /**
+         * @brief Set if a tile is solid or not
+         * @param isCollideable True to set tile as collideable otherwise false
+         *
+         * A tile is not collideable by default
+         */
+        void setCollideable(bool isCollideable);
+
+        /**
          * @brief Get the tiles token
          * @return The tiles token
          */
@@ -126,11 +131,18 @@ namespace IME {
         bool isHidden() const override;
 
         /**
+         * @brief Check if tile is collideable or not
+         * @return True if tile is collideable, otherwise false
+         */
+        bool isCollideable() const;
+
+        /**
          * @brief Destructor
          */
         ~Tile() = default;
 
     private:
+        bool isCollideable_;
         //Tiles token
         char token_;
         //Tile representation

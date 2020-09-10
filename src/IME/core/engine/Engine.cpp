@@ -5,23 +5,33 @@
 #include <assert.h>
 
 namespace IME {
-    std::shared_ptr<const GuiFactory> IME::Engine::guiFactory_(std::make_shared<GuiFactory>());
+    Engine::Engine(const std::string &gameName, const PropertyContainer &settings)
+        : Engine(gameName, "")
+    {
+        settings_ = settings;
+    }
 
-    Engine::Engine(const std::string &gameName, const std::string &settingsFilename)
-        : isRunning_{false},
+    Engine::Engine(const std::string &gameName, const std::string &settingsFile)
+        : isSettingsLoadedFromFile_(!settingsFile.empty()),
+          isRunning_{false},
           isInitialized_{false},
           appName_{gameName},
-          settingFile_{settingsFilename},
+          settingFile_{settingsFile},
           shouldPop_{false}
-    {}
+    {
+        if (settingsFile.empty())
+            isSettingsLoadedFromFile_ = false;
+        else
+            isSettingsLoadedFromFile_ = true;
+    }
 
     void Engine::init() {
-        //Order is important!, some operations requires others to finish first
-        loadSettings();
+        if (isSettingsLoadedFromFile_)
+            loadSettings();
+
+        processSettings();
         initResourceManager();
         initRenderTarget();
-        window_.setFramerateLimit(60);
-        window_.setIcon(settings_.getValueFor("iconPath") + "icon.png");
 
         auto musicPath = settings_.getValueFor("musicPath");
         auto sfxPath = settings_.getValueFor("sfxPath");
@@ -31,7 +41,6 @@ namespace IME {
 
     void Engine::loadSettings() {
         settings_ = Utility::ConfigFileParser().parse(settingFile_);
-        processSettings();
     }
 
     void Engine::processSettings() {
@@ -51,6 +60,7 @@ namespace IME {
         setDefaultValueIfNotSet("height", "600.0f");
         setDefaultValueIfNotSet("fullscreen", "0");
         setDefaultValueIfNotSet("iconPath", "/");
+        setDefaultValueIfNotSet("fpsLimit", "60");
     }
 
     void Engine::initRenderTarget() {
@@ -69,6 +79,9 @@ namespace IME {
                 height = desktopHeight;
             window_.create(title, width, height, Gui::Window::Style::Close);
         }
+
+        setFPSLimit(std::stoi(settings_.getValueFor("fpsLimit")));
+        window_.setIcon(settings_.getValueFor("iconPath") + "icon.png");
     }
 
     void Engine::initResourceManager() {
@@ -96,10 +109,10 @@ namespace IME {
 
         statesManager_.getActiveState()->initialize();
         isRunning_ = true;
-        auto const frameTime = 1.0f / 60.0f;
-        auto clock = Utility::Clock();
+        auto const frameTime = 1.0f / getFPSLimit();
         auto elapsedTime = 0.0f, deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
-        auto prevTime = clock.restart();
+        auto clock = Utility::Clock();
+        auto prevTime = clock.getElapsedTimeInSeconds();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             now = clock.getElapsedTimeInSeconds();
             deltaTime = now - prevTime;
@@ -147,15 +160,10 @@ namespace IME {
     }
 
     void Engine::popState() {
-        shouldPop_ = true;
-    }
-
-    Definitions::Dimensions Engine::getWindowSize() const {
-        return window_.getDimensions();
-    }
-
-    const std::shared_ptr<const GuiFactory> & IME::Engine::getGuiFactory() const {
-        return guiFactory_;
+        if (!isRunning_ && !statesManager_.isEmpty())
+            statesManager_.popState();
+        else
+            shouldPop_ = true;
     }
 
     void Engine::postFrameUpdate() {
@@ -184,6 +192,11 @@ namespace IME {
         return isRunning_;
     }
 
+    void Engine::setFPSLimit(float fpsLimit) {
+        window_.setFramerateLimit(fpsLimit);
+        window_.setVsyncEnabled(fpsLimit >= 0);
+    }
+
     void Engine::onWindowClose() {
         quit();
     }
@@ -192,8 +205,12 @@ namespace IME {
         return *resourceManager_;
     }
 
-    const std::string &Engine::getGameName() const {
-        return appName_;
+    const PropertyContainer &Engine::getSettings() const {
+        return settings_;
+    }
+
+    float Engine::getFPSLimit() const {
+        return window_.getFramerateLimit();
     }
 
     Audio::AudioManager &Engine::getAudioManager() {

@@ -5,16 +5,14 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <string>
 
 namespace IME {
-    using Definitions::Position;
-    using Definitions::Dimensions;
-
     class Sprite : public IDrawable {
     public:
         /**

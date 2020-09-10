@@ -5,7 +5,7 @@
 #ifndef CONFIGFILEPARSER_H
 #define CONFIGFILEPARSER_H
 
-#include "PropertiesContainer.h"
+#include "IME/common/PropertiesContainer.h"
 
 namespace IME {
     namespace Utility {

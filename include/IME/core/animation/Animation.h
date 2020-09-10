@@ -5,15 +5,13 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "IME/common/Definitions.h"
+#include "IME/common/Position.h"
+#include "IME/common/Dimensions.h"
 #include <SFML/Graphics/Rect.hpp>
 #include <string>
 #include <vector>
 
 namespace IME {
-    using Definitions::Dimensions;
-    using Definitions::Position;
-
     /**
      * @brief Defines how the frames are arranged
      */
