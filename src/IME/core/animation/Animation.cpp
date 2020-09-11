@@ -10,15 +10,15 @@ namespace IME{
     }
 
     void Animation::addFrames(Position startPos, Dimensions frameSize,
-        unsigned int numOfFrames, Arrangement arrangement)
+        unsigned int numOfFrames, unsigned int spacing, Arrangement arrangement)
     {
         auto currentPosition = startPos;
         for (auto i = 0u; i < numOfFrames; ++i) {
             addFrame({currentPosition, frameSize});
             if (arrangement == Arrangement::Horizontal)
-                currentPosition.x += frameSize.width;
+                currentPosition.x += frameSize.width + spacing;
             else
-                currentPosition.y += frameSize.height;
+                currentPosition.y += frameSize.height + spacing;
         }
     }
 

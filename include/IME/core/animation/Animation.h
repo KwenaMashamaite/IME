@@ -45,6 +45,7 @@ namespace IME {
          * @param startPos Position of the first frame on the sprite sheet
          * @param frameSize Size of each animation frame
          * @param numOfFrames Number of animation frames
+         * @param spacing Space between frames
          * @param arrangement How the frames are arranged on the sprite sheet
          *
          * This function will create contiguous frames of the same size. To
@@ -52,7 +53,7 @@ namespace IME {
          * sheet and different frame sizes @see addFrame(std::initializer_list<Frame>)
          */
         void addFrames(Position startPos, Dimensions frameSize, unsigned int numOfFrames,
-            Arrangement arrangement = Arrangement::Horizontal);
+            unsigned int spacing = 0, Arrangement arrangement = Arrangement::Horizontal);
 
         /**
          * @brief Add frames to the animation
