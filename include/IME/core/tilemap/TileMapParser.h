@@ -1,7 +1,7 @@
 #ifndef TILEMAPPARSER_H
 #define TILEMAPPARSER_H
 
-#include "IME/core/tile/TileMap.h"
+#include "IME/core/tilemap/TileMap.h"
 
 namespace IME {
     class TileMapParser {

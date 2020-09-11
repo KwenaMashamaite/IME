@@ -1,7 +1,7 @@
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
-#include "IME/core/tile/Tile.h"
+#include "IME/core/tilemap/Tile.h"
 
 namespace IME {
     class CollisionDetector{

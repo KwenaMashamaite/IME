@@ -1,6 +1,6 @@
 #include <iostream>
-#include "IME/core/tile/TileMap.h"
-#include "IME/core/tile/TileMapParser.h"
+#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/tilemap/TileMapParser.h"
 #include "IME/gui/window/Window.h"
 #include "IME/core/managers/ResourceManager.h"
 

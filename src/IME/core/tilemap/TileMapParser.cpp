@@ -1,4 +1,4 @@
-#include "IME/core/tile/TileMapParser.h"
+#include "IME/core/tilemap/TileMapParser.h"
 #include "IME/utility/DiskFileReader.h"
 #include <sstream>
 

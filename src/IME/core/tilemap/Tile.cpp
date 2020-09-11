@@ -1,4 +1,4 @@
-#include "IME/core/tile/Tile.h"
+#include "IME/core/tilemap/Tile.h"
 #include "IME/gui/window/Window.h"
 #include "IME/core/managers/ResourceManager.h"
 
