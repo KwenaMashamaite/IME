@@ -8,11 +8,23 @@
 #include "IME/common/Position.h"
 #include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
+#include "IME/event/EventEmitter.h"
 #include "IME/core/Sprite.h"
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <unordered_map>
 #include <memory>
 
 namespace IME {
+    /**
+     * @brief Defines the borders of the tile
+     */
+    enum class Border {
+        Left,
+        Right,
+        Top,
+        Bottom,
+    };
+
     class Tile : public IDrawable {
     public:
         /**
@@ -86,27 +98,40 @@ namespace IME {
         void setTextureRect(Position position, Dimensions size);
 
         /**
-         * @brief Assign tile a token
-         * @param Token to assign to be assigned
+         * @brief Assign the tile an identification token
+         * @param id Identification token to assign
          *
-         * This token will be used by the tile map renderer to figure out
-         * which tile from the tilset to display for this tile
+         * The id is an empty character by default
          */
-        void setToken(const char &token);
+        void setId(const char &id);
 
         /**
-         * @brief Set if a tile is solid or not
-         * @param isCollideable True to set tile as collideable otherwise false
+         * @brief Set all the sides of the tile as collideable or not
+         * @param isCollideable True to set tile as collideable, otherwise false
          *
-         * A tile is not collideable by default
+         * The tile is not collideable on all sides by default
          */
         void setCollideable(bool isCollideable);
 
         /**
-         * @brief Get the tiles token
-         * @return The tiles token
+         * @brief Set a tile border as collideable or not
+         * @param border The tile border to set
+         * @param isCollideable True to set border as collideable, otherwise false
          */
-        const char& getToken() const;
+        void setCollideable(const Border& border, bool isCollideable);
+
+        /**
+         * @brief Check if a tile border is collideable or not
+         * @param border Border to be checked
+         * @return True if border is collideable, otherwise false
+         */
+        bool isCollideable(const Border& border) const;
+
+        /**
+         * @brief Get the tiles id
+         * @return The tiles id
+         */
+        const char& getId() const;
 
         /**
          * @brief Draw tile
@@ -131,10 +156,42 @@ namespace IME {
         bool isHidden() const override;
 
         /**
-         * @brief Check if tile is collideable or not
-         * @return True if tile is collideable, otherwise false
+         * @brief Check if tile is collideable on all sides or not
+         * @return True if tile is collideable on all sides, otherwise false
          */
         bool isCollideable() const;
+
+        /**
+         * @brief Check if tile contains pixel coordinates
+         * @param x X coordinate to be checked
+         * @param y Y coordinate to be checked
+         * @return True if the tile contains the pixel coordinates, otherwise
+         *         false
+         */
+        bool contains(float x, float y) const;
+
+        /**
+         * @brief Add an event listener to a tile collision event
+         * @param callback Function to execute when a collision occurs
+         * @return Event listeners identification number
+         *
+         * The callback function is invoked each time the tile is collided with.
+         * The tile and the border hit will be provided as arguments to the
+         * callback function when publishing the collision event
+         */
+        int onCollision(Callback<Tile&, Border> callback);
+
+        /**
+         * @brief Collide with this tiles border
+         * @param border Border to collide with
+         */
+        void hit(const Border& border);
+
+        /**
+         * @brief
+         * @return
+         */
+        Sprite& getSprite();
 
         /**
          * @brief Destructor
@@ -143,12 +200,16 @@ namespace IME {
 
     private:
         bool isCollideable_;
-        //Tiles token
-        char token_;
+        //Tiles id
+        char id_;
         //Tile representation
         Sprite sprite_;
         //Tile border
         sf::RectangleShape tileBoarder_;
+        //
+        std::unordered_map<Border, bool> borderCollisionFlags_;
+        //Event publisher
+        EventEmitter eventEmitter_;
     };
 }
 

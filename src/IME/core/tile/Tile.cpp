@@ -6,12 +6,18 @@ namespace IME {
     Tile::Tile(const Dimensions &size, const Position &position)
     {
         isCollideable_ = false;
+        id_ = '\0';
         tileBoarder_.setSize(sf::Vector2f{size.width, size.height});
         tileBoarder_.setOutlineColor(sf::Color::White);
         tileBoarder_.setOutlineThickness(-1.0f);
         tileBoarder_.setFillColor(sf::Color::Transparent);
         setPosition(position);
         setTextureRect({0, 0}, size);
+        borderCollisionFlags_.insert({Border::Left, false});
+
+        //Flag all four sides of the tile as not collideable
+        for (auto i = 0u; i < 4u; i++)
+            borderCollisionFlags_.insert({static_cast<Border>(i), false});
     }
 
     Dimensions Tile::getSize() const {
@@ -24,16 +30,15 @@ namespace IME {
 
     void Tile::setPosition(const Position &position) {
         tileBoarder_.setPosition(position.x, position.y);
-        sprite_.setPosition(getPosition().x + getSize().width / 2.0f,
-            getPosition().y + getSize().height / 2.0f);
+        sprite_.setPosition(getPosition().x, getPosition().y);
     }
 
-    void Tile::setToken(const char &token) {
-        token_ = token;
+    void Tile::setId(const char &id) {
+        id_ = id;
     }
 
-    const char &Tile::getToken() const {
-        return token_;
+    const char &Tile::getId() const {
+        return id_;
     }
 
     void Tile::draw(Gui::Window &renderTarget) {
@@ -61,18 +66,46 @@ namespace IME {
             size.height = getSize().height;
 
         sprite_.setTextureRect(position.x, position.y, size.width, size.height);
-        sprite_.setOrigin(sprite_.getSize().width / 2.0f, sprite_.getSize().height / 2.0f);
     }
 
     void Tile::setTexture(const std::string &filename) {
         sprite_.setTexture(filename);
     }
 
+    bool Tile::isCollideable(const Border &border) const {
+        return borderCollisionFlags_.at(border);
+    }
+
     bool Tile::isCollideable() const {
-        return isCollideable_;
+        return isCollideable(Border::Left)
+            && isCollideable(Border::Right)
+            && isCollideable(Border::Top)
+            && isCollideable(Border::Bottom);
     }
 
     void Tile::setCollideable(bool isCollideable) {
-        isCollideable_ = isCollideable;
+        for (auto& border : borderCollisionFlags_)
+            border.second = isCollideable;
+    }
+
+    void Tile::setCollideable(const Border &border, bool isCollideable) {
+        borderCollisionFlags_.at(border) = isCollideable;
+    }
+
+    bool Tile::contains(float x, float y) const {
+        return ((x >= getPosition().x && x <= getPosition().x + getSize().width)
+            && (y >= getPosition().y && y <= getPosition().y + getSize().height));
+    }
+
+    Sprite &Tile::getSprite() {
+        return sprite_;
+    }
+
+    int Tile::onCollision(Callback<Tile&, Border> callback) {
+        return eventEmitter_.addEventListener("hit", std::move(callback));
+    }
+
+    void Tile::hit(const Border& border) {
+        eventEmitter_.emit("hit", *this, border);
     }
 }

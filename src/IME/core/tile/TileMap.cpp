@@ -1,3 +1,4 @@
+#include <iostream>
 #include "IME/core/tile/TileMap.h"
 #include "IME/core/tile/TileMapParser.h"
 #include "IME/gui/window/Window.h"
@@ -5,8 +6,11 @@
 
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
-        : isBackgroundDrawable_(true), isTilesDrawable_(true), isObjectsDrawable_(true)
+        : isBackgroundDrawable_(true), isTilesDrawable_(true),
+          isObjectsDrawable_(true), invalidTile_({0, 0}, {0, 0})
     {
+        invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
+        invalidTile_.setPosition({-99, -99});
         mapPos_ = {0, 0};
         tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
     }
@@ -14,6 +18,7 @@ namespace IME {
     Tile& TileMap::getTile(const Position &position) {
         if (auto index = getIndexFromPosition(position); isValidIndex(index))
             return getTile(index);
+        return invalidTile_;
     }
 
     void TileMap::setBackground(const std::string &filename) {
@@ -73,8 +78,15 @@ namespace IME {
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Tile>{};
             for (auto j = 0u; j < mapData_[i].size(); j++) {
-                auto tile = Tile(tileSize_, {j * tileSize_.width,i * tileSize_.height});
-                tile.setToken(mapData_[i][j]);
+                auto tile = Tile(tileSize_, {-99, -99});
+                if (i == 0 && j == 0)
+                    tile.setPosition(mapPos_);
+                else if (j == 0)
+                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height});
+                else
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.width, row[j - 1].getPosition().y});
+
+                tile.setId(mapData_[i][j]);
                 row.emplace_back(tile);
             }
             tiledMap_.push_back(row);
@@ -93,10 +105,8 @@ namespace IME {
 
         //Draw tiles (second layer)
         if (isTilesDrawable_) {
-            std::for_each(tiledMap_.begin(), tiledMap_.end(), [&](auto &row) {
-                std::for_each(row.begin(), row.end(), [&](auto &tile) {
-                    renderTarget.draw(tile);
-                });
+            forEachTile([&](Tile &tile) {
+                renderTarget.draw(tile);
             });
         }
 
@@ -113,22 +123,42 @@ namespace IME {
             tiledMap_[index.row][index.colm] = std::move(tile);
     }
 
-    void TileMap::setForbidden(const Index &index, bool isForbidden) {
+    void TileMap::setCollideableByIndex(const Index &index, bool isCollideable) {
         if (isValidIndex(index))
-            tiledMap_[index.row][index.colm].setCollideable(isForbidden);
+            tiledMap_[index.row][index.colm].setCollideable(isCollideable);
     }
 
-    void TileMap::setForbidden(const char &token, bool isForbidden) {
-        std::for_each(tiledMap_.begin(), tiledMap_.end(), [=](auto& row) {
-            std::for_each(row.begin(), row.end(), [=](auto& tile) {
-                if (tile.getToken() == token)
-                    tile.setCollideable(isForbidden);
-            });
+    void TileMap::setCollideableByIndex(const std::initializer_list<Index> &locations, bool isCollideable) {
+        std::for_each(locations.begin(), locations.end(), [=](const Index& index) {
+            setCollideableByIndex(index, isCollideable);
+        });
+    }
+
+    void TileMap::setCollideableByIndex(Index startPos, Index endPos, bool isCollideable) {
+        if (isValidIndex(startPos) && isValidIndex(endPos)){
+            for (auto i = startPos.colm; i < endPos.colm; i++)
+                setCollideableByIndex({startPos.row, i}, isCollideable);
+        }
+    }
+
+    void TileMap::setCollideableById(const char &id, bool isCollideable) {
+        forEachTile([=](Tile& tile) {
+            if (tile.getId() == id)
+                tile.setCollideable(isCollideable);
+        });
+    }
+
+    void TileMap::setCollideableByExclusion(const char &id, bool isCollideable) {
+        forEachTile([=](Tile& tile) {
+            if (tile.getId() != id)
+                tile.setCollideable(isCollideable);
         });
     }
 
     Tile& TileMap::getTile(const Index &index) {
-        return tiledMap_[index.row][index.colm];
+        if (isValidIndex(index))
+            return tiledMap_[index.row][index.colm];
+        return invalidTile_;
     }
 
     void TileMap::hide(const std::string &layer) {
@@ -159,7 +189,7 @@ namespace IME {
         return false;
     }
 
-    bool TileMap::isForbidden(const Index &index) const {
+    bool TileMap::isCollideable(const Index &index) const {
         if (!isValidIndex(index))
             return tiledMap_[index.row][index.colm].isCollideable();
         return false;
@@ -175,23 +205,68 @@ namespace IME {
         return false;
     }
 
-    void TileMap::setTokenTile(const char &token, Position startPos, Dimensions size) {
-        tokenData_.insert({token, {startPos, size}});
+    void TileMap::addTilesetImageData(const char &id, Position startPos, Dimensions size) {
+        imagesData_.insert({id, {startPos, size}});
     }
 
     bool TileMap::isValidToken(const char &token) const {
-        return tokenData_.find(token) != tokenData_.end();
+        return imagesData_.find(token) != imagesData_.end();
     }
 
-    void TileMap::paint() {
-        for (auto& row : tiledMap_) {
-            for (auto& tile : row) {
-                if (auto token = tile.getToken(); isValidToken(token)) {
-                    tile.setTexture(tileSet_);
-                    auto [startPos, size] = tokenData_.at(token);
-                    tile.setTextureRect(startPos, size);
-                }
+    void TileMap::applyImages() {
+        forEachTile([this](Tile& tile) {
+            if (auto token = tile.getId(); isValidToken(token)) {
+                tile.setTexture(tileSet_);
+                auto [startPos, size] = imagesData_.at(token);
+                tile.setTextureRect(startPos, size);
             }
+        });
+    }
+
+    void TileMap::forEachTile(Callback<Tile&> callback) {
+        std::for_each(tiledMap_.begin(), tiledMap_.end(), [&](auto& row) {
+            std::for_each(row.begin(), row.end(), callback);
+        });
+    }
+
+
+    void TileMap::forEachTile(const char &id, Callback<Tile&> callback) {
+        forEachTile([&](Tile& tile) {
+            if (tile.getId() == id)
+                callback(tile);
+        });
+    }
+
+    void TileMap::forEachTile(Index startPos, Index endPos, Callback<Tile&> callback) {
+        if (isValidIndex(startPos) && isValidIndex(endPos)) {
+            std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
+                tiledMap_[startPos.row].begin() + endPos.colm,
+                [&](Tile& tile) { callback(tile);}
+            );
         }
+    }
+
+    void TileMap::forEachObject(Callback<Sprite &> callback) {
+        std::for_each(objects_.begin(), objects_.end(), callback);
+    }
+
+    Tile &TileMap::getTileAbove(const Index &index) {
+        return getTile(Index{index.row, index.colm - 1});
+    }
+
+    Tile& TileMap::getTileBelow(const Index &index) {
+        return getTile(Index{index.row, index.colm + 1});
+    }
+
+    Tile& TileMap::getTileLeftOf(const Index &index) {
+        return getTile(Index{index.row - 1, index.colm});
+    }
+
+    Tile& TileMap::getTileRightOf(const Index &index) {
+        return getTile(Index{index.row + 1, index.colm});
+    }
+
+    int TileMap::onTileMapCollision(Callback<Sprite &, Tile &> callback) {
+        return eventEmitter_.addEventListener("worldCollision", std::move(callback));
     }
 }
