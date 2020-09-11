@@ -26,12 +26,12 @@ namespace IME {
     public:
         /**
          * @brief Create an empty tilemap
-         * @param tileWidth With of each tile in the map
+         * @param tileWidth Width of each tile in the map
          * @param tileHeight height of each tile in the map
          *
          * The tile map has the position (0, 0) by default
          */
-        TileMap(unsigned int tileWidth, unsigned int tileHeight);
+        explicit TileMap(unsigned int tileWidth = 8, unsigned int tileHeight = 8);
 
         /**
          * @brief Set the position of the tile map
@@ -151,7 +151,10 @@ namespace IME {
         /**
          * @brief Get the tile at at certain position
          * @param position Position of the tile to retrieve
-         * @return The tile at the specified position
+         * @return The tile at the specified position or an invalid tile if
+         *         the specified position does not lie within the tilemap bounds
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile& getTile(const Position& position);
 
@@ -167,9 +170,10 @@ namespace IME {
         /**
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
-         * @return The tile at the specified index
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
          *
-         * @warning The index must be within bounds of the tile map
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile& getTile(const Index& index);
 
@@ -227,6 +231,12 @@ namespace IME {
          */
         void forEachTile(Index startPos, Index endPos, Callback<Tile&> callback);
 
+        /**
+         * @brief Execute a callback on each object int the tile map
+         * @param callback Function to execute for each object
+         */
+        void forEachObject(Callback<Sprite&> callback);
+
     private:
         /**
          * @brief Check if the index is within bounds of the tilemap or not
@@ -236,14 +246,11 @@ namespace IME {
         bool isValidIndex(const Index &index) const;
 
         /**
-         * @brief Check if a token is valid or not
-         * @param token Token to check
-         * @return True if token is valid, otherwise false
-         *
-         * A token is valid if it has been linked to a tile on the tilemap's
-         * tileset
+         * @brief Check if a tile id is linked to a tileset image or not
+         * @param id Id to check
+         * @return True if id is linked to tileset image, otherwise false
          */
-        bool isValidToken(const char& token) const;
+        bool isIdLinkedToImage(const char& id) const;
 
         /**
          * @brief Create the visual gird
@@ -275,36 +282,42 @@ namespace IME {
         /**
          * @brief Get the tile above a tile at a given location
          * @param index Index of the tile to get the tile above
-         * @returnThe tile above the specified position (in tiles)
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile& getTileAbove(const Index& index);
 
         /**
          * @brief Get the tile below a tile at a given location
          * @param index Location of the tile to get the tile below
-         * @return The tile below the tile at the specified coordinates
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile& getTileBelow(const Index& index);
 
         /**
          * @brief Get the tile to the left of a tile at a given location
          * @param index Location of the tile to get the tile to the left of
-         * @return The tile to the left of the tile at the specified coordinates
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile & getTileLeftOf(const Index& index);
 
         /**
          * @brief Get the tile to the right of a tile at a given location
          * @param index Location of the tile to get the tile to the right of
-         * @return The tile to the right of the tile at the specified coordinates
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
          */
         Tile& getTileRightOf(const Index& index);
-
-        /**
-         * @brief Execute a callback on each object int the tile map
-         * @param callback Function to execute for each object
-         */
-        void forEachObject(Callback<Sprite&> callback);
 
         /**
          * @brief Add an event listener to a tilemap collision event

@@ -7,11 +7,17 @@
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
         : isBackgroundDrawable_(true), isTilesDrawable_(true),
-          isObjectsDrawable_(true), invalidTile_({0, 0}, {0, 0})
+          isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
         mapPos_ = {0, 0};
+        if (tileWidth < 8)
+            tileWidth = 8;
+
+        if (tileHeight < 8)
+            tileHeight = 8;
+
         tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
     }
 
@@ -209,15 +215,15 @@ namespace IME {
         imagesData_.insert({id, {startPos, size}});
     }
 
-    bool TileMap::isValidToken(const char &token) const {
-        return imagesData_.find(token) != imagesData_.end();
+    bool TileMap::isIdLinkedToImage(const char &id) const {
+        return imagesData_.find(id) != imagesData_.end();
     }
 
     void TileMap::applyImages() {
         forEachTile([this](Tile& tile) {
-            if (auto token = tile.getId(); isValidToken(token)) {
+            if (auto tileId = tile.getId(); isIdLinkedToImage(tileId)) {
                 tile.setTexture(tileSet_);
-                auto [startPos, size] = imagesData_.at(token);
+                auto [startPos, size] = imagesData_.at(tileId);
                 tile.setTextureRect(startPos, size);
             }
         });
