@@ -2,22 +2,36 @@
 #define COLLISIONDETECTOR_H
 
 #include "IME/core/tilemap/Tile.h"
+#include "IME/core/Sprite.h"
 
 namespace IME {
     class CollisionDetector{
     public:
         /**
-         * @brief Check for collision between two tiles
+         * @brief Check for a collision between two tiles
          * @param tileOne The first tile
          * @param tileTwo The second tile
          * @param callback Function to execute when a collision is detected
          *
          * The callback function is not invoked when a collision is not taking
-         * place. When a collision is taking place, the colliding tiles will be
-         * passed as arguments to the callback in the same order in which they
-         * are provided to this function.
+         * place. When a collision is taking place, the colliding objects will
+         * be passed as arguments to the callback in the same order in which
+         * they are provided to this function
          */
-        void TileVSTileCollision(Tile& tileOne, Tile& tileTwo, Callback<Tile&, Tile&> callback);
+        void tileVSTileCollision(Tile& tileOne, Tile& tileTwo, Callback<Tile&, Tile&> callback);
+
+        /**
+         * @brief Check for a collision between a sprite object and a tile object
+         * @param sprite Sprite object
+         * @param tile Tile object
+         * @param callback Function to execute when a collision is detected
+         *
+         * The callback function is not invoked when a collision is not taking
+         * place. When a collision is taking place, the colliding objects will
+         * be passed as arguments to the callback in the same order in which
+         * they are provided to this function
+         */
+        void spriteVsTileCollision(Sprite& sprite, Tile& tile, Callback<Sprite&, Tile&> callback);
 
     private:
         /**
