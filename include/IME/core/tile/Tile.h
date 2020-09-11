@@ -73,6 +73,13 @@ namespace IME {
         void setTexture(const std::string& filename);
 
         /**
+         * @brief Set the position of the tile
+         * @param x X coordinate of the tile
+         * @param y Y coordinate of the tile
+         */
+        void setPosition(float x, float y);
+
+        /**
          * @brief Set the position of the tile in coordinates
          * @param position Position to set
          */
@@ -206,7 +213,7 @@ namespace IME {
         Sprite sprite_;
         //Tile border
         sf::RectangleShape tileBoarder_;
-        //
+        //Collision flags for tile sides
         std::unordered_map<Border, bool> borderCollisionFlags_;
         //Event publisher
         EventEmitter eventEmitter_;

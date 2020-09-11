@@ -28,9 +28,13 @@ namespace IME {
         return {tileBoarder_.getPosition().x, tileBoarder_.getPosition().y};
     }
 
-    void Tile::setPosition(const Position &position) {
-        tileBoarder_.setPosition(position.x, position.y);
+    void Tile::setPosition(float x, float y) {
+        tileBoarder_.setPosition(x, y);
         sprite_.setPosition(getPosition().x, getPosition().y);
+    }
+
+    void Tile::setPosition(const Position &position) {
+        setPosition(position.x, position.y);
     }
 
     void Tile::setId(const char &id) {
@@ -106,6 +110,6 @@ namespace IME {
     }
 
     void Tile::hit(const Border& border) {
-        eventEmitter_.emit("hit", *this, border);
+        eventEmitter_.emit("borderHit", *this, border);
     }
 }
