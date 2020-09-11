@@ -3,7 +3,7 @@
 #define IME_CARET_H
 
 #include "UIElement.h"
-#include "IME/utility/Clock.h"
+#include "IME/core/time/Clock.h"
 
 namespace IME{
     namespace Gui {
@@ -12,7 +12,7 @@ namespace IME{
             std::string getType() const override;
 
         private:
-            Utility::Clock blinkCounter_;
+            Time::Clock blinkCounter_;
         };
     } // namespace Gui
 } // namespace IME

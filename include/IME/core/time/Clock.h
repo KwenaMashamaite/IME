@@ -6,7 +6,7 @@
 #define CLOCK_H
 
 namespace IME {
-    namespace Utility {
+    namespace Time {
         class Clock {
         public:
             /**

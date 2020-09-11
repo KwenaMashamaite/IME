@@ -1,7 +1,7 @@
-#include "IME/utility/Clock.h"
+#include "IME/core/time/Clock.h"
 #include <ctime>
 
-namespace IME::Utility {
+namespace IME::Time {
     Clock::Clock() {
         timeWhenClockWasLastReset_ = getProcessTimeInSeconds();
     }

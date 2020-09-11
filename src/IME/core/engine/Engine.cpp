@@ -1,5 +1,5 @@
 #include "IME/core/engine/Engine.h"
-#include "IME/utility/Clock.h"
+#include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
 #include "IME/utility/ConsoleLogger.h"
 #include <assert.h>
@@ -111,7 +111,7 @@ namespace IME {
         isRunning_ = true;
         auto const frameTime = 1.0f / getFPSLimit();
         auto elapsedTime = 0.0f, deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
-        auto clock = Utility::Clock();
+        auto clock = Time::Clock();
         auto prevTime = clock.getElapsedTimeInSeconds();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             now = clock.getElapsedTimeInSeconds();

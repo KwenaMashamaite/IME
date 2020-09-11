@@ -10,7 +10,7 @@
 #include <thread>
 
 namespace IME {
-    namespace Utility {
+    namespace Time {
         class Timer {
         public:
             /**
@@ -74,7 +74,7 @@ namespace IME {
             void setInterval(int delay, Callable callback, Args...args);
         };
 
-        #include "IME/utility/Timer.inl"
+        #include "IME/core/time/Timer.inl"
     }
 }
 
