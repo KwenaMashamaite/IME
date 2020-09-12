@@ -6,7 +6,7 @@
 
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
-        : isBackgroundDrawable_(true), isTilesDrawable_(true),
+        : isGridVisible_(true), isBackgroundDrawable_(true), isTilesDrawable_(true),
           isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
@@ -19,6 +19,21 @@ namespace IME {
             tileHeight = 8;
 
         tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
+    }
+
+    void TileMap::setGridVisible(bool isVisible) {
+        if (isGridVisible_ == isVisible)
+            return;
+
+        forEachTile([=](Tile& tile) {
+            tile.setBorderVisible(isVisible);
+        });
+
+        isGridVisible_ = isVisible;
+    }
+
+    void TileMap::toggleGridVisibility() {
+        setGridVisible(!isGridVisible_);
     }
 
     Tile& TileMap::getTile(const Position &position) {
@@ -274,5 +289,9 @@ namespace IME {
 
     int TileMap::onTileMapCollision(Callback<Sprite &, Tile &> callback) {
         return eventEmitter_.addEventListener("worldCollision", std::move(callback));
+    }
+
+    bool TileMap::isGridVisible() const {
+        return isGridVisible_;
     }
 }

@@ -52,10 +52,12 @@ namespace IME {
 
     void Tile::hide() {
         sprite_.hide();
+        tileBoarder_.setOutlineColor(sf::Color::Transparent);
     }
 
     void Tile::show() {
         sprite_.show();
+        tileBoarder_.setOutlineColor(sf::Color::White);
     }
 
     bool Tile::isHidden() const {
@@ -111,5 +113,12 @@ namespace IME {
 
     void Tile::hit(const Border& border) {
         eventEmitter_.emit("borderHit", *this, border);
+    }
+
+    void Tile::setBorderVisible(bool isVisible) {
+        if (isVisible)
+            tileBoarder_.setOutlineColor(sf::Color::White);
+        else
+            tileBoarder_.setOutlineColor(sf::Color::Transparent);
     }
 }

@@ -105,6 +105,12 @@ namespace IME {
         void setTextureRect(Position position, Dimensions size);
 
         /**
+         * @brief Set the visibility of the tile border
+         * @param isVisible True to set visible, otherwise false
+         */
+        void setBorderVisible(bool isVisible);
+
+        /**
          * @brief Assign the tile an identification token
          * @param id Identification token to assign
          *

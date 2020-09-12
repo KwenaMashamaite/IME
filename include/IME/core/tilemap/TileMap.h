@@ -168,6 +168,22 @@ namespace IME {
         void setBackground(const std::string& filename);
 
         /**
+         * @brief Show or hide the tilemap grid lines
+         * @param isVisible True to show or false to hide the grid lines
+         *
+         * The grid lines are visible by default
+         */
+        void setGridVisible(bool isVisible);
+
+        /**
+         * @brief Toggle the visibility state of the tilemap grid lines
+         *
+         * This function will show the grid lines if they are hidden, and
+         * vice versa
+         */
+        void toggleGridVisibility();
+
+        /**
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
          * @return The tile at the specified index or an invalid tile if the
@@ -251,6 +267,12 @@ namespace IME {
          * @return True if id is linked to tileset image, otherwise false
          */
         bool isIdLinkedToImage(const char& id) const;
+
+        /**
+         * @brief Check if the grid is visible or not
+         * @return True if gird is visible, otherwise false
+         */
+        bool isGridVisible() const;
 
         /**
          * @brief Create the visual gird
@@ -354,6 +376,8 @@ namespace IME {
         std::vector<std::reference_wrapper<Sprite>> objects_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::pair<Position, Dimensions>> imagesData_;
+        //The visibility state of the grid
+        bool isGridVisible_;
         //First layer render state
         bool isBackgroundDrawable_;
         //Second layer render state
