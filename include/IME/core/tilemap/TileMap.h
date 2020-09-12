@@ -200,6 +200,21 @@ namespace IME {
         void draw(Gui::Window &renderTarget);
 
         /**
+         * @brief Get the size of the tilemap in pixels
+         * @return Size of the tilemap in pixels
+         */
+        Dimensions getSize() const;
+
+        /**
+         * @brief Get the size of the tilemap in tiles
+         * @return Size of the tilemap in tiles
+         *
+         * This function will return the number of rows and columns in the
+         * tilemap as the width and height respectively
+         */
+        Dimensions getSizeInTiles() const;
+
+        /**
          * @brief Hide a shown tile map
          */
         void hide(const std::string& layer);

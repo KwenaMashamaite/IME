@@ -294,4 +294,12 @@ namespace IME {
     bool TileMap::isGridVisible() const {
         return isGridVisible_;
     }
+
+    Dimensions TileMap::getSize() const {
+        return mapSizeInPixels_;
+    }
+
+    Dimensions TileMap::getSizeInTiles() const {
+        return {static_cast<float>(numOfRows_), static_cast<float>(numOfColms_)};
+    }
 }
