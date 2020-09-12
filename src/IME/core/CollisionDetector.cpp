@@ -28,7 +28,8 @@ namespace IME {
     void CollisionDetector::spriteVsTileMapCollision(Sprite &sprite, TileMap &tileMap,
         Callback<Sprite&, Tile&> callback)
     {
-
+        tileMap.forEachTile([&, this](Tile& tile) {
+            spriteVsTileCollision(sprite, tile, callback);
+        });
     }
-
 }
