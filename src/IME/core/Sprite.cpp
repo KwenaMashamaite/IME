@@ -69,4 +69,12 @@ namespace IME {
     void Sprite::setOrigin(float x, float y) {
         sprite_.setOrigin(x, y);
     }
+
+    void Sprite::scale(float xFactor, float yFactor) {
+        sprite_.scale(xFactor, yFactor);
+    }
+
+    void Sprite::move(float xOffset, float yOffset) {
+        sprite_.move(xOffset, yOffset);
+    }
 }

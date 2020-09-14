@@ -9,10 +9,14 @@
 #include "IME/common/Dimensions.h"
 #include "IME/common/IDrawable.h"
 #include "IME/gui/common/Colour.h"
+#include "IME/core/animation/Animation.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <string>
+#include <memory>
 
 namespace IME {
+    class Animator;
+
     class Sprite : public IDrawable {
     public:
         /**
@@ -54,16 +58,11 @@ namespace IME {
          */
         void setTextureRect(int left, int top, int width, int height);
 
+        /**
+         * @brief Set the colour of the sprite
+         * @param colour New colour opf the sprite
+         */
         void setColour(Gui::Colour colour);
-
-        // \brief set the local origin of the object
-        ///
-        /// The origin of an object defines the center point for
-        /// all transformations (position, scale, rotation).
-        /// The coordinates of this point must be relative to the
-        /// top-left corner of the object, and ignore all
-        /// transformations (position, scale, rotation).
-        /// The default origin of a transformable object is (0, 0).
 
         /**
          * @brief Set the local origin of the object
@@ -78,6 +77,20 @@ namespace IME {
         void setOrigin(float x, float y);
 
         /**
+         * @brief Move the sprite by an offset
+         * @param xOffset Horizontal offset
+         * @param yOffset Vertical offset
+         */
+        void move(float xOffset, float yOffset);
+
+        /**
+         * @brief Scale sprite by an offset
+         * @param xFactor Horizontal offset
+         * @param yFactor Vertical offset
+         */
+        void scale(float xFactor, float yFactor);
+
+        /**
          * @brief Get the position of the object
          * @return Position of the object
          */
@@ -89,6 +102,10 @@ namespace IME {
          */
         Dimensions getSize() const;
 
+        /**
+         * @brief Get the colour of the sprite
+         * @return The colour of the sprite
+         */
         Gui::Colour getColour() const;
 
         /**
