@@ -75,7 +75,7 @@ namespace IME {
              *
              * The OS default icon is used by default
              */
-            bool setIcon(const std::string& filename);
+            void setIcon(const std::string& filename);
 
             /**
              * @brief Set the frame rate limit of the window

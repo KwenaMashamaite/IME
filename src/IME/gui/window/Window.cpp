@@ -21,13 +21,14 @@ namespace IME::Gui {
         );
     }
 
-    bool Window::setIcon(const std::string &filename) {
+    void Window::setIcon(const std::string &filename) {
+        auto prevImagePath = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
         try {
             auto icon = ResourceManager::getInstance()->getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-            return true;
-        } catch (...) {} // Use current icon, If not set prior, OS icon will be used
-        return false;
+        } catch (...) {} // No rethrow, Use current icon if set otherwise use OS icon
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, prevImagePath);
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {
