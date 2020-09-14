@@ -70,7 +70,7 @@ namespace IME {
              * @note This event will only be triggered when the key is depressed
              * and released
              */
-            int onAnyKeyPressed(Callback<> callback);
+            int onAnyKeyPressed(Callback<Key> callback);
 
             /**
               * @brief Add an event listener to a key down event

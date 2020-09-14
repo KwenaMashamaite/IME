@@ -36,7 +36,7 @@ namespace IME {
              *
              * This event only fires after a depressed key is released
              */
-            int addAnyKeyPressedListener(Callback<> callback);
+            int addAnyKeyPressedListener(Callback<Keyboard::Key> callback);
 
             /**
              * @brief Remove a key event listener from a key event
