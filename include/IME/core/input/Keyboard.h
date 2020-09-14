@@ -73,6 +73,15 @@ namespace IME {
             int onAnyKeyPressed(Callback<Key> callback);
 
             /**
+             * @brief Add an event listener to any key down event
+             * @param callback Function to execute when the key is down
+             * @return The event listeners identification number
+             *
+             * This event will continue to fire while any key is held down
+             */
+            int onAnyKeyDown(Callback<Key> callback);
+
+            /**
               * @brief Add an event listener to a key down event
               * @param key Key to listen for
               * @param callback Function to execute when the key is down

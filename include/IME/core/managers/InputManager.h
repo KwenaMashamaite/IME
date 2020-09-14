@@ -39,6 +39,15 @@ namespace IME {
             int addAnyKeyPressedListener(Callback<Keyboard::Key> callback);
 
             /**
+             * @brief Add a key listener to any key pressed event
+             * @param callback Function to execute when any key is pressed
+             * @return The event listeners identification number
+             *
+             * This event will continue to fire will a key is depressed
+             */
+            int addAnyKeyDownListener(Callback<Keyboard::Key> callback);
+
+            /**
              * @brief Remove a key event listener from a key event
              * @param event Event to remove listener from
              * @param key The key the event listener was listening for
