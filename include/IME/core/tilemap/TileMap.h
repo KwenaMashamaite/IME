@@ -44,13 +44,21 @@ namespace IME {
 
         /**
          * @brief Set the image to be used as the tileset
+         * @param name Name of the tileset
          * @param filename File name of the tileset image
          * @throw FileNotFound If the tileset cannot be loaded by the asset
          *        manager
-         *
-         * @note The tilemap can only use a single tileset at any given time
          */
-        void setTileset(const std::string& filename);
+        void setTileset(const std::string& name, const std::string& filename);
+
+        /**
+         * @brief Set the current tileset
+         * @param name Name of the tileset
+         *
+         * All tileset related operations are performed on the current tileset.
+         * For instance texturing tilemap tiles
+         */
+        void setCurrentTileset(const std::string& name);
 
         /**
          * @brief Get the position of the tile map in pixels
@@ -391,6 +399,8 @@ namespace IME {
         std::vector<std::reference_wrapper<Sprite>> objects_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::pair<Position, Dimensions>> imagesData_;
+        //The maps tileset image files
+        std::unordered_map<std::string, std::string> tilesets_;
         //The visibility state of the grid
         bool isGridVisible_;
         //First layer render state

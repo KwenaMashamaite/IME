@@ -1,4 +1,3 @@
-#include <iostream>
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/gui/window/Window.h"
@@ -12,6 +11,7 @@ namespace IME {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
         mapPos_ = {0, 0};
+        numOfRows_ = numOfColms_ = 0;
         if (tileWidth < 8)
             tileWidth = 8;
 
@@ -84,11 +84,27 @@ namespace IME {
     void TileMap::setPosition(int x, int y) {
         mapPos_.x = x;
         mapPos_.y = y;
+
+        for (auto i = 0u; i < tiledMap_.size(); i++) {
+            for (auto j = 0u; j < mapData_[i].size(); j++) {
+                if (i == 0 && j == 0)
+                    tiledMap_[i][j].setPosition(mapPos_);
+                //else if (j == 0)
+                  //  tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height});
+                //else
+                  //  tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.width, tiledMap_[i][j - 1].getPosition().y});
+            }
+        }
     }
 
-    void TileMap::setTileset(const std::string &filename) {
+    void TileMap::setTileset(const std::string& name, const std::string &filename) {
         ResourceManager::getInstance()->loadFromFile(ResourceType::Texture, filename);
-        tileSet_ = filename;
+        tilesets_.insert({name, filename});
+    }
+
+    void TileMap::setCurrentTileset(const std::string &name) {
+        if (tilesets_.find(name) != tilesets_.end())
+            tileSet_ = tilesets_.at(name);
     }
 
     Position TileMap::getPosition() const {
