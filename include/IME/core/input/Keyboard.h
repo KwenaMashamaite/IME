@@ -48,8 +48,8 @@ namespace IME {
              * @brief Handle event
              * @param event Event to handle
              *
-             * This function must be called once per frame in order for the object
-             * to determine if a key was pressed or released or neither
+             * This function must be called at least once per frame in order for
+             * the object to determine if a key was pressed or released or neither
              */
             void handleEvent(sf::Event event);
 
