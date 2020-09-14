@@ -6,7 +6,7 @@ namespace IME::Input {
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
     }
 
-    void Mouse::update(sf::Event event) {
+    void Mouse::handleEvent(sf::Event event) {
         if (event.type == sf::Event::MouseButtonPressed)
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down");
         else if (event.type == sf::Event::MouseButtonReleased)

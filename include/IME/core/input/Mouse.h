@@ -37,7 +37,7 @@ namespace IME {
             * This function must be called once per frame in order for the object
             * to determine if a mouse was pressed, released or moved
             */
-            void update(sf::Event event);
+            void handleEvent(sf::Event event);
 
             /**
              * @brief Add an event listener to a mouse button up event

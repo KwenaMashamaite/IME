@@ -48,8 +48,8 @@ namespace IME::Input {
     }
 
     void InputManager::handleEvent(sf::Event event) {
-        keyboard_.update(event);
-        mouse_.update(event);
+        keyboard_.handleEvent(event);
+        mouse_.handleEvent(event);
     }
 
     bool InputManager::removeMouseMovedListener(int id) {

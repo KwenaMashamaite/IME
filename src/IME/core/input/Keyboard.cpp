@@ -2,7 +2,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 namespace IME::Input {
-    void Keyboard::update(sf::Event event) {
+    void Keyboard::handleEvent(sf::Event event) {
         if (event.type == sf::Event::KeyPressed)
             eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Down");
         else if (event.type == sf::Event::KeyReleased) {

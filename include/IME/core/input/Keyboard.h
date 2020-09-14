@@ -51,7 +51,7 @@ namespace IME {
              * This function must be called once per frame in order for the object
              * to determine if a key was pressed or released or neither
              */
-            void update(sf::Event event);
+            void handleEvent(sf::Event event);
 
             /**
              * @brief Check if key is pressed or not
