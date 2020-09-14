@@ -243,7 +243,7 @@ namespace IME {
     }
 
     void TileMap::addTilesetImageData(const char &id, Position startPos, Dimensions size) {
-        imagesData_.insert({id, {startPos, size}});
+        imagesData_.insert({id, {tileSet_, startPos, size}});
     }
 
     bool TileMap::isIdLinkedToImage(const char &id) const {
@@ -253,8 +253,8 @@ namespace IME {
     void TileMap::applyImages() {
         forEachTile([this](Tile& tile) {
             if (auto tileId = tile.getId(); isIdLinkedToImage(tileId)) {
-                tile.setTexture(tileSet_);
-                auto [startPos, size] = imagesData_.at(tileId);
+                auto [tileset, startPos, size] = imagesData_.at(tileId);
+                tile.setTexture(tileset);
                 tile.setTextureRect(startPos, size);
             }
         });

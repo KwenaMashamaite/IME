@@ -12,6 +12,7 @@
 #include "Tile.h"
 #include <unordered_map>
 #include <vector>
+#include <tuple>
 
 namespace IME {
     struct Index {
@@ -398,7 +399,7 @@ namespace IME {
         //References to objects (third layer)
         std::vector<std::reference_wrapper<Sprite>> objects_;
         //Holds the tileset image properties associated with a tile id
-        std::unordered_map<char, std::pair<Position, Dimensions>> imagesData_;
+        std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
         //The maps tileset image files
         std::unordered_map<std::string, std::string> tilesets_;
         //The visibility state of the grid
