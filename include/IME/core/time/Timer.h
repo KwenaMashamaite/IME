@@ -5,7 +5,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <chrono>
 #include <thread>
 

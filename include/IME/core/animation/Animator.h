@@ -9,8 +9,8 @@
 #define ANIMATOR_H
 
 #include "Animation.h"
-#include "IME/event/EventEmitter.h"
-#include "IME/core/Sprite.h"
+#include "IME/core/event/EventEmitter.h"
+#include "IME/graphics/Sprite.h"
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -26,7 +26,7 @@ namespace IME {
          * @brief Constructor
          * @param target Sprite to animate
          */
-        explicit Animator(Sprite& target);
+        explicit Animator(Graphics::Sprite& target);
 
         /**
          * @brief Add an animation to the animator
@@ -103,7 +103,7 @@ namespace IME {
 
     private:
         //Animation sprite
-        Sprite& animationTarget_;
+        Graphics::Sprite& animationTarget_;
         //Animations container
         std::unordered_map<std::string, std::shared_ptr<Animation>> animations_;
         //Pointer to the currently running animation

@@ -7,9 +7,8 @@
 
 #include "IME/common/Position.h"
 #include "IME/common/Dimensions.h"
-#include "IME/common/IDrawable.h"
-#include "IME/event/EventEmitter.h"
-#include "Tile.h"
+#include "IME/core/event/EventEmitter.h"
+#include "IME/graphics/Tile.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -107,7 +106,7 @@ namespace IME {
          * @param index Index of the tile to replace
          * @param tile Tile to replace old one with
          */
-        void setTile(Index index, Tile&& tile);
+        void setTile(Index index, Graphics::Tile&& tile);
 
         /**
          * @brief Enable or disable collision for a tile at a certain location
@@ -155,7 +154,7 @@ namespace IME {
          * @return True if the object has been added or false if the index is
          *         invalid
          */
-        bool addObject(Index index, Sprite& object);
+        bool addObject(Index index, Graphics::Sprite& object);
 
         /**
          * @brief Get the tile at at certain position
@@ -165,7 +164,7 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile& getTile(const Position& position);
+        Graphics::Tile& getTile(const Position& position);
 
         /**
          * @brief Set the background of the tile amp
@@ -200,13 +199,13 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile& getTile(const Index& index);
+        Graphics::Tile& getTile(const Index& index);
 
         /**
          * @brief Render tile map on a render target
          * @param renderTarget Target to render tile map on
          */
-        void draw(Gui::Window &renderTarget);
+        void draw(Graphics::Window &renderTarget);
 
         /**
          * @brief Get the size of the tilemap in pixels
@@ -253,13 +252,13 @@ namespace IME {
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTile(const char& id, Callback<Tile&> callback);
+        void forEachTile(const char& id, Callback<Graphics::Tile&> callback);
 
         /**
          * @brief Execute a callback on each tile of the tilemap
          * @param callback Function to execute for each tile
          */
-        void forEachTile(Callback<Tile&> callback);
+        void forEachTile(Callback<Graphics::Tile&> callback);
 
         /**
          * @brief Execute a callback function on each tile in a range
@@ -269,13 +268,13 @@ namespace IME {
          *
          * @note Only horizontal ranges are supported
          */
-        void forEachTile(Index startPos, Index endPos, Callback<Tile&> callback);
+        void forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
 
         /**
          * @brief Execute a callback on each object int the tile map
          * @param callback Function to execute for each object
          */
-        void forEachObject(Callback<Sprite&> callback);
+        void forEachObject(Callback<Graphics::Sprite&> callback);
 
     private:
         /**
@@ -333,7 +332,7 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile& getTileAbove(const Index& index);
+        Graphics::Tile& getTileAbove(const Index& index);
 
         /**
          * @brief Get the tile below a tile at a given location
@@ -343,7 +342,7 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile& getTileBelow(const Index& index);
+        Graphics::Tile& getTileBelow(const Index& index);
 
         /**
          * @brief Get the tile to the left of a tile at a given location
@@ -353,7 +352,7 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile & getTileLeftOf(const Index& index);
+        Graphics::Tile & getTileLeftOf(const Index& index);
 
         /**
          * @brief Get the tile to the right of a tile at a given location
@@ -363,7 +362,7 @@ namespace IME {
          *
          * A tile is invalid if it has the id of '!' or a negative position
          */
-        Tile& getTileRightOf(const Index& index);
+        Graphics::Tile& getTileRightOf(const Index& index);
 
         /**
          * @brief Add an event listener to a tilemap collision event
@@ -375,7 +374,7 @@ namespace IME {
          * passed the object that caused the collision and the tile the object
          * collided with respectively
          */
-        int onTileMapCollision(Callback<Sprite&, Tile&> callback);
+        int onTileMapCollision(Callback<Graphics::Sprite&, Graphics::Tile&> callback);
 
     private:
         //The Size of each tile in the tilemap
@@ -395,9 +394,9 @@ namespace IME {
         //Background image (first layer)
         std::string background_;
         //Visual grid (second layer)
-        std::vector<std::vector<Tile>> tiledMap_;
+        std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
-        std::vector<std::reference_wrapper<Sprite>> objects_;
+        std::vector<std::reference_wrapper<Graphics::Sprite>> objects_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
         //The maps tileset image files
@@ -411,7 +410,7 @@ namespace IME {
         //Third layer render state
         bool isObjectsDrawable_;
         //Tile returned when an invalid index is provided
-        Tile invalidTile_;
+        Graphics::Tile invalidTile_;
         //Publishes the tile maps events
         EventEmitter eventEmitter_;
     };

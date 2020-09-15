@@ -5,7 +5,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "IME/gui/window/Window.h"
+#include "IME/graphics/Window.h"
 #include <SFML/Window/Event.hpp>
 #include <string>
 
@@ -43,7 +43,7 @@ namespace IME {
          * @brief Render the state on a render target
          * @param renderTarget Target to render state on
          */
-        virtual void render(Gui::Window &renderTarget) = 0;
+        virtual void render(Graphics::Window &renderTarget) = 0;
 
         /**
          * @brief Pause the state

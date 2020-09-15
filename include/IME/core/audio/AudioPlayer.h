@@ -5,7 +5,7 @@
 #ifndef AUDIOPLAYER_H
 #define AUDIOPLAYER_H
 
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <initializer_list>
 #include <string>
 

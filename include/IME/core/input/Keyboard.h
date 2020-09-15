@@ -5,7 +5,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>
 
 namespace IME {

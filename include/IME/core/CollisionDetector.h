@@ -1,9 +1,9 @@
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
-#include "IME/core/tilemap/Tile.h"
+#include "IME/graphics/Tile.h"
 #include "IME/core/tilemap/TileMap.h"
-#include "IME/core/Sprite.h"
+#include "IME/graphics/Sprite.h"
 
 namespace IME {
     class CollisionDetector{
@@ -19,7 +19,8 @@ namespace IME {
          * be passed as arguments to the callback in the same order in which
          * they are provided to this function
          */
-        void tileVSTileCollision(Tile& tileOne, Tile& tileTwo, Callback<Tile&, Tile&> callback);
+        void tileVSTileCollision(Graphics::Tile& tileOne, Graphics::Tile& tileTwo,
+            Callback<Graphics::Tile&, Graphics::Tile&> callback);
 
         /**
          * @brief Check a collision between two sprite objects
@@ -32,8 +33,8 @@ namespace IME {
          * be passed as arguments to the callback in the same order in which
          * they are provided to this function
          */
-        void spriteVsSpriteCollision(Sprite& spriteOne, Sprite& spriteTwo,
-            Callback<Sprite&, Sprite&> callback);
+        void spriteVsSpriteCollision(Graphics::Sprite& spriteOne, Graphics::Sprite& spriteTwo,
+            Callback<Graphics::Sprite&, Graphics::Sprite&> callback);
 
         /**
          * @brief Check for a collision between a sprite object and a tile object
@@ -46,7 +47,8 @@ namespace IME {
          * be passed as arguments to the callback in the same order in which
          * they are provided to this function
          */
-        void spriteVsTileCollision(Sprite& sprite, Tile& tile, Callback<Sprite&, Tile&> callback);
+        void spriteVsTileCollision(Graphics::Sprite& sprite, Graphics::Tile& tile,
+            Callback<Graphics::Sprite&, Graphics::Tile&> callback);
 
         /**
          * @brief Check for collision between a sprite object and a tilemap tile
@@ -59,8 +61,8 @@ namespace IME {
          * be passed as arguments to the callback in the same order in which
          * they are provided to this function
          */
-        void spriteVsTileMapCollision(Sprite& sprite, TileMap& tileMap,
-            Callback<Sprite&, Tile&> callback);
+        void spriteVsTileMapCollision(Graphics::Sprite& sprite, TileMap& tileMap,
+            Callback<Graphics::Sprite&, Graphics::Tile&> callback);
 
     private:
         /**

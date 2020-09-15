@@ -1,6 +1,8 @@
 #include "IME/core/CollisionDetector.h"
 
 namespace IME {
+    using namespace Graphics;
+
     void CollisionDetector::tileVSTileCollision(Tile &tileOne, Tile &tileTwo,
         Callback<Tile &, Tile &> callback)
     {

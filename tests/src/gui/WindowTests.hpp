@@ -1,7 +1,7 @@
 #include "doctest.h"
-#include "IME/gui/window/Window.h"
+#include "IME/graphics/Window.h"
 
-using IME::Gui::Window;
+using IME::Graphics::Window;
 
 TEST_CASE("A window that is not created is not open"){
     auto window = Window();

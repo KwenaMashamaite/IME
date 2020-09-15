@@ -4,7 +4,7 @@
 #include <cassert>
 
 namespace IME{
-    Animator::Animator(Sprite& target)
+    Animator::Animator(Graphics::Sprite& target)
         : animationTarget_(target), totalTime_(0.0f)
     {}
 

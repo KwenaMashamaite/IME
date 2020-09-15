@@ -8,7 +8,7 @@
 #include "IME/common/Dimensions.h"
 #include "IME/common/Position.h"
 #include "IME/core/IEntityState.h"
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <stack>
 #include <string>
 #include <memory>

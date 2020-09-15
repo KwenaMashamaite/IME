@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 
 /*
  * @note In the following tests, event listener, event handler and callback

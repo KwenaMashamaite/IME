@@ -5,7 +5,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "IME/gui/window/Window.h"
+#include "IME/graphics/Window.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/core/managers/AudioManager.h"
 #include "IME/core/managers/InputManager.h"
@@ -199,7 +199,7 @@ namespace IME {
 
     private:
         //Engines render target
-        Gui::Window window_;
+        Graphics::Window window_;
         //Name of the application
         std::string appName_;
         //Filename of the engine settings (including path)

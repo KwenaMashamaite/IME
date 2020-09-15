@@ -5,7 +5,7 @@
 #ifndef EVENTMANAGER_H
 #define EVENTMANAGER_H
 
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <memory>
 #include <string>
 

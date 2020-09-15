@@ -59,7 +59,7 @@ namespace IME {
         setDefaultValueIfNotSet("width", "600.0f");
         setDefaultValueIfNotSet("height", "600.0f");
         setDefaultValueIfNotSet("fullscreen", "0");
-        setDefaultValueIfNotSet("iconPath", "/");
+        setDefaultValueIfNotSet("iconPath", "");
         setDefaultValueIfNotSet("fpsLimit", "60");
     }
 
@@ -71,13 +71,13 @@ namespace IME {
         auto height = std::stof(settings_.getValueFor("height"));
         auto isFullscreen = static_cast<bool>(std::stoi(settings_.getValueFor("fullscreen")));
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
-            window_.create(title, desktopWidth, desktopHeight, Gui::Window::Style::Fullscreen);
+            window_.create(title, desktopWidth, desktopHeight, Graphics::Window::Style::Fullscreen);
         } else {
             if (width > desktopWidth)
                 width = desktopWidth;
             if (height > desktopHeight)
                 height = desktopHeight;
-            window_.create(title, width, height, Gui::Window::Style::Close);
+            window_.create(title, width, height, Graphics::Window::Style::Close);
         }
 
         setFPSLimit(std::stoi(settings_.getValueFor("fpsLimit")));

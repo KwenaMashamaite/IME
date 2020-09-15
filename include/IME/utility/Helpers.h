@@ -5,7 +5,7 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include "IME/gui/common/Colour.h"
+#include "IME/graphics/Colour.h"
 #include <SFML/Graphics/Color.hpp>
 #include <unordered_map>
 #include <vector>
@@ -22,7 +22,7 @@ namespace IME {
          * colour. This means that the colour after the conversion is
          * the same as the one before the conversion
          */
-        static sf::Color convertTo3rdPartyColour(Gui::Colour color) {
+        static sf::Color convertTo3rdPartyColour(Graphics::Colour color) {
             return {static_cast<sf::Uint8>(color.red),
                     static_cast<sf::Uint8>(color.green),
                     static_cast<sf::Uint8>(color.blue),
@@ -38,7 +38,7 @@ namespace IME {
          * colour. This means that the colour after the conversion is
          * the same as the one before the conversion
          */
-        static Gui::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
+        static Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
             return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
         }
 

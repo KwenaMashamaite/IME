@@ -12,7 +12,7 @@
 #include "IME/core/audio/AudioPlayer.h"
 #include "IME/core/audio/MusicPlayer.h"
 #include "IME/core/audio/SoundEffectPlayer.h"
-#include "IME/event/EventEmitter.h"
+#include "IME/core/event/EventEmitter.h"
 #include <unordered_map>
 #include <initializer_list>
 #include <memory>
