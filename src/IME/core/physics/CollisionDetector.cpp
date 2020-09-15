@@ -1,4 +1,4 @@
-#include "IME/core/CollisionDetector.h"
+#include "IME/core/physics/CollisionDetector.h"
 
 namespace IME {
     using namespace Graphics;
