@@ -43,7 +43,19 @@ namespace IME {
     }
 
     void TileMap::setBackground(const std::string &filename) {
-        background_ = filename;
+        background_.setTexture(filename);
+        if (background_.getSize().width > mapSizeInPixels_.width
+            && background_.getSize().height > mapSizeInPixels_.height)
+            background_.setTextureRect(0, 0, mapSizeInPixels_.width, mapSizeInPixels_.height);
+        else if (background_.getSize().width > mapSizeInPixels_.width)
+            background_.setTextureRect(0, 0, mapSizeInPixels_.width, background_.getSize().height);
+        else if (background_.getSize().height > mapSizeInPixels_.height)
+            background_.setTextureRect(0, 0, background_.getSize().width, mapSizeInPixels_.height);
+    }
+
+    void TileMap::scaleBackground(float xOffset, float yOffset) {
+        background_.scale(xOffset, yOffset);
+        setBackground(background_.getTexture());
     }
 
     bool TileMap::isValidIndex(const Index &index) const {
@@ -132,12 +144,9 @@ namespace IME {
 
     void TileMap::draw(Graphics::Window &renderTarget) {
         //Draw background (first layer)
-        if (isBackgroundDrawable_ && !background_.empty()) {
-            auto background = Graphics::Sprite();
-            background.setTexture(background_);
-            background.setTextureRect(0, 0, mapSizeInPixels_.width, mapSizeInPixels_.height);
-            background.setPosition(mapPos_.x, mapPos_.y);
-            renderTarget.draw(background);
+        if (isBackgroundDrawable_) {
+            background_.setPosition(mapPos_.x, mapPos_.y);
+            renderTarget.draw(background_);
         }
 
         //Draw tiles (second layer)

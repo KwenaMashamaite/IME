@@ -96,6 +96,12 @@ namespace IME {
             Position getPosition() const;
 
             /**
+             * @brief Get the name of the texture used by the sprite
+             * @return Name of the texture used by the sprite
+             */
+            const std::string& getTexture() const;
+
+            /**
              * @brief Get the size of the object
              * @return The size of the object
              */
@@ -140,10 +146,12 @@ namespace IME {
         private:
             //Internal sprite
             sf::Sprite sprite_;
+            //Filename of the texture used by the object
+            std::string textureFileName_;
             //Hidden state
             bool isHidden_;
             // Sprite colour
-            Colour spriteColour_;
+            Colour prevSpriteColour;
         };
     }
 } // namespace IME

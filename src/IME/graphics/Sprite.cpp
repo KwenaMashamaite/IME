@@ -4,7 +4,7 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics {
-    Sprite::Sprite() : isHidden_(false)
+    Sprite::Sprite() : isHidden_(false), textureFileName_("")
     {}
 
     void Sprite::setPosition(float x, float y) {
@@ -17,10 +17,15 @@ namespace IME::Graphics {
 
     void Sprite::setTexture(const std::string &filename) {
         sprite_.setTexture(ResourceManager::getInstance()->getTexture(filename));
+        textureFileName_ = filename;
     }
 
     Position Sprite::getPosition() const {
         return {sprite_.getPosition().x, sprite_.getPosition().y};
+    }
+
+    const std::string &Sprite::getTexture() const {
+        return textureFileName_;
     }
 
     Dimensions Sprite::getSize() const {
@@ -38,7 +43,7 @@ namespace IME::Graphics {
     void Sprite::hide() {
         if (!isHidden_) {
             isHidden_ = true;
-            spriteColour_ = getColour();
+            prevSpriteColour = getColour();
             sprite_.setColor(sf::Color::Transparent);
         }
     }
@@ -46,7 +51,7 @@ namespace IME::Graphics {
     void Sprite::show() {
         if (isHidden_) {
             isHidden_ = false;
-            setColour(spriteColour_);
+            setColour(prevSpriteColour);
         }
     }
 

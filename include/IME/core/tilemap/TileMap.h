@@ -170,10 +170,18 @@ namespace IME {
          * @brief Set the background of the tile amp
          * @param filename Name of the background image
          *
-         * The image must be the same size as the tile set, otherwise it will
-         * be cropped or stretched
+         * The background image must
          */
         void setBackground(const std::string& filename);
+
+        /**
+         * @brief Scale the background image by an offset
+         * @param xOffset Horizontal offset
+         * @param yOffset Vertical offset
+         *
+         * The image will be cropped if the scaling goes beyond the tile borders
+         */
+        void scaleBackground(float xOffset, float yOffset);
 
         /**
          * @brief Show or hide the tilemap grid lines
@@ -392,7 +400,7 @@ namespace IME {
         //Tile set the visual grid is constructed from
         std::string tileSet_;
         //Background image (first layer)
-        std::string background_;
+        Graphics::Sprite background_;
         //Visual grid (second layer)
         std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
