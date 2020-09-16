@@ -1,8 +1,13 @@
-#include "IME/core/entity/IEntity.h"
+#include "IME/core/entity/Entity.h"
 #include <assert.h>
 
 namespace IME {
-    void IEntity::setPosition(float x, float y) {
+    Entity::Entity(const Dimensions &boundingRect)
+        : boundingRect_(boundingRect), isAlive_(true),
+          direction_(Direction::None), position_({0, 0})
+    {}
+
+    void Entity::setPosition(float x, float y) {
         if (position_.x == x && position_.y == y)
             return;
         position_.x = x;
@@ -10,18 +15,18 @@ namespace IME {
         publishEvent("positionChanged", position_.x, position_.y);
     }
 
-    void IEntity::setDirection(IEntity::Direction dir) {
+    void Entity::setDirection(Entity::Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
             publishEvent("directionChanged", direction_);
         }
     }
 
-    Dimensions IEntity::getBoundingRect() const {
+    Dimensions Entity::getBoundingRect() const {
         return boundingRect_;
     }
 
-    void IEntity::setAlive(bool isAlive) {
+    void Entity::setAlive(bool isAlive) {
         if (isAlive_ == isAlive)
             return;
         isAlive_ = isAlive;
@@ -32,39 +37,39 @@ namespace IME {
             publishEvent("revived"); //By default entity is alive
     }
 
-    bool IEntity::isAlive() const {
+    bool Entity::isAlive() const {
         return isAlive_;
     }
 
-    IEntity::Direction IEntity::getDirection() const {
+    Entity::Direction Entity::getDirection() const {
         return direction_;
     }
 
-    Position IEntity::getPosition() const {
+    Position Entity::getPosition() const {
         return position_;
     }
 
-    void IEntity::update() {
+    void Entity::update() {
         assert(!states_.empty() && "No state to update");
         states_.top()->update();
     }
 
-    void IEntity::pushState(std::shared_ptr<IEntityState> state) {
+    void Entity::pushState(std::shared_ptr<IEntityState> state) {
         assert(state && "A state cannot be null");
         states_.push(std::move(state));
     }
 
-    void IEntity::popState() {
+    void Entity::popState() {
         assert(!states_.empty() && "No state to pop");
         states_.pop();
     }
 
-    void IEntity::reset() {
+    void Entity::reset() {
         assert(!states_.empty() && "No state to reset");
         states_.top()->reset();
     }
 
-    bool IEntity::removeEventListener(const std::string &event, int id) {
+    bool Entity::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }
 }

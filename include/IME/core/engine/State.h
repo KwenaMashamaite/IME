@@ -23,19 +23,25 @@ namespace IME {
         /**
          * @brief Initialize state
          *
-         * This function will be called by the engine when the game starts
+         * This function will be called by the engine before a state
+         * is entered
          */
         virtual void initialize() = 0;
 
         /**
          * @brief Update the state
          * @param deltaTime Time passed since last update
+         *
+         * This function will be called by the engine once per frame
          */
         virtual void update(float deltaTime) = 0;
 
         /**
          * @brief Update state in fixed time steps
          * @param deltaTime Time passed since last update
+         *
+         * This function will be called by the engine multiple times
+         * per frame
          */
         virtual void fixedUpdate(float deltaTime) = 0;
 
@@ -48,8 +54,8 @@ namespace IME {
         /**
          * @brief Pause the state
          *
-         * This function will be called by the game engine when a state change is
-         * requested and this object is the current state
+         * This function will be called by the game engine when a state
+         * change is requested and this state is the current state
          */
         virtual void pause() = 0;
 
@@ -62,13 +68,15 @@ namespace IME {
         /**
          * @brief Resume a paused state
          *
-         * This function will be called by the game engine when a state change
+         * This function will be called by the engine when it switches
+         * back to this state
          */
         virtual void resume() = 0;
 
         /**
          * @brief Check if a state is initialized or not
-         * @return True if state is initialized or false if state is not initialized
+         * @return True if state is initialized or false if state is
+         * not initialized
          */
         virtual bool isInitialized() const = 0;
 

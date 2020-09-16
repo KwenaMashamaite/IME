@@ -14,7 +14,7 @@
 #include <memory>
 
 namespace IME {
-    class IEntity {
+    class Entity {
     public:
         /**
          * @brief Directions in which an entity can face
@@ -26,6 +26,15 @@ namespace IME {
             Up,
             Down
         };
+
+        /**
+         * @brief Construct entity
+         * @param boundingRect Bounding rectangle of the entity
+         *
+         * The entity is alive, has the position (0, 0) and no direction
+         * by default
+         */
+        explicit Entity(const Dimensions &boundingRect);
 
         /**
          * @brief Set the position of the entity
@@ -122,7 +131,7 @@ namespace IME {
         /**
          * @brief Destructor
          */
-        virtual ~IEntity() = default;
+        virtual ~Entity() = default;
 
     protected:
         /**
@@ -136,10 +145,10 @@ namespace IME {
     private:
         //The entities state machine
         std::stack<std::shared_ptr<IEntityState>> states_;
-        //The entities alive state
-        bool isAlive_;
         //The entities bounding rectangle
         Dimensions boundingRect_;
+        //The entities alive state
+        bool isAlive_;
         //The direction of the entity
         Direction direction_;
         //The position of the entity
@@ -149,12 +158,12 @@ namespace IME {
     };
 
     template<typename ...Args>
-    inline int IEntity::onEvent(const std::string& event, Callback<Args...> callback) {
+    inline int Entity::onEvent(const std::string& event, Callback<Args...> callback) {
         return eventEmitter_.on(event, std::move(callback));
     }
 
     template<typename...Args>
-    void IEntity::publishEvent(const std::string& event, Args&&...args) {
+    void Entity::publishEvent(const std::string& event, Args&&...args) {
         eventEmitter_.emit(event, std::forward<Args>(args)...);
     }
 }
