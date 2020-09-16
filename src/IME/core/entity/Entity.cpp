@@ -3,7 +3,7 @@
 
 namespace IME {
     Entity::Entity(const Dimensions &boundingRect)
-        : boundingRect_(boundingRect), isAlive_(true),
+        : boundingRect_(boundingRect), isAlive_(true), isCollidable_(false),
           direction_(Direction::None), position_({0, 0})
     {}
 
@@ -37,8 +37,22 @@ namespace IME {
             publishEvent("revived"); //By default entity is alive
     }
 
+    void Entity::setCollidable(bool isCollidable) {
+        if (isCollidable_ != isCollidable) {
+            isCollidable_ = isCollidable;
+            if (isCollidable_)
+                publishEvent("collisionEnabled");
+            else
+                publishEvent("collisionDisabled");
+        }
+    }
+
     bool Entity::isAlive() const {
         return isAlive_;
+    }
+
+    bool Entity::isCollidable() const {
+        return isCollidable_;
     }
 
     Entity::Direction Entity::getDirection() const {

@@ -3,6 +3,20 @@
 namespace IME {
     using namespace Graphics;
 
+    void CollisionDetector::entityVsEntityCollision(Entity &entityOne,Entity &entityTwo,
+        Callback<Entity &, Entity &> callback)
+    {
+        if (entityOne.isCollidable() && entityTwo.isCollidable()) {
+            if (entityOne.getPosition().x + entityOne.getBoundingRect().width >= entityTwo.getPosition().x
+                   && entityOne.getPosition().x <= entityTwo.getPosition().x + entityTwo.getBoundingRect().width
+                   && entityOne.getPosition().y + entityOne.getBoundingRect().height >= entityTwo.getPosition().y
+                   && entityOne.getPosition().y <= entityTwo.getPosition().y + entityTwo.getBoundingRect().height)
+            {
+                callback(entityOne, entityTwo);
+            }
+        }
+    }
+
     void CollisionDetector::tileVSTileCollision(Tile &tileOne, Tile &tileTwo,
         Callback<Tile &, Tile &> callback)
     {

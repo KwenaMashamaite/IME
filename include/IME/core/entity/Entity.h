@@ -62,6 +62,14 @@ namespace IME {
         void setAlive(bool isAlive);
 
         /**
+         * @brief Enable or disable collision for this entity
+         * @param isCollidable True to enable collision or false to disable collision
+         *
+         * Collisions are disabled by default
+         */
+        void setCollidable(bool isCollidable);
+
+        /**
          * @brief Check if entity is alive or not
          * @return True if entity is alive, false if it's not alive
          */
@@ -78,6 +86,12 @@ namespace IME {
          * @return Position of the entity
          */
         Position getPosition() const;
+
+        /**
+         * @brief Check if entity is collidable or not
+         * @return True if entity is collidable, otherwise false
+         */
+        bool isCollidable() const;
 
         /**
          * @brief Get the type of the entity
@@ -149,6 +163,8 @@ namespace IME {
         Dimensions boundingRect_;
         //The entities alive state
         bool isAlive_;
+        //The entities collidable state
+        bool isCollidable_;
         //The direction of the entity
         Direction direction_;
         //The position of the entity
