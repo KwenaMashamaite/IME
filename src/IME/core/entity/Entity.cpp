@@ -64,23 +64,29 @@ namespace IME {
     }
 
     void Entity::update() {
-        assert(!states_.empty() && "No state to update");
-        states_.top()->update();
+        if (!states_.empty())
+            states_.top()->update();
     }
 
     void Entity::pushState(std::shared_ptr<IEntityState> state) {
         assert(state && "A state cannot be null");
+        states_.top()->onPause();
+        state->onEnter();
         states_.push(std::move(state));
     }
 
     void Entity::popState() {
-        assert(!states_.empty() && "No state to pop");
-        states_.pop();
+        if (!states_.empty()) {
+            states_.top()->onExit();
+            states_.pop();
+            if (!states_.empty())
+                states_.top()->onResume();
+        }
     }
 
     void Entity::reset() {
-        assert(!states_.empty() && "No state to reset");
-        states_.top()->reset();
+        if (!states_.empty())
+            states_.top()->reset();
     }
 
     bool Entity::removeEventListener(const std::string &event, int id) {
