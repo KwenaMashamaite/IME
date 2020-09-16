@@ -325,6 +325,6 @@ namespace IME {
     }
 
     Dimensions TileMap::getSizeInTiles() const {
-        return {static_cast<float>(numOfRows_), static_cast<float>(numOfColms_)};
+        return {static_cast<float>(numOfColms_), static_cast<float>(numOfRows_)};
     }
 }
