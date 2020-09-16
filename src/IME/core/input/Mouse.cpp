@@ -29,11 +29,11 @@ namespace IME::Input {
         return eventEmitter_.addEventListener("mouseMoved", std::move(callback));
     }
 
-    bool Mouse::removeEventListener(const std::string& event, Button button,int listenerId) {
-        if (event == "mouseButtonDown")
+    bool Mouse::removeEventListener(Event event, Button button,int listenerId) {
+        if (event == Event::MouseDown)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(button)) + "Down", listenerId);
-        else if (event == "mouseButtonUp")
+        else if (event == Event::MouseUp)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(button)) + "Up", listenerId);
         return false;

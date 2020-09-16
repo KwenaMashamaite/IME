@@ -4,8 +4,8 @@
 namespace IME::Input {
     void Keyboard::handleEvent(sf::Event event) {
         if (event.type == sf::Event::KeyPressed) {
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Down");
             eventEmitter_.emit("anyKeyDown", static_cast<Key>(event.key.code));
+            eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Down");
         } else if (event.type == sf::Event::KeyReleased) {
             eventEmitter_.emit("anyKeyPressed", static_cast<Key>(event.key.code));
             eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Up");
@@ -26,11 +26,11 @@ namespace IME::Input {
             std::to_string(static_cast<int>(key)) + "Down", std::move(callback));
     }
 
-    bool Keyboard::removeEventListener(const std::string &event, Key key, int callbackId){
-        if (event == "keyUp")
+    bool Keyboard::removeEventListener(Event event, Key key, int callbackId){
+        if (event == Event::KeyUp)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(key)) + "Up", callbackId);
-        else if (event == "keyDown")
+        else if (event == Event::KeyDown)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(key)) + "Down", callbackId);
         return false;

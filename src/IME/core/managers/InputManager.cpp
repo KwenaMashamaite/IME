@@ -1,12 +1,12 @@
 #include "IME/core/managers/InputManager.h"
 
 namespace IME::Input {
-    int InputManager::addKeyListener(const std::string &event, Keyboard::Key key,
+    int InputManager::addKeyListener(Keyboard::Event event, Keyboard::Key key,
         Callback<> callback)
     {
-        if (event == "keyDown")
+        if (event == Keyboard::Event::KeyDown)
             return keyboard_.onKeyDown(key, std::move(callback));
-        else if (event == "keyUp")
+        else if (event == Keyboard::Event::KeyUp)
             return keyboard_.onKeyUp(key, std::move(callback));
         return -1;
     }
@@ -19,17 +19,17 @@ namespace IME::Input {
         return keyboard_.onAnyKeyDown(std::move(callback));
     }
 
-    int InputManager::addMouseButtonListener(const std::string &event, Mouse::Button button,
+    int InputManager::addMouseButtonListener(Mouse::Event event, Mouse::Button button,
         Callback<> callback)
     {
-        if (event == "mouseButtonDown")
+        if (event == Mouse::Event::MouseDown)
             mouse_.onButtonDown(button, std::move(callback));
-        else if (event == "mouseButtonUp")
+        else if (event == Mouse::Event::MouseUp)
             mouse_.onButtonUp(button, std::move(callback));
         return 0;
     }
 
-    bool InputManager::removeKeyListener(const std::string &event, Keyboard::Key key, int id) {
+    bool InputManager::removeKeyListener(Keyboard::Event event, Keyboard::Key key, int id) {
         return keyboard_.removeEventListener(event, key, id);
     }
 
@@ -45,7 +45,7 @@ namespace IME::Input {
         return mouse_.isButtonPressed(button);
     }
 
-    bool InputManager::removeMouseListener(const std::string &event,
+    bool InputManager::removeMouseListener(Mouse::Event event,
         Mouse::Button button, int id)
     {
         return mouse_.removeEventListener(event, button, id);

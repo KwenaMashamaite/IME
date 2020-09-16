@@ -12,6 +12,11 @@ namespace IME {
     namespace Input {
         class Keyboard {
         public:
+            enum class Event {
+                KeyDown,
+                KeyUp
+            };
+
             /**
              * @brief keyboard keys
              */
@@ -111,7 +116,7 @@ namespace IME {
               * @return True if a listener was removed from an event, false if the
               *         specified event does not have a listener with the specified id
               */
-            bool removeEventListener(const std::string &event, Key key, int callbackId);
+            bool removeEventListener(Event event, Key key, int callbackId);
 
         private:
             //Event Emitter/publisher

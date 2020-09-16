@@ -12,6 +12,11 @@ namespace IME {
     namespace Input {
         class Mouse {
         public:
+            enum class Event {
+                MouseDown,
+                MouseUp
+            };
+
             /**
              * @brief Mouse Buttons
              */
@@ -79,7 +84,7 @@ namespace IME {
               * @return True if a listener was removed from an event, false if the
               *         specified event does not have a listener with the specified id
               */
-            bool removeEventListener(const std::string &event, Button button,
+            bool removeEventListener(Event event, Button button,
                 int listenerId);
 
             /**
