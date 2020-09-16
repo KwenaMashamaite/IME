@@ -22,7 +22,7 @@ namespace IME::Graphics {
     }
 
     int AnimatableSprite::onAnimationStart(const std::string &name, Callback<> callback) {
-        return animator_->onAnimationFinish(name, std::move(callback));
+        return animator_->onAnimationStart(name, std::move(callback));
     }
 
     int AnimatableSprite::onAnimationFinish(const std::string &name, Callback<> callback) {
