@@ -22,7 +22,7 @@ namespace IME {
         }
     }
 
-    Dimensions Entity::getBoundingRect() const {
+    Dimensions Entity::getSize() const {
         return boundingRect_;
     }
 

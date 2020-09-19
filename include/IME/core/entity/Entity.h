@@ -53,7 +53,7 @@ namespace IME {
          * @brief Get the dimensions of the entity's bounding box
          * @return Dimensions of the entity's bounding box
          */
-        Dimensions getBoundingRect() const;
+        Dimensions getSize() const;
 
         /**
          * @brief Set the alive state of the entity
