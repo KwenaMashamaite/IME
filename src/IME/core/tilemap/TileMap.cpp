@@ -37,8 +37,11 @@ namespace IME {
     }
 
     Graphics::Tile& TileMap::getTile(const Position &position) {
-        if (auto index = getIndexFromPosition(position); isValidIndex(index))
-            return getTile(index);
+        for (auto& tileRows : tiledMap_) {
+            for (auto& tile : tileRows)
+                if (tile.getPosition() == position)
+                    return tile;
+        }
         return invalidTile_;
     }
 
@@ -58,9 +61,9 @@ namespace IME {
         setBackground(background_.getTexture());
     }
 
-    bool TileMap::isValidIndex(const Index &index) const {
+    bool TileMap::isIndexValid(const Index &index) const {
         auto [row, colm] = index;
-        return !(row > numOfRows_ || row < 0 || colm > numOfColms_ || colm < 0);
+        return !(row >= numOfRows_ || row < 0 || colm >= numOfColms_ || colm < 0);
     }
 
     Index TileMap::getIndexFromPosition(const Position &position) const {
@@ -136,6 +139,7 @@ namespace IME {
                     tile.setPosition( {row[j - 1].getPosition().x + tileSize_.width, row[j - 1].getPosition().y});
 
                 tile.setId(mapData_[i][j]);
+                tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
                 row.emplace_back(tile);
             }
             tiledMap_.push_back(row);
@@ -165,12 +169,12 @@ namespace IME {
     }
 
     void TileMap::setTile(Index index, Graphics::Tile &&tile) {
-        if (isValidIndex(index))
+        if (isIndexValid(index))
             tiledMap_[index.row][index.colm] = std::move(tile);
     }
 
     void TileMap::setCollideableByIndex(const Index &index, bool isCollideable) {
-        if (isValidIndex(index))
+        if (isIndexValid(index))
             tiledMap_[index.row][index.colm].setCollideable(isCollideable);
     }
 
@@ -181,7 +185,7 @@ namespace IME {
     }
 
     void TileMap::setCollideableByIndex(Index startPos, Index endPos, bool isCollideable) {
-        if (isValidIndex(startPos) && isValidIndex(endPos)){
+        if (isIndexValid(startPos) && isIndexValid(endPos)){
             for (auto i = startPos.colm; i < endPos.colm; i++)
                 setCollideableByIndex({startPos.row, i}, isCollideable);
         }
@@ -202,7 +206,7 @@ namespace IME {
     }
 
     Graphics::Tile& TileMap::getTile(const Index &index) {
-        if (isValidIndex(index))
+        if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
         return invalidTile_;
     }
@@ -236,13 +240,13 @@ namespace IME {
     }
 
     bool TileMap::isCollideable(const Index &index) const {
-        if (!isValidIndex(index))
+        if (!isIndexValid(index))
             return tiledMap_[index.row][index.colm].isCollideable();
         return false;
     }
 
     bool TileMap::addObject(Index index, Graphics::Sprite &object) {
-        if (isValidIndex(index)) {
+        if (isIndexValid(index)) {
             auto& targetTile = getTile(index);
             object.setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
             objects_.push_back(object);
@@ -284,7 +288,7 @@ namespace IME {
     }
 
     void TileMap::forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback) {
-        if (isValidIndex(startPos) && isValidIndex(endPos)) {
+        if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
                 tiledMap_[startPos.row].begin() + endPos.colm,
                 [&](Graphics::Tile& tile) { callback(tile);}

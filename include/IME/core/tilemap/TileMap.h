@@ -14,11 +14,6 @@
 #include <tuple>
 
 namespace IME {
-    struct Index {
-        int row;
-        int colm;
-    };
-
     //Alias for 2D vector
     using Map = std::vector<std::vector<char>>;
 
@@ -284,26 +279,26 @@ namespace IME {
          */
         void forEachObject(Callback<Graphics::Sprite&> callback);
 
-    private:
         /**
          * @brief Check if the index is within bounds of the tilemap or not
          * @param index Index to check
          * @return True if the index is within bounds, otherwise false
          */
-        bool isValidIndex(const Index &index) const;
-
-        /**
-         * @brief Check if a tile id is linked to a tileset image or not
-         * @param id Id to check
-         * @return True if id is linked to tileset image, otherwise false
-         */
-        bool isIdLinkedToImage(const char& id) const;
+        bool isIndexValid(const Index &index) const;
 
         /**
          * @brief Check if the grid is visible or not
          * @return True if gird is visible, otherwise false
          */
         bool isGridVisible() const;
+
+    private:
+        /**
+         * @brief Check if a tile id is linked to a tileset image or not
+         * @param id Id to check
+         * @return True if id is linked to tileset image, otherwise false
+         */
+        bool isIdLinkedToImage(const char& id) const;
 
         /**
          * @brief Create the visual gird

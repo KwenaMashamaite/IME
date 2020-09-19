@@ -15,6 +15,14 @@
 #include <memory>
 
 namespace IME {
+    /**
+     * @brief
+     */
+    struct Index {
+        int row;
+        int colm;
+    };
+
     namespace Graphics {
         /**
          * @brief Defines the borders of the tile
@@ -110,6 +118,20 @@ namespace IME {
              * @param isVisible True to set visible, otherwise false
              */
             void setBorderVisible(bool isVisible);
+
+            /**
+             * @brief Set the index of the tile in the tilemap
+             * @param index The index of the tile in the tilemap
+             *
+             * The index corresponds to the position of the tile i the tilemap
+             */
+            void setIndex(Index index);
+
+            /**
+             * @brief Get the index of the tile in the tilemap
+             * @return The index of the tile in the tilemap
+             */
+            Index getIndex() const;
 
             /**
              * @brief Assign the tile an identification token
@@ -216,6 +238,8 @@ namespace IME {
             bool isCollideable_;
             //Tiles id
             char id_;
+            //The position of the tile in the tilemap
+            Index index_;
             //Tile representation
             Sprite sprite_;
             //Tile border

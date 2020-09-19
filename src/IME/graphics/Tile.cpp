@@ -6,6 +6,7 @@ namespace IME::Graphics {
     Tile::Tile(const Dimensions &size, const Position &position) {
         isCollideable_ = false;
         id_ = '\0';
+        index_ = {-1, -1}; //Invalid index
         tileBoarder_.setSize(sf::Vector2f{size.width, size.height});
         tileBoarder_.setOutlineColor(sf::Color::White);
         tileBoarder_.setOutlineThickness(-1.0f);
@@ -119,5 +120,13 @@ namespace IME::Graphics {
             tileBoarder_.setOutlineColor(sf::Color::White);
         else
             tileBoarder_.setOutlineColor(sf::Color::Transparent);
+    }
+
+    void Tile::setIndex(Index index) {
+        index_ = index;
+    }
+
+    Index Tile::getIndex() const {
+        return index_;
     }
 }
