@@ -76,6 +76,12 @@ namespace IME {
             void setOrigin(float x, float y);
 
             /**
+             * @brief Get the objects origin
+             * @return The objects origin
+             */
+            Position getOrigin() const;
+
+            /**
              * @brief Move the sprite by an offset
              * @param xOffset Horizontal offset
              * @param yOffset Vertical offset

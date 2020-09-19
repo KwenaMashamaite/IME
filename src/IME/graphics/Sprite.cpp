@@ -75,6 +75,10 @@ namespace IME::Graphics {
         sprite_.setOrigin(x, y);
     }
 
+    Position Sprite::getOrigin() const {
+        return {sprite_.getOrigin().x, sprite_.getOrigin().y};
+    }
+
     void Sprite::scale(float xFactor, float yFactor) {
         sprite_.scale(xFactor, yFactor);
     }
