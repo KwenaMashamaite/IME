@@ -6,14 +6,10 @@ namespace IME {
     void CollisionDetector::entityVsEntityCollision(Entity &entityOne,Entity &entityTwo,
         Callback<Entity &, Entity &> callback)
     {
-        if (entityOne.isCollidable() && entityTwo.isCollidable()) {
-            if (entityOne.getPosition().x + entityOne.getBoundingRect().width >= entityTwo.getPosition().x
-                   && entityOne.getPosition().x <= entityTwo.getPosition().x + entityTwo.getBoundingRect().width
-                   && entityOne.getPosition().y + entityOne.getBoundingRect().height >= entityTwo.getPosition().y
-                   && entityOne.getPosition().y <= entityTwo.getPosition().y + entityTwo.getBoundingRect().height)
-            {
-                callback(entityOne, entityTwo);
-            }
+        if (entityOne.isCollidable() && entityTwo.isCollidable()
+            && isCollideAABB(entityOne, entityTwo))
+        {
+            callback(entityOne, entityTwo);
         }
     }
 
