@@ -118,7 +118,7 @@ namespace IME {
             //Managed Mouse
             Mouse mouse_;
         };
-    } // namespace Input
+    }
 } // namespace IME
 
 #endif

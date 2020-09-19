@@ -68,14 +68,14 @@ namespace IME {
             static bool isKeyPressed(Key key);
 
             /**
-             * @brief Add an event listener to any key pressed event
+             * @brief Add an event listener to any key up event
              * @param callback Function to execute when the key is pressed
              * @return The event listeners identification number
              *
              * @note This event will only be triggered when the key is depressed
              * and released
              */
-            int onAnyKeyPressed(Callback<Key> callback);
+            int onKeyUp(Callback<Key> callback);
 
             /**
              * @brief Add an event listener to any key down event
@@ -84,10 +84,10 @@ namespace IME {
              *
              * This event will continue to fire while any key is held down
              */
-            int onAnyKeyDown(Callback<Key> callback);
+            int onKeyDown(Callback<Key> callback);
 
             /**
-              * @brief Add an event listener to a key down event
+              * @brief Add an event listener to a specific key down event
               * @param key Key to listen for
               * @param callback Function to execute when the key is down
               * @return Event listener's identification number
@@ -98,7 +98,7 @@ namespace IME {
             int onKeyDown(Key key, Callback<> callback);
 
             /**
-              * @brief Add an event listener to a key up event
+              * @brief Add an event listener to a specific key up event
               * @param key Key to listen for
               * @param callback Function to execute when the key is released
               * @return Event listener's identification number
@@ -122,7 +122,7 @@ namespace IME {
             //Event Emitter/publisher
             EventEmitter eventEmitter_;
         };
-    } // namespace Gui
+    }
 } // namespace IME
 
 #endif

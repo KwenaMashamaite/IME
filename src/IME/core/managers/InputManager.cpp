@@ -12,11 +12,11 @@ namespace IME::Input {
     }
 
     int InputManager::addAnyKeyPressedListener(Callback<Keyboard::Key> callback) {
-        return keyboard_.onAnyKeyPressed(std::move(callback));
+        return keyboard_.onKeyUp(std::move(callback));
     }
 
     int InputManager::addAnyKeyDownListener(Callback<Keyboard::Key> callback) {
-        return keyboard_.onAnyKeyDown(std::move(callback));
+        return keyboard_.onKeyDown(std::move(callback));
     }
 
     int InputManager::addMouseButtonListener(Mouse::Event event, Mouse::Button button,

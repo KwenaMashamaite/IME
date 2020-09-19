@@ -36,11 +36,11 @@ namespace IME::Input {
         return false;
     }
 
-    int Keyboard::onAnyKeyPressed(Callback<Key> callback) {
+    int Keyboard::onKeyUp(Callback<Key> callback) {
         return eventEmitter_.addEventListener("anyKeyPressed", std::move(callback));
     }
 
-    int Keyboard::onAnyKeyDown(Callback<Keyboard::Key> callback) {
+    int Keyboard::onKeyDown(Callback<Keyboard::Key> callback) {
         return eventEmitter_.addEventListener("anyKeyDown", std::move(callback));
     }
 }
