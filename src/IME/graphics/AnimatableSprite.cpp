@@ -17,8 +17,8 @@ namespace IME::Graphics {
         animator_->finishAnimation();
     }
 
-    bool AnimatableSprite::changeAnimation(const std::string &name) {
-        return animator_->changeAnimation(name);
+    bool AnimatableSprite::switchAnimation(const std::string &name) {
+        return animator_->switchAnimation(name);
     }
 
     int AnimatableSprite::onAnimationStart(const std::string &name, Callback<> callback) {

@@ -42,7 +42,7 @@ namespace IME{
         }
     }
 
-    bool Animator::changeAnimation(const std::string &animation) {
+    bool Animator::switchAnimation(const std::string &animation) {
         if (auto found = animations_.find(animation); found != animations_.end()){
             auto newAnimation = found->second;
             animationTarget_.setTexture(newAnimation->getSpriteSheet());

@@ -67,7 +67,7 @@ namespace IME {
          * @return True if animation was changed or false if animation does
          *          not exist
          */
-        bool changeAnimation(const std::string& animation);
+        bool switchAnimation(const std::string& animation);
 
         /**
          * @brief Add a function to execute when an animation starts
