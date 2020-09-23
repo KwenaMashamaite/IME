@@ -55,7 +55,7 @@ namespace IME {
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
-        std::shared_ptr<EventManager> instance();
+        static std::shared_ptr<EventManager> instance();
 
     private:
         /**
