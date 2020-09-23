@@ -46,6 +46,8 @@ namespace IME{
         if (auto found = animations_.find(animation); found != animations_.end()){
             auto newAnimation = found->second;
             animationTarget_.setTexture(newAnimation->getSpriteSheet());
+            auto firstFrame = newAnimation->getFrameAt(0);
+            animationTarget_.setTextureRect(firstFrame.left, firstFrame.top, firstFrame.width, firstFrame.height);
             currentAnimation_ = newAnimation;
             totalTime_ = 0.0f;
             return true;

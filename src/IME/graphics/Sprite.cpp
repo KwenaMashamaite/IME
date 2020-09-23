@@ -29,7 +29,8 @@ namespace IME::Graphics {
     }
 
     Dimensions Sprite::getSize() const {
-        return {sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
+        return {static_cast<float>(sprite_.getTextureRect().width),
+                static_cast<float>(sprite_.getTextureRect().height)};
     }
 
     void Sprite::setTextureRect(int left, int top, int width, int height) {
