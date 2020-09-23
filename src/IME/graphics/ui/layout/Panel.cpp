@@ -117,6 +117,12 @@ namespace IME::Graphics::UI {
         });
     }
 
+    void Panel::forEach(Callback<UIElement &> callback) {
+        std::for_each(uiElements_.begin(), uiElements_.end(), [&callback](auto& uiElement) {
+            callback(*uiElement.second);
+        });
+    }
+
     Panel::UIElementContainer::iterator Panel::findUIElement(const std::string &uiElemAlias) {
         return std::find_if(uiElements_.begin(), uiElements_.end(),
             [this, &uiElemAlias](const auto& uiElement){

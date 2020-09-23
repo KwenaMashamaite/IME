@@ -157,6 +157,12 @@ namespace IME {
             void handleEvent(sf::Event event);
 
             /**
+             * @brief Execute a callback function on each UI element
+             * @param callback Function to execute
+             */
+            void forEach(Callback<UIElement&> callback);
+
+            /**
              * @brief Subscribe all child elements to an event
              * @tparam Args Template argument name
              * @param event Event to subscribe child elements to
