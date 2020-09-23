@@ -32,7 +32,7 @@ namespace IME {
         isAlive_ = isAlive;
 
         if (!isAlive_)
-            publishEvent("dead");
+            publishEvent("killed");
         else
             publishEvent("revived"); //By default entity is alive
     }
