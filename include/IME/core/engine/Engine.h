@@ -9,6 +9,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/core/managers/AudioManager.h"
 #include "IME/core/managers/InputManager.h"
+#include "IME/core/managers/EventManager.h"
 #include "IME/common/PropertiesContainer.h"
 #include "StateManager.h"
 
@@ -218,6 +219,8 @@ namespace IME {
         std::shared_ptr<ResourceManager> resourceManager_;
         //Engines input manager
         Input::InputManager inputManager_;
+        //Engines Event manager
+        std::shared_ptr<EventManager> eventManager_;
         //Engine settings
         PropertyContainer settings_;
         //Hold a state to be pushed to engine state

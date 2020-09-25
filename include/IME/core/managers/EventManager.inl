@@ -1,6 +1,6 @@
 template<typename... Args>
 void EventManager::fireEvent(const std::string &event, Args &&... args) {
-    eventEmitter_.emit(event, std::forward(args)...);
+    eventEmitter_.emit(event, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
