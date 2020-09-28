@@ -82,6 +82,18 @@ namespace IME {
             void setTexture(const std::string &filename);
 
             /**
+             * @brief Set the fill colour of the tile
+             * @param colour New fill colour of the tile
+             */
+            void setFillColour(const Colour& colour);
+
+            /**
+             * @brief Get the tiles fill colour
+             * @return The tiles fill colour
+             */
+            Colour getFillColour() const;
+
+            /**
              * @brief Set the position of the tile
              * @param x X coordinate of the tile
              * @param y Y coordinate of the tile

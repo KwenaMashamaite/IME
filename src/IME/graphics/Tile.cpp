@@ -129,4 +129,12 @@ namespace IME::Graphics {
     Index Tile::getIndex() const {
         return index_;
     }
+
+    void Tile::setFillColour(const Colour &colour) {
+        tileBoarder_.setFillColor(Utility::convertTo3rdPartyColour(colour));
+    }
+
+    Colour Tile::getFillColour() const {
+        return Utility::convertFrom3rdPartyColour(tileBoarder_.getFillColor());
+    }
 }
