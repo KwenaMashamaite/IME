@@ -1,3 +1,8 @@
+/**
+ * @brief Class for checking a collision between two objects
+ */
+
+
 #ifndef COLLISIONDETECTOR_H
 #define COLLISIONDETECTOR_H
 
@@ -7,7 +12,7 @@
 #include "IME/core/entity/Entity.h"
 
 namespace IME {
-    class CollisionDetector{
+    class CollisionDetector {
     public:
         /**
          * @brief Check for a collision between two entities

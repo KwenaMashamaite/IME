@@ -16,7 +16,7 @@ namespace IME {
     void CollisionDetector::tileVSTileCollision(Tile &tileOne, Tile &tileTwo,
         Callback<Tile &, Tile &> callback)
     {
-        if (tileOne.isCollideable() && tileTwo.isCollideable()
+        if (tileOne.isCollidable() && tileTwo.isCollidable()
             && isCollideAABB(tileOne, tileTwo))
         {
             callback(tileOne, tileTwo);
@@ -33,7 +33,7 @@ namespace IME {
     void CollisionDetector::spriteVsTileCollision(Sprite &sprite,
         Tile &tile,Callback<Sprite &, Tile &> callback)
     {
-        if (tile.isCollideable() && isCollideAABB(sprite, tile))
+        if (tile.isCollidable() && isCollideAABB(sprite, tile))
             callback(sprite, tile);
     }
 

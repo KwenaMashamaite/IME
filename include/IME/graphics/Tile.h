@@ -142,26 +142,26 @@ namespace IME {
             void setId(const char &id);
 
             /**
-             * @brief Set all the sides of the tile as collideable or not
-             * @param isCollideable True to set tile as collideable, otherwise false
+             * @brief Set all the sides of the tile as collidable or not
+             * @param isCollidable True to set tile as collidable, otherwise false
              *
-             * The tile is not collideable on all sides by default
+             * The tile is not collidable on all sides by default
              */
-            void setCollideable(bool isCollideable);
+            void setCollidable(bool isCollidable);
 
             /**
              * @brief Set a tile border as collideable or not
              * @param border The tile border to set
-             * @param isCollideable True to set border as collideable, otherwise false
+             * @param isCollidable True to set border as collidable, otherwise false
              */
-            void setCollideable(const Border &border, bool isCollideable);
+            void setCollidable(const Border &border, bool isCollidable);
 
             /**
              * @brief Check if a tile border is collideable or not
              * @param border Border to be checked
              * @return True if border is collideable, otherwise false
              */
-            bool isCollideable(const Border &border) const;
+            bool isCollidable(const Border &border) const;
 
             /**
              * @brief Get the tiles id
@@ -192,10 +192,10 @@ namespace IME {
             bool isHidden() const override;
 
             /**
-             * @brief Check if tile is collideable on all sides or not
-             * @return True if tile is collideable on all sides, otherwise false
+             * @brief Check if tile is collidable on all sides or not
+             * @return True if tile is collidable on all sides, otherwise false
              */
-            bool isCollideable() const;
+            bool isCollidable() const;
 
             /**
              * @brief Check if tile contains pixel coordinates

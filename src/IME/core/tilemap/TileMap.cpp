@@ -173,35 +173,35 @@ namespace IME {
             tiledMap_[index.row][index.colm] = std::move(tile);
     }
 
-    void TileMap::setCollideableByIndex(const Index &index, bool isCollideable) {
+    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
         if (isIndexValid(index))
-            tiledMap_[index.row][index.colm].setCollideable(isCollideable);
+            tiledMap_[index.row][index.colm].setCollidable(isCollidable);
     }
 
-    void TileMap::setCollideableByIndex(const std::initializer_list<Index> &locations, bool isCollideable) {
+    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable) {
         std::for_each(locations.begin(), locations.end(), [=](const Index& index) {
-            setCollideableByIndex(index, isCollideable);
+            setCollidableByIndex(index, isCollidable);
         });
     }
 
-    void TileMap::setCollideableByIndex(Index startPos, Index endPos, bool isCollideable) {
+    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable) {
         if (isIndexValid(startPos) && isIndexValid(endPos)){
             for (auto i = startPos.colm; i < endPos.colm; i++)
-                setCollideableByIndex({startPos.row, i}, isCollideable);
+                setCollidableByIndex({startPos.row, i}, isCollidable);
         }
     }
 
-    void TileMap::setCollideableById(const char &id, bool isCollideable) {
+    void TileMap::setCollidableById(const char &id, bool isCollidable) {
         forEachTile([=](Graphics::Tile& tile) {
             if (tile.getId() == id)
-                tile.setCollideable(isCollideable);
+                tile.setCollidable(isCollidable);
         });
     }
 
-    void TileMap::setCollideableByExclusion(const char &id, bool isCollideable) {
+    void TileMap::setCollidableByExclusion(const char &id, bool isCollidable) {
         forEachTile([=](Graphics::Tile& tile) {
             if (tile.getId() != id)
-                tile.setCollideable(isCollideable);
+                tile.setCollidable(isCollidable);
         });
     }
 
@@ -239,9 +239,9 @@ namespace IME {
         return false;
     }
 
-    bool TileMap::isCollideable(const Index &index) const {
+    bool TileMap::isCollidable(const Index &index) const {
         if (!isIndexValid(index))
-            return tiledMap_[index.row][index.colm].isCollideable();
+            return tiledMap_[index.row][index.colm].isCollidable();
         return false;
     }
 

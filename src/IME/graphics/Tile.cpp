@@ -78,24 +78,24 @@ namespace IME::Graphics {
         sprite_.setTexture(filename);
     }
 
-    bool Tile::isCollideable(const Border &border) const {
+    bool Tile::isCollidable(const Border &border) const {
         return borderCollisionFlags_.at(border);
     }
 
-    bool Tile::isCollideable() const {
-        return isCollideable(Border::Left)
-            && isCollideable(Border::Right)
-            && isCollideable(Border::Top)
-            && isCollideable(Border::Bottom);
+    bool Tile::isCollidable() const {
+        return isCollidable(Border::Left)
+           && isCollidable(Border::Right)
+           && isCollidable(Border::Top)
+           && isCollidable(Border::Bottom);
     }
 
-    void Tile::setCollideable(bool isCollideable) {
+    void Tile::setCollidable(bool isCollidable) {
         for (auto& border : borderCollisionFlags_)
-            border.second = isCollideable;
+            border.second = isCollidable;
     }
 
-    void Tile::setCollideable(const Border &border, bool isCollideable) {
-        borderCollisionFlags_.at(border) = isCollideable;
+    void Tile::setCollidable(const Border &border, bool isCollidable) {
+        borderCollisionFlags_.at(border) = isCollidable;
     }
 
     bool Tile::contains(float x, float y) const {

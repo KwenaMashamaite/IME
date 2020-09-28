@@ -106,17 +106,17 @@ namespace IME {
         /**
          * @brief Enable or disable collision for a tile at a certain location
          * @param index Location (in tiles) of the tile
-         * @param isCollideable True to enable collision, otherwise false
+         * @param isCollidable True to enable collision, otherwise false
          */
-        void setCollideableByIndex(const Index &index, bool isCollideable);
+        void setCollidableByIndex(const Index &index, bool isCollidable);
 
         /**
          * @brief Enable or disable collision for tiles at certain locations
          * @param locations Locations (in tiles) of the tiles
-         * @param isCollideable True to enable collision, otherwise false
+         * @param isCollidable True to enable collision, otherwise false
          */
-        void setCollideableByIndex(const std::initializer_list<Index>& locations,
-            bool isCollideable);
+        void setCollidableByIndex(const std::initializer_list<Index>& locations,
+            bool isCollidable);
 
         /**
          * @brief Enable or disable collisions for tiles in a range
@@ -125,22 +125,22 @@ namespace IME {
          *
          * @note Only horizontal ranges are supported
          */
-        void setCollideableByIndex(Index startPos, Index endPos, bool isCollideable);
+        void setCollidableByIndex(Index startPos, Index endPos, bool isCollidable);
 
         /**
          * @brief Enable or disable collision for tiles with a certain id
          * @param id Id of the tiles to enable or disable collisions for
-         * @param isCollideable True to enable collision, otherwise false
+         * @param isCollidable True to enable collision, otherwise false
          */
-        void setCollideableById(const char& id, bool isCollideable);
+        void setCollidableById(const char& id, bool isCollidable);
 
         /**
          * @brief Enable or disable collision for all tiles except those with
          *        with a certain id
          * @param id Identification of the tiles to exclude
-         * @param isCollideable True to enable collision, otherwise false
+         * @param isCollidable True to enable collision, otherwise false
          */
-        void setCollideableByExclusion(const char& id, bool isCollideable);
+        void setCollidableByExclusion(const char& id, bool isCollidable);
 
         /**
          * @brief Add an object to the tile map
@@ -242,13 +242,13 @@ namespace IME {
         bool isHidden(const std::string& layer) const;
 
         /**
-         * @brief Check if a tile is collideable or not
+         * @brief Check if a tile is collidable or not
          * @param index Index of the tile to be checked
-         * @return True if tile is collideable, or false if the tile is not
-         *         collideable, partially collideable (Some tile borders are
-         *         collideable) or the position od the tile is invalid
+         * @return True if tile is collidable, or false if the tile is not
+         *         collidable, partially collidable (Some tile borders are
+         *         collidable) or the position od the tile is invalid
          */
-        bool isCollideable(const Index& index) const;
+        bool isCollidable(const Index& index) const;
 
         /**
          * @brief Execute a callback function on every tile with a certain id
