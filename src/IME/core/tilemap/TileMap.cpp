@@ -12,13 +12,14 @@ namespace IME {
         invalidTile_.setPosition({-99, -99});
         mapPos_ = {0, 0};
         numOfRows_ = numOfColms_ = 0;
-        if (tileWidth < 8)
+        if (tileWidth <= 0)
             tileWidth = 8;
 
-        if (tileHeight < 8)
+        if (tileHeight <= 0)
             tileHeight = 8;
 
         tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
+        background_.setPosition(0, 0);
     }
 
     void TileMap::setGridVisible(bool isVisible) {
@@ -45,8 +46,9 @@ namespace IME {
         return invalidTile_;
     }
 
-    void TileMap::setBackground(const std::string &filename) {
+    void TileMap::setBackground(const std::string &filename, Position position) {
         background_.setTexture(filename);
+        background_.setPosition(position);
         if (background_.getSize().width > mapSizeInPixels_.width
             && background_.getSize().height > mapSizeInPixels_.height)
             background_.setTextureRect(0, 0, mapSizeInPixels_.width, mapSizeInPixels_.height);
@@ -58,7 +60,7 @@ namespace IME {
 
     void TileMap::scaleBackground(float xOffset, float yOffset) {
         background_.scale(xOffset, yOffset);
-        setBackground(background_.getTexture());
+        setBackground(background_.getTexture(), background_.getPosition());
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
@@ -148,10 +150,8 @@ namespace IME {
 
     void TileMap::draw(Graphics::Window &renderTarget) {
         //Draw background (first layer)
-        if (isBackgroundDrawable_) {
-            background_.setPosition(mapPos_.x, mapPos_.y);
+        if (isBackgroundDrawable_)
             renderTarget.draw(background_);
-        }
 
         //Draw tiles (second layer)
         if (isTilesDrawable_) {
@@ -248,7 +248,8 @@ namespace IME {
     bool TileMap::addObject(Index index, Graphics::Sprite &object) {
         if (isIndexValid(index)) {
             auto& targetTile = getTile(index);
-            object.setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
+            object.setPosition(targetTile.getPosition().x + targetTile.getSize().width / 2.0f,
+                targetTile.getPosition().y + targetTile.getSize().height / 2.0f);
             objects_.push_back(object);
             return true;
         }

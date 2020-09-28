@@ -167,7 +167,7 @@ namespace IME {
          *
          * The background image must
          */
-        void setBackground(const std::string& filename);
+        void setBackground(const std::string& filename, Position position);
 
         /**
          * @brief Scale the background image by an offset
