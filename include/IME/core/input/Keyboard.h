@@ -118,6 +118,15 @@ namespace IME {
               */
             bool removeEventListener(Event event, Key key, int callbackId);
 
+            /**
+             * @brief Remove an event listener from a key down or key up event
+             * @param event Event to remove event listener from
+             * @param callbackId Identification number of the listener to be removed
+             * @return True if a listener was removed from an event, false if the
+              *        specified event does not have a listener with the specified id
+             */
+            bool removeEventListener(Event event, int callbackId);
+
         private:
             //Event Emitter/publisher
             EventEmitter eventEmitter_;

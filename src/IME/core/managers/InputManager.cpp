@@ -33,6 +33,10 @@ namespace IME::Input {
         return keyboard_.removeEventListener(event, key, id);
     }
 
+    bool InputManager::removeKeyListener(Keyboard::Event event, int id) {
+        return keyboard_.removeEventListener(event, id);
+    }
+
     int InputManager::addMouseMovedListener(Callback<int, int> callback) {
         return mouse_.onMouseMove(std::move(callback));
     }

@@ -48,7 +48,7 @@ namespace IME {
             int addAnyKeyDownListener(Callback<Keyboard::Key> callback);
 
             /**
-             * @brief Remove a key event listener from a key event
+             * @brief Remove a key event listener from a specific key event
              * @param event Event to remove listener from
              * @param key The key the event listener was listening for
              * @param id The identification number of the event listener
@@ -57,6 +57,15 @@ namespace IME {
               *        specified id
              */
             bool removeKeyListener(Keyboard::Event event, Keyboard::Key key, int id);
+
+            /**
+             * @brief Remove an event listener from a key down or key up event
+             * @param event Event to remove event listener from
+             * @param callbackId Identification number of the listener to be removed
+             * @return True if a listener was removed from an event, false if the
+              *        specified event does not have a listener with the specified id
+             */
+            bool removeKeyListener(Keyboard::Event event, int id);
 
             /**
              * @brief Check if a mouse button is currently pressed or not

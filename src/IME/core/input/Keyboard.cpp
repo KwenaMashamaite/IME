@@ -36,6 +36,17 @@ namespace IME::Input {
         return false;
     }
 
+    bool Keyboard::removeEventListener(Keyboard::Event event, int callbackId) {
+        switch (event) {
+            case Event::KeyDown:
+                return eventEmitter_.removeEventListener("anyKeyDown", callbackId);
+            case Event::KeyUp:
+                return eventEmitter_.removeEventListener("anyKeyPressed", callbackId);
+            default:
+                return false;
+        }
+    }
+
     int Keyboard::onKeyUp(Callback<Key> callback) {
         return eventEmitter_.addEventListener("anyKeyPressed", std::move(callback));
     }
