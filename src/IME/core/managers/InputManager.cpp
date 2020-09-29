@@ -11,7 +11,7 @@ namespace IME::Input {
         return -1;
     }
 
-    int InputManager::addAnyKeyPressedListener(Callback<Keyboard::Key> callback) {
+    int InputManager::addAnyKeyUpListener(Callback<Keyboard::Key> callback) {
         return keyboard_.onKeyUp(std::move(callback));
     }
 
