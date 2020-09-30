@@ -3,7 +3,7 @@
 
 namespace IME {
     Entity::Entity(const Dimensions &boundingRect)
-        : boundingRect_(boundingRect), isAlive_(true), isCollidable_(false),
+        : boundingRect_(boundingRect), isInvincible_(false), isAlive_(true), isCollidable_(false),
           direction_(Direction::None), position_({0, 0})
     {}
 
@@ -27,7 +27,7 @@ namespace IME {
     }
 
     void Entity::setAlive(bool isAlive) {
-        if (isAlive_ == isAlive)
+        if (isAlive_ == isAlive || (isAlive_ && isInvincible_))
             return;
         isAlive_ = isAlive;
 
@@ -35,6 +35,16 @@ namespace IME {
             publishEvent("killed");
         else
             publishEvent("revived"); //By default entity is alive
+    }
+
+    void Entity::setInvincible(bool isInvincible) {
+        if (isInvincible_ != isInvincible) {
+            isInvincible_ = isInvincible;
+            if (isInvincible_)
+                publishEvent("godModeEnabled");
+            else
+                publishEvent("godModeDisabled");
+        }
     }
 
     void Entity::setCollidable(bool isCollidable) {
@@ -53,6 +63,10 @@ namespace IME {
 
     bool Entity::isCollidable() const {
         return isCollidable_;
+    }
+
+    bool Entity::isInvincible() const {
+        return isInvincible_;
     }
 
     Entity::Direction Entity::getDirection() const {

@@ -62,6 +62,17 @@ namespace IME {
         void setAlive(bool isAlive);
 
         /**
+         * @brief Set entity as invincible or not
+         * @param isInvincible True to set invincible, otherwise false
+         *
+         * An invincible entity cannot be killed. That is, @see setAlive(bool)
+         * on an entity that is alive and invincible will always fail.
+         *
+         * The entity is not invincible by default
+         */
+        void setInvincible(bool isInvincible);
+
+        /**
          * @brief Enable or disable collision for this entity
          * @param isCollidable True to enable collision or false to disable collision
          *
@@ -86,6 +97,12 @@ namespace IME {
          * @return Position of the entity
          */
         Position getPosition() const;
+
+        /**
+         * @brief Check if entity is invincible or not
+         * @return True if entity is invincible, otherwise false
+         */
+        bool isInvincible() const;
 
         /**
          * @brief Check if entity is collidable or not
@@ -161,6 +178,8 @@ namespace IME {
         std::stack<std::shared_ptr<IEntityState>> states_;
         //The entities bounding rectangle
         Dimensions boundingRect_;
+        //Invincibility state
+        bool isInvincible_;
         //The entities alive state
         bool isAlive_;
         //The entities collidable state
