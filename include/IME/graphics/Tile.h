@@ -21,6 +21,10 @@ namespace IME {
     struct Index {
         int row;
         int colm;
+
+        bool operator==(const Index& rhs) const {
+            return row == rhs.row && colm == rhs.colm;
+        }
     };
 
     namespace Graphics {
