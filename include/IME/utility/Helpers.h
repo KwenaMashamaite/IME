@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 
 namespace IME {
     namespace Utility {
@@ -83,6 +84,16 @@ namespace IME {
                 return true;
             }
             return false;
+        }
+
+        /**
+         * @brief Generate a random number in a range
+         * @param min The start of the range
+         * @param max The end of the range
+         * @return A random number in the given range
+         */
+        static int generateRandomNum(int min, int max) {
+            return min + (rand() % (max - min + 1));
         }
     }
 }

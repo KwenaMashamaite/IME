@@ -3,11 +3,13 @@
 #include "IME/utility/ConfigFileParser.h"
 #include "IME/utility/ConsoleLogger.h"
 #include <assert.h>
+#include <cstdlib>
 
 namespace IME {
     Engine::Engine(const std::string &gameName, const PropertyContainer &settings)
         : Engine(gameName, "")
     {
+        srand(time(0));
         settings_ = settings;
     }
 
