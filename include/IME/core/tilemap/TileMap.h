@@ -246,6 +246,46 @@ namespace IME {
         Graphics::Tile& getTileRightOf(const Index& index);
 
         /**
+         * @brief Get the tile above a certain tile
+         * @param tile Tile to get the tile above of
+         * @return The tile above the specified tile or an invalid tile if
+         *         there is no tile above the specified tile
+         *
+         * A tile is invalid if it has the id of '!' or a negative index
+         */
+        Graphics::Tile& getTileAbove(const Graphics::Tile& tile);
+
+        /**
+         * @brief Get the tile below a certain tile
+         * @param tile Tile to get the tile below of
+         * @return The tile below the specified tile or an invalid tile if
+         *         there is no tile below the specified tile
+         *
+         * A tile is invalid if it has the id of '!' or a negative index
+         */
+        Graphics::Tile& getTileBelow(const Graphics::Tile& tile);
+
+        /**
+         * @brief Get the tile to the left of a certain tile
+         * @param tile Tile to get the tile to the left of
+         * @return The tile to the left of the specified tile or an invalid
+         *         tile if there's no tile to the left of the specified tile
+         *
+         * A tile is invalid if it has the id of '!' or a negative index
+         */
+        Graphics::Tile & getTileLeftOf(const Graphics::Tile& tile);
+
+        /**
+         * @brief Get the tile to the right of a certain tile
+         * @param tile Tile to get the tile to the right of
+         * @return The tile to the right of the specified tile or an invalid
+         *         tile if there's no tile to the left of the specified tile
+         *
+         * A tile is invalid if it has the id of '!' or a negative index
+         */
+        Graphics::Tile& getTileRightOf(const Graphics::Tile& tile);
+
+        /**
          * @brief Render tile map on a render target
          * @param renderTarget Target to render tile map on
          */

@@ -314,6 +314,22 @@ namespace IME {
         return getTile(Index{index.row, index.colm + 1});
     }
 
+    Graphics::Tile &TileMap::getTileAbove(const Graphics::Tile &tile) {
+        return getTileAbove(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileBelow(const Graphics::Tile &tile) {
+        return getTileBelow(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileLeftOf(const Graphics::Tile &tile) {
+        return getTileLeftOf(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileRightOf(const Graphics::Tile &tile) {
+        return getTileRightOf(tile.getIndex());
+    }
+
     int TileMap::onTileMapCollision(Callback<Entity&, Graphics::Tile &> callback) {
         return -1; //
     }
