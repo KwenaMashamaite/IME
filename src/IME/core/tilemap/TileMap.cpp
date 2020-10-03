@@ -11,6 +11,7 @@ namespace IME {
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
+        invalidTile_.setIndex({-1, -1});
         mapPos_ = {0, 0};
         numOfRows_ = numOfColms_ = 0;
         if (tileWidth <= 0)
