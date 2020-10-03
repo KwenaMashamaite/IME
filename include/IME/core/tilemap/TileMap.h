@@ -9,6 +9,7 @@
 #include "IME/common/Dimensions.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Tile.h"
+#include "IME/core/entity/Entity.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -149,17 +150,7 @@ namespace IME {
          * @return True if the object has been added or false if the index is
          *         invalid
          */
-        bool addObject(Index index, Graphics::Sprite& object);
-
-        /**
-         * @brief Get the tile at at certain position
-         * @param position Position of the tile to retrieve
-         * @return The tile at the specified position or an invalid tile if
-         *         the specified position does not lie within the tilemap bounds
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTile(const Position& position);
+        bool addObject(Index index, std::shared_ptr<Entity> object);
 
         /**
          * @brief Set the background of the tile amp
@@ -195,6 +186,16 @@ namespace IME {
         void toggleGridVisibility();
 
         /**
+         * @brief Get the tile at at certain position
+         * @param position Position of the tile to retrieve
+         * @return The tile at the specified position or an invalid tile if
+         *         the specified position does not lie within the tilemap bounds
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTile(const Position& position);
+
+        /**
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
          * @return The tile at the specified index or an invalid tile if the
@@ -203,6 +204,46 @@ namespace IME {
          * A tile is invalid if it has the id of '!' or a negative position
          */
         Graphics::Tile& getTile(const Index& index);
+
+        /**
+         * @brief Get the tile above a tile at a given location
+         * @param index Index of the tile to get the tile above
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTileAbove(const Index& index);
+
+        /**
+         * @brief Get the tile below a tile at a given location
+         * @param index Location of the tile to get the tile below
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTileBelow(const Index& index);
+
+        /**
+         * @brief Get the tile to the left of a tile at a given location
+         * @param index Location of the tile to get the tile to the left of
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile & getTileLeftOf(const Index& index);
+
+        /**
+         * @brief Get the tile to the right of a tile at a given location
+         * @param index Location of the tile to get the tile to the right of
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTileRightOf(const Index& index);
 
         /**
          * @brief Render tile map on a render target
@@ -277,7 +318,7 @@ namespace IME {
          * @brief Execute a callback on each object int the tile map
          * @param callback Function to execute for each object
          */
-        void forEachObject(Callback<Graphics::Sprite&> callback);
+        void forEachObject(Callback<IME::Entity&> callback);
 
         /**
          * @brief Check if the index is within bounds of the tilemap or not
@@ -328,46 +369,6 @@ namespace IME {
         void computeDimensions();
 
         /**
-         * @brief Get the tile above a tile at a given location
-         * @param index Index of the tile to get the tile above
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileAbove(const Index& index);
-
-        /**
-         * @brief Get the tile below a tile at a given location
-         * @param index Location of the tile to get the tile below
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileBelow(const Index& index);
-
-        /**
-         * @brief Get the tile to the left of a tile at a given location
-         * @param index Location of the tile to get the tile to the left of
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile & getTileLeftOf(const Index& index);
-
-        /**
-         * @brief Get the tile to the right of a tile at a given location
-         * @param index Location of the tile to get the tile to the right of
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileRightOf(const Index& index);
-
-        /**
          * @brief Add an event listener to a tilemap collision event
          * @param callback Function to execute when the event is raised
          * @return The event listeners identification number
@@ -377,7 +378,7 @@ namespace IME {
          * passed the object that caused the collision and the tile the object
          * collided with respectively
          */
-        int onTileMapCollision(Callback<Graphics::Sprite&, Graphics::Tile&> callback);
+        int onTileMapCollision(Callback<Entity&, Graphics::Tile&> callback);
 
     private:
         //The Size of each tile in the tilemap
@@ -399,7 +400,7 @@ namespace IME {
         //Visual grid (second layer)
         std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
-        std::vector<std::reference_wrapper<Graphics::Sprite>> objects_;
+        std::vector<std::shared_ptr<Entity>> objects_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
         //The maps tileset image files

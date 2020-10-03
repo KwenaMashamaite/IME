@@ -2,6 +2,7 @@
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/managers/ResourceManager.h"
+#include <cassert>
 
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
@@ -40,7 +41,7 @@ namespace IME {
     Graphics::Tile& TileMap::getTile(const Position &position) {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
-                if (tile.getPosition() == position)
+                if (tile.contains(position.x, position.y))
                     return tile;
         }
         return invalidTile_;
@@ -159,13 +160,6 @@ namespace IME {
                 renderTarget.draw(tile);
             });
         }
-
-        //Draw objects (third layer)
-        if (isObjectsDrawable_) {
-            std::for_each(objects_.begin(), objects_.end(), [&](auto &sprite) {
-                renderTarget.draw(sprite);
-            });
-        }
     }
 
     void TileMap::setTile(Index index, Graphics::Tile &&tile) {
@@ -245,12 +239,12 @@ namespace IME {
         return false;
     }
 
-    bool TileMap::addObject(Index index, Graphics::Sprite &object) {
+    bool TileMap::addObject(Index index, std::shared_ptr<Entity> object) {
+        assert(object && "Object added to the tilemap cannot be null");
         if (isIndexValid(index)) {
             auto& targetTile = getTile(index);
-            object.setPosition(targetTile.getPosition().x + targetTile.getSize().width / 2.0f,
-                targetTile.getPosition().y + targetTile.getSize().height / 2.0f);
-            objects_.push_back(object);
+            object->setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
+            objects_.push_back(std::move(object));
             return true;
         }
         return false;
@@ -297,28 +291,31 @@ namespace IME {
         }
     }
 
-    void TileMap::forEachObject(Callback<Graphics::Sprite &> callback) {
-        std::for_each(objects_.begin(), objects_.end(), callback);
+    void TileMap::forEachObject(Callback<Entity&> callback) {
+        std::for_each(objects_.begin(), objects_.end(), [&](auto& entityPtr) {
+            if (entityPtr)
+                callback(*entityPtr);
+        });
     }
 
     Graphics::Tile &TileMap::getTileAbove(const Index &index) {
-        return getTile(Index{index.row, index.colm - 1});
-    }
-
-    Graphics::Tile& TileMap::getTileBelow(const Index &index) {
-        return getTile(Index{index.row, index.colm + 1});
-    }
-
-    Graphics::Tile& TileMap::getTileLeftOf(const Index &index) {
         return getTile(Index{index.row - 1, index.colm});
     }
 
-    Graphics::Tile& TileMap::getTileRightOf(const Index &index) {
+    Graphics::Tile& TileMap::getTileBelow(const Index &index) {
         return getTile(Index{index.row + 1, index.colm});
     }
 
-    int TileMap::onTileMapCollision(Callback<Graphics::Sprite &, Graphics::Tile &> callback) {
-        return eventEmitter_.addEventListener("worldCollision", std::move(callback));
+    Graphics::Tile& TileMap::getTileLeftOf(const Index &index) {
+        return getTile(Index{index.row, index.colm - 1});
+    }
+
+    Graphics::Tile& TileMap::getTileRightOf(const Index &index) {
+        return getTile(Index{index.row, index.colm + 1});
+    }
+
+    int TileMap::onTileMapCollision(Callback<Entity&, Graphics::Tile &> callback) {
+        return -1; //
     }
 
     bool TileMap::isGridVisible() const {
