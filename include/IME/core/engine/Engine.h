@@ -107,6 +107,16 @@ namespace IME {
         void popState();
 
         /**
+         * @brief Get the time passed since the engine was started/run
+         * @return The time passed since the engine was started/run
+         *
+         * The elapsed time will reset to 0.0f when the engine is stopped. This
+         * means that this function will return 0.0f if the engine is not running.
+         * The time is in seconds
+         */
+        float getElapsedTime() const;
+
+        /**
          * @brief Get access to the engines resource manager
          * @return Engines resource manager
          */
@@ -227,6 +237,8 @@ namespace IME {
         std::shared_ptr<State> stateToPush_;
         //Flag for popping
         bool shouldPop_;
+        //Keeps track of how long the engine has been running
+        float elapsedTime_;
     };
 } // namespace IME
 

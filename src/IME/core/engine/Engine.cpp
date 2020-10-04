@@ -19,7 +19,8 @@ namespace IME {
           isInitialized_{false},
           appName_{gameName},
           settingFile_{settingsFile},
-          shouldPop_{false}
+          shouldPop_{false},
+          elapsedTime_{0.0f}
     {
         if (settingsFile.empty())
             isSettingsLoadedFromFile_ = false;
@@ -113,7 +114,7 @@ namespace IME {
         statesManager_.getActiveState()->initialize();
         isRunning_ = true;
         auto const frameTime = 1.0f / getFPSLimit();
-        auto elapsedTime = 0.0f, deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
+        auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
         auto clock = Time::Clock();
         auto prevTime = clock.getElapsedTimeInSeconds();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
@@ -131,7 +132,7 @@ namespace IME {
             render();
             display();
             postFrameUpdate();
-            elapsedTime += deltaTime;
+            elapsedTime_ += deltaTime;
         }
     }
 
@@ -188,6 +189,7 @@ namespace IME {
             audioManager_->stopAllAudio();
             statesManager_.clear();
             isInitialized_ = false;
+            elapsedTime_ = 0.0f;
         }
     }
 
@@ -202,6 +204,10 @@ namespace IME {
 
     void Engine::onWindowClose() {
         quit();
+    }
+
+    float Engine::getElapsedTime() const {
+        return elapsedTime_;
     }
 
     ResourceManager &Engine::getResourceManager() {
