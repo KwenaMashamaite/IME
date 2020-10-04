@@ -9,6 +9,9 @@ namespace IME{
             // Predefined colours
             static const Colour Black;
             static const Colour White;
+            static const Colour Red;
+            static const Colour Green;
+            static const Colour Blue;
             static const Colour Transparent;
 
             /**
