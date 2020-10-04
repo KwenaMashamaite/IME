@@ -146,11 +146,11 @@ namespace IME {
         /**
          * @brief Add an object to the tile map
          * @param index Index of the tile to add the object to
-         * @param object Object to add to the tile map
+         * @param child Object to add to the tile map
          * @return True if the object has been added or false if the index is
          *         invalid
          */
-        bool addObject(Index index, std::shared_ptr<Entity> object);
+        bool addChild(Index index, std::shared_ptr<Entity> child);
 
         /**
          * @brief Set the background of the tile amp
@@ -176,6 +176,13 @@ namespace IME {
          * The grid lines are visible by default
          */
         void setGridVisible(bool isVisible);
+
+        /**
+         * @brief Check if the tilemap has a certain child object
+         * @param childPtr Child to search for in the tilemap
+         * @return True if the tilemap has the child otherwise false
+         */
+        bool hasChild(std::shared_ptr<Entity> childPtr);
 
         /**
          * @brief Toggle the visibility state of the tilemap grid lines
@@ -355,10 +362,10 @@ namespace IME {
         void forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
 
         /**
-         * @brief Execute a callback on each object int the tile map
-         * @param callback Function to execute for each object
+         * @brief Execute a callback on each child of the tile map
+         * @param childPtr Function to execute for each child
          */
-        void forEachObject(Callback<IME::Entity&> callback);
+        void forEachChild(Callback<Entity&> childPtr);
 
         /**
          * @brief Check if the index is within bounds of the tilemap or not
@@ -440,7 +447,7 @@ namespace IME {
         //Visual grid (second layer)
         std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
-        std::vector<std::shared_ptr<Entity>> objects_;
+        std::vector<std::shared_ptr<Entity>> children_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
         //The maps tileset image files

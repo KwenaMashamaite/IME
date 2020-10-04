@@ -35,6 +35,18 @@ namespace IME {
         isGridVisible_ = isVisible;
     }
 
+    bool TileMap::hasChild(std::shared_ptr<Entity> child) {
+        if (!child)
+            return false;
+
+        auto hasChild = false;
+        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
+            if (childPtr == child)
+                hasChild = true;
+        });
+        return hasChild;
+    }
+
     void TileMap::toggleGridVisibility() {
         setGridVisible(!isGridVisible_);
     }
@@ -240,12 +252,12 @@ namespace IME {
         return false;
     }
 
-    bool TileMap::addObject(Index index, std::shared_ptr<Entity> object) {
-        assert(object && "Object added to the tilemap cannot be null");
+    bool TileMap::addChild(Index index, std::shared_ptr<Entity> child) {
+        assert(child && "Object added to the tilemap cannot be null");
         if (isIndexValid(index)) {
             auto& targetTile = getTile(index);
-            object->setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
-            objects_.push_back(std::move(object));
+            child->setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
+            children_.push_back(std::move(child));
             return true;
         }
         return false;
@@ -292,10 +304,10 @@ namespace IME {
         }
     }
 
-    void TileMap::forEachObject(Callback<Entity&> callback) {
-        std::for_each(objects_.begin(), objects_.end(), [&](auto& entityPtr) {
-            if (entityPtr)
-                callback(*entityPtr);
+    void TileMap::forEachChild(Callback<Entity&> callback) {
+        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
+            if (childPtr)
+                callback(*childPtr);
         });
     }
 
