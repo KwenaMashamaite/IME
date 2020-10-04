@@ -254,7 +254,7 @@ namespace IME {
 
     bool TileMap::addChild(Index index, std::shared_ptr<Entity> child) {
         assert(child && "Object added to the tilemap cannot be null");
-        if (isIndexValid(index)) {
+        if (isIndexValid(index) && !hasChild(child)) {
             auto& targetTile = getTile(index);
             child->setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
             children_.push_back(std::move(child));
