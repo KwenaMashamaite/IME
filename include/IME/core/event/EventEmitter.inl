@@ -33,7 +33,7 @@ void EventEmitter::emit(const std::string &event, Args... args) {
         for (auto& listenerBase : listeners) {
             auto listener = std::dynamic_pointer_cast<Listener<Args...>>(listenerBase);
             if (listener && listener->callback_) {
-                std::invoke(listener->callback_, std::forward<Args>(args)...);
+                std::invoke(listener->callback_, args...);
                 if (listener->isCalledOnce_)
                     removeEventListener(event, listener->id_);
             }
