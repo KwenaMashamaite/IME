@@ -38,6 +38,14 @@ namespace IME {
             Bottom,
         };
 
+        enum class TileType {
+            Empty,
+            Obstacle,
+            Collectable,
+            Player,
+            Enemy
+        };
+
         class Tile : public IDrawable {
         public:
             /**
@@ -180,6 +188,21 @@ namespace IME {
             bool isCollidable(const Border &border) const;
 
             /**
+             * @brief Set the tile type
+             * @param tileType The tile type
+             *
+             * The tile type corresponds to the object that is in this tile
+             */
+            void setType(const TileType& tileType);
+
+
+            /**
+             * @brief Get the type of this tile
+             * @return The type of this tile
+             */
+            TileType getType() const;
+
+            /**
              * @brief Get the tiles id
              * @return The tiles id
              */
@@ -251,8 +274,11 @@ namespace IME {
             ~Tile() = default;
 
         private:
+            //Collision flag
             bool isCollideable_;
-            //Tiles id
+            //Stores the type of the object that will be in this tile
+            TileType tileType_;
+            //Stores the id of the actual object that will be in this tile
             char id_;
             //The position of the tile in the tilemap
             Index index_;

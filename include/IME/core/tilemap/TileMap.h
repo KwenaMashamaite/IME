@@ -1,5 +1,7 @@
 /**
- * @brief A Container for Tiles
+ * @brief Class for creating a visual 2D grid.
+ *
+ * The grid if made up of tiles for visual representation
  */
 
 #ifndef TILEMAP_H
@@ -7,7 +9,6 @@
 
 #include "IME/common/Position.h"
 #include "IME/common/Dimensions.h"
-#include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/entity/Entity.h"
 #include <unordered_map>
@@ -117,7 +118,7 @@ namespace IME {
          * @param isCollidable True to enable collision, otherwise false
          */
         void setCollidableByIndex(const std::initializer_list<Index>& locations,
-            bool isCollidable);
+                                  bool isCollidable);
 
         /**
          * @brief Enable or disable collisions for tiles in a range
@@ -150,32 +151,7 @@ namespace IME {
          * @return True if the object has been added or false if the index is
          *         invalid
          */
-        bool addChild(Index index, std::shared_ptr<Entity> child);
-
-        /**
-         * @brief Set the background of the tile amp
-         * @param filename Name of the background image
-         *
-         * The background image must
-         */
-        void setBackground(const std::string& filename, Position position);
-
-        /**
-         * @brief Scale the background image by an offset
-         * @param xOffset Horizontal offset
-         * @param yOffset Vertical offset
-         *
-         * The image will be cropped if the scaling goes beyond the tile borders
-         */
-        void scaleBackground(float xOffset, float yOffset);
-
-        /**
-         * @brief Show or hide the tilemap grid lines
-         * @param isVisible True to show or false to hide the grid lines
-         *
-         * The grid lines are visible by default
-         */
-        void setGridVisible(bool isVisible);
+        bool addChild(Index index, std::shared_ptr<IME::Entity> child);
 
         /**
          * @brief Check if the tilemap has a certain child object
@@ -185,12 +161,27 @@ namespace IME {
         bool hasChild(std::shared_ptr<Entity> childPtr);
 
         /**
-         * @brief Toggle the visibility state of the tilemap grid lines
-         *
-         * This function will show the grid lines if they are hidden, and
-         * vice versa
+         * @brief Get the child occupying a certain tile
+         * @param tilePos The position of the tile to get the occupant of
+         * @return The child occupying a tile at the specified location or a
+         *         nullptr if the tile is not occupied
          */
-        void toggleGridVisibility();
+        std::shared_ptr<Entity> getChild(Index index) const;
+
+        /**
+         * @brief Remove an entity from the tilemap
+         * @param index Index of the entity in the tilemap
+         * @return True if the entity was removed or false if the entity does not
+         *          exist at the specified index
+         */
+        bool removeChild(Index index);
+
+        /**
+         * @brief Move child to a different position in the tilemap
+         * @param child Child to move
+         * @param index New position of the child
+         */
+        void updateChild(std::shared_ptr<IME::Entity> child, Index index);
 
         /**
          * @brief Get the tile at at certain position
@@ -201,56 +192,6 @@ namespace IME {
          * A tile is invalid if it has the id of '!' or a negative position
          */
         Graphics::Tile& getTile(const Position& position);
-
-        /**
-         * @brief Get a tile at a certain index
-         * @param index Index of the tile to get
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTile(const Index& index);
-
-        /**
-         * @brief Get the tile above a tile at a given location
-         * @param index Index of the tile to get the tile above
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileAbove(const Index& index);
-
-        /**
-         * @brief Get the tile below a tile at a given location
-         * @param index Location of the tile to get the tile below
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileBelow(const Index& index);
-
-        /**
-         * @brief Get the tile to the left of a tile at a given location
-         * @param index Location of the tile to get the tile to the left of
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile & getTileLeftOf(const Index& index);
-
-        /**
-         * @brief Get the tile to the right of a tile at a given location
-         * @param index Location of the tile to get the tile to the right of
-         * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
-         *
-         * A tile is invalid if it has the id of '!' or a negative position
-         */
-        Graphics::Tile& getTileRightOf(const Index& index);
 
         /**
          * @brief Get the tile above a certain tile
@@ -291,6 +232,41 @@ namespace IME {
          * A tile is invalid if it has the id of '!' or a negative index
          */
         Graphics::Tile& getTileRightOf(const Graphics::Tile& tile);
+
+        /**
+         * @brief Set the background of the tile amp
+         * @param filename Name of the background image
+         *
+         * The background image must
+         */
+        void setBackground(const std::string& filename, Position position);
+
+        /**
+         * @brief Scale the background image by an offset
+         * @param xOffset Horizontal offset
+         * @param yOffset Vertical offset
+         *
+         * The image will be cropped if the scaling goes beyond the tile borders
+         */
+        void scaleBackground(float xOffset, float yOffset);
+
+        /**
+         * @brief Show or hide the tilemap grid lines
+         * @param isVisible True to show or false to hide the grid lines
+         *
+         * The grid lines are visible by default
+         */
+        void setGridVisible(bool isVisible);
+
+        /**
+         * @brief Get a tile at a certain index
+         * @param index Index of the tile to get
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTile(const Index& index);
 
         /**
          * @brief Render tile map on a render target
@@ -394,21 +370,6 @@ namespace IME {
         void createTiledMap();
 
         /**
-         * @brief Get the index of a tile from pixel coordinates
-         * @param position Coordinates to get index from
-         * @return Coordinates of the tile at the specified position or (-1,-1)
-         *         if the position is out of tile map bounds
-         */
-        Index getIndexFromPosition(const Position& position) const;
-
-        /**
-         * @brief Get the pixel coordinates of a tile from its index
-         * @param index The index of the tile to get the position for
-         * @return The position of tile in pixels
-         */
-        Position getCoordinatesFromIndex(Index index) const;
-
-        /**
          * @brief Calculate size related attributes
          *
          * This include map size, number of rows and columns, etc..
@@ -416,16 +377,44 @@ namespace IME {
         void computeDimensions();
 
         /**
-         * @brief Add an event listener to a tilemap collision event
-         * @param callback Function to execute when the event is raised
-         * @return The event listeners identification number
+         * @brief Get the tile above a tile at a given location
+         * @param index Index of the tile to get the tile above
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
          *
-         * A tilemap collision event occurs when an object tries to enter a
-         * tile that has been marked as collideable. The callback will be
-         * passed the object that caused the collision and the tile the object
-         * collided with respectively
+         * A tile is invalid if it has the id of '!' or a negative position
          */
-        int onTileMapCollision(Callback<Entity&, Graphics::Tile&> callback);
+        Graphics::Tile& getTileAbove(const Index& index);
+
+        /**
+         * @brief Get the tile below a tile at a given location
+         * @param index Location of the tile to get the tile below
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTileBelow(const Index& index);
+
+        /**
+         * @brief Get the tile to the left of a tile at a given location
+         * @param index Location of the tile to get the tile to the left of
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile & getTileLeftOf(const Index& index);
+
+        /**
+         * @brief Get the tile to the right of a tile at a given location
+         * @param index Location of the tile to get the tile to the right of
+         * @return The tile at the specified index or an invalid tile if the
+         *         specified index is out of bounds of the tilemap
+         *
+         * A tile is invalid if it has the id of '!' or a negative position
+         */
+        Graphics::Tile& getTileRightOf(const Index& index);
 
     private:
         //The Size of each tile in the tilemap
@@ -447,7 +436,7 @@ namespace IME {
         //Visual grid (second layer)
         std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
-        std::vector<std::shared_ptr<Entity>> children_;
+        std::vector<std::pair<Index, std::shared_ptr<Entity>>> children_;
         //Holds the tileset image properties associated with a tile id
         std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
         //The maps tileset image files
@@ -462,8 +451,8 @@ namespace IME {
         bool isObjectsDrawable_;
         //Tile returned when an invalid index is provided
         Graphics::Tile invalidTile_;
-        //Publishes the tile maps events
-        EventEmitter eventEmitter_;
+
+        friend class AdjacencyList;
     };
 }
 

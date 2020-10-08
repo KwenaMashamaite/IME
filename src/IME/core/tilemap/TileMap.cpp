@@ -6,8 +6,8 @@
 
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
-        : isGridVisible_(true), isBackgroundDrawable_(true), isTilesDrawable_(true),
-          isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
+            : isGridVisible_(true), isBackgroundDrawable_(false), isTilesDrawable_(true),
+              isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
@@ -35,22 +35,6 @@ namespace IME {
         isGridVisible_ = isVisible;
     }
 
-    bool TileMap::hasChild(std::shared_ptr<Entity> child) {
-        if (!child)
-            return false;
-
-        auto hasChild = false;
-        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
-            if (childPtr == child)
-                hasChild = true;
-        });
-        return hasChild;
-    }
-
-    void TileMap::toggleGridVisibility() {
-        setGridVisible(!isGridVisible_);
-    }
-
     Graphics::Tile& TileMap::getTile(const Position &position) {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
@@ -58,6 +42,22 @@ namespace IME {
                     return tile;
         }
         return invalidTile_;
+    }
+
+    Graphics::Tile &TileMap::getTileAbove(const Graphics::Tile &tile) {
+        return getTileAbove(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileBelow(const Graphics::Tile &tile) {
+        return getTileBelow(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileLeftOf(const Graphics::Tile &tile) {
+        return getTileLeftOf(tile.getIndex());
+    }
+
+    Graphics::Tile &TileMap::getTileRightOf(const Graphics::Tile &tile) {
+        return getTileRightOf(tile.getIndex());
     }
 
     void TileMap::setBackground(const std::string &filename, Position position) {
@@ -70,28 +70,19 @@ namespace IME {
             background_.setTextureRect(0, 0, mapSizeInPixels_.width, background_.getSize().height);
         else if (background_.getSize().height > mapSizeInPixels_.height)
             background_.setTextureRect(0, 0, background_.getSize().width, mapSizeInPixels_.height);
+        isBackgroundDrawable_ = true;
     }
 
     void TileMap::scaleBackground(float xOffset, float yOffset) {
-        background_.scale(xOffset, yOffset);
-        setBackground(background_.getTexture(), background_.getPosition());
+        if (isBackgroundDrawable_) {
+            background_.scale(xOffset, yOffset);
+            setBackground(background_.getTexture(), background_.getPosition());
+        }
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
         auto [row, colm] = index;
         return !(row >= numOfRows_ || row < 0 || colm >= numOfColms_ || colm < 0);
-    }
-
-    Index TileMap::getIndexFromPosition(const Position &position) const {
-        auto row = position.x / (tileSize_.width * position.y) / tileSize_.height;
-        auto colm = position.y / (tileSize_.height - position.x) / tileSize_.width;
-        return {static_cast<int>(row), static_cast<int>(colm)};
-    }
-
-    Position TileMap::getCoordinatesFromIndex(Index index) const {
-        auto x = (mapSizeInPixels_.width - mapSizeInPixels_.height) * tileSize_.width / 2.0f;
-        auto y = (mapSizeInPixels_.width + mapSizeInPixels_.height) * tileSize_.height / 2.0f;
-        return {x, y};
     }
 
     void TileMap::loadFromFile(const std::string &filename, const char& separator) {
@@ -143,6 +134,7 @@ namespace IME {
     }
 
     void TileMap::createTiledMap() {
+        auto tileSpacing = 1;
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Graphics::Tile>{};
             for (auto j = 0u; j < mapData_[i].size(); j++) {
@@ -150,9 +142,9 @@ namespace IME {
                 if (i == 0 && j == 0)
                     tile.setPosition(mapPos_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height});
+                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height + tileSpacing});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.width, row[j - 1].getPosition().y});
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.width + tileSpacing, row[j - 1].getPosition().y});
 
                 tile.setId(mapData_[i][j]);
                 tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
@@ -252,15 +244,55 @@ namespace IME {
         return false;
     }
 
-    bool TileMap::addChild(Index index, std::shared_ptr<Entity> child) {
+    bool TileMap::addChild(Index index, std::shared_ptr<IME::Entity> child) {
         assert(child && "Object added to the tilemap cannot be null");
         if (isIndexValid(index) && !hasChild(child)) {
             auto& targetTile = getTile(index);
             child->setPosition(targetTile.getPosition().x, targetTile.getPosition().y);
-            children_.push_back(std::move(child));
+            children_.emplace_back(index, std::move(child));
             return true;
         }
         return false;
+    }
+
+    bool TileMap::hasChild(std::shared_ptr<Entity> child) {
+        if (!child)
+            return false;
+
+        auto hasChild = false;
+        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
+            if (childPtr.second == child)
+                hasChild = true;
+        });
+        return hasChild;
+    }
+
+    std::shared_ptr<Entity> TileMap::getChild(Index index) const {
+        for (auto& [childIndex, child] : children_) {
+            if (childIndex == index)
+                return child;
+        }
+        return nullptr;
+    }
+
+    bool TileMap::removeChild(Index index) {
+        for (auto& child : children_) {
+            if (child.first == index) {
+                child.first = {-1, -1};
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void TileMap::updateChild(std::shared_ptr<IME::Entity> child, Index index) {
+        for (auto& childInGrid : children_) {
+            if (childInGrid.second == child) {
+                childInGrid.first = index;
+                childInGrid.second->setPosition(getTile(index).getPosition().x,
+                                                getTile(index).getPosition().y);
+            }
+        }
     }
 
     void TileMap::addTilesetImageData(const char &id, Position startPos, Dimensions size) {
@@ -298,16 +330,16 @@ namespace IME {
     void TileMap::forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback) {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
-                tiledMap_[startPos.row].begin() + endPos.colm,
-                [&](Graphics::Tile& tile) { callback(tile);}
+                          tiledMap_[startPos.row].begin() + endPos.colm,
+                          [&](Graphics::Tile& tile) { callback(tile);}
             );
         }
     }
 
     void TileMap::forEachChild(Callback<Entity&> callback) {
-        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
-            if (childPtr)
-                callback(*childPtr);
+        std::for_each(children_.begin(), children_.end(), [&](auto& child) {
+            if (child.second)
+                callback(*child.second);
         });
     }
 
@@ -325,26 +357,6 @@ namespace IME {
 
     Graphics::Tile& TileMap::getTileRightOf(const Index &index) {
         return getTile(Index{index.row, index.colm + 1});
-    }
-
-    Graphics::Tile &TileMap::getTileAbove(const Graphics::Tile &tile) {
-        return getTileAbove(tile.getIndex());
-    }
-
-    Graphics::Tile &TileMap::getTileBelow(const Graphics::Tile &tile) {
-        return getTileBelow(tile.getIndex());
-    }
-
-    Graphics::Tile &TileMap::getTileLeftOf(const Graphics::Tile &tile) {
-        return getTileLeftOf(tile.getIndex());
-    }
-
-    Graphics::Tile &TileMap::getTileRightOf(const Graphics::Tile &tile) {
-        return getTileRightOf(tile.getIndex());
-    }
-
-    int TileMap::onTileMapCollision(Callback<Entity&, Graphics::Tile &> callback) {
-        return -1; //
     }
 
     bool TileMap::isGridVisible() const {

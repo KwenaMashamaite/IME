@@ -1,5 +1,6 @@
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Window.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics {
@@ -14,6 +15,7 @@ namespace IME::Graphics {
         setPosition(position);
         setTextureRect({0, 0}, size);
         borderCollisionFlags_.insert({Border::Left, false});
+        tileType_ = TileType::Empty;
 
         //Flag all four sides of the tile as not collideable
         for (auto i = 0u; i < 4u; i++)
@@ -84,9 +86,9 @@ namespace IME::Graphics {
 
     bool Tile::isCollidable() const {
         return isCollidable(Border::Left)
-           && isCollidable(Border::Right)
-           && isCollidable(Border::Top)
-           && isCollidable(Border::Bottom);
+               && isCollidable(Border::Right)
+               && isCollidable(Border::Top)
+               && isCollidable(Border::Bottom);
     }
 
     void Tile::setCollidable(bool isCollidable) {
@@ -100,7 +102,7 @@ namespace IME::Graphics {
 
     bool Tile::contains(float x, float y) const {
         return ((x >= getPosition().x && x <= getPosition().x + getSize().width)
-            && (y >= getPosition().y && y <= getPosition().y + getSize().height));
+                && (y >= getPosition().y && y <= getPosition().y + getSize().height));
     }
 
     Sprite &Tile::getSprite() {
@@ -136,5 +138,13 @@ namespace IME::Graphics {
 
     Colour Tile::getFillColour() const {
         return Utility::convertFrom3rdPartyColour(tileBoarder_.getFillColor());
+    }
+
+    void Tile::setType(const TileType &tileType) {
+        tileType_ = tileType;
+    }
+
+    TileType Tile::getType() const {
+        return tileType_;
     }
 }
