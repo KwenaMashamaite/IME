@@ -12,16 +12,18 @@
 #include <queue>
 
 namespace IME {
-    class BFSPathFinder {
+    struct Node {
+        Index parent; //Index of this nodes parent in the grid
+        Index index; //Position of this node in the grid
+    };
+
+    class BFSPathFinder : IGridPathFinder {
     public:
         /**
          * @brief Initialize the algorithm
-         * @param grid Grid to find path in
-         *
-         * The @see findPath() method will not work if the algorithm is not
-         * initialized, The initialization is done only once.
+         * @param gridSize Size of the grid
          */
-        void initialize(IME::TileMap& grid);
+        explicit BFSPathFinder(Dimensions gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid
@@ -30,27 +32,38 @@ namespace IME {
          * @return A vector containing the path from the source to the destination
          *         if reachable, otherwise an empty vector
          */
-        std::vector<Index> findPath(Index sourceTile, Index targetTile);
+        std::vector<Index> findPath(TileMap& grid, Index sourceTile, Index targetTile) override;
 
     private:
-        struct Node {
-            Index parent; //Index of this nodes parent in the grid
-            Index index; //Position of this node in the grid
-        };
+        /**
+         * @brief Finds the target using bfs algorithm
+         * @param source The starting position
+         * @param target The destination
+         * @param nodeToVisit Vector to store nodes that must be visited on the next run
+         * @param exploredNodes A vector to stores nodes that have been visited
+         */
+        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit, std::vector<Node>& exploredNodes);
 
+        /**
+         * @brief Generate path from the source to the target
+         * @param exploredNodes Nodes explored before the target was found
+         * @return The path from the source to the target
+         *
+         * This function assumes that the last node in the container is the
+         * target node.
+         */
+        std::vector<Index> backtrack(const std::vector<Node>& exploredNodes);
+
+        /**
+         * @brief Set visited nodes as not visited
+         */
+        void reset();
+
+    private:
         //A list containing a list of adjacent nodes for each accessible node in the grid
         AdjacencyList adjacencyList_;
         //Vector storing the visited state of a grid node
         std::vector<std::vector<bool>> visited_;
-
-        /**
-         * @brief Finds the target using bfs algorithm
-         * @param source The starting position
-         * @param target The position to be found
-         * @param nodeToVisit This vector will be populated with a list of nodes
-         * @param exploredNodes A vec
-         */
-        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit, std::vector<Node>& exploredNodes);
     };
 }
 

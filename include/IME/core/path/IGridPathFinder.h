@@ -6,18 +6,20 @@
 #define GRIDPATHFINDER_H
 
 #include "IME/core/tilemap/TileMap.h"
+#include <vector>
 
 namespace IME {
     class IGridPathFinder {
     public:
-
         /**
          * @brief Find a path from a source tile to a target tile in a grid
-         * @param gird Grid to find path for
+         * @param gird Grid to find path in
          * @param sourceNode The starting tile
          * @param source The destination tile
+         * @return The path from the source to the destination if the destination
+         *         is reachable from the source, otherwise an empty vector
          */
-        virtual void findPath(Index sourceNode, Index source) = 0;
+        virtual std::vector<Index> findPath(TileMap& grid, Index sourceNode, Index source) = 0;
     };
 }
 

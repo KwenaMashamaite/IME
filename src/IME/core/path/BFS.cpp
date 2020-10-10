@@ -1,23 +1,21 @@
 #include "IME/core/path/BFS.h"
-#include <queue>
 #include <algorithm>
 
 namespace IME {
-    void BFSPathFinder::initialize(TileMap &grid) {
-        adjacencyList_.generateFrom(grid);
-        for (auto i = 0; i < grid.getSizeInTiles().height; i++) {
+    BFSPathFinder::BFSPathFinder(Dimensions gridSize) {
+        for (auto i = 0; i < gridSize.height; i++) {
             auto innerVector = std::vector<bool>{};
-            for (auto j = 0; j < grid.getSizeInTiles().width; j++)
+            for (auto j = 0; j < gridSize.width; j++)
                 innerVector.push_back(false);
             visited_.push_back(innerVector);
         }
     }
 
-    std::vector<Index> BFSPathFinder::findPath(Index sourceTile, Index targetTile) {
+    std::vector<Index> BFSPathFinder::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
         if (sourceTile == targetTile)
             return std::vector<Index>{};
+        adjacencyList_.generateFrom(grid);
         auto exploredPath = std::vector<Node>{};
-        auto path = std::vector<Index>{}; //Stores the shortest path to the target
         auto nodeToVisit = std::queue<Node>(); //Keeps a list of nodes to be visited
         nodeToVisit.push({sourceTile, sourceTile});
         while (!nodeToVisit.empty()) {
@@ -26,27 +24,18 @@ namespace IME {
             bfs(node, targetTile, nodeToVisit, exploredPath);
         }
 
-        //Backtracking
+        reset();
         if (exploredPath.back().index == targetTile) { //Found target
-            path.push_back(targetTile);
-            auto tileParent = exploredPath.back().parent;
-            for (auto i = exploredPath.size() - 2; i > 0; i--) { //-2 because we already saved the last node
-                if (exploredPath[i].index == tileParent) {
-                    path.push_back(exploredPath[i].index);
-                    tileParent = exploredPath.at(i).parent;
-                }
-            }
-            std::reverse(path.begin(), path.end());
+            return backtrack(exploredPath);
         } else
             return std::vector<Index>{};
+    }
 
-        //Clear flags
+    void BFSPathFinder::reset() {
         for (auto i = 0; i < visited_.size(); i++) {
             for (auto j = 0; j < visited_[0].size(); j++)
                 visited_[i][j] = false;
         }
-
-        return path;
     }
 
     void BFSPathFinder::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
@@ -63,5 +52,19 @@ namespace IME {
             for (auto& neighbour : adjacencyList_.getNeighbours(source.index))
                 nodeToVisit.push({source.index, neighbour});
         }
+    }
+
+    std::vector<Index> BFSPathFinder::backtrack(const std::vector<Node> &exploredNodes) {
+        auto path = std::vector<Index>{};
+        path.push_back(exploredNodes.back().index);
+        auto tileParent = exploredNodes.back().parent;
+        for (auto i = exploredNodes.size() - 2; i > 0; i--) { //-2 because we already saved the last node
+            if (exploredNodes[i].index == tileParent) {
+                path.push_back(exploredNodes[i].index);
+                tileParent = exploredNodes.at(i).parent;
+            }
+        }
+        std::reverse(path.begin(), path.end());
+        return path;
     }
 }
