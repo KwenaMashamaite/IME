@@ -20,8 +20,8 @@ namespace IME {
                 neighbours.push_back({row, colm});
         };
         auto adjList = AdjList();
-        for (auto i = 0; i < tileMap.tiledMap_.size(); i++) {
-            for (auto j = 0 ; j < tileMap.tiledMap_[i].size(); j++) {
+        for (auto i = 0; i < tileMap.getSizeInTiles().height; i++) {
+            for (auto j = 0 ; j < tileMap.getSizeInTiles().width; j++) {
                 if (tileMap.getTile(Index{i, j}).getType() == Graphics::TileType::Obstacle)
                     continue;
                 auto neighbours = std::vector<Index>{};

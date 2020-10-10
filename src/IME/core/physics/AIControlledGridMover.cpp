@@ -86,11 +86,11 @@ namespace IME {
             if (movementType_ == MovementType::Random)
                 generateNewDirOfMotion();
             else if (movementType_ == MovementType::TargetEntity) {
-                auto pathToPlayer = pathFinder_.findPath(grid_,
-                     grid_.getTile(controlledEntity_->getPosition()).getIndex(),
-                     grid_.getTile(target_->getPosition()).getIndex());
-                if (!pathToPlayer.empty())
-                    generateNewDirOfMotion(pathToPlayer.front());
+                auto pathToTarget = pathFinder_.findPath(grid_,
+                    grid_.getTile(controlledEntity_->getPosition()).getIndex(),
+                    grid_.getTile(target_->getPosition()).getIndex());
+                if (!pathToTarget.empty())
+                    generateNewDirOfMotion(pathToTarget.front());
             }
         }
     }

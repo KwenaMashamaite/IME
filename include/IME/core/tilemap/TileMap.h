@@ -451,8 +451,6 @@ namespace IME {
         bool isObjectsDrawable_;
         //Tile returned when an invalid index is provided
         Graphics::Tile invalidTile_;
-
-        friend class AdjacencyList;
     };
 }
 
