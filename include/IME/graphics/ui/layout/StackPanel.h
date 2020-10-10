@@ -6,7 +6,7 @@
 #define STACKPANEL_H
 
 #include "Panel.h"
-#include "IME/graphics/ui/control/Label.h"
+#include "IME/graphics/ui/elements/Label.h"
 
 namespace IME {
     namespace Graphics::UI {
@@ -106,7 +106,7 @@ namespace IME {
             //Panel orientation state
             Orientation orientation_;
         };
-    } // namespace Gui
+    }
 } // namespace IME
 
 #endif

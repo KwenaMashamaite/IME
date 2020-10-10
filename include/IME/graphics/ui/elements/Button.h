@@ -110,7 +110,7 @@ namespace IME {
             //Button colours when mouse cursor leaves it
             Colours defaultColours_;
         };
-    } // namespace Gui
+    }
 } // namespace IME
 
 #endif

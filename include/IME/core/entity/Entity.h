@@ -7,6 +7,7 @@
 
 #include "IME/common/Dimensions.h"
 #include "IME/common/Position.h"
+#include "IME/common/Direction.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IEntityState.h"
 #include <stack>
@@ -16,17 +17,6 @@
 namespace IME {
     class Entity {
     public:
-        /**
-         * @brief Directions in which an entity can face
-         */
-        enum class Direction {
-            None,
-            Left,
-            Right,
-            Up,
-            Down
-        };
-
         /**
          * @brief Construct entity
          * @param boundingRect Bounding rectangle of the entity

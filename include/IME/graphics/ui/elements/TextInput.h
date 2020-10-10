@@ -108,7 +108,7 @@ namespace IME {
             //
             std::size_t caretPosition_;
         };
-    } // namespace Gui
+    }
 } // namespace IME
 
 #endif

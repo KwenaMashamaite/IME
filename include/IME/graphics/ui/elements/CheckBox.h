@@ -34,4 +34,5 @@ namespace IME {
         };
     }
 }
-#endif //IME_CHECKBOX_H
+
+#endif

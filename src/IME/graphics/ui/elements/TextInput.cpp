@@ -1,6 +1,5 @@
-#include "IME/graphics/ui/control/TextInput.h"
+#include "IME/graphics/ui/elements/TextInput.h"
 #include "IME/core/input/Mouse.h"
-#include "IME/core/input/Keyboard.h"
 
 namespace IME::Graphics::UI {
     TextInput::TextInput(const std::string& placeholder) : ClickableUIElement(placeholder),

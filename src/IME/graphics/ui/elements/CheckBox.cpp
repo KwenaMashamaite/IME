@@ -1,4 +1,4 @@
-#include "IME/graphics/ui/control/CheckBox.h"
+#include "IME/graphics/ui/elements/CheckBox.h"
 
 namespace IME::Graphics::UI {
     CheckBox::CheckBox() : ClickableUIElement("Checkbox"), isChecked_(false) {

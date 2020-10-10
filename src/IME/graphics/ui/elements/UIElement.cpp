@@ -1,6 +1,5 @@
-#include "IME/graphics/ui/control/UIElement.h"
+#include "IME/graphics/ui/elements/UIElement.h"
 #include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
 
 namespace IME::Graphics::UI {
     UIElement::UIElement() : UIElement("")

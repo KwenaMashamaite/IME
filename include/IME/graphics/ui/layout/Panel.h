@@ -5,7 +5,7 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include "IME/graphics/ui/control/UIElement.h"
+#include "IME/graphics/ui/elements/UIElement.h"
 #include "IME/graphics/IDrawable.h"
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>

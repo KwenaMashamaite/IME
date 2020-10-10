@@ -15,7 +15,7 @@ namespace IME {
         publishEvent("positionChanged", position_.x, position_.y);
     }
 
-    void Entity::setDirection(Entity::Direction dir) {
+    void Entity::setDirection(Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
             publishEvent("directionChanged", direction_);
@@ -69,7 +69,7 @@ namespace IME {
         return isInvincible_;
     }
 
-    Entity::Direction Entity::getDirection() const {
+    Direction Entity::getDirection() const {
         return direction_;
     }
 

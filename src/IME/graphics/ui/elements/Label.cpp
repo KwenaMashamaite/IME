@@ -1,4 +1,4 @@
-#include "IME/graphics/ui/control/Label.h"
+#include "IME/graphics/ui/elements/Label.h"
 
 namespace IME::Graphics::UI {
     Label::Label() : Label("")

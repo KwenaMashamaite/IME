@@ -1,4 +1,4 @@
-#include "IME/graphics/ui/control/ClickableUIElement.h"
+#include "IME/graphics/ui/elements/ClickableUIElement.h"
 #include "IME/core/input/Mouse.h"
 
 namespace IME::Graphics::UI {

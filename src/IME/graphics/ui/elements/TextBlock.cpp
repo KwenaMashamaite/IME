@@ -1,4 +1,4 @@
-#include "IME/graphics/ui/control/TextBlock.h"
+#include "IME/graphics/ui/elements/TextBlock.h"
 
 namespace IME::Graphics::UI {
     TextBlock::TextBlock(const std::string &textContent)
