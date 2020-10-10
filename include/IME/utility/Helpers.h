@@ -106,9 +106,20 @@ namespace IME {
          */
         static auto createRandomNumGenerator(int min, int max) {
             return [distribution = std::uniform_int_distribution(min, max),
-                    randomEngine = std::mt19937{std::random_device{}()}]() mutable {
-                        return distribution(randomEngine);
-                    };
+                randomEngine = std::mt19937{std::random_device{}()}]() mutable {
+                    return distribution(randomEngine);
+            };
+        }
+
+        /**
+         * @brief Create a random colour
+         * @return A random colour
+         */
+        static Graphics::Colour generateRandomColour() {
+            auto gen_random_num_between_0_and_255 = createRandomNumGenerator(0, 255);
+            return {static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                    static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                    static_cast<unsigned int>(gen_random_num_between_0_and_255()),255};
         }
     }
 }
