@@ -3,7 +3,7 @@
 
 namespace IME {
     Entity::Entity(const Dimensions &boundingRect)
-        : boundingRect_(boundingRect), isInvincible_(false), isAlive_(true), isCollidable_(false),
+        : boundingRect_(boundingRect), isVulnerable_(true), isAlive_(true), isCollidable_(false),
           direction_(Direction::None), position_({0, 0})
     {}
 
@@ -27,23 +27,23 @@ namespace IME {
     }
 
     void Entity::setAlive(bool isAlive) {
-        if (isAlive_ == isAlive || (isAlive_ && isInvincible_))
+        if (isAlive_ == isAlive || (isAlive_ && !isVulnerable_))
             return;
         isAlive_ = isAlive;
 
         if (!isAlive_)
             publishEvent("killed");
         else
-            publishEvent("revived"); //By default entity is alive
+            publishEvent("revived"); //By default entity is alive (Will be killed first)
     }
 
-    void Entity::setInvincible(bool isInvincible) {
-        if (isInvincible_ != isInvincible) {
-            isInvincible_ = isInvincible;
-            if (isInvincible_)
-                publishEvent("godModeEnabled");
+    void Entity::setVulnerable(bool isVulnerable) {
+        if (isVulnerable_ != isVulnerable) {
+            isVulnerable_ = isVulnerable;
+            if (isVulnerable_)
+                publishEvent("vulnerable");
             else
-                publishEvent("godModeDisabled");
+                publishEvent("inVulnerable");
         }
     }
 
@@ -65,8 +65,8 @@ namespace IME {
         return isCollidable_;
     }
 
-    bool Entity::isInvincible() const {
-        return isInvincible_;
+    bool Entity::isVulnerable() const {
+        return isVulnerable_;
     }
 
     Direction Entity::getDirection() const {

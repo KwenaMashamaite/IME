@@ -52,15 +52,16 @@ namespace IME {
         void setAlive(bool isAlive);
 
         /**
-         * @brief Set entity as invincible or not
-         * @param isInvincible True to set invincible, otherwise false
+         * @brief Set entity as vulnerable or inVulnerable
+         * @param isVulnerable True to set vulnerable or false to set invulnerable
          *
-         * An invincible entity cannot be killed. That is, @see setAlive(bool)
-         * on an entity that is alive and invincible will always fail.
+         * A vulnerable entity can be killed whilst an invulnerable entity
+         * cannot be killed. That is, @see setAlive(bool) on an entity that is
+         * alive and invulnerable will always fail.
          *
-         * The entity is not invincible by default
+         * The entity is vulnerable by default
          */
-        void setInvincible(bool isInvincible);
+        void setVulnerable(bool isVulnerable);
 
         /**
          * @brief Enable or disable collision for this entity
@@ -89,10 +90,12 @@ namespace IME {
         Position getPosition() const;
 
         /**
-         * @brief Check if entity is invincible or not
-         * @return True if entity is invincible, otherwise false
+         * @brief Check if entity is vulnerable or not
+         * @return True if entity is vulnerable or false if inVulnerable
+         *
+         * @see setVulnerable(bool)
          */
-        bool isInvincible() const;
+        bool isVulnerable() const;
 
         /**
          * @brief Check if entity is collidable or not
@@ -168,8 +171,8 @@ namespace IME {
         std::stack<std::shared_ptr<IEntityState>> states_;
         //The entities bounding rectangle
         Dimensions boundingRect_;
-        //Invincibility state
-        bool isInvincible_;
+        //Vulnerability state state
+        bool isVulnerable_;
         //The entities alive state
         bool isAlive_;
         //The entities collidable state
@@ -188,7 +191,7 @@ namespace IME {
     }
 
     template<typename...Args>
-    void Entity::publishEvent(const std::string& event, Args&&...args) {
+    inline void Entity::publishEvent(const std::string& event, Args&&...args) {
         eventEmitter_.emit(event, std::forward<Args>(args)...);
     }
 }
