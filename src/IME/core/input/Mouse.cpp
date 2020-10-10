@@ -8,19 +8,21 @@ namespace IME::Input {
 
     void Mouse::handleEvent(sf::Event event) {
         if (event.type == sf::Event::MouseButtonPressed)
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down");
+            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down",
+                event.mouseButton.x, event.mouseButton.y);
         else if (event.type == sf::Event::MouseButtonReleased)
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up");
+            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up",
+                event.mouseButton.x, event.mouseButton.y);
         else if (event.type == sf::Event::MouseMoved)
             eventEmitter_.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
     }
 
-    int Mouse::onButtonUp(Button button, Callback<> callback) {
+    int Mouse::onButtonUp(Button button, Callback<int, int> callback) {
         return  eventEmitter_.addEventListener(
             std::to_string(static_cast<int>(button)) + "Up", std::move(callback));
     }
 
-    int Mouse::onButtonDown(Button button, Callback<> callback) {
+    int Mouse::onButtonDown(Button button, Callback<int, int> callback) {
         return eventEmitter_.addEventListener(
             std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
     }

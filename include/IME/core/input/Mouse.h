@@ -51,9 +51,10 @@ namespace IME {
              * @return Event listeners identification number
              *
              * A button up event fires when a mouse button is released. This event always
-             * fires after a mouse button down event @see onButtonDown(Button, Callback)
+             * fires after a mouse button down event @see onButtonDown(Button, Callback).
+             * The callback will be passes the coordinates of where the button was released
              */
-            int onButtonUp(Button button, Callback<> callback);
+            int onButtonUp(Button button, Callback<int, int> callback);
 
             /**
              * @brief Add an event listener to mouse button down event
@@ -62,9 +63,11 @@ namespace IME {
              * @return Event listeners identification number
              *
              * A button down event fires when you depress a mouse button. @note This
-             * event does not fire repetitively while the mouse button remains depressed
+             * event does not fire repetitively while the mouse button remains depressed.
+             * The callback will be passes the coordinates of where the button was
+             * depressed
              */
-            int onButtonDown(Button button, Callback<> callback);
+            int onButtonDown(Button button, Callback<int, int> callback);
 
             /**
              * @brief Add an event listener to a mouse move event
@@ -99,7 +102,7 @@ namespace IME {
             //Event Emitter/publisher
             EventEmitter eventEmitter_{};
         };
-    } // namespace Gui
+    }
 } // namespace IME
 
 #endif

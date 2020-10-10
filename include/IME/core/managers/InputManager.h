@@ -81,13 +81,21 @@ namespace IME {
              * @param callback Function to execute when the mouse event is raised
              * @return The event listeners identification number or -1 if the
              *         specified mouse event is invalid
+             *
+             * The callback will be passed the coordinates of where the mouse
+             * event took place. That is, the coordinates of where the mouse was
+             * depressed or released
              */
-            int addMouseButtonListener(Mouse::Event event, Mouse::Button button, Callback<> callback);
+            int addMouseButtonListener(Mouse::Event event, Mouse::Button button,
+                Callback<int, int> callback);
 
             /**
              * @brief Add an event listener to a mouse moved event
              * @param callback Function to execute when the mouse is moved
              * @return The event listeners identification number
+             *
+             * The callback will be invoked and passed the coordinates of the
+             * mouse cursor everytime the mouse moves
              */
             int addMouseMovedListener(Callback<int, int> callback);
 

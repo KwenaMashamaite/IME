@@ -20,7 +20,7 @@ namespace IME::Input {
     }
 
     int InputManager::addMouseButtonListener(Mouse::Event event, Mouse::Button button,
-        Callback<> callback)
+        Callback<int, int> callback)
     {
         if (event == Mouse::Event::MouseDown)
             mouse_.onButtonDown(button, std::move(callback));
