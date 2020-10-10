@@ -1,7 +1,7 @@
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/tilemap/TileMapParser.h"
-#include "IME/graphics/Window.h"
 #include "IME/core/managers/ResourceManager.h"
+#include "IME/graphics/Window.h"
 #include <cassert>
 
 namespace IME {
@@ -28,10 +28,7 @@ namespace IME {
         if (isGridVisible_ == isVisible)
             return;
 
-        forEachTile([=](Graphics::Tile& tile) {
-            tile.setBorderVisible(isVisible);
-        });
-
+        isTilesDrawable_ = isVisible;
         isGridVisible_ = isVisible;
     }
 
@@ -290,7 +287,7 @@ namespace IME {
             if (childInGrid.second == child) {
                 childInGrid.first = index;
                 childInGrid.second->setPosition(getTile(index).getPosition().x,
-                                                getTile(index).getPosition().y);
+                getTile(index).getPosition().y);
             }
         }
     }
@@ -330,8 +327,8 @@ namespace IME {
     void TileMap::forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback) {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
-                          tiledMap_[startPos.row].begin() + endPos.colm,
-                          [&](Graphics::Tile& tile) { callback(tile);}
+                tiledMap_[startPos.row].begin() + endPos.colm,
+                [&](Graphics::Tile& tile) { callback(tile);}
             );
         }
     }

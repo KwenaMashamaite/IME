@@ -8,7 +8,7 @@ namespace IME::Graphics {
         isCollideable_ = false;
         id_ = '\0';
         index_ = {-1, -1}; //Invalid index
-        tileBoarder_.setSize(sf::Vector2f{size.width, size.height});
+        setSize(size.width, size.height);
         tileBoarder_.setOutlineColor(sf::Color::White);
         tileBoarder_.setOutlineThickness(-1.0f);
         tileBoarder_.setFillColor(sf::Color::Transparent);
@@ -37,6 +37,14 @@ namespace IME::Graphics {
 
     void Tile::setPosition(const Position &position) {
         setPosition(position.x, position.y);
+    }
+
+    void Tile::setSize(float width, float height) {
+        tileBoarder_.setSize(sf::Vector2f{width, height});
+    }
+
+    void Tile::setSize(Dimensions size) {
+        setSize(size.width, size.height);
     }
 
     void Tile::setId(const char &id) {

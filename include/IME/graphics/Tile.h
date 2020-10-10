@@ -119,6 +119,19 @@ namespace IME {
             void setPosition(const Position &position);
 
             /**
+             * @brief Set the size of the tile
+             * @param width The horizontal size
+             * @param height The vertical size
+             */
+            void setSize(float width, float height);
+
+            /**
+             * @brief Set the size of the tile
+             * @param size New tile size
+             */
+            void setSize(Dimensions size);
+
+            /**
              * @brief Get the size of the tile
              * @return The size of the tile
              */
