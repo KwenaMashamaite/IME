@@ -59,9 +59,9 @@ namespace IME {
                 }
         };
 
-        setDefaultValueIfNotSet("title", "Infinite Motion Engine");
-        setDefaultValueIfNotSet("width", "600.0f");
-        setDefaultValueIfNotSet("height", "600.0f");
+        setDefaultValueIfNotSet("windowTitle", "Infinite Motion Engine");
+        setDefaultValueIfNotSet("windowWidth", "600.0f");
+        setDefaultValueIfNotSet("windowHeight", "600.0f");
         setDefaultValueIfNotSet("fullscreen", "0");
         setDefaultValueIfNotSet("iconPath", "");
         setDefaultValueIfNotSet("fpsLimit", "60");
@@ -70,9 +70,9 @@ namespace IME {
     void Engine::initRenderTarget() {
         auto desktopWidth = sf::VideoMode::getDesktopMode().width;
         auto desktopHeight = sf::VideoMode::getDesktopMode().height;
-        auto title = settings_.getValueFor("title");
-        auto width = std::stof(settings_.getValueFor("width"));
-        auto height = std::stof(settings_.getValueFor("height"));
+        auto title = settings_.getValueFor("windowTitle");
+        auto width = std::stof(settings_.getValueFor("windowWidth"));
+        auto height = std::stof(settings_.getValueFor("windowHeight"));
         auto isFullscreen = static_cast<bool>(std::stoi(settings_.getValueFor("fullscreen")));
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
             window_.create(title, desktopWidth, desktopHeight, Graphics::Window::Style::Fullscreen);
