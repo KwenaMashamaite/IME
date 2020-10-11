@@ -1,9 +1,9 @@
 template<typename... Args>
-void EventManager::fireEvent(const std::string &event, Args &&... args) {
+void EventDispatcher::dispatchEvent(const std::string &event, Args &&... args) {
     eventEmitter_.emit(event, std::forward<Args>(args)...);
 }
 
 template<typename... Args>
-int EventManager::onEvent(const std::string &event, Callback<Args...> callback) {
+int EventDispatcher::onEvent(const std::string &event, Callback<Args...> callback) {
     return eventEmitter_.addEventListener(event, std::move(callback));
 }

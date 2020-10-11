@@ -1,30 +1,38 @@
 /**
- * @brief
+ * @brief A singleton class that creates a communication interface between
+ *        separate parts of a program through event dispatching
+ *
+ * @warning This classes instance is accessible from anywhere withing the program,
+ * however the instance is destroyed when the last pointer to it goes out of scope.
+ * This means that all event listeners that have been registered will be destroyed
+ * and a call to dispatchEvent will not do anything. Therefore there must be
+ * at least one pointer to the class instance that keeps it alive for as long
+ * as its being used. @see instance()
  */
 
-#ifndef EVENTMANAGER_H
-#define EVENTMANAGER_H
+#ifndef EVENTDISPATCHER_H
+#define EVENTDISPATCHER_H
 
-#include "IME/core/event/EventEmitter.h"
+#include "EventEmitter.h"
 #include <memory>
 #include <string>
 
 namespace IME {
-    class EventManager {
+    class EventDispatcher {
     public:
         /**
          * @brief Copy constructor
          */
-        EventManager(const EventManager&) = delete;
+        EventDispatcher(const EventDispatcher&) = delete;
 
         /**
          * @brief Assignment operator
          */
-        EventManager& operator=(const EventManager&) = delete;
+        EventDispatcher& operator=(const EventDispatcher&) = delete;
 
         /**
          * @brief Add an event listener to an event
-         * @param event Event to add event listener to
+         * @param event Event to add an event listener to
          * @param callback Function to execute when the event is fired
          * @return The event listeners identification number
          */
@@ -33,13 +41,13 @@ namespace IME {
 
         /**
          * @brief Fire an event
-         * @param event Event to fire
-         * @param args Arguments passed to event listeners
+         * @param event Name of the event to fire
+         * @param args Arguments to be passed to event listeners
          *
          * This function will invoke all event listeners of the fired event
          */
         template<typename... Args>
-        void fireEvent(const std::string& event, Args&& ...args);
+        void dispatchEvent(const std::string& event, Args&& ...args);
 
         /**
          * @brief Remove a listener from an event
@@ -55,22 +63,22 @@ namespace IME {
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
-        static std::shared_ptr<EventManager> instance();
+        static std::shared_ptr<EventDispatcher> instance();
 
     private:
         /**
          * @brief Default constructor
          */
-        EventManager() = default;
+        EventDispatcher() = default;
 
     private:
         //The sole class instance
-        std::shared_ptr<EventManager> instance_;
+        std::shared_ptr<EventDispatcher> instance_;
         //Event publisher
         EventEmitter eventEmitter_;
     };
 
-    #include "IME/core/managers/EventManager.inl"
+    #include "EventDispatcher.inl"
 }
 
 #endif
