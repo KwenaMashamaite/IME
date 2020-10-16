@@ -26,7 +26,9 @@ namespace IME {
 
         reset();
         if (exploredPath.back().index == targetTile) { //Found target
-            return backtrack(exploredPath);
+            auto path = std::vector<Index>{};
+            backtrack(exploredPath, path);
+            return path;
         } else
             return std::vector<Index>{};
     }
@@ -41,8 +43,7 @@ namespace IME {
     void BFSPathFinder::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
         if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than twice
             return;
-
-        if (source.index == target) {
+        else if (source.index == target) {
             exploredNodes.push_back(source);
             while (!nodeToVisit.empty())
                 nodeToVisit.pop();
@@ -54,8 +55,7 @@ namespace IME {
         }
     }
 
-    std::vector<Index> BFSPathFinder::backtrack(const std::vector<Node> &exploredNodes) {
-        auto path = std::vector<Index>{};
+    void BFSPathFinder::backtrack(const std::vector<Node> &exploredNodes, std::vector<Index>& path) {
         path.push_back(exploredNodes.back().index);
         auto tileParent = exploredNodes.back().parent;
         for (auto i = exploredNodes.size() - 2; i > 0; i--) { //-2 because we already saved the last node
@@ -65,6 +65,5 @@ namespace IME {
             }
         }
         std::reverse(path.begin(), path.end());
-        return path;
     }
 }

@@ -47,12 +47,13 @@ namespace IME {
         /**
          * @brief Generate path from the source to the target
          * @param exploredNodes Nodes explored before the target was found
+         * @param path Vector to populate with path
          * @return The path from the source to the target
          *
          * This function assumes that the last node in the container is the
          * target node.
          */
-        std::vector<Index> backtrack(const std::vector<Node>& exploredNodes);
+        void backtrack(const std::vector<Node>& exploredNodes, std::vector<Index>& path);
 
         /**
          * @brief Set visited nodes as not visited

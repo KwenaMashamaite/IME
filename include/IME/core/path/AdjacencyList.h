@@ -26,20 +26,13 @@ namespace IME {
          * @param index Location of the tile to get the neighbours of
          * @return The tiles neighbours or an empty vector if the index is invalid
          */
-        std::vector<Index> getNeighbours(const Index& index) const;
-
-    private:
-        using AdjList = std::vector<std::pair<Index, std::vector<Index>>>;
-        /**
-         * @brief Generate an adjacency list for a tile map
-         * @param tileMap Tilemap to generate adjacency list for
-         * @return The generated adjacency list
-         */
-         AdjList generateAdjacencyList(TileMap &tileMap);
+        const std::vector<Index>& getNeighbours(const Index& index) const;
 
     private:
         //Adjacency list data
-        AdjList adjacencyList_;
+        std::vector<std::pair<Index, std::vector<Index>>> adjacencyList_;
+        //An empty vector
+        const std::vector<Index> emptyVec{};
     };
 }
 
