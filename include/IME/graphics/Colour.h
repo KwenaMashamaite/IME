@@ -12,6 +12,16 @@ namespace IME{
             static const Colour Red;
             static const Colour Green;
             static const Colour Blue;
+            static const Colour Yellow;
+            static const Colour Orange;
+            static const Colour Cyan;
+            static const Colour Magenta;
+            static const Colour Purple;
+            static const Colour Pink;
+            static const Colour Grey;
+            static const Colour Violet;
+            static const Colour Turquoise;
+            static const Colour Gold;
             static const Colour Transparent;
 
             /**
