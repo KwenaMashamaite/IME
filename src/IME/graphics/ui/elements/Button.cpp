@@ -22,7 +22,7 @@ namespace IME::Graphics::UI {
 
     void Button::initializeDefaultBehavior() {
         addEventListener("leftMouseDown", Callback<>([this] {
-            setTextColour({0, 0, 0, 110}); //Black
+            setTextColour(Colour::Black);
         }));
 
         addEventListener("click", Callback<>([this] {
@@ -55,9 +55,9 @@ namespace IME::Graphics::UI {
                 defaultColours_.backgroundColour = getBackgroundColour();
                 defaultColours_.textColour = getTextColour();
                 defaultColours_.outlineColour = getOutlineColour();
-                setTextColour({0, 0, 0, 90}); //Black
+                setTextColour(Colour::Black);
                 setBackgroundColour({105, 105, 105, 70}); //Dim Grey
-                setOutlineColour({128, 128, 128, 70}); //Grey
+                setOutlineColour(Colour::Grey);
             }
         }));
 

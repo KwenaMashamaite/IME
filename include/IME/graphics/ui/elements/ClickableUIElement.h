@@ -9,13 +9,19 @@ namespace IME {
         class ClickableUIElement : public UIElement {
         public:
             /**
-             * @brief Create a new UI element
+             * @brief Create a new UI element with an empty text
+             *
+             * The elements text font must be set before it is rendered,
+             * @see setTextFont() in @class UIElement
              */
             ClickableUIElement();
 
             /**
              * @brief Create a new UI element
              * @param text Text to be displayed inside the element
+             *
+             * The elements text font must be set before it is rendered,
+             * @see setTextFont() in @class UIElement
              */
             explicit ClickableUIElement(const std::string& text);
 

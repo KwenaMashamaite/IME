@@ -14,6 +14,9 @@ namespace IME {
             /**
              * @brief Constructor
              * @param placeholder
+             *
+             * @note The elements text font must be set before it is drawn,
+             * @see setTextFont() in @class UIElement
              */
             explicit TextInput(const std::string& placeholder = "|");
 
@@ -109,6 +112,6 @@ namespace IME {
             std::size_t caretPosition_;
         };
     }
-} // namespace IME
+}
 
 #endif

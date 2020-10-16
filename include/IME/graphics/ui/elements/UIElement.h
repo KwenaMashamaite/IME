@@ -57,7 +57,9 @@ namespace IME {
              * The UI element is created with an empty text content
              * @note A UI element with no text content cannot be seen when
              * rendered. It will remain invisible until its text content,
-             * outline thickness, padding or margin is set
+             * outline thickness, padding or margin is set. In addition the
+             * elements text font must be set before it is rendered,
+             * @see setTextFont()
              */
             UIElement();
 
@@ -65,7 +67,9 @@ namespace IME {
              * @brief Create a UI element
              * @param textContent Text to be displayed inside the element
              *
-             * The UI element will have the dimensions of the text content
+             * The UI element will have the dimensions of the text content.
+             * @note The elements text font must be set before it is rendered,
+             * @see setTextFont()
              */
             explicit UIElement(const std::string &textContent);
 
@@ -138,8 +142,10 @@ namespace IME {
             /**
              * @brief Set the element's text font
              * @param textFont New font
+             * @throws FileNotFound if the specified font cannot be found on the
+             *         disk
              *
-             * This function will overwrite the default text font
+             * This function will overwrite the current font if set
              */
             void setTextFont(const std::string &textFont);
 
@@ -365,11 +371,6 @@ namespace IME {
 
         private:
             /**
-             * @brief Initialize element
-             */
-            void initialize();
-
-            /**
              * @brief Create events and attach listeners
              */
             void initEvents();
@@ -401,6 +402,6 @@ namespace IME {
             bool isHidden_;
         };
     }
-} // namespace IME
+}
 
 #endif

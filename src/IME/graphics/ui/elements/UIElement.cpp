@@ -9,18 +9,13 @@ namespace IME::Graphics::UI {
         : isHidden_(false)
     {
         setText(textContent);
-        initialize();
-    }
-
-    void UIElement::initialize() {
         initEvents();
-        setTextFont("secret-code.ttf");
         setTextCharSize(25u);
         setTextAlignment(TextAlignment::Left);
-        parentRectangle_.setFillColor({0, 0, 0, 0}); //Transparent
+        parentRectangle_.setFillColor(sf::Color::Transparent);
         setBackgroundColour({220, 220, 220}); //Gainsboro
-        setOutlineColour({128, 128, 128}); //Grey
-        setTextColour(Colour::Black); //Black
+        setOutlineColour(Colour::Grey);
+        setTextColour(Colour::Black);
         setOutlineThickness(0.0f);
         setPadding(0.0f);
         setMargin(0.0f);

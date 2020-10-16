@@ -15,6 +15,9 @@ namespace IME {
             /**
              * @brief Construct a new Text Block object
              * @param textContent text to be displayed inside the text block
+             *
+             * @note The elements text font must be set before it is drawn,
+             * @see setTextFont() in @class UIElement
              */
             explicit TextBlock(const std::string &textContent);
 
@@ -24,7 +27,7 @@ namespace IME {
              */
             std::string getType() const override;
         };
-    } // namespace Gui
-} // namespace IME
+    }
+}
 
 #endif

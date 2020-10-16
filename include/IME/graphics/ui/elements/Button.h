@@ -17,6 +17,8 @@ namespace IME {
              *
              * The button has no text, is located at (0, 0), has the
              * dimensions (0, 0) and a character size of 25 by default
+             * @note The elements text font must be set before it is drawn,
+             * @see setTextFont() in @class UIElement
              */
             Button();
 
@@ -26,7 +28,8 @@ namespace IME {
              *
              * The button has the dimensions of the button text, a
              * character size of 30 and it's position is (0, 0) by
-             * default
+             * default. @note The elements text font must be set before
+             * it is drawn, @see setTextFont() in @class UIElement
              */
             explicit Button(const std::string &buttonText);
 
