@@ -129,10 +129,41 @@ namespace IME {
         Audio::AudioManager& getAudioManager();
 
         /**
-         * @brief Get access to the engines input manager
-         * @return Engines input manager
+         * @brief Get access to the engines local input manager
+         * @return Engines local input manager
+         *
+         * This input manager is local to the current state. This means that
+         * input listeners attached to it will only be notified during the
+         * current state only. The input manager is cleared on a state change
+         * (push or pop). Therefore, when a state is pushed, the state prior to
+         * the state push will have to reattach input event listeners when it is
+         * resumed.
+         *
+         * @warning If the input handler has a reference or a pointer to a class
+         * member, then caution must be taken to ensure that the input manager
+         * does not try to invoke a member of a destroyed object. Doing so may
+         * lead to undefined behavior or worse, crash the program
          */
         Input::InputManager& getInputManager();
+
+        /**
+         * @brief Get access to the engines global input manager
+         * @return Engines global input manager
+         *
+         * Input event listeners attached to this input manager will be notified
+         * when the corresponding event is fired regardless of state.
+         *
+         * @warning State specific input handlers must use @see getInputManager()
+         * because this input manager will not check if a state is active, paused
+         * or destroyed when notifying handlers. Therefore, if a state is popped
+         * and the global handlers are not removed before the state is destroyed,
+         * the program may crash or perform some undefined behaviour. In addition
+         * If the handler has a reference or a pointer to a class member, then
+         * caution must be taken to ensure that the input manager does not try
+         * to invoke a member of a destroyed object. Doing so may lead to undefined
+         * behavior or worse, crash the program
+         */
+        Input::InputManager& getGlobalInputManager();
 
         /**
          * @brief Destructor
@@ -204,7 +235,7 @@ namespace IME {
          *
          * This function will be called by the engine when a request to
          * close the window is made by the user. The default behavior stops
-         * the engine
+         * the engine and closes the render window
          */
         virtual void onWindowClose();
 
@@ -227,9 +258,11 @@ namespace IME {
         std::unique_ptr<Audio::AudioManager> audioManager_;
         //Engines resource manager
         std::shared_ptr<ResourceManager> resourceManager_;
-        //Engines input manager
+        //Engines local input manager
         Input::InputManager inputManager_;
-        //Engines Event manager
+        //Engines global input manager
+        Input::InputManager globalInputManager_;
+        //Engines Event dispatcher (This instance is kept alive for all states)
         std::shared_ptr<EventDispatcher> eventDispatcher_;
         //Engine settings
         PropertyContainer settings_;

@@ -103,6 +103,7 @@ namespace IME {
             if (event.type == sf::Event::Closed)
                 onWindowClose();
             statesManager_.getActiveState()->handleEvent(event);
+            globalInputManager_.handleEvent(event);
             inputManager_.handleEvent(event);
         }
     }
@@ -174,12 +175,14 @@ namespace IME {
         // Don't use if-else because popping and pushing are not mutually exclusive
         if (shouldPop_) {
             shouldPop_ = false;
+            inputManager_ = Input::InputManager(); //Clear current state input handlers
             statesManager_.popState();
             if (!statesManager_.isEmpty() && !statesManager_.getActiveState()->isInitialized())
                 statesManager_.getActiveState()->initialize();
         }
 
-        if (stateToPush_) { // A state push request has been made
+        if (stateToPush_) {
+            inputManager_ = Input::InputManager(); //Clear current state input handlers
             stateToPush_->initialize();
             statesManager_.pushState(std::move(stateToPush_));
         }
@@ -228,6 +231,10 @@ namespace IME {
 
     Input::InputManager &Engine::getInputManager() {
         return inputManager_;
+    }
+
+    Input::InputManager &Engine::getGlobalInputManager() {
+        return globalInputManager_;
     }
 
     Engine::~Engine() = default;
