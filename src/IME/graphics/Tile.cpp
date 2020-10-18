@@ -12,6 +12,7 @@ namespace IME::Graphics {
         tile_.setOutlineColor(sf::Color::White);
         tile_.setOutlineThickness(-1.0f);
         tile_.setFillColor(sf::Color::Transparent);
+        prevFillColour_ = sf::Color::Transparent;
         setPosition(position);
         tileType_ = TileType::Empty;
     }
@@ -57,10 +58,13 @@ namespace IME::Graphics {
     void Tile::hide() {
         sprite_.hide();
         tile_.setOutlineColor(sf::Color::Transparent);
+        prevFillColour_ = tile_.getFillColor();
+        tile_.setFillColor(sf::Color::Transparent);
     }
 
     void Tile::show() {
         sprite_.show();
+        tile_.setFillColor(prevFillColour_);
         tile_.setOutlineColor(sf::Color::White);
     }
 

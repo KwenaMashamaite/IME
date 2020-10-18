@@ -273,6 +273,8 @@ namespace IME {
             sf::RectangleShape tile_;
             //Event publisher
             EventEmitter eventEmitter_;
+            //For hiding purposes
+            sf::Color prevFillColour_;
         };
     }
 }
