@@ -33,7 +33,6 @@ namespace IME{
     }
 
     void Audio::AudioPlayer::restart() {
-        stop();
-        play();
+        seek(0.0f);
     }
 }
