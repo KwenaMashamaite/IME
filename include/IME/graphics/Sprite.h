@@ -160,6 +160,6 @@ namespace IME {
             Colour prevSpriteColour;
         };
     }
-} // namespace IME
+}
 
 #endif

@@ -1,3 +1,12 @@
+/**
+ * @brief Class for animating a sprite out the box
+ *
+ * This class is simply a sprite with an added feature. It packs a sprite and
+ * its animator in a single unit. This is just a convenience because you don't
+ * have to keep track of two objects at the same time (A sprite and an animator
+ * object)
+ */
+
 #ifndef ANIMATABLESPRITE_H
 #define ANIMATABLESPRITE_H
 
