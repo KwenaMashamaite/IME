@@ -42,14 +42,12 @@ namespace IME {
              * @brief Construct a tile
              * @param size Size of the tile
              * @param position Position of the tile
-             * @param tileSet Tile set file that contains the graphical representation
-             *        of the tie
              */
             Tile(const Dimensions &size, const Position &position);
 
             /**
              * @brief Construct a tile from an existing tile
-             * @param other Tile to construct 'this' tile from
+             * @param other Tile to construct this tile from
              */
             Tile(const Tile &other) = default;
 
@@ -75,13 +73,13 @@ namespace IME {
             Position getPosition() const;
 
             /**
-             * @brief Set the texture of the tile
-             * @param filename Filename of the texture to set
+             * @brief Add a sprite to the tile
+             * @param sprite Sprite to be added
              *
-             * The texture must be the same size as the tile or only the section
-             * corresponding to the texture rectangle size and texture rect
+             * The tile can only contain a single sprite. Therefore, subsequent
+             * calls to this function will replace the previous sprite
              */
-            void setTexture(const std::string &filename);
+            void addSprite(Sprite sprite);
 
             /**
              * @brief Set the fill colour of the tile
@@ -101,6 +99,20 @@ namespace IME {
              * @param y Y coordinate of the tile
              */
             void setPosition(float x, float y);
+
+            /**
+             * @brief Set the position of the sprite within the tile
+             * @param x X coordinate of the sprite
+             * @param y Y coordinate of the sprite
+             *
+             * The sprite will be moved to the new position immediately. Nothing
+             * will happen if the specified position lies outside the tile
+             * borders. @note This function will not check if the entire sprite
+             * lies in within the borders of the tile, it only checks if the
+             * sprites origin lies within the tile borders or not. The sprite
+             * has the same position as the tile by default
+             */
+            void setSpritePosition(float x, float y);
 
             /**
              * @brief Set the position of the tile in coordinates
@@ -126,19 +138,6 @@ namespace IME {
              * @return The size of the tile
              */
             Dimensions getSize() const;
-
-            /**
-             * @brief Set the texture rect of the tile
-             * @param position Position of the texture rect
-             * @param size Size of the texture rect
-             *
-             * The size of the texture rectangle must not be larger than the
-             * size of the tile, otherwise it will automatically be reduced
-             * to the tile size
-             *
-             * The texture rectangle is (0, 0, tileWidth, tileHeight) by default
-             */
-            void setTextureRect(Position position, Dimensions size);
 
             /**
              * @brief Set the visibility of the tile border
@@ -183,7 +182,6 @@ namespace IME {
              * The tile type corresponds to the object that is in this tile
              */
             void setType(TileType tileType);
-
 
             /**
              * @brief Get the type of this tile
@@ -250,8 +248,8 @@ namespace IME {
             void hit();
 
             /**
-             * @brief
-             * @return
+             * @brief Get the sprite set on the tile
+             * @return Sprite on the tile
              */
             Sprite &getSprite();
 

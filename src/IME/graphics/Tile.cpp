@@ -13,7 +13,6 @@ namespace IME::Graphics {
         tile_.setOutlineThickness(-1.0f);
         tile_.setFillColor(sf::Color::Transparent);
         setPosition(position);
-        setTextureRect({0, 0}, size);
         tileType_ = TileType::Empty;
     }
 
@@ -69,18 +68,9 @@ namespace IME::Graphics {
         return sprite_.isHidden();
     }
 
-    void Tile::setTextureRect(Position position, Dimensions size) {
-        if (size.width > getSize().width)
-            size.width = getSize().width;
-
-        if (size.height > getSize().height)
-            size.height = getSize().height;
-
-        sprite_.setTextureRect(position.x, position.y, size.width, size.height);
-    }
-
-    void Tile::setTexture(const std::string &filename) {
-        sprite_.setTexture(filename);
+    void Tile::addSprite(Sprite sprite) {
+        sprite.setPosition(sprite_.getPosition());
+        sprite_ = sprite;
     }
 
     bool Tile::isCollidable() const {
@@ -137,5 +127,10 @@ namespace IME::Graphics {
 
     TileType Tile::getType() const {
         return tileType_;
+    }
+
+    void Tile::setSpritePosition(float x, float y) {
+        if (contains(x, y))
+            sprite_.setPosition(x, y);
     }
 }

@@ -304,8 +304,10 @@ namespace IME {
         forEachTile([this](Graphics::Tile& tile) {
             if (auto tileId = tile.getId(); isIdLinkedToImage(tileId)) {
                 auto [tileset, startPos, size] = imagesData_.at(tileId);
-                tile.setTexture(tileset);
-                tile.setTextureRect(startPos, size);
+                auto sprite = Graphics::Sprite();
+                sprite.setTexture(tileset);
+                sprite.setTextureRect(startPos.x, startPos.y, size.width, size.height);
+                tile.addSprite(std::move(sprite));
             }
         });
     }
