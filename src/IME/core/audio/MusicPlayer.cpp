@@ -2,15 +2,15 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio {
-    void MusicPlayer::play(const std::string &song){
+    void MusicPlayer::play(const std::string &song) {
         if (currentMusicFileName_ != song) {
             song_ = ResourceManager::getInstance()->getMusic(song);
             currentMusicFileName_ = song;
-            play();
         }
+        play();
     }
 
-    void MusicPlayer::setLoop(bool isLoop){
+    void MusicPlayer::setLoop(bool isLoop) {
         if (song_ && song_->getLoop() != isLoop) {
             song_->setLoop(isLoop);
             emit("loopChanged", isLoop);
@@ -24,7 +24,7 @@ namespace IME::Audio {
         }
     }
 
-    void MusicPlayer::play(){
+    void MusicPlayer::play() {
         if (song_ && (song_->getStatus() == sf::Music::Status::Paused
             || song_->getStatus() == sf::Music::Status::Stopped))
         {

@@ -6,8 +6,8 @@ namespace IME::Audio{
         if (currentEffectName_ != filename) {
             soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
             currentEffectName_ = filename;
-            play();
         }
+        play();
     }
 
     void SoundEffectPlayer::stop() {
