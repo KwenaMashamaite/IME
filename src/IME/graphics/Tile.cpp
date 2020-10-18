@@ -9,24 +9,24 @@ namespace IME::Graphics {
         id_ = '\0';
         index_ = {-1, -1}; //Invalid index
         setSize(size.width, size.height);
-        tileBoarder_.setOutlineColor(sf::Color::White);
-        tileBoarder_.setOutlineThickness(-1.0f);
-        tileBoarder_.setFillColor(sf::Color::Transparent);
+        tile_.setOutlineColor(sf::Color::White);
+        tile_.setOutlineThickness(-1.0f);
+        tile_.setFillColor(sf::Color::Transparent);
         setPosition(position);
         setTextureRect({0, 0}, size);
         tileType_ = TileType::Empty;
     }
 
     Dimensions Tile::getSize() const {
-        return {tileBoarder_.getGlobalBounds().width, tileBoarder_.getGlobalBounds().height};
+        return {tile_.getGlobalBounds().width, tile_.getGlobalBounds().height};
     }
 
     Position Tile::getPosition() const {
-        return {tileBoarder_.getPosition().x, tileBoarder_.getPosition().y};
+        return {tile_.getPosition().x, tile_.getPosition().y};
     }
 
     void Tile::setPosition(float x, float y) {
-        tileBoarder_.setPosition(x, y);
+        tile_.setPosition(x, y);
         sprite_.setPosition(getPosition().x, getPosition().y);
     }
 
@@ -35,34 +35,34 @@ namespace IME::Graphics {
     }
 
     void Tile::setSize(float width, float height) {
-        tileBoarder_.setSize(sf::Vector2f{width, height});
+        tile_.setSize(sf::Vector2f{width, height});
     }
 
     void Tile::setSize(Dimensions size) {
         setSize(size.width, size.height);
     }
 
-    void Tile::setId(const char &id) {
+    void Tile::setId(char id) {
         id_ = id;
     }
 
-    const char &Tile::getId() const {
+    char Tile::getId() const {
         return id_;
     }
 
     void Tile::draw(Window &renderTarget) {
-        renderTarget.draw(tileBoarder_);
+        renderTarget.draw(tile_);
         renderTarget.draw(sprite_);
     }
 
     void Tile::hide() {
         sprite_.hide();
-        tileBoarder_.setOutlineColor(sf::Color::Transparent);
+        tile_.setOutlineColor(sf::Color::Transparent);
     }
 
     void Tile::show() {
         sprite_.show();
-        tileBoarder_.setOutlineColor(sf::Color::White);
+        tile_.setOutlineColor(sf::Color::White);
     }
 
     bool Tile::isHidden() const {
@@ -110,9 +110,9 @@ namespace IME::Graphics {
 
     void Tile::setBorderVisible(bool isVisible) {
         if (isVisible)
-            tileBoarder_.setOutlineColor(sf::Color::White);
+            tile_.setOutlineColor(sf::Color::White);
         else
-            tileBoarder_.setOutlineColor(sf::Color::Transparent);
+            tile_.setOutlineColor(sf::Color::Transparent);
     }
 
     void Tile::setIndex(Index index) {
@@ -124,14 +124,14 @@ namespace IME::Graphics {
     }
 
     void Tile::setFillColour(const Colour &colour) {
-        tileBoarder_.setFillColor(Utility::convertTo3rdPartyColour(colour));
+        tile_.setFillColor(Utility::convertTo3rdPartyColour(colour));
     }
 
     Colour Tile::getFillColour() const {
-        return Utility::convertFrom3rdPartyColour(tileBoarder_.getFillColor());
+        return Utility::convertFrom3rdPartyColour(tile_.getFillColor());
     }
 
-    void Tile::setType(const TileType &tileType) {
+    void Tile::setType(TileType tileType) {
         tileType_ = tileType;
     }
 

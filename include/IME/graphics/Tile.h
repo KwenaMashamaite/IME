@@ -166,7 +166,7 @@ namespace IME {
              *
              * The id is an empty character by default
              */
-            void setId(const char &id);
+            void setId(char id);
 
             /**
              * @brief Set all the sides of the tile as collidable or not
@@ -182,7 +182,7 @@ namespace IME {
              *
              * The tile type corresponds to the object that is in this tile
              */
-            void setType(const TileType& tileType);
+            void setType(TileType tileType);
 
 
             /**
@@ -195,7 +195,7 @@ namespace IME {
              * @brief Get the tiles id
              * @return The tiles id
              */
-            const char &getId() const;
+            char getId() const;
 
             /**
              * @brief Draw tile
@@ -272,7 +272,7 @@ namespace IME {
             //Tile representation
             Sprite sprite_;
             //Tile border
-            sf::RectangleShape tileBoarder_;
+            sf::RectangleShape tile_;
             //Event publisher
             EventEmitter eventEmitter_;
         };
