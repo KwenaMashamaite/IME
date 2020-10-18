@@ -22,7 +22,7 @@ namespace IME{
     }
 
     void Animator::update(float deltaTime) {
-        if (currentAnimation_ != nullptr) {
+        if (currentAnimation_) {
             if (totalTime_ == 0.0f)
                 eventEmitter_.emit(currentAnimation_->getName() + "AnimationStarted");
 
@@ -75,7 +75,7 @@ namespace IME{
     }
 
     void Animator::finishAnimation() {
-        if (currentAnimation_ != nullptr && totalTime_ != 0.0f){
+        if (currentAnimation_ && totalTime_ != 0.0f){
             totalTime_ = 0.0f;
             auto lastFrame = currentAnimation_->getFrameAt(currentAnimation_->getNumOfFrames() - 1);
             animationTarget_.setTextureRect(lastFrame.left, lastFrame.top, lastFrame.width, lastFrame.height);
