@@ -36,9 +36,7 @@ namespace IME {
         initResourceManager();
         initRenderTarget();
 
-        auto musicPath = settings_.getValueFor("musicPath");
-        auto sfxPath = settings_.getValueFor("sfxPath");
-        audioManager_ = std::make_unique<Audio::AudioManager>(musicPath, sfxPath);
+        audioManager_ = std::make_unique<Audio::AudioManager>();
         eventDispatcher_ = EventDispatcher::instance();
         isInitialized_ = true;
     }

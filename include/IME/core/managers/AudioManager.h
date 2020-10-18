@@ -30,20 +30,10 @@ namespace IME {
 
         class AudioManager {
         public:
-            AudioManager(const std::string& musicFilePath, const std::string& soundEffectFilePath);
-
             /**
-             * @brief Load audio files
-             * @param audioType The type of audio file to be loaded
-             * @param filenames File names of the audio files to be loaded
-             * @throw FileNotFound if the specified audio files cannot be
-             *        found on disk
-             *
-             * Use AudioType::Music for long and big audio files and
-             * AudioType::SoundEffect for small, short audio files.
-             * @see @class MusicPlayer and @class SoundEffectPlayer
+             * @brief Default constructor
              */
-            void loadAudioFiles(AudioType audioType, std::initializer_list<std::string> filenames);
+            AudioManager();
 
             /**
              * @brief Play an audio file
@@ -178,7 +168,7 @@ namespace IME {
             //Event emitter
             EventEmitter eventEmitter_;
         };
-    } // namespace Audio
-} // namespace IME
+    }
+}
 
 #endif

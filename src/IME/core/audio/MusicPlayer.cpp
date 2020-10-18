@@ -1,12 +1,7 @@
 #include "IME/core/audio/MusicPlayer.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Audio{
-    MusicPlayer::MusicPlayer(const std::string &musicPath)
-        : AudioPlayer(musicPath),
-          currentMusicFileName_("")
-    {}
-
+namespace IME::Audio {
     void MusicPlayer::play(const std::string &song){
         if (currentMusicFileName_ != song) {
             song_ = ResourceManager::getInstance()->getMusic(song);
@@ -73,15 +68,6 @@ namespace IME::Audio{
         if (song_)
             return song_->getVolume();
         return 100.0f; //Default volume is maximum
-    }
-
-    void MusicPlayer::loadFromFile(const std::initializer_list<std::string>& filenames) {
-        auto prevMusicPath = ResourceManager::getInstance()->getPathFor(ResourceType::Music);
-        ResourceManager::getInstance()->setPathFor(ResourceType::Music,getAudioFilePath());
-        std::for_each(filenames.begin(), filenames.end(), [this](const auto& filename) {
-            ResourceManager::getInstance()->loadFromFile(ResourceType::Music, filename);
-        });
-        ResourceManager::getInstance()->setPathFor(ResourceType::Music, prevMusicPath);
     }
 
     bool MusicPlayer::isLooped() const {

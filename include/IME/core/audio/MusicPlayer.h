@@ -22,12 +22,6 @@ namespace IME {
         class MusicPlayer final : public AudioPlayer{
         public:
             /**
-             * @brief Constructor
-             * @param musicPath Path where music files are located
-             */
-            explicit MusicPlayer(const std::string& musicPath);
-
-            /**
              * @brief play music file
              * @param filename File name of the Music to play
              *
@@ -83,19 +77,6 @@ namespace IME {
             float getVolume() const override;
 
             /**
-             * @brief Stream music from an audio file on the hard drive
-             * @param filenames Names of the audio file to stream music from
-             * @throw FileNotFound if a single audio file cannot be located in the
-             *        path specified during instantiation or using @see setPath()
-             *
-             * @warning This function does not load music files into the program.
-             * They are streamed continuously from the hard drive. Therefore, they
-             * must remain accessible until the Audio::MusicPlayer object is
-             * destroyed or no longer needs them
-             */
-            void loadFromFile(const std::initializer_list<std::string>& filenames) override;
-
-            /**
              * @brief Check if the music is looped or not
              * @return True if song is looped, false if song is not looped
              */
@@ -136,7 +117,7 @@ namespace IME {
             //Name of the current audio file
             std::string currentMusicFileName_;
         };
-    } // namespace Audio
-} // namespace IME
+    }
+}
 
 #endif

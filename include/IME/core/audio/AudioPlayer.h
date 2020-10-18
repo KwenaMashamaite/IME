@@ -23,23 +23,9 @@ namespace IME {
         class AudioPlayer : public EventEmitter{
         public:
             /**
-             * @brief Constructor
-             * @param path Path to where audio files will be loaded from
+             * @brief Default constructor
              */
-            AudioPlayer(const std::string& path);
-
-            /**
-             * @brief Set the path to the audio files
-             * @param audioFilesPath Path to the audio files
-             */
-            void setPath(const std::string& audioFilesPath);
-
-            /**
-             * @brief Load audio files from hard drive into player
-             * @param audioFileNames Names of the audio files to load
-             * @throw FileNotFound if an audio file cannot be found in the specified path
-             */
-            virtual void loadFromFile(const std::initializer_list<std::string>& audioFiles) = 0;
+            AudioPlayer();
 
             /**
              * @brief Play audio
@@ -137,12 +123,6 @@ namespace IME {
             virtual float getVolume() const = 0;
 
             /**
-             * @brief Get the path to the audio files
-             * @return Path to the audio files
-             */
-            const std::string& getAudioFilePath() const;
-
-            /**
              * @brief Get the name of the current audio file
              * @return Name of the current audio file
              */
@@ -176,14 +156,12 @@ namespace IME {
             using EventEmitter::emit;
 
         private:
-            //Path o where audio files are located on the disk
-            std::string path_;
             //Muted state
             bool isMuted_;
             //Volume of the music player before it was muted
             float volumeBeforeMute_;
         };
-    } // namespace Audio
-} // namespace IME
+    }
+}
 
 #endif

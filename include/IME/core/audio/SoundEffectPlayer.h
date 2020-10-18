@@ -19,14 +19,8 @@
 
 namespace IME{
     namespace Audio {
-        class SoundEffectPlayer final : public AudioPlayer{
+        class SoundEffectPlayer final : public AudioPlayer {
         public:
-            /**
-             * @brief Constructor
-             * @param path Path to where sounds are located on the hard drive
-             */
-            explicit SoundEffectPlayer(const std::string& path);
-
             /**
              * @brief Play sound
              * @param filename File name of the sound to play
@@ -78,12 +72,6 @@ namespace IME{
             float getVolume() const override;
 
             /**
-             * @brief Load sound effects from the hard drive into the player
-             * @param audioFileNames Names of the sound effects to load
-             */
-            void loadFromFile(const std::initializer_list<std::string>& audioFileNames) override;
-
-            /**
              * @brief Check if the sound effect is looped or not
              * @return True if sound effect is looped, false if sound effect is
              *         not looped
@@ -105,7 +93,7 @@ namespace IME{
             void seek(float position) override;
 
             /**
-             * @brief Get the name of the currently sound effect
+             * @brief Get the name of the current sound effect
              * @return The name of the current sound effect
              *
              * The current sound effect is the one that is currently playing, paused
@@ -125,7 +113,7 @@ namespace IME{
             //Name of the current sound effect
             std::string currentEffectName_;
         };
-    } // namespace Audio
-} // namespace IME
+    }
+}
 
 #endif

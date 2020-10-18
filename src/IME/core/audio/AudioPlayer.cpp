@@ -1,7 +1,7 @@
 #include "IME/core/audio/AudioPlayer.h"
 
 namespace IME{
-    Audio::AudioPlayer::AudioPlayer(const std::string &path)
+    Audio::AudioPlayer::AudioPlayer()
         : isMuted_(false),
           volumeBeforeMute_(100.0f)
     {}
@@ -30,14 +30,6 @@ namespace IME{
 
     bool Audio::AudioPlayer::isMuted() const {
         return isMuted_;
-    }
-
-    void Audio::AudioPlayer::setPath(const std::string &audioFilesPath) {
-        path_ = audioFilesPath;
-    }
-
-    const std::string &Audio::AudioPlayer::getAudioFilePath() const {
-        return path_;
     }
 
     void Audio::AudioPlayer::restart() {

@@ -2,11 +2,6 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio{
-    SoundEffectPlayer::SoundEffectPlayer(const std::string &path)
-        : AudioPlayer(path),
-          currentEffectName_("")
-          {}
-
     void SoundEffectPlayer::play(const std::string &filename){
         if (currentEffectName_ != filename) {
             soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
@@ -66,14 +61,6 @@ namespace IME::Audio{
 
     float SoundEffectPlayer::getVolume() const {
         return soundEffect_.getVolume();
-    }
-
-    void SoundEffectPlayer::loadFromFile(const std::initializer_list<std::string>& audioFileNames) {
-        auto prevSfxPath = ResourceManager::getInstance()->getPathFor(ResourceType::SoundBuffer);
-        ResourceManager::getInstance()->setPathFor(ResourceType::SoundBuffer,getAudioFilePath());
-        for (const auto& filename : audioFileNames)
-            ResourceManager::getInstance()->loadFromFile(ResourceType::SoundBuffer, filename);
-        ResourceManager::getInstance()->setPathFor(ResourceType::SoundBuffer, prevSfxPath);
     }
 
     bool SoundEffectPlayer::isLooped() const {

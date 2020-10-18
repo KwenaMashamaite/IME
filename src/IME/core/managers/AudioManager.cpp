@@ -1,20 +1,9 @@
 #include "IME/core/managers/AudioManager.h"
 
 namespace IME::Audio{
-    AudioManager::AudioManager(const std::string &musicFilePath,
-        const std::string &soundEffectFilePath)
-        : musicPlayer_(musicFilePath), sfxPlayer_(soundEffectFilePath),
-          maxVolume_(100.0f), isMuted_(false)
-        {}
-
-    void AudioManager::loadAudioFiles(AudioType audioType,
-         std::initializer_list<std::string> filenames)
-     {
-        if (audioType == AudioType::Music)
-            musicPlayer_.loadFromFile(filenames);
-        else if (audioType == AudioType::SoundEffect)
-            sfxPlayer_.loadFromFile(filenames);
-    }
+    AudioManager::AudioManager()
+        : maxVolume_(100.0f), isMuted_(false)
+    {}
 
     void AudioManager::play(const AudioType &audioType, const std::string &filename) {
         if (audioType == AudioType::Music)
