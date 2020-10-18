@@ -28,10 +28,14 @@ namespace IME::Graphics {
         this->opacity = opacity;
     }
 
-    bool Colour::operator==(const Colour &right) {
-        return red == right.red
-            && green == right.green
-            && blue == right.blue
-            && opacity == right.opacity;
+    bool Colour::operator==(const Colour &rhs) {
+        return red == rhs.red
+            && green == rhs.green
+            && blue == rhs.blue
+            && opacity == rhs.opacity;
+    }
+
+    bool Colour::operator!=(const Colour &rhs) {
+        return !(*this == rhs);
     }
 }

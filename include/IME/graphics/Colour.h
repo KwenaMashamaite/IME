@@ -44,10 +44,17 @@ namespace IME{
 
             /**
              * @brief Check if a colour is the same as this colour
-             * @param right Right operand
+             * @param rhs Right operand
              * @return True if the colours are the same, otherwise false
              */
-             bool operator==(const Colour& right);
+            bool operator==(const Colour& rhs);
+
+            /**
+             * @brief Check if a colour is not the same as this colour
+             * @param rhs Right operand
+             * @return True if the colours are not the same, otherwise false
+             */
+            bool operator!=(const Colour& rhs);
 
             // Colour components
             unsigned int red = 0;
@@ -56,6 +63,6 @@ namespace IME{
             unsigned int opacity = 255;
         };
     }
-} // namespace IME
+}
 
 #endif
