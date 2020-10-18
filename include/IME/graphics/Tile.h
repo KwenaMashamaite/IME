@@ -28,16 +28,6 @@ namespace IME {
     };
 
     namespace Graphics {
-        /**
-         * @brief Defines the borders of the tile
-         */
-        enum class Border {
-            Left,
-            Right,
-            Top,
-            Bottom,
-        };
-
         enum class TileType {
             Empty,
             Obstacle,
@@ -187,20 +177,6 @@ namespace IME {
             void setCollidable(bool isCollidable);
 
             /**
-             * @brief Set a tile border as collideable or not
-             * @param border The tile border to set
-             * @param isCollidable True to set border as collidable, otherwise false
-             */
-            void setCollidable(const Border &border, bool isCollidable);
-
-            /**
-             * @brief Check if a tile border is collideable or not
-             * @param border Border to be checked
-             * @return True if border is collideable, otherwise false
-             */
-            bool isCollidable(const Border &border) const;
-
-            /**
              * @brief Set the tile type
              * @param tileType The tile type
              *
@@ -263,17 +239,15 @@ namespace IME {
              * @param callback Function to execute when a collision occurs
              * @return Event listeners identification number
              *
-             * The callback function is invoked each time the tile is collided with.
-             * The tile and the border hit will be provided as arguments to the
-             * callback function when publishing the collision event
+             * The callback function is invoked each time this tile is collided
+             * with. The tile will be passed as an argument to the callback
              */
-            int onCollision(Callback<Tile &, Border> callback);
+            int onCollision(Callback<Tile &> callback);
 
             /**
-             * @brief Collide with this tiles border
-             * @param border Border to collide with
+             * @brief Collide with this tile
              */
-            void hit(const Border &border);
+            void hit();
 
             /**
              * @brief
@@ -288,7 +262,7 @@ namespace IME {
 
         private:
             //Collision flag
-            bool isCollideable_;
+            bool isCollidable_;
             //Stores the type of the object that will be in this tile
             TileType tileType_;
             //Stores the id of the actual object that will be in this tile
@@ -299,8 +273,6 @@ namespace IME {
             Sprite sprite_;
             //Tile border
             sf::RectangleShape tileBoarder_;
-            //Collision flags for tile sides
-            std::unordered_map<Border, bool> borderCollisionFlags_;
             //Event publisher
             EventEmitter eventEmitter_;
         };

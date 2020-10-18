@@ -5,7 +5,7 @@
 
 namespace IME::Graphics {
     Tile::Tile(const Dimensions &size, const Position &position) {
-        isCollideable_ = false;
+        isCollidable_ = false;
         id_ = '\0';
         index_ = {-1, -1}; //Invalid index
         setSize(size.width, size.height);
@@ -14,12 +14,7 @@ namespace IME::Graphics {
         tileBoarder_.setFillColor(sf::Color::Transparent);
         setPosition(position);
         setTextureRect({0, 0}, size);
-        borderCollisionFlags_.insert({Border::Left, false});
         tileType_ = TileType::Empty;
-
-        //Flag all four sides of the tile as not collideable
-        for (auto i = 0u; i < 4u; i++)
-            borderCollisionFlags_.insert({static_cast<Border>(i), false});
     }
 
     Dimensions Tile::getSize() const {
@@ -88,24 +83,12 @@ namespace IME::Graphics {
         sprite_.setTexture(filename);
     }
 
-    bool Tile::isCollidable(const Border &border) const {
-        return borderCollisionFlags_.at(border);
-    }
-
     bool Tile::isCollidable() const {
-        return isCollidable(Border::Left)
-               && isCollidable(Border::Right)
-               && isCollidable(Border::Top)
-               && isCollidable(Border::Bottom);
+        return isCollidable_;
     }
 
     void Tile::setCollidable(bool isCollidable) {
-        for (auto& border : borderCollisionFlags_)
-            border.second = isCollidable;
-    }
-
-    void Tile::setCollidable(const Border &border, bool isCollidable) {
-        borderCollisionFlags_.at(border) = isCollidable;
+        isCollidable_ = isCollidable;
     }
 
     bool Tile::contains(float x, float y) const {
@@ -117,12 +100,12 @@ namespace IME::Graphics {
         return sprite_;
     }
 
-    int Tile::onCollision(Callback<Tile&, Border> callback) {
+    int Tile::onCollision(Callback<Tile&> callback) {
         return eventEmitter_.addEventListener("hit", std::move(callback));
     }
 
-    void Tile::hit(const Border& border) {
-        eventEmitter_.emit("borderHit", *this, border);
+    void Tile::hit() {
+        eventEmitter_.emit("hit", *this);
     }
 
     void Tile::setBorderVisible(bool isVisible) {
