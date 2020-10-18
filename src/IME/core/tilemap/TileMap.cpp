@@ -6,8 +6,8 @@
 
 namespace IME {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
-            : isGridVisible_(true), isBackgroundDrawable_(false), isTilesDrawable_(true),
-              isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
+        : isGridVisible_(true), isBackgroundDrawable_(false), isTilesDrawable_(true),
+          isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
@@ -28,7 +28,10 @@ namespace IME {
         if (isGridVisible_ == isVisible)
             return;
 
-        isTilesDrawable_ = isVisible;
+        forEachTile([=](Graphics::Tile& tile) {
+            tile.setBorderVisible(isVisible);
+        });
+
         isGridVisible_ = isVisible;
     }
 
