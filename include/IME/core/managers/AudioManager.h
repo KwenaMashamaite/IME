@@ -2,7 +2,7 @@
  * @brief Class for managing audio
  *
  * This class allows us to play multiple audio files of different types
- * (Music or SoundEffect, @see @class Music and @class SoundEffectPlayer)
+ * (Music or Sfx, @see @class Music and @class SoundEffectPlayer)
  * simultaneously. Each audio file is played in a separate thread
  */
 
@@ -24,7 +24,7 @@ namespace IME {
          * @brief Types of audio files managed by the audio manager
          */
         enum class AudioType{
-            SoundEffect,
+            Sfx,
             Music
         };
 
@@ -39,6 +39,8 @@ namespace IME {
              * @brief Play an audio file
              * @param audioType Type of the audio file to play
              * @param filename Filename of the audio to play
+             * @param volume
+             * @param isLooped
              *
              * The audio file must be loaded first otherwise nothing will play
              * @see loadAudioFiles(AudioType, std::initializer_list<std::string>)
@@ -46,7 +48,8 @@ namespace IME {
              * that, the main thread is not blocked and other audio file may be
              * played simultaneously
              */
-            void play(const AudioType &audioType, const std::string &filename);
+            void play(const AudioType &audioType, const std::string &filename,
+                bool isLooped = false);
 
             /**
              * @brief Play all audio files of a certain type
@@ -70,15 +73,6 @@ namespace IME {
             void stopAll(const AudioType &audioType);
 
             /**
-             * @brief Loop/unloop an audio file
-             * @param audioType Type of the audio to set loop for
-             * @param isLooped Set true to loop and false to unloop
-             *
-             * All audio files are not looped by default
-             */
-            void setLoopFor(const AudioType &audioType, bool isLooped);
-
-            /**
              * @brief Set the volume for an audio file
              * @param audioType Type of the audio file to set volume for
              * @param volume Volume to set, (mute) 0 <= volume <= 100 (max)
@@ -99,25 +93,25 @@ namespace IME {
              * @param volume The new maximum volume
              *
              * This function will overwrite the previous volume. To offset
-             * the volume by a constant @see adjustMaxVolume(float). The
+             * the volume by a constant @see adjustMasterVolume(float). The
              * maximum volume for all audio players is 100.0 by default
              */
-            void setMaxVolume(float volume);
+            void setMasterVolume(float volume);
 
             /**
              * @brief Offset the maximum volume for all audio players
              * @param offset Volume offset
              *
              * This function will add/subtract to/from the current volume.
-             * To overwrite the volume @see setMaxVolume(float)
+             * To overwrite the volume @see setMasterVolume(float)
              */
-            void adjustMaxVolume(float offset);
+            void adjustMasterVolume(float offset);
 
             /**
              * @brief Get the maximum volume for all audio players
              * @return The maximum volume for all audio players
              */
-            float getMaxVolume() const;
+            float getMasterVolume() const;
 
             /**
              * @brief Play all paused/stopped audio files
@@ -158,7 +152,7 @@ namespace IME {
 
         private:
             //Maximum volume all audio players
-            float maxVolume_;
+            float masterVolume_;
             //Mute state
             bool isMuted_;
             //Handles music

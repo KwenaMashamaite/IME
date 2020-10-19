@@ -93,6 +93,12 @@ namespace IME{
             void seek(float position) override;
 
             /**
+             * @brief Get the type of the audio player
+             * @return The type of the audio player
+             */
+            std::string getType() override;
+
+            /**
              * @brief Get the name of the current sound effect
              * @return The name of the current sound effect
              *

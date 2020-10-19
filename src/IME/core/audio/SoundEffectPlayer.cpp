@@ -84,4 +84,8 @@ namespace IME::Audio{
     float SoundEffectPlayer::getPlayingPosition() const {
         return soundEffect_.getPlayingOffset().asSeconds();
     }
+
+    std::string SoundEffectPlayer::getType() {
+        return "SfxPlayer";
+    }
 }

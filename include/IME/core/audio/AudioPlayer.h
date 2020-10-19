@@ -129,6 +129,12 @@ namespace IME {
             virtual const std::string& getCurrentAudioFileName() const = 0;
 
             /**
+             * @brief Get the type of the audio player
+             * @return The type of the audio player
+             */
+            virtual std::string getType() = 0;
+
+            /**
              * @brief Mute or ummute the audio
              * @param mute True to mute the audio or false to unmute the audio
              */

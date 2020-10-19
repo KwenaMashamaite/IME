@@ -98,4 +98,8 @@ namespace IME::Audio {
             song_->getPlayingOffset().asSeconds();
         return 0.0f;
     }
+
+    std::string MusicPlayer::getType() {
+        return "MusicPlayer";
+    }
 }

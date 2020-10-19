@@ -2,44 +2,39 @@
 
 namespace IME::Audio{
     AudioManager::AudioManager()
-        : maxVolume_(100.0f), isMuted_(false)
+        : masterVolume_(100.0f), isMuted_(false)
     {}
 
-    void AudioManager::play(const AudioType &audioType, const std::string &filename) {
+    void AudioManager::play(const AudioType &audioType, const std::string &filename,
+        bool isLooped)
+    {
         if (audioType == AudioType::Music)
             musicPlayer_.play(filename);
-        else if (audioType == AudioType::SoundEffect)
+        else if (audioType == AudioType::Sfx)
             sfxPlayer_.play(filename);
     }
 
     void AudioManager::pauseAll(const AudioType &audioType) {
         if (audioType == AudioType::Music)
             musicPlayer_.pause();
-        else if (audioType == AudioType::SoundEffect)
+        else if (audioType == AudioType::Sfx)
             sfxPlayer_.pause();
     }
 
     void AudioManager::stopAll(const AudioType &audioType) {
         if (audioType == AudioType::Music)
             musicPlayer_.stop();
-        else if (audioType == AudioType::SoundEffect)
+        else if (audioType == AudioType::Sfx)
             sfxPlayer_.stop();
     }
 
     void AudioManager::setVolumeFor(const AudioType &audioType, float volume) {
-        if (volume > maxVolume_)
-            volume = maxVolume_;
+        if (volume > masterVolume_)
+            volume = masterVolume_;
         if (audioType == AudioType::Music)
             musicPlayer_.setVolume(volume);
-        else if (audioType == AudioType::SoundEffect)
+        else if (audioType == AudioType::Sfx)
             sfxPlayer_.setVolume(volume);
-    }
-
-    void AudioManager::setLoopFor(const AudioType &audioType, bool isLooped) {
-        if (audioType == AudioType::Music)
-            musicPlayer_.setLoop(isLooped);
-        else if (audioType == AudioType::SoundEffect)
-            sfxPlayer_.setLoop(isLooped);
     }
 
     void AudioManager::playAllAudio() {
@@ -49,7 +44,7 @@ namespace IME::Audio{
 
     void AudioManager::pauseAllAudio() {
         musicPlayer_.pause();
-        sfxPlayer_.stop();
+        sfxPlayer_.pause();
     }
 
     void AudioManager::stopAllAudio() {
@@ -67,37 +62,37 @@ namespace IME::Audio{
 
     float AudioManager::getVolumeFor(const AudioType &audioType) {
         switch (audioType) {
-            case AudioType::SoundEffect:
+            case AudioType::Sfx:
                 return sfxPlayer_.getVolume();
             case AudioType::Music:
                 return musicPlayer_.getVolume();
         }
     }
 
-    void AudioManager::setMaxVolume(float volume) {
-        if (maxVolume_ != volume) {
+    void AudioManager::setMasterVolume(float volume) {
+        if (masterVolume_ != volume) {
             if (volume > 100.0f)
-                maxVolume_ = 100.0f;
+                masterVolume_ = 100.0f;
             else if (volume < 0.0f)
-                maxVolume_ = 0.0f;
+                masterVolume_ = 0.0f;
             else
-                maxVolume_ = volume;
-            eventEmitter_.emit("volumeChanged", maxVolume_);
+                masterVolume_ = volume;
+            eventEmitter_.emit("volumeChanged", masterVolume_);
         }
     }
 
-    void AudioManager::adjustMaxVolume(float offset) {
-        setMaxVolume(getMaxVolume() + offset);
+    void AudioManager::adjustMasterVolume(float offset) {
+        setMasterVolume(getMasterVolume() + offset);
     }
 
-    float AudioManager::getMaxVolume() const {
-        return maxVolume_;
+    float AudioManager::getMasterVolume() const {
+        return masterVolume_;
     }
 
     void AudioManager::playAll(AudioType audioType) {
         if (audioType == AudioType::Music)
             musicPlayer_.play();
-        else if (audioType == AudioType::SoundEffect)
+        else if (audioType == AudioType::Sfx)
             sfxPlayer_.play();
     }
 

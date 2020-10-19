@@ -39,6 +39,12 @@ namespace IME {
             void setLoop(bool isLoop) override ;
 
             /**
+             * @brief Get the type of the audio player
+             * @return The type of the audio player
+             */
+            std::string getType() override;
+
+            /**
              * @brief Pause the Music
              */
             void pause() override;
