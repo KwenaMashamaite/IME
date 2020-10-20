@@ -101,7 +101,7 @@ namespace IME {
              * @brief Get the duration of the current song
              * @return Duration of the current song
              */
-            float getDuration() const override;
+            Duration getDuration() const override;
 
             /**
              * @brief Change the playing position of the current song
@@ -115,7 +115,21 @@ namespace IME {
              * @brief Get the current playing position
              * @return Current playing position
              */
-            float getPlayingPosition() const override;
+            Duration getPlayingPosition() const override;
+
+            /**
+             * @brief Set the pitch of the audio file
+             * @param pitch The new pitch of the audio file
+             *
+             * The default pitch is 1
+             */
+            void setPitch(float pitch) override;
+
+            /**
+             * @brief Get the pitch of the audio file
+             * @return The pitch of the audio file
+             */
+            float getPitch() const override;
 
         private:
             //pointer to playing music

@@ -17,7 +17,7 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
-namespace IME{
+namespace IME {
     namespace Audio {
         class SoundEffectPlayer final : public AudioPlayer {
         public:
@@ -82,7 +82,21 @@ namespace IME{
              * @brief Get the duration of the sound effect
              * @return Duration of the sound effect
              */
-            float getDuration() const override;
+            Duration getDuration() const override;
+
+            /**
+             * @brief Set the pitch of the audio file
+             * @param pitch The new pitch of the audio file
+             *
+             * The default pitch is 1
+             */
+            void setPitch(float pitch) override;
+
+            /**
+             * @brief Get the pitch of the audio file
+             * @return The pitch of the audio file
+             */
+            float getPitch() const override;
 
             /**
              * @brief Change the playing position of the sound effect
@@ -111,7 +125,7 @@ namespace IME{
              * @brief Get the current playing position of the sound effect
              * @return Current playing position of the sound effect
              */
-            float getPlayingPosition() const override;
+            Duration getPlayingPosition() const override;
 
         private:
             //Currently playing sound

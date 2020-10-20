@@ -25,12 +25,8 @@ namespace IME::Audio{
     }
 
     void SoundEffectPlayer::play() {
-        if (soundEffect_.getStatus() == sf::Sound::Status::Paused
-            || soundEffect_.getStatus() == sf::Sound::Status::Stopped)
-        {
-            soundEffect_.play();
-            emit("playing", currentEffectName_);
-        }
+        soundEffect_.play();
+        emit("playing", currentEffectName_);
     }
 
     void SoundEffectPlayer::setVolume(float volume) {
@@ -50,11 +46,11 @@ namespace IME::Audio{
 
     Status SoundEffectPlayer::getStatus() const {
         switch (soundEffect_.getStatus()) {
-            case sf::Music::Status::Playing:
+            case sf::SoundSource::Status::Playing:
                 return Status::Playing;
-            case sf::Music::Status::Paused:
+            case sf::SoundSource::Status::Paused:
                 return Status::Paused;
-            case sf::Music::Status::Stopped:
+            case sf::SoundSource::Status::Stopped:
                 return Status::Stopped;
         }
     }
@@ -67,25 +63,37 @@ namespace IME::Audio{
         return soundEffect_.getLoop();
     }
 
-    float SoundEffectPlayer::getDuration() const {
+    Duration SoundEffectPlayer::getDuration() const {
         if (soundEffect_.getBuffer())
-            return soundEffect_.getBuffer()->getDuration().asSeconds();
-        return 0.0f;
+            return {soundEffect_.getPlayingOffset().asSeconds(),
+                    static_cast<float>(soundEffect_.getBuffer()->getDuration().asMilliseconds()),
+                    static_cast<float>(soundEffect_.getPlayingOffset().asMicroseconds())};
+        return {0.0f, 0.0f, 0.0f};
     }
 
     void SoundEffectPlayer::seek(float position) {
-        soundEffect_.setPlayingOffset(sf::seconds(position));
+        soundEffect_.setPlayingOffset(sf::milliseconds(position));
     }
 
     const std::string &SoundEffectPlayer::getCurrentAudioFileName() const {
         return currentEffectName_;
     }
 
-    float SoundEffectPlayer::getPlayingPosition() const {
-        return soundEffect_.getPlayingOffset().asSeconds();
+    Duration SoundEffectPlayer::getPlayingPosition() const {
+        return {soundEffect_.getPlayingOffset().asSeconds(),
+                static_cast<float>(soundEffect_.getPlayingOffset().asMilliseconds()),
+                static_cast<float>(soundEffect_.getPlayingOffset().asMicroseconds())};
     }
 
     std::string SoundEffectPlayer::getType() {
         return "SfxPlayer";
+    }
+
+    void SoundEffectPlayer::setPitch(float pitch) {
+        soundEffect_.setPitch(pitch);
+    }
+
+    float SoundEffectPlayer::getPitch() const {
+        soundEffect_.getPitch();
     }
 }

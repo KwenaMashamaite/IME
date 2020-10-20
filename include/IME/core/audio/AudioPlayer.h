@@ -15,9 +15,15 @@ namespace IME {
          * @brief Audio status
          */
         enum class Status{
-            Playing,
+            Stopped,
             Paused,
-            Stopped
+            Playing
+        };
+
+        struct Duration {
+            float Seconds;
+            float Milliseconds;
+            float Microseconds;
         };
 
         class AudioPlayer : public EventEmitter{
@@ -58,6 +64,20 @@ namespace IME {
             virtual void setVolume(float volume) = 0;
 
             /**
+             * @brief Set the pitch of the audio file
+             * @param pitch The new pitch of the audio file
+             *
+             * The default pitch is 1
+             */
+            virtual void setPitch(float pitch) = 0;
+
+            /**
+             * @brief Get the pitch of the audio file
+             * @return The pitch of the audio file
+             */
+            virtual float getPitch() const = 0;
+
+            /**
              * @brief Loop/unloop audio
              * @param isLooped Set to true to loop audio, false to unloop audio
              */
@@ -94,13 +114,13 @@ namespace IME {
              *
              * The duration is in seconds
              */
-            virtual float getDuration() const = 0;
+            virtual Duration getDuration() const = 0;
 
             /**
              * @brief Get the current playing position of the audio file
              * @return Current playing position of the audio file
              */
-            virtual float getPlayingPosition() const = 0;
+            virtual Duration getPlayingPosition() const = 0;
 
             /**
              * @brief Change the current playing position of the audio file

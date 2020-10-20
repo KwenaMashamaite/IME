@@ -25,9 +25,7 @@ namespace IME::Audio {
     }
 
     void MusicPlayer::play() {
-        if (song_ && (song_->getStatus() == sf::Music::Status::Paused
-            || song_->getStatus() == sf::Music::Status::Stopped))
-        {
+        if (song_) {
             song_->play();
             emit("playing", currentMusicFileName_);
         }
@@ -80,26 +78,41 @@ namespace IME::Audio {
         return currentMusicFileName_;
     }
 
-    float MusicPlayer::getDuration() const {
+    Duration MusicPlayer::getDuration() const {
         if (song_)
-            return song_->getDuration().asSeconds();
-        return 0.0f;
+            return {song_->getDuration().asSeconds(),
+                    static_cast<float>(song_->getDuration().asMilliseconds()),
+                    static_cast<float>(song_->getDuration().asMicroseconds())};
+        return {0.0f, 0.0f, 0.0f};
     }
 
     void MusicPlayer::seek(float position) {
         if (song_) {
-            song_->setPlayingOffset(sf::seconds(position));
+            song_->setPlayingOffset(sf::microseconds(position));
             emit("playingPositionChanged", position);
         }
     }
 
-    float MusicPlayer::getPlayingPosition() const {
+    Duration MusicPlayer::getPlayingPosition() const {
         if (song_)
-            song_->getPlayingOffset().asSeconds();
-        return 0.0f;
+            return {song_->getPlayingOffset().asSeconds(),
+                    static_cast<float>(song_->getPlayingOffset().asMicroseconds()),
+                    static_cast<float>(song_->getPlayingOffset().asMicroseconds())};
+        return {0.0f, 0.0f, 0.0f};
     }
 
     std::string MusicPlayer::getType() {
         return "MusicPlayer";
+    }
+
+    void MusicPlayer::setPitch(float pitch) {
+        if (song_)
+            song_->setPitch(pitch);
+    }
+
+    float MusicPlayer::getPitch() const {
+        if (song_)
+            return song_->getPitch();
+        return 1;
     }
 }
