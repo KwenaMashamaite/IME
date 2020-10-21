@@ -39,54 +39,33 @@ namespace IME {
              * @brief Play an audio file
              * @param audioType Type of the audio file to play
              * @param filename Filename of the audio to play
-             * @param volume
-             * @param isLooped
+             * @param isLooped True if audio should be looped, otherwise false
+             * @throws FileNotFound if the audio file cannot be found on the disk
              *
-             * The audio file must be loaded first otherwise nothing will play
-             * @see loadAudioFiles(AudioType, std::initializer_list<std::string>)
-             * The audio file will be played in a separate thread. This means
+             * The audio file are played in a separate thread. This means
              * that, the main thread is not blocked and other audio file may be
-             * played simultaneously
+             * played simultaneously. @note It's much faster to preload the audio
+             * files with the @class ResourceManager rather than having the audio
+             * manager load each individual file from the disk before playing it
              */
-            void play(const AudioType &audioType, const std::string &filename,
-                bool isLooped = false);
-
-            /**
-             * @brief Play all audio files of a certain type
-             * @param audioType Type of the audio files to play
-             */
-            void playAll(AudioType audioType);
-
-            /**
-             * @brief Pause all playing audio files of a certain type
-             * @param audioType Type of the audio files to pause
-             */
-            void pauseAll(const AudioType &audioType);
-
-            /**
-             * @brief Stop all playing/paused audio files of a certain type
-             * @param audioType Type of the audio file to stop
-             *
-             * Stopping an audio file (playing/paused) will reset the current
-             * playing position to the beginning
-             */
-            void stopAll(const AudioType &audioType);
+            void play(AudioType audioType, const std::string &filename,
+                      bool isLooped = false);
 
             /**
              * @brief Set the volume for an audio file
              * @param audioType Type of the audio file to set volume for
-             * @param volume Volume to set, (mute) 0 <= volume <= 100 (max)
+             * @param volume Volume to set, in the range (mute) 0 <= volume <= 100 (max)
              *
              * The default volume is 100 (max)
              */
-            void setVolumeFor(const AudioType &audioType, float volume);
+            void setVolumeFor(AudioType audioType, float volume);
 
             /**
              * @brief Get the volume of an audio file
              * @param audioType Type of the audio file to get volume for
              * @return Volume of an audio file
              */
-            float getVolumeFor(const AudioType &audioType);
+            float getVolumeFor(AudioType audioType);
 
             /**
              * @brief Set the maximum volume for all audio players
@@ -133,8 +112,7 @@ namespace IME {
 
             /**
              * @param Mute or unmute all audio players
-             *
-             * Muted audio files will continue playing
+             * @param isMuted True to mute all audio, otherwise false
              */
             void setMute(bool isMuted);
 
@@ -150,17 +128,24 @@ namespace IME {
              */
             void onVolumeChanged(Callback<float> callback);
 
+            /**
+             * @brief Update the audio manager
+             */
+            void update();
+
         private:
             //Maximum volume all audio players
             float masterVolume_;
+            //Sound effect volume
+            float sfxVolume_;
+            //Music volume
+            float musicVolume_;
             //Mute state
             bool isMuted_;
-            //Handles music
-            MusicPlayer musicPlayer_;
-            //Handles sound effects
-            SoundEffectPlayer sfxPlayer_;
             //Event emitter
             EventEmitter eventEmitter_;
+            //Audio players
+            std::vector<std::unique_ptr<AudioPlayer>> playingAudio_;
         };
     }
 }
