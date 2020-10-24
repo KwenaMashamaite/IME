@@ -65,7 +65,7 @@ namespace IME::Graphics {
     }
 
     void Sprite::setColour(Colour colour) {
-        sprite_.setColor(Utility::convertTo3rdPartyColour(colour));
+        sprite_.setColor(Utility::convertToSFMLColour(colour));
     }
 
     Colour Sprite::getColour() const {

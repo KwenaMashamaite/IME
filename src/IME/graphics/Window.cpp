@@ -2,6 +2,7 @@
 #include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
+#include "IME/graphics/ui/widgets/IWidget.h"
 #include <cassert>
 
 namespace IME::Graphics {
@@ -44,12 +45,6 @@ namespace IME::Graphics {
         return frameRateLimit_;
     }
 
-    void Window::setCursorType(Window::CursorType cursorType) {
-        auto static cursor = sf::Cursor();
-        if (cursor.loadFromSystem(static_cast<sf::Cursor::Type>(cursorType)))
-            window_.setMouseCursor(cursor);
-    }
-
     bool Window::isOpen() const{
         return window_.isOpen();
     }
@@ -67,7 +62,7 @@ namespace IME::Graphics {
     }
 
     void Window::clear(Colour colour) {
-        window_.clear(Utility::convertTo3rdPartyColour(colour));
+        window_.clear(Utility::convertToSFMLColour(colour));
     }
 
     void Window::draw(const sf::Drawable &drawable) {

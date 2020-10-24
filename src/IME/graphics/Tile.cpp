@@ -118,7 +118,7 @@ namespace IME::Graphics {
     }
 
     void Tile::setFillColour(const Colour &colour) {
-        tile_.setFillColor(Utility::convertTo3rdPartyColour(colour));
+        tile_.setFillColor(Utility::convertToSFMLColour(colour));
     }
 
     Colour Tile::getFillColour() const {

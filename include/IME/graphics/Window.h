@@ -7,6 +7,7 @@
 
 #include "IME/common/Position.h"
 #include "IME/common/Dimensions.h"
+#include "IME/utility/NonCopyable.h"
 #include "IDrawable.h"
 #include "Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,7 +15,11 @@
 
 namespace IME {
     namespace Graphics {
-        class Window : sf::NonCopyable {
+        namespace UI {
+            class IWidget;
+        }
+
+        class Window : Utility::NonCopyable {
         public:
             /**
              * @brief Window styles
@@ -26,25 +31,6 @@ namespace IME {
                 Close = 1 << 2,      // Title bar + close button
                 Fullscreen = 1 << 3,  // Fullscreen mode
                 Default = Titlebar | Resize | Close ///< Default window style
-            };
-
-            /**
-             * @brief Mouse cursor styles
-             */
-            enum class CursorType{
-                Arrow,                  //Arrow cursor (default)
-                ArrowWait,              // Busy arrow cursor
-                Wait,                   // Busy cursor
-                Text,                   // I-beam, cursor when hovering over a field allowing text entry
-                Hand,                   // Pointing hand cursor
-                SizeHorizontal,         // Horizontal double arrow cursor
-                SizeVertical,           // Vertical double arrow cursor
-                SizeTopLeftBottomRight, // Double arrow cursor going from top-left to bottom-right
-                SizeBottomLeftTopRight, // Double arrow cursor going from bottom-left to top-right
-                SizeAll,                // Combination of SizeHorizontal and SizeVertical
-                Cross,                  // Crosshair cursor
-                Help,                   // Help cursor
-                NotAllowed              // Action not allowed cursor
             };
 
             /**
@@ -105,12 +91,6 @@ namespace IME {
              *         if the frame rate is not limited
              */
             unsigned int getFramerateLimit() const;
-
-            /**
-             * @brief Change the displayed mouse cursor type
-             * @param cursorType Mouse cursor type to display
-             */
-            void setCursorType(CursorType cursorType);
 
             /**
              * @brief Get the dimensions of the window
@@ -176,8 +156,9 @@ namespace IME {
             unsigned int frameRateLimit_;
             //Instantiation state
             inline static auto isInstantiated_ = false;
+            friend class Gui;
         };
-    } // namespace Gui
-} // namespace IME
+    }
+}
 
 #endif

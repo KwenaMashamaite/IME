@@ -32,6 +32,14 @@ if(SFML_FOUND)
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
 endif()
 
+#Find and link TGUI
+set(TGUI_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extlibs/TGUI-0.9/include")
+set(TGUI_LIBRARY_DIR "${PROJECT_SOURCE_DIR}/extlibs/TGUI-0.9/lib")
+
+link_libraries(${TGUI_LIBRARY_DIR})
+include_directories(${TGUI_INCLUDE_DIR})
+target_link_libraries(ime PUBLIC ${TGUI_LIBRARY_DIR}/libtgui-d.a)
+
 file(GLOB_RECURSE IME_PUBLIC_HEADERS ${PROJECT_SOURCE_DIR}/include *.h)
 file(GLOB_RECURSE CMAKE_MAIN "cmake-build-debug/*" )
 list(REMOVE_ITEM IN IME_PUBLIC_HEADERS ${CMAKE_MAIN})
