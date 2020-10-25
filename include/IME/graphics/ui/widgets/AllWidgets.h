@@ -1,4 +1,6 @@
-
+/**
+ * @brief Includes all widgets
+ */
 
 #ifndef ALLWIDGETS_H
 #define ALLWIDGETS_H

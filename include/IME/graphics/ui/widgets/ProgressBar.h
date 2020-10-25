@@ -2,6 +2,7 @@
 #define PROGRESSBAR_H
 
 #include "IClickableWidget.h"
+#include "IME/graphics/ui/renderers/ProgressBarRenderer.h"
 #include <TGUI/Widgets/ProgressBar.hpp>
 
 namespace IME {
@@ -23,6 +24,26 @@ namespace IME {
              * @brief Construct a progress bar
              */
             ProgressBar();
+
+            /**
+             * @brief Set the progress bars renderer
+             * @param renderer The new renderer
+             *
+             * The renderer determines how the label is displayed. The progress
+             * bar has a default renderer which can be manipulated using the
+             * @see getRenderer() function
+             */
+            void setRenderer(std::shared_ptr<ProgressBarRenderer> renderer);
+
+            /**
+             * @brief Get the progress bars renderer
+             * @return The progress bars renderer
+             *
+             * The renderer gives access to functions that determine how the
+             * widget is displayed. It allows you to manipulate things such
+             * as the background colour, text colour, border colour etc...
+             */
+            std::shared_ptr<ProgressBarRenderer> getRenderer();
 
             /**
              * @brief Set a minimum value
@@ -201,15 +222,6 @@ namespace IME {
             void scale(float factorX, float factorY) override;
 
             /**
-             * @brief Draw the widget on a render target
-             * @param renderTarget Target to draw widget on
-             *
-             * @warning Do not call this function, the widget will be drawn
-             * by its container
-             */
-            void draw(Window &renderTarget) override;
-
-            /**
             * @brief Hide widget from a render target
             *
             * A hidden widget will not be drawn on a render target when calling
@@ -268,103 +280,6 @@ namespace IME {
             bool isMouseOverElement() const override;
 
             /**
-             * @brief Set the same margin on all sides
-             * @param margin Margin to set
-             *
-             * The margin controls the distance between the widget and
-             * whatever its placed next to. For instance, when the widget
-             * is placed next to another widget and the margin is zero,
-             * The widgets will physically touch each other. However, when
-             * the margin is non-zero, the widgets will automatically be
-             * separated by the set margin. The default margin is 0 on all
-             * sides
-             */
-            void setPadding(float padding) override;
-
-            /**
-             * @brief Set the padding of the widget individually
-             * @param padding Padding to set
-             *
-             * This function controls the distance between the widgets text
-             * content and the border. When the padding is 0, the border and
-             * the widgets text will have the same dimensions. The "left"
-             * and "right" values of the argument adjust the width while the
-             * "top" and "bottom" values adjust the height. The default padding
-             * is {0, 0, 0, 0}
-             */
-            void setPadding(const Padding &padding) override;
-
-            /**
-             * @brief Set the same margin on all sides
-             * @param margin Margin to set
-             *
-             * The margin controls the distance between the widget and
-             * whatever its placed next to. For instance, when the widget
-             * is placed next to another widget and the margin is zero,
-             * The widgets will physically touch each other. However, when
-             * the margin is non-zero, the widgets will automatically be
-             * separated by the set margin. The default margin is 0 on all
-             * sides
-             */
-            void setMargin(float margin) override;
-
-            /**
-             * @brief Set the margin (individually)
-             * @param margin Margin to set
-             *
-             * The margin controls the distance between the widget and
-             * whatever its placed next to. For instance, when the widget
-             * is placed next to another widget and the margin is zero,
-             * The widgets will physically touch each other. However, when
-             * the margin is non-zero, the widgets will automatically be
-             * separated by the set margin. The default margin is {0, 0, 0, 0}
-             */
-            void setMargin(const Margin &margin) override;
-
-            /**
-             * @brief Set the text colour of the button when the mouse cursor
-             *        enters it
-             * @param textColour Button text colour to set
-             *
-             * The buttons text colour changes to dark grey by default
-             * on "mouseEnter". The colour changes back to the way it
-             * was prior to "mouseEnter" on "mouseLeave"
-             */
-            void setHoverTextColour(Colour textColour) override;
-
-            /**
-             * @brief Set the background colour of the button when the mouse
-             *        cursor enters it
-             * @param backgroundColour Background colour to set
-             *
-             * The button colour changes to dim grey by default on mouse
-             * enter. The colour changes back to the way it was
-             * prior to "mouseEnter" on "mouseLeave"
-             */
-            void setHoverBackgroundColour(Colour backgroundColour) override;
-
-            /**
-             * @brief Set the outline colour of the button when the
-             *        mouse cursor enters the button
-             * @param outlineColour Outline colour to set
-             *
-             * The buttons outline colour changes to light sky blue
-             * by default on "mouseEnter". The colour changes back
-             * to the way it was prior to "mouseEnter" on "mouseLeave"
-             */
-            void setHoverOutlineColour(Colour outlineColour) override;
-
-            /**
-             * @brief Set the widget's text font
-             * @param textFont New font
-             * @throws FileNotFound if the specified font cannot be found on the
-             *         disk
-             *
-             * This function will overwrite the current font if set
-             */
-            void setTextFont(const std::string &textFont) override;
-
-            /**
              * @brief Set the character size of the widget's text
              * @param charSize New character size
              *
@@ -382,106 +297,11 @@ namespace IME {
             void setText(const std::string &content) override;
 
             /**
-             * @brief Set the outline thickness of the widget
-             * @param outlineThickness New outline thickness to set
-             *
-             * The default outline thickness is 0
-             */
-            void setOutlineThickness(float outlineThickness) override;
-
-            /**
-            * @brief Set the background colour of the widget
-            * @param backgroundColour New background colour of the widget
-            *
-            * The default background colour is gainsboro
-            */
-            void setBackgroundColour(Colour backgroundColour) override;
-
-            /**
-             * @brief Set the colour of the widget's text
-             * @param textColour New text colour
-             *
-             * The default text colour is black
-             */
-            void setTextColour(Colour textColour) override;
-
-            /**
-             * @brief Set the outline colour of the widget
-             * @param outlineColour New outline colour
-             *
-             * The default outline colour is grey
-             */
-            void setOutlineColour(Colour outlineColour) override;
-
-            /**
-             * @brief Set text alignment
-             * @param textAlignment Text alignment to set
-             */
-            void setTextAlignment(TextAlignment textAlignment) override;
-
-            /**
-             * @brief Get the padding set on the widget
-             * @return Padding set on the widget
-             */
-            Padding getPadding() const override;
-
-            /**
-             * @brief Get the margin set on the widget
-             * @return Margin set on the widget
-             */
-            Margin getMargin() const override;
-
-            /**
              * @brief Set the size of the widget
              * @param width The width of the widget
              * @param height The height of the widget
              */
             void setSize(float width, float height) override;
-
-            /**
-             * @brief Set the image that is shown on the widget
-             * @param filename Name of the image file
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * @note When this image is set, the background color property will
-             *       be ignored
-             */
-            void setTexture(const std::string& filename) override;
-
-            /**
-             * @brief Set the image that is displayed when the widget is focused
-             *        but not hovered
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             */
-            void setOnFocusedImage(const std::string& filename) override;
-
-            /**
-             * @brief Set the image that is displayed when the widget is disabled
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             */
-            void setOnDisabledImage(const std::string& filename) override;
-
-            /**
-             * @brief Set the image that is displayed when the mouse is held
-             *        down on the widget
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * No image is displayed by default
-             */
-            void setOnMouseDownImage(const std::string& filename) override;
-
-            /**
-             * @brief Set the image that is displayed when the mouse enters the
-             *        widget
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * No image is displayed by default
-             */
-            void setOnHoverImage(const std::string& filename) override;
 
             /**
              * @brief Get the size of the widget
@@ -504,46 +324,16 @@ namespace IME {
             Dimensions getAbsoluteSize() override;
 
             /**
-             * @brief Get the background colour of the widget
-             * @return Background colour of the widget
-             */
-            Colour getBackgroundColour() const override;
-
-            /**
-             * @brief Get the text colour of the widget
-             * @return Text colour of the widget
-             */
-            Colour getTextColour() const override;
-
-            /**
-             * @brief Get the outline colour of the widget
-             * @return Outline colour of the widget
-             */
-            Colour getOutlineColour() const override;
-
-            /**
              * @brief Get the widgets text content
              * @return Widgets text content
              */
             std::string getText() const override;
 
             /**
-             * @brief Get the outline thickness of the widget
-             * @return Outline thickness of the widget
-             */
-            unsigned int getOutlineThickness() const override;
-
-            /**
              * @brief Get the character size of the text
              * @return The character size of the text
              */
             unsigned int getTextSize() const override;
-
-            /**
-             * @brief Get the text alignment
-             * @return Text alignment
-             */
-            TextAlignment getTextAlignment() const override;
 
             /**
              * @brief Focus or unfocus widget
@@ -556,12 +346,6 @@ namespace IME {
              * @return True if widget is focused. Otherwise, false
              */
             bool isFocused() const override;
-
-            /**
-             * @brief Get the name of the current text font
-             * @return Name of the current text font
-             */
-            std::string getFontName() const override;
 
             /**
              * @brief Get the type of the widget
@@ -590,30 +374,18 @@ namespace IME {
 
             /**
              * @internal
-             * @brief Get the internal pointer to a third party widget widget
-             * @return The internal pointer to a third party widget widget
+             * @brief Get the internal pointer to a third party widget
+             * @return The internal pointer to a third party widget
              *
              * @warning This function is intended for internal use only and
              * should never be called under any circumstance
              */
             std::shared_ptr<tgui::Widget> getInternalPtr() override;
 
-            /**
-             * @brief Handle an event
-             * @param event Event to handle
-             *
-             * @note If overridden, this function must be called in the body of
-             * the overriding function so that the base class can also handle
-             * its events. Failure to do so may result in inconsistent and
-             * incorrect behavior
-             *
-             * @warning Don't call this function, the widgets container will
-             * pass the event to it
-             */
-            void handleEvent(sf::Event event) override;
-
         private:
             std::shared_ptr<tgui::ProgressBar> progressBar_;
+            std::shared_ptr<ProgressBarRenderer> renderer_;
+            //How long the progress bar takes before its completely hidden or shown
             static const int fadeAnimDuration_ = 100;
         };
     }

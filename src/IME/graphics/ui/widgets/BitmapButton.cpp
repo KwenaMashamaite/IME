@@ -2,14 +2,28 @@
 #include "IME/utility/Helpers.h"
 #include <TGUI/GuiBase.hpp>
 #include "IME/core/managers/ResourceManager.h"
+#include <cassert>
 
 namespace IME::Graphics::UI {
     BitmapButton::BitmapButton() : BitmapButton("") 
     {}
 
     BitmapButton::BitmapButton(const std::string &buttonText)
-        : button_{tgui::BitmapButton::create(buttonText)}
-    {}
+        : button_{tgui::BitmapButton::create(buttonText)},
+          renderer_{std::make_shared<ButtonRenderer>()}
+    {
+        renderer_->setInternalPtr(button_->getRenderer());
+    }
+
+    void BitmapButton::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {
+        assert(renderer && "A nullptr cannot be set as a renderer");
+        renderer_ = renderer;
+        button_->setRenderer(renderer->getInternalPtr()->getData());
+    }
+
+    std::shared_ptr<ButtonRenderer> BitmapButton::getRenderer() {
+        return renderer_;
+    }
     
     void BitmapButton::setImage(const std::string &filename) {
         button_->setImage(IME::ResourceManager::getInstance()->getTexture(filename));
@@ -65,12 +79,6 @@ namespace IME::Graphics::UI {
                            button_->getScale().y + factorY});
     }
 
-    void BitmapButton::draw(Window &renderTarget) {
-        // Currently, widgets cannot be used as standalone, they must be
-        // inside a container and that container renders them
-        // @see IME::Graphics::Gui
-    }
-
     void BitmapButton::hide() {
         button_->hideWithEffect(tgui::ShowAnimationType::Fade,
                                 fadeAnimDuration_);
@@ -102,28 +110,8 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void BitmapButton::setPadding(float padding) {
-        //@todo
-    }
-
-    void BitmapButton::setPadding(const Padding &padding) {
-        //@todo
-    }
-
-    void BitmapButton::setMargin(float margin) {
-        //@todo
-    }
-
-    void BitmapButton::setMargin(const Margin &margin) {
-        //@todo
-    }
-
     void BitmapButton::setPosition(Position position) {
         setPosition(position.x, position.y);
-    }
-
-    void BitmapButton::setTextFont(const std::string &textFont) {
-        button_->getRenderer()->setFont(textFont.c_str());
     }
 
     void BitmapButton::setTextSize(unsigned int charSize) {
@@ -134,43 +122,6 @@ namespace IME::Graphics::UI {
         button_->setText(content);
     }
 
-    void BitmapButton::setOutlineThickness(float outlineThickness) {
-        button_->getRenderer()->setBorders(
-                {outlineThickness, outlineThickness, outlineThickness,
-                 outlineThickness});
-    }
-
-    void BitmapButton::setBackgroundColour(Colour backgroundColour) {
-        button_->getRenderer()->setBackgroundColor(
-                Utility::convertToTGUIColour(backgroundColour));
-    }
-
-    void BitmapButton::setTextColour(Colour textColour) {
-        button_->getRenderer()->setTextColor(
-                Utility::convertToTGUIColour(textColour));
-    }
-
-    void BitmapButton::setOutlineColour(Colour outlineColour) {
-        button_->getRenderer()->setBorderColor(
-                Utility::convertToTGUIColour(outlineColour));
-    }
-
-    void BitmapButton::setTextAlignment(TextAlignment textAlignment) {
-        //@TODO
-    }
-
-    Padding BitmapButton::getPadding() const {
-        return {button_->getRenderer()->getBorders().getLeft(),
-                button_->getRenderer()->getBorders().getRight(),
-                button_->getRenderer()->getBorders().getTop(),
-                button_->getRenderer()->getBorders().getBottom()};
-    }
-
-    Margin BitmapButton::getMargin() const {
-        //@todo
-        return Margin();
-    }
-
     void BitmapButton::setSize(float width, float height) {
         button_->setSize({width, height});
     }
@@ -179,41 +130,12 @@ namespace IME::Graphics::UI {
         return {button_->getSize().x, button_->getSize().y};
     }
 
-    Colour BitmapButton::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                button_->getRenderer()->getBackgroundColor());
-    }
-
-    Colour BitmapButton::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                button_->getRenderer()->getTextColor());
-    }
-
-    Colour BitmapButton::getOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                button_->getRenderer()->getBorderColor());
-    }
-
     std::string BitmapButton::getText() const {
         return button_->getText().toAnsiString();
     }
 
-    unsigned int BitmapButton::getOutlineThickness() const {
-        //@todo
-        return 0;
-    }
-
     unsigned int BitmapButton::getTextSize() const {
         return button_->getTextSize();
-    }
-
-    TextAlignment BitmapButton::getTextAlignment() const {
-        //@TODO - FIX
-        return TextAlignment::Left;
-    }
-
-    std::string BitmapButton::getFontName() const {
-        return button_->getRenderer()->getFont().getId().toAnsiString();
     }
 
     std::string BitmapButton::getType() const {
@@ -228,26 +150,6 @@ namespace IME::Graphics::UI {
         return button_->isMouseOnWidget({x, y});
     }
 
-    void BitmapButton::handleEvent(sf::Event event) {
-        auto tguiEvent = Utility::convert_SFML_event_to_TGUI_event(event);
-        button_->getParentGui()->handleEvent(tguiEvent);
-    }
-
-    void BitmapButton::setHoverTextColour(Colour textColour) {
-        button_->getRenderer()->setTextColorHover(
-                Utility::convertToTGUIColour(textColour));
-    }
-
-    void BitmapButton::setHoverBackgroundColour(Colour backgroundColour) {
-        button_->getRenderer()->setBackgroundColorHover(
-                Utility::convertToTGUIColour(backgroundColour));
-    }
-
-    void BitmapButton::setHoverOutlineColour(Colour outlineColour) {
-        button_->getRenderer()->setBorderColorHover(
-                Utility::convertToTGUIColour(outlineColour));
-    }
-
     void BitmapButton::setFocused(bool isFocused) {
         button_->setFocused(isFocused);
     }
@@ -256,36 +158,11 @@ namespace IME::Graphics::UI {
         return button_->isFocused();
     }
 
-    void BitmapButton::setTexture(const std::string &filename) {
-        button_->getRenderer()->setTexture(
-                IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
     std::shared_ptr<tgui::Widget> BitmapButton::getInternalPtr() {
         return button_;
     }
 
     Dimensions BitmapButton::getAbsoluteSize() {
         return {button_->getFullSize().x, button_->getFullSize().y};
-    }
-
-    void BitmapButton::setOnFocusedImage(const std::string &filename) {
-        button_->getRenderer()->setTextureFocused(
-                IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
-    void BitmapButton::setOnDisabledImage(const std::string &filename) {
-        button_->getRenderer()->setTextureDisabled(
-                IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
-    void BitmapButton::setOnMouseDownImage(const std::string &filename) {
-        button_->getRenderer()->setTextureDown(
-                IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
-    void BitmapButton::setOnHoverImage(const std::string &filename) {
-        button_->getRenderer()->setTextureHover(
-                IME::ResourceManager::getInstance()->getTexture(filename));
     }
 }

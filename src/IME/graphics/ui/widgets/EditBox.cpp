@@ -1,11 +1,24 @@
 #include "IME/graphics/ui/widgets/EditBox.h"
 #include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
 #include <TGUI/GuiBase.hpp>
 
 namespace IME::Graphics::UI {
-    EditBox::EditBox() : editBox_{tgui::EditBox::create()}
-    {}
+    EditBox::EditBox()
+        : editBox_{tgui::EditBox::create()},
+          renderer_{std::make_shared<EditBoxRenderer>()}
+    {
+        renderer_->setInternalPtr(editBox_->getRenderer());
+    }
+
+    void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
+        assert(renderer && "A nullptr cannot be set as a renderer");
+        renderer_ = renderer;
+        editBox_->setRenderer(renderer->getInternalPtr()->getData());
+    }
+
+    std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() {
+        return renderer_;
+    }
 
     void EditBox::setDefaultText(const std::string &text) {
         editBox_->setDefaultText(text);
@@ -97,12 +110,6 @@ namespace IME::Graphics::UI {
                            editBox_->getScale().y + factorY});
     }
 
-    void EditBox::draw(Window &renderTarget) {
-        // Currently, widgets cannot be used as standalone, they must be
-        // inside a container and that container renders them
-        // @see IME::Graphics::Gui
-    }
-
     void EditBox::hide() {
         editBox_->hideWithEffect(tgui::ShowAnimationType::Fade,
                                 fadeAnimDuration_);
@@ -134,28 +141,8 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void EditBox::setPadding(float padding) {
-        //@todo
-    }
-
-    void EditBox::setPadding(const Padding &padding) {
-        //@todo
-    }
-
-    void EditBox::setMargin(float margin) {
-        //@todo
-    }
-
-    void EditBox::setMargin(const Margin &margin) {
-        //@todo
-    }
-
     void EditBox::setPosition(Position position) {
         setPosition(position.x, position.y);
-    }
-
-    void EditBox::setTextFont(const std::string &textFont) {
-        editBox_->getRenderer()->setFont(textFont.c_str());
     }
 
     void EditBox::setTextSize(unsigned int charSize) {
@@ -166,43 +153,6 @@ namespace IME::Graphics::UI {
         editBox_->setText(content);
     }
 
-    void EditBox::setOutlineThickness(float outlineThickness) {
-        editBox_->getRenderer()->setBorders(
-                {outlineThickness, outlineThickness, outlineThickness,
-                 outlineThickness});
-    }
-
-    void EditBox::setBackgroundColour(Colour backgroundColour) {
-        editBox_->getRenderer()->setBackgroundColor(
-                Utility::convertToTGUIColour(backgroundColour));
-    }
-
-    void EditBox::setTextColour(Colour textColour) {
-        editBox_->getRenderer()->setTextColor(
-                Utility::convertToTGUIColour(textColour));
-    }
-
-    void EditBox::setOutlineColour(Colour outlineColour) {
-        editBox_->getRenderer()->setBorderColor(
-                Utility::convertToTGUIColour(outlineColour));
-    }
-
-    void EditBox::setTextAlignment(TextAlignment textAlignment) {
-        //@TODO
-    }
-
-    Padding EditBox::getPadding() const {
-        return {editBox_->getRenderer()->getBorders().getLeft(),
-                editBox_->getRenderer()->getBorders().getRight(),
-                editBox_->getRenderer()->getBorders().getTop(),
-                editBox_->getRenderer()->getBorders().getBottom()};
-    }
-
-    Margin EditBox::getMargin() const {
-        //@todo
-        return Margin();
-    }
-
     void EditBox::setSize(float width, float height) {
         editBox_->setSize({width, height});
     }
@@ -211,41 +161,12 @@ namespace IME::Graphics::UI {
         return {editBox_->getSize().x, editBox_->getSize().y};
     }
 
-    Colour EditBox::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                editBox_->getRenderer()->getBackgroundColor());
-    }
-
-    Colour EditBox::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                editBox_->getRenderer()->getTextColor());
-    }
-
-    Colour EditBox::getOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                editBox_->getRenderer()->getBorderColor());
-    }
-
     std::string EditBox::getText() const {
         return editBox_->getText().toAnsiString();
     }
 
-    unsigned int EditBox::getOutlineThickness() const {
-        //@todo
-        return 0;
-    }
-
     unsigned int EditBox::getTextSize() const {
         return editBox_->getTextSize();
-    }
-
-    TextAlignment EditBox::getTextAlignment() const {
-        //@TODO - FIX
-        return TextAlignment::Left;
-    }
-
-    std::string EditBox::getFontName() const {
-        return editBox_->getRenderer()->getFont().getId().toAnsiString();
     }
 
     std::string EditBox::getType() const {
@@ -260,25 +181,6 @@ namespace IME::Graphics::UI {
         return editBox_->isMouseOnWidget({x, y});
     }
 
-    void EditBox::handleEvent(sf::Event event) {
-        auto tguiEvent = Utility::convert_SFML_event_to_TGUI_event(event);
-        editBox_->getParentGui()->handleEvent(tguiEvent);
-    }
-
-    void EditBox::setHoverTextColour(Colour textColour) {
-
-    }
-
-    void EditBox::setHoverBackgroundColour(Colour backgroundColour) {
-        editBox_->getRenderer()->setBackgroundColorHover(
-            Utility::convertToTGUIColour(backgroundColour));
-    }
-
-    void EditBox::setHoverOutlineColour(Colour outlineColour) {
-        editBox_->getRenderer()->setBorderColorHover(
-            Utility::convertToTGUIColour(outlineColour));
-    }
-
     void EditBox::setFocused(bool isFocused) {
         editBox_->setFocused(isFocused);
     }
@@ -287,35 +189,11 @@ namespace IME::Graphics::UI {
         return editBox_->isFocused();
     }
 
-    void EditBox::setTexture(const std::string &filename) {
-        editBox_->getRenderer()->setTexture(
-            IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
     std::shared_ptr<tgui::Widget> EditBox::getInternalPtr() {
         return editBox_;
     }
 
     Dimensions EditBox::getAbsoluteSize() {
         return {editBox_->getFullSize().x, editBox_->getFullSize().y};
-    }
-
-    void EditBox::setOnFocusedImage(const std::string &filename) {
-        editBox_->getRenderer()->setTextureFocused(
-            IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
-    void EditBox::setOnDisabledImage(const std::string &filename) {
-        editBox_->getRenderer()->setTextureDisabled(
-            IME::ResourceManager::getInstance()->getTexture(filename));
-    }
-
-    void EditBox::setOnMouseDownImage(const std::string &filename) {
-
-    }
-
-    void EditBox::setOnHoverImage(const std::string &filename) {
-        editBox_->getRenderer()->setTextureHover(
-                IME::ResourceManager::getInstance()->getTexture(filename));
     }
 }

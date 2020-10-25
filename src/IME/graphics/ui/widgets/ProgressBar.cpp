@@ -2,11 +2,25 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 #include <TGUI/GuiBase.hpp>
+#include <cassert>
 
 namespace IME::Graphics::UI {
     ProgressBar::ProgressBar()
-        : progressBar_{tgui::ProgressBar::create()}
-    {}
+        : progressBar_{tgui::ProgressBar::create()},
+          renderer_{std::make_shared<ProgressBarRenderer>()}
+    {
+        renderer_->setInternalPtr(progressBar_->getRenderer());
+    }
+
+    void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {
+        assert(renderer && "A nullptr cannot be set as a renderer");
+        renderer_ = renderer;
+        progressBar_->setRenderer(renderer->getInternalPtr()->getData());
+    }
+
+    std::shared_ptr<ProgressBarRenderer> ProgressBar::getRenderer() {
+        return renderer_;
+    }
 
     void ProgressBar::setMinimumValue(unsigned int minValue) {
         progressBar_->setMinimum(minValue);
@@ -87,12 +101,6 @@ namespace IME::Graphics::UI {
                            progressBar_->getScale().y + factorY});
     }
 
-    void ProgressBar::draw(Window &renderTarget) {
-        // Currently, widgets cannot be used as standalone, they must be
-        // inside a container and that container renders them
-        // @see IME::Graphics::Gui
-    }
-
     void ProgressBar::hide() {
         progressBar_->hideWithEffect(tgui::ShowAnimationType::Fade,
                                 fadeAnimDuration_);
@@ -124,28 +132,8 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void ProgressBar::setPadding(float padding) {
-        //@todo
-    }
-
-    void ProgressBar::setPadding(const Padding &padding) {
-        //@todo
-    }
-
-    void ProgressBar::setMargin(float margin) {
-        //@todo
-    }
-
-    void ProgressBar::setMargin(const Margin &margin) {
-        //@todo
-    }
-
     void ProgressBar::setPosition(Position position) {
         setPosition(position.x, position.y);
-    }
-
-    void ProgressBar::setTextFont(const std::string &textFont) {
-        progressBar_->getRenderer()->setFont(textFont.c_str());
     }
 
     void ProgressBar::setTextSize(unsigned int charSize) {
@@ -156,43 +144,6 @@ namespace IME::Graphics::UI {
         progressBar_->setText(content);
     }
 
-    void ProgressBar::setOutlineThickness(float outlineThickness) {
-        progressBar_->getRenderer()->setBorders(
-                {outlineThickness, outlineThickness, outlineThickness,
-                 outlineThickness});
-    }
-
-    void ProgressBar::setBackgroundColour(Colour backgroundColour) {
-        progressBar_->getRenderer()->setBackgroundColor(
-                Utility::convertToTGUIColour(backgroundColour));
-    }
-
-    void ProgressBar::setTextColour(Colour textColour) {
-        progressBar_->getRenderer()->setTextColor(
-                Utility::convertToTGUIColour(textColour));
-    }
-
-    void ProgressBar::setOutlineColour(Colour outlineColour) {
-        progressBar_->getRenderer()->setBorderColor(
-                Utility::convertToTGUIColour(outlineColour));
-    }
-
-    void ProgressBar::setTextAlignment(TextAlignment textAlignment) {
-        //@TODO
-    }
-
-    Padding ProgressBar::getPadding() const {
-        return {progressBar_->getRenderer()->getBorders().getLeft(),
-                progressBar_->getRenderer()->getBorders().getRight(),
-                progressBar_->getRenderer()->getBorders().getTop(),
-                progressBar_->getRenderer()->getBorders().getBottom()};
-    }
-
-    Margin ProgressBar::getMargin() const {
-        //@todo
-        return Margin();
-    }
-
     void ProgressBar::setSize(float width, float height) {
         progressBar_->setSize({width, height});
     }
@@ -201,41 +152,12 @@ namespace IME::Graphics::UI {
         return {progressBar_->getSize().x, progressBar_->getSize().y};
     }
 
-    Colour ProgressBar::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                progressBar_->getRenderer()->getBackgroundColor());
-    }
-
-    Colour ProgressBar::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                progressBar_->getRenderer()->getTextColor());
-    }
-
-    Colour ProgressBar::getOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                progressBar_->getRenderer()->getBorderColor());
-    }
-
     std::string ProgressBar::getText() const {
         return progressBar_->getText().toAnsiString();
     }
 
-    unsigned int ProgressBar::getOutlineThickness() const {
-        //@todo
-        return 0;
-    }
-
     unsigned int ProgressBar::getTextSize() const {
         return progressBar_->getTextSize();
-    }
-
-    TextAlignment ProgressBar::getTextAlignment() const {
-        //@TODO - FIX
-        return TextAlignment::Left;
-    }
-
-    std::string ProgressBar::getFontName() const {
-        return progressBar_->getRenderer()->getFont().getId().toAnsiString();
     }
 
     std::string ProgressBar::getType() const {
@@ -250,23 +172,6 @@ namespace IME::Graphics::UI {
         return progressBar_->isMouseOnWidget({x, y});
     }
 
-    void ProgressBar::handleEvent(sf::Event event) {
-        auto tguiEvent = Utility::convert_SFML_event_to_TGUI_event(event);
-        progressBar_->getParentGui()->handleEvent(tguiEvent);
-    }
-
-    void ProgressBar::setHoverTextColour(Colour textColour) {
-
-    }
-
-    void ProgressBar::setHoverBackgroundColour(Colour backgroundColour) {
-
-    }
-
-    void ProgressBar::setHoverOutlineColour(Colour outlineColour) {
-
-    }
-
     void ProgressBar::setFocused(bool isFocused) {
         progressBar_->setFocused(isFocused);
     }
@@ -275,31 +180,11 @@ namespace IME::Graphics::UI {
         return progressBar_->isFocused();
     }
 
-    void ProgressBar::setTexture(const std::string &filename) {
-
-    }
-
     std::shared_ptr<tgui::Widget> ProgressBar::getInternalPtr() {
         return progressBar_;
     }
 
     Dimensions ProgressBar::getAbsoluteSize() {
         return {progressBar_->getFullSize().x, progressBar_->getFullSize().y};
-    }
-
-    void ProgressBar::setOnFocusedImage(const std::string &filename) {
-
-    }
-
-    void ProgressBar::setOnDisabledImage(const std::string &filename) {
-
-    }
-
-    void ProgressBar::setOnMouseDownImage(const std::string &filename) {
-
-    }
-
-    void ProgressBar::setOnHoverImage(const std::string &filename) {
-
     }
 }

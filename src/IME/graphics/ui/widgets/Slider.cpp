@@ -1,12 +1,26 @@
 #include "IME/graphics/ui/widgets/Slider.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
+#include <cassert>
 #include <TGUI/GuiBase.hpp>
 
 namespace IME::Graphics::UI {
     Slider::Slider(float minValue, float maxValue) 
-        : slider_{tgui::Slider::create(minValue, maxValue)}
-    {}
+        : slider_{tgui::Slider::create(minValue, maxValue)},
+          renderer_{std::make_shared<SliderRenderer>()}
+    {
+        renderer_->setInternalPtr(slider_->getRenderer());
+    }
+
+    void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
+        assert(renderer && "A nullptr cannot be set as a renderer");
+        renderer_ = renderer;
+        slider_->setRenderer(renderer->getInternalPtr()->getData());
+    }
+
+    std::shared_ptr<SliderRenderer> Slider::getRenderer() {
+        return renderer_;
+    }
 
     void Slider::setMinimumValue(float minValue) {
         slider_->setMinimum(minValue);
@@ -101,6 +115,10 @@ namespace IME::Graphics::UI {
             getPosition().y + yOffset);
     }
 
+    void Slider::setTextSize(unsigned int charSize) {
+        slider_->setTextSize(charSize);
+    }
+
     void Slider::rotate(float offset) {
         slider_->setRotation(slider_->getRotation() + offset);
     }
@@ -108,12 +126,6 @@ namespace IME::Graphics::UI {
     void Slider::scale(float factorX, float factorY) {
         slider_->setScale({slider_->getScale().x + factorX,
             slider_->getScale().y + factorY});
-    }
-
-    void Slider::draw(Window &renderTarget) {
-        // Currently, widgets cannot be used as standalone, they must be
-        // inside a container and that container renders them
-        // @see IME::Graphics::Gui
     }
 
     void Slider::hide() {
@@ -130,63 +142,8 @@ namespace IME::Graphics::UI {
         return !slider_->isVisible();
     }
 
-    void Slider::setPadding(float padding) {
-
-    }
-
-    void Slider::setPadding(const Padding &padding) {
-
-    }
-
-    void Slider::setMargin(float margin) {
-
-    }
-
-    void Slider::setMargin(const Margin &margin) {
-
-    }
-
-    void Slider::setTextFont(const std::string &textFont) {
-        slider_->getRenderer()->setFont(textFont.c_str());
-    }
-
-    void Slider::setTextSize(unsigned int charSize) {
-        slider_->setTextSize(charSize);
-    }
-
     void Slider::setText(const std::string &content) {
 
-    }
-
-    void Slider::setOutlineThickness(float outlineThickness) {
-        slider_->getRenderer()->setBorders(
-                {outlineThickness, outlineThickness, outlineThickness,
-                 outlineThickness});
-    }
-
-    void Slider::setBackgroundColour(Colour backgroundColour) {
-
-    }
-
-    void Slider::setTextColour(Colour textColour) {
-
-    }
-
-    void Slider::setOutlineColour(Colour outlineColour) {
-        slider_->getRenderer()->setBorderColor(
-                Utility::convertToTGUIColour(outlineColour));
-    }
-
-    void Slider::setTextAlignment(TextAlignment textAlignment) {
-
-    }
-
-    Padding Slider::getPadding() const {
-        return Padding();
-    }
-
-    Margin Slider::getMargin() const {
-        return Margin();
     }
 
     void Slider::setSize(float width, float height) {
@@ -201,37 +158,12 @@ namespace IME::Graphics::UI {
         return {slider_->getFullSize().x, slider_->getFullSize().y};;
     }
 
-    Colour Slider::getBackgroundColour() const {
-
-    }
-
-    Colour Slider::getTextColour() const {
-
-    }
-
-    Colour Slider::getOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
-                slider_->getRenderer()->getBorderColor());
-    }
-
     std::string Slider::getText() const {
 
     }
 
-    unsigned int Slider::getOutlineThickness() const {
-        return 0;
-    }
-
     unsigned int Slider::getTextSize() const {
         return slider_->getTextSize();
-    }
-
-    TextAlignment Slider::getTextAlignment() const {
-        return TextAlignment::Center;
-    }
-
-    std::string Slider::getFontName() const {
-        return slider_->getRenderer()->getFont().getId().toAnsiString();
     }
 
     void Slider::toggleVisibility() {
@@ -248,10 +180,5 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> Slider::getInternalPtr() {
         return slider_;
-    }
-
-    void Slider::handleEvent(sf::Event event) {
-        auto tguiEvent = Utility::convert_SFML_event_to_TGUI_event(event);
-        slider_->getParentGui()->handleEvent(tguiEvent);
     }
 }

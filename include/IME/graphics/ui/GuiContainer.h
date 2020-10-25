@@ -8,15 +8,17 @@
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Position.h"
 #include "IME/graphics/CursorTypes.h"
+#include "IME/graphics/ui/layout/IContainer.h"
 
 namespace IME {
-    namespace Graphics {
-        class Window;
-        namespace UI {
-            class IWidget;
+    namespace Graphics::UI {
+        namespace Graphics {
+            class Window;
         }
 
-        class Gui {
+        class IWidget;
+
+        class GuiContainer {
         public:
             /**
              * @brief Construct the gui
@@ -24,7 +26,7 @@ namespace IME {
              * @warning When constructed with this constructor, @see setTarget()
              * must be called before the gui is used
              */
-            Gui() = default;
+            GuiContainer() = default;
 
             /**
              * @brief Construct the gui and set the target on which the gui
@@ -34,17 +36,17 @@ namespace IME {
              * This constructor will set the target therefore there is no need
              * to call @see setTarget()
              */
-            explicit Gui(Window& target);
+            explicit GuiContainer(Window& target);
 
             /**
              * @brief Copy constructor
              */
-            Gui(const Gui&) = delete;
+            GuiContainer(const GuiContainer&) = delete;
 
             /**
              * @brief Assignment operator
              */
-            Gui& operator=(const Gui&) = delete;
+            GuiContainer& operator=(const GuiContainer&) = delete;
 
             /**
              * @brief Set the target on which the gui should be drawn
@@ -88,123 +90,9 @@ namespace IME {
             void setFont(const std::string& filename);
 
             /**
-             * @brief Get a list of all widgets in the gui
-             * @return A vector of all widgets in the gui
-             */
-            const std::vector<UI::IWidget>& getWidgets() const;
-
-            /**
-             * @brief Add a widget to the gui
-             * @param widgetPtr Pointer to the widget to be added
-             * @param widgetName Name of the widget
-             *
-             * The widget name must be set if the widget is to be retrieved at
-             * a later time. In addition the name must not contain whitespaces
-             */
-            void addWidget(const std::shared_ptr<UI::IWidget> widgetPtr,
-                const std::string& widgetName = "");
-
-            /**
-             * @brief Get a pointer to a widget in the gui
-             * @param widgetName Name of the widget to retrieve
-             * @return Pointer to the specified widget or a nullptr if the gui
-             *         does not have a widget with the specified name
-             *
-             * The gui will first search for widgets that are direct children
-             * of it, but when none of the child widgets match the given name,
-             * a recursive search will be performed.
-             */
-            std::shared_ptr<UI::IWidget> getWidget(const std::string& widgetName) const;
-
-            /**
-             * @brief Remove a widget from the gui
-             * @param widget Widget to be removed from the gui
-             * @return True if the widget was removed or false if the widget
-             *         does not exist i the gui
-             */
-            bool removeWidget(const std::shared_ptr<UI::IWidget> widget);
-
-            /**
-             * @brief Remove all widgets from the gui
-             */
-            void removeAllWidgets();
-
-            /**
-             * @brief Get the currently focused widget inside the gui
-             * @return Pointer to the focused child widget or a nullptr if none
-             *         of the widgets are currently focused
-             *
-             * @note If the focused widget is a container, then a pointer to
-             * the container is returned rather than a pointer to the focused
-             * widget inside that container. @see getFocusedLeaf() should be
-             * used to get the widget that is focused inside a container
-             */
-            std::shared_ptr<UI::IWidget> getFocusedWidget() const;
-
-            /**
-             * @brief Get the currently focused widget inside the gui
-             * @return Pointer to the focused child widget or a nullptr if none
-             *         of the widgets are currently focused
-             *
-             * @note Unlike @see getFocusedWidget() which returns a pointer to
-             * a container when the focused widget is a child of another
-             * container within the gui, this function will always return the
-             * focused widget regardless of whether its a direct child of the
-             * gui or not
-             */
-            std::shared_ptr<UI::IWidget> getFocusedLeaf() const;
-
-            /**
-             * @brief Get a widget at a given position
-             * @param pos The position of the widget relative to the gui view
-             * @return Pointer to the widget at the specified position or a
-             *         nullptr if there is no widget at that position
-             */
-            std::shared_ptr<UI::IWidget> getWidgetAtPosition(Position pos) const;
-
-            /**
-             * @brief Get the widget below the mouse cursor
-             * @param mousePos The position of the mouse cursor in pixel
-             *                 coordinates relative to the window
-             * @return Widget below the mouse or a nullptr if the mouse isn't
-             *         on top of any widgets
-             */
-            std::shared_ptr<UI::IWidget> getWidgetBelowMouseCursor(Position mousePos) const;
-
-            /**
-             * @brief Focus the next widget in the gui
-             * @param recursive Set true to focus next widget when the currently
-             *        focused widget is a container or false to focus the sibling
-             *        of that container
-             * @return True if the next widget was focused, otherwise false
-             */
-            bool focusNextWidget(bool recursive = true);
-
-            /**
-             * @brief Focus the previous widget in the gui
-             * @param recursive Set true to focus next widget when the currently
-             *        focused widget is a container or false to focus the sibling
-             *        of that container
-             * @return True if the next widget was focused, otherwise false
-             */
-            bool focusPreviousWidget(bool recursive = true);
-
-            /**
              * @brief Unfocus all widgets
              */
             void unfocusAllWidgets();
-
-            /**
-             * @brief Place a widget before all other widgets to the front
-             * @param widget The widget to be moved to the front
-             */
-            void moveWidgetToFront(const std::shared_ptr<UI::IWidget> widget);
-
-            /**
-             * @brief Place a widget behind all other widgets
-             * @param widget The widget to be moved to the back
-             */
-            void moveWidgetToBack(const std::shared_ptr<UI::IWidget> widget);
 
             /**
              * @brief Set the opacity of all widgets
@@ -220,19 +108,6 @@ namespace IME {
              * @return The opacity of all the widgets in the range [0, 1]
              */
             float getOpacity() const;
-
-            /**
-             * @brief Set the character size of all existing and future child
-             *        widgets
-             * @param size The new character size
-             */
-            void setTextSize(unsigned int size);
-
-            /**
-             * @brief Get the text size of all existing and future child widgets
-             * @return The text size of all existing and future child widgets
-             */
-            unsigned int getTextSize() const;
 
             /**
              * @brief Change the mouse cursor that gets shown
@@ -275,12 +150,149 @@ namespace IME {
             void requestMouseCursor(CursorType cursorType);
 
             /**
-             * @brief Update the animation clock
-             *
-             * This function must called at least once per frame to ensure that
-             * animations keep playing
+             * @brief Get a list of all widgets in the gui
+             * @return A vector of all widgets in the gui
              */
-            void updateAnimationClock();
+            const std::vector<IWidget>& getWidgets() const;
+
+            /**
+             * @brief Add a widget to the gui
+             * @param widgetPtr Pointer to the widget to be added
+             * @param widgetName Name of the widget
+             *
+             * The widget name must be set if the widget is to be retrieved at
+             * a later time. In addition, the name must not contain whitespaces
+             */
+            void addWidget(const std::shared_ptr<IWidget> &widgetPtr,
+                const std::string& widgetName = "");
+
+            /**
+             * @brief Get a pointer to a widget in the gui
+             * @param widgetName Name of the widget to retrieve
+             * @return Pointer to the specified widget or a nullptr if the gui
+             *         does not have a widget with the specified name
+             *
+             * The gui will first search for widgets that are direct children
+             * of it, but when none of the child widgets match the given name,
+             * a recursive search will be performed.
+             */
+            std::shared_ptr<IWidget> getWidget(const std::string& widgetName) const;
+
+            /**
+             * @brief Remove a widget from the gui
+             * @param widget Widget to be removed from the gui
+             * @return True if the widget was removed or false if the widget
+             *         does not exist in the gui
+             */
+            bool removeWidget(std::shared_ptr<IWidget> widget);
+
+            /**
+             * @brief Remove all widgets from the gui
+             */
+            void removeAllWidgets();
+
+            /**
+             * @brief Get the currently focused widget inside the gui
+             * @return Pointer to the focused child widget or a nullptr if none
+             *         of the widgets are currently focused
+             *
+             * @note If the focused widget is a container, then a pointer to
+             * the container is returned rather than a pointer to the focused
+             * widget inside that container. @see getFocusedLeaf() should be
+             * used to get the widget that is focused inside a container
+             */
+            std::shared_ptr<IWidget> getFocusedWidget() const;
+
+            /**
+             * @brief Get the currently focused widget inside the gui
+             * @return Pointer to the focused child widget or a nullptr if none
+             *         of the widgets are currently focused
+             *
+             * @note Unlike @see getFocusedWidget() which returns a pointer to
+             * a container when the focused widget is a child of another
+             * container within the gui, this function will always return the
+             * focused widget regardless of whether its a direct child of the
+             * gui or not
+             */
+            std::shared_ptr<IWidget> getFocusedLeaf() const;
+
+            /**
+             * @brief Get a widget at a given position
+             * @param pos The position of the widget relative to the gui view
+             * @return Pointer to the widget at the specified position or a
+             *         nullptr if there is no widget at that position
+             */
+            std::shared_ptr<IWidget> getWidgetAtPosition(Position pos) const;
+
+            /**
+             * @brief Get the widget below the mouse cursor
+             * @param mousePos The position of the mouse cursor in pixel
+             *                 coordinates relative to the window
+             * @return Widget below the mouse or a nullptr if the mouse isn't
+             *         on top of any widgets
+             */
+            std::shared_ptr<IWidget> getWidgetBelowMouseCursor(Position mousePos) const;
+
+            /**
+             * @brief Focus the next widget in the gui
+             * @param recursive Set true to focus next widget when the currently
+             *        focused widget is a container or false to focus the sibling
+             *        of that container
+             * @return True if the next widget was focused, otherwise false
+             */
+            bool focusNextWidget(bool recursive = true);
+
+            /**
+             * @brief Focus the previous widget in the gui
+             * @param recursive Set true to focus next widget when the currently
+             *        focused widget is a container or false to focus the sibling
+             *        of that container
+             * @return True if the next widget was focused, otherwise false
+             */
+            bool focusPreviousWidget(bool recursive = true);
+
+            /**
+             * @brief Place a widget before all other widgets to the front
+             * @param widget The widget to be moved to the front
+             */
+            void moveWidgetToFront(const std::shared_ptr<IWidget> &widget);
+
+            /**
+             * @brief Place a widget behind all other widgets
+             * @param widget The widget to be moved to the back
+             */
+            void moveWidgetToBack(const std::shared_ptr<IWidget> &widget);
+
+            /**
+             * @brief Place a widget one step forward in the z-order
+             * @param widget The widget that should be moved one step forward
+             * @return New index in the widgets list (one higher than the old
+             *         index or the same if the widget was already in front),
+             */
+            size_t
+            moveWidgetForward(std::shared_ptr<IWidget> widget);
+
+            /**
+             * @brief Place a widget one step backwards in the z-order
+             * @param widget The widget that should be moved one step backward
+             * @return New index in the widgets list (one higher than the old
+             *         index or the same if the widget was already in front),
+             */
+            size_t
+            moveWidgetBackward(std::shared_ptr<IWidget> widget);
+
+            /**
+             * @brief Set the character size of all existing and future child
+             *        widgets
+             * @param size The new character size
+             */
+            void setTextSize(unsigned int size);
+
+            /**
+             * @brief Get the text size of all existing and future child widgets
+             * @return The text size of all existing and future child widgets
+             */
+            unsigned int getTextSize() const;
 
         private:
             //Gui controller and renderer

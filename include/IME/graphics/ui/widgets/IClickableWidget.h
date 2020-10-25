@@ -9,39 +9,6 @@ namespace IME {
         class IClickableWidget : public IWidget {
         public:
             /**
-             * @brief Set the text colour of the button when the mouse cursor
-             *        enters it
-             * @param textColour Button text colour to set
-             *
-             * The buttons text colour changes to dark grey by default
-             * on "mouseEnter". The colour changes back to the way it
-             * was prior to "mouseEnter" on "mouseLeave"
-             */
-            virtual void setHoverTextColour(Colour textColour) = 0;
-
-            /**
-             * @brief Set the back ground colour of the button when the mouse
-             *        cursor enters it
-             * @param backgroundColour Background colour to set
-             *
-             * The button colour changes to dim grey by default on mouse
-             * enter. The colour changes back to the way it was
-             * prior to "mouseEnter" on "mouseLeave"
-             */
-            virtual void setHoverBackgroundColour(Colour backgroundColour) = 0;
-
-            /**
-             * @brief Set the outline colour of the button when the
-             *        mouse cursor enters the button
-             * @param outlineColour Outline colour to set
-             *
-             * The buttons outline colour changes to light sky blue
-             * by default on "mouseEnter". The colour changes back
-             * to the way it was prior to "mouseEnter" on "mouseLeave"
-             */
-            virtual void setHoverOutlineColour(Colour outlineColour) = 0;
-
-            /**
              * @brief Enable or disable the widget
              * @param isEnable Set true to enable the widget, false to
              *        disable the widget
@@ -87,51 +54,6 @@ namespace IME {
              * @return True if mouse cursor is over the widget, false otherwise
              */
             virtual bool isMouseOverElement() const = 0;
-
-            /**
-             * @brief Set the image that is shown on the widget
-             * @param filename Name of the image file
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * @note When this image is set, the background color property will
-             *       be ignored
-             */
-            virtual void setTexture(const std::string& filename) = 0;
-
-            /**
-             * @brief Set the image that is displayed when the widget is focused
-             *        but not hovered
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             */
-            virtual void setOnFocusedImage(const std::string& filename) = 0;
-
-            /**
-             * @brief Set the image that is displayed when the widget is disabled
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             */
-            virtual void setOnDisabledImage(const std::string& filename) = 0;
-
-            /**
-             * @brief Set the image that is displayed when the mouse is held
-             *        down on the widget
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * No image is displayed by default
-             */
-            virtual void setOnMouseDownImage(const std::string& filename) = 0;
-
-            /**
-             * @brief Set the image that is displayed when the mouse enters the
-             *        widget
-             * @param filename Filename of the image to be displayed
-             * @throws FileNotFound if the image cannot be found on the disk
-             *
-             * No image is displayed by default
-             */
-            virtual void setOnHoverImage(const std::string& filename) = 0;
         };
     }
 }

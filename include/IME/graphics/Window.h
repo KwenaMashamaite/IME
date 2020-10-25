@@ -16,7 +16,7 @@
 namespace IME {
     namespace Graphics {
         namespace UI {
-            class IWidget;
+            class GuiContainer;
         }
 
         class Window : Utility::NonCopyable {
@@ -156,7 +156,7 @@ namespace IME {
             unsigned int frameRateLimit_;
             //Instantiation state
             inline static auto isInstantiated_ = false;
-            friend class Gui;
+            friend class UI::GuiContainer;
         };
     }
 }
