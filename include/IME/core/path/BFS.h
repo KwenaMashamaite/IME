@@ -17,7 +17,7 @@ namespace IME {
         Index index; //Position of this node in the grid
     };
 
-    class BFSPathFinder : IGridPathFinder {
+    class BFSPathFinder : public IGridPathFinder {
     public:
         /**
          * @brief Initialize the algorithm
@@ -29,20 +29,23 @@ namespace IME {
          * @brief Generate a path from a source tile to a target tile in a grid
          * @param sourceTile The position of the starting position in tiles
          * @param targetTile The position of the destination in tiles
-         * @return A vector containing the path from the source to the destination
-         *         if reachable, otherwise an empty vector
+         * @return The path from the source to the destination if reachable,
+         *         otherwise an empty path
          */
-        std::vector<Index> findPath(TileMap& grid, Index sourceTile, Index targetTile) override;
+        std::vector<Index> findPath(TileMap& grid, Index sourceTile,
+            Index targetTile) override;
 
     private:
         /**
          * @brief Finds the target using bfs algorithm
          * @param source The starting position
          * @param target The destination
-         * @param nodeToVisit Vector to store nodes that must be visited on the next run
+         * @param nodeToVisit Container to store nodes that must be visited on
+         *                    the next run
          * @param exploredNodes A vector to stores nodes that have been visited
          */
-        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit, std::vector<Node>& exploredNodes);
+        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit,
+             std::vector<Node>& exploredNodes);
 
         /**
          * @brief Generate path from the source to the target
@@ -50,8 +53,11 @@ namespace IME {
          * @param path Vector to populate with path
          * @return The path from the source to the target
          *
-         * This function assumes that the last node in the container is the
-         * target node.
+         * @warning This function will backtrack from the destination to the
+         * source in order to generate the path. As such, it assumes that the
+         * last node in the @param exploredNodes container is the target node.
+         * Therefore it must only be called the target was reached from the
+         * source
          */
         void backtrack(const std::vector<Node>& exploredNodes, std::vector<Index>& path);
 

@@ -180,6 +180,7 @@ namespace IME {
         }
 
         if (stateToPush_) {
+            //@TODO - Remember input handlers on state push and only clear on state pop
             inputManager_ = Input::InputManager(); //Clear current state input handlers
             stateToPush_->initialize();
             statesManager_.pushState(std::move(stateToPush_));
