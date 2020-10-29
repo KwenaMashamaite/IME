@@ -40,6 +40,16 @@ namespace IME {
         void setMovementType(MovementType movementType, std::shared_ptr<Entity> target = nullptr);
 
         /**
+         * @brief Add an event listener to a target reached event
+         * @param callback Function to exexute when the event is fired
+         *
+         * This event is only triggered when the movement type is set to
+         * MovementType::TargetEntity and the chasing entity reached the
+         * target entity
+         */
+        void onTargetReached(Callback<> callback);
+
+        /**
          * @brief Update the target entities movement in the grid
          * @param deltaTime Time passed since entity movement was last updated
          */
@@ -61,7 +71,7 @@ namespace IME {
         /**
          * @brief Generates the targets new direction of motion
          */
-        void generateNewDirOfMotion();
+        void generateRandomDirOfMotion();
 
     private:
         //Moves entity in the grid
@@ -78,6 +88,12 @@ namespace IME {
         Direction prevDirection_;
         //The entity's movement type
         MovementType movementType_;
+        //Stores the path to the target when motion type is set to targetEntity
+        std::stack<Index> pathToTarget_;
+        //Prevents generation of path for every move the chaser makes
+        bool targetChangedPos_;
+        //Handler for target position change event (MovementType::TargetEntity only)
+        int targetPosChangedHandlerId_;
     };
 }
 

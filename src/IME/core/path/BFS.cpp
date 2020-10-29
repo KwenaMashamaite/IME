@@ -11,26 +11,26 @@ namespace IME {
         }
     }
 
-    std::vector<Index> BFSPathFinder::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
+    std::stack<Index> BFSPathFinder::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
         if (sourceTile == targetTile)
-            return std::vector<Index>{};
+            return std::stack<Index>{};
         adjacencyList_.generateFrom(grid);
         auto exploredPath = std::vector<Node>{};
-        auto nodeToVisit = std::queue<Node>(); //Keeps a list of nodes to be visited
-        nodeToVisit.push({sourceTile, sourceTile});
-        while (!nodeToVisit.empty()) {
-            auto node = nodeToVisit.front();
-            nodeToVisit.pop();
-            bfs(node, targetTile, nodeToVisit, exploredPath);
+        auto nodesToVisit = std::queue<Node>();
+        nodesToVisit.push({sourceTile, sourceTile});
+        while (!nodesToVisit.empty()) {
+            auto node = nodesToVisit.front();
+            nodesToVisit.pop();
+            bfs(node, targetTile, nodesToVisit, exploredPath);
         }
 
         reset();
         if (exploredPath.back().index == targetTile) { //Found target
-            auto path = std::vector<Index>{};
+            auto path = std::stack<Index>{};
             backtrack(exploredPath, path);
             return path;
         } else
-            return std::vector<Index>{};
+            return std::stack<Index>{};
     }
 
     void BFSPathFinder::reset() {
@@ -41,7 +41,7 @@ namespace IME {
     }
 
     void BFSPathFinder::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
-        if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than twice
+        if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than once
             return;
         else if (source.index == target) {
             exploredNodes.push_back(source);
@@ -55,15 +55,14 @@ namespace IME {
         }
     }
 
-    void BFSPathFinder::backtrack(const std::vector<Node> &exploredNodes, std::vector<Index>& path) {
-        path.push_back(exploredNodes.back().index);
+    void BFSPathFinder::backtrack(const std::vector<Node> &exploredNodes, std::stack<Index>& path) {
+        path.push(exploredNodes.back().index);
         auto tileParent = exploredNodes.back().parent;
-        for (auto i = exploredNodes.size() - 2; i > 0; i--) { //-2 because we already saved the last node
+        for (auto i = exploredNodes.size() - 2; i > 0; i--) { //.size() -2 because we already saved the last node
             if (exploredNodes[i].index == tileParent) {
-                path.push_back(exploredNodes[i].index);
+                path.push(exploredNodes[i].index);
                 tileParent = exploredNodes.at(i).parent;
             }
         }
-        std::reverse(path.begin(), path.end());
     }
 }

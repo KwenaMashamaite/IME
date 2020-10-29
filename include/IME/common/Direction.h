@@ -7,7 +7,7 @@
 
 namespace IME {
     enum class Direction {
-        None,
+        None = 0,
         Left,
         Right,
         Up,

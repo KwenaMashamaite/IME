@@ -32,7 +32,7 @@ namespace IME {
          * @return The path from the source to the destination if reachable,
          *         otherwise an empty path
          */
-        std::vector<Index> findPath(TileMap& grid, Index sourceTile,
+        std::stack<Index> findPath(TileMap& grid, Index sourceTile,
             Index targetTile) override;
 
     private:
@@ -59,7 +59,7 @@ namespace IME {
          * Therefore it must only be called the target was reached from the
          * source
          */
-        void backtrack(const std::vector<Node>& exploredNodes, std::vector<Index>& path);
+        void backtrack(const std::vector<Node>& exploredNodes, std::stack<Index>& path);
 
         /**
          * @brief Set visited nodes as not visited

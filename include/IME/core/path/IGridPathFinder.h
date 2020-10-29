@@ -6,7 +6,7 @@
 #define GRIDPATHFINDER_H
 
 #include "IME/core/tilemap/TileMap.h"
-#include <vector>
+#include <stack>
 
 namespace IME {
     class IGridPathFinder {
@@ -19,7 +19,7 @@ namespace IME {
          * @return The path from the source to the destination if the destination
          *         is reachable from the source, otherwise an empty vector
          */
-        virtual std::vector<Index> findPath(TileMap& grid, Index sourceNode, Index source) = 0;
+        virtual std::stack<Index> findPath(TileMap& grid, Index sourceNode, Index source) = 0;
     };
 }
 

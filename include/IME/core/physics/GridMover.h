@@ -42,7 +42,7 @@ namespace IME {
 
         /**
          * @brief Update entity movement in the grid
-         * @param deltaTime Time passed since movement wa last updated
+         * @param deltaTime Time passed since movement was last updated
          *
          * The target can only move one tile at a time. After the entity moves
          * to the target tile it stops moving until instructed to move again and
@@ -104,7 +104,7 @@ namespace IME {
         int onEnemyCollision(Callback<EntityPtr, EntityPtr> callback);
 
         /**
-         * @brief Add an event listener to an player collision
+         * @brief Add an event listener to a player collision
          * @param callback Function to execute when the collision takes place
          * @return The event listeners identification number
          *
@@ -114,6 +114,12 @@ namespace IME {
          * with each other
          */
         int onPlayerCollision(Callback<EntityPtr, EntityPtr> callback);
+
+    private:
+        /**
+         * @brief Perfectly align target with the target destination
+         */
+        void snap();
 
     private:
         //Grid to move entity in
@@ -126,13 +132,8 @@ namespace IME {
         Graphics::Tile targetTile_;
         //Collision event publisher
         EventEmitter eventEmitter_;
-        //
+        //Tracks if controlled entity has reached target tile or not
         bool reachedTarget_;
-
-        /**
-         * @brief Perfectly align target with the target destination
-         */
-        void snap();
     };
 }
 
