@@ -77,32 +77,6 @@ namespace IME {
         return position_;
     }
 
-    void Entity::update() {
-        if (!states_.empty())
-            states_.top()->update();
-    }
-
-    void Entity::pushState(std::shared_ptr<IEntityState> state) {
-        assert(state && "A state cannot be null");
-        states_.top()->onPause();
-        state->onEnter();
-        states_.push(std::move(state));
-    }
-
-    void Entity::popState() {
-        if (!states_.empty()) {
-            states_.top()->onExit();
-            states_.pop();
-            if (!states_.empty())
-                states_.top()->onResume();
-        }
-    }
-
-    void Entity::reset() {
-        if (!states_.empty())
-            states_.top()->reset();
-    }
-
     bool Entity::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }

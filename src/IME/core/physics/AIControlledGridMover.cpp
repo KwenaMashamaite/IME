@@ -18,15 +18,14 @@ namespace IME {
 
     void AIControlledGridMover::setMovementType(MovementType movementType,
             std::shared_ptr<Entity> target) {
-        if (movementType == MovementType::TargetEntity) {
+        if (movementType_ == movementType)
+            return;
+        else if (movementType == MovementType::TargetEntity) {
             if (target) {
                 target_ = std::move(target);
                 targetPosChangedHandlerId_ = target_->onEvent("positionChanged",
-                    Callback<float, float>([this](float x, float y) {
-                        std::cout << "target changed position" << std::endl;
-                        targetChangedPos_ = true;
-                    }
-                ));
+                    Callback<float, float>([this](float x, float y) {targetChangedPos_ = true;
+                }));
             } else {
                 movementType_ = MovementType::None;
                 return;

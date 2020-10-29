@@ -36,6 +36,7 @@ namespace IME {
                 targetDirection = IME::Direction::Up;
             else if (key == downKey)
                 targetDirection = IME::Direction::Down;
+
             if (targetDirection != target_->getDirection() && targetDirection != IME::Direction::None
                 && std::dynamic_pointer_cast<IMovable>(target_)->isMoving()) {
                 newDir_.first = true;

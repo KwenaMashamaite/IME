@@ -9,7 +9,6 @@
 #include "IME/common/Position.h"
 #include "IME/common/Direction.h"
 #include "IME/core/event/EventEmitter.h"
-#include "IEntityState.h"
 #include <stack>
 #include <string>
 #include <memory>
@@ -116,7 +115,9 @@ namespace IME {
          * @return The event listeners identification number
          */
         template<typename ...Args>
-        int onEvent(const std::string& event, Callback<Args...> callback);
+        int onEvent(const std::string& event, Callback<Args...> callback) {
+            return eventEmitter_.on(event, std::move(callback));
+        }
 
         /**
          * @brief Remove an event listener form an entity event
@@ -126,31 +127,6 @@ namespace IME {
          *         event listener exists for the specified event
          */
         bool removeEventListener(const std::string& event, int id);
-
-        /**
-         * @brief Reset the entity
-         */
-        void reset();
-
-        /**
-         * @brief Update object
-         *
-         * This function will update the current state
-         */
-        void update();
-
-        /**
-         * @brief Add a state to the entity
-         * @param state State to add
-         *
-         * This state will automatically become the active state upon being added
-         */
-        void pushState(std::shared_ptr<IEntityState> state);
-
-        /**
-         * @brief Remove the current state
-         */
-        void popState();
 
         /**
          * @brief Destructor
@@ -164,11 +140,11 @@ namespace IME {
          * @param args Arguments passed to event listeners
          */
         template<typename...Args>
-        void publishEvent(const std::string& event, Args&&...args);
+        void publishEvent(const std::string& event, Args&&...args) {
+            eventEmitter_.emit(event, std::forward<Args>(args)...);
+        }
 
     private:
-        //The entities state machine
-        std::stack<std::shared_ptr<IEntityState>> states_;
         //The entities bounding rectangle
         Dimensions boundingRect_;
         //Vulnerability state state
@@ -184,16 +160,6 @@ namespace IME {
         //The event publisher of the entity
         EventEmitter eventEmitter_;
     };
-
-    template<typename ...Args>
-    inline int Entity::onEvent(const std::string& event, Callback<Args...> callback) {
-        return eventEmitter_.on(event, std::move(callback));
-    }
-
-    template<typename...Args>
-    inline void Entity::publishEvent(const std::string& event, Args&&...args) {
-        eventEmitter_.emit(event, std::forward<Args>(args)...);
-    }
 }
 
 #endif
