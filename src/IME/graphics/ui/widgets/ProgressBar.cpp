@@ -10,6 +10,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<ProgressBarRenderer>()}
     {
         renderer_->setInternalPtr(progressBar_->getRenderer());
+        initEvents();
     }
 
     void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {
@@ -186,5 +187,58 @@ namespace IME::Graphics::UI {
 
     Dimensions ProgressBar::getAbsoluteSize() {
         return {progressBar_->getFullSize().x, progressBar_->getFullSize().y};
+    }
+
+    void ProgressBar::initEvents() {
+        progressBar_->onMouseEnter([this]{emit("mouseEnter");});
+        progressBar_->onMouseLeave([this]{emit("mouseLeave");});
+        progressBar_->onFocus([this]{emit("focus");});
+        progressBar_->onUnfocus([this]{emit("unfocus");});
+        progressBar_->onAnimationFinish([this]{emit("animationFinish");});
+        progressBar_->onFull([this]{emit("full");});
+
+        progressBar_->onValueChange([this](unsigned int newValue) {
+            emit("valueChange", newValue);
+        });
+
+        progressBar_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        progressBar_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
+
+        //Events triggered by left mouse button
+        progressBar_->onClick([this](tgui::Vector2f mousePos){
+            emit("click");
+            emit("click", mousePos.x, mousePos.y);
+        });
+
+        progressBar_->onMousePress([this](tgui::Vector2f mousePos) {
+            emit("leftMouseDown");
+            emit("leftMouseDown", mousePos.x, mousePos.y);
+        });
+
+        progressBar_->onMouseRelease([this](tgui::Vector2f mousePos) {
+            emit("leftMouseUp");
+            emit("leftMouseUp", mousePos.x, mousePos.y);
+        });
+
+        //Events triggered by right mouse button
+        progressBar_->onRightMousePress([this](tgui::Vector2f mousePos){
+            emit("rightMouseDown");
+            emit("rightMouseDown", mousePos.x, mousePos.y);
+        });
+
+        progressBar_->onRightMouseRelease([this](tgui::Vector2f mousePos){
+            emit("rightMouseUp");
+            emit("rightMouseUp", mousePos.x, mousePos.y);
+        });
+
+        progressBar_->onRightClick([this](tgui::Vector2f mousePos){
+            emit("rightClick");
+            emit("rightClick", mousePos.x, mousePos.y);
+        });
     }
 }

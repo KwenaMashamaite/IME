@@ -13,6 +13,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<ButtonRenderer>()}
     {
         renderer_->setInternalPtr(button_->getRenderer());
+        initEvents();
     }
 
     void BitmapButton::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {
@@ -164,5 +165,52 @@ namespace IME::Graphics::UI {
 
     Dimensions BitmapButton::getAbsoluteSize() {
         return {button_->getFullSize().x, button_->getFullSize().y};
+    }
+
+    void BitmapButton::initEvents() {
+        button_->onMouseEnter([this]{emit("mouseEnter");});
+        button_->onMouseLeave([this]{emit("mouseLeave");});
+        button_->onFocus([this]{emit("focus");});
+        button_->onUnfocus([this]{emit("unfocus");});
+        button_->onAnimationFinish([this]{emit("animationFinish");});
+        button_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        button_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
+
+        //Events triggered by left mouse button
+        button_->onClick([this](tgui::Vector2f mousePos){
+            emit("click");
+            emit("click", mousePos.x, mousePos.y);
+        });
+
+        button_->onMousePress([this](tgui::Vector2f mousePos) {
+            emit("leftMouseDown");
+            emit("leftMouseDown", mousePos.x, mousePos.y);
+        });
+
+        button_->onMouseRelease([this](tgui::Vector2f mousePos) {
+            emit("leftMouseUp");
+            emit("leftMouseUp", mousePos.x, mousePos.y);
+        });
+
+        //Events triggered by right mouse button
+        button_->onRightMousePress([this](tgui::Vector2f mousePos){
+            emit("rightMouseDown");
+            emit("rightMouseDown", mousePos.x, mousePos.y);
+        });
+
+        button_->onRightMouseRelease([this](tgui::Vector2f mousePos){
+            emit("rightMouseUp");
+            emit("rightMouseUp", mousePos.x, mousePos.y);
+        });
+
+        button_->onRightClick([this](tgui::Vector2f mousePos){
+            emit("rightClick");
+            emit("rightClick", mousePos.x, mousePos.y);
+        });
     }
 }

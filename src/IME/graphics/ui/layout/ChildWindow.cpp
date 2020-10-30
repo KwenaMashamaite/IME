@@ -3,30 +3,32 @@
 namespace IME::Graphics::UI {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons)
         : window_{tgui::ChildWindow::create(title, titleButtons)}
-    {}
+    {
+        initEvents();
+    }
 
     void ChildWindow::setClientSize(Dimensions size) {
-
+        window_->setClientSize({size.width, size.height});
     }
 
     Dimensions ChildWindow::getClientSize() const {
-        return Dimensions();
+        return {window_->getClientSize().x, window_->getClientSize().y};
     }
 
     void ChildWindow::setMaximumSize(Dimensions size) {
-
+        window_->setMaximumSize({size.width, size.height});
     }
 
     Dimensions ChildWindow::getMaximumSize() const {
-        return Dimensions();
+        return {window_->getMaximumSize().x, window_->getMaximumSize().y};
     }
 
     void ChildWindow::setMinimumSize(Dimensions size) {
-
+        window_->setMinimumSize({size.width, size.height});
     }
 
     Dimensions ChildWindow::getMinimumSize() const {
-        return Dimensions();
+        return {window_->getMinimumSize().x, window_->getMinimumSize().y};
     }
 
     void ChildWindow::setTitle(const std::string &title) {
@@ -252,5 +254,25 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> ChildWindow::getInternalPtr() {
         return window_;
+    }
+
+    void ChildWindow::initEvents() {
+        window_->onMouseEnter([this]{emit("mouseEnter");});
+        window_->onMouseLeave([this]{emit("mouseLeave");});
+        window_->onFocus([this]{emit("focus");});
+        window_->onUnfocus([this]{emit("unfocus");});
+        window_->onAnimationFinish([this]{emit("animationFinish");});
+        window_->onMousePress([this] {emit("leftMouseDown");});
+        window_->onClose([this]{emit("closed");});
+        window_->onMinimize([this]{emit("minimize");});
+        window_->onMaximize([this]{emit("maximize");});
+        window_->onEscapeKeyPress([this]{emit("escapeKeyPress");});
+        window_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        window_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
     }
 }

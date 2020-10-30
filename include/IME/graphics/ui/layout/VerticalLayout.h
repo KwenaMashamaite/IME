@@ -476,6 +476,15 @@ namespace IME {
             std::shared_ptr<tgui::Widget> getInternalPtr() override;
 
         private:
+            /**
+             * @brief Initialize events
+             *
+             * These events will notify event listeners about an internal state
+             * change of the object when that state changes
+             */
+            void initEvents();
+
+        private:
             //Pointer to third party layout
             std::shared_ptr<tgui::VerticalLayout> layout_;
             //Renderer for this layout

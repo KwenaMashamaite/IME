@@ -323,6 +323,15 @@ namespace IME {
             std::shared_ptr<tgui::Widget> getInternalPtr() override;
 
         private:
+            /**
+             * @brief Initialize events
+             *
+             * These events will notify event listeners about an internal state
+             * change of the object when that state changes
+             */
+            void initEvents();
+
+        private:
             //Internal ptr to third party api
             std::shared_ptr<tgui::Button> button_;
             //Renderer for this button

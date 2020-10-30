@@ -24,7 +24,7 @@ namespace IME{
     void Animator::update(float deltaTime) {
         if (currentAnimation_) {
             if (totalTime_ == 0.0f)
-                eventEmitter_.emit(currentAnimation_->getName() + "AnimationStarted");
+                eventEmitter_.emit(currentAnimation_->getName() + "AnimationStart");
 
             totalTime_ += deltaTime;
             auto numOfAnimFrames = currentAnimation_->getNumOfFrames();
@@ -56,19 +56,19 @@ namespace IME{
     }
 
     int Animator::onAnimationStart(const std::string &name, Callback<> callback) {
-        return eventEmitter_.addEventListener(name + "AnimationStarted", std::move(callback));
+        return eventEmitter_.addEventListener(name + "AnimationStart", std::move(callback));
     }
 
     int Animator::onAnimationFinish(const std::string &name, Callback<> callback) {
-        return eventEmitter_.addEventListener(name + "AnimationFinished", std::move(callback));
+        return eventEmitter_.addEventListener(name + "AnimationFinish", std::move(callback));
     }
 
     bool Animator::removeEventListener(const std::string &name, const std::string &onTrigger, int id) {
         auto fullEventName = name;
         if (onTrigger == "start")
-            fullEventName += "AnimationStarted";
+            fullEventName += "AnimationStart";
         else if (onTrigger == "finish")
-            fullEventName += "AnimationFinished";
+            fullEventName += "AnimationFinish";
         else
             return false;
         return eventEmitter_.removeEventListener(fullEventName, id);
@@ -81,7 +81,7 @@ namespace IME{
             animationTarget_.setTextureRect(lastFrame.left, lastFrame.top, lastFrame.width, lastFrame.height);
             auto animationName = currentAnimation_->getName();
             currentAnimation_ = nullptr;
-            eventEmitter_.emit(animationName + "AnimationFinished");
+            eventEmitter_.emit(animationName + "AnimationFinish");
         }
     }
 }

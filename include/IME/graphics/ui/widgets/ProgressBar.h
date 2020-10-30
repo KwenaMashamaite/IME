@@ -383,7 +383,18 @@ namespace IME {
             std::shared_ptr<tgui::Widget> getInternalPtr() override;
 
         private:
+            /**
+             * @brief Initialize events
+             *
+             * These events will notify event listeners about an internal state
+             * change of the object when that state changes
+             */
+            void initEvents();
+
+        private:
+            //Pointer to third party progress bar
             std::shared_ptr<tgui::ProgressBar> progressBar_;
+            //Renderer for this progress bar
             std::shared_ptr<ProgressBarRenderer> renderer_;
             //How long the progress bar takes before its completely hidden or shown
             static const int fadeAnimDuration_ = 100;

@@ -10,6 +10,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<CheckBoxRenderer>()}
     {
         renderer_->setInternalPtr(checkBox_->getRenderer());
+        initEvents();
     }
 
     void CheckBox::setRenderer(std::shared_ptr<CheckBoxRenderer> renderer) {
@@ -165,5 +166,55 @@ namespace IME::Graphics::UI {
 
     Dimensions CheckBox::getAbsoluteSize() {
         return {checkBox_->getFullSize().x, checkBox_->getFullSize().y};
+    }
+
+    void CheckBox::initEvents() {
+        checkBox_->onMouseEnter([this]{emit("mouseEnter");});
+        checkBox_->onMouseLeave([this]{emit("mouseLeave");});
+        checkBox_->onFocus([this]{emit("focus");});
+        checkBox_->onUnfocus([this]{emit("unfocus");});
+        checkBox_->onCheck([this]{emit("check");});
+        checkBox_->onUncheck([this]{emit("uncheck");});
+        checkBox_->onChange([this](bool checked) {emit("checkedChanged", checked);});
+        checkBox_->onAnimationFinish([this]{emit("animationFinish");});
+        checkBox_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        checkBox_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
+
+        //Events triggered by left mouse button
+        checkBox_->onClick([this](tgui::Vector2f mousePos){
+            emit("click");
+            emit("click", mousePos.x, mousePos.y);
+        });
+
+        checkBox_->onMousePress([this](tgui::Vector2f mousePos) {
+            emit("leftMouseDown");
+            emit("leftMouseDown", mousePos.x, mousePos.y);
+        });
+
+        checkBox_->onMouseRelease([this](tgui::Vector2f mousePos) {
+            emit("leftMouseUp");
+            emit("leftMouseUp", mousePos.x, mousePos.y);
+        });
+
+        //Events triggered by right mouse button
+        checkBox_->onRightMousePress([this](tgui::Vector2f mousePos){
+            emit("rightMouseDown");
+            emit("rightMouseDown", mousePos.x, mousePos.y);
+        });
+
+        checkBox_->onRightMouseRelease([this](tgui::Vector2f mousePos){
+            emit("rightMouseUp");
+            emit("rightMouseUp", mousePos.x, mousePos.y);
+        });
+
+        checkBox_->onRightClick([this](tgui::Vector2f mousePos){
+            emit("rightClick");
+            emit("rightClick", mousePos.x, mousePos.y);
+        });
     }
 }

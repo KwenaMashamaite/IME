@@ -10,6 +10,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<SliderRenderer>()}
     {
         renderer_->setInternalPtr(slider_->getRenderer());
+        initEvents();
     }
 
     void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
@@ -180,5 +181,24 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> Slider::getInternalPtr() {
         return slider_;
+    }
+
+    void Slider::initEvents() {
+        slider_->onMouseEnter([this]{emit("mouseEnter");});
+        slider_->onMouseLeave([this]{emit("mouseLeave");});
+        slider_->onFocus([this]{emit("focus");});
+        slider_->onUnfocus([this]{emit("unfocus");});
+        slider_->onAnimationFinish([this]{emit("animationFinish");});
+        slider_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        slider_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
+
+        slider_->onValueChange([this](float newValue) {
+            emit("valueChange", newValue);
+        });
     }
 }

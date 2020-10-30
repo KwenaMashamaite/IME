@@ -8,6 +8,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<EditBoxRenderer>()}
     {
         renderer_->setInternalPtr(editBox_->getRenderer());
+        initEvents();
     }
 
     void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
@@ -195,5 +196,60 @@ namespace IME::Graphics::UI {
 
     Dimensions EditBox::getAbsoluteSize() {
         return {editBox_->getFullSize().x, editBox_->getFullSize().y};
+    }
+
+    void EditBox::initEvents() {
+        editBox_->onMouseEnter([this]{emit("mouseEnter");});
+        editBox_->onMouseLeave([this]{emit("mouseLeave");});
+        editBox_->onFocus([this]{emit("focus");});
+        editBox_->onUnfocus([this]{emit("unfocus");});
+        editBox_->onTextChange([this](const tgui::String& text) {
+            emit("textEnter", text.toAnsiString());
+        });
+
+        editBox_->onReturnKeyPress([this](const tgui::String& text) {
+            emit("enterKeyPress", text.toAnsiString());
+        });
+
+        editBox_->onAnimationFinish([this]{emit("animationFinish");});
+        editBox_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        editBox_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
+
+        //Events triggered by left mouse button
+        editBox_->onClick([this](tgui::Vector2f mousePos){
+            emit("click");
+            emit("click", mousePos.x, mousePos.y);
+        });
+
+        editBox_->onMousePress([this](tgui::Vector2f mousePos) {
+            emit("leftMouseDown");
+            emit("leftMouseDown", mousePos.x, mousePos.y);
+        });
+
+        editBox_->onMouseRelease([this](tgui::Vector2f mousePos) {
+            emit("leftMouseUp");
+            emit("leftMouseUp", mousePos.x, mousePos.y);
+        });
+
+        //Events triggered by right mouse button
+        editBox_->onRightMousePress([this](tgui::Vector2f mousePos){
+            emit("rightMouseDown");
+            emit("rightMouseDown", mousePos.x, mousePos.y);
+        });
+
+        editBox_->onRightMouseRelease([this](tgui::Vector2f mousePos){
+            emit("rightMouseUp");
+            emit("rightMouseUp", mousePos.x, mousePos.y);
+        });
+
+        editBox_->onRightClick([this](tgui::Vector2f mousePos){
+            emit("rightClick");
+            emit("rightClick", mousePos.x, mousePos.y);
+        });
     }
 }

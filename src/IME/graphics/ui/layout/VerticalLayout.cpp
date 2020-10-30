@@ -7,6 +7,7 @@ namespace IME::Graphics::UI {
           renderer_{std::make_shared<BoxLayoutRenderer>()}
     {
         renderer_->setInternalPtr(layout_->getRenderer());
+        initEvents();
     }
 
     void VerticalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
@@ -218,5 +219,20 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> VerticalLayout::getInternalPtr() {
         return layout_;
+    }
+
+    void VerticalLayout::initEvents() {
+        layout_->onMouseEnter([this]{emit("mouseEnter");});
+        layout_->onMouseLeave([this]{emit("mouseLeave");});
+        layout_->onFocus([this]{emit("focus");});
+        layout_->onUnfocus([this]{emit("unfocus");});
+        layout_->onAnimationFinish([this]{emit("animationFinish");});
+        layout_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        layout_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
     }
 }
