@@ -1,10 +1,23 @@
 #include "IME/graphics/ui/layout/ChildWindow.h"
+#include <cassert>
 
 namespace IME::Graphics::UI {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons)
-        : window_{tgui::ChildWindow::create(title, titleButtons)}
+        : window_{tgui::ChildWindow::create(title, titleButtons)},
+          renderer_{std::make_shared<ChildWindowRenderer>()}
     {
+        renderer_->setInternalPtr(window_->getRenderer());
         initEvents();
+    }
+
+    void ChildWindow::setRenderer(std::shared_ptr<ChildWindowRenderer> renderer) {
+        assert(renderer && "A nullptr cannot be set as a renderer");
+        renderer_ = renderer;
+        window_->setRenderer(renderer->getInternalPtr()->getData());
+    }
+
+    std::shared_ptr<ChildWindowRenderer> ChildWindow::getRenderer() {
+        return renderer_;
     }
 
     void ChildWindow::setClientSize(Dimensions size) {

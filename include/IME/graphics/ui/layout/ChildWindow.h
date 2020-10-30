@@ -6,6 +6,7 @@
 #define CHILDWINDOW_H
 
 #include "IContainer.h"
+#include "IME/graphics/ui/renderers/ChildWindowRenderer.h"
 #include <TGUI/Widgets/ChildWindow.hpp>
 
 namespace IME {
@@ -34,6 +35,26 @@ namespace IME {
              */
             explicit ChildWindow(const std::string& title = "",
                  unsigned int titleButtons = TitleButton::Close);
+
+            /**
+             * @brief Set the child window renderer
+             * @param renderer The new renderer
+             *
+             * The renderer determines how the button is displayed. The window
+             * has a default renderer which can be manipulated using the
+             * @see getRenderer() function
+             */
+            void setRenderer(std::shared_ptr<ChildWindowRenderer> renderer);
+
+            /**
+             * @brief Get the child window renderer
+             * @return The child window  renderer
+             *
+             * The renderer gives access to functions that determine how the
+             * window is displayed. It allows you to manipulate things such
+             * as the background colour, text colour, border colour etc...
+             */
+            std::shared_ptr<ChildWindowRenderer> getRenderer();
 
             /**
              * @brief Set the client size of the child window
@@ -574,6 +595,8 @@ namespace IME {
         private:
             //Pointer to third party window
             std::shared_ptr<tgui::ChildWindow> window_;
+            //Renderer for this layout
+            std::shared_ptr<ChildWindowRenderer> renderer_;
             //How long the layout takes before its completely hidden or shown
             static const int fadeAnimDuration_ = 100;
         };
