@@ -491,7 +491,13 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~ButtonRenderer();
+
         private:
+            //Pointer to third party button
             tgui::ButtonRenderer* buttonRenderer_;
         };
     }

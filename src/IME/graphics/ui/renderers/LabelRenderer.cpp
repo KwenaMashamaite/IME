@@ -133,4 +133,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *LabelRenderer::getInternalPtr() {
         return labelRenderer_;
     }
+
+    LabelRenderer::~LabelRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        labelRenderer_ = nullptr;
+    }
 }

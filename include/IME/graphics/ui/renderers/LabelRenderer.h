@@ -254,6 +254,11 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~LabelRenderer();
+
         private:
             //Pointer to third party renderer
             tgui::LabelRenderer* labelRenderer_;

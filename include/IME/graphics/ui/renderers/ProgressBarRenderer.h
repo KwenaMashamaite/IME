@@ -242,6 +242,8 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            virtual ~ProgressBarRenderer();
+
         private:
             //Pointer to third party renderer
             tgui::ProgressBarRenderer* progressBarRenderer_;

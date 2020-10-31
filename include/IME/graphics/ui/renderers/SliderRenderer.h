@@ -245,10 +245,16 @@ namespace IME {
              */
             tgui::WidgetRenderer* getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~SliderRenderer();
+
         private:
             //Pointer to third party slider render
             tgui::SliderRenderer* sliderRenderer_;
         };
     }
 }
+
 #endif

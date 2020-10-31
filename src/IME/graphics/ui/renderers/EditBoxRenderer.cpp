@@ -286,4 +286,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *EditBoxRenderer::getInternalPtr() {
         return editBoxRenderer_;
     }
+
+    EditBoxRenderer::~EditBoxRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        editBoxRenderer_ = nullptr;
+    }
 }

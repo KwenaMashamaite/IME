@@ -584,6 +584,11 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~CheckBoxRenderer();
+
         private:
             //Pointer to third party checkbox renderer
             tgui::CheckBoxRenderer* checkBoxRenderer_;

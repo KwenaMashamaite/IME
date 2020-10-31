@@ -139,6 +139,11 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~BoxLayoutRenderer();
+
         private:
             //Pointer to third party renderer
             tgui::BoxLayoutRenderer* boxLayoutRenderer_;

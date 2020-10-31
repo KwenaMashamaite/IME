@@ -142,5 +142,11 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *SliderRenderer::getInternalPtr() {
         return sliderRenderer_;
     }
+
+    SliderRenderer::~SliderRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        sliderRenderer_ = nullptr;
+    }
 }
 

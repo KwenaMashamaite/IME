@@ -279,4 +279,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *ButtonRenderer::getInternalPtr() {
         return buttonRenderer_;
     }
+
+    ButtonRenderer::~ButtonRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        buttonRenderer_ = nullptr;
+    }
 }

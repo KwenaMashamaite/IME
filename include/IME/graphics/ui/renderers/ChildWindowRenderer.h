@@ -312,6 +312,11 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~ChildWindowRenderer();
+
         private:
             //Pointer to third party child window renderer
             tgui::ChildWindowRenderer *windowRenderer_;

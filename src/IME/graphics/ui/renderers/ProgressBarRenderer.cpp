@@ -118,4 +118,10 @@ namespace IME::Graphics::UI {
         Callback<const std::string &> callback) {
         return 0;
     }
+
+    ProgressBarRenderer::~ProgressBarRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        progressBarRenderer_ = nullptr;
+    }
 }

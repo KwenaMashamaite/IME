@@ -346,4 +346,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *CheckBoxRenderer::getInternalPtr() {
         return checkBoxRenderer_;
     }
+
+    CheckBoxRenderer::~CheckBoxRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        checkBoxRenderer_ = nullptr;
+    }
 }

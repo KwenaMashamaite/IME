@@ -458,6 +458,11 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
+            virtual ~EditBoxRenderer();
+
         private:
             //Pointer to third party edit box renderer
             tgui::EditBoxRenderer* editBoxRenderer_;

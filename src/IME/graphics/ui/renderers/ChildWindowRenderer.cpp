@@ -162,4 +162,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *ChildWindowRenderer::getInternalPtr() {
         return windowRenderer_;
     }
+
+    ChildWindowRenderer::~ChildWindowRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        windowRenderer_ = nullptr;
+    }
 }

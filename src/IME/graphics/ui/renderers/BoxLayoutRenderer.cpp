@@ -66,4 +66,10 @@ namespace IME::Graphics::UI {
     tgui::WidgetRenderer *BoxLayoutRenderer::getInternalPtr() {
         return boxLayoutRenderer_;
     }
+
+    BoxLayoutRenderer::~BoxLayoutRenderer() {
+        // We don't delete the pointee because its lifetime is managed by the
+        // third party library
+        boxLayoutRenderer_ = nullptr;
+    }
 }
