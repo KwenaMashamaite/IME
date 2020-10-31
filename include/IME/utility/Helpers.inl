@@ -3,6 +3,15 @@ bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item) {
     return unorderedMap.find(item) != unorderedMap.end();
 }
 
+template <typename T, typename U, typename V>
+bool eraseIn(std::unordered_map<T, U>& unorderedMap, const V& item) {
+    if (findIn(unorderedMap, item)) {
+        unorderedMap.erase(item);
+        return true;
+    }
+    return false;
+}
+
 template <typename T, typename U>
 std::pair<bool, int> findIn(const std::vector<T> vector, const U& item) {
     if (auto found = std::find(vector.begin(), vector.end(), item); found != vector.end())

@@ -61,6 +61,15 @@ namespace IME::Utility {
     bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item);
 
     /**
+     * @brief Erase an item from the map
+     * @param unorderedMap Map to remove item from
+     * @param item Item to be removed
+     * @return True if was removed in the unordered map, otherwise false
+     */
+    template <typename T, typename U, typename V>
+    bool eraseIn(std::unordered_map<T, U>& unorderedMap, const V& item);
+
+    /**
      * @brief Find an item in vector
      * @param vector Vector to search item in
      * @param item Item to search for
