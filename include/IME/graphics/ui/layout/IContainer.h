@@ -15,13 +15,15 @@ namespace IME {
             /**
              * @brief Add a widget to the container
              * @param widgetPtr Pointer to the widget to be added
-             * @param widgetName Name of the widget
+             * @param widgetName Unique Name of the widget
+             * @return True if the widget was added to the container or false
+             *         if the container already has a widget with the same name
+             *         as the specified widget name
              *
-             * The widget name must be set if the widget is to be retrieved at
-             * a later time. In addition, the name must not contain whitespaces
+             * The name of the widget must not contain whitespaces
              */
-            virtual void addWidget(const std::shared_ptr<IWidget> widgetPtr,
-               const std::string& widgetName = "") = 0;
+            virtual bool addWidget(std::shared_ptr<IWidget> widgetPtr,
+                const std::string& widgetName) = 0;
             
             /**
              * @brief Get a pointer to a widget in the container
@@ -44,11 +46,11 @@ namespace IME {
 
             /**
              * @brief Remove a widget from the container
-             * @param widget Widget to be removed from the container
+             * @param widget Name of the widget to be removed from the container
              * @return True if the widget was removed or false if the widget
              *         does not exist in the container
              */
-            virtual bool removeWidget(std::shared_ptr<IWidget> widget) = 0;
+            virtual bool removeWidget(const std::string &widget) = 0;
 
             /**
              * @brief Remove all widgets from the container

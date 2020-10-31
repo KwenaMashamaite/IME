@@ -1,4 +1,5 @@
 #include "IME/graphics/ui/layout/ChildWindow.h"
+#include "IME/utility/Helpers.h"
 #include <cassert>
 
 namespace IME::Graphics::UI {
@@ -204,27 +205,40 @@ namespace IME::Graphics::UI {
         setScale(window_->getScale().x + factorX, window_->getScale().y + factorY);
     }
 
-    void ChildWindow::addWidget(const std::shared_ptr<IWidget> widgetPtr,
+    bool ChildWindow::addWidget(std::shared_ptr<IWidget> widgetPtr,
         const std::string &widgetName)
     {
-        window_->add(widgetPtr->getInternalPtr(), widgetName);
+        assert(widgetPtr && "Cannot add null widget to Child window container");
+        if (widgets_.insert({widgetName, widgetPtr}).second) {
+            window_->add(widgetPtr->getInternalPtr(), widgetName);
+            return true;
+        }
+        return false;
     }
 
     std::shared_ptr<IWidget>
     ChildWindow::getWidget(const std::string &widgetName) const {
-        return std::shared_ptr<IWidget>();
+        if (Utility::findIn(widgets_, widgetName))
+            return widgets_.at(widgetName);
+        return nullptr;
     }
 
     const std::vector<IWidget> &ChildWindow::getWidgets() const {
 
     }
 
-    bool ChildWindow::removeWidget(std::shared_ptr<IWidget> widget) {
+    bool ChildWindow::removeWidget(const std::string &widget) {
+        if (Utility::findIn(widgets_, widget)) {
+            window_->remove(widgets_[widget]->getInternalPtr());
+            widgets_.erase(widget);
+            return true;
+        }
         return false;
     }
 
     void ChildWindow::removeAllWidgets() {
         window_->removeAllWidgets();
+        widgets_.clear();
     }
 
     void ChildWindow::moveWidgetToFront(std::shared_ptr<IWidget> widget) {
@@ -245,16 +259,24 @@ namespace IME::Graphics::UI {
     }
 
     std::shared_ptr<IWidget> ChildWindow::getFocusedWidget() const {
-        return std::shared_ptr<IWidget>();
+        auto widget = window_->getFocusedChild();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     std::shared_ptr<IWidget> ChildWindow::getFocusedLeaf() const {
-        return std::shared_ptr<IWidget>();
+        auto widget = window_->getFocusedLeaf();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
-    std::shared_ptr<IWidget>
-    ChildWindow::getWidgetAtPosition(Position pos) const {
-        return std::shared_ptr<IWidget>();
+    std::shared_ptr<IWidget> ChildWindow::getWidgetAtPosition(Position pos) const {
+        auto widget = window_->getWidgetAtPosition({pos.x, pos.y});
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     bool ChildWindow::focusNextWidget(bool recursive) {

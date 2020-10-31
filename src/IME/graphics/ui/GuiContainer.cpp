@@ -3,6 +3,7 @@
 #include "IME/graphics/ui/widgets/IWidget.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
+#include <cassert>
 
 namespace IME::Graphics::UI {
     GuiContainer::GuiContainer(Window &target) : sfmlGui_{target.window_}
@@ -39,7 +40,10 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<IWidget>
     GuiContainer::getWidgetBelowMouseCursor(Position mousePos) const {
-        return std::shared_ptr<IWidget>();
+        auto widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     void GuiContainer::unfocusAllWidgets() {
@@ -70,33 +74,52 @@ namespace IME::Graphics::UI {
 
     }
 
-    void GuiContainer::addWidget(std::shared_ptr<IWidget> widget,
+    bool GuiContainer::addWidget(std::shared_ptr<IWidget> widget,
          const std::string &widgetName)
     {
-        sfmlGui_.add(widget->getInternalPtr(), widgetName);
-        widgets_.insert({widgetName, std::move(widget)});
+        assert(widget && "Cannot add null widget to gui container");
+        if (widgets_.insert({widgetName, widget}).second) {
+            sfmlGui_.add(widget->getInternalPtr(), widgetName);
+            return true;
+        }
+        return false;
     }
 
     std::shared_ptr<IWidget>
     GuiContainer::getWidget(const std::string &widgetName) const {
-
-        return std::shared_ptr<IWidget>();
+        if (Utility::findIn(widgets_, widgetName))
+            return widgets_.at(widgetName);
+        return nullptr;
     }
 
-    bool GuiContainer::removeWidget(std::shared_ptr<IWidget> widget) {
-        return sfmlGui_.remove(widget->getInternalPtr());
+    bool GuiContainer::removeWidget(const std::string &widget) {
+        if (Utility::findIn(widgets_, widget)) {
+            sfmlGui_.remove(widgets_[widget]->getInternalPtr());
+            widgets_.erase(widget);
+            return true;
+        }
+        return false;
     }
 
     std::shared_ptr<IWidget> GuiContainer::getFocusedWidget() const {
-        return std::shared_ptr<IWidget>();
+        auto widget = sfmlGui_.getFocusedChild();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     std::shared_ptr<IWidget> GuiContainer::getFocusedLeaf() const {
-        return std::shared_ptr<IWidget>();
+        auto widget = sfmlGui_.getFocusedLeaf();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     std::shared_ptr<IWidget> GuiContainer::getWidgetAtPosition(Position pos) const {
-        return std::shared_ptr<IWidget>();
+        auto widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     bool GuiContainer::focusNextWidget(bool recursive) {

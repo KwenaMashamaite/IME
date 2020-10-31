@@ -1,4 +1,5 @@
 #include "IME/graphics/ui/layout/HorizontalLayout.h"
+#include "IME/utility/Helpers.h"
 #include <cassert>
 
 namespace IME::Graphics::UI {
@@ -159,26 +160,39 @@ namespace IME::Graphics::UI {
         return layout_->getRatio(index);
     }
 
-    void HorizontalLayout::addWidget(const std::shared_ptr<UI::IWidget> widgetPtr,
-    const std::string &widgetName) {
-        layout_->add(widgetPtr->getInternalPtr(), widgetName);
+    bool HorizontalLayout::addWidget(std::shared_ptr<IWidget> widgetPtr,
+        const std::string &widgetName)
+    {
+        assert(widgetPtr && "Cannot add null widget to Horizontal layout container");
+        if (widgets_.insert({widgetName, widgetPtr}).second) {
+            layout_->add(widgetPtr->getInternalPtr(), widgetName);
+            return true;
+        }
+        return false;
     }
 
-    std::shared_ptr<IWidget>
-    HorizontalLayout::getWidget(const std::string &widgetName) const {
-        return std::shared_ptr<IWidget>();
+    std::shared_ptr<IWidget> HorizontalLayout::getWidget(const std::string &widgetName) const {
+        if (Utility::findIn(widgets_, widgetName))
+            return widgets_.at(widgetName);
+        return nullptr;
     }
 
     const std::vector<IWidget> &HorizontalLayout::getWidgets() const {
 
     }
 
-    bool HorizontalLayout::removeWidget(std::shared_ptr<UI::IWidget> widget) {
+    bool HorizontalLayout::removeWidget(const std::string &widget) {
+        if (Utility::findIn(widgets_, widget)) {
+            layout_->remove(widgets_[widget]->getInternalPtr());
+            widgets_.erase(widget);
+            return true;
+        }
         return false;
     }
 
     void HorizontalLayout::removeAllWidgets() {
         layout_->removeAllWidgets();
+        widgets_.clear();
     }
 
     void HorizontalLayout::moveWidgetToFront(std::shared_ptr<IWidget> widget) {
@@ -199,16 +213,24 @@ namespace IME::Graphics::UI {
     }
 
     std::shared_ptr<UI::IWidget> HorizontalLayout::getFocusedWidget() const {
-        return std::shared_ptr<UI::IWidget>();
+        auto widget = layout_->getFocusedChild();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     std::shared_ptr<UI::IWidget> HorizontalLayout::getFocusedLeaf() const {
-        return std::shared_ptr<UI::IWidget>();
+        auto widget = layout_->getFocusedLeaf();
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget>
-    HorizontalLayout::getWidgetAtPosition(Position pos) const {
-        return std::shared_ptr<UI::IWidget>();
+    std::shared_ptr<UI::IWidget> HorizontalLayout::getWidgetAtPosition(Position pos) const {
+        auto widget = layout_->getWidgetAtPosition({pos.x, pos.y});
+        if (widget)
+            return widgets_.at(widget->getWidgetName().toAnsiString());
+        return nullptr;
     }
 
     bool HorizontalLayout::focusNextWidget(bool recursive) {

@@ -167,13 +167,15 @@ namespace IME {
             /**
              * @brief Add a widget to the gui
              * @param widget The widget to be added
-             * @param widgetName Name of the widget
+             * @param widgetName Unique name of the widget
+             * @return True if the widget was added to the container or false
+             *         if the container already has a widget with the same name
+             *         as the specified widget name
              *
-             * The widget name must be set if the widget is to be retrieved at
-             * a later time. In addition, the name must not contain whitespaces
+             * The name of the widget must not contain whitespaces
              */
-            void addWidget(std::shared_ptr<IWidget> widget,
-                const std::string& widgetName = "");
+            bool addWidget(std::shared_ptr<IWidget> widget,
+                const std::string& widgetName);
 
             /**
              * @brief Get a pointer to a widget in the gui
@@ -189,11 +191,11 @@ namespace IME {
 
             /**
              * @brief Remove a widget from the gui
-             * @param widget Widget to be removed from the gui
+             * @param widget Name of the widget to be removed from the gui
              * @return True if the widget was removed or false if the widget
              *         does not exist in the gui
              */
-            bool removeWidget(std::shared_ptr<IWidget> widget);
+            bool removeWidget(const std::string &widget);
 
             /**
              * @brief Remove all widgets from the gui
