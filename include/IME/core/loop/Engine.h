@@ -166,6 +166,18 @@ namespace IME {
         Input::InputManager& getGlobalInputManager();
 
         /**
+         * @brief Get access to the engines render target
+         * @return The engines render target
+         *
+         * @warning Don't call pollEvent(), on the instance as it will empty
+         * the event queue and prevent the engine from properly dispatching
+         * events. Also avoid drawing directly on the window because it will
+         * be cleared by the engine before rendering a state. This function
+         * must only be called after the engine has been initialized @see init()
+         */
+        Graphics::Window& getRenderTarget();
+
+        /**
          * @brief Add an event lister to a window close event
          * @param callback Function to execute when a window close event is fired
          *

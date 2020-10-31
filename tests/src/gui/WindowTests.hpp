@@ -24,6 +24,6 @@ TEST_CASE("An open window can be closed"){
 TEST_CASE("Window is created with the specified dimensions"){
     auto window = Window();
     window.create("duel invaders", 600u, 500u, Window::Style::None);
-    CHECK_EQ(window.getDimensions().width, 600u);
-    CHECK_EQ(window.getDimensions().height, 500u);
+    CHECK_EQ(window.getSize().width, 600u);
+    CHECK_EQ(window.getSize().height, 500u);
 }

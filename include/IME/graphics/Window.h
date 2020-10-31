@@ -52,8 +52,8 @@ namespace IME {
              * The dimensions of the window must be positive, otherwise
              * the program will be terminated prematurely
              */
-            void create(const std::string &title, float width, float height,
-                    Style style = Style::Default);
+            void create(const std::string &title, unsigned int width,
+                unsigned int height, Style style = Style::Default);
 
             /**
              * @brief Change the window's icon
@@ -96,7 +96,7 @@ namespace IME {
              * @brief Get the dimensions of the window
              * @return Dimensions of the window
              */
-            static Dimensions getDimensions();
+            Dimensions getSize();
 
             /**
              * @brief Check if the window is open or not
@@ -150,12 +150,11 @@ namespace IME {
         private:
             //SFML render window.
             sf::RenderWindow window_;
-            //Dimensions of the window
-            static Dimensions dimensions_;
             //Frame rate limit
             unsigned int frameRateLimit_;
             //Instantiation state
             inline static auto isInstantiated_ = false;
+            //Needs access to the sf::RenderWindow
             friend class UI::GuiContainer;
         };
     }

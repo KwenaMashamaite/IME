@@ -234,6 +234,10 @@ namespace IME {
         return globalInputManager_;
     }
 
+    Graphics::Window &Engine::getRenderTarget() {
+        return window_;
+    }
+
     void Engine::onWindowClose(Callback<> callback) {
         windowCloseHandler_ = callback;
     }
