@@ -113,8 +113,8 @@ namespace IME::Graphics::UI {
         return sliderRenderer_->getOpacity();
     }
 
-    void SliderRenderer::setFont(const std::string &font) {
-        sliderRenderer_->setFont(font.c_str());
+    void SliderRenderer::setFont(const std::string &filename) {
+        sliderRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void SliderRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

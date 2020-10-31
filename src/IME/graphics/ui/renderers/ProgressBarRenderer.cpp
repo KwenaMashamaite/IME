@@ -1,5 +1,6 @@
 #include "IME/graphics/ui/renderers/ProgressBarRenderer.h"
 #include "IME/core/managers/ResourceManager.h"
+#include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/utility/Helpers.h"
 
 namespace IME::Graphics::UI {
@@ -90,8 +91,8 @@ namespace IME::Graphics::UI {
         return progressBarRenderer_->getOpacity();
     }
 
-    void ProgressBarRenderer::setFont(const std::string &font) {
-        progressBarRenderer_->setFont(font.c_str());
+    void ProgressBarRenderer::setFont(const std::string &filename) {
+        progressBarRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void ProgressBarRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

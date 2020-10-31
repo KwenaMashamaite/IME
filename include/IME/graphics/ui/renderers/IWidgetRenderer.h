@@ -49,9 +49,10 @@ namespace IME {
 
             /**
              * @brief Change the widgets font
-             * @param font The new font
+             * @param filename Filename of the new font
+             * @throws FileNotFound If the font cannot be found on the disk
              */
-            virtual void setFont(const std::string& font) = 0;
+            virtual void setFont(const std::string& filename) = 0;
 
             /**
              * @brief Set whether mouse events should be ignored on transparent

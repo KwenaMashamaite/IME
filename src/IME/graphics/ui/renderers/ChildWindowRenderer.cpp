@@ -133,8 +133,8 @@ namespace IME::Graphics::UI {
         return windowRenderer_->getOpacity();
     }
 
-    void ChildWindowRenderer::setFont(const std::string &font) {
-        windowRenderer_->setFont(font.c_str());
+    void ChildWindowRenderer::setFont(const std::string &filename) {
+        windowRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void ChildWindowRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

@@ -105,8 +105,8 @@ namespace IME::Graphics::UI {
         return labelRenderer_->getOpacityDisabled();
     }
 
-    void LabelRenderer::setFont(const std::string &font) {
-        labelRenderer_->setFont(font.c_str());
+    void LabelRenderer::setFont(const std::string &filename) {
+        labelRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void LabelRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

@@ -317,8 +317,8 @@ namespace IME::Graphics::UI {
         return checkBoxRenderer_->getOpacityDisabled();
     }
 
-    void CheckBoxRenderer::setFont(const std::string &font) {
-        checkBoxRenderer_->setFont(font.c_str());
+    void CheckBoxRenderer::setFont(const std::string &filename) {
+        checkBoxRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void CheckBoxRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

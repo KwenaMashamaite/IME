@@ -1,4 +1,5 @@
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"
+#include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics::UI {
     void BoxLayoutRenderer::setPadding(const Padding &padding) {
@@ -37,8 +38,8 @@ namespace IME::Graphics::UI {
         return boxLayoutRenderer_->getOpacity();
     }
 
-    void BoxLayoutRenderer::setFont(const std::string &font) {
-        boxLayoutRenderer_->setFont(font.c_str());
+    void BoxLayoutRenderer::setFont(const std::string &filename) {
+        boxLayoutRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void BoxLayoutRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

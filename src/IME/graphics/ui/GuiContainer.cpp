@@ -2,6 +2,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/graphics/ui/widgets/IWidget.h"
 #include "IME/core/managers/ResourceManager.h"
+#include "IME/utility/Helpers.h"
 
 namespace IME::Graphics::UI {
     GuiContainer::GuiContainer(Window &target) : sfmlGui_{target.window_}
@@ -24,12 +25,12 @@ namespace IME::Graphics::UI {
     }
 
     void GuiContainer::setFont(const std::string& filename) {
-        //@TODO - somehow contruct tgui::Font from sf::Font
-        //sfmlGui_.setFont(IME::ResourceManager::getInstance()->getFont(filename));
+        sfmlGui_.setFont(Utility::get_TGUI_Font(filename));
     }
 
     void GuiContainer::removeAllWidgets() {
         sfmlGui_.removeAllWidgets();
+        widgets_.clear();
     }
 
     void GuiContainer::setTarget(Window &target) {
@@ -69,14 +70,16 @@ namespace IME::Graphics::UI {
 
     }
 
-    void GuiContainer::addWidget(const std::shared_ptr<IWidget> &widgetPtr,
-                                 const std::string &widgetName)
+    void GuiContainer::addWidget(std::shared_ptr<IWidget> widget,
+         const std::string &widgetName)
     {
-        sfmlGui_.add(widgetPtr->getInternalPtr(), widgetName);
+        sfmlGui_.add(widget->getInternalPtr(), widgetName);
+        widgets_.insert({widgetName, std::move(widget)});
     }
 
     std::shared_ptr<IWidget>
     GuiContainer::getWidget(const std::string &widgetName) const {
+
         return std::shared_ptr<IWidget>();
     }
 

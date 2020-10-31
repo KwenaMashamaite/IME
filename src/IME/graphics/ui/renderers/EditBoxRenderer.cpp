@@ -257,8 +257,8 @@ namespace IME::Graphics::UI {
         return editBoxRenderer_->getOpacity();
     }
 
-    void EditBoxRenderer::setFont(const std::string &font) {
-        editBoxRenderer_->setFont(font.c_str());
+    void EditBoxRenderer::setFont(const std::string &filename) {
+        editBoxRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void EditBoxRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

@@ -244,9 +244,10 @@ namespace IME {
 
             /**
              * @brief Change the widgets font
-             * @param font The new font
+             * @param filename Filename of the new font
+             * @throws FileNotFound If the font cannot be found on the disk
              */
-            void setFont(const std::string &font) override;
+            void setFont(const std::string &filename) override;
 
             /**
              * @brief Set whether mouse events should be ignored on transparent

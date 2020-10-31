@@ -250,8 +250,8 @@ namespace IME::Graphics::UI {
         return buttonRenderer_->getOpacity();
     }
 
-    void ButtonRenderer::setFont(const std::string &font) {
-        buttonRenderer_->setFont(font.c_str());
+    void ButtonRenderer::setFont(const std::string &filename) {
+        buttonRenderer_->setFont(Utility::get_TGUI_Font(filename));
     }
 
     void ButtonRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

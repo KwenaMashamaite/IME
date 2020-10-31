@@ -9,6 +9,7 @@
 #include "IME/common/Position.h"
 #include "IME/graphics/CursorTypes.h"
 #include "IME/graphics/ui/layout/IContainer.h"
+#include <unordered_map>
 
 namespace IME {
     namespace Graphics::UI {
@@ -85,7 +86,8 @@ namespace IME {
 
             /**
              * @brief Change the global font
-             * @param filename new global font
+             * @param filename Filename of the new global font
+             * @throws FileNotFound if the font cannot be found on the disk
              */
             void setFont(const std::string& filename);
 
@@ -157,13 +159,13 @@ namespace IME {
 
             /**
              * @brief Add a widget to the gui
-             * @param widgetPtr Pointer to the widget to be added
+             * @param widget The widget to be added
              * @param widgetName Name of the widget
              *
              * The widget name must be set if the widget is to be retrieved at
              * a later time. In addition, the name must not contain whitespaces
              */
-            void addWidget(const std::shared_ptr<IWidget> &widgetPtr,
+            void addWidget(std::shared_ptr<IWidget> widget,
                 const std::string& widgetName = "");
 
             /**
@@ -297,6 +299,8 @@ namespace IME {
         private:
             //Gui controller and renderer
             tgui::GuiSFML sfmlGui_;
+            //Widgets container
+            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_;
         };
     }
 }
