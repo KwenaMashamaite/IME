@@ -104,14 +104,14 @@ namespace IME {
              *        checkbox and it is checked
              * @return The checked hover colour
              */
-            Colour getTextColorCheckedHover() const;
+            Colour getCheckedTextHoverColour() const;
             
             /**
              * @brief Set the colour of the text when the checkbox is 
              *        checked and disabled
              * @param colour New colour 
              */
-            void setTextColourCheckedDisabled(Colour colour);
+            void setCheckedDisabledTextColour(Colour colour);
 
             /**
              * @brief Get the colour of the text when the checkbox is 
@@ -119,7 +119,7 @@ namespace IME {
              * @return The colour of the text when the checkbox is 
              *          checked and disabled
              */
-            Colour getTextColorCheckedDisabled() const;
+            Colour getCheckedDisabledTextColour() const;
             
             /**
              * @brief Set the background colour of the checkbox
@@ -150,7 +150,7 @@ namespace IME {
              * @return The background colour of the checkbox when the mouse 
              *         enters it
              */
-            Colour getBackgroundColorHover() const;
+            Colour getBackgroundHoverColour() const;
             
             /**
              * @brief Set the background colour of the checkbox when it is 
@@ -277,7 +277,7 @@ namespace IME {
              * @brief Get the border colour when the checkbox is checked
              * @return The border colour when the checkbox is checked
              */
-            Colour getBorderColorChecked() const;
+            Colour getCheckedBorderColour() const;
 
             /**
              * @brief Set the colour of the checkbox when the mouse cursor
@@ -322,7 +322,7 @@ namespace IME {
              * @return  The border colour when the checkbox is checked and
              *         focused
              */
-            Colour getBorderColourCheckedFocused() const;
+            Colour getCheckedFocusedBorderColour() const;
 
             /**
              * @brief Set the colour that is used to fill the checkbox when
@@ -359,7 +359,7 @@ namespace IME {
              *         the checkbox is disabled
              * @param colour The new colour to set
              */
-            void setDisabledCheckColour(Colour colour);
+            void setDisabledCheckedColour(Colour colour);
 
             /**
              * @brief Get the colour that is used to fill the checkbox when
@@ -399,7 +399,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set
              */
-            void setTextureUncheckedHover(const std::string& filename);
+            void setUncheckedHoverTexture(const std::string& filename);
 
             /**
              * @brief Set the image that is displayed when the checkbox is
@@ -410,7 +410,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set
              */
-            void setCheckedHoverTexture(const std::string& texture);
+            void setCheckedHoverTexture(const std::string& filename);
 
             /**
              * @brief Set the image that is displayed when the checkbox is not
@@ -421,7 +421,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set
              */
-            void setUncheckedDisabledTexture(const std::string& texture);
+            void setUncheckedDisabledTexture(const std::string& filename);
 
             /**
              * @brief Set the image that is displayed when the checkbox is
@@ -432,7 +432,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set
              */
-            void setCheckedDisabledTexture(const std::string& texture);
+            void setCheckedDisabledTexture(const std::string& filename);
             
             /**
              * @brief Set the image that is displayed on top of the checkbox 
@@ -443,7 +443,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set. Pass an empty texture to unset the image
              */
-            void setUncheckedFocusedTexture(const std::string& texture);
+            void setUncheckedFocusedTexture(const std::string& filename);
 
             /**
              * @brief Set the image that is displayed on top of the checkbox 
@@ -454,7 +454,7 @@ namespace IME {
              * This only has effect when the normal checked and unchecked images 
              * are also set. Pass an empty texture to unset the image
              */
-            void setCheckedFocusedTexture(const std::string& texture);
+            void setCheckedFocusedTexture(const std::string& filename);
 
             /**
              * @brief Set the text style
