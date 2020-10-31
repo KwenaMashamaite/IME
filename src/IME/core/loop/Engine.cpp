@@ -38,6 +38,8 @@ namespace IME {
 
         audioManager_ = std::make_unique<Audio::AudioManager>();
         eventDispatcher_ = EventDispatcher::instance();
+
+        windowCloseHandler_ = [this]{quit();};
         isInitialized_ = true;
     }
 
@@ -99,7 +101,7 @@ namespace IME {
         sf::Event event;
         while (window_.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                onWindowClose();
+                windowCloseHandler_();
             statesManager_.getActiveState()->handleEvent(event);
             globalInputManager_.handleEvent(event);
             inputManager_.handleEvent(event);
@@ -204,10 +206,6 @@ namespace IME {
         window_.setVsyncEnabled(fpsLimit >= 0);
     }
 
-    void Engine::onWindowClose() {
-        quit();
-    }
-
     float Engine::getElapsedTime() const {
         return elapsedTime_;
     }
@@ -236,5 +234,7 @@ namespace IME {
         return globalInputManager_;
     }
 
-    Engine::~Engine() = default;
+    void Engine::onWindowClose(Callback<> callback) {
+        windowCloseHandler_ = callback;
+    }
 }

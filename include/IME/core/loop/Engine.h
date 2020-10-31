@@ -166,9 +166,17 @@ namespace IME {
         Input::InputManager& getGlobalInputManager();
 
         /**
-         * @brief Destructor
+         * @brief Add an event lister to a window close event
+         * @param callback Function to execute when a window close event is fired
+         *
+         * The callback function will be called by the engine when a request to
+         * close the window is made by the user. The default behavior stops
+         * the engine and closes the render window. @note Only one event listener
+         * may be registered to this event. This means that when a new event
+         * listener is added, the previous one is removed. As a result, adding
+         * a window close event listener overwrites the default behavior
          */
-        virtual ~Engine() = 0;
+        void onWindowClose(Callback<> callback);
 
     private:
         /**
@@ -229,16 +237,6 @@ namespace IME {
          */
         void postFrameUpdate();
 
-    protected:
-        /**
-         * @brief Handle window close event
-         *
-         * This function will be called by the engine when a request to
-         * close the window is made by the user. The default behavior stops
-         * the engine and closes the render window
-         */
-        virtual void onWindowClose();
-
     private:
         //Engines render target
         Graphics::Window window_;
@@ -272,7 +270,9 @@ namespace IME {
         bool shouldPop_;
         //Keeps track of how long the engine has been running
         float elapsedTime_;
+        //Window close event listener
+        std::function<void()> windowCloseHandler_;
     };
-} // namespace IME
+}
 
 #endif
