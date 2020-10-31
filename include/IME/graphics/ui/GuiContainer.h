@@ -56,6 +56,13 @@ namespace IME {
             void setTarget(Window& target);
 
             /**
+             * @brief Check if the target on which the gui should be drawn is
+             *        set or not
+             * @return True if the target is set, otherwise false
+             */
+            bool isTargetSet() const;
+
+            /**
              * @brief Handle event for all contained widgets
              * @param event Event to handle
              *

@@ -132,4 +132,8 @@ namespace IME::Graphics::UI {
     unsigned int GuiContainer::getTextSize() const {
         return sfmlGui_.getTextSize();
     }
+
+    bool GuiContainer::isTargetSet() const {
+        return sfmlGui_.getTarget() != nullptr;
+    }
 }
