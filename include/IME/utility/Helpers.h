@@ -16,9 +16,11 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <TGUI/Event.hpp>
 #include <SFML/Window/Event.hpp>
+#include <TGUI/Font.hpp>
 
 namespace IME::Utility {
     /**
+     * @internal
      * @brief Convert own Colour object to SFML colour object
      * @param colour Colour to be converted to SFML colour object
      * @return SFML colour object
@@ -27,21 +29,18 @@ namespace IME::Utility {
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    static sf::Color convertToSFMLColour(Graphics::Colour color) {
-        return {static_cast<sf::Uint8>(color.red),
-                static_cast<sf::Uint8>(color.green),
-                static_cast<sf::Uint8>(color.blue),
-                static_cast<sf::Uint8>(color.opacity)};
-    }
-
-    static tgui::Color convertToTGUIColour(Graphics::Colour color) {
-        return {static_cast<std::uint8_t>(color.red),
-                static_cast<std::uint8_t>(color.green),
-                static_cast<std::uint8_t>(color.blue),
-                static_cast<std::uint8_t>(color.opacity)};
-    }
+    extern sf::Color convertToSFMLColour(Graphics::Colour colour);
 
     /**
+     * @internal
+     * @brief Convert own Colour object to TGUI colour object
+     * @param color colour Colour to be converted to TGUI colour object
+     * @return TGUI colour object
+     */
+    extern tgui::Color convertToTGUIColour(Graphics::Colour color);
+
+    /**
+     * @internal
      * @brief Convert graphics library colour object to own colour object
      * @param thirdPartyColour Colour to be converted to own colour object
      * @return Own colour object
@@ -50,9 +49,7 @@ namespace IME::Utility {
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    static Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
-        return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
-    }
+    extern Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
 
     /**
      * @brief Check if an item exists or not in an unordered map
@@ -61,9 +58,7 @@ namespace IME::Utility {
      * @return True if item exists in the unordered map, otherwise false
      */
     template <typename T, typename U, typename V>
-    bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item) {
-        return unorderedMap.find(item) != unorderedMap.end();
-    }
+    bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item);
 
     /**
      * @brief Find an item in vector
@@ -75,11 +70,7 @@ namespace IME::Utility {
      *         the vector
      */
     template <typename T, typename U>
-    std::pair<bool, int> findIn(const std::vector<T> vector, const U& item) {
-        if (auto found = std::find(vector.begin(), vector.end(), item); found != vector.end())
-            return {true, std::distance(vector.begin(), found)};
-        return {false, -1};
-    }
+    std::pair<bool, int> findIn(const std::vector<T> vector, const U& item);
 
     /**
      * @brief Erase an element from a vector
@@ -89,13 +80,7 @@ namespace IME::Utility {
      *         in the vector
      */
     template <typename T, typename U>
-    bool eraseIn(std::vector<T>& vector, const U& element) {
-        if (auto [found, index] = findIn(vector, element); found) {
-            vector.erase(vector.begin() + index);
-            return true;
-        }
-        return false;
-    }
+    bool eraseIn(std::vector<T>& vector, const U& element);
 
     /**
      * @brief Generate a random number in a range
@@ -103,9 +88,7 @@ namespace IME::Utility {
      * @param max The end of the range
      * @return A random number in the given range
      */
-    static int generateRandomNum(int min, int max) {
-        return min + (rand() % (max - min + 1));
-    }
+    extern int generateRandomNum(int min, int max);
 
     /**
      * @brief Create a callable that generates random numbers in a range
@@ -114,22 +97,24 @@ namespace IME::Utility {
      * @return A callable object, when called returns a random number in the
      *         specified range
      */
-    static auto createRandomNumGenerator(int min, int max) {
-        return [distribution = std::uniform_int_distribution(min, max),
-            randomEngine = std::mt19937{std::random_device{}()}]() mutable {
-                return distribution(randomEngine);
-        };
-    }
+    static auto createRandomNumGenerator(int min, int max);
 
     /**
      * @brief Create a random colour
      * @return A random colour
      */
-    static Graphics::Colour generateRandomColour() {
-        return {static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),255};
-    }
+    extern Graphics::Colour generateRandomColour();
+
+    /**
+     * @internal
+     * @brief Get a TGUI font
+     * @param filename Filename of the font
+     * @throws FileNotFound If the font cannot be found on the disk
+     * @return TGUI font
+     */
+    extern tgui::Font get_TGUI_Font(const std::string& filename);
+
+    #include "Helpers.inl"
 }
 
 #endif
