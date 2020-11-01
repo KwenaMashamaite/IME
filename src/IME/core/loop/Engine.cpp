@@ -120,6 +120,8 @@ namespace IME {
         elapsedTime_ = 0.0f;
         auto prevTime = clock.getElapsedTimeInSeconds();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
+            if (onFrameStart_)
+                onFrameStart_();
             now = clock.getElapsedTimeInSeconds();
             deltaTime = now - prevTime;
             prevTime = now;
@@ -135,6 +137,8 @@ namespace IME {
             display();
             postFrameUpdate();
             elapsedTime_ += deltaTime;
+            if (onFrameEnd_)
+                onFrameEnd_();
         }
         shutdown();
     }
@@ -251,6 +255,14 @@ namespace IME {
     }
 
     void Engine::onWindowClose(Callback<> callback) {
-        windowCloseHandler_ = callback;
+        windowCloseHandler_ = std::move(callback);
+    }
+
+    void Engine::onFrameStart(Callback<> callback) {
+        onFrameStart_ = std::move(callback);
+    }
+
+    void Engine::onFrameEnd(Callback<> callback) {
+        onFrameEnd_ = std::move(callback);
     }
 }

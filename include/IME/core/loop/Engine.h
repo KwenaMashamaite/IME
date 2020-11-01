@@ -189,6 +189,27 @@ namespace IME {
          */
         void onWindowClose(Callback<> callback);
 
+        /**
+         * @brief Execute a function at the start of a frame
+         * @param callback Function to execute
+         *
+         * @note Only one callback  may be registered at a time. Pass nullptr to
+         * stop the callback from being invoked. By default no callback is
+         * registered
+         */
+        void onFrameStart(Callback<> callback);
+
+        /**
+         * @brief Execute a function at the end of the current frame
+         * @param callback Function to execute
+         *
+         * The callback is invoked after all updates and rendering is completed,
+         * That is, before the start of the next frame. @note Only one callback
+         * may be registered at a time. Pass nullptr to stop the callback from
+         * being invoked. By default no callback is registered
+         */
+        void onFrameEnd(Callback<> callback);
+
     private:
         /**
          * @brief Load engine settings from the hard drive
@@ -288,6 +309,10 @@ namespace IME {
         float elapsedTime_;
         //Window close event listener
         std::function<void()> windowCloseHandler_;
+        //Function called at the start of a frame
+        std::function<void()> onFrameStart_;
+        //Function called at the end of a frame
+        std::function<void()> onFrameEnd_;
         //Remembers the prev state local input handlers on state push
         std::stack<Input::InputManager> prevStateInputManager_;
     };
