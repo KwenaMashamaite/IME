@@ -99,11 +99,6 @@ namespace IME {
         virtual bool isInitialized() const = 0;
 
         /**
-         * @brief Reset state without re-initialization
-         */
-        virtual void reset() = 0;
-
-        /**
          * @brief Exit a state
          *
          * This function will be called by the engine before the state
