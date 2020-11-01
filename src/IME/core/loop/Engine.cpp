@@ -163,11 +163,13 @@ namespace IME {
         window_.display();
     }
 
-    void Engine::pushState(std::shared_ptr<State> state) {
+    void Engine::pushState(std::shared_ptr<State> state, Callback<> callback) {
         if (!isRunning_)
             statesManager_.pushState(std::move(state));
-        else
-            stateToPush_ = std::move(state);
+        else {
+            stateToPush_.first = std::move(state);
+            stateToPush_.second = callback;
+        }
     }
 
     void Engine::popState() {
@@ -190,11 +192,15 @@ namespace IME {
             }
         }
 
-        if (stateToPush_) {
+        if (stateToPush_.first) {
             prevStateInputManager_.push(inputManager_);
             inputManager_ = Input::InputManager(); //Clear prev state input handlers
-            stateToPush_->initialize();
-            statesManager_.pushState(std::move(stateToPush_));
+            stateToPush_.first->initialize();
+            statesManager_.pushState(std::move(stateToPush_.first));
+            if (stateToPush_.second) { //Invoke post push callback
+                stateToPush_.second();
+                stateToPush_.second = nullptr;
+            }
         }
     }
 

@@ -94,15 +94,23 @@ namespace IME {
          * @brief Add a state
          * @param name Name of the state
          * @param state State to be added
+         * @param callback Optional function to be executed after the state is
+         *                 pushed
          *
-         * The state will be pushed at the end of the current frame
+         * The state will NOT be pushed immediately but rather at the end of the
+         * current frame. @note Any operation performed on the engine before
+         * the end of the current frame will reflect on the current state and
+         * not the state to be pushed. A callback must be provided if the
+         * need to perform an operation immediately after a state is pushed
+         * arises
          */
-        void pushState(std::shared_ptr<State> state);
+        void pushState(std::shared_ptr<State> state, Callback<> callback = nullptr);
 
         /**
          * @brief Remove a state from the engine
          *
-         * The state will be popped at the end of the current frame
+         * The state will not be popped immediately but rather at the end of
+         * the current frame
          */
         void popState();
 
@@ -301,8 +309,8 @@ namespace IME {
         std::shared_ptr<EventDispatcher> eventDispatcher_;
         //Engine settings
         PropertyContainer settings_;
-        //Hold a state to be pushed to engine state
-        std::shared_ptr<State> stateToPush_;
+        //Holds a state to be pushed to the engine
+        std::pair<std::shared_ptr<State>, Callback<>> stateToPush_;
         //Flag for popping
         bool shouldPop_;
         //Keeps track of how long the engine has been running
