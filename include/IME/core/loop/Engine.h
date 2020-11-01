@@ -249,6 +249,11 @@ namespace IME {
          */
         void postFrameUpdate();
 
+        /**
+         * @brief Stops the engine and clears all data
+         */
+        void shutdown();
+
     private:
         //Engines render target
         Graphics::Window window_;

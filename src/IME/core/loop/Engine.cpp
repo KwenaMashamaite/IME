@@ -117,6 +117,7 @@ namespace IME {
         auto const frameTime = 1.0f / getFPSLimit();
         auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
         auto clock = Time::Clock();
+        elapsedTime_ = 0.0f;
         auto prevTime = clock.getElapsedTimeInSeconds();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             now = clock.getElapsedTimeInSeconds();
@@ -135,6 +136,7 @@ namespace IME {
             postFrameUpdate();
             elapsedTime_ += deltaTime;
         }
+        shutdown();
     }
 
     void Engine::quit() {
@@ -187,14 +189,21 @@ namespace IME {
             stateToPush_->initialize();
             statesManager_.pushState(std::move(stateToPush_));
         }
+    }
 
-        if (!isRunning_) {
-            window_.close();
-            audioManager_->stopAllAudio();
-            statesManager_.clear();
-            isInitialized_ = false;
-            elapsedTime_ = 0.0f;
-        }
+    void Engine::shutdown() {
+        // Not using statesManager_.clear() because we want remaining
+        // states to be notified that they are being destroyed
+        while (!statesManager_.isEmpty())
+            statesManager_.popState();
+        window_.close();
+        audioManager_->stopAllAudio();
+        inputManager_ = Input::InputManager();
+        globalInputManager_ = Input::InputManager();
+        eventDispatcher_.reset();
+        resourceManager_.reset();
+        isRunning_ = false;
+        isInitialized_ = false;
     }
 
     bool Engine::isRunning() const {
