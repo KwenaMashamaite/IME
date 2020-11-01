@@ -177,15 +177,18 @@ namespace IME {
         // Don't use if-else because popping and pushing are not mutually exclusive
         if (shouldPop_) {
             shouldPop_ = false;
-            inputManager_ = Input::InputManager(); //Clear current state input handlers
             statesManager_.popState();
-            if (!statesManager_.isEmpty() && !statesManager_.getActiveState()->isInitialized())
-                statesManager_.getActiveState()->initialize();
+            if (!statesManager_.isEmpty()) {
+                inputManager_ = prevStateInputManager_.top();
+                prevStateInputManager_.pop();
+                if (!statesManager_.getActiveState()->isInitialized())
+                    statesManager_.getActiveState()->initialize();
+            }
         }
 
         if (stateToPush_) {
-            //@TODO - Remember input handlers on state push and only clear on state pop
-            inputManager_ = Input::InputManager(); //Clear current state input handlers
+            prevStateInputManager_.push(inputManager_);
+            inputManager_ = Input::InputManager(); //Clear prev state input handlers
             stateToPush_->initialize();
             statesManager_.pushState(std::move(stateToPush_));
         }

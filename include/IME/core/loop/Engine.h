@@ -135,9 +135,8 @@ namespace IME {
          * This input manager is local to the current state. This means that
          * input listeners attached to it will only be notified during the
          * current state only. The input manager is cleared on a state change
-         * (push or pop). Therefore, when a state is pushed, the state prior to
-         * the state push will have to reattach input event listeners when it is
-         * resumed.
+         * (push or pop). For a push operation, input event listeners are
+         * remembered and restored when the state is resumed
          *
          * @warning If the input handler has a reference or a pointer to a class
          * member, then caution must be taken to ensure that the input manager
@@ -289,6 +288,8 @@ namespace IME {
         float elapsedTime_;
         //Window close event listener
         std::function<void()> windowCloseHandler_;
+        //Remembers the prev state local input handlers on state push
+        std::stack<Input::InputManager> prevStateInputManager_;
     };
 }
 
