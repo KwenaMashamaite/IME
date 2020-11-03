@@ -1,24 +1,22 @@
 /**
  * @brief Class for finding the path from a source tile to a destination tile
- *        using the Breadth First Search algorithm
+ *        using the Depth First Search algorithm
  */
 
-#ifndef BFS_H
-#define BFS_H
+#ifndef DFS_H
+#define DFS_H
 
 #include "IGridPathFinder.h"
-#include "AdjacencyList.h"
-#include <initializer_list>
-#include <queue>
+#include "BFS.h"
 
 namespace IME {
-    class BFSPathFinder : public IGridPathFinder {
+    class DFSPathFinder : public IGridPathFinder {
     public:
         /**
          * @brief Initialize the algorithm
          * @param gridSize Size of the grid
          */
-        explicit BFSPathFinder(Dimensions gridSize);
+        explicit DFSPathFinder(Dimensions gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid
@@ -38,15 +36,15 @@ namespace IME {
 
     private:
         /**
-         * @brief Finds the target using bfs algorithm
+         * @brief Finds the target using dfs algorithm
          * @param source The starting position
          * @param target The destination
          * @param nodeToVisit Container to store nodes that must be visited on
          *                    the next run
          * @param exploredNodes A vector to stores nodes that have been visited
          */
-        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit,
-             std::vector<Node>& exploredNodes);
+        void dfs(Node source, Index target, std::stack<Node>& nodeToVisit,
+                 std::vector<Node>& exploredNodes);
 
         /**
          * @brief Set visited nodes as not visited
