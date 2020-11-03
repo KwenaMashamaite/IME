@@ -13,9 +13,20 @@ namespace IME {
         assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
     }
 
+    void GridMover::setTarget(GridMover::EntityPtr target) {
+        assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+        if (target_)
+            teleportTargetToDestination();
+        target_ = target;
+    }
+
+    GridMover::EntityPtr GridMover::getTarget() const {
+        return target_;
+    }
+
     bool GridMover::requestDirectionChange(Direction newDir) {
         auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
-        if (!movableObj->isMoving()) {
+        if (movableObj && !movableObj->isMoving()) {
             switch (newDir) {
                 case Direction::None:
                     target_->setDirection(Direction::None);
@@ -41,6 +52,8 @@ namespace IME {
 
     void GridMover::update(float deltaTime) {
         auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
+        if (!movableObj)
+            return;
         if (!movableObj->isMoving() && targetDirection_ != Direction::None) {
             auto currentTile = tileMap_.getTile(target_->getPosition());
             switch (targetDirection_) {
@@ -58,14 +71,18 @@ namespace IME {
                     break;
             }
 
-            if (targetTile_.getIndex().row < 0) //Can't leave grid
+            //A tile outside the grid bounds has the index {-1, -1}
+            if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
+                targetTile_ = currentTile;
+                targetDirection_ = Direction::None;
                 return;
+            }
 
-            if (targetTile_.getType() == IME::Graphics::TileType::Obstacle) {
-                targetDirection_ = IME::Direction::None;
+            if (targetTile_.getType() == Graphics::TileType::Obstacle) {
+                targetTile_ = currentTile;
+                targetDirection_ = Direction::None;
                 auto obstacle = tileMap_.getChild(targetTile_.getIndex());
-                if (obstacle)
-                    eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                eventEmitter_.emit("obstacleCollision", target_, obstacle);
                 return;
             }
             movableObj->move();
@@ -73,18 +90,18 @@ namespace IME {
             auto velocity = movableObj->getSpeed() * deltaTime;
             auto entityPosition = target_->getPosition();
             switch (targetDirection_) {
-                case IME::Direction::None:
+                case Direction::None:
                     break;
-                case IME::Direction::Left:
+                case Direction::Left:
                     target_->setPosition(target_->getPosition().x - velocity, target_->getPosition().y);
                     break;
-                case IME::Direction::Right:
+                case Direction::Right:
                     target_->setPosition(target_->getPosition().x + velocity, target_->getPosition().y);
                     break;
-                case IME::Direction::Up:
+                case Direction::Up:
                     target_->setPosition(target_->getPosition().x , target_->getPosition().y - velocity);
                     break;
-                case IME::Direction::Down:
+                case Direction::Down:
                     target_->setPosition(target_->getPosition().x , target_->getPosition().y + velocity);
                     break;
             }
@@ -127,10 +144,12 @@ namespace IME {
     }
 
     void GridMover::snap() {
-        target_->setPosition(targetTile_.getPosition().x, targetTile_.getPosition().y);
-        std::dynamic_pointer_cast<IMovable>(target_)->stop();
-        targetDirection_ = Direction::None;
-        reachedTarget_ = true;
+        if (target_ && target_->getPosition() != targetTile_.getPosition()) {
+            target_->setPosition(targetTile_.getPosition().x, targetTile_.getPosition().y);
+            std::dynamic_pointer_cast<IMovable>(target_)->stop();
+            targetDirection_ = Direction::None;
+            reachedTarget_ = true;
+        }
     }
 
     int GridMover::onDestinationReached(Callback<float, float> callback) {

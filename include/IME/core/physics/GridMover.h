@@ -41,6 +41,21 @@ namespace IME {
         bool requestDirectionChange(Direction newDir);
 
         /**
+         * @brief Change the controlled entity
+         * @param target New target
+         *
+         * Set to nullptr to remove the target from the grid mover
+         */
+        void setTarget(EntityPtr target);
+
+        /**
+         * @brief Get access to the controlled entity
+         * @return The controlled entity, or a nullptr if there is no entity to
+         *         control
+         */
+        EntityPtr getTarget() const;
+
+        /**
          * @brief Update entity movement in the grid
          * @param deltaTime Time passed since movement was last updated
          *
@@ -73,9 +88,11 @@ namespace IME {
          * @param callback Function to execute when the collision takes place
          * @return The event listeners identification number
          *
-         * This event is emitted when the target collides with an obstacle object
+         * This event is emitted when the target collides with an obstacle tile
          * in the grid. The target will be prevented from occupying the same tile
-         * as an obstacle
+         * as an obstacle. @warning If a tile is marked as an obstacle and has
+         * no obstacle object, the callback will be passed a nullptr for the
+         * obstacle object
          */
         int onObstacleCollision(Callback<EntityPtr, EntityPtr> callback);
 
