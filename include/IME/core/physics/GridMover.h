@@ -74,6 +74,17 @@ namespace IME {
         void teleportTargetToDestination();
 
         /**
+         * @brief Add an event listener to a grid/tilemap border collision
+         * @param callback Function to execute when the target collides with
+         *         the borders of the grid/tilemap
+         * @return The event listeners identification number
+         *
+         * @note The target will be prevented from leaving the grid. That is,
+         * it will occupy the same tile it occupied before the collision
+         */
+        int onGridBorderCollision(Callback<> callback);
+
+        /**
          * @brief Add an event listener to a destination reached event
          * @param callback Function to execute when the target reaches its destination
          *

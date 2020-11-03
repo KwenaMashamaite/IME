@@ -75,6 +75,7 @@ namespace IME {
             if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
                 targetTile_ = currentTile;
                 targetDirection_ = Direction::None;
+                eventEmitter_.emit("gridCollision");
                 return;
             }
 
@@ -150,6 +151,10 @@ namespace IME {
             targetDirection_ = Direction::None;
             reachedTarget_ = true;
         }
+    }
+
+    int GridMover::onGridBorderCollision(Callback<> callback) {
+        return eventEmitter_.addEventListener("gridCollision", std::move(callback));
     }
 
     int GridMover::onDestinationReached(Callback<float, float> callback) {
