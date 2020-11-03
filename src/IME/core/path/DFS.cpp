@@ -43,25 +43,6 @@ namespace IME {
             return std::stack<Index>{};
     }
 
-    void
-    DFSPathFinder::dfs(Node source, Index target, std::stack<Node> &nodeToVisit,
-                       std::vector<Node> &exploredNodes) {
-        if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than once
-            return;
-        else if (source.index == target) {
-            exploredNodes.push_back(source);
-            while (!nodeToVisit.empty())
-                nodeToVisit.pop();
-        } else {
-            exploredNodes.push_back(source);
-            visited_[source.index.row][source.index.colm] = true;
-            for (auto& neighbour : adjacencyList_.getNeighbours(source.index)) {
-                if (!visited_[neighbour.row][neighbour.colm])
-                    nodeToVisit.push({source.index, neighbour});
-            }
-        }
-    }
-
     void DFSPathFinder::reset() {
         for (auto i = 0; i < visited_.size(); i++) {
             for (auto j = 0; j < visited_[0].size(); j++)

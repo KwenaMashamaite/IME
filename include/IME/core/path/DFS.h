@@ -36,17 +36,6 @@ namespace IME {
 
     private:
         /**
-         * @brief Finds the target using dfs algorithm
-         * @param source The starting position
-         * @param target The destination
-         * @param nodeToVisit Container to store nodes that must be visited on
-         *                    the next run
-         * @param exploredNodes A vector to stores nodes that have been visited
-         */
-        void dfs(Node source, Index target, std::stack<Node>& nodeToVisit,
-                 std::vector<Node>& exploredNodes);
-
-        /**
          * @brief Set visited nodes as not visited
          */
         void reset();
