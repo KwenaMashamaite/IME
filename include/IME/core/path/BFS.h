@@ -8,7 +8,6 @@
 
 #include "IGridPathFinder.h"
 #include "AdjacencyList.h"
-#include <initializer_list>
 #include <queue>
 
 namespace IME {

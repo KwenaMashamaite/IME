@@ -7,7 +7,7 @@
 #define DFS_H
 
 #include "IGridPathFinder.h"
-#include "BFS.h"
+#include "AdjacencyList.h"
 
 namespace IME {
     class DFSPathFinder : public IGridPathFinder {

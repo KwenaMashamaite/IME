@@ -74,7 +74,7 @@ namespace IME {
          * @brief Construct the tilemap form a vector that contains map data
          * @param map Vector to construct map from
          */
-        void loadFromVector(const Map& map);
+        void loadFromVector(Map map);
 
         /**
          * @brief Associate a tile id with a tileset image

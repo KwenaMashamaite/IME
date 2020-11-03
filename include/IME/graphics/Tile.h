@@ -16,7 +16,7 @@
 
 namespace IME {
     /**
-     * @brief
+     * @brief Represents a position in the tilemap
      */
     struct Index {
         int row;
@@ -24,6 +24,10 @@ namespace IME {
 
         bool operator==(const Index& rhs) const {
             return row == rhs.row && colm == rhs.colm;
+        }
+
+        bool operator!=(const Index& rhs) const {
+            return !(*this == rhs);
         }
     };
 

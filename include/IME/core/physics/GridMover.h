@@ -3,7 +3,7 @@
  *
  * This class monitors the movement of an entity in a grid and ensures that
  * it always moves from one cell to the next and never between grid cells.
- * The entities direction cannot be changed until it has completed it current
+ * The entities direction cannot be changed until it has completed it's current
  * movement
  */
 
@@ -54,6 +54,22 @@ namespace IME {
          *         control
          */
         EntityPtr getTarget() const;
+
+        /**
+         * @brief Get access to the grid in which the target is moved in
+         * @return The grid in which the target is being moved in
+         */
+        TileMap& getGrid();
+
+        /**
+         * @brief Check if target is moving or not
+         * @return True if target is moving otherwise false
+         *
+         * @warning This function will return false if the target is not moving
+         * or when there is no target set. Therefore, the existence of the
+         * target should be checked first for accurate results. @see getTarget()
+         */
+        bool isTargetMoving() const;
 
         /**
          * @brief Update entity movement in the grid

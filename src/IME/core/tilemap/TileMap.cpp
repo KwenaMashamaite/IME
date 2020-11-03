@@ -91,8 +91,8 @@ namespace IME {
         createTiledMap();
     }
 
-    void TileMap::loadFromVector(const Map &map) {
-        mapData_ = map;
+    void TileMap::loadFromVector(Map map) {
+        mapData_ = std::move(map);
         computeDimensions();
         createTiledMap();
     }

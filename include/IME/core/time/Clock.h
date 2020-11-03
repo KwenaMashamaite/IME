@@ -39,7 +39,7 @@ namespace IME {
              */
             double getProcessTimeInSeconds();
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

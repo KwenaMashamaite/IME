@@ -24,6 +24,17 @@ namespace IME {
         return target_;
     }
 
+    TileMap &GridMover::getGrid() {
+        return tileMap_;
+    }
+
+    bool GridMover::isTargetMoving() const {
+        auto target = std::dynamic_pointer_cast<IMovable>(target_);
+        if (target)
+            return target->isMoving();
+        return false;
+    }
+
     bool GridMover::requestDirectionChange(Direction newDir) {
         auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
         if (movableObj && !movableObj->isMoving()) {
