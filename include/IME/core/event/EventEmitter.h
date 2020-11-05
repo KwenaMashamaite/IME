@@ -20,6 +20,7 @@
 #include <vector>
 #include <functional>
 #include <mutex>
+#include <thread>
 
 namespace IME {
     template <typename... Args>
@@ -44,7 +45,6 @@ namespace IME {
 
         /**
          * @brief Add a listener (callback) to an event
-         * @tparam Args Template parameter pack name
          * @param event Event to add listener to
          * @param callback Function to execute when the event is fired
          * @return listener's identification number
@@ -97,7 +97,7 @@ namespace IME {
          *         if the specified event does not have a listener with
          *         the specified id
          */
-         bool removeEventListener(const std::string &event, int listenerId);
+        bool removeEventListener(const std::string &event, int listenerId);
 
          /**
           * @brief Remove all listeners of an event
@@ -107,7 +107,7 @@ namespace IME {
           *
           * @warning Exercise caution when using this function
           */
-         bool removeAllEventListeners(const std::string &event);
+        bool removeAllEventListeners(const std::string &event);
 
         /**
          * @brief Fire an event
@@ -117,6 +117,23 @@ namespace IME {
          */
         template<typename...Args>
         void emit(const std::string &event, Args...args);
+
+        /**
+         * @brief Fire an event
+         * @param event Name of the event to fire
+         * @param args Arguments to be passed to event listeners
+         *
+         * Unlike emit() which is synchronous, this function publishes events
+         * in a separate thread. The function will return immediately after
+         * starting the new thread instead of waiting for all event listeners
+         * to be notified
+         *
+         * @note If the specified events listener list has a once listener then
+         * this function will block after invoking the listener because it must
+         * be removed immediately from the event list.
+         */
+        template<typename...Args>
+        void emitAsync(const std::string &event, Args...args);
 
         /**
          * @brief Check if an event exists or not
@@ -135,7 +152,7 @@ namespace IME {
 
         /**
          * @brief Get the current number of events
-         * @return Current umber of events
+         * @return Current number of events
          */
         int getNumberOfEvents() const;
 
@@ -151,7 +168,6 @@ namespace IME {
     private:
         /**
          * @brief  Add a listener (callback) to an event
-         * @tparam Args Template parameter pack name
          * @param  event Event to add listener to
          * @param  callback Function to execute when the event is fired
          * @param  isCalledOnce True if listener is called only when the event
@@ -167,8 +183,8 @@ namespace IME {
          * @param listenerId Identification number of the listener to be checked
          * @return A pair, of which the first element is a bool that is true if
          *         the specified event has an event listener with the specified id, 
-                   otherwise false and the second is an int which is the index of 
-                   the found event listener in the specified event listeners list
+         *         otherwise false and the second is an int which is the index of
+         *         the found event listener in the specified event listeners list
          *
          * @warning If the first element of the pair is false, the second element
          * is invalid (Function will return a negative index)

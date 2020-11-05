@@ -42,3 +42,23 @@ void EventEmitter::emit(const std::string &event, Args... args) {
         }
     }
 }
+
+template<typename...Args>
+void EventEmitter::emitAsync(const std::string &event, Args...args) {
+    mutex_.lock();
+    Listeners listenersToNotify{};
+    if (hasEvent(event))
+        listenersToNotify = eventList_.at(event);
+    mutex_.unlock();
+
+    std::thread([=, listeners = std::move(listenersToNotify)] {
+        for (auto& listenerBase : listeners) {
+            auto listener = std::dynamic_pointer_cast<Listener<Args...>>(listenerBase);
+            if (listener && listener->callback_) {
+                std::invoke(listener->callback_, args...);
+                if (listener->isCalledOnce_)
+                    removeEventListener(event, listener->id_);
+            }
+        }
+    }).detach();
+}
