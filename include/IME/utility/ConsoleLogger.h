@@ -6,6 +6,7 @@
 #define CONSOLELOGGER_H
 
 #include "ILogger.h"
+#include <mutex>
 
 namespace IME {
     namespace Utility {
@@ -27,8 +28,11 @@ namespace IME {
              *  console output- STATUS: Assets loaded successfully
              */
             void log(MessageType logType, const std::string& msg) override;
+
+        private:
+            std::mutex mutex_;
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

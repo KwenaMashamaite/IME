@@ -3,6 +3,7 @@
 
 namespace IME::Utility {
     void ConsoleLogger::log(MessageType logType, const std::string &msg) {
+        std::scoped_lock lock(mutex_);
         switch (logType) {
             case MessageType::General:
                 std::cout << msg << std::endl;
