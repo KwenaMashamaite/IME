@@ -6,6 +6,7 @@ namespace IME {
     }
 
     std::shared_ptr<EventDispatcher> EventDispatcher::instance() {
+        std::scoped_lock lock(mutex_);
         static std::weak_ptr<EventDispatcher> instance_;
         if (const auto result = instance_.lock())
             return result;

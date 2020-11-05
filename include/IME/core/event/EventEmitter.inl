@@ -15,6 +15,7 @@ int EventEmitter::addOnceEventListener(const std::string &event, Callback<Args..
 
 template<typename...Args>
 int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
+    std::scoped_lock lock(mutex_);
     static auto previousListenerId = 0u;
     auto listenerId = ++previousListenerId;
     auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
@@ -28,6 +29,7 @@ int EventEmitter::addListener(const std::string &event, Callback<Args...> callba
 
 template<typename... Args>
 void EventEmitter::emit(const std::string &event, Args... args) {
+    std::scoped_lock lock(mutex_);
     if (hasEvent(event)) {
         auto& listeners = eventList_.at(event);
         for (auto& listenerBase : listeners) {

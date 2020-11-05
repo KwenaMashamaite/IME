@@ -19,6 +19,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <mutex>
 
 namespace IME {
     template <typename... Args>
@@ -26,6 +27,21 @@ namespace IME {
 
     class EventEmitter {
     public:
+        /**
+         * @brief Default copy constructor
+         */
+        EventEmitter() = default;
+
+        /**
+         * @brief Copy constructor
+         */
+        EventEmitter(const EventEmitter& other);
+
+        /**
+         * @brief Assignment operator
+         */
+        EventEmitter& operator=(const EventEmitter& rhs);
+
         /**
          * @brief Add a listener (callback) to an event
          * @tparam Args Template parameter pack name
@@ -179,9 +195,10 @@ namespace IME {
 
         using Listeners = std::vector<std::shared_ptr<IListener>>;
         std::unordered_map<std::string, Listeners> eventList_;
+        mutable std::recursive_mutex mutex_;
     };
 
     #include "EventEmitter.inl"
-} // namespace IME
+}
 
 #endif

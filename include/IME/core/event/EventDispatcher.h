@@ -76,6 +76,7 @@ namespace IME {
         std::shared_ptr<EventDispatcher> instance_;
         //Event publisher
         EventEmitter eventEmitter_;
+        inline static std::mutex mutex_;
     };
 
     #include "EventDispatcher.inl"
