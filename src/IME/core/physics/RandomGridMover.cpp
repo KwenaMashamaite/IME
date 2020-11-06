@@ -6,8 +6,10 @@ namespace IME {
         : gridMover_(tileMap, target), prevDirection_(Direction::None), movementStarted_{false}
     {
         gridMover_.onObstacleCollision([this](auto target, auto obstacle) {
-            gridMover_.getTarget()->setDirection(prevDirection_);
-            generateNewDirection();
+            if (movementStarted_) {
+                gridMover_.getTarget()->setDirection(prevDirection_);
+                generateNewDirection();
+            }
         });
 
         gridMover_.onDestinationReached([this](float x, float y) {
@@ -37,7 +39,6 @@ namespace IME {
 
     void RandomGridMover::stopMovement() {
         movementStarted_ = false;
-        gridMover_.teleportTargetToDestination();
     }
 
     void RandomGridMover::update(float deltaTime) {
