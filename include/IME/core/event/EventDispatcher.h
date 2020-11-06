@@ -50,17 +50,6 @@ namespace IME {
         void dispatchEvent(const std::string& event, Args&& ...args);
 
         /**
-         * @brief Fire an event
-         * @param event Name of the event to fire
-         * @param args Arguments to be passed to event listeners
-         *
-         * This function will invoke all event listeners of the fired event
-         * asynchronously
-         */
-        template<typename... Args>
-        void dispatchEventAsync(const std::string& event, Args&& ...args);
-
-        /**
          * @brief Remove a listener from an event
          * @param event Event to remove listener from
          * @param id Identification number of the listener to be removed
