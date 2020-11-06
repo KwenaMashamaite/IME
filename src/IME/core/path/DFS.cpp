@@ -12,8 +12,10 @@ namespace IME {
 
     std::stack<Index>
     DFSPathFinder::findPath(TileMap &grid, Index sourceTile, Index targetTile) {
-        if (sourceTile == targetTile)
+        if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
+            || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};
+
         adjacencyList_.generateFrom(grid);
         auto exploredPath = std::vector<Node>{};
         auto nodesToVisit = std::stack<Node>();

@@ -8,6 +8,10 @@ namespace IME {
           targetTile_{-1, -1}, targetStopped_{false},
           targetTileChangedWhileMoving_{false}
     {
+        if (gridMover_.getTarget())
+            targetTile_ = gridMover_.getGrid().getTile(
+                gridMover_.getTarget()->getPosition()).getIndex();
+
         gridMover_.onDestinationReached([this](float, float ) {
             if (targetTileChangedWhileMoving_) {
                 generatePath();
