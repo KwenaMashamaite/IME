@@ -21,7 +21,8 @@ namespace IME {
              * @brief keyboard keys
              */
             enum class Key {
-                A, B, C,
+                Unknown = -1, ///< Unhandled key
+                A = 0, B, C,
                 D, E, F, G,
                 H, I, J, K,
                 L, M, N, O,

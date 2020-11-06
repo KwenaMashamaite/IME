@@ -3,53 +3,89 @@
 #include <utility>
 
 namespace IME {
-    KeyboardControlledGridMover::KeyboardControlledGridMover(
-            std::shared_ptr<GridMover> gridMover, std::shared_ptr<IME::Entity> target, Trigger trigger)
-        : gridMover_(std::move(gridMover)), target_(std::move(target)), trigger_(trigger), onTriggerHandlerId_(-1)
+    KeyboardControlledGridMover::KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<IME::Entity> target)
+        : gridMover_(tileMap, target), trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
-        gridMover_->onDestinationReached([this](float, float) {
-            if (newDir_.first) { //If a direction switch was requested while a key was pressed
-                newDir_.first = false;
-                gridMover_->requestDirectionChange(newDir_.second);
+        gridMover_.onDestinationReached([this](float, float) {
+            if (auto& [changeDir, newDir] = newDir_; changeDir) { //If a direction switch was requested while a key was pressed
+                changeDir = false;
+                gridMover_.requestDirectionChange(newDir);
             }
         });
+    }
+
+    void KeyboardControlledGridMover::setTarget(KeyboardControlledGridMover::EntityPtr target) {
+        gridMover_.setTarget(target);
+    }
+
+    KeyboardControlledGridMover::EntityPtr KeyboardControlledGridMover::getTarget() const {
+        return gridMover_.getTarget();
+    }
+
+    void KeyboardControlledGridMover::setMovementTrigger(MovementTrigger trigger) {
+        if (trigger_ != trigger) {
+            trigger_ = trigger;
+            if (trigger_ == MovementTrigger::None && onTriggerHandlerId_ != -1) {
+                keyboard_.removeEventListener(Input::Keyboard::Event::KeyDown, onTriggerHandlerId_);
+                keyboard_.removeEventListener(Input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
+                onTriggerHandlerId_ = -1;
+                return;
+            } else if (trigger_ == MovementTrigger::OnKeyDown)
+                keyboard_.removeEventListener(Input::Keyboard::Event::KeyDown, onTriggerHandlerId_);
+            else
+                keyboard_.removeEventListener(Input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
+            attachInputEventListeners();
+        }
+    }
+
+    MovementTrigger KeyboardControlledGridMover::getMovementTrigger() const {
+        return trigger_;
     }
 
     void KeyboardControlledGridMover::setKeys(Input::Keyboard::Key leftKey, Input::Keyboard::Key rightKey,
         Input::Keyboard::Key upKey, Input::Keyboard::Key downKey)
     {
-        if (onTriggerHandlerId_ != -1) { //Keys already set
-            if (trigger_ == Trigger::OnKeyDown)
-                keyboard_.removeEventListener(Input::Keyboard::Event::KeyDown, onTriggerHandlerId_);
-            else
-                keyboard_.removeEventListener(Input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
-            onTriggerHandlerId_ = -1;
-        }
+        movementKeys_.left = leftKey;
+        movementKeys_.right = rightKey;
+        movementKeys_.up = upKey;
+        movementKeys_.down = downKey;
+        attachInputEventListeners();
+    }
 
-        auto moveEntity = [=](Input::Keyboard::Key key) {
-            auto targetDirection = IME::Direction::None;
-            if (key == leftKey)
-                targetDirection = IME::Direction::Left;
-            else if (key == rightKey)
-                targetDirection = IME::Direction::Right;
-            else if (key == upKey)
-                targetDirection = IME::Direction::Up;
-            else if (key == downKey)
-                targetDirection = IME::Direction::Down;
-
-            if (targetDirection != target_->getDirection() && targetDirection != IME::Direction::None
-                && std::dynamic_pointer_cast<IMovable>(target_)->isMoving()) {
-                newDir_.first = true;
-                newDir_.second = targetDirection;
-            } else if (targetDirection != IME::Direction::None) {
-                gridMover_->requestDirectionChange(targetDirection);
-            }
-        };
-
-        if (trigger_ == Trigger::OnKeyDown)
+    void KeyboardControlledGridMover::attachInputEventListeners() {
+        static auto moveEntity = [this](Input::Keyboard::Key key) {moveTarget(key);};
+        if (trigger_ == MovementTrigger::OnKeyDown)
             onTriggerHandlerId_ = keyboard_.onKeyDown(moveEntity);
-        else
+        else if (trigger_ == MovementTrigger::OnKeyUp)
             onTriggerHandlerId_ = keyboard_.onKeyUp(moveEntity);
+    }
+
+    void KeyboardControlledGridMover::moveTarget(Input::Keyboard::Key key) {
+        auto targetDirection = IME::Direction::None;
+        if (key == movementKeys_.left)
+            targetDirection = IME::Direction::Left;
+        else if (key == movementKeys_.right)
+            targetDirection = IME::Direction::Right;
+        else if (key == movementKeys_.up)
+            targetDirection = IME::Direction::Up;
+        else if (key == movementKeys_.down)
+            targetDirection = IME::Direction::Down;
+        else
+            return;
+
+        if (targetDirection != gridMover_.getTarget()->getDirection() && gridMover_.isTargetMoving()) {
+            newDir_.first = true;
+            newDir_.second = targetDirection;
+        } else
+            gridMover_.requestDirectionChange(targetDirection);
+    }
+
+    bool KeyboardControlledGridMover::isTargetMoving() const {
+        return gridMover_.isTargetMoving();
+    }
+
+    int KeyboardControlledGridMover::onGridBorderCollision(Callback<> callback) {
+        return gridMover_.onGridBorderCollision(std::move(callback));
     }
 
     void KeyboardControlledGridMover::handleEvent(sf::Event event) {
@@ -57,10 +93,38 @@ namespace IME {
     }
 
     void KeyboardControlledGridMover::update(float deltaTime) {
-        gridMover_->update(deltaTime);
+        gridMover_.update(deltaTime);
     }
 
     void KeyboardControlledGridMover::teleportTargetToDestination() {
-        gridMover_->teleportTargetToDestination();
+        gridMover_.teleportTargetToDestination();
+    }
+
+    int KeyboardControlledGridMover::onDestinationReached(Callback<float, float> callback) {
+        return gridMover_.onDestinationReached(std::move(callback));
+    }
+
+    int KeyboardControlledGridMover::onObstacleCollision(Callback<KeyboardControlledGridMover::EntityPtr,
+            KeyboardControlledGridMover::EntityPtr> callback)
+    {
+        return gridMover_.onObstacleCollision(std::move(callback));
+    }
+
+    int KeyboardControlledGridMover::onCollectableCollision(Callback<KeyboardControlledGridMover::EntityPtr,
+            KeyboardControlledGridMover::EntityPtr> callback)
+    {
+        return gridMover_.onCollectableCollision(std::move(callback));
+    }
+
+    int KeyboardControlledGridMover::onEnemyCollision(Callback<KeyboardControlledGridMover::EntityPtr,
+            KeyboardControlledGridMover::EntityPtr> callback)
+    {
+        return gridMover_.onEnemyCollision(std::move(callback));
+    }
+
+    int KeyboardControlledGridMover::onPlayerCollision(Callback<KeyboardControlledGridMover::EntityPtr,
+            KeyboardControlledGridMover::EntityPtr> callback)
+    {
+        return gridMover_.onPlayerCollision(std::move(callback));
     }
 }
