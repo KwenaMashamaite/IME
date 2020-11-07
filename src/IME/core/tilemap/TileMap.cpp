@@ -152,6 +152,9 @@ namespace IME {
             }
             tiledMap_.push_back(row);
         }
+        //Accommodate tile spacing in overall tilemap size
+        mapSizeInPixels_.width += (numOfColms_ - 1) * tileSpacing;
+        mapSizeInPixels_.height += (numOfRows_ - 1) * tileSpacing;
     }
 
     void TileMap::draw(Graphics::Window &renderTarget) {
