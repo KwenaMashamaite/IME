@@ -74,10 +74,7 @@ namespace IME {
     }
 
     void TileMap::scaleBackground(float xOffset, float yOffset) {
-        if (isBackgroundDrawable_) {
-            background_.scale(xOffset, yOffset);
-            setBackground(background_.getTexture(), background_.getPosition());
-        }
+        background_.scale(xOffset, yOffset);
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
