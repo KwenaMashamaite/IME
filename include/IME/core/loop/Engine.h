@@ -11,7 +11,7 @@
 #include "IME/core/managers/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/common/PropertiesContainer.h"
-#include "StateManager.h"
+#include "IME/core/states/StateManager.h"
 
 namespace IME {
     class Engine {

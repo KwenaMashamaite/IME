@@ -58,6 +58,6 @@ namespace IME {
         //States container
         std::stack<std::shared_ptr<State>> states_;
     };
-} // namespace IME
+}
 
 #endif

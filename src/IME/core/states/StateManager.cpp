@@ -1,4 +1,4 @@
-#include "IME/core/loop/StateManager.h"
+#include "IME/core/states/StateManager.h"
 #include <cassert>
 
 namespace IME {
