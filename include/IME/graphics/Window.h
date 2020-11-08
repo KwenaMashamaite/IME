@@ -124,9 +124,15 @@ namespace IME {
 
             /**
              * @brief Draw drawable on the window
-             * @param drawable Object to draw
+             * @param drawable Object to be drawn
              */
             void draw(IDrawable& drawable);
+
+            /**
+             * @brief Draw drawable on the window
+             * @param drawable Object to be drawn
+             */
+            void draw(IDrawable&& drawable);
 
             /**
              * @brief Display drawn objects on the window

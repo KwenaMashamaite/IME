@@ -63,6 +63,10 @@ namespace IME::Graphics {
         drawable.draw(*this);
     }
 
+    void Window::draw(IDrawable &&drawable) {
+        draw(drawable);
+    }
+
     Window::~Window() {
         isInstantiated_ = false;
     }
