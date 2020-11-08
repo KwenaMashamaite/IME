@@ -6,18 +6,28 @@ namespace IME {
     GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target)
         : tileMap_(tileMap), target_(target),
           targetDirection_(Direction::None),
-          targetTile_{{}, {}},
+          targetTile_{tileMap.getTileSize(), {0, 0}},
           reachedTarget_(false)
     {
-        assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
-        assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+        if (target) {
+            assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
+            assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+            targetTile_ = tileMap.getTile(target->getPosition());
+        }
     }
 
     void GridMover::setTarget(GridMover::EntityPtr target) {
-        assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
-        if (target_)
-            teleportTargetToDestination();
-        target_ = target;
+        if (target_ == target)
+            return;
+        else if (target) {
+            assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
+            assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+            if (target_)
+                teleportTargetToDestination();
+            targetTile_ = tileMap_.getTile(target->getPosition());
+            target_ = std::move(target);
+            eventEmitter_.emit("targetChange", target_);
+        }
     }
 
     GridMover::EntityPtr GridMover::getTarget() const {
@@ -162,6 +172,10 @@ namespace IME {
             targetDirection_ = Direction::None;
             reachedTarget_ = true;
         }
+    }
+
+    int GridMover::onTargetChanged(Callback<GridMover::EntityPtr> callback) {
+        return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
     int GridMover::onGridBorderCollision(Callback<> callback) {

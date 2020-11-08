@@ -5,8 +5,16 @@ namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target)
         : gridMover_(tileMap, target), prevDirection_(Direction::None), movementStarted_{false}
     {
+        gridMover_.onTargetChanged([this](EntityPtr target) {
+            if (target) {
+                movementStarted_ = true;
+                generateNewDirection();
+            } else
+                movementStarted_ = false;
+        });
+
         gridMover_.onObstacleCollision([this](auto target, auto obstacle) {
-            if (movementStarted_) {
+            if (target && movementStarted_) {
                 gridMover_.getTarget()->setDirection(prevDirection_);
                 generateNewDirection();
             }
@@ -46,6 +54,9 @@ namespace IME {
     }
 
     void RandomGridMover::generateNewDirection() {
+        if (!gridMover_.getTarget())
+            return;
+
         prevDirection_ = gridMover_.getTarget()->getDirection();
         auto newDirection = Direction::None;
         auto oppositeDirection = Direction::None;

@@ -73,7 +73,7 @@ namespace IME {
         else
             return;
 
-        if (targetDirection != gridMover_.getTarget()->getDirection() && gridMover_.isTargetMoving()) {
+        if (gridMover_.getTarget() && targetDirection != gridMover_.getTarget()->getDirection() && gridMover_.isTargetMoving()) {
             newDir_.first = true;
             newDir_.second = targetDirection;
         } else

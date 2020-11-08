@@ -295,6 +295,10 @@ namespace IME {
         }
     }
 
+    Dimensions TileMap::getTileSize() const {
+        return tileSize_;
+    }
+
     void TileMap::addTilesetImageData(const char &id, Position startPos, Dimensions size) {
         imagesData_.insert({id, {tileSet_, startPos, size}});
     }

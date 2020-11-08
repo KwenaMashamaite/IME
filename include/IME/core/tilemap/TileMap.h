@@ -184,12 +184,20 @@ namespace IME {
         void updateChild(std::shared_ptr<IME::Entity> child, Index index);
 
         /**
+         * @brief Get the size of each tile in the grid
+         * @return The size of each tile in the grid
+         *
+         * All the tiles have the same size
+         */
+        Dimensions getTileSize() const;
+
+        /**
          * @brief Get the tile at at certain position
          * @param position Position of the tile to retrieve
          * @return The tile at the specified position or an invalid tile if
          *         the specified position does not lie within the tilemap bounds
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTile(const Position& position);
 
@@ -199,7 +207,7 @@ namespace IME {
          * @return The tile above the specified tile or an invalid tile if
          *         there is no tile above the specified tile
          *
-         * A tile is invalid if it has the id of '!' or a negative index
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileAbove(const Graphics::Tile& tile);
 
@@ -209,7 +217,7 @@ namespace IME {
          * @return The tile below the specified tile or an invalid tile if
          *         there is no tile below the specified tile
          *
-         * A tile is invalid if it has the id of '!' or a negative index
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileBelow(const Graphics::Tile& tile);
 
@@ -219,7 +227,7 @@ namespace IME {
          * @return The tile to the left of the specified tile or an invalid
          *         tile if there's no tile to the left of the specified tile
          *
-         * A tile is invalid if it has the id of '!' or a negative index
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile & getTileLeftOf(const Graphics::Tile& tile);
 
@@ -229,7 +237,7 @@ namespace IME {
          * @return The tile to the right of the specified tile or an invalid
          *         tile if there's no tile to the left of the specified tile
          *
-         * A tile is invalid if it has the id of '!' or a negative index
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileRightOf(const Graphics::Tile& tile);
 
@@ -264,7 +272,7 @@ namespace IME {
          * @return The tile at the specified index or an invalid tile if the
          *         specified index is out of bounds of the tilemap
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTile(const Index& index);
 
@@ -382,7 +390,7 @@ namespace IME {
          * @return The tile at the specified index or an invalid tile if the
          *         specified index is out of bounds of the tilemap
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileAbove(const Index& index);
 
@@ -392,7 +400,7 @@ namespace IME {
          * @return The tile at the specified index or an invalid tile if the
          *         specified index is out of bounds of the tilemap
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileBelow(const Index& index);
 
@@ -402,7 +410,7 @@ namespace IME {
          * @return The tile at the specified index or an invalid tile if the
          *         specified index is out of bounds of the tilemap
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile & getTileLeftOf(const Index& index);
 
@@ -412,7 +420,7 @@ namespace IME {
          * @return The tile at the specified index or an invalid tile if the
          *         specified index is out of bounds of the tilemap
          *
-         * A tile is invalid if it has the id of '!' or a negative position
+         * A tile is invalid if it has a negative index
          */
         Graphics::Tile& getTileRightOf(const Index& index);
 

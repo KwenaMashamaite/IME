@@ -90,6 +90,16 @@ namespace IME {
         void teleportTargetToDestination();
 
         /**
+         * @brief Add an event listener to a target change event
+         * @param callback Function to execute when the target changes
+         * @return The event listeners identification number
+         *
+         * @warning The callback will be passed the new target which may be a
+         * nullptr
+         */
+        int onTargetChanged(Callback<EntityPtr> callback);
+
+        /**
          * @brief Add an event listener to a grid/tilemap border collision
          * @param callback Function to execute when the target collides with
          *         the borders of the grid/tilemap

@@ -12,6 +12,15 @@ namespace IME {
             targetTile_ = gridMover_.getGrid().getTile(
                 gridMover_.getTarget()->getPosition()).getIndex();
 
+        gridMover_.onTargetChanged([this](EntityPtr target) {
+            while (!pathToTargetTile_.empty()) //Clear previous targets path
+                pathToTargetTile_.pop();
+            if (target) {
+                generatePath();
+                moveTarget();
+            }
+        });
+
         gridMover_.onDestinationReached([this](float, float ) {
             if (targetTileChangedWhileMoving_) {
                 generatePath();
@@ -68,6 +77,9 @@ namespace IME {
     }
 
     void TargetGridMover::generateNewDirOfMotion(Index nextPos) {
+        if (!gridMover_.getTarget())
+            return;
+
         auto newDirection = Direction::None;
         auto currentPosIndex = gridMover_.getGrid().getTile(
                 gridMover_.getTarget()->getPosition()).getIndex();
@@ -85,8 +97,10 @@ namespace IME {
     }
 
     void TargetGridMover::generatePath() {
-        auto sourceTilePos = gridMover_.getGrid().getTile(gridMover_.getTarget()->getPosition()).getIndex();
-        pathToTargetTile_ = pathFinder_->findPath(gridMover_.getGrid(), sourceTilePos, targetTile_);
+        if (gridMover_.getTarget()) {
+            auto sourceTilePos = gridMover_.getGrid().getTile(gridMover_.getTarget()->getPosition()).getIndex();
+            pathToTargetTile_ = pathFinder_->findPath(gridMover_.getGrid(), sourceTilePos, targetTile_);
+        }
     }
 
     void TargetGridMover::moveTarget() {
