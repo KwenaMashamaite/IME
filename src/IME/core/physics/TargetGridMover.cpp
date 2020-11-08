@@ -13,8 +13,6 @@ namespace IME {
                 gridMover_.getTarget()->getPosition()).getIndex();
 
         gridMover_.onTargetChanged([this](EntityPtr target) {
-            while (!pathToTargetTile_.empty()) //Clear previous targets path
-                pathToTargetTile_.pop();
             if (target) {
                 generatePath();
                 moveTarget();
@@ -55,8 +53,11 @@ namespace IME {
     }
 
     void TargetGridMover::setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder) {
-        if (pathFinder)
+        if (pathFinder) {
             pathFinder_ = std::move(pathFinder);
+            generatePath();
+            moveTarget();
+        }
     }
 
     void TargetGridMover::setDestination(Position position) {
