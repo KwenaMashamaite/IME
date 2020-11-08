@@ -63,7 +63,6 @@ namespace IME {
         setDefaultValueIfNotSet("windowWidth", "600.0f");
         setDefaultValueIfNotSet("windowHeight", "600.0f");
         setDefaultValueIfNotSet("fullscreen", "0");
-        setDefaultValueIfNotSet("iconPath", "");
         setDefaultValueIfNotSet("fpsLimit", "60");
     }
 
@@ -85,7 +84,7 @@ namespace IME {
         }
 
         setFPSLimit(std::stoi(settings_.getValueFor("fpsLimit")));
-        window_.setIcon(settings_.getValueFor("iconPath") + "icon.png");
+        window_.setIcon("icon.png");
     }
 
     void Engine::initResourceManager() {
