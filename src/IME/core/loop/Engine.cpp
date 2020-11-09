@@ -239,7 +239,7 @@ namespace IME {
         return settings_;
     }
 
-    float Engine::getFPSLimit() const {
+    unsigned int Engine::getFPSLimit() const {
         return window_.getFramerateLimit();
     }
 

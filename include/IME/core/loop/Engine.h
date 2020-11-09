@@ -88,7 +88,7 @@ namespace IME {
          * @brief Get frames per second (FPS) limit
          * @return FPS limit
          */
-        float getFPSLimit() const;
+        unsigned int getFPSLimit() const;
 
         /**
          * @brief Get the name of the game
