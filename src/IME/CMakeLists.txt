@@ -1,3 +1,7 @@
+#Remove lib prefix from library name
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
+
+#IME's source file directory
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE IME_SRC_FILES ${PROJECT_SOURCE_DIR}/src *.cpp *.inl)
@@ -5,6 +9,7 @@ file(GLOB_RECURSE CMAKE_MAIN "cmake-build-debug/*")
 list(REMOVE_ITEM IN IME_SRC_FILES ${CMAKE_MAIN})
 
 add_library(ime SHARED ${IME_SRC_FILES})
+
 target_include_directories(ime PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(ime PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
@@ -40,16 +45,9 @@ link_libraries(${TGUI_LIBRARY_DIR})
 include_directories(${TGUI_INCLUDE_DIR})
 target_link_libraries(ime PUBLIC ${TGUI_LIBRARY_DIR}/libtgui-d.a)
 
+# Add public Headers
+
 file(GLOB_RECURSE IME_PUBLIC_HEADERS ${PROJECT_SOURCE_DIR}/include *.h)
 file(GLOB_RECURSE CMAKE_MAIN "cmake-build-debug/*" )
 list(REMOVE_ITEM IN IME_PUBLIC_HEADERS ${CMAKE_MAIN})
 set_target_properties(ime PROPERTIES PUBLIC_HEADER "${IME_PUBLIC_HEADERS}")
-
-install(TARGETS ime
-        LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/IME
-        ARCHIVE DESTINATION ${PROJECT_BINARY_DIR}/IME/lib
-        PUBLIC_HEADER DESTINATION ${PROJECT_BINARY_DIR}/IME/include)
-
-install(TARGETS ime
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
