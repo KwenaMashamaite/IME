@@ -7,6 +7,7 @@
 #define RESOURCEMANAGER_H
 
 #include "IME/core/resources/ResourceHolder.h"
+#include "IME/core/event/EventEmitter.h"
 #include <SFML/Audio/Music.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -35,6 +36,7 @@ namespace IME {
          * @param type Type of the resource to be loaded
          * @param filename File name of the resource to be loaded
          * @throws FileNotFound If the resource cannot be found on the disk
+         * @return Returns true when the resource was loaded successfully
          *
          * Loading a resource from the disk prior to retrieving it
          * later in the program is much faster and efficient as the
@@ -42,18 +44,23 @@ namespace IME {
          * in the program rather than having to load it from the disk
          * every time it's needed).
          */
-        void loadFromFile(ResourceType type, const std::string &filename);
+        bool loadFromFile(ResourceType type, const std::string &filename);
 
         /**
          * @brief  load multiple resources of the same type from
          *         the hard drive
          * @param  type Type of the resources to be loaded
          * @param  filenames File names of the resources to be loaded
+         * @param  callback Function to execute after successful load of
+         *         each resource
          * @throws FileNotFound If one of the files cannot be found
          *         on the disk
+         *
+         * The callback is passed the name of the resource that was loaded
          */
         void loadFromFile(ResourceType type,
-            const std::initializer_list<std::string> &filenames);
+            const std::initializer_list<std::string> &filenames,
+            Callback<const std::string&> callback = nullptr);
 
         /**
          * @brief Unload a resource

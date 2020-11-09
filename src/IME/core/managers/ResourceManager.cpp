@@ -6,32 +6,29 @@ namespace IME {
         : fonts_(""), textures_(""), images_(""), soundBuffers_(""), music_("")
     {}
 
-    void ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
+    bool ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
         switch (type) {
             case ResourceType::Texture:
-                textures_.loadFromFile(filename);
-                break;
+                return textures_.loadFromFile(filename);
             case ResourceType::SoundBuffer:
-                soundBuffers_.loadFromFile(filename);
-                break;
+                return soundBuffers_.loadFromFile(filename);
             case ResourceType::Image:
-                images_.loadFromFile(filename);
-                break;
+                return images_.loadFromFile(filename);
             case ResourceType::Font:
-                fonts_.loadFromFile(filename);
-                break;
+                return fonts_.loadFromFile(filename);
             case ResourceType::Music:
-                music_.loadFromFile(filename);
-                break;
+                return music_.loadFromFile(filename);
         }
     }
 
     void ResourceManager::loadFromFile(ResourceType type,
-           const std::initializer_list<std::string>& filenames)
+           const std::initializer_list<std::string>& filenames,
+            Callback<const std::string &> callback)
     {
         std::for_each(filenames.begin(), filenames.end(),
             [=](const std::string& filename) {
-                loadFromFile(type, filename);
+                if (loadFromFile(type, filename) && callback)
+                    callback(filename);
         });
     }
 
