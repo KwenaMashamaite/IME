@@ -91,6 +91,15 @@ namespace IME {
         float getFPSLimit() const;
 
         /**
+         * @brief Get the name of the game
+         * @return The name of the game
+         *
+         * This is the name provided during construction of the engine
+         * @see Engine()
+         */
+        const std::string& getGameName() const;
+
+        /**
          * @brief Add a state
          * @param name Name of the state
          * @param state State to be added

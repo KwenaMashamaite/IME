@@ -243,6 +243,10 @@ namespace IME {
         return window_.getFramerateLimit();
     }
 
+    const std::string &Engine::getGameName() const {
+        return appName_;
+    }
+
     Audio::AudioManager &Engine::getAudioManager() {
         return *audioManager_;
     }
