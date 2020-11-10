@@ -23,6 +23,10 @@ add it to the list. Here is a list of games developed with IME:
 
 1. [Namco's 1982 Super Pac-Man clone](https://github.com/KwenaMashamaite/SuperPacMan)
 
+## Learn
+
+* [Documentation](docs/html/index.html)
+
 ## Contact
 
 Name: Kwena Mashamaite (Author)
