@@ -95,7 +95,8 @@ namespace IME {
              * @brief Increment the value
              * @return The new value
              *
-             * The value will never exceed the maximum value
+             * The value is increased by 1 and will never exceed the maximum
+             * value
              */
             unsigned int incrementValue();
 
