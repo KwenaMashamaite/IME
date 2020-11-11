@@ -29,7 +29,10 @@ namespace IME {
     Entity::Entity(const Dimensions &boundingRect)
         : boundingRect_(boundingRect), isVulnerable_(true), isAlive_(true), isCollidable_(false),
           direction_(Direction::None), position_({0, 0})
-    {}
+    {
+        static std::size_t prevEntityId = 0;
+        id_ = prevEntityId++;
+    }
 
     void Entity::setPosition(float x, float y) {
         if (position_.x == x && position_.y == y)
@@ -93,6 +96,10 @@ namespace IME {
         return isVulnerable_;
     }
 
+    std::size_t Entity::getId() const {
+        return id_;
+    }
+
     Direction Entity::getDirection() const {
         return direction_;
     }
@@ -103,5 +110,13 @@ namespace IME {
 
     bool Entity::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
+    }
+
+    bool Entity::operator==(const Entity &rhs) {
+        return id_ == rhs.id_;
+    }
+
+    bool Entity::operator!=(const Entity &rhs) {
+        return !(*this == rhs);
     }
 }

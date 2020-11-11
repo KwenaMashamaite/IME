@@ -127,10 +127,19 @@ namespace IME {
         bool isCollidable() const;
 
         /**
-         * @brief Get the type of the entity
-         * @return The type of the entity
+         * @brief Get the type of the object
+         * @return The type of the object
          */
         virtual std::string getType() = 0;
+
+        /**
+         * @brief Get the entities unique identifier
+         * @return Entities unique identifier
+         *
+         * An entity object cannot have the same identifier as another
+         * entity object
+         */
+        std::size_t getId() const;
 
         /**
          * @brief Add an event listener to an entity event
@@ -153,6 +162,26 @@ namespace IME {
         bool removeEventListener(const std::string& event, int id);
 
         /**
+         * @brief Check if two entity objects are the same object or not
+         * @param rhs Object to compare against this object
+         * @return True if the two entities are the same object
+         *
+         * Two entity objects are the same object if they have the same
+         * id
+         */
+        bool operator==(const Entity& rhs);
+
+        /**
+         * @brief Check if this entity is the same object as another object
+         * @param rhs Object to compare against this object
+         * @return True if the two objects are not the same object
+         *
+         * Two entity objects are not the same object if they don't have the
+         * same id
+         */
+        bool operator!=(const Entity& rhs);
+
+        /**
          * @brief Destructor
          */
         virtual ~Entity() = default;
@@ -169,6 +198,8 @@ namespace IME {
         }
 
     private:
+        //Objects unique identifier
+        std::size_t id_;
         //The entities bounding rectangle
         Dimensions boundingRect_;
         //Vulnerability state state
