@@ -63,6 +63,11 @@ namespace IME {
          * This function does nothing if the object is not moving
          */
         virtual void stop() = 0;
+
+        /**
+         * @brief Destructor
+         */
+        virtual ~IMovable() = default;
     };
 }
 

@@ -51,6 +51,11 @@ namespace IME {
          */
         virtual std::string getType() const = 0;
 
+        /**
+         * @brief Destructor
+         */
+        virtual ~IGridPathFinder() = default;
+
     protected:
         struct Node {
             Index parent; //Index of this nodes parent in the grid

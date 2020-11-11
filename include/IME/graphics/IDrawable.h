@@ -64,8 +64,13 @@ namespace IME {
              * @return True if object is hidden, false if object is not hidden
              */
             virtual bool isHidden() const = 0;
+
+            /**
+             * @brief Destructor
+             */
+            virtual ~IDrawable() = default;
         };
     }
-} // namespace IME
+}
 
 #endif

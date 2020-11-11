@@ -138,6 +138,11 @@ namespace IME {
              * should never be called under any circumstance
              */
             virtual tgui::WidgetRenderer* getInternalPtr() = 0;
+
+            /**
+             * @brief Destructor
+             */
+            virtual ~IWidgetRenderer() = default;
         };
     }
 }

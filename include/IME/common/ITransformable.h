@@ -139,6 +139,11 @@ namespace IME {
          * unlike setScale which overwrites it.
          */
         virtual void scale(float factorX, float factorY) = 0;
+
+        /**
+         * @brief Destructor
+         */
+        virtual ~ITransformable() = default;
     };
 }
 
