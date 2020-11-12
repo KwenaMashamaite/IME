@@ -25,7 +25,7 @@ add it to the list. Here is a list of games developed with IME:
 
 ## Learn
 
-* [Documentation](docs/html/index.html)
+* [Documentation](https://kwenamashamaite.github.io/IME/html/index.html)
 
 ## Contact
 
