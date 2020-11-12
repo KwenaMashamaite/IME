@@ -95,7 +95,7 @@ add_subdirectory(src/IME)
 
 # Build the documentation when requested
 if(IME_BUILD_DOC)
-    add_subdirectory(doc)
+    add_subdirectory(docs)
 endif()
 
 # Build the examples if requested

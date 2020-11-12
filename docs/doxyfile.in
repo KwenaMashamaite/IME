@@ -845,7 +845,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = "@DOXYGEN_INPUT_DIR@/include/IME" \
-                         "@DOXYGEN_INPUT_DIR@/doc/doxygen/mainpage.hpp"
+                         "@DOXYGEN_INPUT_DIR@/docs/mainpage.hpp"
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1205,7 +1205,7 @@ HTML_HEADER            = "@DOXYGEN_OUTPUT_DIR@/header.html"
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            = "@DOXYGEN_INPUT_DIR@/doc/doxygen/footer.html"
+HTML_FOOTER            = "@DOXYGEN_INPUT_DIR@/docs/footer.html"
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1217,7 +1217,7 @@ HTML_FOOTER            = "@DOXYGEN_INPUT_DIR@/doc/doxygen/footer.html"
 # obsolete.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_STYLESHEET        = "@DOXYGEN_INPUT_DIR@/doc/doxygen/doxygen.css"
+HTML_STYLESHEET        = "@DOXYGEN_INPUT_DIR@/docs/doxygen.css"
 
 # The HTML_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # cascading style sheets that are included after the standard style sheets

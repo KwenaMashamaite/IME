@@ -2,7 +2,7 @@ find_package(Doxygen REQUIRED)
 
 # set the input and output documentation paths
 set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR})
-set(DOXYGEN_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc)
+set(DOXYGEN_OUTPUT_DIR ${PROJECT_BINARY_DIR}/docs)
 
 # see if we can generate the CHM documentation
 if(IME_OS_WINDOWS)
@@ -23,11 +23,11 @@ endif()
 
 # configure the source Doxyfile by copying it and replacing all @variables@
 set(DOXYGEN_CONFIGURED_INPUT ${DOXYGEN_OUTPUT_DIR}/doxyfile)
-configure_file(${DOXYGEN_INPUT_DIR}/doc/doxygen/doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
-configure_file(${DOXYGEN_INPUT_DIR}/doc/doxygen/header.html.in ${DOXYGEN_OUTPUT_DIR}/header.html @ONLY)
+configure_file(${DOXYGEN_INPUT_DIR}/docs/doxyfile.in ${DOXYGEN_CONFIGURED_INPUT} @ONLY)
+configure_file(${DOXYGEN_INPUT_DIR}/docs/header.html.in ${DOXYGEN_OUTPUT_DIR}/header.html @ONLY)
 
 # copy the files needed by the documentation
-configure_file(${DOXYGEN_INPUT_DIR}/doc/doxygen/doxygen.css ${DOXYGEN_OUTPUT_DIR}/html/doxygen.css COPYONLY)
+configure_file(${DOXYGEN_INPUT_DIR}/docs/doxygen.css ${DOXYGEN_OUTPUT_DIR}/html/doxygen.css COPYONLY)
 
 # target setup
 add_custom_target(doc ALL
@@ -47,7 +47,7 @@ install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html
 
 # Store doc here because html files are served by github pages (No dedicated website for this project)
 install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html
-        DESTINATION ${PROJECT_SOURCE_DIR}/doc/doxygen
+        DESTINATION ${PROJECT_SOURCE_DIR}/docs
         COMPONENT doc)
 
 if(DOXYGEN_HHC_PROGRAM)
