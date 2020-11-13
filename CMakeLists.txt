@@ -20,7 +20,7 @@ include(${PROJECT_SOURCE_DIR}/cmake/Config.cmake)
 # Add an option for choosing the build type (shared or static)
 if(IME_OS_WINDOWS)
     if(DEFINED BUILD_SHARED_LIBS)
-        set(IME_SHARED_LIBS ${BUILD_SHARED_LIBS} BOOL "TRUE to build IME as a shared library, FALSE to build it as a static library")
+        ime_set_option(IME_SHARED_LIBS ${BUILD_SHARED_LIBS} BOOL "TRUE to build IME as a shared library, FALSE to build it as a static library")
     else()
         ime_set_option(IME_SHARED_LIBS TRUE BOOL "TRUE to build IME as a shared library, FALSE to build it as a static library")
     endif()
@@ -35,7 +35,7 @@ ime_set_option(IME_BUILD_TESTS FALSE BOOL "TRUE to build the IME tests")
 # Add option to build the documentation
 ime_set_option(IME_BUILD_DOC FALSE BOOL "TRUE to generate the API documentation, FALSE to ignore it")
 
-    # Set CXX Standard
+# Set CXX Standard
 ime_set_option(IME_CXX_STANDARD "17" STRING "C++ standard version to build IME with. Possible values: 17 or 20. Projects using IME must use a version equal or higher to this")
 
 # At least C++17 has to be used
@@ -85,6 +85,16 @@ if(IME_OS_WINDOWS AND IME_COMPILER_MSVC AND IME_USE_STATIC_STD_LIBS)
             string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
         endif()
     endforeach()
+endif()
+
+# Find SFML if not build in same project
+if (NOT TARGET sfml-system OR NOT TARGET sfml-window OR NOT TARGET sfml-graphics OR NOT TARGET sfml-audio)
+    find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
+endif ()
+
+# Find TGUI if not build in same project
+if (NOT TARGET tgui)
+    find_package(TGUI 0.9.0 REQUIRED)
 endif()
 
 # Set the path for the libraries

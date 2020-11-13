@@ -14,8 +14,6 @@
 #   set(IME_STATIC_LIBRARIES TRUE)
 #   find_package(IME 1.0.0 REQUIRED)
 #
-# Additionally, keep in mind that IME frameworks are only available as release libraries
-#
 # If IME is not installed in a standard path, you can use the IME_DIR CMake variable
 # to tell CMake where IME's config file is located (PREFIX/lib/cmake/IME for a library-based installation,
 #

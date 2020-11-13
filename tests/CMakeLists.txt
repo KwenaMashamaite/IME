@@ -1,11 +1,19 @@
-include_directories("${PROJECT_SOURCE_DIR}/include")
-include_directories("${PROJECT_SOURCE_DIR}/extlibs/doctest/")
+# Include doctest unit testing framework
+include_directories(${PROJECT_SOURCE_DIR}/extlibs/doctest)
 
-file(GLOB_RECURSE IME_TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/tests/src *.cpp *.hpp)
-file(GLOB_RECURSE CMAKE_MAIN "cmake-build-debug/*")
-list(REMOVE_ITEM IN IME_TEST_SRC_FILES ${CMAKE_MAIN})
+# Set test source root directory
+set(SRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/src)
 
-#Change executable output folder
+# Set unit tests source files
+set(SRC_FILES
+        ${SRC_ROOT}/unitTestsMain.cpp
+    )
+
+# Change executable output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-add_executable(ime-tests ${IME_TEST_SRC_FILES})
-target_link_libraries(ime-tests PRIVATE ime)
+
+# Create test executable
+add_executable(tests ${SRC_FILES})
+
+# Link IME, TGUI and SFML
+target_link_libraries(tests PRIVATE ime tgui sfml-graphics sfml-window sfml-system sfml-audio)

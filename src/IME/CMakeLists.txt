@@ -1,4 +1,4 @@
-set(IME_SRC_FILES
+set(IME_SRC
     common/Dimensions.cpp
     common/Position.cpp
     common/Property.cpp
@@ -62,9 +62,40 @@ set(IME_SRC_FILES
     utility/Helpers.cpp
 )
 
+# Optimize single build
+if(IME_OPTIMIZE_SINGLE_BUILD)
+    list(LENGTH IME_SRC fileCount)
+    if(IME_OPTIMIZE_SINGLE_BUILD_THREADS)
+        set(threads ${IME_OPTIMIZE_SINGLE_BUILD_THREADS})
+    else()
+        include(ProcessorCount)
+        ProcessorCount(threads)
+    endif()
+
+    if(${threads} LESS ${fileCount})
+        math(EXPR threads "(${threads} / 2) + 1")
+        math(EXPR fileCountMinusOne "${fileCount} - 1")
+        math(EXPR threadsMinusOne "${threads} - 1")
+
+        set(NEW_IME_SRC "")
+        foreach(i RANGE 0 ${threadsMinusOne})
+            set(OutputFile "${CMAKE_CURRENT_SOURCE_DIR}/CombinedSources-${i}.cpp")
+            file(WRITE "${OutputFile}" "")
+            foreach(j RANGE ${i} ${fileCountMinusOne} ${threads})
+                list(GET IME_SRC ${j} inputFile)
+                file(READ ${inputFile} CONTENTS)
+                file(APPEND "${OutputFile}" "${CONTENTS}")
+                list(APPEND NEW_IME_SRC "${OutputFile}")
+            endforeach()
+        endforeach()
+
+        set(IME_SRC ${NEW_IME_SRC})
+    endif()
+endif()
+
 # Create library and determine suffixes depending on static/shared configuration
 if(IME_SHARED_LIBS)
-    add_library(ime SHARED ${IME_SRC_FILES})
+    add_library(ime SHARED ${IME_SRC})
     set_target_properties(ime PROPERTIES DEFINE_SYMBOL IME_EXPORTS)
     set_target_properties(ime PROPERTIES DEBUG_POSTFIX -d)
 
@@ -80,7 +111,7 @@ if(IME_SHARED_LIBS)
     endif()
 
 else()
-    add_library(ime STATIC ${IME_SRC_FILES})
+    add_library(ime STATIC ${IME_SRC})
     set_target_properties(ime PROPERTIES DEBUG_POSTFIX -s-d)
     set_target_properties(ime PROPERTIES RELEASE_POSTFIX -s)
     set_target_properties(ime PROPERTIES MINSIZEREL_POSTFIX -s)
@@ -97,41 +128,16 @@ endif()
 ime_set_global_compile_flags(ime)
 ime_set_stdlib(ime)
 
+if(IME_OPTIMIZE_SINGLE_BUILD AND IME_COMPILER_MSVC)
+    target_compile_options(ime PRIVATE /bigobj)
+endif()
+
 # Add <project>/include as public include directory
 target_include_directories(ime PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
 target_include_directories(ime INTERFACE $<INSTALL_INTERFACE:include>)
 
-# Find SFML
-set(SFML_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extlibs/SFML/include")
-set(SFML_LIBRARY_DIR "${PROJECT_SOURCE_DIR}/extlibs/SFML/lib")
-set(SFML_DIR "${PROJECT_SOURCE_DIR}/extlibs/SFML/lib/cmake/SFML")
-
-find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
-message(STATUS "SFML_INCLUDE_DIR: ${SFML_INCLUDE_DIR}")
-message(STATUS "SFML_LIBRARIES: ${SFML_LIBRARY_DIR}")
-message(STATUS "SFML_VERSION: ${SFML_VERSION}")
-
-# Find TGUI
-set(TGUI_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extlibs/TGUI-0.9/include")
-set(TGUI_LIBRARY_DIR "${PROJECT_SOURCE_DIR}/extlibs/TGUI-0.9/lib")
-set(TGUI_DIR "${PROJECT_SOURCE_DIR}/extlibs/TGUI-0.9/lib/cmake/TGUI")
-
-if(IME_CXX_STANDARD EQUAL "17")
-    ime_set_option(TGUI_USE_CPP17 TRUE BOOL "TRUE to compile TGUI with C++17, otherwise FALSE")
-endif()
-
-find_package(TGUI 0.9.0 REQUIRED)
-message(STATUS "TGUI_INCLUDE_DIR: ${TGUI_INCLUDE_DIR}")
-message(STATUS "TGUI_LIBRARIES: ${TGUI_LIBRARY_DIR}")
-message(STATUS "TGUI_VERSION: ${TGUI_VERSION}")
-
 # Link TGUI and SFML
 target_link_libraries(ime PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio)
-
-# define IME_USE_CPP17 if requested
-if(IME_USE_CPP17)
-    target_compile_definitions(ime PUBLIC IME_USE_CPP17)
-endif()
 
 # For Visual Studio on Windows, export debug symbols (PDB files) to lib directory
 if(IME_GENERATE_PDB)
