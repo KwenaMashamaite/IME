@@ -300,12 +300,11 @@ namespace IME {
     }
 
     bool TileMap::removeChild(Index index) {
-        for (auto& child : children_) {
-            if (child.first == index) {
-                child.first = {-1, -1};
+        for (auto i = 0u; i < children_.size(); ++i)
+            if (children_[i].first == index) {
+                children_.erase(children_.begin() + i);
                 return true;
             }
-        }
         return false;
     }
 
