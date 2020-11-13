@@ -23,9 +23,15 @@ add it to the list. Here is a list of games developed with IME:
 
 1. [Namco's 1982 Super Pac-Man clone](https://github.com/KwenaMashamaite/SuperPacMan)
 
+## Download
+
+* Download the latest precompiled IME binaries [here](https://github.com/KwenaMashamaite/IME/releases/latest/download/IME-1.0.0.zip)
+* Download [SFML 2.5.1](https://www.sfml-dev.org/download/sfml/2.5.1/)
+* Download [TGUI 0.9.0-beta](https://github.com/texus/TGUI/releases/tag/v0.9-beta)
+
 ## Learn
 
-* [Documentation](docs/html/index.html)
+* [Documentation](https://kwenamashamaite.github.io/IME/html/index.html)
 
 ## Contact
 
