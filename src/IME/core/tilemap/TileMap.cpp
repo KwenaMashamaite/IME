@@ -292,11 +292,27 @@ namespace IME {
     }
 
     std::shared_ptr<Entity> TileMap::getChild(Index index) const {
+        if (!isIndexValid(index))
+            return nullptr;
+
         for (auto& [childIndex, child] : children_) {
             if (childIndex == index)
                 return child;
         }
         return nullptr;
+    }
+
+    std::shared_ptr<Entity> TileMap::getChildWithId(std::size_t id) const {
+        for (auto& [childIndex, child] : children_)
+            if (child->getId() == id)
+                return child;
+        return nullptr;
+    }
+
+    bool TileMap::removeChild(const std::shared_ptr<Entity> &child) {
+        if (child)
+            return removeChildWithId(child->getId());
+        return false;
     }
 
     bool TileMap::removeChild(Index index) {
@@ -305,6 +321,16 @@ namespace IME {
                 children_.erase(children_.begin() + i);
                 return true;
             }
+        return false;
+    }
+
+    bool TileMap::removeChildWithId(std::size_t id) {
+        for (auto i = 0u; i < children_.size(); ++i) {
+            if (children_[i].second->getId() == id) {
+                children_.erase(children_.begin() + i);
+                return true;
+            }
+        }
         return false;
     }
 

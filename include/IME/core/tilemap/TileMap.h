@@ -193,12 +193,36 @@ namespace IME {
         std::shared_ptr<Entity> getChild(Index index) const;
 
         /**
+         * @brief Get the child in the map with a certain id
+         * @param id Id of the child to get access to
+         * @return The child with the specified id or a nullptr if the child
+         *          with the specified id does not exist in the tilemap
+         */
+        std::shared_ptr<Entity> getChildWithId(std::size_t id) const;
+
+        /**
+         * @brief Remove a child from the tilemap
+         * @param child Child to be removed
+         * @return True if the child was removed or false if the child is not
+         *          in the tilemap
+         */
+        bool removeChild(const std::shared_ptr<Entity>& child);
+
+        /**
          * @brief Remove an entity from the tilemap
          * @param index Index of the entity in the tilemap
          * @return True if the entity was removed or false if the entity does not
          *          exist at the specified index
          */
         bool removeChild(Index index);
+
+        /**
+         * @brief Remove a child with a certain id from the tilemap
+         * @param id Id of the child to be removed
+         * @return True if the child was removed or false if the child does not
+         *          exist
+         */
+        bool removeChildWithId(std::size_t id);
 
         /**
          * @brief Move child to a different position in the tilemap
