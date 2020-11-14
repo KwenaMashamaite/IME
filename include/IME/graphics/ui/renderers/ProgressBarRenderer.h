@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of a ProgressBar
  */
 
-#ifndef PROGRESSBARRENDERER_H
-#define PROGRESSBARRENDERER_H
+#ifndef IME_PROGRESSBARRENDERER_H
+#define IME_PROGRESSBARRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Structs.h"

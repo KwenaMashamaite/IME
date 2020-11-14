@@ -26,8 +26,8 @@
  * @brief Class for moving an entity to a specific position in the grid
  */
 
-#ifndef TARGETGRIDMOVER_H
-#define TARGETGRIDMOVER_H
+#ifndef IME_TARGETGRIDMOVER_H
+#define IME_TARGETGRIDMOVER_H
 
 #include "GridMover.h"
 #include "IME/core/path/IGridPathFinder.h"

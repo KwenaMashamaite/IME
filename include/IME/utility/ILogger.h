@@ -26,8 +26,8 @@
  * @brief Interface for logging
  */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef IME_LOGGER_H
+#define IME_LOGGER_H
 
 #include <string>
 
@@ -54,6 +54,7 @@ namespace IME {
              */
             virtual ~ILogger() = default;
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
+
 #endif

@@ -35,8 +35,8 @@
  * function must be made to fire an event and notify event listeners
  */
 
-#ifndef EVENTEMITTER_H
-#define EVENTEMITTER_H
+#ifndef IME_EVENTEMITTER_H
+#define IME_EVENTEMITTER_H
 
 #include <unordered_map>
 #include <string>

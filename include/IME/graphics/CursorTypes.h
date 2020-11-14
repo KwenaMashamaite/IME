@@ -26,8 +26,8 @@
  * @brief Mouse cursor types
 */
 
-#ifndef CURSORTYPES_H
-#define CURSORTYPES_H
+#ifndef IME_CURSORTYPES_H
+#define IME_CURSORTYPES_H
 
 namespace IME {
     enum class CursorType {

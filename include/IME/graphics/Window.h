@@ -26,8 +26,8 @@
  * @brief Window that can serve as a target for 2D drawing
  */
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef IME_WINDOW_H
+#define IME_WINDOW_H
 
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"

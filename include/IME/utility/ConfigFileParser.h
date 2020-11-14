@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Class for passing engine settings read from a file on the disk
  */
 
-#ifndef CONFIGFILEPARSER_H
-#define CONFIGFILEPARSER_H
+#ifndef IME_CONFIGFILEPARSER_H
+#define IME_CONFIGFILEPARSER_H
 
 #include "IME/common/PropertiesContainer.h"
 
@@ -43,7 +43,7 @@ namespace IME {
              */
             PropertyContainer parse(const std::string& filename);
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

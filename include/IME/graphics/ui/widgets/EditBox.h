@@ -26,8 +26,8 @@
  * @brief A single line input field
  */
 
-#ifndef EDITBOX_H
-#define EDITBOX_H
+#ifndef IME_EDITBOX_H
+#define IME_EDITBOX_H
 
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/EditBoxRenderer.h"

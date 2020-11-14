@@ -26,8 +26,8 @@
  * @brief A window that can be displayed on top of the another window
  */
 
-#ifndef CHILDWINDOW_H
-#define CHILDWINDOW_H
+#ifndef IME_CHILDWINDOW_H
+#define IME_CHILDWINDOW_H
 
 #include "IContainer.h"
 #include "IME/graphics/ui/renderers/ChildWindowRenderer.h"

@@ -26,8 +26,8 @@
  * @brief A class for rendering a slider
  */
 
-#ifndef SLIDERRENDERER_H
-#define SLIDERRENDERER_H
+#ifndef IME_SLIDERRENDERER_H
+#define IME_SLIDERRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Enums.h"

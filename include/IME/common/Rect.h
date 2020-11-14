@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef RECT_H
-#define RECT_H
+#ifndef IME_RECT_H
+#define IME_RECT_H
 
 /**
  * @brief Class for manipulating 2D axis aligned rectangles

@@ -26,8 +26,8 @@
  * @brief Defines possible exceptions that may be thrown in the game
  */
 
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#ifndef IME_EXCEPTIONS_H
+#define IME_EXCEPTIONS_H
 
 #include <stdexcept>
 #include <string>

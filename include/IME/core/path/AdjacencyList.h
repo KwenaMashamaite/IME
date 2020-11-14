@@ -28,8 +28,8 @@
  * An accessible node is one that is not an obstacle
  */
 
-#ifndef ADJACENCYLIST_H
-#define ADJACENCYLIST_H
+#ifndef IME_ADJACENCYLIST_H
+#define IME_ADJACENCYLIST_H
 
 #include "IME/core/tilemap/TileMap.h"
 

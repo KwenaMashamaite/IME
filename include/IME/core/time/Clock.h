@@ -26,8 +26,8 @@
  * @brief This class models a clock
  */
 
-#ifndef CLOCK_H
-#define CLOCK_H
+#ifndef IME_CLOCK_H
+#define IME_CLOCK_H
 
 namespace IME {
     namespace Time {

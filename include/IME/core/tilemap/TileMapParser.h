@@ -26,8 +26,8 @@
  * @brief Reads a file containing the tilemap data and returns it in grid form
  */
 
-#ifndef TILEMAPPARSER_H
-#define TILEMAPPARSER_H
+#ifndef IME_TILEMAPPARSER_H
+#define IME_TILEMAPPARSER_H
 
 #include "IME/core/tilemap/TileMap.h"
 

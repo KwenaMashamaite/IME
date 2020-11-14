@@ -23,34 +23,34 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Enums used by UI classes
  */
 
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef IME_ENUMS_H
+#define IME_ENUMS_H
 
 namespace IME {
+    /**
+     * @brief Orientation of  widget
+     */
     enum class Orientation {
         Horizontal,
         Vertical
     };
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// @brief The horizontal text alignment
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    enum class HorizontalAlignment
-    {
+    /**
+     * @brief The horizontal text alignment
+     */
+    enum class HorizontalAlignment {
         Left,   //!< Put the text on the left side (default)
         Center, //!< Center the text horizontally
         Right   //!< Put the text on the right side (e.g. for numbers)
     };
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// @brief The vertical text alignment
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    enum class VerticalAlignment
-    {
+    /**
+     * @brief The vertical text alignment
+     */
+    enum class VerticalAlignment {
         Top ,   //!< Put the text at the top (default)
         Center, //!< Center the text vertically
         Bottom  //!< Put the text at the bottom

@@ -27,8 +27,8 @@
  *        images and music)
 */
 
-#ifndef RESOURCEMANAGER_H
-#define RESOURCEMANAGER_H
+#ifndef IME_RESOURCEMANAGER_H
+#define IME_RESOURCEMANAGER_H
 
 #include "IME/core/resources/ResourceHolder.h"
 #include "IME/core/event/EventEmitter.h"

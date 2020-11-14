@@ -30,8 +30,8 @@
  * simultaneously. Each audio file is played in a separate thread
  */
 
-#ifndef AUDIOMANAGER_H
-#define AUDIOMANAGER_H
+#ifndef IME_AUDIOMANAGER_H
+#define IME_AUDIOMANAGER_H
 
 #include "IME/core/audio/AudioPlayer.h"
 #include "IME/core/audio/MusicPlayer.h"

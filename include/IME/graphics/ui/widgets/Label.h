@@ -26,8 +26,8 @@
  * @brief Widget that displays a single or multiple lines of text
  */
 
-#ifndef LABEL_H
-#define LABEL_H
+#ifndef IME_LABEL_H
+#define IME_LABEL_H
 
 #include "IWidget.h"
 #include <TGUI/Widgets/Label.hpp>

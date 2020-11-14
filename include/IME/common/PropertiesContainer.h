@@ -26,8 +26,8 @@
  * @brief A container for a group of properties
  */
 
-#ifndef PROPERTIES_H
-#define PROPERTIES_H
+#ifndef IME_PROPERTIES_H
+#define IME_PROPERTIES_H
 
 #include "IME/common/Property.h"
 #include <string>

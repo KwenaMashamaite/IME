@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Interface for clickable widgets
  */
 
-#ifndef ICLICKABLEWIDGET_H
-#define ICLICKABLEWIDGET_H
+#ifndef IME_ICLICKABLEWIDGET_H
+#define IME_ICLICKABLEWIDGET_H
 
 #include "IWidget.h"
 #include <string>

@@ -23,11 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Class for making other classes non copyable
+ *
+ * @note Classes that inherit from this class will implicitly have their move
+ * constructor deleted
  */
 
-#ifndef NONCOPYABLE_H
-#define NONCOPYABLE_H
+#ifndef IME_NONCOPYABLE_H
+#define IME_NONCOPYABLE_H
 
 namespace IME {
     namespace Utility {
@@ -54,7 +57,7 @@ namespace IME {
              */
             ~NonCopyable() = default;
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

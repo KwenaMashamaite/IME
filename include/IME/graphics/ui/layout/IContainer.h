@@ -26,11 +26,11 @@
  * @brief Interface for all widget containers
  */
 
+#ifndef IME_ICONTAINER_H
+#define IME_ICONTAINER_H
+
 #include "IME/graphics/ui/widgets/IWidget.h"
 #include <memory>
-
-#ifndef ICONTAINER_H
-#define ICONTAINER_H
 
 namespace IME {
     namespace Graphics::UI {

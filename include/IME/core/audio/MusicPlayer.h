@@ -33,8 +33,8 @@
  * gun shots and explosions
  */
 
-#ifndef MUSICPLAYER_H
-#define MUSICPLAYER_H
+#ifndef IME_MUSICPLAYER_H
+#define IME_MUSICPLAYER_H
 
 #include "AudioPlayer.h"
 #include <SFML/Audio.hpp>

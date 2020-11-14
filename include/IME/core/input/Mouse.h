@@ -26,8 +26,8 @@
  * @brief Class for capturing mouse inputs
  */
 
-#ifndef MOUSE_H
-#define MOUSE_H
+#ifndef IME_MOUSE_H
+#define IME_MOUSE_H
 
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>

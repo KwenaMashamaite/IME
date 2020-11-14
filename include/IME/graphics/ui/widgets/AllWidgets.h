@@ -26,8 +26,8 @@
  * @brief Includes all widgets
  */
 
-#ifndef ALLWIDGETS_H
-#define ALLWIDGETS_H
+#ifndef IME_ALLWIDGETS_H
+#define IME_ALLWIDGETS_H
 
 #include "Label.h"
 #include "Button.h"

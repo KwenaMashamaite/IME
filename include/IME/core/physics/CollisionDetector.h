@@ -27,8 +27,8 @@
  */
 
 
-#ifndef COLLISIONDETECTOR_H
-#define COLLISIONDETECTOR_H
+#ifndef IME_COLLISIONDETECTOR_H
+#define IME_COLLISIONDETECTOR_H
 
 #include "IME/graphics/Tile.h"
 #include "IME/core/tilemap/TileMap.h"

@@ -26,8 +26,8 @@
  * @brief Class for capturing keyboard inputs
  */
 
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#ifndef IME_KEYBOARD_H
+#define IME_KEYBOARD_H
 
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>

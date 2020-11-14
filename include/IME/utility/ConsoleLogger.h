@@ -26,8 +26,8 @@
  * @brief Utility class for logging messages to the console
  */
 
-#ifndef CONSOLELOGGER_H
-#define CONSOLELOGGER_H
+#ifndef IME_CONSOLELOGGER_H
+#define IME_CONSOLELOGGER_H
 
 #include "ILogger.h"
 #include <mutex>

@@ -34,8 +34,8 @@
  * for long sounds such as background music.
  */
 
-#ifndef SOUNDEFFECTPLAYER_H
-#define SOUNDEFFECTPLAYER_H
+#ifndef IME_SOUNDEFFECTPLAYER_H
+#define IME_SOUNDEFFECTPLAYER_H
 
 #include "AudioPlayer.h"
 #include <SFML/Audio.hpp>

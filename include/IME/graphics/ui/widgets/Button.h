@@ -26,8 +26,8 @@
  * @brief Widget that can display text perform actions
  */
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef IME_BUTTON_H
+#define IME_BUTTON_H
 
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/ButtonRenderer.h"

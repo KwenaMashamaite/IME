@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief RGBA colour
  */
 
-#ifndef COLOUR_H
-#define COLOUR_H
+#ifndef IME_COLOUR_H
+#define IME_COLOUR_H
 
-namespace IME{
+namespace IME {
     namespace Graphics {
         class Colour {
         public:

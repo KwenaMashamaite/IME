@@ -34,8 +34,8 @@
  * as its being used. @see instance()
  */
 
-#ifndef EVENTDISPATCHER_H
-#define EVENTDISPATCHER_H
+#ifndef IME_EVENTDISPATCHER_H
+#define IME_EVENTDISPATCHER_H
 
 #include "EventEmitter.h"
 #include <memory>

@@ -26,8 +26,8 @@
  * @brief Runs the main loop
  */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef IME_ENGINE_H
+#define IME_ENGINE_H
 
 #include "IME/graphics/Window.h"
 #include "IME/core/managers/ResourceManager.h"

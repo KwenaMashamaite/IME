@@ -26,8 +26,8 @@
  * @brief Includes all widget containers
  */
 
-#ifndef ALLLAYOUTS_H
-#define ALLLAYOUTS_H
+#ifndef IME_ALLLAYOUTS_H
+#define IME_ALLLAYOUTS_H
 
 #include "ChildWindow.h"
 #include "VerticalLayout.h"

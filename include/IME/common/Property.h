@@ -26,8 +26,8 @@
  * @brief Class for defining attributes
  */
 
-#ifndef PROPERTY_H
-#define PROPERTY_H
+#ifndef IME_PROPERTY_H
+#define IME_PROPERTY_H
 
 #include<string>
 

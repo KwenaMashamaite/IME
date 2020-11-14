@@ -26,8 +26,8 @@
  * @brief Helper functions
  */
 
-#ifndef UTILITY_H
-#define UTILITY_H
+#ifndef IME_UTILITY_H
+#define IME_UTILITY_H
 
 #include "IME/graphics/Colour.h"
 #include <SFML/Graphics/Color.hpp>

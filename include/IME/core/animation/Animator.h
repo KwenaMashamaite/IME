@@ -29,8 +29,8 @@
  * with the properties of the animation object
  */
 
-#ifndef ANIMATOR_H
-#define ANIMATOR_H
+#ifndef IME_ANIMATOR_H
+#define IME_ANIMATOR_H
 
 #include "Animation.h"
 #include "IME/core/event/EventEmitter.h"

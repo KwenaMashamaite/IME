@@ -26,8 +26,8 @@
  * @brief Abstract base class Graphical User Interface (GUI) widgets
  */
 
-#ifndef IWIDGET_H
-#define IWIDGET_H
+#ifndef IME_IWIDGET_H
+#define IME_IWIDGET_H
 
 #include "IME/graphics/Window.h"
 #include "IME/graphics/IDrawable.h"

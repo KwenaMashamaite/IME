@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Structs used by UI classes
  */
 
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef IME_STRUCTS_H
+#define IME_STRUCTS_H
 
 namespace IME {
     /**

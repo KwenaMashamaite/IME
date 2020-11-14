@@ -26,8 +26,8 @@
  * @brief Interface for all game entities (players, projectiles, enemies etc...)
  */
 
-#ifndef IENTITY_H
-#define IENTITY_H
+#ifndef IME_IENTITY_H
+#define IME_IENTITY_H
 
 #include "IME/common/Vector2.h"
 #include "IME/common/Direction.h"
@@ -46,7 +46,7 @@ namespace IME {
          * The entity is alive, has the position (0, 0) and no direction
          * by default
          */
-        explicit Entity(const Vector2f &boundingRectSize);
+        explicit Entity(const Vector2u &boundingRectSize);
 
         /**
          * @brief Set the position of the entity

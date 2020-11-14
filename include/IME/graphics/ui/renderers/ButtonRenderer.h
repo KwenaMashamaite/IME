@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of a Button
  */
 
-#ifndef BUTTONRENDERER_H
-#define BUTTONRENDERER_H
+#ifndef IME_BUTTONRENDERER_H
+#define IME_BUTTONRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Enums.h"

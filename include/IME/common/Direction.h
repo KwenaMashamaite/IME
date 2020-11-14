@@ -26,8 +26,8 @@
  * @brief Defines directions
  */
 
-#ifndef DIRECTION_H
-#define DIRECTION_H
+#ifndef IME_DIRECTION_H
+#define IME_DIRECTION_H
 
 namespace IME {
     enum class Direction {

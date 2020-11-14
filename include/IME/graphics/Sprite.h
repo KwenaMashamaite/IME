@@ -26,8 +26,8 @@
  * @brief Drawable representation of a texture
  */
 
-#ifndef SPRITE_H
-#define SPRITE_H
+#ifndef IME_SPRITE_H
+#define IME_SPRITE_H
 
 #include "IME/common/Vector2.h"
 #include "IDrawable.h"

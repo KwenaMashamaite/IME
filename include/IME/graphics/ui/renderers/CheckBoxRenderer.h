@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of a checkbox
  */
 
-#ifndef CHECKBOXRENDERER_H
-#define CHECKBOXRENDERER_H
+#ifndef IME_CHECKBOXRENDERER_H
+#define IME_CHECKBOXRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Enums.h"

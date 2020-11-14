@@ -26,8 +26,8 @@
  * @brief Interface for drawable objects
  */
 
-#ifndef IDRAWABLE_H
-#define IDRAWABLE_H
+#ifndef IME_IDRAWABLE_H
+#define IME_IDRAWABLE_H
 
 namespace IME {
     namespace Graphics {

@@ -26,8 +26,8 @@
  * @brief Slider widget
  */
 
-#ifndef SLIDER_H
-#define SLIDER_H
+#ifndef IME_SLIDER_H
+#define IME_SLIDER_H
 
 #include "IWidget.h"
 #include "IME/graphics/ui/renderers/SliderRenderer.h"

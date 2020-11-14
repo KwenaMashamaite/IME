@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of a child window
  */
 
-#ifndef CHILDWINDOWRENDERER_H
-#define CHILDWINDOWRENDERER_H
+#ifndef IME_CHILDWINDOWRENDERER_H
+#define IME_CHILDWINDOWRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Enums.h"

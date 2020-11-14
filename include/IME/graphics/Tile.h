@@ -26,8 +26,8 @@
  * @brief Tile map Tile
  */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef IME_TILE_H
+#define IME_TILE_H
 
 #include "IME/common/Vector2.h"
 #include "IDrawable.h"

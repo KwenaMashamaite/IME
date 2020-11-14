@@ -26,8 +26,8 @@
  * @brief Interface for grid path finder algorithms
  */
 
-#ifndef GRIDPATHFINDER_H
-#define GRIDPATHFINDER_H
+#ifndef IME_GRIDPATHFINDER_H
+#define IME_GRIDPATHFINDER_H
 
 #include "IME/core/tilemap/TileMap.h"
 #include <stack>

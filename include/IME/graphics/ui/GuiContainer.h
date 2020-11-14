@@ -26,8 +26,8 @@
  * @brief Container for Graphical User Interface (GUI) objects
  */
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef IME_GUI_H
+#define IME_GUI_H
 
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Vector2.h"

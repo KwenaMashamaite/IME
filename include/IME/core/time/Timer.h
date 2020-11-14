@@ -26,8 +26,8 @@
  * @brief Class for timing purposes
  */
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef IME_TIMER_H
+#define IME_TIMER_H
 
 #include "IME/core/event/EventEmitter.h"
 #include <chrono>

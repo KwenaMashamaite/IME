@@ -26,8 +26,8 @@
  * @brief Base class for states
  */
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef IME_STATE_H
+#define IME_STATE_H
 
 #include "IME/graphics/Window.h"
 #include <SFML/Window/Event.hpp>

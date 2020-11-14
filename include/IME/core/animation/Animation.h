@@ -26,8 +26,8 @@
  * @brief Class for creating animations
  */
 
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef IME_ANIMATION_H
+#define IME_ANIMATION_H
 
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"

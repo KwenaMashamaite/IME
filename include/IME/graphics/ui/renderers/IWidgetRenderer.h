@@ -26,8 +26,8 @@
  * @brief Interface for widget renderers
  */
 
-#ifndef IWIDGETRENDERER_H
-#define IWIDGETRENDERER_H
+#ifndef IME_IWIDGETRENDERER_H
+#define IME_IWIDGETRENDERER_H
 
 #include <TGUI/Renderers/WidgetRenderer.hpp>
 #include "IME/core/event/EventEmitter.h"

@@ -27,8 +27,8 @@
  *        available space between children. The children are stacked vertically.
  */
 
-#ifndef VERTICALLAYOUT_H
-#define VERTICALLAYOUT_H
+#ifndef IME_VERTICALLAYOUT_H
+#define IME_VERTICALLAYOUT_H
 
 #include "IBoxLayout.h"
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"

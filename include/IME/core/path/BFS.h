@@ -27,8 +27,8 @@
  *        using the Breadth First Search algorithm
  */
 
-#ifndef BFS_H
-#define BFS_H
+#ifndef IME_BFS_H
+#define IME_BFS_H
 
 #include "IGridPathFinder.h"
 #include "AdjacencyList.h"

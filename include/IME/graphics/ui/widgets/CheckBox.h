@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief
+ * @brief Checkbox widget
  */
 
-#ifndef CHECKBOX_H
-#define CHECKBOX_H
+#ifndef IME_CHECKBOX_H
+#define IME_CHECKBOX_H
 
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/CheckBoxRenderer.h"

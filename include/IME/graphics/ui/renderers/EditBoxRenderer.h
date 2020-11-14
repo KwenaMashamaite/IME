@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of an edit box
  */
 
-#ifndef EDITBOXRENDERER_H
-#define EDITBOXRENDERER_H
+#ifndef IME_EDITBOXRENDERER_H
+#define IME_EDITBOXRENDERER_H
 
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Enums.h"

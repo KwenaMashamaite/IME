@@ -26,8 +26,8 @@
  * @brief Interface for transformable entities
  */
 
-#ifndef ITRANSFORMABLE_H
-#define ITRANSFORMABLE_H
+#ifndef IME_ITRANSFORMABLE_H
+#define IME_ITRANSFORMABLE_H
 
 #include "Vector2.h"
 

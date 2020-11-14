@@ -26,8 +26,8 @@
  * @brief Class for managing keyboard and mouse inputs
  */
 
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#ifndef IME_INPUTMANAGER_H
+#define IME_INPUTMANAGER_H
 
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"

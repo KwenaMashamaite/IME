@@ -31,8 +31,8 @@
  * object)
  */
 
-#ifndef ANIMATABLESPRITE_H
-#define ANIMATABLESPRITE_H
+#ifndef IME_ANIMATABLESPRITE_H
+#define IME_ANIMATABLESPRITE_H
 
 #include "Sprite.h"
 #include "IME/core/animation/Animation.h"

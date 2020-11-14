@@ -28,8 +28,8 @@
  * The grid if made up of tiles for visual representation
  */
 
-#ifndef TILEMAP_H
-#define TILEMAP_H
+#ifndef IME_TILEMAP_H
+#define IME_TILEMAP_H
 
 #include "IME/common/Vector2.h"
 #include "IME/graphics/Tile.h"

@@ -26,8 +26,8 @@
  * @brief Utility class for logging messages to a file on the disk
  */
 
-#ifndef DISKFILELOGGER_H
-#define DISKFILELOGGER_H
+#ifndef IME_DISKFILELOGGER_H
+#define IME_DISKFILELOGGER_H
 
 #include "ILogger.h"
 
@@ -90,7 +90,7 @@ namespace IME {
             //Log file
             std::string file_;
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

@@ -28,8 +28,8 @@
  * This class allows you to manipulate the render properties of a Label
  */
 
-#ifndef LABELRENDERER_H
-#define LABELRENDERER_H
+#ifndef IME_LABELRENDERER_H
+#define IME_LABELRENDERER_H
 
 #include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/ui/Structs.h"

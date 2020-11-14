@@ -26,8 +26,8 @@
  * @brief Interface for box layout
  */
 
-#ifndef IBOXLAYOUT_H
-#define IBOXLAYOUT_H
+#ifndef IME_IBOXLAYOUT_H
+#define IME_IBOXLAYOUT_H
 
 #include "IContainer.h"
 

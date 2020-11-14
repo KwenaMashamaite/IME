@@ -27,8 +27,8 @@
  *        in the button without text)
  */
 
-#ifndef BITMAPBUTTON_H
-#define BITMAPBUTTON_H
+#ifndef IME_BITMAPBUTTON_H
+#define IME_BITMAPBUTTON_H
 
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/ButtonRenderer.h"

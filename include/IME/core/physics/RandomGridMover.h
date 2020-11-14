@@ -26,8 +26,8 @@
  * @brief Class for moving an entity randomly in a grid/tilemap
  */
 
-#ifndef RANDOMGRIDMOVER_H
-#define RANDOMGRIDMOVER_H
+#ifndef IME_RANDOMGRIDMOVER_H
+#define IME_RANDOMGRIDMOVER_H
 
 #include "GridMover.h"
 

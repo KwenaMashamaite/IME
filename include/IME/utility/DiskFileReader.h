@@ -26,8 +26,8 @@
  * @brief Reads/writes data to/from the disk drive
  */
 
-#ifndef DISKFILEREADER_H
-#define DISKFILEREADER_H
+#ifndef IME_DISKFILEREADER_H
+#define IME_DISKFILEREADER_H
 
 #include <fstream>
 #include <sstream>
@@ -73,7 +73,7 @@ namespace IME {
             //Writes to file
             std::ofstream outFile_;
         };
-    } // namespace Utility
-} // namespace IME
+    }
+}
 
 #endif

@@ -26,8 +26,8 @@
  * @brief Interface for movable entities
  */
 
-#ifndef IMOVABLE_H
-#define IMOVABLE_H
+#ifndef IME_IMOVABLE_H
+#define IME_IMOVABLE_H
 
 namespace IME {
     class IMovable {

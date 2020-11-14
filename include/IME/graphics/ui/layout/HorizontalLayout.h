@@ -28,8 +28,8 @@
  *        horizontally
  */
 
-#ifndef HORIZONTALLAYOUT_H
-#define HORIZONTALLAYOUT_H
+#ifndef IME_HORIZONTALLAYOUT_H
+#define IME_HORIZONTALLAYOUT_H
 
 #include "IBoxLayout.h"
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"

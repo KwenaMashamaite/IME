@@ -27,8 +27,8 @@
  *        as a movement trigger
  */
 
-#ifndef KEYBOARDCONTROLLED_H
-#define KEYBOARDCONTROLLED_H
+#ifndef IME_KEYBOARDCONTROLLED_H
+#define IME_KEYBOARDCONTROLLED_H
 
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/entity/Entity.h"

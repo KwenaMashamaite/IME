@@ -26,8 +26,8 @@
 * @brief Class template for a resource container
 */
 
-#ifndef RESOURCEHOLDER_H
-#define RESOURCEHOLDER_H
+#ifndef IME_RESOURCEHOLDER_H
+#define IME_RESOURCEHOLDER_H
 
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/NonCopyable.h"

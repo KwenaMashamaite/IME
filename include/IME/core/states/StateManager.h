@@ -26,8 +26,8 @@
  * @brief Class for managing game states. The states are managed using a LIFO method
  */
 
-#ifndef STATEMANAGER_H
-#define STATEMANAGER_H
+#ifndef IME_STATEMANAGER_H
+#define IME_STATEMANAGER_H
 
 #include "State.h"
 #include <stack>

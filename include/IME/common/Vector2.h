@@ -26,8 +26,8 @@
  * @brief 2D vector
  */
 
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#ifndef IME_VECTOR2_H
+#define IME_VECTOR2_H
 
 namespace IME {
     template<typename T>

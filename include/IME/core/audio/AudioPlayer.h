@@ -26,8 +26,8 @@
  * @brief Interface for audio players
  */
 
-#ifndef AUDIOPLAYER_H
-#define AUDIOPLAYER_H
+#ifndef IME_AUDIOPLAYER_H
+#define IME_AUDIOPLAYER_H
 
 #include "IME/core/event/EventEmitter.h"
 #include <initializer_list>

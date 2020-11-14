@@ -26,7 +26,7 @@
 #include <assert.h>
 
 namespace IME {
-    Entity::Entity(const Vector2f &boundingRect)
+    Entity::Entity(const Vector2u &boundingRect)
         : boundingRect_(boundingRect), isVulnerable_(true), isAlive_(true), isCollidable_(false),
           direction_(Direction::None), position_({0, 0})
     {
@@ -49,7 +49,7 @@ namespace IME {
         }
     }
 
-    Vector2f Entity::getSize() const {
+    Vector2u Entity::getSize() const {
         return boundingRect_;
     }
 

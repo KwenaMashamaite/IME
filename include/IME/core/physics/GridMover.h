@@ -31,8 +31,8 @@
  * movement
  */
 
-#ifndef GRIDMOVER_H
-#define GRIDMOVER_H
+#ifndef IME_GRIDMOVER_H
+#define IME_GRIDMOVER_H
 
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/entity/Entity.h"

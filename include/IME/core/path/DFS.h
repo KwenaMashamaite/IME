@@ -27,8 +27,8 @@
  *        using the Depth First Search algorithm
  */
 
-#ifndef DFS_H
-#define DFS_H
+#ifndef IME_DFS_H
+#define IME_DFS_H
 
 #include "IGridPathFinder.h"
 #include "AdjacencyList.h"

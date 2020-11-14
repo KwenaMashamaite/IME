@@ -31,8 +31,8 @@
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Structs.h"
 
-#ifndef BOXLAYOUTRENDERER_H
-#define BOXLAYOUTRENDERER_H
+#ifndef IME_BOXLAYOUTRENDERER_H
+#define IME_BOXLAYOUTRENDERER_H
 
 #include <TGUI/Renderers/BoxLayoutRenderer.hpp>
 
