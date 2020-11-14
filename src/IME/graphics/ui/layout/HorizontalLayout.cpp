@@ -57,11 +57,11 @@ namespace IME::Graphics::UI {
         layout_->setSize({width, height});
     }
 
-    Dimensions HorizontalLayout::getSize() const {
+    Vector2f HorizontalLayout::getSize() const {
         return {layout_->getSize().x, layout_->getSize().y};
     }
 
-    Dimensions HorizontalLayout::getAbsoluteSize() {
+    Vector2f HorizontalLayout::getAbsoluteSize() {
         return {layout_->getFullSize().x, layout_->getFullSize().y};
     }
 
@@ -104,7 +104,7 @@ namespace IME::Graphics::UI {
         layout_->setPosition({x, y});
     }
 
-    void HorizontalLayout::setPosition(Position position) {
+    void HorizontalLayout::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -120,11 +120,11 @@ namespace IME::Graphics::UI {
         layout_->setOrigin({x, y});
     }
 
-    Position HorizontalLayout::getPosition() const {
+    Vector2f HorizontalLayout::getPosition() const {
         return {layout_->getPosition().x, layout_->getPosition().y};
     }
 
-    Position HorizontalLayout::getOrigin() const {
+    Vector2f HorizontalLayout::getOrigin() const {
         return {layout_->getOrigin().x, layout_->getOrigin().y};
     }
 
@@ -250,7 +250,7 @@ namespace IME::Graphics::UI {
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> HorizontalLayout::getWidgetAtPosition(Position pos) const {
+    std::shared_ptr<UI::IWidget> HorizontalLayout::getWidgetAtPosition(Vector2f pos) const {
         auto widget = layout_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
@@ -267,6 +267,22 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> HorizontalLayout::getInternalPtr() {
         return layout_;
+    }
+
+    void HorizontalLayout::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void HorizontalLayout::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void HorizontalLayout::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void HorizontalLayout::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void HorizontalLayout::initEvents() {

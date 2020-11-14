@@ -96,7 +96,7 @@ namespace IME {
          * the target will not move since it cannot establish a path to the
          * destination
          */
-        void setDestination(Position position);
+        void setDestination(Vector2f position);
 
         /**
          * @brief Resume moving target to the destination tile

@@ -30,7 +30,7 @@
 #define GUI_H
 
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
-#include "IME/common/Position.h"
+#include "IME/common/Vector2.h"
 #include "IME/graphics/CursorTypes.h"
 #include "IME/graphics/ui/layout/IContainer.h"
 #include <unordered_map>
@@ -257,7 +257,7 @@ namespace IME {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<IWidget> getWidgetAtPosition(Position pos) const;
+            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const;
 
             /**
              * @brief Get the widget below the mouse cursor
@@ -266,7 +266,7 @@ namespace IME {
              * @return Widget below the mouse or a nullptr if the mouse isn't
              *         on top of any widgets
              */
-            std::shared_ptr<IWidget> getWidgetBelowMouseCursor(Position mousePos) const;
+            std::shared_ptr<IWidget> getWidgetBelowMouseCursor(Vector2f mousePos) const;
 
             /**
              * @brief Focus the next widget in the gui

@@ -31,8 +31,7 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "IME/common/Position.h"
-#include "IME/common/Dimensions.h"
+#include "IME/common/Vector2.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/entity/Entity.h"
 #include <unordered_map>
@@ -85,7 +84,7 @@ namespace IME {
          * @brief Get the position of the tile map in pixels
          * @return The position of the tile map pixels
          */
-        Position getPosition() const;
+        Vector2f getPosition() const;
 
         /**
          * @brief Construct the tilemap from data located on a file on the disk
@@ -109,7 +108,7 @@ namespace IME {
          * Tiles in the tilemap will be textured with the image data corresponding
          * to their id's when textured @see applyImages()
          */
-        void addTilesetImageData(const char& id, Position startPos, Dimensions size);
+        void addTilesetImageData(const char& id, Vector2f startPos, Vector2f size);
 
         /**
          * @brief Texture the tilemap
@@ -237,7 +236,7 @@ namespace IME {
          *
          * All the tiles have the same size
          */
-        Dimensions getTileSize() const;
+        Vector2u getTileSize() const;
 
         /**
          * @brief Get the tile at at certain position
@@ -247,7 +246,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTile(const Position& position);
+        Graphics::Tile& getTile(const Vector2f& position);
 
         /**
          * @brief Get the tile above a certain tile
@@ -295,7 +294,7 @@ namespace IME {
          *
          * The background image must
          */
-        void setBackground(const std::string& filename, Position position);
+        void setBackground(const std::string& filename, Vector2f position);
 
         /**
          * @brief Scale the background image by an offset
@@ -334,7 +333,7 @@ namespace IME {
          * @brief Get the size of the tilemap in pixels
          * @return Size of the tilemap in pixels
          */
-        Dimensions getSize() const;
+        Vector2u getSize() const;
 
         /**
          * @brief Get the size of the tilemap in tiles
@@ -343,7 +342,7 @@ namespace IME {
          * This function will return the number of rows and columns in the
          * tilemap as the width and height respectively
          */
-        Dimensions getSizeInTiles() const;
+        Vector2u getSizeInTiles() const;
 
         /**
          * @brief Hide a shown tile map
@@ -474,11 +473,11 @@ namespace IME {
 
     private:
         //The Size of each tile in the tilemap
-        Dimensions tileSize_;
+        Vector2u tileSize_;
         //The Size of the tilemap in pixels
-        Dimensions mapSizeInPixels_;
+        Vector2u mapSizeInPixels_;
         //The Position of the tilemap in pixels
-        Position mapPos_;
+        Vector2f mapPos_;
         //The width of the tilemap in tiles
         unsigned int numOfRows_;
         //The height of the tilemap in tiles
@@ -494,7 +493,7 @@ namespace IME {
         //References to objects (third layer)
         std::vector<std::pair<Index, std::shared_ptr<Entity>>> children_;
         //Holds the tileset image properties associated with a tile id
-        std::unordered_map<char, std::tuple<std::string, Position, Dimensions>> imagesData_;
+        std::unordered_map<char, std::tuple<std::string, Vector2f, Vector2f>> imagesData_;
         //The maps tileset image files
         std::unordered_map<std::string, std::string> tilesets_;
         //The visibility state of the grid

@@ -143,7 +143,7 @@ namespace IME {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            virtual std::shared_ptr<IWidget> getWidgetAtPosition(Position pos) const = 0;
+            virtual std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const = 0;
 
             /**
              * @brief Focus the next widget in the container

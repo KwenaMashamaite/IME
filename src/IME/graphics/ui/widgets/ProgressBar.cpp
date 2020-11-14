@@ -100,11 +100,11 @@ namespace IME::Graphics::UI {
         progressBar_->setOrigin({x, y});
     }
 
-    Position ProgressBar::getPosition() const {
+    Vector2f ProgressBar::getPosition() const {
         return {progressBar_->getPosition().x, progressBar_->getPosition().y};
     }
 
-    Position ProgressBar::getOrigin() const {
+    Vector2f ProgressBar::getOrigin() const {
         return {progressBar_->getOrigin().x, progressBar_->getOrigin().y};
     }
 
@@ -114,7 +114,7 @@ namespace IME::Graphics::UI {
 
     void ProgressBar::move(float xOffset, float yOffset) {
         progressBar_->setPosition(getPosition().x + xOffset,
-                             getPosition().y + yOffset);
+            getPosition().y + yOffset);
     }
 
     void ProgressBar::rotate(float offset) {
@@ -123,17 +123,15 @@ namespace IME::Graphics::UI {
 
     void ProgressBar::scale(float factorX, float factorY) {
         progressBar_->setScale({progressBar_->getScale().x + factorX,
-                           progressBar_->getScale().y + factorY});
+            progressBar_->getScale().y + factorY});
     }
 
     void ProgressBar::hide() {
-        progressBar_->hideWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+        progressBar_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
     }
 
     void ProgressBar::show() {
-        progressBar_->showWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+        progressBar_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
     }
 
     bool ProgressBar::isHidden() const {
@@ -157,7 +155,7 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void ProgressBar::setPosition(Position position) {
+    void ProgressBar::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -173,7 +171,7 @@ namespace IME::Graphics::UI {
         progressBar_->setSize({width, height});
     }
 
-    Dimensions ProgressBar::getSize() const {
+    Vector2f ProgressBar::getSize() const {
         return {progressBar_->getSize().x, progressBar_->getSize().y};
     }
 
@@ -209,7 +207,23 @@ namespace IME::Graphics::UI {
         return progressBar_;
     }
 
-    Dimensions ProgressBar::getAbsoluteSize() {
+    void ProgressBar::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void ProgressBar::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void ProgressBar::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void ProgressBar::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
+    }
+
+    Vector2f ProgressBar::getAbsoluteSize() {
         return {progressBar_->getFullSize().x, progressBar_->getFullSize().y};
     }
 

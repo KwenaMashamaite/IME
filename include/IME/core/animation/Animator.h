@@ -64,7 +64,7 @@ namespace IME {
          * @brief Add multiple animations at the same time
          * @param animations Animations to be added
          *
-         * @see addAnimation(std::shared_ptr<Animation>)
+         * @see addAnimation
          */
         void addAnimation(Animations animations);
 
@@ -137,6 +137,6 @@ namespace IME {
         //Event publisher
         EventEmitter eventEmitter_;
     };
-} // namespace IME
+}
 
 #endif

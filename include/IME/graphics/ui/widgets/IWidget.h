@@ -34,7 +34,7 @@
 #include "IME/graphics/Colour.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/common/ITransformable.h"
-#include "IME/common/Dimensions.h"
+#include "IME/common/Vector2.h"
 #include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/ui/Structs.h"
 #include <TGUI/Widget.hpp>
@@ -76,7 +76,7 @@ namespace IME {
              * absolute size (with the margin, outline thickness etc...)
              * @see getAbsoluteSize()
              */
-            virtual Dimensions getSize() const = 0;
+            virtual Vector2f getSize() const = 0;
 
             /**
              * @brief Get the absolute size of the widget
@@ -86,7 +86,7 @@ namespace IME {
              * margin and outline thickness. To get just the size of the widget
              * use @see getSize()
              */
-            virtual Dimensions getAbsoluteSize() = 0;
+            virtual Vector2f getAbsoluteSize() = 0;
 
             /**
              * @brief Get the widgets text content

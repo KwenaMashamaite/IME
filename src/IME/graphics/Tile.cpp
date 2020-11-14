@@ -28,11 +28,11 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics {
-    Tile::Tile(const Dimensions &size, const Position &position) {
+    Tile::Tile(const Vector2u &size, const Vector2f &position) {
         isCollidable_ = false;
         id_ = '\0';
         index_ = {-1, -1}; //Invalid index
-        setSize(size.width, size.height);
+        setSize(size.x, size.y);
         tile_.setOutlineColor(sf::Color::White);
         tile_.setOutlineThickness(-1.0f);
         tile_.setFillColor(sf::Color::Transparent);
@@ -41,11 +41,12 @@ namespace IME::Graphics {
         tileType_ = TileType::Empty;
     }
 
-    Dimensions Tile::getSize() const {
-        return {tile_.getGlobalBounds().width, tile_.getGlobalBounds().height};
+    Vector2u Tile::getSize() const {
+        return {static_cast<unsigned int>(tile_.getGlobalBounds().width),
+                static_cast<unsigned int>(tile_.getGlobalBounds().height)};
     }
 
-    Position Tile::getPosition() const {
+    Vector2f Tile::getPosition() const {
         return {tile_.getPosition().x, tile_.getPosition().y};
     }
 
@@ -54,16 +55,17 @@ namespace IME::Graphics {
         sprite_.setPosition(getPosition().x, getPosition().y);
     }
 
-    void Tile::setPosition(const Position &position) {
+    void Tile::setPosition(const Vector2f &position) {
         setPosition(position.x, position.y);
     }
 
-    void Tile::setSize(float width, float height) {
-        tile_.setSize(sf::Vector2f{width, height});
+    void Tile::setSize(unsigned int width, unsigned int height) {
+        tile_.setSize(sf::Vector2f{static_cast<float>(width),
+            static_cast<float>(height)});
     }
 
-    void Tile::setSize(Dimensions size) {
-        setSize(size.width, size.height);
+    void Tile::setSize(Vector2u size) {
+        setSize(size.x, size.y);
     }
 
     void Tile::setId(char id) {
@@ -110,8 +112,8 @@ namespace IME::Graphics {
     }
 
     bool Tile::contains(float x, float y) const {
-        return ((x >= getPosition().x && x <= getPosition().x + getSize().width)
-                && (y >= getPosition().y && y <= getPosition().y + getSize().height));
+        return ((x >= getPosition().x && x <= getPosition().x + getSize().x)
+                && (y >= getPosition().y && y <= getPosition().y + getSize().y));
     }
 
     Sprite &Tile::getSprite() {

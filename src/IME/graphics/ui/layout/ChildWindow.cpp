@@ -45,27 +45,27 @@ namespace IME::Graphics::UI {
         return renderer_;
     }
 
-    void ChildWindow::setClientSize(Dimensions size) {
-        window_->setClientSize({size.width, size.height});
+    void ChildWindow::setClientSize(Vector2f size) {
+        window_->setClientSize({size.x, size.y});
     }
 
-    Dimensions ChildWindow::getClientSize() const {
+    Vector2f ChildWindow::getClientSize() const {
         return {window_->getClientSize().x, window_->getClientSize().y};
     }
 
-    void ChildWindow::setMaximumSize(Dimensions size) {
-        window_->setMaximumSize({size.width, size.height});
+    void ChildWindow::setMaximumSize(Vector2f size) {
+        window_->setMaximumSize({size.x, size.y});
     }
 
-    Dimensions ChildWindow::getMaximumSize() const {
+    Vector2f ChildWindow::getMaximumSize() const {
         return {window_->getMaximumSize().x, window_->getMaximumSize().y};
     }
 
-    void ChildWindow::setMinimumSize(Dimensions size) {
-        window_->setMinimumSize({size.width, size.height});
+    void ChildWindow::setMinimumSize(Vector2f size) {
+        window_->setMinimumSize({size.x, size.y});
     }
 
-    Dimensions ChildWindow::getMinimumSize() const {
+    Vector2f ChildWindow::getMinimumSize() const {
         return {window_->getMinimumSize().x, window_->getMinimumSize().y};
     }
 
@@ -141,11 +141,11 @@ namespace IME::Graphics::UI {
         window_->setSize({width, height});
     }
 
-    Dimensions ChildWindow::getSize() const {
+    Vector2f ChildWindow::getSize() const {
         return {window_->getSize().x, window_->getSize().y};
     }
 
-    Dimensions ChildWindow::getAbsoluteSize() {
+    Vector2f ChildWindow::getAbsoluteSize() {
         return {window_->getFullSize().x, window_->getFullSize().y};
     }
 
@@ -188,7 +188,7 @@ namespace IME::Graphics::UI {
         window_->setPosition({x, y});
     }
 
-    void ChildWindow::setPosition(Position position) {
+    void ChildWindow::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -204,11 +204,11 @@ namespace IME::Graphics::UI {
         window_->setOrigin({x, y});
     }
 
-    Position ChildWindow::getPosition() const {
+    Vector2f ChildWindow::getPosition() const {
         return {window_->getPosition().x, window_->getPosition().y};
     }
 
-    Position ChildWindow::getOrigin() const {
+    Vector2f ChildWindow::getOrigin() const {
         return {window_->getOrigin().x, window_->getOrigin().y};
     }
 
@@ -296,7 +296,7 @@ namespace IME::Graphics::UI {
         return nullptr;
     }
 
-    std::shared_ptr<IWidget> ChildWindow::getWidgetAtPosition(Position pos) const {
+    std::shared_ptr<IWidget> ChildWindow::getWidgetAtPosition(Vector2f pos) const {
         auto widget = window_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
@@ -313,6 +313,22 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> ChildWindow::getInternalPtr() {
         return window_;
+    }
+
+    void ChildWindow::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void ChildWindow::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void ChildWindow::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void ChildWindow::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void ChildWindow::initEvents() {

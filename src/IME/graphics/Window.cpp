@@ -95,8 +95,7 @@ namespace IME::Graphics {
         isInstantiated_ = false;
     }
 
-    Dimensions Window::getSize() {
-        return {static_cast<float>(window_.getSize().x),
-                static_cast<float>(window_.getSize().y)};
+    Vector2u Window::getSize() {
+        return {window_.getSize().x, window_.getSize().y};
     }
 }

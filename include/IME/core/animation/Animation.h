@@ -29,9 +29,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "IME/common/Position.h"
-#include "IME/common/Dimensions.h"
-#include <SFML/Graphics/Rect.hpp>
+#include "IME/common/Vector2.h"
+#include "IME/common/Rect.h"
 #include <string>
 #include <vector>
 
@@ -46,7 +45,6 @@ namespace IME {
 
     class Animation {
     public:
-        using Frame = std::pair<Position, Dimensions>;
         /**
          * @brief Create a new animation
          * @param name Name of the animation
@@ -76,7 +74,7 @@ namespace IME {
          * create an animation from frames at different position on the sprite
          * sheet and different frame sizes @see addFrame(std::initializer_list<Frame>)
          */
-        void addFrames(Position startPos, Dimensions frameSize, unsigned int numOfFrames,
+        void addFrames(Vector2i startPos, Vector2i frameSize, unsigned int numOfFrames,
             unsigned int spacing = 0, Arrangement arrangement = Arrangement::Horizontal);
 
         /**
@@ -89,7 +87,7 @@ namespace IME {
          * from contiguous frames of the same size
          * @see addFrame(Position, Dimensions, unsigned int, Arrangement)
          */
-        void addFrames(const std::initializer_list<Frame>& frames);
+        void addFrames(const std::initializer_list<IntRect>& frames);
 
         /**
          * @brief Loop/unloop the animation
@@ -143,7 +141,7 @@ namespace IME {
          * appropriate sprite sheet before displaying it, otherwise a white
          * rectangle will be displayed instead.
          */
-        sf::IntRect getFrameAt(unsigned int frameNumber) const;
+        IntRect getFrameAt(unsigned int frameNumber) const;
 
         /**
          * @brief Get the total number of frames
@@ -157,26 +155,9 @@ namespace IME {
          */
         const std::string &getName() const;
 
-        /**
-         * @brief Get the size of each animation frame
-         * @return The size of each animation frame
-         */
-        Dimensions getFrameSizeAt(unsigned int index) const;
-
-    private:
-        /**
-         * @brief Create animation frames
-         * @param numOfFrames Number of frames to create
-         * @param startingPos Position of the first frame on the sprite sheet
-         * @param frameSize Size of each frame
-         *
-         * This function creates empty frames (not textured) contiguously.
-         */
-        void addFrame(Frame frame);
-
     private:
         //Animation frames
-        std::vector<sf::IntRect> frames_;
+        std::vector<IntRect> frames_;
         //Name of the animation
         std::string name_;
         //Animation sprite sheet filename
@@ -186,6 +167,6 @@ namespace IME {
         //Looping state
         bool isLooped_;
     };
-} // namespace IME
+}
 
 #endif

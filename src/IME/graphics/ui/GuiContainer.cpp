@@ -63,7 +63,7 @@ namespace IME::Graphics::UI {
     }
 
     std::shared_ptr<IWidget>
-    GuiContainer::getWidgetBelowMouseCursor(Position mousePos) const {
+    GuiContainer::getWidgetBelowMouseCursor(Vector2f mousePos) const {
         auto widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
@@ -139,7 +139,7 @@ namespace IME::Graphics::UI {
         return nullptr;
     }
 
-    std::shared_ptr<IWidget> GuiContainer::getWidgetAtPosition(Position pos) const {
+    std::shared_ptr<IWidget> GuiContainer::getWidgetAtPosition(Vector2f pos) const {
         auto widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());

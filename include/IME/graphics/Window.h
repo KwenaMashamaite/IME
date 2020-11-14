@@ -29,9 +29,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "IME/common/Position.h"
-#include "IME/common/Dimensions.h"
 #include "IME/utility/NonCopyable.h"
+#include "IME/common/Vector2.h"
 #include "IDrawable.h"
 #include "Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -120,7 +119,7 @@ namespace IME {
              * @brief Get the dimensions of the window
              * @return Dimensions of the window
              */
-            Dimensions getSize();
+            Vector2u getSize();
 
             /**
              * @brief Check if the window is open or not

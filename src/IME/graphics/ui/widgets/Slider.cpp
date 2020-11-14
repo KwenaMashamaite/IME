@@ -107,7 +107,7 @@ namespace IME::Graphics::UI {
         slider_->setPosition({x, y});
     }
 
-    void Slider::setPosition(Position position) {
+    void Slider::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -123,11 +123,11 @@ namespace IME::Graphics::UI {
         slider_->setOrigin({x, y});
     }
 
-    Position Slider::getPosition() const {
+    Vector2f Slider::getPosition() const {
         return {slider_->getPosition().x, slider_->getPosition().y};
     }
 
-    Position Slider::getOrigin() const {
+    Vector2f Slider::getOrigin() const {
         return {slider_->getOrigin().x, slider_->getOrigin().y};
     }
 
@@ -175,11 +175,11 @@ namespace IME::Graphics::UI {
         slider_->setSize({width, height});
     }
 
-    Dimensions Slider::getSize() const {
+    Vector2f Slider::getSize() const {
         return {slider_->getSize().x, slider_->getSize().y};
     }
 
-    Dimensions Slider::getAbsoluteSize() {
+    Vector2f Slider::getAbsoluteSize() {
         return {slider_->getFullSize().x, slider_->getFullSize().y};;
     }
 
@@ -205,6 +205,22 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> Slider::getInternalPtr() {
         return slider_;
+    }
+
+    void Slider::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void Slider::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void Slider::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void Slider::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void Slider::initEvents() {

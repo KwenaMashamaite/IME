@@ -84,7 +84,7 @@ namespace IME {
         }
     }
 
-    void TargetGridMover::setDestination(Position position) {
+    void TargetGridMover::setDestination(Vector2f position) {
         setDestination(gridMover_.getGrid().getTile(position).getIndex());
     }
 
@@ -142,7 +142,7 @@ namespace IME {
     int TargetGridMover::onDestinationReached(Callback<float, float> callback) {
         return gridMover_.onDestinationReached(
             [this, callback = std::move(callback)](float x, float y) {
-                if (gridMover_.getGrid().getTile(targetTile_).getPosition() == Position{x, y})
+                if (gridMover_.getGrid().getTile(targetTile_).getPosition() == Vector2f{x, y})
                     callback(x, y);
             });
     }

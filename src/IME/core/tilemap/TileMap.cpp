@@ -37,14 +37,14 @@ namespace IME {
         invalidTile_.setPosition({-99, -99});
         invalidTile_.setIndex({-1, -1});
         mapPos_ = {0, 0};
-        numOfRows_ = numOfColms_ = 0;
+        numOfRows_ = numOfColms_ = 0u;
         if (tileWidth <= 0)
             tileWidth = 8;
 
         if (tileHeight <= 0)
             tileHeight = 8;
 
-        tileSize_ = Dimensions{static_cast<float>(tileWidth), static_cast<float>(tileHeight)};
+        tileSize_ = Vector2u{tileWidth, tileHeight};
         background_.setPosition(0, 0);
     }
 
@@ -59,7 +59,7 @@ namespace IME {
         isGridVisible_ = isVisible;
     }
 
-    Graphics::Tile& TileMap::getTile(const Position &position) {
+    Graphics::Tile& TileMap::getTile(const Vector2f &position) {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
                 if (tile.contains(position.x, position.y))
@@ -84,16 +84,16 @@ namespace IME {
         return getTileRightOf(tile.getIndex());
     }
 
-    void TileMap::setBackground(const std::string &filename, Position position) {
+    void TileMap::setBackground(const std::string &filename, Vector2f position) {
         background_.setTexture(filename);
         background_.setPosition(position);
-        if (background_.getSize().width > mapSizeInPixels_.width
-            && background_.getSize().height > mapSizeInPixels_.height)
-            background_.setTextureRect(0, 0, mapSizeInPixels_.width, mapSizeInPixels_.height);
-        else if (background_.getSize().width > mapSizeInPixels_.width)
-            background_.setTextureRect(0, 0, mapSizeInPixels_.width, background_.getSize().height);
-        else if (background_.getSize().height > mapSizeInPixels_.height)
-            background_.setTextureRect(0, 0, background_.getSize().width, mapSizeInPixels_.height);
+        if (background_.getSize().x > mapSizeInPixels_.y
+            && background_.getSize().y > mapSizeInPixels_.y)
+            background_.setTextureRect(0, 0, mapSizeInPixels_.x, mapSizeInPixels_.y);
+        else if (background_.getSize().x > mapSizeInPixels_.x)
+            background_.setTextureRect(0, 0, mapSizeInPixels_.x, background_.getSize().y);
+        else if (background_.getSize().y > mapSizeInPixels_.y)
+            background_.setTextureRect(0, 0, background_.getSize().x, mapSizeInPixels_.y);
         isBackgroundDrawable_ = true;
     }
 
@@ -121,7 +121,7 @@ namespace IME {
     void TileMap::computeDimensions() {
         numOfRows_ = mapData_.size();
         numOfColms_ = mapData_[0].size();
-        mapSizeInPixels_ = {numOfColms_ * tileSize_.height, numOfRows_ * tileSize_.width};
+        mapSizeInPixels_ = {numOfColms_ * tileSize_.y, numOfRows_ * tileSize_.x};
     }
 
     void TileMap::setPosition(int x, int y) {
@@ -133,9 +133,9 @@ namespace IME {
                 if (i == 0 && j == 0)
                     tiledMap_[i][j].setPosition(mapPos_);
                 else if (j == 0)
-                    tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height});
+                    tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y});
                 else
-                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.width, tiledMap_[i][j - 1].getPosition().y});
+                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x, tiledMap_[i][j - 1].getPosition().y});
             }
         }
     }
@@ -150,7 +150,7 @@ namespace IME {
             tileSet_ = tilesets_.at(name);
     }
 
-    Position TileMap::getPosition() const {
+    Vector2f TileMap::getPosition() const {
         return mapPos_;
     }
 
@@ -163,9 +163,9 @@ namespace IME {
                 if (i == 0 && j == 0)
                     tile.setPosition(mapPos_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.height + tileSpacing});
+                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.width + tileSpacing, row[j - 1].getPosition().y});
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing, row[j - 1].getPosition().y});
 
                 tile.setId(mapData_[i][j]);
                 tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
@@ -174,8 +174,8 @@ namespace IME {
             tiledMap_.push_back(row);
         }
         //Accommodate tile spacing in overall tilemap size
-        mapSizeInPixels_.width += (numOfColms_ - 1) * tileSpacing;
-        mapSizeInPixels_.height += (numOfRows_ - 1) * tileSpacing;
+        mapSizeInPixels_.x += (numOfColms_ - 1) * tileSpacing;
+        mapSizeInPixels_.y += (numOfRows_ - 1) * tileSpacing;
     }
 
     void TileMap::draw(Graphics::Window &renderTarget) {
@@ -344,11 +344,11 @@ namespace IME {
         }
     }
 
-    Dimensions TileMap::getTileSize() const {
+    Vector2u TileMap::getTileSize() const {
         return tileSize_;
     }
 
-    void TileMap::addTilesetImageData(const char &id, Position startPos, Dimensions size) {
+    void TileMap::addTilesetImageData(const char &id, Vector2f startPos, Vector2f size) {
         imagesData_.insert({id, {tileSet_, startPos, size}});
     }
 
@@ -362,7 +362,7 @@ namespace IME {
                 auto [tileset, startPos, size] = imagesData_.at(tileId);
                 auto sprite = Graphics::Sprite();
                 sprite.setTexture(tileset);
-                sprite.setTextureRect(startPos.x, startPos.y, size.width, size.height);
+                sprite.setTextureRect(startPos.x, startPos.y, size.x, size.y);
                 tile.addSprite(std::move(sprite));
             }
         });
@@ -373,7 +373,6 @@ namespace IME {
             std::for_each(row.begin(), row.end(), callback);
         });
     }
-
 
     void TileMap::forEachTile(const char &id, Callback<Graphics::Tile&> callback) {
         forEachTile([&](Graphics::Tile& tile) {
@@ -418,11 +417,11 @@ namespace IME {
         return isGridVisible_;
     }
 
-    Dimensions TileMap::getSize() const {
+    Vector2u TileMap::getSize() const {
         return mapSizeInPixels_;
     }
 
-    Dimensions TileMap::getSizeInTiles() const {
-        return {static_cast<float>(numOfColms_), static_cast<float>(numOfRows_)};
+    Vector2u TileMap::getSizeInTiles() const {
+        return {numOfColms_, numOfRows_};
     }
 }

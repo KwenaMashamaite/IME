@@ -35,7 +35,7 @@ namespace IME::Graphics {
         sprite_.setPosition(x, y);
     }
 
-    void Sprite::setPosition(Position position) {
+    void Sprite::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -44,7 +44,7 @@ namespace IME::Graphics {
         textureFileName_ = filename;
     }
 
-    Position Sprite::getPosition() const {
+    Vector2f Sprite::getPosition() const {
         return {sprite_.getPosition().x, sprite_.getPosition().y};
     }
 
@@ -52,7 +52,7 @@ namespace IME::Graphics {
         return textureFileName_;
     }
 
-    Dimensions Sprite::getSize() const {
+    Vector2f Sprite::getSize() const {
         return {static_cast<float>(sprite_.getTextureRect().width),
                 static_cast<float>(sprite_.getTextureRect().height)};
     }
@@ -100,7 +100,7 @@ namespace IME::Graphics {
         sprite_.setOrigin(x, y);
     }
 
-    Position Sprite::getOrigin() const {
+    Vector2f Sprite::getOrigin() const {
         return {sprite_.getOrigin().x, sprite_.getOrigin().y};
     }
 

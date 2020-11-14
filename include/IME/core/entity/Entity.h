@@ -29,8 +29,7 @@
 #ifndef IENTITY_H
 #define IENTITY_H
 
-#include "IME/common/Dimensions.h"
-#include "IME/common/Position.h"
+#include "IME/common/Vector2.h"
 #include "IME/common/Direction.h"
 #include "IME/core/event/EventEmitter.h"
 #include <stack>
@@ -42,12 +41,12 @@ namespace IME {
     public:
         /**
          * @brief Construct entity
-         * @param boundingRect Bounding rectangle of the entity
+         * @param boundingRectSize Size of the entity's bounding rect
          *
          * The entity is alive, has the position (0, 0) and no direction
          * by default
          */
-        explicit Entity(const Dimensions &boundingRect);
+        explicit Entity(const Vector2f &boundingRectSize);
 
         /**
          * @brief Set the position of the entity
@@ -66,7 +65,7 @@ namespace IME {
          * @brief Get the dimensions of the entity's bounding box
          * @return Dimensions of the entity's bounding box
          */
-        Dimensions getSize() const;
+        Vector2f getSize() const;
 
         /**
          * @brief Set the alive state of the entity
@@ -110,7 +109,7 @@ namespace IME {
          * @brief Get the position of the entity
          * @return Position of the entity
          */
-        Position getPosition() const;
+        Vector2f getPosition() const;
 
         /**
          * @brief Check if entity is vulnerable or not
@@ -201,7 +200,7 @@ namespace IME {
         //Objects unique identifier
         std::size_t id_;
         //The entities bounding rectangle
-        Dimensions boundingRect_;
+        Vector2f boundingRect_;
         //Vulnerability state state
         bool isVulnerable_;
         //The entities alive state
@@ -211,7 +210,7 @@ namespace IME {
         //The direction of the entity
         Direction direction_;
         //The position of the entity
-        Position position_;
+        Vector2f position_;
         //The event publisher of the entity
         EventEmitter eventEmitter_;
     };

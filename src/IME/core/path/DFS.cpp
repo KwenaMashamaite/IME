@@ -25,10 +25,10 @@
 #include "IME/core/path/DFS.h"
 
 namespace IME {
-    DFSPathFinder::DFSPathFinder(Dimensions gridSize) {
-        for (auto i = 0; i < gridSize.height; i++) {
+    DFSPathFinder::DFSPathFinder(Vector2u gridSize) {
+        for (auto i = 0; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};
-            for (auto j = 0; j < gridSize.width; j++)
+            for (auto j = 0; j < gridSize.x; j++)
                 innerVector.push_back(false);
             visited_.push_back(innerVector);
         }

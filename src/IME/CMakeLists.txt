@@ -1,6 +1,4 @@
 set(IME_SRC
-    common/Dimensions.cpp
-    common/Position.cpp
     common/Property.cpp
     common/PropertiesContainer.cpp
     core/animation/Animation.cpp

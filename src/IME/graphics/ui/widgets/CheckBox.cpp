@@ -79,11 +79,11 @@ namespace IME::Graphics::UI {
         checkBox_->setOrigin({x, y});
     }
 
-    Position CheckBox::getPosition() const {
+    Vector2f CheckBox::getPosition() const {
         return {checkBox_->getPosition().x, checkBox_->getPosition().y};
     }
 
-    Position CheckBox::getOrigin() const {
+    Vector2f CheckBox::getOrigin() const {
         return {checkBox_->getOrigin().x, checkBox_->getOrigin().y};
     }
 
@@ -136,7 +136,7 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void CheckBox::setPosition(Position position) {
+    void CheckBox::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -152,7 +152,7 @@ namespace IME::Graphics::UI {
         checkBox_->setSize({width, height});
     }
 
-    Dimensions CheckBox::getSize() const {
+    Vector2f CheckBox::getSize() const {
         return {checkBox_->getSize().x, checkBox_->getSize().y};
     }
 
@@ -188,8 +188,24 @@ namespace IME::Graphics::UI {
         return checkBox_;
     }
 
-    Dimensions CheckBox::getAbsoluteSize() {
+    Vector2f CheckBox::getAbsoluteSize() {
         return {checkBox_->getFullSize().x, checkBox_->getFullSize().y};
+    }
+
+    void CheckBox::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void CheckBox::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void CheckBox::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void CheckBox::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void CheckBox::initEvents() {

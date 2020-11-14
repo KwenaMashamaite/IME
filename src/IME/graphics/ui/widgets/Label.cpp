@@ -56,7 +56,7 @@ namespace IME::Graphics::UI {
         label_->setPosition({x, y});
     }
 
-    void Label::setPosition(Position position) {
+    void Label::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -72,11 +72,11 @@ namespace IME::Graphics::UI {
         label_->setOrigin({x, y});
     }
 
-    Position Label::getPosition() const {
+    Vector2f Label::getPosition() const {
         return {label_->getPosition().x, label_->getPosition().y};
     }
 
-    Position Label::getOrigin() const {
+    Vector2f Label::getOrigin() const {
         return {label_->getOrigin().x, label_->getOrigin().y};
     }
 
@@ -124,11 +124,11 @@ namespace IME::Graphics::UI {
         label_->setSize({width, height});
     }
 
-    Dimensions Label::getSize() const {
+    Vector2f Label::getSize() const {
         return {label_->getSize().x, label_->getSize().y};
     }
 
-    Dimensions Label::getAbsoluteSize() {
+    Vector2f Label::getAbsoluteSize() {
         return {label_->getFullSize().x, label_->getFullSize().y};;
     }
 
@@ -146,6 +146,22 @@ namespace IME::Graphics::UI {
 
     bool Label::contains(float x, float y) const {
         return label_->isMouseOnWidget({x, y});;
+    }
+
+    void Label::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void Label::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void Label::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void Label::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     std::shared_ptr<tgui::Widget> Label::getInternalPtr() {

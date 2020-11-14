@@ -31,8 +31,8 @@ namespace IME {
                 neighbours.push_back({row, colm});
         };
 
-        for (auto i = 0; i < tileMap.getSizeInTiles().height; i++) {
-            for (auto j = 0 ; j < tileMap.getSizeInTiles().width; j++) {
+        for (auto i = 0; i < tileMap.getSizeInTiles().y; i++) {
+            for (auto j = 0 ; j < tileMap.getSizeInTiles().x; j++) {
                 if (tileMap.getTile(Index{i, j}).getType() == Graphics::TileType::Obstacle)
                     continue;
                 auto neighbours = std::vector<Index>{};

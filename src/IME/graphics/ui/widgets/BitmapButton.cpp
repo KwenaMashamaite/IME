@@ -74,15 +74,19 @@ namespace IME::Graphics::UI {
         button_->setScale({factorX, factorY});
     }
 
+    void BitmapButton::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
     void BitmapButton::setOrigin(float x, float y) {
         button_->setOrigin({x, y});
     }
 
-    Position BitmapButton::getPosition() const {
+    Vector2f BitmapButton::getPosition() const {
         return {button_->getPosition().x, button_->getPosition().y};
     }
 
-    Position BitmapButton::getOrigin() const {
+    Vector2f BitmapButton::getOrigin() const {
         return {button_->getOrigin().x, button_->getOrigin().y};
     }
 
@@ -92,7 +96,7 @@ namespace IME::Graphics::UI {
 
     void BitmapButton::move(float xOffset, float yOffset) {
         button_->setPosition(getPosition().x + xOffset,
-                             getPosition().y + yOffset);
+            getPosition().y + yOffset);
     }
 
     void BitmapButton::rotate(float offset) {
@@ -101,17 +105,15 @@ namespace IME::Graphics::UI {
 
     void BitmapButton::scale(float factorX, float factorY) {
         button_->setScale({button_->getScale().x + factorX,
-                           button_->getScale().y + factorY});
+    button_->getScale().y + factorY});
     }
 
     void BitmapButton::hide() {
-        button_->hideWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+        button_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
     }
 
     void BitmapButton::show() {
-        button_->showWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+        button_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
     }
 
     bool BitmapButton::isHidden() const {
@@ -135,7 +137,7 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void BitmapButton::setPosition(Position position) {
+    void BitmapButton::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -151,7 +153,7 @@ namespace IME::Graphics::UI {
         button_->setSize({width, height});
     }
 
-    Dimensions BitmapButton::getSize() const {
+    Vector2f BitmapButton::getSize() const {
         return {button_->getSize().x, button_->getSize().y};
     }
 
@@ -187,7 +189,7 @@ namespace IME::Graphics::UI {
         return button_;
     }
 
-    Dimensions BitmapButton::getAbsoluteSize() {
+    Vector2f BitmapButton::getAbsoluteSize() {
         return {button_->getFullSize().x, button_->getFullSize().y};
     }
 
@@ -236,5 +238,17 @@ namespace IME::Graphics::UI {
             emit("rightClick");
             emit("rightClick", mousePos.x, mousePos.y);
         });
+    }
+
+    void BitmapButton::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void BitmapButton::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void BitmapButton::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 }

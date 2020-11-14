@@ -26,10 +26,10 @@
 #include <algorithm>
 
 namespace IME {
-    BFSPathFinder::BFSPathFinder(Dimensions gridSize) {
-        for (auto i = 0; i < gridSize.height; i++) {
+    BFSPathFinder::BFSPathFinder(Vector2u gridSize) {
+        for (auto i = 0; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};
-            for (auto j = 0; j < gridSize.width; j++)
+            for (auto j = 0; j < gridSize.x; j++)
                 innerVector.push_back(false);
             visited_.push_back(innerVector);
         }

@@ -29,8 +29,7 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "IME/common/Position.h"
-#include "IME/common/Dimensions.h"
+#include "IME/common/Vector2.h"
 #include "IDrawable.h"
 #include "Sprite.h"
 #include "IME/core/event/EventEmitter.h"
@@ -71,7 +70,7 @@ namespace IME {
              * @param size Size of the tile
              * @param position Position of the tile
              */
-            Tile(const Dimensions &size, const Position &position);
+            Tile(const Vector2u &size, const Vector2f &position);
 
             /**
              * @brief Construct a tile from an existing tile
@@ -98,7 +97,7 @@ namespace IME {
              * @brief Get the position of the tile
              * @return The position of the tile
              */
-            Position getPosition() const;
+            Vector2f getPosition() const;
 
             /**
              * @brief Add a sprite to the tile
@@ -146,26 +145,26 @@ namespace IME {
              * @brief Set the position of the tile in coordinates
              * @param position Position to set
              */
-            void setPosition(const Position &position);
+            void setPosition(const Vector2f &position);
 
             /**
              * @brief Set the size of the tile
              * @param width The horizontal size
              * @param height The vertical size
              */
-            void setSize(float width, float height);
+            void setSize(unsigned int, unsigned int height);
 
             /**
              * @brief Set the size of the tile
              * @param size New tile size
              */
-            void setSize(Dimensions size);
+            void setSize(Vector2u size);
 
             /**
              * @brief Get the size of the tile
              * @return The size of the tile
              */
-            Dimensions getSize() const;
+            Vector2u getSize() const;
 
             /**
              * @brief Set the visibility of the tile border
@@ -174,6 +173,7 @@ namespace IME {
             void setBorderVisible(bool isVisible);
 
             /**
+             * @internal
              * @brief Set the index of the tile in the tilemap
              * @param index The index of the tile in the tilemap
              *

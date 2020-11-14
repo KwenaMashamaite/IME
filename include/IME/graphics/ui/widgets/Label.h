@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Widget that displays a single line of text
+ * @brief Widget that displays a single or multiple lines of text
  */
 
 #ifndef LABEL_H
@@ -100,7 +100,7 @@ namespace IME {
              * position instead. The default position of a transformable widget
              * is (0, 0).
              */
-            void setPosition(Position position) override;
+            void setPosition(Vector2f position) override;
 
             /**
              * @brief Set the orientation of the widget
@@ -112,6 +112,47 @@ namespace IME {
              * is 0.
              */
             void setRotation(float angle) override;
+
+            /**
+             * @brief Set the scale factors of the object
+             * @param scale New scale
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            void setScale(Vector2f scale) override;
+
+            /**
+             * @brief set the local origin of the object
+             * @param origin New origin
+             *
+             * The origin of an object defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the object, and ignore all
+             * transformations (position, scale, rotation).
+             * The default origin of a transformable object is (0, 0)
+             */
+            void setOrigin(Vector2f origin) override;
+
+            /**
+             * @brief Move the object by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the object,
+             * unlike @see setPosition which overwrites it
+             */
+            void move(Vector2f offset) override;
+
+            /**
+             * @brief Scale the object by an offset
+             * @param offset Offset to apply
+             *
+             * This function multiplies the current scale of the object,
+             * unlike @see setScale which overwrites it
+             */
+            void scale(Vector2f offset) override;
 
             /**
              * @brief Set the scale factors of the widget
@@ -140,13 +181,13 @@ namespace IME {
              * @brief Get the position of the widget
              * @return Current position of the widget
              */
-            Position getPosition() const override;
+            Vector2f getPosition() const override;
 
             /**
              * @brief Get the local origin of the widget
              * @return get the local origin of the widget
              */
-            Position getOrigin() const override;
+            Vector2f getOrigin() const override;
 
             /**
              * @brief Get the orientation of the widget
@@ -240,7 +281,7 @@ namespace IME {
              * absolute size (with the margin, outline thickness etc...)
              * @see getAbsoluteSize()
              */
-            Dimensions getSize() const override;
+            Vector2f getSize() const override;
 
             /**
              * @brief Get the absolute size of the widget
@@ -250,7 +291,7 @@ namespace IME {
              * margin and outline thickness. To get just the size of the widget
              * use @see getSize()
              */
-            Dimensions getAbsoluteSize() override;
+            Vector2f getAbsoluteSize() override;
 
             /**
              * @brief Get the widgets text content

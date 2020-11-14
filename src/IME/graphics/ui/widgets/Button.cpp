@@ -65,11 +65,11 @@ namespace IME::Graphics::UI {
         button_->setOrigin({x, y});
     }
 
-    Position Button::getPosition() const {
+    Vector2f Button::getPosition() const {
         return {button_->getPosition().x, button_->getPosition().y};
     }
 
-    Position Button::getOrigin() const {
+    Vector2f Button::getOrigin() const {
         return {button_->getOrigin().x, button_->getOrigin().y};
     }
 
@@ -122,7 +122,7 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void Button::setPosition(Position position) {
+    void Button::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -138,7 +138,7 @@ namespace IME::Graphics::UI {
         button_->setSize({width, height});
     }
 
-    Dimensions Button::getSize() const {
+    Vector2f Button::getSize() const {
         return {button_->getSize().x, button_->getSize().y};
     }
 
@@ -146,7 +146,7 @@ namespace IME::Graphics::UI {
         return button_->getText().toAnsiString();
     }
 
-    Dimensions Button::getAbsoluteSize() {
+    Vector2f Button::getAbsoluteSize() {
         return {button_->getFullSize().x, button_->getFullSize().y};
     }
 
@@ -176,6 +176,22 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> Button::getInternalPtr() {
         return button_;
+    }
+
+    void Button::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void Button::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void Button::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void Button::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void Button::initEvents() {

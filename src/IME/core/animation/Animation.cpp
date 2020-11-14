@@ -33,16 +33,16 @@ namespace IME{
         return spriteSheet_;
     }
 
-    void Animation::addFrames(Position startPos, Dimensions frameSize,
+    void Animation::addFrames(Vector2i startPos, Vector2i frameSize,
         unsigned int numOfFrames, unsigned int spacing, Arrangement arrangement)
     {
         auto currentPosition = startPos;
         for (auto i = 0u; i < numOfFrames; ++i) {
-            addFrame({currentPosition, frameSize});
+            frames_.emplace_back(IntRect{currentPosition.x, currentPosition.y, frameSize.x, frameSize.y});
             if (arrangement == Arrangement::Horizontal)
-                currentPosition.x += frameSize.width + spacing;
+                currentPosition.x += frameSize.x + spacing;
             else
-                currentPosition.y += frameSize.height + spacing;
+                currentPosition.y += frameSize.y + spacing;
         }
     }
 
@@ -65,16 +65,11 @@ namespace IME{
         return isLooped_;
     }
 
-    void Animation::addFrame(Frame frame) {
-        auto [position, frameSize] = frame;
-        frames_.emplace_back(position.x, position.y, frameSize.width, frameSize.height);
-    }
-
     float Animation::getDuration() const {
         return duration_;
     }
 
-    sf::IntRect Animation::getFrameAt(unsigned int index) const {
+    IntRect Animation::getFrameAt(unsigned int index) const {
         return frames_.at(index);
     }
 
@@ -86,13 +81,8 @@ namespace IME{
         return name_;
     }
 
-    Dimensions Animation::getFrameSizeAt(unsigned int index) const {
-        return {static_cast<float>(frames_.at(index).width),
-                static_cast<float>(frames_.at(index).height)};
-    }
-
-    void Animation::addFrames(const std::initializer_list<Frame>& frames) {
+    void Animation::addFrames(const std::initializer_list<IntRect>& frames) {
         for (const auto& frame : frames)
-            addFrame(frame);
+            frames_.emplace_back(frame);
     }
 }

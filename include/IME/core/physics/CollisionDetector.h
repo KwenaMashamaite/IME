@@ -112,10 +112,10 @@ namespace IME {
          */
         template<typename T1, typename T2>
         bool isCollideAABB(const T1& objectOne, const T2& objectTwo) const {
-            return objectOne.getPosition().x + objectOne.getSize().width >= objectTwo.getPosition().x
-                && objectOne.getPosition().x <= objectTwo.getPosition().x + objectTwo.getSize().width
-                && objectOne.getPosition().y + objectOne.getSize().height >= objectTwo.getPosition().y
-                && objectOne.getPosition().y <= objectTwo.getPosition().y + objectTwo.getSize().height;
+            return objectOne.getPosition().x + objectOne.getSize().x >= objectTwo.getPosition().x
+                && objectOne.getPosition().x <= objectTwo.getPosition().x + objectTwo.getSize().x
+                && objectOne.getPosition().y + objectOne.getSize().y >= objectTwo.getPosition().y
+                && objectOne.getPosition().y <= objectTwo.getPosition().y + objectTwo.getSize().y;
         }
 
     private:

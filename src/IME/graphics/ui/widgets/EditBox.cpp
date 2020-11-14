@@ -109,11 +109,11 @@ namespace IME::Graphics::UI {
         editBox_->setOrigin({x, y});
     }
 
-    Position EditBox::getPosition() const {
+    Vector2f EditBox::getPosition() const {
         return {editBox_->getPosition().x, editBox_->getPosition().y};
     }
 
-    Position EditBox::getOrigin() const {
+    Vector2f EditBox::getOrigin() const {
         return {editBox_->getOrigin().x, editBox_->getOrigin().y};
     }
 
@@ -123,7 +123,7 @@ namespace IME::Graphics::UI {
 
     void EditBox::move(float xOffset, float yOffset) {
         editBox_->setPosition(getPosition().x + xOffset,
-                             getPosition().y + yOffset);
+            getPosition().y + yOffset);
     }
 
     void EditBox::rotate(float offset) {
@@ -132,17 +132,17 @@ namespace IME::Graphics::UI {
 
     void EditBox::scale(float factorX, float factorY) {
         editBox_->setScale({editBox_->getScale().x + factorX,
-                           editBox_->getScale().y + factorY});
+            editBox_->getScale().y + factorY});
     }
 
     void EditBox::hide() {
         editBox_->hideWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+            fadeAnimDuration_);
     }
 
     void EditBox::show() {
         editBox_->showWithEffect(tgui::ShowAnimationType::Fade,
-                                fadeAnimDuration_);
+            fadeAnimDuration_);
     }
 
     bool EditBox::isHidden() const {
@@ -166,7 +166,7 @@ namespace IME::Graphics::UI {
         return false;
     }
 
-    void EditBox::setPosition(Position position) {
+    void EditBox::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -182,7 +182,7 @@ namespace IME::Graphics::UI {
         editBox_->setSize({width, height});
     }
 
-    Dimensions EditBox::getSize() const {
+    Vector2f EditBox::getSize() const {
         return {editBox_->getSize().x, editBox_->getSize().y};
     }
 
@@ -218,8 +218,24 @@ namespace IME::Graphics::UI {
         return editBox_;
     }
 
-    Dimensions EditBox::getAbsoluteSize() {
+    Vector2f EditBox::getAbsoluteSize() {
         return {editBox_->getFullSize().x, editBox_->getFullSize().y};
+    }
+
+    void EditBox::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void EditBox::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void EditBox::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void EditBox::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void EditBox::initEvents() {

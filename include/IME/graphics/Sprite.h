@@ -29,8 +29,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "IME/common/Position.h"
-#include "IME/common/Dimensions.h"
+#include "IME/common/Vector2.h"
 #include "IDrawable.h"
 #include "Colour.h"
 #include "IME/core/animation/Animation.h"
@@ -58,7 +57,7 @@ namespace IME {
              * @brief Set the position of the object
              * @param position New position of the object
              */
-            void setPosition(Position position);
+            void setPosition(Vector2f position);
 
             /**
              * @brief Set the texture of the object
@@ -103,7 +102,7 @@ namespace IME {
              * @brief Get the objects origin
              * @return The objects origin
              */
-            Position getOrigin() const;
+            Vector2f getOrigin() const;
 
             /**
              * @brief Move the sprite by an offset
@@ -123,7 +122,7 @@ namespace IME {
              * @brief Get the position of the object
              * @return Position of the object
              */
-            Position getPosition() const;
+            Vector2f getPosition() const;
 
             /**
              * @brief Get the name of the texture used by the sprite
@@ -135,7 +134,7 @@ namespace IME {
              * @brief Get the size of the object
              * @return The size of the object
              */
-            Dimensions getSize() const;
+            Vector2f getSize() const;
 
             /**
              * @brief Get the colour of the sprite

@@ -29,7 +29,7 @@
 #ifndef ITRANSFORMABLE_H
 #define ITRANSFORMABLE_H
 
-#include "IME/common/Position.h"
+#include "Vector2.h"
 
 namespace IME {
     class ITransformable {
@@ -55,7 +55,7 @@ namespace IME {
          * position instead. The default position of a transformable object
          * is (0, 0).
          */
-        virtual void setPosition(Position position) = 0;
+        virtual void setPosition(Vector2f position) = 0;
 
         /**
          * @brief Set the orientation of the object
@@ -65,17 +65,31 @@ namespace IME {
          * See the rotate function to add an angle based on the previous
          * rotation instead. The default rotation of a transformable object
          * is 0.
+         *
+         * @see rotate
          */
         virtual void setRotation(float angle) = 0;
 
         /**
-         * @brief set the scale factors of the object
+         * @brief Set the scale factors of the object
          * @param factorX New horizontal scale factor
          * @param factorY New vertical scale factor
          *
-         * This function completely overwrites the previous scale.
+         * This function completely overwrites the previous scale
+         *
+         * @see scale
          */
         virtual void setScale(float factorX, float factorY) = 0;
+
+        /**
+         * @brief Set the scale factors of the object
+         * @param scale New scale
+         *
+         * This function completely overwrites the previous scale
+         *
+         * @see scale
+         */
+        virtual void setScale(Vector2f scale) = 0;
 
         /**
          * @brief set the local origin of the object
@@ -87,21 +101,34 @@ namespace IME {
          * The coordinates of this point must be relative to the
          * top-left corner of the object, and ignore all
          * transformations (position, scale, rotation).
-         * The default origin of a transformable object is (0, 0).
+         * The default origin of a transformable object is (0, 0)
          */
         virtual void setOrigin(float x, float y) = 0;
+
+        /**
+         * @brief set the local origin of the object
+         * @param origin New origin
+         *
+         * The origin of an object defines the center point for
+         * all transformations (position, scale, rotation).
+         * The coordinates of this point must be relative to the
+         * top-left corner of the object, and ignore all
+         * transformations (position, scale, rotation).
+         * The default origin of a transformable object is (0, 0)
+         */
+        virtual void setOrigin(Vector2f origin) = 0;
 
         /**
          * @brief Get the position of the object
          * @return Current position of the object
          */
-        virtual Position getPosition() const = 0;
+        virtual Vector2f getPosition() const = 0;
 
         /**
          * @brief Get the local origin of the object
          * @return get the local origin of the object
          */
-        virtual Position getOrigin() const = 0;
+        virtual Vector2f getOrigin() const = 0;
 
         /**
          * @brief Get the orientation of the object
@@ -117,28 +144,46 @@ namespace IME {
          * @param offsetY Vertical offset
          *
          * This function adds to the current position of the object,
-         * unlike setPosition which overwrites it.
+         * unlike @see setPosition which overwrites it
          */
         virtual void move(float offsetX, float offsetY) = 0;
+
+        /**
+         * @brief Move the object by a given offset
+         * @param offset Offset to apply
+         *
+         * This function adds to the current position of the object,
+         * unlike @see setPosition which overwrites it
+         */
+        virtual void move(Vector2f offset) = 0;
 
         /**
          * @brief Rotate the object
          * @param angle Angle of rotation, in degrees
          *
          * This function adds to the current rotation of the object,
-         * unlike setRotation which overwrites it
+         * unlike @see setRotation which overwrites it
          */
         virtual void rotate(float angle) = 0;
 
         /**
-         * @brief Scale the object
+         * @brief Scale the object by an offset
          * @param factorX Horizontal scale factor
          * @param factorY Vertical scale factor
          *
          * This function multiplies the current scale of the object,
-         * unlike setScale which overwrites it.
+         * unlike @see setScale which overwrites it
          */
         virtual void scale(float factorX, float factorY) = 0;
+
+        /**
+         * @brief Scale the object by an offset
+         * @param offset Offset to apply
+         *
+         * This function multiplies the current scale of the object,
+         * unlike @see setScale which overwrites it
+         */
+        virtual void scale(Vector2f offset) = 0;
 
         /**
          * @brief Destructor

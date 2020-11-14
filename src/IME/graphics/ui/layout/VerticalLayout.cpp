@@ -57,11 +57,11 @@ namespace IME::Graphics::UI {
         layout_->setSize({width, height});
     }
 
-    Dimensions VerticalLayout::getSize() const {
+    Vector2f VerticalLayout::getSize() const {
         return {layout_->getSize().x, layout_->getSize().y};
     }
 
-    Dimensions VerticalLayout::getAbsoluteSize() {
+    Vector2f VerticalLayout::getAbsoluteSize() {
         return {layout_->getFullSize().x, layout_->getFullSize().y};
     }
 
@@ -104,7 +104,7 @@ namespace IME::Graphics::UI {
         layout_->setPosition({x, y});
     }
 
-    void VerticalLayout::setPosition(Position position) {
+    void VerticalLayout::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -120,11 +120,11 @@ namespace IME::Graphics::UI {
         layout_->setOrigin({x, y});
     }
 
-    Position VerticalLayout::getPosition() const {
+    Vector2f VerticalLayout::getPosition() const {
         return {layout_->getPosition().x, layout_->getPosition().y};
     }
 
-    Position VerticalLayout::getOrigin() const {
+    Vector2f VerticalLayout::getOrigin() const {
         return {layout_->getOrigin().x, layout_->getOrigin().y};
     }
 
@@ -249,7 +249,7 @@ namespace IME::Graphics::UI {
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> VerticalLayout::getWidgetAtPosition(Position pos) const {
+    std::shared_ptr<UI::IWidget> VerticalLayout::getWidgetAtPosition(Vector2f pos) const {
         auto widget = layout_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
@@ -266,6 +266,22 @@ namespace IME::Graphics::UI {
 
     std::shared_ptr<tgui::Widget> VerticalLayout::getInternalPtr() {
         return layout_;
+    }
+
+    void VerticalLayout::setScale(Vector2f scale) {
+        setScale(scale.x, scale.y);
+    }
+
+    void VerticalLayout::setOrigin(Vector2f origin) {
+        setOrigin(origin.x, origin.y);
+    }
+
+    void VerticalLayout::move(Vector2f offset) {
+        move(offset.x, offset.y);
+    }
+
+    void VerticalLayout::scale(Vector2f offset) {
+        scale(offset.x, offset.y);
     }
 
     void VerticalLayout::initEvents() {

@@ -40,7 +40,7 @@ namespace IME {
          * @brief Initialize the algorithm
          * @param gridSize Size of the grid
          */
-        explicit DFSPathFinder(Dimensions gridSize);
+        explicit DFSPathFinder(Vector2u gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid
