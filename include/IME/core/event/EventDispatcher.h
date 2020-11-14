@@ -37,12 +37,13 @@
 #ifndef IME_EVENTDISPATCHER_H
 #define IME_EVENTDISPATCHER_H
 
+#include "IME/Config.h"
 #include "EventEmitter.h"
 #include <memory>
 #include <string>
 
 namespace IME {
-    class EventDispatcher {
+    class IME_API EventDispatcher {
     public:
         /**
          * @brief Copy constructor

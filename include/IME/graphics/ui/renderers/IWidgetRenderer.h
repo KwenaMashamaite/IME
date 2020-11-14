@@ -29,8 +29,9 @@
 #ifndef IME_IWIDGETRENDERER_H
 #define IME_IWIDGETRENDERER_H
 
-#include <TGUI/Renderers/WidgetRenderer.hpp>
+#include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
+#include <TGUI/Renderers/WidgetRenderer.hpp>
 #include <string>
 
 namespace IME {

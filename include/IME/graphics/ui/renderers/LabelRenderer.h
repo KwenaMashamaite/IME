@@ -40,7 +40,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class LabelRenderer : public IWidgetRenderer {
+        class IME_API LabelRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Change the ize of the widget borders

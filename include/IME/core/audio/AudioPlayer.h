@@ -29,6 +29,7 @@
 #ifndef IME_AUDIOPLAYER_H
 #define IME_AUDIOPLAYER_H
 
+#include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
 #include <initializer_list>
 #include <string>
@@ -50,7 +51,7 @@ namespace IME {
             float Microseconds;
         };
 
-        class AudioPlayer : public EventEmitter{
+        class IME_API AudioPlayer : public EventEmitter{
         public:
             /**
              * @brief Default constructor

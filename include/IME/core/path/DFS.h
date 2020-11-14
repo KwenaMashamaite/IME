@@ -34,7 +34,7 @@
 #include "AdjacencyList.h"
 
 namespace IME {
-    class DFSPathFinder : public IGridPathFinder {
+    class IME_API DFSPathFinder : public IGridPathFinder {
     public:
         /**
          * @brief Initialize the algorithm

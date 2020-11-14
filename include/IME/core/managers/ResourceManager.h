@@ -30,6 +30,7 @@
 #ifndef IME_RESOURCEMANAGER_H
 #define IME_RESOURCEMANAGER_H
 
+#include "IME/Config.h"
 #include "IME/core/resources/ResourceHolder.h"
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Audio/Music.hpp>
@@ -53,7 +54,7 @@ namespace IME {
         Music
     };
 
-    class ResourceManager final {
+    class IME_API ResourceManager final {
     public:
         /**
          * @brief Load a resource from the hard drive

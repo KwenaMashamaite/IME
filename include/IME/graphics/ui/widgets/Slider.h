@@ -35,7 +35,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class Slider : public IWidget {
+        class IME_API Slider : public IWidget {
         public:
             /**
              * @brief Construct a slider

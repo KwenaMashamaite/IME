@@ -35,7 +35,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class EditBox : public IClickableWidget {
+        class IME_API EditBox : public IClickableWidget {
         public:
             /**
              * @brief Construct an edit box

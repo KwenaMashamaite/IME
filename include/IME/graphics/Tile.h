@@ -63,7 +63,7 @@ namespace IME {
             Enemy
         };
 
-        class Tile : public IDrawable {
+        class IME_API Tile : public IDrawable {
         public:
             /**
              * @brief Construct a tile

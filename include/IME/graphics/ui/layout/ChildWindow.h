@@ -35,7 +35,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class ChildWindow : public IContainer {
+        class IME_API ChildWindow : public IContainer {
         public:
             /// Title alignments, possible options for the setTitleAlignment function
             enum class TitleAlignment {

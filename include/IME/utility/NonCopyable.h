@@ -32,9 +32,11 @@
 #ifndef IME_NONCOPYABLE_H
 #define IME_NONCOPYABLE_H
 
+#include "IME/Config.h"
+
 namespace IME {
     namespace Utility {
-        class NonCopyable {
+        class IME_API NonCopyable {
         public:
             /**
              * @brief Copy constructor

@@ -35,7 +35,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class CheckBox : public IClickableWidget {
+        class IME_API CheckBox : public IClickableWidget {
         public:
             /**
              * @brief Create the checkbox

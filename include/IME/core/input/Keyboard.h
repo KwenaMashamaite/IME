@@ -29,12 +29,13 @@
 #ifndef IME_KEYBOARD_H
 #define IME_KEYBOARD_H
 
+#include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>
 
 namespace IME {
     namespace Input {
-        class Keyboard {
+        class IME_API Keyboard {
         public:
             enum class Event {
                 KeyDown,

@@ -29,9 +29,11 @@
 #ifndef IME_COLOUR_H
 #define IME_COLOUR_H
 
+#include "IME/Config.h"
+
 namespace IME {
     namespace Graphics {
-        class Colour {
+        class IME_API Colour {
         public:
             // Predefined colours
             static const Colour Black;

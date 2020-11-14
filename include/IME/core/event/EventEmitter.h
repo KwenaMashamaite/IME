@@ -38,6 +38,7 @@
 #ifndef IME_EVENTEMITTER_H
 #define IME_EVENTEMITTER_H
 
+#include "IME/Config.h"
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -49,7 +50,7 @@ namespace IME {
     template <typename... Args>
     using Callback = std::function<void(Args...)>;
 
-    class EventEmitter {
+    class IME_API EventEmitter {
     public:
         /**
          * @brief Default copy constructor

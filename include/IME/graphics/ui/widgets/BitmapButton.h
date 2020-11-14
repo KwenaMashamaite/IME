@@ -36,7 +36,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class BitmapButton : public IClickableWidget {
+        class IME_API BitmapButton : public IClickableWidget {
         public:
             /**
              * @brief Construct an empty bitmap button

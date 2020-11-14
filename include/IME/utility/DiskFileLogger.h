@@ -29,11 +29,12 @@
 #ifndef IME_DISKFILELOGGER_H
 #define IME_DISKFILELOGGER_H
 
+#include "IME/Config.h"
 #include "ILogger.h"
 
 namespace IME {
     namespace Utility {
-        class DiskFileLogger : public ILogger {
+        class IME_API DiskFileLogger : public ILogger {
         public:
             /**
              * @brief Constructor

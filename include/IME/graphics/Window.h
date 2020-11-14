@@ -29,6 +29,7 @@
 #ifndef IME_WINDOW_H
 #define IME_WINDOW_H
 
+#include "IME/Config.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IDrawable.h"
@@ -42,7 +43,7 @@ namespace IME {
             class GuiContainer;
         }
 
-        class Window : Utility::NonCopyable {
+        class IME_API Window : Utility::NonCopyable {
         public:
             /**
              * @brief Window styles

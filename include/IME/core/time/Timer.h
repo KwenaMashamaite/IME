@@ -29,13 +29,14 @@
 #ifndef IME_TIMER_H
 #define IME_TIMER_H
 
+#include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
 #include <chrono>
 #include <thread>
 
 namespace IME {
     namespace Time {
-        class Timer {
+        class IME_API Timer {
         public:
             /**
              * @brief Execute a one time callback function after a delay

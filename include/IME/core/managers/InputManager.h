@@ -29,12 +29,13 @@
 #ifndef IME_INPUTMANAGER_H
 #define IME_INPUTMANAGER_H
 
+#include "IME/Config.h"
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"
 
 namespace IME {
     namespace Input {
-        class InputManager {
+        class IME_API InputManager {
         public:
             /**
              * @brief Check if a key is currently pressed or not

@@ -34,12 +34,13 @@
 #ifndef IME_GRIDMOVER_H
 #define IME_GRIDMOVER_H
 
+#include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/entity/Entity.h"
 #include "IME/core/event/EventEmitter.h"
 
 namespace IME {
-    class GridMover {
+    class IME_API GridMover {
     public:
         using EntityPtr = std::shared_ptr<Entity>;
         /**

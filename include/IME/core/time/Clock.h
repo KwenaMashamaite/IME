@@ -29,9 +29,11 @@
 #ifndef IME_CLOCK_H
 #define IME_CLOCK_H
 
+#include "IME/Config.h"
+
 namespace IME {
     namespace Time {
-        class Clock {
+        class IME_API Clock {
         public:
             /**
              * @brief Constructor

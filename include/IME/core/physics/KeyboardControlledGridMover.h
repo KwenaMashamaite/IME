@@ -41,7 +41,7 @@ namespace IME {
         OnKeyUp    // Only triggers when a key is released
     };
 
-    class KeyboardControlledGridMover {
+    class IME_API KeyboardControlledGridMover {
     public:
         using EntityPtr = std::shared_ptr<Entity>;
 

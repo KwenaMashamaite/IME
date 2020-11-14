@@ -30,13 +30,14 @@
 #ifndef IME_COLLISIONDETECTOR_H
 #define IME_COLLISIONDETECTOR_H
 
+#include "IME/Config.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/core/entity/Entity.h"
 
 namespace IME {
-    class CollisionDetector {
+    class IME_API CollisionDetector {
     public:
         /**
          * @brief Check for a collision between two entities

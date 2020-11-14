@@ -39,7 +39,7 @@
 
 namespace IME {
     namespace Graphics {
-        class Sprite : public IDrawable {
+        class IME_API Sprite : public IDrawable {
         public:
             /**
              * @brief Default constructor

@@ -34,7 +34,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class IContainer : public IWidget {
+        class IME_API IContainer : public IWidget {
         public:
             /**
              * @brief Add a widget to the container

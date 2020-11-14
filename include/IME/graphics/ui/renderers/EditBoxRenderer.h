@@ -39,7 +39,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class EditBoxRenderer : public IWidgetRenderer {
+        class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Set the text style

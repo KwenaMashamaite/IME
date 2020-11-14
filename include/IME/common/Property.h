@@ -29,10 +29,11 @@
 #ifndef IME_PROPERTY_H
 #define IME_PROPERTY_H
 
-#include<string>
+#include "IME/Config.h"
+#include <string>
 
 namespace IME {
-    class Property {
+    class IME_API Property {
     public:
         /**
          * @brief Constructor

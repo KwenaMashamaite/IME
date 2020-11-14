@@ -109,6 +109,7 @@ namespace IME {
 
         setFPSLimit(std::stoi(settings_.getValueFor("fpsLimit")));
         window_.setIcon("icon.png");
+
     }
 
     void Engine::initResourceManager() {

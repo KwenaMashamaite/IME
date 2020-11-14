@@ -39,7 +39,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class ButtonRenderer : public IWidgetRenderer {
+        class IME_API ButtonRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Change the ize of the widget borders

@@ -37,7 +37,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class HorizontalLayout : public IBoxLayout {
+        class IME_API HorizontalLayout : public IBoxLayout {
         public:
             /**
              * @brief Create a horizontal layout

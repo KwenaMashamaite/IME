@@ -39,7 +39,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class CheckBoxRenderer : public IWidgetRenderer {
+        class IME_API CheckBoxRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Change the ize of the widget borders

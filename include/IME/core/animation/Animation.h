@@ -29,6 +29,7 @@
 #ifndef IME_ANIMATION_H
 #define IME_ANIMATION_H
 
+#include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include <string>
@@ -43,7 +44,7 @@ namespace IME {
         Vertical
     };
 
-    class Animation {
+    class IME_API Animation {
     public:
         /**
          * @brief Create a new animation

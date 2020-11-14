@@ -29,11 +29,12 @@
 #ifndef IME_GRIDPATHFINDER_H
 #define IME_GRIDPATHFINDER_H
 
+#include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
 #include <stack>
 
 namespace IME {
-    class IGridPathFinder {
+    class IME_API IGridPathFinder {
     public:
         /**
          * @brief Find a path from a source tile to a target tile in a grid

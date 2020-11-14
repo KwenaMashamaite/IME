@@ -29,6 +29,7 @@
 #ifndef IME_DISKFILEREADER_H
 #define IME_DISKFILEREADER_H
 
+#include "IME/Config.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -43,7 +44,7 @@ namespace IME {
             Append     // Appends (At the end of file) new data to existing data
         };
 
-        class DiskFileReader {
+        class IME_API DiskFileReader {
         public:
             /**
              * @brief Read data from a file on the disk

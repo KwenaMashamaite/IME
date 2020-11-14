@@ -29,12 +29,13 @@
 #ifndef IME_PROPERTIES_H
 #define IME_PROPERTIES_H
 
+#include "IME/Config.h"
 #include "IME/common/Property.h"
 #include <string>
 #include <vector>
 
 namespace IME {
-    class PropertyContainer {
+    class IME_API PropertyContainer {
     public:
         /**
          * @brief Default constructor

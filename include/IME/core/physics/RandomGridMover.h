@@ -32,7 +32,7 @@
 #include "GridMover.h"
 
 namespace IME {
-    class RandomGridMover {
+    class IME_API RandomGridMover {
     public:
         using EntityPtr = std::shared_ptr<Entity>;
         /**

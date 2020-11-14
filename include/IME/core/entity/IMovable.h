@@ -29,8 +29,10 @@
 #ifndef IME_IMOVABLE_H
 #define IME_IMOVABLE_H
 
+#include "IME/Config.h"
+
 namespace IME {
-    class IMovable {
+    class IME_API IMovable {
     public:
         /**
          * @brief Move the object in the current direction at the current speed

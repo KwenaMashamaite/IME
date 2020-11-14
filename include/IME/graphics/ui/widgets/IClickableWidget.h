@@ -34,7 +34,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class IClickableWidget : public IWidget {
+        class IME_API IClickableWidget : public IWidget {
         public:
             /**
              * @brief Enable or disable the widget

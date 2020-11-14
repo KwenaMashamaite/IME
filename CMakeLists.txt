@@ -87,6 +87,24 @@ if(IME_OS_WINDOWS AND IME_COMPILER_MSVC AND IME_USE_STATIC_STD_LIBS)
     endforeach()
 endif()
 
+# Link SFML in the same way as IME, unless SFML_STATIC_LIBRARIES is manually specified
+if(NOT DEFINED SFML_STATIC_LIBRARIES)
+    if(IME_SHARED_LIBS)
+        set(SFML_STATIC_LIBRARIES FALSE)
+    else()
+        set(SFML_STATIC_LIBRARIES TRUE)
+    endif()
+endif()
+
+# Link TGUI in the same way as IME, unless IME_STATIC_LIBRARIES is manually specified
+if(NOT DEFINED TGUI_STATIC_LIBRARIES)
+    if(IME_SHARED_LIBS)
+        set(TGUI_STATIC_LIBRARIES FALSE)
+    else()
+        set(TGUI_STATIC_LIBRARIES TRUE)
+    endif()
+endif()
+
 # Find SFML if not build in same project
 if (NOT TARGET sfml-system OR NOT TARGET sfml-window OR NOT TARGET sfml-graphics OR NOT TARGET sfml-audio)
     find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
@@ -102,6 +120,9 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 # Add source directory
 add_subdirectory(src/IME)
+
+# Generate the Config.hpp header
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/IME/Config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/IME/Config.h @ONLY)
 
 # Build the documentation when requested
 if(IME_BUILD_DOC)

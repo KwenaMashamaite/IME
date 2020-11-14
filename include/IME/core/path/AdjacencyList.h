@@ -31,10 +31,11 @@
 #ifndef IME_ADJACENCYLIST_H
 #define IME_ADJACENCYLIST_H
 
+#include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
 
 namespace IME {
-    class AdjacencyList {
+    class IME_API AdjacencyList {
     public:
         /**
          * @brief Generate adjacency list from a tilemap

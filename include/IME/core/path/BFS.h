@@ -35,7 +35,7 @@
 #include <queue>
 
 namespace IME {
-    class BFSPathFinder : public IGridPathFinder {
+    class IME_API BFSPathFinder : public IGridPathFinder {
     public:
         /**
          * @brief Initialize the algorithm

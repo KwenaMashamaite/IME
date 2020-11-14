@@ -43,7 +43,7 @@ namespace IME {
 
         class IWidget;
 
-        class GuiContainer {
+        class IME_API GuiContainer {
         public:
             /**
              * @brief Construct the gui
@@ -209,9 +209,23 @@ namespace IME {
              *
              * The gui will first search for widgets that are direct children
              * of it, but when none of the child widgets match the given name,
-             * a recursive search will be performed.
+             * a recursive search will be performed
              */
             std::shared_ptr<IWidget> getWidget(const std::string& widgetName) const;
+
+            /**
+             * @brief Get a pointer to a widget in the gui
+             * @param widgetName Name of the widget to retrieve
+             * @return Pointer to the specified widget or a nullptr if the gui
+             *         does not have a widget with the specified name or T is
+             *         invalid
+             *
+             * @note The pointer will already be casted to the desired type (T)
+             */
+            template <class T>
+            std::shared_ptr<T> getWidget(const std::string& widgetName) const {
+                return std::dynamic_pointer_cast<T>(getWidget(widgetName));
+            }
 
             /**
              * @brief Remove a widget from the gui

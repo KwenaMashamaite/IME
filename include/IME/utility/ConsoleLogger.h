@@ -29,12 +29,13 @@
 #ifndef IME_CONSOLELOGGER_H
 #define IME_CONSOLELOGGER_H
 
+#include "IME/Config.h"
 #include "ILogger.h"
 #include <mutex>
 
 namespace IME {
     namespace Utility {
-        class ConsoleLogger : public ILogger {
+        class IME_API ConsoleLogger : public ILogger {
         public:
             /**
              * @brief Log message to the console

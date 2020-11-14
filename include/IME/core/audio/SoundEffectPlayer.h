@@ -37,13 +37,14 @@
 #ifndef IME_SOUNDEFFECTPLAYER_H
 #define IME_SOUNDEFFECTPLAYER_H
 
+#include "IME/Config.h"
 #include "AudioPlayer.h"
 #include <SFML/Audio.hpp>
 #include <string>
 
 namespace IME {
     namespace Audio {
-        class SoundEffectPlayer final : public AudioPlayer {
+        class IME_API SoundEffectPlayer final : public AudioPlayer {
         public:
             /**
              * @brief Play sound

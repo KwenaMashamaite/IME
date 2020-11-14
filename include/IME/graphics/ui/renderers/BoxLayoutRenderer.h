@@ -38,7 +38,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class BoxLayoutRenderer : public IWidgetRenderer {
+        class IME_API BoxLayoutRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Set the size of the padding

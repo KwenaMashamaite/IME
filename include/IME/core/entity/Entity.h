@@ -29,6 +29,7 @@
 #ifndef IME_IENTITY_H
 #define IME_IENTITY_H
 
+#include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Direction.h"
 #include "IME/core/event/EventEmitter.h"
@@ -37,7 +38,7 @@
 #include <memory>
 
 namespace IME {
-    class Entity {
+    class IME_API Entity {
     public:
         /**
          * @brief Construct entity
@@ -65,7 +66,7 @@ namespace IME {
          * @brief Get the dimensions of the entity's bounding box
          * @return Dimensions of the entity's bounding box
          */
-        Vector2f getSize() const;
+        Vector2u getSize() const;
 
         /**
          * @brief Set the alive state of the entity
@@ -200,7 +201,7 @@ namespace IME {
         //Objects unique identifier
         std::size_t id_;
         //The entities bounding rectangle
-        Vector2f boundingRect_;
+        Vector2u boundingRect_;
         //Vulnerability state state
         bool isVulnerable_;
         //The entities alive state

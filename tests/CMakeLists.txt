@@ -16,4 +16,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 add_executable(tests ${SRC_FILES})
 
 # Link IME, TGUI and SFML
-target_link_libraries(tests PRIVATE ime tgui sfml-graphics sfml-window sfml-system sfml-audio)
+target_link_libraries(tests PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio ime)

@@ -36,7 +36,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class Label : public IWidget {
+        class IME_API Label : public IWidget {
         public:
             /**
              * @brief Create a label

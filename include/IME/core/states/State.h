@@ -29,6 +29,7 @@
 #ifndef IME_STATE_H
 #define IME_STATE_H
 
+#include "IME/Config.h"
 #include "IME/graphics/Window.h"
 #include <SFML/Window/Event.hpp>
 #include <string>
@@ -36,7 +37,7 @@
 namespace IME {
     class Engine;
 
-    class State {
+    class IME_API State {
     public:
         /**
          * @brief Constructor

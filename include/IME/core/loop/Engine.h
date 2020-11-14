@@ -29,6 +29,7 @@
 #ifndef IME_ENGINE_H
 #define IME_ENGINE_H
 
+#include "IME/Config.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/core/managers/AudioManager.h"
@@ -38,7 +39,7 @@
 #include "IME/core/states/StateManager.h"
 
 namespace IME {
-    class Engine {
+    class IME_API Engine {
     public:
         /**
          * @brief Constructor

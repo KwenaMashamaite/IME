@@ -29,11 +29,12 @@
 #ifndef IME_CONFIGFILEPARSER_H
 #define IME_CONFIGFILEPARSER_H
 
+#include "IME/Config.h"
 #include "IME/common/PropertiesContainer.h"
 
 namespace IME {
     namespace Utility {
-        class ConfigFileParser {
+        class IME_API ConfigFileParser {
         public:
             /**
              * @brief Parse a config file

@@ -31,6 +31,7 @@
 #ifndef IME_TILEMAP_H
 #define IME_TILEMAP_H
 
+#include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/entity/Entity.h"
@@ -42,7 +43,7 @@ namespace IME {
     //Alias for 2D vector
     using Map = std::vector<std::vector<char>>;
 
-    class TileMap {
+    class IME_API TileMap {
     public:
         /**
          * @brief Create an empty tilemap

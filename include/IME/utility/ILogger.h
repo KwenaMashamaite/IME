@@ -40,7 +40,7 @@ namespace IME {
             Error    // Error message
         };
 
-        class ILogger {
+        class IME_API ILogger {
         public:
             /**
              * @brief Log message

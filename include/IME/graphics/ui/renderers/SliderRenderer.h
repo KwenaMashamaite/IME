@@ -37,7 +37,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class SliderRenderer : public IWidgetRenderer {
+        class IME_API SliderRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Change the ize of the widget borders

@@ -32,6 +32,7 @@
 #ifndef IME_ANIMATOR_H
 #define IME_ANIMATOR_H
 
+#include "IME/Config.h"
 #include "Animation.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
@@ -42,7 +43,7 @@
 #include <utility>
 
 namespace IME {
-    class Animator {
+    class IME_API Animator {
     public:
         using Animations = std::initializer_list<std::shared_ptr<Animation>>;
 

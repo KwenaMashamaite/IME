@@ -42,7 +42,7 @@ namespace IME {
     class Animator;
 
     namespace Graphics {
-        class AnimatableSprite : public Sprite {
+        class IME_API AnimatableSprite : public Sprite {
         public:
             /**
              * @brief Construct an animatable sprite

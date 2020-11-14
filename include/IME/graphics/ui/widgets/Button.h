@@ -36,7 +36,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class Button : public IClickableWidget {
+        class IME_API Button : public IClickableWidget {
         public:
             /**
              * @brief Create a button

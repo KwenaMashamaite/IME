@@ -36,6 +36,7 @@
 #ifndef IME_MUSICPLAYER_H
 #define IME_MUSICPLAYER_H
 
+#include "IME/Config.h"
 #include "AudioPlayer.h"
 #include <SFML/Audio.hpp>
 #include <string>
@@ -43,7 +44,7 @@
 
 namespace IME {
     namespace Audio {
-        class MusicPlayer final : public AudioPlayer{
+        class IME_API MusicPlayer final : public AudioPlayer{
         public:
             /**
              * @brief play music file

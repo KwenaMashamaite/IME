@@ -31,7 +31,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class ProgressBar : public IClickableWidget {
+        class IME_API ProgressBar : public IClickableWidget {
         public:
             /**
              * @brief Determines in which direction the progress bar is filled

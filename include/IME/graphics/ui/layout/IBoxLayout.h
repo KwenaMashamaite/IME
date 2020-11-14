@@ -33,7 +33,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class IBoxLayout : public IContainer {
+        class IME_API IBoxLayout : public IContainer {
         public:
             /**
              * @brief Insert a widget to the container

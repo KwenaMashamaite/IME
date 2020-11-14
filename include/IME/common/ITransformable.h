@@ -29,10 +29,11 @@
 #ifndef IME_ITRANSFORMABLE_H
 #define IME_ITRANSFORMABLE_H
 
+#include "IME/Config.h"
 #include "Vector2.h"
 
 namespace IME {
-    class ITransformable {
+    class IME_API ITransformable {
     public:
         /**
          * @brief Set the position of the object

@@ -33,6 +33,7 @@
 #ifndef IME_AUDIOMANAGER_H
 #define IME_AUDIOMANAGER_H
 
+#include "IME/Config.h"
 #include "IME/core/audio/AudioPlayer.h"
 #include "IME/core/audio/MusicPlayer.h"
 #include "IME/core/audio/SoundEffectPlayer.h"

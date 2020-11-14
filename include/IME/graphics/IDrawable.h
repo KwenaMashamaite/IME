@@ -29,11 +29,13 @@
 #ifndef IME_IDRAWABLE_H
 #define IME_IDRAWABLE_H
 
+#include "IME/Config.h"
+
 namespace IME {
     namespace Graphics {
         class Window; //Forward declaration
 
-        class IDrawable {
+        class IME_API IDrawable {
         public:
             /**
              * @brief Draw object on a render target

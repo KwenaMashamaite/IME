@@ -33,7 +33,7 @@
 #include "IME/core/path/IGridPathFinder.h"
 
 namespace IME {
-    class TargetGridMover {
+    class IME_API TargetGridMover {
     public:
         using EntityPtr = std::shared_ptr<Entity>;
 

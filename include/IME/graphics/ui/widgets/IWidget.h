@@ -29,6 +29,7 @@
 #ifndef IME_IWIDGET_H
 #define IME_IWIDGET_H
 
+#include "IME/Config.h"
 #include "IME/graphics/Window.h"
 #include "IME/graphics/IDrawable.h"
 #include "IME/graphics/Colour.h"
@@ -42,7 +43,7 @@
 
 namespace IME {
     namespace Graphics::UI {
-        class IWidget : public ITransformable, public EventEmitter {
+        class IME_API IWidget : public ITransformable, public EventEmitter {
         public:
             /**
              * @brief Set the character size of the widget's text

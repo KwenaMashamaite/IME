@@ -29,6 +29,7 @@
 #ifndef IME_UTILITY_H
 #define IME_UTILITY_H
 
+#include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Color.hpp>
@@ -121,7 +122,7 @@ namespace IME::Utility {
      * @param max The end of the range
      * @return A random number in the given range
      */
-    extern int generateRandomNum(int min, int max);
+    IME_API extern int generateRandomNum(int min, int max);
 
     /**
      * @brief Create a callable that generates random numbers in a range
@@ -136,7 +137,7 @@ namespace IME::Utility {
      * @brief Create a random colour
      * @return A random colour
      */
-    extern Graphics::Colour generateRandomColour();
+    IME_API extern Graphics::Colour generateRandomColour();
 
     /**
      * @internal

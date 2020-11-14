@@ -29,12 +29,13 @@
 #ifndef IME_MOUSE_H
 #define IME_MOUSE_H
 
+#include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>
 
 namespace IME {
     namespace Input {
-        class Mouse {
+        class IME_API Mouse {
         public:
             enum class Event {
                 MouseDown,
