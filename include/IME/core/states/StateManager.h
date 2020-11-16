@@ -29,12 +29,13 @@
 #ifndef IME_STATEMANAGER_H
 #define IME_STATEMANAGER_H
 
+#include "IME/Config.h"
 #include "State.h"
 #include <stack>
 #include <memory>
 
 namespace IME {
-    class StateManager {
+    class IME_API StateManager {
     public:
         /**
          * @brief Add a state

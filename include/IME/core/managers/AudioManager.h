@@ -53,7 +53,7 @@ namespace IME {
             Music
         };
 
-        class AudioManager {
+        class IME_API AudioManager {
         public:
             /**
              * @brief Default constructor
