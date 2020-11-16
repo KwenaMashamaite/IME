@@ -77,6 +77,7 @@ namespace IME::Utility {
     extern Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
 
     /**
+     * @internal
      * @brief Check if an item exists or not in an unordered map
      * @param unorderedMap Map to search for item in
      * @param item Item to search for
@@ -86,6 +87,7 @@ namespace IME::Utility {
     bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item);
 
     /**
+     * @internal
      * @brief Erase an item from the map
      * @param unorderedMap Map to remove item from
      * @param item Item to be removed
@@ -95,6 +97,7 @@ namespace IME::Utility {
     bool eraseIn(std::unordered_map<T, U>& unorderedMap, const V& item);
 
     /**
+     * @internal
      * @brief Find an item in vector
      * @param vector Vector to search item in
      * @param item Item to search for
@@ -107,6 +110,7 @@ namespace IME::Utility {
     std::pair<bool, int> findIn(const std::vector<T> vector, const U& item);
 
     /**
+     * @internal
      * @brief Erase an element from a vector
      * @param vector Vector to remove element from
      * @param element Element to be removed
