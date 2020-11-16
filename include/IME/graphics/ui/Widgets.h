@@ -26,15 +26,18 @@
  * @brief Includes all widgets
  */
 
-#ifndef IME_ALLWIDGETS_H
-#define IME_ALLWIDGETS_H
+#ifndef IME_WIDGETS_H
+#define IME_WIDGETS_H
 
-#include "Label.h"
-#include "Button.h"
-#include "BitmapButton.h"
-#include "Slider.h"
-#include "CheckBox.h"
-#include "EditBox.h"
-#include "ProgressBar.h"
+#include "IME/graphics/ui/widgets/Label.h"
+#include "IME/graphics/ui/widgets/Button.h"
+#include "IME/graphics/ui/widgets/BitmapButton.h"
+#include "IME/graphics/ui/widgets/Slider.h"
+#include "IME/graphics/ui/widgets/CheckBox.h"
+#include "IME/graphics/ui/widgets/EditBox.h"
+#include "IME/graphics/ui/widgets/ProgressBar.h"
+#include "IME/graphics/ui/widgets/VerticalLayout.h"
+#include "IME/graphics/ui/widgets/HorizontalLayout.h"
+#include "IME/graphics/ui/widgets/ChildWindow.h"
 
 #endif

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/ui/layout/ChildWindow.h"
+#include "IME/graphics/ui/widgets/ChildWindow.h"
 #include "IME/utility/Helpers.h"
 #include <cassert>
 

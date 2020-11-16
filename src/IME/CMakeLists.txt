@@ -29,9 +29,9 @@ set(IME_SRC
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
-    graphics/ui/layout/ChildWindow.cpp
-    graphics/ui/layout/VerticalLayout.cpp
-    graphics/ui/layout/HorizontalLayout.cpp
+    graphics/ui/widgets/ChildWindow.cpp
+    graphics/ui/widgets/VerticalLayout.cpp
+    graphics/ui/widgets/HorizontalLayout.cpp
     graphics/ui/renderers/BoxLayoutRenderer.cpp
     graphics/ui/renderers/ButtonRenderer.cpp
     graphics/ui/renderers/CheckBoxRenderer.cpp

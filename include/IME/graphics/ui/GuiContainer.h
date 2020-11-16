@@ -29,20 +29,16 @@
 #ifndef IME_GUI_H
 #define IME_GUI_H
 
+#include "IME/Config.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Vector2.h"
 #include "IME/graphics/CursorTypes.h"
-#include "IME/graphics/ui/layout/IContainer.h"
+#include "IME/graphics/ui/widgets/IWidget.h"
+#include "IME/graphics/Window.h"
 #include <unordered_map>
 
 namespace IME {
     namespace Graphics::UI {
-        namespace Graphics {
-            class Window;
-        }
-
-        class IWidget;
-
         class IME_API GuiContainer {
         public:
             /**
