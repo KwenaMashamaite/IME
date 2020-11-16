@@ -1,3 +1,7 @@
+# Hide all symbols by default
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+
 set(IME_SRC
     common/Property.cpp
     common/PropertiesContainer.cpp
@@ -97,8 +101,7 @@ if(IME_SHARED_LIBS)
     set_target_properties(ime PROPERTIES DEFINE_SYMBOL IME_EXPORTS)
     set_target_properties(ime PROPERTIES DEBUG_POSTFIX -d)
 
-    # Set the version and soversion of the target
-    set_target_properties(ime PROPERTIES SOVERSION ${IME_VERSION_MAJOR}.${IME_VERSION_MINOR}.${IME_VERSION_PATCH})
+    # Set the version of the target
     set_target_properties(ime PROPERTIES VERSION ${IME_VERSION_MAJOR}.${IME_VERSION_MINOR}.${IME_VERSION_PATCH})
 
     # on Windows/gcc get rid of "lib" prefix for shared libraries,
@@ -168,7 +171,4 @@ install(TARGETS ime EXPORT IMEConfigExport
         )
 
 # Generate the IMEConfig.cmake file
-# This has to happen here instead of in the root CMakeLists.txt because otherwise
-# it might try to write to the macOS framework before the framework is installed.
-# This is because the order of install rules is undefined between directories.
 ime_export_target(IMEConfigExport)

@@ -50,11 +50,6 @@ set(FIND_IME_PATHS
 
 # Choose which target definitions must be imported
 if (IME_STATIC_LIBRARIES)
-	set(IME_IS_FRAMEWORK_INSTALL "@IME_BUILD_FRAMEWORKS@")
-    if (IME_IS_FRAMEWORK_INSTALL)
-        message(WARNING "Static frameworks are not supported by IME. Clear IME_DIR cache entry, \
-and either change IME_STATIC_LIBRARIES or CMAKE_FIND_FRAMEWORK before calling find_package(IME)")
-    endif()
     set(config_name "Static")
 else()
     set(config_name "Shared")

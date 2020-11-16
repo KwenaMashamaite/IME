@@ -28,12 +28,7 @@ function(ime_set_global_compile_flags target)
     endif()
 
     set_target_properties(${target} PROPERTIES CXX_EXTENSIONS OFF)
-    if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
-        set_target_properties(${target} PROPERTIES CXX_STANDARD_REQUIRED ON)
-        set_target_properties(${target} PROPERTIES CXX_STANDARD ${IME_CXX_STANDARD})
-    else() # CMake 3.8 or newer
-        target_compile_features(${target} PUBLIC cxx_std_${IME_CXX_STANDARD})
-    endif()
+    target_compile_features(${target} PUBLIC cxx_std_${IME_CXX_STANDARD})
 endfunction()
 
 # Set the appropriate standard library on each platform for the given target
