@@ -83,11 +83,12 @@ namespace IME {
                 }
         };
 
-        setDefaultValueIfNotSet("windowTitle", "Infinite Motion Engine");
+        setDefaultValueIfNotSet("windowTitle", "Untitled");
         setDefaultValueIfNotSet("windowWidth", "600.0f");
         setDefaultValueIfNotSet("windowHeight", "600.0f");
         setDefaultValueIfNotSet("fullscreen", "0");
         setDefaultValueIfNotSet("fpsLimit", "60");
+        setDefaultValueIfNotSet("vsync", "0");
     }
 
     void Engine::initRenderTarget() {
@@ -107,9 +108,9 @@ namespace IME {
             window_.create(title, width, height, Graphics::Window::Style::Close);
         }
 
-        setFPSLimit(std::stoi(settings_.getValueFor("fpsLimit")));
+        window_.setFramerateLimit(std::stoi(settings_.getValueFor("fpsLimit")));
+        window_.setVsyncEnabled(static_cast<bool>(std::stoi(settings_.getValueFor("vsync"))));
         window_.setIcon("icon.png");
-
     }
 
     void Engine::initResourceManager() {
@@ -124,7 +125,7 @@ namespace IME {
     void Engine::processEvents() {
         sf::Event event;
         while (window_.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed && windowCloseHandler_)
                 windowCloseHandler_();
             statesManager_.getActiveState()->handleEvent(event);
             globalInputManager_.handleEvent(event);
@@ -247,11 +248,6 @@ namespace IME {
 
     bool Engine::isRunning() const {
         return isRunning_;
-    }
-
-    void Engine::setFPSLimit(float fpsLimit) {
-        window_.setFramerateLimit(fpsLimit);
-        window_.setVsyncEnabled(fpsLimit >= 0);
     }
 
     float Engine::getElapsedTime() const {

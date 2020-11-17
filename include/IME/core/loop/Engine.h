@@ -70,14 +70,6 @@ namespace IME {
         void init();
 
         /**
-         * @brief Limit the frame rate of the engines render target
-         * @param fpsLimit The new frame limit
-         *
-         * By default the frame rate is not limited
-         */
-        void setFPSLimit(float fpsLimit);
-
-        /**
          * @brief Start the main loop
          *
          * There must be at least one state added for the engine to run. The
