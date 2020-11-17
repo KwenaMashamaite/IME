@@ -28,16 +28,17 @@
 namespace IME {
     void StateManager::pushState(std::shared_ptr<State> state) {
         assert(state && "A game state cannot be null");
-        if (!states_.empty())
+        if (!states_.empty() && states_.top()->isInitialized())
             states_.top()->pause();
         states_.push(std::move(state));
     }
 
     void StateManager::popState() {
         assert(!states_.empty() && "Cannot pop a state from an empty state manager");
-        states_.top()->exit();
+        if (states_.top()->isInitialized())
+            states_.top()->exit();
         states_.pop();
-        if (!states_.empty())
+        if (!states_.empty() && states_.top()->isInitialized())
             states_.top()->resume();
     }
 
@@ -46,8 +47,8 @@ namespace IME {
     }
 
     void StateManager::clear() {
-        for (auto i = 0; i < states_.size(); i++)
-            states_.pop();
+        while (!isEmpty())
+            popState();
     }
 
     std::shared_ptr<State> StateManager::getActiveState() const {

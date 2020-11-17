@@ -188,18 +188,21 @@ namespace IME {
     }
 
     void Engine::pushState(std::shared_ptr<State> state, Callback<> callback) {
-        if (!isRunning_)
+        if (!isRunning_) {
+            prevStateInputManager_.push(Input::InputManager());
             statesManager_.pushState(std::move(state));
-        else {
+        } else {
             stateToPush_.first = std::move(state);
             stateToPush_.second = callback;
         }
     }
 
     void Engine::popState() {
-        if (!isRunning_ && !statesManager_.isEmpty())
+        if (!isRunning_ && !statesManager_.isEmpty()) {
             statesManager_.popState();
-        else
+            inputManager_ = prevStateInputManager_.top();
+            prevStateInputManager_.pop();
+        } else
             shouldPop_ = true;
     }
 
@@ -209,6 +212,7 @@ namespace IME {
             shouldPop_ = false;
             statesManager_.popState();
             if (!statesManager_.isEmpty()) {
+                //Restore input manager
                 inputManager_ = prevStateInputManager_.top();
                 prevStateInputManager_.pop();
                 if (!statesManager_.getActiveState()->isInitialized())
@@ -219,8 +223,9 @@ namespace IME {
         if (stateToPush_.first) {
             prevStateInputManager_.push(inputManager_);
             inputManager_ = Input::InputManager(); //Clear prev state input handlers
+            statesManager_.pushState(stateToPush_.first);
             stateToPush_.first->initialize();
-            statesManager_.pushState(std::move(stateToPush_.first));
+            stateToPush_.first = nullptr;
             if (stateToPush_.second) { //Invoke post push callback
                 stateToPush_.second();
                 stateToPush_.second = nullptr;
@@ -229,10 +234,7 @@ namespace IME {
     }
 
     void Engine::shutdown() {
-        // Not using statesManager_.clear() because we want remaining
-        // states to be notified that they are being destroyed
-        while (!statesManager_.isEmpty())
-            statesManager_.popState();
+        statesManager_.clear();
         window_.close();
         audioManager_->stopAllAudio();
         inputManager_ = Input::InputManager();
