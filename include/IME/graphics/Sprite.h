@@ -30,6 +30,7 @@
 #define IME_SPRITE_H
 
 #include "IME/common/Vector2.h"
+#include "IME/common/ITransformable.h"
 #include "IDrawable.h"
 #include "Colour.h"
 #include "IME/core/animation/Animation.h"
@@ -39,7 +40,7 @@
 
 namespace IME {
     namespace Graphics {
-        class IME_API Sprite : public IDrawable {
+        class IME_API Sprite : public ITransformable, public IDrawable {
         public:
             /**
              * @brief Default constructor
@@ -48,20 +49,160 @@ namespace IME {
 
             /**
              * @brief Set the position of the object
-             * @param x New x coordinate of the object
-             * @param y New y coordinate of the object
+             * @param X coordinate of the new position
+             * @param Y coordinate of the new position
+             *
+             * This function completely overwrites the previous position.
+             * See the move function to apply an offset based on the previous
+             * position instead. The default position of a transformable object
+             * is (0, 0).
              */
-            void setPosition(float x, float y);
+            void setPosition(float x, float y) override;
 
             /**
              * @brief Set the position of the object
-             * @param position New position of the object
+             * @param position New position
+             *
+             * This function completely overwrites the previous position.
+             * See the move function to apply an offset based on the previous
+             * position instead. The default position of a transformable object
+             * is (0, 0).
              */
-            void setPosition(Vector2f position);
+            void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the orientation of the object
+             * @param angle New rotation, in degrees
+             *
+             * This function completely overwrites the previous rotation.
+             * See the rotate function to add an angle based on the previous
+             * rotation instead. The default rotation of a transformable object
+             * is 0.
+             *
+             * @see rotate
+             */
+            void setRotation(float angle) override;
+
+            /**
+             * @brief Set the scale factors of the object
+             * @param factorX New horizontal scale factor
+             * @param factorY New vertical scale factor
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            void setScale(float factorX, float factorY) override;
+
+            /**
+             * @brief Set the scale factors of the object
+             * @param scale New scale
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            void setScale(Vector2f scale) override;
+
+            /**
+             * @brief set the local origin of the object
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
+             *
+             * The origin of an object defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the object, and ignore all
+             * transformations (position, scale, rotation).
+             * The default origin of a transformable object is (0, 0)
+             */
+            void setOrigin(float x, float y) override;
+
+            /**
+             * @brief set the local origin of the object
+             * @param origin New origin
+             *
+             * The origin of an object defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the object, and ignore all
+             * transformations (position, scale, rotation).
+             * The default origin of a transformable object is (0, 0)
+             */
+            void setOrigin(Vector2f origin) override;
+
+            /**
+             * @brief Get the position of the object
+             * @return Current position of the object
+             */
+            Vector2f getPosition() const override;
+
+            /**
+             * @brief Get the local origin of the object
+             * @return get the local origin of the object
+             */
+            Vector2f getOrigin() const override;
+
+            /**
+             * @brief Get the orientation of the object
+             * @return Current rotation, in degrees
+             *
+             * The rotation is always in the range [0, 360].
+             */
+            float getRotation() const override;
+
+            /**
+             * @brief Move the object by a given offset
+             * @param offsetX Horizontal offset
+             * @param offsetY Vertical offset
+             *
+             * This function adds to the current position of the object,
+             * unlike @see setPosition which overwrites it
+             */
+            void move(float offsetX, float offsetY) override;
+
+            /**
+             * @brief Move the object by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the object,
+             * unlike @see setPosition which overwrites it
+             */
+            void move(Vector2f offset) override;
+
+            /**
+             * @brief Rotate the object
+             * @param angle Angle of rotation, in degrees
+             *
+             * This function adds to the current rotation of the object,
+             * unlike @see setRotation which overwrites it
+             */
+            void rotate(float angle) override;
+
+            /**
+             * @brief Scale the object by an offset
+             * @param factorX Horizontal scale factor
+             * @param factorY Vertical scale factor
+             *
+             * This function multiplies the current scale of the object,
+             * unlike @see setScale which overwrites it
+             */
+            void scale(float factorX, float factorY) override;
+
+            /**
+             * @brief Scale the object by an offset
+             * @param offset Offset to apply
+             *
+             * This function multiplies the current scale of the object,
+             * unlike @see setScale which overwrites it
+             */
+            void scale(Vector2f offset) override;
 
             /**
              * @brief Set the texture of the object
              * @param filename Filename of the texture to set
+             * @throws FileNotFound if the specified texture cannot be found
+             *         in the images path
              */
             void setTexture(const std::string &filename);
 
@@ -87,44 +228,6 @@ namespace IME {
             void setColour(Colour colour);
 
             /**
-             * @brief Set the local origin of the object
-             * @param x X coordinate of the new origin
-             * @param y Y coordinate of the new origin
-             *
-             * The origin defines the center point for all transformations (position,
-             * scale, rotation). The coordinates of this point must be relative to
-             * the top-left corner of the object, and ignore all transformations
-             * (position, scale, rotation). The origin is (0, 0) by default
-             */
-            void setOrigin(float x, float y);
-
-            /**
-             * @brief Get the objects origin
-             * @return The objects origin
-             */
-            Vector2f getOrigin() const;
-
-            /**
-             * @brief Move the sprite by an offset
-             * @param xOffset Horizontal offset
-             * @param yOffset Vertical offset
-             */
-            void move(float xOffset, float yOffset);
-
-            /**
-             * @brief Scale sprite by an offset
-             * @param xFactor Horizontal offset
-             * @param yFactor Vertical offset
-             */
-            void scale(float xFactor, float yFactor);
-
-            /**
-             * @brief Get the position of the object
-             * @return Position of the object
-             */
-            Vector2f getPosition() const;
-
-            /**
              * @brief Get the name of the texture used by the sprite
              * @return Name of the texture used by the sprite
              */
@@ -141,14 +244,6 @@ namespace IME {
              * @return The colour of the sprite
              */
             Colour getColour() const;
-
-            /**
-             * @brief Rotate object
-             * @param angle Angle of rotation
-             *
-             * This function adds to the current angle of rotation
-             */
-            void rotate(float angle);
 
             /**
              * @brief Draw object on a render target

@@ -39,6 +39,34 @@ namespace IME::Graphics {
         setPosition(position.x, position.y);
     }
 
+    void Sprite::setRotation(float angle) {
+        sprite_.setRotation(angle);
+    }
+
+    void Sprite::setScale(float factorX, float factorY) {
+        sprite_.setScale(factorX, factorY);
+    }
+
+    void Sprite::setScale(Vector2f scale) {
+        sprite_.setScale({scale.x, scale.y});
+    }
+
+    void Sprite::setOrigin(Vector2f origin) {
+        sprite_.setOrigin({origin.x, origin.y});
+    }
+
+    float Sprite::getRotation() const {
+        return sprite_.getRotation();
+    }
+
+    void Sprite::move(Vector2f offset) {
+        sprite_.move({offset.x, offset.y});
+    }
+
+    void Sprite::scale(Vector2f offset) {
+        sprite_.scale({offset.x, offset.y});
+    }
+
     void Sprite::setTexture(const std::string &filename) {
         sprite_.setTexture(ResourceManager::getInstance()->getTexture(filename));
         textureFileName_ = filename;
