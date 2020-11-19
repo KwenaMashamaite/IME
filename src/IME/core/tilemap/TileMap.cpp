@@ -283,12 +283,10 @@ namespace IME {
         if (!child)
             return false;
 
-        auto hasChild = false;
-        std::for_each(children_.begin(), children_.end(), [&](auto& childPtr) {
-            if (childPtr.second == child)
-                hasChild = true;
+        auto found = std::find_if(children_.begin(), children_.end(), [&child](auto& childPtr) {
+            return childPtr.second == child;
         });
-        return hasChild;
+        return found != children_.end();
     }
 
     std::shared_ptr<Entity> TileMap::getChild(Index index) const {
