@@ -290,21 +290,16 @@ namespace IME {
         Graphics::Tile& getTileRightOf(const Graphics::Tile& tile);
 
         /**
-         * @brief Set the background of the tile amp
-         * @param filename Name of the background image
+         * @brief Get the tilemap background
+         * @return The tilemap background
          *
-         * The background image must
+         * The background of the tilemap may be manipulated through the
+         * returned sprite. @note By default there is no background set,
+         * if the background texture is set then @see showLayer must be
+         * invoked with "background" as the argument in order for the
+         * background to be rendered and displayed
          */
-        void setBackground(const std::string& filename, Vector2f position);
-
-        /**
-         * @brief Scale the background image by an offset
-         * @param xOffset Horizontal offset
-         * @param yOffset Vertical offset
-         *
-         * The image will be cropped if the scaling goes beyond the tile borders
-         */
-        void scaleBackground(float xOffset, float yOffset);
+        Graphics::Sprite& getBackground();
 
         /**
          * @brief Show or hide the tilemap grid lines
@@ -346,27 +341,29 @@ namespace IME {
         Vector2u getSizeInTiles() const;
 
         /**
-         * @brief Hide a shown tile map
+         * @brief Hide a layer
+         * @param layer Name of the layer to be hidden
          */
-        void hide(const std::string& layer);
+        void hideLayer(const std::string& layer);
 
         /**
-         * @brief Show a hidden tile map
+         * @brief Show a hidden layer
+         * @param layer Name of the layer to be shown
          */
-        void show(const std::string& layer);
+        void showLayer(const std::string& layer);
 
         /**
-         * @brief Check if tile map is hidden or not
-         * @return True if tile map is hidden, otherwise false
+         * @brief Check if a layer is hidden or not
+         * @param layer Name of the layer to be checked
+         * @return True if specified layer is hidden, otherwise false
          */
-        bool isHidden(const std::string& layer) const;
+        bool isLayerHidden(const std::string& layer) const;
 
         /**
          * @brief Check if a tile is collidable or not
          * @param index Index of the tile to be checked
          * @return True if tile is collidable, or false if the tile is not
-         *         collidable, partially collidable (Some tile borders are
-         *         collidable) or the position od the tile is invalid
+         *         collidable or the index is invalid
          */
         bool isCollidable(const Index& index) const;
 
@@ -408,7 +405,7 @@ namespace IME {
 
         /**
          * @brief Check if the grid is visible or not
-         * @return True if gird is visible, otherwise false
+         * @return True if grid is visible, otherwise false
          */
         bool isGridVisible() const;
 

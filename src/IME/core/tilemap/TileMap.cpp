@@ -84,21 +84,8 @@ namespace IME {
         return getTileRightOf(tile.getIndex());
     }
 
-    void TileMap::setBackground(const std::string &filename, Vector2f position) {
-        background_.setTexture(filename);
-        background_.setPosition(position);
-        if (background_.getSize().x > mapSizeInPixels_.y
-            && background_.getSize().y > mapSizeInPixels_.y)
-            background_.setTextureRect(0, 0, mapSizeInPixels_.x, mapSizeInPixels_.y);
-        else if (background_.getSize().x > mapSizeInPixels_.x)
-            background_.setTextureRect(0, 0, mapSizeInPixels_.x, background_.getSize().y);
-        else if (background_.getSize().y > mapSizeInPixels_.y)
-            background_.setTextureRect(0, 0, background_.getSize().x, mapSizeInPixels_.y);
-        isBackgroundDrawable_ = true;
-    }
-
-    void TileMap::scaleBackground(float xOffset, float yOffset) {
-        background_.scale(xOffset, yOffset);
+    Graphics::Sprite &TileMap::getBackground() {
+        return background_;
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
@@ -234,7 +221,7 @@ namespace IME {
         return invalidTile_;
     }
 
-    void TileMap::hide(const std::string &layer) {
+    void TileMap::hideLayer(const std::string &layer) {
         if (layer == "background")
             isBackgroundDrawable_ = false;
         else if (layer == "tiles")
@@ -243,7 +230,7 @@ namespace IME {
             isObjectsDrawable_ = false;
     }
 
-    void TileMap::show(const std::string &layer) {
+    void TileMap::showLayer(const std::string &layer) {
         if (layer == "background")
             isBackgroundDrawable_ = true;
         else if (layer == "tiles")
@@ -252,7 +239,7 @@ namespace IME {
             isObjectsDrawable_ = true;
     }
 
-    bool TileMap::isHidden(const std::string &layer) const {
+    bool TileMap::isLayerHidden(const std::string &layer) const {
         if (layer == "background")
             return isBackgroundDrawable_;
         else if (layer == "tiles")
