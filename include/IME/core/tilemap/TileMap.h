@@ -33,6 +33,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
+#include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/entity/Entity.h"
 #include <unordered_map>
@@ -101,26 +102,39 @@ namespace IME {
         void loadFromVector(Map map);
 
         /**
-         * @brief Associate a tile id with a tileset image
-         * @param id The tile id to associate with a tileset image
-         * @param startPos The starting position of the tileset image
-         * @param size The size of the tileset image
+         * @brief Texture a tile at given index
+         * @param index Index of the tile to apply a texture to
+         * @param rect Texture to apply
          *
-         * Tiles in the tilemap will be textured with the image data corresponding
-         * to their id's when textured @see applyImages()
+         * The current tileset image will be used to texture the tile. The
+         * @param rect defines the portion of the tileset to use for the
+         * texturing the tile
          */
-        void addTilesetImageData(const char& id, Vector2f startPos, Vector2f size);
+        void textureTile(Index index, FloatRect rect);
 
         /**
-         * @brief Texture the tilemap
+         * @brief Apply a texture to all tiles with a certain id
+         * @param id Id of the tile to apply texture to
+         * @param rect Texture to apply
          *
-         * This function will texture each tile in the tile map with an image
-         * linked to the tile's id. Any tile whose id is not linked to an image
-         * on the tilemap's tileset will be left empty
-         *
-         * @see addTilesetImageData(const char&, Position, Dimensions)
+         * The current tileset image will be used to texture the tile. The
+         * @param rect defines the portion of the tileset to use for the
+         * texturing the tile. If you want to use a transformed texture,
+         * (scaled, rotated, etc ...), you can use
+         * @see textureTilesById(char id, const Graphics::Sprite& sprite)
          */
-        void applyImages();
+        void textureTilesById(char id, FloatRect rect);
+
+        /**
+         * @brief Apply a texture to all tiles with a certain id
+         * @param id Id of the tile to apply texture to
+         * @param sprite Texture to apply
+         *
+         * The texture will be applied as is. This function is useful if the
+         * texture from the tileset must be transformed first (scaled,
+         * rotated, etc...) before its applied to the tilemap
+         */
+        void textureTilesById(char id, const Graphics::Sprite& sprite);
 
         /**
          * @brief Replace a tile at a certain index
@@ -411,13 +425,6 @@ namespace IME {
 
     private:
         /**
-         * @brief Check if a tile id is linked to a tileset image or not
-         * @param id Id to check
-         * @return True if id is linked to tileset image, otherwise false
-         */
-        bool isIdLinkedToImage(const char& id) const;
-
-        /**
          * @brief Create the visual gird
          */
         void createTiledMap();
@@ -491,7 +498,7 @@ namespace IME {
         //References to objects (third layer)
         std::vector<std::pair<Index, std::shared_ptr<Entity>>> children_;
         //Holds the tileset image properties associated with a tile id
-        std::unordered_map<char, std::tuple<std::string, Vector2f, Vector2f>> imagesData_;
+        std::unordered_map<char, std::pair<std::string, FloatRect>> imagesData_;
         //The maps tileset image files
         std::unordered_map<std::string, std::string> tilesets_;
         //The visibility state of the grid

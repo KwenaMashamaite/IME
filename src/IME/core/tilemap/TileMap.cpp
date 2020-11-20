@@ -333,23 +333,26 @@ namespace IME {
         return tileSize_;
     }
 
-    void TileMap::addTilesetImageData(const char &id, Vector2f startPos, Vector2f size) {
-        imagesData_.insert({id, {tileSet_, startPos, size}});
+     void TileMap::textureTile(Index index, FloatRect rect) {
+        assert(!tilesets_.empty() && "Cannot texture tile with an empty tileset, set tileset to be used first");
+        if (isIndexValid(index)) {
+            auto& sprite = tiledMap_[index.row][index.colm].getSprite();
+            sprite.setTexture(tileSet_);
+            sprite.setTextureRect(rect.left, rect.top, rect.width, rect.height);
+        }
     }
 
-    bool TileMap::isIdLinkedToImage(const char &id) const {
-        return imagesData_.find(id) != imagesData_.end();
+    void TileMap::textureTilesById(char id, FloatRect rect) {
+        forEachTile([&](Graphics::Tile& tile) {
+            if (tile.getId() == id)
+                textureTile(tile.getIndex(), rect);
+        });
     }
 
-    void TileMap::applyImages() {
-        forEachTile([this](Graphics::Tile& tile) {
-            if (auto tileId = tile.getId(); isIdLinkedToImage(tileId)) {
-                auto [tileset, startPos, size] = imagesData_.at(tileId);
-                auto sprite = Graphics::Sprite();
-                sprite.setTexture(tileset);
-                sprite.setTextureRect(startPos.x, startPos.y, size.x, size.y);
-                tile.addSprite(std::move(sprite));
-            }
+    void TileMap::textureTilesById(char id, const Graphics::Sprite &sprite) {
+        forEachTile([&](Graphics::Tile& tile) {
+            if (tile.getId() == id)
+                tile.addSprite(sprite);
         });
     }
 
