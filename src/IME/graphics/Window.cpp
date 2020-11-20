@@ -83,12 +83,8 @@ namespace IME::Graphics {
         window_.draw(drawable);
     }
 
-    void Window::draw(IDrawable &drawable) {
+    void Window::draw(const IDrawable &drawable) {
         drawable.draw(*this);
-    }
-
-    void Window::draw(IDrawable &&drawable) {
-        draw(drawable);
     }
 
     Window::~Window() {

@@ -76,7 +76,7 @@ namespace IME::Graphics {
         return id_;
     }
 
-    void Tile::draw(Window &renderTarget) {
+    void Tile::draw(Window &renderTarget) const {
         renderTarget.draw(tile_);
         renderTarget.draw(sprite_);
     }

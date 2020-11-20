@@ -89,7 +89,11 @@ namespace IME::Graphics {
         sprite_.setTextureRect({left, top, width, height});
     }
 
-    void Sprite::draw(Window &renderTarget) {
+    void Sprite::setTextureRect(IntRect rect) {
+        setTextureRect(rect.left, rect.top, rect.width, rect.height);
+    }
+
+    void Sprite::draw(Window &renderTarget) const {
         renderTarget.draw(sprite_);
     }
 

@@ -222,6 +222,17 @@ namespace IME {
             void setTextureRect(int left, int top, int width, int height);
 
             /**
+             * @brief Set the sub-rectangle of the texture that the sprite will display
+             * @param rect The rectangle to set
+             *
+             * This function will set the texture that the sprite displays to a
+             * portion of the entire texture. The displaying will start at the
+             * position of the @param rect. By default, the sprite displays the
+             * entire texture
+             */
+            void setTextureRect(IntRect rect);
+
+            /**
              * @brief Set the colour of the sprite
              * @param colour New colour opf the sprite
              */
@@ -249,7 +260,7 @@ namespace IME {
              * @brief Draw object on a render target
              * @param renderTarget Target to draw object on
              */
-            void draw(Window &renderTarget) override;
+            void draw(Window &renderTarget) const override;
 
             /**
              * @brief Hide object

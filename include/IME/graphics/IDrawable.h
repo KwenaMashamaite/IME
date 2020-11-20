@@ -41,7 +41,7 @@ namespace IME {
              * @brief Draw object on a render target
              * @param renderTarget Target to draw object on
              */
-            virtual void draw(Window &renderTarget) = 0;
+            virtual void draw(Window &renderTarget) const = 0;
 
             /**
              * @brief Hide object from a render target

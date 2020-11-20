@@ -224,10 +224,10 @@ namespace IME {
             char getId() const;
 
             /**
-             * @brief Draw tile
-             * @param renderTarget
+             * @brief Render tile
+             * @param renderTarget Target to render tile on
              */
-            void draw(Window &renderTarget) override;
+            void draw(Window &renderTarget) const override;
 
             /**
              * @brief Hide tile content
