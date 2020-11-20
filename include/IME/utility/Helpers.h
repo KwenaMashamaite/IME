@@ -36,8 +36,6 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include <ctime>
-#include <random>
 #include <SFML/Window/Keyboard.hpp>
 #include <TGUI/Event.hpp>
 #include <SFML/Window/Event.hpp>
@@ -119,29 +117,6 @@ namespace IME::Utility {
      */
     template <typename T, typename U>
     bool eraseIn(std::vector<T>& vector, const U& element);
-
-    /**
-     * @brief Generate a random number in a range
-     * @param min The start of the range
-     * @param max The end of the range
-     * @return A random number in the given range
-     */
-    IME_API extern int generateRandomNum(int min, int max);
-
-    /**
-     * @brief Create a callable that generates random numbers in a range
-     * @param min The start of the range
-     * @param max The end of the range
-     * @return A callable object, when called returns a random number in the
-     *         specified range
-     */
-    static auto createRandomNumGenerator(int min, int max);
-
-    /**
-     * @brief Create a random colour
-     * @return A random colour
-     */
-    IME_API extern Graphics::Colour generateRandomColour();
 
     /**
      * @internal

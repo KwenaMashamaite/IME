@@ -22,32 +22,47 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T, typename U, typename V>
-bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item) {
-    return unorderedMap.find(item) != unorderedMap.end();
-}
+#ifndef IME_UTILS_H
+#define IME_UTILS_H
 
-template <typename T, typename U, typename V>
-bool eraseIn(std::unordered_map<T, U>& unorderedMap, const V& item) {
-    if (findIn(unorderedMap, item)) {
-        unorderedMap.erase(item);
-        return true;
+/**
+ * @brief Utility functions
+ */
+
+#include "IME/Config.h"
+#include "IME/graphics/Colour.h"
+#include <random>
+
+namespace IME {
+    namespace Utility {
+        /**
+         * @brief Generate a random number in a range
+         * @param min The start of the range
+         * @param max The end of the range
+         * @return A random number in the given range
+         */
+        IME_API extern int generateRandomNum(int min, int max);
+
+        /**
+         * @brief Create a callable that generates random numbers in a range
+         * @param min The start of the range
+         * @param max The end of the range
+         * @return A callable object, when called returns a random number in the
+         *         specified range
+         */
+        static auto createRandomNumGenerator(int min, int max) {
+            return [distribution = std::uniform_int_distribution(min, max),
+                    randomEngine = std::mt19937{std::random_device{}()}]() mutable {
+                return distribution(randomEngine);
+            };
+        }
+
+        /**
+         * @brief Create a random colour
+         * @return A random colour
+         */
+        IME_API extern Graphics::Colour generateRandomColour();
     }
-    return false;
 }
 
-template <typename T, typename U>
-std::pair<bool, int> findIn(const std::vector<T> vector, const U& item) {
-    if (auto found = std::find(vector.begin(), vector.end(), item); found != vector.end())
-        return {true, std::distance(vector.begin(), found)};
-    return {false, -1};
-}
-
-template <typename T, typename U>
-bool eraseIn(std::vector<T>& vector, const U& element) {
-    if (auto [found, index] = findIn(vector, element); found) {
-        vector.erase(vector.begin() + index);
-        return true;
-    }
-    return false;
-}
+#endif

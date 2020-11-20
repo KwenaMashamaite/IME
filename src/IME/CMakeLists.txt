@@ -62,6 +62,7 @@ set(IME_SRC
     utility/DiskFileLogger.cpp
     utility/DiskFileReader.cpp
     utility/Helpers.cpp
+    utility/Utils.cpp
 )
 
 # Optimize single build

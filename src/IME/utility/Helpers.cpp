@@ -45,16 +45,6 @@ namespace IME::Utility {
         return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
     }
 
-    int generateRandomNum(int min, int max) {
-        return min + (rand() % (max - min + 1));
-    }
-
-    Graphics::Colour generateRandomColour() {
-        return {static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),255};
-    }
-
     tgui::Font get_TGUI_Font(const std::string &filename) {
         auto tguiBackendFont = std::make_shared<tgui::BackendFontSFML>();
         tguiBackendFont->getInternalFont() = IME::ResourceManager::getInstance()->getFont(filename);

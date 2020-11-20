@@ -349,8 +349,8 @@ namespace IME {
          * @brief Get the size of the tilemap in tiles
          * @return Size of the tilemap in tiles
          *
-         * This function will return the number of rows and columns in the
-         * tilemap as the width and height respectively
+         * The x component is the number of columns whilst the y component
+         * is the number of rows
          */
         Vector2u getSizeInTiles() const;
 

@@ -22,32 +22,17 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T, typename U, typename V>
-bool findIn(const std::unordered_map<T, U>& unorderedMap, const V& item) {
-    return unorderedMap.find(item) != unorderedMap.end();
-}
+#include "IME/utility/Utils.h"
+#include <ctime>
 
-template <typename T, typename U, typename V>
-bool eraseIn(std::unordered_map<T, U>& unorderedMap, const V& item) {
-    if (findIn(unorderedMap, item)) {
-        unorderedMap.erase(item);
-        return true;
+namespace IME::Utility {
+    int generateRandomNum(int min, int max) {
+        return min + (rand() % (max - min + 1));
     }
-    return false;
-}
 
-template <typename T, typename U>
-std::pair<bool, int> findIn(const std::vector<T> vector, const U& item) {
-    if (auto found = std::find(vector.begin(), vector.end(), item); found != vector.end())
-        return {true, std::distance(vector.begin(), found)};
-    return {false, -1};
-}
-
-template <typename T, typename U>
-bool eraseIn(std::vector<T>& vector, const U& element) {
-    if (auto [found, index] = findIn(vector, element); found) {
-        vector.erase(vector.begin() + index);
-        return true;
+    Graphics::Colour generateRandomColour() {
+        return {static_cast<unsigned int>(generateRandomNum(0, 255)),
+                static_cast<unsigned int>(generateRandomNum(0, 255)),
+                static_cast<unsigned int>(generateRandomNum(0, 255)),255};
     }
-    return false;
 }

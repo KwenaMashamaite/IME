@@ -77,7 +77,8 @@ namespace IME {
                 static auto consoleLogger = Utility::ConsoleLogger();
                 if (!settings_.hasProperty(setting) && settings_.getValueFor(setting).empty()) {
                     consoleLogger.log(Utility::MessageType::Warning,
-                        R"(Missing or invalid ")" + setting + R"(" entry in ")" + settingFile_
+                        R"(Missing or invalid ")" + setting + R"(" entry in ")"
+                        + ((isSettingsLoadedFromFile_) ? settingFile_ : "settings")
                         + R"(", using default value: ")" + setting + "=" + defaultValue + R"(")");
                     settings_.addProperty(setting, "string", defaultValue);
                 }

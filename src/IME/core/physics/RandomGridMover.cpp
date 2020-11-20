@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/RandomGridMover.h"
-#include "IME/utility/Helpers.h"
+#include "IME/utility/Utils.h"
 
 namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target)
