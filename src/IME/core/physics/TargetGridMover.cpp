@@ -89,8 +89,10 @@ namespace IME {
     }
 
     void TargetGridMover::resumeMovement() {
-        targetStopped_ = false;
-        moveTarget();
+        if (targetStopped_) {
+            targetStopped_ = false;
+            moveTarget();
+        }
     }
 
     void TargetGridMover::pauseMovement() {
