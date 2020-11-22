@@ -29,9 +29,13 @@
 #include <cassert>
 
 namespace IME {
-    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight)
-        : isGridVisible_(true), isBackgroundDrawable_(false), isTilesDrawable_(true),
-          isObjectsDrawable_(true), invalidTile_({0, 0}, {-1, -1})
+    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight) :
+        tileSpacing_{1u},
+        isGridVisible_(true),
+        isBackgroundDrawable_(false),
+        isTilesDrawable_(true),
+        isObjectsDrawable_(true),
+        invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
@@ -120,9 +124,9 @@ namespace IME {
                 if (i == 0 && j == 0)
                     tiledMap_[i][j].setPosition(mapPos_);
                 else if (j == 0)
-                    tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y});
+                    tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
-                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x, tiledMap_[i][j - 1].getPosition().y});
+                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y});
             }
         }
     }
@@ -142,7 +146,6 @@ namespace IME {
     }
 
     void TileMap::createTiledMap() {
-        auto tileSpacing = 1;
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Graphics::Tile>{};
             for (auto j = 0u; j < mapData_[i].size(); j++) {
@@ -150,9 +153,9 @@ namespace IME {
                 if (i == 0 && j == 0)
                     tile.setPosition(mapPos_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing});
+                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing, row[j - 1].getPosition().y});
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
 
                 tile.setId(mapData_[i][j]);
                 tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
@@ -161,8 +164,8 @@ namespace IME {
             tiledMap_.push_back(row);
         }
         //Accommodate tile spacing in overall tilemap size
-        mapSizeInPixels_.x += (numOfColms_ - 1) * tileSpacing;
-        mapSizeInPixels_.y += (numOfRows_ - 1) * tileSpacing;
+        mapSizeInPixels_.x += (numOfColms_ - 1) * tileSpacing_;
+        mapSizeInPixels_.y += (numOfRows_ - 1) * tileSpacing_;
     }
 
     void TileMap::draw(Graphics::Window &renderTarget) {
@@ -407,6 +410,10 @@ namespace IME {
 
     Vector2u TileMap::getSize() const {
         return mapSizeInPixels_;
+    }
+
+    unsigned int TileMap::getSpaceBetweenTiles() const {
+        return tileSpacing_;
     }
 
     Vector2u TileMap::getSizeInTiles() const {

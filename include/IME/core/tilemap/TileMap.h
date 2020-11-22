@@ -346,6 +346,15 @@ namespace IME {
         Vector2u getSize() const;
 
         /**
+         * @brief Get the spacing between tiles in all directions
+         * @return The spacing between tiles
+         *
+         * The spacing is how far tiles are from one another. The default
+         * space between tiles is 1
+         */
+        unsigned int getSpaceBetweenTiles() const;
+
+        /**
          * @brief Get the size of the tilemap in tiles
          * @return Size of the tilemap in tiles
          *
@@ -477,6 +486,8 @@ namespace IME {
         Graphics::Tile& getTileRightOf(const Index& index);
 
     private:
+        //Spacing between tiles in all directions
+        unsigned int tileSpacing_;
         //The Size of each tile in the tilemap
         Vector2u tileSize_;
         //The Size of the tilemap in pixels
