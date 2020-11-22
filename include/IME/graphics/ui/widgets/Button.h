@@ -123,6 +123,12 @@ namespace IME {
             void setScale(float factorX, float factorY) override;
 
             /**
+             * @brief Get the current scale of the object
+             * @return Current scale of the object
+             */
+            Vector2f getScale() const override;
+
+            /**
              * @brief Set the local origin of the widget
              * @param x X coordinate of the new origin
              * @param y Y coordinate of the new origin

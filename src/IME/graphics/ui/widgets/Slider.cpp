@@ -241,4 +241,8 @@ namespace IME::Graphics::UI {
             emit("valueChange", newValue);
         });
     }
+
+    Vector2f Slider::getScale() const {
+        return {slider_->getScale().x, slider_->getScale().y};
+    }
 }

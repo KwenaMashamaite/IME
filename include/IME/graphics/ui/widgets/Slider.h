@@ -301,6 +301,12 @@ namespace IME {
             float getRotation() const override;
 
             /**
+             * @brief Get the current scale of the object
+             * @return Current scale of the object
+             */
+            Vector2f getScale() const override;
+
+            /**
              * @brief Move the widget by a given offset
              * @param offsetX Horizontal offset
              * @param offsetY Vertical offset

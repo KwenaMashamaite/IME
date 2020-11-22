@@ -143,4 +143,8 @@ namespace IME::Graphics {
     void Sprite::move(float xOffset, float yOffset) {
         sprite_.move(xOffset, yOffset);
     }
+
+    Vector2f Sprite::getScale() const {
+        return {sprite_.getScale().x, sprite_.getScale().y};
+    }
 }

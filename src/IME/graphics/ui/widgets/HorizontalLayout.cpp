@@ -299,4 +299,8 @@ namespace IME::Graphics::UI {
             emit("positionChange", newPos.x, newPos.y);
         });
     }
+
+    Vector2f HorizontalLayout::getScale() const {
+        return {layout_->getScale().x, layout_->getScale().y};
+    }
 }

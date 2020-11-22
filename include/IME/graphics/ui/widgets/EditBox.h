@@ -206,6 +206,12 @@ namespace IME {
             void setScale(Vector2f scale) override;
 
             /**
+             * @brief Get the current scale of the object
+             * @return Current scale of the object
+             */
+            Vector2f getScale() const override;
+
+            /**
              * @brief set the local origin of the object
              * @param origin New origin
              *

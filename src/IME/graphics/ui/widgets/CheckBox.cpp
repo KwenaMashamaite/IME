@@ -257,4 +257,8 @@ namespace IME::Graphics::UI {
             emit("rightClick", mousePos.x, mousePos.y);
         });
     }
+
+    Vector2f CheckBox::getScale() const {
+        return {checkBox_->getScale().x, checkBox_->getScale().y};
+    }
 }

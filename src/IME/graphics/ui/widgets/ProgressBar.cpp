@@ -279,4 +279,8 @@ namespace IME::Graphics::UI {
             emit("rightClick", mousePos.x, mousePos.y);
         });
     }
+
+    Vector2f ProgressBar::getScale() const {
+        return {progressBar_->getScale().x, progressBar_->getScale().y};
+    }
 }

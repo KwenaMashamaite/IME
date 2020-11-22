@@ -292,4 +292,8 @@ namespace IME::Graphics::UI {
             emit("rightClick", mousePos.x, mousePos.y);
         });
     }
+
+    Vector2f EditBox::getScale() const {
+        return {editBox_->getScale().x, editBox_->getScale().y};
+    }
 }

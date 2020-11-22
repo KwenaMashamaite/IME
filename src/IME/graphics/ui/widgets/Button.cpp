@@ -240,4 +240,8 @@ namespace IME::Graphics::UI {
             emit("rightClick", mousePos.x, mousePos.y);
         });
     }
+
+    Vector2f Button::getScale() const {
+        return {button_->getScale().x, button_->getScale().y};
+    }
 }

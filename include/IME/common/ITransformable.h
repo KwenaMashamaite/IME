@@ -187,6 +187,12 @@ namespace IME {
         virtual void scale(Vector2f offset) = 0;
 
         /**
+         * @brief Get the current scale of the object
+         * @return Current scale of the object
+         */
+        virtual Vector2f getScale() const = 0;
+
+        /**
          * @brief Destructor
          */
         virtual ~ITransformable() = default;

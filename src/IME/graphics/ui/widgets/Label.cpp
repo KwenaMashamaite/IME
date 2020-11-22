@@ -167,4 +167,8 @@ namespace IME::Graphics::UI {
     std::shared_ptr<tgui::Widget> Label::getInternalPtr() {
         return label_;
     }
+
+    Vector2f Label::getScale() const {
+        return {label_->getScale().x, label_->getScale().y};
+    }
 }

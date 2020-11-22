@@ -350,4 +350,8 @@ namespace IME::Graphics::UI {
             emit("positionChange", newPos.x, newPos.y);
         });
     }
+
+    Vector2f ChildWindow::getScale() const {
+        return {window_->getScale().x, window_->getScale().y};
+    }
 }

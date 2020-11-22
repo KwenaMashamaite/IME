@@ -251,4 +251,8 @@ namespace IME::Graphics::UI {
     void BitmapButton::scale(Vector2f offset) {
         scale(offset.x, offset.y);
     }
+
+    Vector2f BitmapButton::getScale() const {
+        return {button_->getScale().x, button_->getScale().y};
+    }
 }

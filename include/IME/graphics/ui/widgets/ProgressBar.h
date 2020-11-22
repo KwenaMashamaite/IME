@@ -288,6 +288,12 @@ namespace IME {
             void scale(Vector2f offset) override;
 
             /**
+             * @brief Get the current scale of the object
+             * @return Current scale of the object
+             */
+            Vector2f getScale() const override;
+
+            /**
             * @brief Hide widget from a render target
             *
             * A hidden widget will not be drawn on a render target when calling
