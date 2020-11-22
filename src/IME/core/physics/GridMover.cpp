@@ -134,32 +134,14 @@ namespace IME {
             movableObj->move();
         } else if (movableObj->isMoving()) {
             auto velocity = movableObj->getSpeed() * deltaTime;
-            auto entityPosition = target_->getPosition();
-            switch (targetDirection_) {
-                case Direction::None:
-                    break;
-                case Direction::Left:
-                    target_->setPosition(target_->getPosition().x - velocity, target_->getPosition().y);
-                    break;
-                case Direction::Right:
-                    target_->setPosition(target_->getPosition().x + velocity, target_->getPosition().y);
-                    break;
-                case Direction::Up:
-                    target_->setPosition(target_->getPosition().x , target_->getPosition().y - velocity);
-                    break;
-                case Direction::Down:
-                    target_->setPosition(target_->getPosition().x , target_->getPosition().y + velocity);
-                    break;
-            }
-
             if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
-                auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - entityPosition.x);
+                auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
                 if (velocity >= horizontalDistToTarget)
                     snap();
             }
 
             if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
-                auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - entityPosition.y);
+                auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getPosition().y);
                 if (velocity >= verticalDistToTarget)
                     snap();
             }
