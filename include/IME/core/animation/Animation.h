@@ -76,7 +76,7 @@ namespace IME {
          * sheet and different frame sizes @see addFrame(std::initializer_list<Frame>)
          */
         void addFrames(Vector2i startPos, Vector2i frameSize, unsigned int numOfFrames,
-            unsigned int spacing = 0, Arrangement arrangement = Arrangement::Horizontal);
+            unsigned int spacing = 1, Arrangement arrangement = Arrangement::Horizontal);
 
         /**
          * @brief Add frames to the animation
