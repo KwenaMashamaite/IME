@@ -130,7 +130,7 @@ namespace IME {
          * @brief Get the type of the object
          * @return The type of the object
          */
-        virtual std::string getType() = 0;
+        virtual std::string getObjectType() = 0;
 
         /**
          * @brief Get the entities unique identifier
@@ -139,7 +139,7 @@ namespace IME {
          * An entity object cannot have the same identifier as another
          * entity object
          */
-        std::size_t getId() const;
+        std::size_t getObjectId() const;
 
         /**
          * @brief Add an event listener to an entity event
@@ -167,17 +167,21 @@ namespace IME {
          * @return True if the two entities are the same object
          *
          * Two entity objects are the same object if they have the same
-         * id
+         * object id
+         *
+         * @see getObjectId
          */
         bool operator==(const Entity& rhs);
 
         /**
-         * @brief Check if this entity is the same object as another object
+         * @brief Check if this entity is not the same object as another object
          * @param rhs Object to compare against this object
          * @return True if the two objects are not the same object
          *
          * Two entity objects are not the same object if they don't have the
-         * same id
+         * same object id
+         *
+         * @see getObjectId
          */
         bool operator!=(const Entity& rhs);
 

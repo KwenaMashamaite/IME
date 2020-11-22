@@ -96,7 +96,7 @@ namespace IME {
         return isVulnerable_;
     }
 
-    std::size_t Entity::getId() const {
+    std::size_t Entity::getObjectId() const {
         return id_;
     }
 
