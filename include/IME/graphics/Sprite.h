@@ -239,6 +239,12 @@ namespace IME {
             void setTextureRect(IntRect rect);
 
             /**
+             * @brief Get the sub-rectangle of the texture displayed by the sprite
+             * @return The sub-rectangle of the texture displayed by the sprite
+             */
+            IntRect getTextureRect() const;
+
+            /**
              * @brief Set the colour of the sprite
              * @param colour New colour opf the sprite
              */

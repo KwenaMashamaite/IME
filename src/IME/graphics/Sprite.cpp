@@ -147,4 +147,9 @@ namespace IME::Graphics {
     Vector2f Sprite::getScale() const {
         return {sprite_.getScale().x, sprite_.getScale().y};
     }
+
+    IntRect Sprite::getTextureRect() const {
+        return {sprite_.getTextureRect().left, sprite_.getTextureRect().top,
+                sprite_.getTextureRect().width, sprite_.getTextureRect().height};
+    }
 }
