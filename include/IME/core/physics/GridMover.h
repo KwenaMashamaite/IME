@@ -48,7 +48,8 @@ namespace IME {
          * @param tileMap Grid to move a target entity in
          * @param target Entity to be moved in the grid
          *
-         * The target must be placed in the grid prior to grid mover construction
+         * @warning if the target is not a nullptr, then it must be placed
+         * in the grid prior to instantiation of this class
          */
         GridMover(TileMap &tileMap, EntityPtr target);
 
@@ -69,7 +70,10 @@ namespace IME {
          * @brief Change the controlled entity
          * @param target New target
          *
-         * Set to nullptr to remove the target from the grid mover
+         * Provide nullptr as argument to remove current target
+         *
+         * @warning if the target is not a nullptr, then it must be placed
+         * in the grid prior to function call
          */
         void setTarget(EntityPtr target);
 
@@ -134,6 +138,17 @@ namespace IME {
          * it will occupy the same tile it occupied before the collision
          */
         int onGridBorderCollision(Callback<> callback);
+
+        /**
+         * @brief Add an event listener to a tile collision
+         * @param callback Function to execute when the target collides with
+         *        a solid tile
+         * @return The event listeners identification number
+         *
+         * By default the target will be prevented from occupying the same
+         * tile as the solid tile
+         */
+        int onTileCollision(Callback<IME::Graphics::Tile&> callback);
 
         /**
          * @brief Add an event listener to a destination reached event
@@ -209,6 +224,8 @@ namespace IME {
         Direction targetDirection_;
         //The grid tile the target wishes to reach in the current frame
         Graphics::Tile targetTile_;
+        //Tile target was in before starting movement
+        Graphics::Tile prevTile_;
         //Collision event publisher
         EventEmitter eventEmitter_;
         //Tracks if controlled entity has reached target tile or not

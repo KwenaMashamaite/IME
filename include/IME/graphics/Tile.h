@@ -54,15 +54,11 @@ namespace IME {
         }
     };
 
-    namespace Graphics {
-        enum class TileType {
-            Empty,
-            Obstacle,
-            Collectable,
-            Player,
-            Enemy
-        };
+    static bool operator<(const Index& lhs, const Index& rhs) {
+        return rhs.row < lhs.row && rhs.colm < lhs.colm;
+    }
 
+    namespace Graphics {
         class IME_API Tile : public IDrawable {
         public:
             /**
@@ -177,7 +173,7 @@ namespace IME {
              * @brief Set the index of the tile in the tilemap
              * @param index The index of the tile in the tilemap
              *
-             * The index corresponds to the position of the tile i the tilemap
+             * The index corresponds to the position of the tile in the tilemap
              */
             void setIndex(Index index);
 
@@ -196,26 +192,19 @@ namespace IME {
             void setId(char id);
 
             /**
-             * @brief Set all the sides of the tile as collidable or not
-             * @param isCollidable True to set tile as collidable, otherwise false
+             * @brief Set whether the tile is a solid or an empty tile
+             * @param isSolid True to set solid or false to set empty
              *
-             * The tile is not collidable on all sides by default
+             * Solid tiles are collidable while empty tiles are not collidable.
+             * The tile is empty by default
              */
-            void setCollidable(bool isCollidable);
+            void setSolid(bool isSolid);
 
             /**
-             * @brief Set the tile type
-             * @param tileType The tile type
-             *
-             * The tile type corresponds to the object that is in this tile
+             * @brief Check if tile is a solid or an empty tile
+             * @return True if solid or false if empty
              */
-            void setType(TileType tileType);
-
-            /**
-             * @brief Get the type of this tile
-             * @return The type of this tile
-             */
-            TileType getType() const;
+            bool isSolid() const;
 
             /**
              * @brief Get the tiles id
@@ -271,11 +260,6 @@ namespace IME {
             int onCollision(Callback<Tile &> callback);
 
             /**
-             * @brief Collide with this tile
-             */
-            void hit();
-
-            /**
              * @brief Get the sprite set on the tile
              * @return Sprite on the tile
              */
@@ -287,10 +271,8 @@ namespace IME {
             ~Tile() = default;
 
         private:
-            //Collision flag
-            bool isCollidable_;
-            //Stores the type of the object that will be in this tile
-            TileType tileType_;
+            //Stores whether tile is a solid or an empty tile
+            bool isSolid_;
             //Stores the id of the actual object that will be in this tile
             char id_;
             //The position of the tile in the tilemap
@@ -299,12 +281,19 @@ namespace IME {
             Sprite sprite_;
             //Tile border
             sf::RectangleShape tile_;
-            //Event publisher
-            EventEmitter eventEmitter_;
             //For hiding purposes
             sf::Color prevFillColour_;
         };
     }
+}
+
+namespace std {
+    template <>
+    struct hash<IME::Index> {
+        size_t operator()(const IME::Index& index) const {
+            return hash<int>()(index.row) + hash<int>()(index.colm);
+        }
+    };
 }
 
 #endif

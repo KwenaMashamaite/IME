@@ -28,17 +28,17 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics {
-    Tile::Tile(const Vector2u &size, const Vector2f &position) {
-        isCollidable_ = false;
-        id_ = '\0';
-        index_ = {-1, -1}; //Invalid index
+    Tile::Tile(const Vector2u &size, const Vector2f &position) :
+        isSolid_{false},
+        id_{'\0'},
+        index_{-1, -1}
+    {
         setSize(size.x, size.y);
         tile_.setOutlineColor(sf::Color::White);
         tile_.setOutlineThickness(-1.0f);
         tile_.setFillColor(sf::Color::Transparent);
         prevFillColour_ = sf::Color::Transparent;
         setPosition(position);
-        tileType_ = TileType::Empty;
     }
 
     Vector2u Tile::getSize() const {
@@ -66,6 +66,14 @@ namespace IME::Graphics {
 
     void Tile::setSize(Vector2u size) {
         setSize(size.x, size.y);
+    }
+
+    void Tile::setSolid(bool isSolid) {
+        isSolid_ = isSolid;
+    }
+
+    bool Tile::isSolid() const {
+        return isSolid_;
     }
 
     void Tile::setId(char id) {
@@ -104,11 +112,7 @@ namespace IME::Graphics {
     }
 
     bool Tile::isCollidable() const {
-        return isCollidable_;
-    }
-
-    void Tile::setCollidable(bool isCollidable) {
-        isCollidable_ = isCollidable;
+        return isSolid_;
     }
 
     bool Tile::contains(float x, float y) const {
@@ -118,14 +122,6 @@ namespace IME::Graphics {
 
     Sprite &Tile::getSprite() {
         return sprite_;
-    }
-
-    int Tile::onCollision(Callback<Tile&> callback) {
-        return eventEmitter_.addEventListener("hit", std::move(callback));
-    }
-
-    void Tile::hit() {
-        eventEmitter_.emit("hit", *this);
     }
 
     void Tile::setBorderVisible(bool isVisible) {
@@ -149,14 +145,6 @@ namespace IME::Graphics {
 
     Colour Tile::getFillColour() const {
         return Utility::convertFrom3rdPartyColour(tile_.getFillColor());
-    }
-
-    void Tile::setType(TileType tileType) {
-        tileType_ = tileType;
-    }
-
-    TileType Tile::getType() const {
-        return tileType_;
     }
 
     void Tile::setSpritePosition(float x, float y) {

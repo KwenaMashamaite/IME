@@ -39,6 +39,7 @@
 #include <unordered_map>
 #include <vector>
 #include <tuple>
+#include <map>
 
 namespace IME {
     //Alias for 2D vector
@@ -67,8 +68,8 @@ namespace IME {
         /**
          * @brief Set the image to be used as the tileset
          * @param name Name of the tileset
-         * @param filename File name of the tileset image
-         * @throw FileNotFound If the tileset cannot be loaded by the asset
+         * @param filename Filename of the tileset image
+         * @throws FileNotFound If the tileset cannot be loaded by the asset
          *        manager
          */
         void setTileset(const std::string& name, const std::string& filename);
@@ -78,13 +79,14 @@ namespace IME {
          * @param name Name of the tileset
          *
          * All tileset related operations are performed on the current tileset.
-         * For instance texturing tilemap tiles
+         * In order to tile the map from different tileset, the current tileset
+         * must be alternated
          */
         void setCurrentTileset(const std::string& name);
 
         /**
-         * @brief Get the position of the tile map in pixels
-         * @return The position of the tile map pixels
+         * @brief Get the position of the tilemap in pixels
+         * @return The position of the tilemap pixels
          */
         Vector2f getPosition() const;
 
@@ -107,7 +109,7 @@ namespace IME {
          * @param rect Texture to apply
          *
          * The current tileset image will be used to texture the tile. The
-         * @param rect defines the portion of the tileset to use for the
+         * @param rect defines the sub-rectangle of the tileset to use for
          * texturing the tile
          */
         void textureTile(Index index, FloatRect rect);
@@ -118,10 +120,10 @@ namespace IME {
          * @param rect Texture to apply
          *
          * The current tileset image will be used to texture the tile. The
-         * @param rect defines the portion of the tileset to use for the
-         * texturing the tile. If you want to use a transformed texture,
-         * (scaled, rotated, etc ...), you can use
-         * @see textureTilesById(char id, const Graphics::Sprite& sprite)
+         * @param rect defines the sub-rectangle of the tileset to use for
+         * texturing the tile. The image will taken as is from the tileset,
+         * If you want to use a transformed texture (scaled, rotated, etc...),
+         * you can use @see textureTilesById(char, const Graphics::Sprite&)
          */
         void textureTilesById(char id, FloatRect rect);
 
@@ -130,23 +132,20 @@ namespace IME {
          * @param id Id of the tile to apply texture to
          * @param sprite Texture to apply
          *
-         * The texture will be applied as is. This function is useful if the
-         * texture from the tileset must be transformed first (scaled,
-         * rotated, etc...) before its applied to the tilemap
+         * The texture will be applied as is (i.e the properties of the sprite
+         * object (scaling, rotation, origin etc..) will no be altered. This
+         * function is useful if the texture from the tileset must be transformed
+         * first (scaled, rotated, etc...) before its applied to the tilemap
          */
         void textureTilesById(char id, const Graphics::Sprite& sprite);
-
-        /**
-         * @brief Replace a tile at a certain index
-         * @param index Index of the tile to replace
-         * @param tile Tile to replace old one with
-         */
-        void setTile(Index index, Graphics::Tile&& tile);
 
         /**
          * @brief Enable or disable collision for a tile at a certain location
          * @param index Location (in tiles) of the tile
          * @param isCollidable True to enable collision, otherwise false
+         *
+         * The tile will be marked as a solid tile, if currently set as an
+         * empty tile
          */
         void setCollidableByIndex(const Index &index, bool isCollidable);
 
@@ -154,60 +153,64 @@ namespace IME {
          * @brief Enable or disable collision for tiles at certain locations
          * @param locations Locations (in tiles) of the tiles
          * @param isCollidable True to enable collision, otherwise false
+         *
+         * All the tiles at specified indexes (if valid) will be set as solid
+         * tiles if currently set as empty tiles
          */
         void setCollidableByIndex(const std::initializer_list<Index>& locations,
-                                  bool isCollidable);
+            bool isCollidable);
 
         /**
          * @brief Enable or disable collisions for tiles in a range
          * @param startPos The start position of the range
          * @param endPos The ending position of the range
          *
-         * @note Only horizontal ranges are supported
+         * @warning Only horizontal ranges are supported. This means that
+         * that the indexes in the range [startPos, endPos] must refer to
+         * tiles that are valid and horizontally contiguous
          */
         void setCollidableByIndex(Index startPos, Index endPos, bool isCollidable);
 
         /**
-         * @brief Enable or disable collision for tiles with a certain id
+         * @brief Enable or disable collisions for tiles with a certain id
          * @param id Id of the tiles to enable or disable collisions for
          * @param isCollidable True to enable collision, otherwise false
+         *
+         * All the tiles with the specified id will be marked as solid tiles
+         * if currently marked as empty tiles
          */
-        void setCollidableById(const char& id, bool isCollidable);
+        void setCollidableById(char id, bool isCollidable);
 
         /**
-         * @brief Enable or disable collision for all tiles except those with
+         * @brief Enable or disable collisions for all tiles except those with
          *        with a certain id
          * @param id Identification of the tiles to exclude
          * @param isCollidable True to enable collision, otherwise false
          */
-        void setCollidableByExclusion(const char& id, bool isCollidable);
+        void setCollidableByExclusion(char id, bool isCollidable);
 
         /**
-         * @brief Add an object to the tile map
-         * @param index Index of the tile to add the object to
-         * @param child Object to add to the tile map
-         * @return True if the object has been added or false if the index is
-         *         invalid
+         * @brief Add an entity to the tilemap
+         * @param child Entity to add to the tilemap
+         * @param index Index of the tile to add the entity to
+         * @return True if the entity has been added or false if the index is
+         *         invalid or the entity already exists in the tilemap
+         *
+         * If the specified tile is already occupied, the child will be added
+         * as a visitor of that tile. If the child already exists and you want
+         * to move it to a different tile @see moveChild
          */
-        bool addChild(Index index, std::shared_ptr<IME::Entity> child);
+        bool addChild(std::shared_ptr<IME::Entity> child, Index index);
 
         /**
-         * @brief Check if the tilemap has a certain child object
-         * @param childPtr Child to search for in the tilemap
-         * @return True if the tilemap has the child otherwise false
+         * @brief Check if the tilemap has a certain child or not
+         * @param child Child to search for in the tilemap
+         * @return True if the tilemap has the child, otherwise false
          */
-        bool hasChild(std::shared_ptr<Entity> childPtr);
+        bool hasChild(std::shared_ptr<Entity> child);
 
         /**
-         * @brief Get the child occupying a certain tile
-         * @param tilePos The position of the tile to get the occupant of
-         * @return The child occupying a tile at the specified location or a
-         *         nullptr if the tile is not occupied
-         */
-        std::shared_ptr<Entity> getChild(Index index) const;
-
-        /**
-         * @brief Get the child in the map with a certain id
+         * @brief Get the child in the tilemap with a certain id
          * @param id Id of the child to get access to
          * @return The child with the specified id or a nullptr if the child
          *          with the specified id does not exist in the tilemap
@@ -215,26 +218,31 @@ namespace IME {
         std::shared_ptr<Entity> getChildWithId(std::size_t id) const;
 
         /**
-         * @brief Remove a child from the tilemap
+         * @brief Remove a child from a tile
          * @param child Child to be removed
          * @return True if the child was removed or false if the child is not
-         *          in the tilemap
+         *         in the specified tile
          */
-        bool removeChild(const std::shared_ptr<Entity>& child);
+        bool removeChildFromTile(const IME::Graphics::Tile& tile, const std::shared_ptr<Entity>& child);
 
         /**
-         * @brief Remove an entity from the tilemap
-         * @param index Index of the entity in the tilemap
-         * @return True if the entity was removed or false if the entity does not
-         *          exist at the specified index
+         * @brief Remove an occupant of a tile
+         * @param tile Tile to remove occupant from
+         * @return True if the occupant was removed or false if the tile is
+         *         not occupied or it is invalid
+         *
+         * Recall, an occupant is the first child to occupy a tile, if removed,
+         * the first visitor will become the new occupant. Subsequent calls to
+         * this function will result in visitors taking turns as occupants until
+         * the tile is no longer occupied
          */
-        bool removeChild(Index index);
+        bool removeOccupant(const Graphics::Tile &tile);
 
         /**
          * @brief Remove a child with a certain id from the tilemap
          * @param id Id of the child to be removed
-         * @return True if the child was removed or false if the child does not
-         *          exist
+         * @return True if the child was removed or false if the child with
+         *         the specified id does not exist in the tilemap
          */
         bool removeChildWithId(std::size_t id);
 
@@ -242,8 +250,83 @@ namespace IME {
          * @brief Move child to a different position in the tilemap
          * @param child Child to move
          * @param index New position of the child
+         *
+         * The child is ignored if it does not exist in the tilemap or the
+         * specified index is invalid. To add the child @see addChild
          */
-        void updateChild(std::shared_ptr<IME::Entity> child, Index index);
+        void moveChild(std::shared_ptr<IME::Entity> child, Index index);
+
+        /**
+         * @brief Move child to a different tile
+         * @param child Child to be moved
+         * @param tile Tile to move child to
+         *
+         * The child is ignored if it does not exist in the tilemap or the
+         * specified tile is invalid. To add the child @see addChild
+         */
+        void moveChild(std::shared_ptr<IME::Entity> child, const Graphics::Tile& tile);
+
+        /**
+         * @brief Get the tile occupied by a child of the tilemap
+         * @param child Child whose occupation tile is to be retrieved
+         * @return The tile occupied by the specified child or an invalid tile
+         *         if the child is not in the tilemap
+         *
+         * An invalid tile has a negative index
+         */
+        Graphics::Tile& getTileOccupiedByChild(std::shared_ptr<Entity> child);
+
+        /**
+         * @brief Check if tile is occupied or not
+         * @param tile Tile to be checked
+         * @return True if the tile is occupied, otherwise false
+         *
+         * A tile is occupied if it has at least one child
+         *
+         * @see addChild
+         */
+        bool isTileOccupied(const Graphics::Tile& tile) const;
+
+        /**
+         * @brief Check if the tile at a specified index has visitors or not
+         * @param index Index of the tile to be checked
+         * @return True if the tile has visitors, otherwise false
+         *
+         * A tile has visitors if its currently occupied by more than one
+         * child. The first child to occupy the tile is the occupant of
+         * that tile whilst other entities are visitors
+         */
+        bool tileHasVisitors(const Graphics::Tile& tile) const;
+
+        /**
+         * @brief Get the occupant of a tile
+         * @param tile Tile to get the occupant of
+         * @return The occupant of the specified tile if the tile is occupied,
+         *         otherwise a nullptr
+         *
+         * An occupant is the first child to occupy a tile, subsequent children
+         * are considered visitors
+         *
+         * @see forEachTile(Graphics::Tile&, Callback) to get visitors
+         */
+        std::shared_ptr<Entity> getOccupant(const Graphics::Tile& index);
+
+        /**
+         * @brief Execute a callback for each child in the tilemap
+         * @param callback Function to execute
+         */
+        void forEachChild(Callback<std::shared_ptr<Entity>> callback);
+
+        /**
+         * @brief Execute a callback for each child in a tile
+         * @param tile Tile to execute callback on
+         * @param callback Function to execute
+         *
+         * The callback will be passed the children of the tile, with the first
+         * child being the occupant of the tile. The callback will be ignored
+         * if the specified index is invalid or the tile is not occupied
+         */
+        void forEachChildInTile(const Graphics::Tile& tile, Callback<std::shared_ptr<Entity>> callback);
 
         /**
          * @brief Get the size of each tile in the grid
@@ -257,7 +340,8 @@ namespace IME {
          * @brief Get the tile at at certain position
          * @param position Position of the tile to retrieve
          * @return The tile at the specified position or an invalid tile if
-         *         the specified position does not lie within the tilemap bounds
+         *         the specified position does not lie within the tilemap
+         *         bounds
          *
          * A tile is invalid if it has a negative index
          */
@@ -309,7 +393,7 @@ namespace IME {
          *
          * The background of the tilemap may be manipulated through the
          * returned sprite. @note By default there is no background set,
-         * if the background texture is set then @see showLayer must be
+         * if the background texture is set then @see showLayer() must be
          * invoked with "background" as the argument in order for the
          * background to be rendered and displayed
          */
@@ -334,8 +418,8 @@ namespace IME {
         Graphics::Tile& getTile(const Index& index);
 
         /**
-         * @brief Render tile map on a render target
-         * @param renderTarget Target to render tile map on
+         * @brief Render tilemap on a render target
+         * @param renderTarget Target to render tilemap on
          */
         void draw(Graphics::Window &renderTarget);
 
@@ -358,8 +442,8 @@ namespace IME {
          * @brief Get the size of the tilemap in tiles
          * @return Size of the tilemap in tiles
          *
-         * The x component is the number of columns whilst the y component
-         * is the number of rows
+         * @warning The x component is the number of columns whilst the y
+         * component is the number of rows
          */
         Vector2u getSizeInTiles() const;
 
@@ -395,10 +479,18 @@ namespace IME {
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTile(const char& id, Callback<Graphics::Tile&> callback);
+        void forEachTile(char id, Callback<Graphics::Tile&> callback);
 
         /**
-         * @brief Execute a callback on each tile of the tilemap
+         * @brief Execute a callback on all tiles except tiles with a
+         *        given id
+         * @param id Id of the tiles to be ignored
+         * @param callback Function to be executed
+         */
+        void forEachTileExcept(char id, Callback<Graphics::Tile&> callback);
+
+        /**
+         * @brief Execute a callback on all the tiles of the tilemap
          * @param callback Function to execute for each tile
          */
         void forEachTile(Callback<Graphics::Tile&> callback);
@@ -412,12 +504,6 @@ namespace IME {
          * @note Only horizontal ranges are supported
          */
         void forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
-
-        /**
-         * @brief Execute a callback on each child of the tile map
-         * @param childPtr Function to execute for each child
-         */
-        void forEachChild(Callback<Entity&> childPtr);
 
         /**
          * @brief Check if the index is within bounds of the tilemap or not
@@ -437,6 +523,8 @@ namespace IME {
          * @brief Create the visual gird
          */
         void createTiledMap();
+
+        void createObjectList();
 
         /**
          * @brief Calculate size related attributes
@@ -507,9 +595,7 @@ namespace IME {
         //Visual grid (second layer)
         std::vector<std::vector<Graphics::Tile>> tiledMap_;
         //References to objects (third layer)
-        std::vector<std::pair<Index, std::shared_ptr<Entity>>> children_;
-        //Holds the tileset image properties associated with a tile id
-        std::unordered_map<char, std::pair<std::string, FloatRect>> imagesData_;
+        std::unordered_map<Index, std::vector<std::shared_ptr<Entity>>> children_;
         //The maps tileset image files
         std::unordered_map<std::string, std::string> tilesets_;
         //The visibility state of the grid

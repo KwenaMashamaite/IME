@@ -26,9 +26,14 @@
 #include <assert.h>
 
 namespace IME {
-    Entity::Entity(const Vector2u &boundingRect)
-        : boundingRect_(boundingRect), isVulnerable_(true), isAlive_(true), isCollidable_(false),
-          direction_(Direction::None), position_({0, 0})
+    Entity::Entity(const Vector2u &boundingRect, Type type) :
+        type_(type),
+        boundingRect_(boundingRect),
+        isVulnerable_(true),
+        isAlive_(true),
+        isCollidable_(false),
+        direction_(Direction::None),
+        position_({0, 0})
     {
         static std::size_t prevEntityId = 0;
         id_ = prevEntityId++;
@@ -90,6 +95,14 @@ namespace IME {
 
     bool Entity::isCollidable() const {
         return isCollidable_;
+    }
+
+    void Entity::setType(Entity::Type type) {
+        type_ = type;
+    }
+
+    Entity::Type Entity::getType() const {
+        return type_;
     }
 
     bool Entity::isVulnerable() const {

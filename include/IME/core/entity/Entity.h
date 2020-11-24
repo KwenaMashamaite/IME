@@ -40,6 +40,15 @@
 namespace IME {
     class IME_API Entity {
     public:
+        // The type of an entity
+        enum class Type {
+            Unknown = -1,
+            Player = 0,
+            Enemy,
+            Collectable,
+            Obstacle,
+        };
+
         /**
          * @brief Construct entity
          * @param boundingRectSize Size of the entity's bounding rect
@@ -47,7 +56,7 @@ namespace IME {
          * The entity is alive, has the position (0, 0) and no direction
          * by default
          */
-        explicit Entity(const Vector2u &boundingRectSize);
+        explicit Entity(const Vector2u &boundingRectSize, Type type = Type::Unknown);
 
         /**
          * @brief Set the position of the entity
@@ -127,10 +136,22 @@ namespace IME {
         bool isCollidable() const;
 
         /**
-         * @brief Get the type of the object
-         * @return The type of the object
+         * @brief Get concrete class the object belongs to
+         * @return Name of the concrete class the objects belongs to
          */
-        virtual std::string getObjectType() = 0;
+        virtual std::string getClassType() = 0;
+
+        /**
+         * @brief Set the type of the entity
+         * @param type Type to set
+         */
+        void setType(Type type);
+
+        /**
+         * @brief Get the type of the entity
+         * @return The type of the entity
+         */
+        Type getType() const;
 
         /**
          * @brief Get the entities unique identifier
@@ -202,6 +223,8 @@ namespace IME {
         }
 
     private:
+        //The type of this entity object
+        Type type_;
         //Objects unique identifier
         std::size_t id_;
         //The entities bounding rectangle

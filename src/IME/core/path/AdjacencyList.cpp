@@ -24,16 +24,31 @@
 
 #include "IME/core/path/AdjacencyList.h"
 
+bool tileHasObstacle(IME::TileMap& grid, IME::Index index) {
+    auto hasObstacle = false;
+    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<IME::Entity> child) {
+        if (child->getType() == IME::Entity::Type::Obstacle && child->isCollidable()) {
+            hasObstacle = true;
+            return;
+        }
+    });
+    return hasObstacle;
+}
+
 namespace IME {
     void AdjacencyList::generateFrom(TileMap &tileMap) {
         auto static addNeighbour = [](auto& tilemap, auto& neighbours, int row, int colm) {
-            if (tilemap.isIndexValid({row, colm}) && tilemap.getTile(Index{row, colm}).getType() != Graphics::TileType::Obstacle)
+            if (tilemap.isIndexValid({row, colm})
+                && !tilemap.getTile(Index{row, colm}).isSolid()
+                && !tileHasObstacle(tilemap, Index{row, colm}))
+            {
                 neighbours.push_back({row, colm});
+            }
         };
 
         for (auto i = 0; i < tileMap.getSizeInTiles().y; i++) {
             for (auto j = 0 ; j < tileMap.getSizeInTiles().x; j++) {
-                if (tileMap.getTile(Index{i, j}).getType() == Graphics::TileType::Obstacle)
+                if (tileMap.getTile(Index{i, j}).isSolid() || tileHasObstacle(tileMap, Index{i, j}))
                     continue;
                 auto neighbours = std::vector<Index>{};
                 addNeighbour(tileMap, neighbours, i - 1, j); //Left neighbour

@@ -27,11 +27,13 @@
 #include <cassert>
 
 namespace IME {
-    GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target)
-        : tileMap_(tileMap), target_(target),
-          targetDirection_(Direction::None),
-          targetTile_{tileMap.getTileSize(), {0, 0}},
-          reachedTarget_(false)
+    GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
+        tileMap_(tileMap),
+        target_(target),
+        targetDirection_(Direction::None),
+        targetTile_{tileMap.getTileSize(), {0, 0}},
+        prevTile_({tileMap.getTileSize(), {}}),
+        reachedTarget_(false)
     {
         if (target) {
             assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
@@ -45,12 +47,11 @@ namespace IME {
             return;
         else if (target) {
             assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
-            assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+            assert(tileMap_.hasChild(target) && "Target must already be in the grid before calling setTarget()");
             if (target_)
                 teleportTargetToDestination();
             targetTile_ = tileMap_.getTile(target->getPosition());
             target_ = std::move(target);
-            eventEmitter_.emit("targetChange", target_);
         }
     }
 
@@ -96,44 +97,44 @@ namespace IME {
     }
 
     void GridMover::update(float deltaTime) {
-        auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
-        if (!movableObj)
+        auto movable = std::dynamic_pointer_cast<IMovable>(target_);
+        if (!movable)
             return;
-        if (!movableObj->isMoving() && targetDirection_ != Direction::None) {
-            auto currentTile = tileMap_.getTile(target_->getPosition());
+        if (!movable->isMoving() && targetDirection_ != Direction::None) {
+            prevTile_ = tileMap_.getTile(target_->getPosition());
             switch (targetDirection_) {
                 case Direction::Left:
-                    targetTile_ = tileMap_.getTileLeftOf(currentTile);
+                    targetTile_ = tileMap_.getTileLeftOf(prevTile_);
                     break;
                 case Direction::Right:
-                    targetTile_ = tileMap_.getTileRightOf(currentTile);
+                    targetTile_ = tileMap_.getTileRightOf(prevTile_);
                     break;
                 case Direction::Up:
-                    targetTile_ = tileMap_.getTileAbove(currentTile);
+                    targetTile_ = tileMap_.getTileAbove(prevTile_);
                     break;
                 case Direction::Down:
-                    targetTile_ = tileMap_.getTileBelow(currentTile);
+                    targetTile_ = tileMap_.getTileBelow(prevTile_);
                     break;
             }
 
             //A tile outside the grid bounds has the index {-1, -1}
             if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
-                targetTile_ = currentTile;
+                targetTile_ = prevTile_;
                 targetDirection_ = Direction::None;
                 eventEmitter_.emit("gridCollision");
                 return;
             }
 
-            if (targetTile_.getType() == Graphics::TileType::Obstacle) {
-                targetTile_ = currentTile;
+            if (targetTile_.isSolid()) {
+                auto tile = targetTile_;
+                targetTile_ = prevTile_;
                 targetDirection_ = Direction::None;
-                auto obstacle = tileMap_.getChild(targetTile_.getIndex());
-                eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                eventEmitter_.emit("tileCollision", target_, tile);
                 return;
             }
-            movableObj->move();
-        } else if (movableObj->isMoving()) {
-            auto velocity = movableObj->getSpeed() * deltaTime;
+            movable->move();
+        } else if (movable->isMoving()) {
+            auto velocity = movable->getSpeed() * deltaTime;
             if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
                 auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
                 if (velocity >= horizontalDistToTarget)
@@ -148,20 +149,29 @@ namespace IME {
 
             if (reachedTarget_) {
                 reachedTarget_ = false;
-                auto targetTileIndex = targetTile_.getIndex();
-                switch (targetTile_.getType()) {
-                    case Graphics::TileType::Collectable:
-                        eventEmitter_.emit("collectableCollision", target_, tileMap_.getChild(targetTileIndex));
-                        break;
-                    case Graphics::TileType::Enemy:
-                        eventEmitter_.emit("enemyCollision", target_, tileMap_.getChild(targetTileIndex));
-                        break;
-                    case Graphics::TileType::Player:
-                        eventEmitter_.emit("playerCollision", target_, tileMap_.getChild(targetTileIndex));
-                        break;
-                    default:
-                        break;
-                }
+                tileMap_.forEachChildInTile(targetTile_, [this](EntityPtr entity) {
+                    if (entity->isCollidable()) {
+                        switch (entity->getType()) {
+                            case Entity::Type::Unknown:
+                                break;
+                            case Entity::Type::Player:
+                                eventEmitter_.emit("playerCollision", target_, entity);
+                                break;
+                            case Entity::Type::Enemy:
+                                eventEmitter_.emit("enemyCollision", target_, entity);
+                                break;
+                            case Entity::Type::Collectable:
+                                eventEmitter_.emit("collectableCollision", target_, entity);
+                                break;
+                            case Entity::Type::Obstacle:
+                                targetTile_ = prevTile_;
+                                targetDirection_ = Direction::None;
+                                tileMap_.moveChild(target_, prevTile_.getIndex());
+                                eventEmitter_.emit("obstacleCollision", target_, entity);
+                                break;
+                        }
+                    }
+                });
                 eventEmitter_.emit("destinationReached", targetTile_.getPosition().x, targetTile_.getPosition().y);
             }
         }
@@ -173,11 +183,15 @@ namespace IME {
 
     void GridMover::snap() {
         if (target_ && target_->getPosition() != targetTile_.getPosition()) {
-            target_->setPosition(targetTile_.getPosition().x, targetTile_.getPosition().y);
+            tileMap_.moveChild(target_, targetTile_);
             std::dynamic_pointer_cast<IMovable>(target_)->stop();
             targetDirection_ = Direction::None;
             reachedTarget_ = true;
         }
+    }
+
+    int GridMover::onTileCollision(Callback<Graphics::Tile &> callback) {
+        return eventEmitter_.addEventListener("tileCollision", std::move(callback));
     }
 
     int GridMover::onTargetChanged(Callback<GridMover::EntityPtr> callback) {
