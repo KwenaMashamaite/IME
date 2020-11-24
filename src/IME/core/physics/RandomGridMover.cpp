@@ -26,10 +26,13 @@
 #include "IME/utility/Utils.h"
 
 namespace IME {
-    RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target)
-        : gridMover_(tileMap, target), prevDirection_(Direction::None), movementStarted_{false}
+    RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
+        GridMover(tileMap, target), prevDirection_(Direction::None),
+        obstacleHandlerId_{-1},
+        solidTileHandlerId_{-1},
+        movementStarted_{false}
     {
-        gridMover_.onTargetChanged([this](EntityPtr target) {
+        onTargetChanged([this](EntityPtr target) {
             if (target) {
                 movementStarted_ = true;
                 generateNewDirection();
@@ -37,29 +40,29 @@ namespace IME {
                 movementStarted_ = false;
         });
 
-        gridMover_.onObstacleCollision([this](auto target, auto obstacle) {
-            if (target && movementStarted_) {
-                gridMover_.getTarget()->setDirection(prevDirection_);
-                generateNewDirection();
-            }
+        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile tile) {
+            revertAndGenerateDirection();
         });
 
-        gridMover_.onDestinationReached([this](float x, float y) {
+        obstacleHandlerId_ = onObstacleCollision([this](auto, auto) {
+            revertAndGenerateDirection();
+        });
+
+        onAdjacentTileReached([this](Graphics::Tile) {
             if (movementStarted_)
                 generateNewDirection();
         });
 
-        gridMover_.onGridBorderCollision([this] {
+        onGridBorderCollision([this] {
             generateNewDirection();
         });
-    }
 
-    void RandomGridMover::setTarget(RandomGridMover::EntityPtr target) {
-        gridMover_.setTarget(target);
-    }
-
-    RandomGridMover::EntityPtr RandomGridMover::getTarget() const {
-        return gridMover_.getTarget();
+        onInternalHandlerRemove([this](std::string handler) {
+            if (handler == "solidTiles")
+                removeCollisionHandler(solidTileHandlerId_);
+            else if (handler == "obstacles")
+                removeCollisionHandler(obstacleHandlerId_);
+        });
     }
 
     void RandomGridMover::startMovement() {
@@ -73,15 +76,11 @@ namespace IME {
         movementStarted_ = false;
     }
 
-    void RandomGridMover::update(float deltaTime) {
-        gridMover_.update(deltaTime);
-    }
-
     void RandomGridMover::generateNewDirection() {
-        if (!gridMover_.getTarget())
+        if (!getTarget())
             return;
 
-        prevDirection_ = gridMover_.getTarget()->getDirection();
+        prevDirection_ = getTarget()->getDirection();
         auto newDirection = Direction::None;
         auto oppositeDirection = Direction::None;
 
@@ -97,34 +96,13 @@ namespace IME {
         do {
             newDirection = static_cast<Direction>(Utility::generateRandomNum(1, 4));
         } while (newDirection == oppositeDirection);
-        gridMover_.requestDirectionChange(newDirection);
+        requestDirectionChange(newDirection);
     }
 
-    int RandomGridMover::onDestinationReached(Callback<float, float> callback) {
-        return gridMover_.onDestinationReached(std::move(callback));
-    }
-
-    int RandomGridMover::onObstacleCollision(Callback<RandomGridMover::EntityPtr,
-        RandomGridMover::EntityPtr> callback)
-    {
-        return gridMover_.onObstacleCollision(std::move(callback));
-    }
-
-    int RandomGridMover::onCollectableCollision(Callback<RandomGridMover::EntityPtr,
-        RandomGridMover::EntityPtr> callback)
-    {
-        return gridMover_.onCollectableCollision(std::move(callback));
-    }
-
-    int RandomGridMover::onEnemyCollision(Callback<RandomGridMover::EntityPtr,
-        RandomGridMover::EntityPtr> callback)
-    {
-        return gridMover_.onEnemyCollision(std::move(callback));
-    }
-
-    int RandomGridMover::onPlayerCollision(Callback<RandomGridMover::EntityPtr,
-        RandomGridMover::EntityPtr> callback)
-    {
-        return gridMover_.onPlayerCollision(std::move(callback));
+    void RandomGridMover::revertAndGenerateDirection() {
+        if (getTarget() && movementStarted_) {
+            getTarget()->setDirection(prevDirection_);
+            generateNewDirection();
+        }
     }
 }

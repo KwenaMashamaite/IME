@@ -40,6 +40,18 @@ namespace IME {
             assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
             targetTile_ = tileMap.getTile(target->getPosition());
         }
+
+        obstacleCollisionHandler_ = [this] {
+            targetTile_ = prevTile_;
+            targetDirection_ = Direction::None;
+        };
+
+        solidTileCollisionHandler_ = [this] {
+            auto hitTile = targetTile_;
+            targetTile_ = prevTile_;
+            targetDirection_ = Direction::None;
+            eventEmitter_.emit("solidTileCollision", hitTile);
+        };
     }
 
     void GridMover::setTarget(GridMover::EntityPtr target) {
@@ -97,113 +109,152 @@ namespace IME {
     }
 
     void GridMover::update(float deltaTime) {
-        auto movable = std::dynamic_pointer_cast<IMovable>(target_);
-        if (!movable)
-            return;
-        if (!movable->isMoving() && targetDirection_ != Direction::None) {
-            prevTile_ = tileMap_.getTile(target_->getPosition());
-            switch (targetDirection_) {
-                case Direction::Left:
-                    targetTile_ = tileMap_.getTileLeftOf(prevTile_);
-                    break;
-                case Direction::Right:
-                    targetTile_ = tileMap_.getTileRightOf(prevTile_);
-                    break;
-                case Direction::Up:
-                    targetTile_ = tileMap_.getTileAbove(prevTile_);
-                    break;
-                case Direction::Down:
-                    targetTile_ = tileMap_.getTileBelow(prevTile_);
-                    break;
-            }
+        if (target_) {
+            assert(tileMap_.hasChild(target_) && "Target removed from the grid while still controlled by a grid mover");
+            auto movable = std::dynamic_pointer_cast<IMovable>(target_);
+            if (!movable->isMoving() && targetDirection_ != Direction::None) {
+                setTargetTile();
 
-            //A tile outside the grid bounds has the index {-1, -1}
-            if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
-                targetTile_ = prevTile_;
-                targetDirection_ = Direction::None;
-                eventEmitter_.emit("gridCollision");
-                return;
-            }
-
-            if (targetTile_.isSolid()) {
-                auto tile = targetTile_;
-                targetTile_ = prevTile_;
-                targetDirection_ = Direction::None;
-                eventEmitter_.emit("tileCollision", target_, tile);
-                return;
-            }
-            movable->move();
-        } else if (movable->isMoving()) {
-            auto velocity = movable->getSpeed() * deltaTime;
-            if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
-                auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
-                if (velocity >= horizontalDistToTarget)
-                    snap();
-            }
-
-            if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
-                auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getPosition().y);
-                if (velocity >= verticalDistToTarget)
-                    snap();
-            }
-
-            if (reachedTarget_) {
-                reachedTarget_ = false;
-                tileMap_.forEachChildInTile(targetTile_, [this](EntityPtr entity) {
-                    if (entity->isCollidable()) {
-                        switch (entity->getType()) {
-                            case Entity::Type::Unknown:
-                                break;
-                            case Entity::Type::Player:
-                                eventEmitter_.emit("playerCollision", target_, entity);
-                                break;
-                            case Entity::Type::Enemy:
-                                eventEmitter_.emit("enemyCollision", target_, entity);
-                                break;
-                            case Entity::Type::Collectable:
-                                eventEmitter_.emit("collectableCollision", target_, entity);
-                                break;
-                            case Entity::Type::Obstacle:
-                                targetTile_ = prevTile_;
-                                targetDirection_ = Direction::None;
-                                tileMap_.moveChild(target_, prevTile_.getIndex());
-                                eventEmitter_.emit("obstacleCollision", target_, entity);
-                                break;
-                        }
+                // Stop further execution if a collision will occur if we move
+                if (handleGridBorderCollision())
+                    return;
+                else if (handleSolidTileCollision())
+                    return;
+                else if (auto [found, obstacle] = targetTileHasObstacle(); found) {
+                    if (obstacleCollisionHandler_) {
+                        obstacleCollisionHandler_();
+                        eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                        return;
                     }
-                });
-                eventEmitter_.emit("destinationReached", targetTile_.getPosition().x, targetTile_.getPosition().y);
+                    eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                }
+
+                movable->move();
+            } else if (movable->isMoving()) {
+                if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
+                    auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
+                    if (movable->getSpeed() * deltaTime >= horizontalDistToTarget)
+                        snapTargetToTargetTile();
+                }
+
+                if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
+                    auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getPosition().y);
+                    if (movable->getSpeed() * deltaTime >= verticalDistToTarget)
+                        snapTargetToTargetTile();
+                }
+
+                if (reachedTarget_) {
+                    reachedTarget_ = false;
+                    onDestinationReached();
+                }
             }
         }
     }
 
     void GridMover::teleportTargetToDestination() {
-        snap();
+        snapTargetToTargetTile();
     }
 
-    void GridMover::snap() {
+    void GridMover::snapTargetToTargetTile() {
         if (target_ && target_->getPosition() != targetTile_.getPosition()) {
-            tileMap_.moveChild(target_, targetTile_);
             std::dynamic_pointer_cast<IMovable>(target_)->stop();
+            tileMap_.removeChildFromTile(prevTile_, target_);
+            tileMap_.addChild(target_, targetTile_.getIndex());
             targetDirection_ = Direction::None;
             reachedTarget_ = true;
         }
     }
 
-    int GridMover::onTileCollision(Callback<Graphics::Tile &> callback) {
-        return eventEmitter_.addEventListener("tileCollision", std::move(callback));
+    bool GridMover::handleSolidTileCollision() {
+        if (targetTile_.isSolid() && target_->isCollidable()) {
+            if (solidTileCollisionHandler_) {
+                solidTileCollisionHandler_();
+                return true;
+            }
+            eventEmitter_.emit("solidTileCollision", targetTile_);
+        }
+        return false;
+    }
+
+    std::pair<bool, std::shared_ptr<Entity>> GridMover::targetTileHasObstacle() {
+        EntityPtr obstacle;
+        tileMap_.forEachChildInTile(targetTile_, [&](EntityPtr child) {
+            if (child->getType() == Entity::Type::Obstacle && child->isCollidable()) {
+                obstacle = child;
+                return;
+            }
+        });
+        return {obstacle != nullptr, std::move(obstacle)};
+    }
+
+    bool GridMover::handleGridBorderCollision() {
+        //A tile outside the grid bounds has the index {-1, -1}
+        if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
+            targetTile_ = prevTile_;
+            targetDirection_ = Direction::None;
+            eventEmitter_.emit("gridBorderCollision");
+            return true;
+        }
+        return false;
+    }
+
+    void GridMover::onDestinationReached() {
+        tileMap_.forEachChildInTile(targetTile_, [this](EntityPtr entity) {
+            if (target_->isCollidable() && entity->isCollidable()) {
+                switch (entity->getType()) {
+                    case Entity::Type::Unknown:
+                        break;
+                    case Entity::Type::Player:
+                        eventEmitter_.emit("playerCollision", target_, entity);
+                        break;
+                    case Entity::Type::Enemy:
+                        eventEmitter_.emit("enemyCollision", target_, entity);
+                        break;
+                    case Entity::Type::Collectable:
+                        eventEmitter_.emit("collectableCollision", target_, entity);
+                        break;
+                    case Entity::Type::Obstacle:
+                        break;
+                }
+            }
+        });
+        eventEmitter_.emit("adjacentTileReached", targetTile_);
+    }
+
+    void GridMover::setTargetTile() {
+        prevTile_ = tileMap_.getTile(target_->getPosition());
+        switch (targetDirection_) {
+            case Direction::Left:
+                targetTile_ = tileMap_.getTileLeftOf(prevTile_);
+                break;
+            case Direction::Right:
+                targetTile_ = tileMap_.getTileRightOf(prevTile_);
+                break;
+            case Direction::Up:
+                targetTile_ = tileMap_.getTileAbove(prevTile_);
+                break;
+            case Direction::Down:
+                targetTile_ = tileMap_.getTileBelow(prevTile_);
+                break;
+            case Direction::None:
+                return;
+        }
     }
 
     int GridMover::onTargetChanged(Callback<GridMover::EntityPtr> callback) {
         return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
-    int GridMover::onGridBorderCollision(Callback<> callback) {
-        return eventEmitter_.addEventListener("gridCollision", std::move(callback));
+    int GridMover::onSolidTileCollision(Callback<Graphics::Tile> callback) {
+        return eventEmitter_.addEventListener("solidTileCollision", std::move(callback));
     }
 
-    int GridMover::onDestinationReached(Callback<float, float> callback) {
-        return eventEmitter_.addEventListener("destinationReached", std::move(callback));
+    int GridMover::onGridBorderCollision(Callback<> callback) {
+        return eventEmitter_.addEventListener("gridBorderCollision", std::move(callback));
+    }
+
+    int GridMover::onAdjacentTileReached(Callback<Graphics::Tile> callback) {
+        return eventEmitter_.addEventListener("adjacentTileReached", std::move(callback));
     }
 
     int GridMover::onObstacleCollision(Callback<EntityPtr, EntityPtr> callback) {
@@ -220,5 +271,45 @@ namespace IME {
 
     int GridMover::onPlayerCollision(Callback<GridMover::EntityPtr, GridMover::EntityPtr> callback) {
         return eventEmitter_.addEventListener("playerCollision", std::move(callback));
+    }
+
+    bool GridMover::removeCollisionHandler(int handlerId) {
+        if (eventEmitter_.removeEventListener("playerCollision", handlerId)
+            || eventEmitter_.removeEventListener("enemyCollision", handlerId)
+            || eventEmitter_.removeEventListener("collectableCollision", handlerId)
+            || eventEmitter_.removeEventListener("obstacleCollision", handlerId)
+            || eventEmitter_.removeEventListener("adjacentTileReached", handlerId)
+            || eventEmitter_.removeEventListener("solidTileCollision", handlerId)
+            || eventEmitter_.removeEventListener("gridBorderCollision", handlerId))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool GridMover::removeInternalCollisionHandlerFor(const std::string &handler) {
+        if (handler == "solidTiles") {
+            solidTileCollisionHandler_ = nullptr;
+            eventEmitter_.emit("handlerRemoved", handler);
+            return true;
+        } else if (handler == "obstacles") {
+            obstacleCollisionHandler_ = nullptr;
+            eventEmitter_.emit("handlerRemoved", handler);
+            return true;
+        }
+        return false;
+    }
+
+    bool GridMover::isInternalHandlerRemoved(const std::string &handler) {
+        if (handler == "solidTiles") {
+            return solidTileCollisionHandler_ == nullptr;
+        } else if (handler == "obstacles") {
+            return obstacleCollisionHandler_ == nullptr;
+        }
+        return true;
+    }
+
+    void GridMover::onInternalHandlerRemove(Callback<std::string> callback) {
+        eventEmitter_.addEventListener("handlerRemoved", std::move(callback));
     }
 }

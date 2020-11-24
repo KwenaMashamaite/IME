@@ -33,10 +33,8 @@
 #include "IME/core/path/IGridPathFinder.h"
 
 namespace IME {
-    class IME_API TargetGridMover {
+    class IME_API TargetGridMover : public GridMover {
     public:
-        using EntityPtr = std::shared_ptr<Entity>;
-
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to target in
@@ -45,21 +43,6 @@ namespace IME {
          * The target must be placed in the grid prior to grid mover construction
          */
         explicit TargetGridMover(TileMap &tileMap, EntityPtr target = nullptr);
-
-        /**
-         * @brief Change the controlled entity
-         * @param target New target
-         *
-         * Set to nullptr to remove the target from the grid mover
-         */
-        void setTarget(EntityPtr target);
-
-        /**
-         * @brief Get access to the controlled entity
-         * @return The controlled entity, or a nullptr if there is no entity
-         *         to control
-         */
-        EntityPtr getTarget() const;
 
         /**
          * @brief Set the path finder
@@ -112,71 +95,18 @@ namespace IME {
         void pauseMovement();
 
         /**
-         * @brief Update the targets movement in the grid
-         * @param deltaTime Time passed since targets movement was last updated
-         *
-         * This function must be called at least once per frame for consistent
-         * movement of the target otherwise the target will not move
-         */
-        void update(float deltaTime);
-
-        /**
-         * @brief Add an event listener to an to an adjacent tile reached event
-         * @param callback Function to execute when the event is fired
-         * @return The identification number of the listener
-         *
-         * This event is fired as the target moves from one tile to the next.
-         * To get notified when the target reaches the final destination
-         * @see onDestinationReached()
-         */
-        int onAdjacentTileReached(Callback<float, float> callback);
-
-        /**
          * @brief Add an event listener to a destination reached event
          * @param callback Function to execute when the target reaches its
          *          destination tile
          *
          * This event is fired when the target reaches the final target tile.
          * To get notified as the target progresses towards the destination
-         * #see onAdjacentTileReached()
-         */
-        int onDestinationReached(Callback<float, float> callback);
-
-        /**
-         * @brief Add an event listener to a collectable collision
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
+         * @see onAdjacentTileReached
          *
-         * This event is emitted when the target collides with a collectable
-         * object the grid. This event will be emitted when the target entity
-         * and the collectable object occupy the same tile, not when they start
-         * colliding with each other
+         * The callback is passed the position of the target after it reaches
+         * its destination
          */
-        int onCollectableCollision(Callback<EntityPtr, EntityPtr> callback);
-
-        /**
-         * @brief Add an event listener to an enemy collision
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with an enemy object
-         * in the grid. This event will be emitted when the target entity and
-         * the enemy object occupy the same tile, not when they start colliding
-         * with each other
-         */
-        int onEnemyCollision(Callback<EntityPtr, EntityPtr> callback);
-
-        /**
-         * @brief Add an event listener to a player collision
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with a player object
-         * in the grid. This event will be emitted when the target entity and
-         * the player object occupy the same tile, not when they start colliding
-         * with each other
-         */
-        int onPlayerCollision(Callback<EntityPtr, EntityPtr> callback);
+        int onDestinationReached(Callback<Vector2f> callback);
 
     private:
         /**
@@ -197,8 +127,6 @@ namespace IME {
         void moveTarget();
 
     private:
-        //Moves the target in the grid
-        GridMover gridMover_;
         //Finds the path from the source to the target
         std::unique_ptr<IGridPathFinder> pathFinder_;
         //Target tile position

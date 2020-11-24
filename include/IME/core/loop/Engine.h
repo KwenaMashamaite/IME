@@ -342,11 +342,11 @@ namespace IME {
         //Keeps track of how long the engine has been running
         float elapsedTime_;
         //Window close event listener
-        std::function<void()> windowCloseHandler_;
+        Callback<> windowCloseHandler_;
         //Function called at the start of a frame
-        std::function<void()> onFrameStart_;
+        Callback<> onFrameStart_;
         //Function called at the end of a frame
-        std::function<void()> onFrameEnd_;
+        Callback<> onFrameEnd_;
         //Remembers the prev state local input handlers on state push
         std::stack<Input::InputManager> prevStateInputManager_;
     };
