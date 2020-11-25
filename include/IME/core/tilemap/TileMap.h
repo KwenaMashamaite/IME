@@ -524,6 +524,12 @@ namespace IME {
          */
         void createTiledMap();
 
+        /**
+         * @brief Create an empty vector of children for each tile of the
+         *        tilemap
+         *
+         * This vector will store the children of that specific tile
+         */
         void createObjectList();
 
         /**
