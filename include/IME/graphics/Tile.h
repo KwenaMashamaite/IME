@@ -29,35 +29,16 @@
 #ifndef IME_TILE_H
 #define IME_TILE_H
 
+#include "IME/core/event/EventEmitter.h"
+#include "IME/core/tilemap/Index.h"
 #include "IME/common/Vector2.h"
 #include "IDrawable.h"
 #include "Sprite.h"
-#include "IME/core/event/EventEmitter.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <unordered_map>
 #include <memory>
 
 namespace IME {
-    /**
-     * @brief Represents a position in the tilemap
-     */
-    struct Index {
-        int row;
-        int colm;
-
-        bool operator==(const Index& rhs) const {
-            return row == rhs.row && colm == rhs.colm;
-        }
-
-        bool operator!=(const Index& rhs) const {
-            return !(*this == rhs);
-        }
-    };
-
-    static bool operator<(const Index& lhs, const Index& rhs) {
-        return rhs.row < lhs.row && rhs.colm < lhs.colm;
-    }
-
     namespace Graphics {
         class IME_API Tile : public IDrawable {
         public:
@@ -285,15 +266,6 @@ namespace IME {
             sf::Color prevFillColour_;
         };
     }
-}
-
-namespace std {
-    template <>
-    struct hash<IME::Index> {
-        size_t operator()(const IME::Index& index) const {
-            return hash<int>()(index.row) + hash<int>()(index.colm);
-        }
-    };
 }
 
 #endif

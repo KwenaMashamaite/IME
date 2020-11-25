@@ -35,6 +35,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
+#include "Index.h"
 #include "IME/core/entity/Entity.h"
 #include <unordered_map>
 #include <vector>
@@ -42,7 +43,7 @@
 #include <map>
 
 namespace IME {
-    //Alias for 2D vector
+    //Alias for 2D vector of chars
     using Map = std::vector<std::vector<char>>;
 
     class IME_API TileMap {
@@ -247,6 +248,38 @@ namespace IME {
         bool removeChildWithId(std::size_t id);
 
         /**
+         * @brief Remove a child from the grid
+         * @param child Child to be removed
+         * @return True if the child was removed or false if the child does
+         *         not exist in the grid
+         */
+        bool removeChild(std::shared_ptr<Entity> child);
+
+        /**
+         * @brief Remove all the visitors of a tile
+         * @param tile Tile whose visitors are to be removed
+         * @return True if all visitors have been removed or false if the
+         *         tile has no visitors
+         *
+         * This function will remove all children currently occupying a tile
+         * except the occupant of the tile. In this context the occupant is
+         * the child that got to the tile before other children
+         *
+         * @see tileHasVisitors
+         */
+        bool removeAllVisitors(const IME::Graphics::Tile& tile);
+
+        /**
+         * @brief Remove all children in a tile
+         * @param tile Tile to remove all children from
+         * @return True if all children were removed, or false if the
+         *         tile is not occupied
+         *
+         * @see removeAllVisitors and @see removeOccupant
+         */
+        bool removeAllChildren(const Graphics::Tile& tile);
+
+        /**
          * @brief Move child to a different position in the tilemap
          * @param child Child to move
          * @param index New position of the child
@@ -327,6 +360,13 @@ namespace IME {
          * if the specified index is invalid or the tile is not occupied
          */
         void forEachChildInTile(const Graphics::Tile& tile, Callback<std::shared_ptr<Entity>> callback);
+
+        /**
+         * @brief Get the number of occupants in a tile
+         * @param tile Tile to get the number of occupants for
+         * @return The number of occupants in a tile
+         */
+        std::size_t getNumOfOccupants(const Graphics::Tile& tile) const;
 
         /**
          * @brief Get the size of each tile in the grid

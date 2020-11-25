@@ -323,6 +323,12 @@ namespace IME {
         }
     }
 
+    std::size_t TileMap::getNumOfOccupants(const Graphics::Tile &tile) const {
+        if (isTileOccupied(tile))
+            return children_.at(tile.getIndex()).size();
+        return 0;
+    }
+
     bool TileMap::removeChildFromTile(const IME::Graphics::Tile& tile, const std::shared_ptr<Entity> &child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
@@ -353,6 +359,31 @@ namespace IME {
                     childList.erase(childList.begin() + i);
                     return true;
                 }
+        }
+        return false;
+    }
+
+    bool TileMap::removeChild(std::shared_ptr<Entity> child) {
+        if (!child)
+            return false;
+        return removeChildWithId(child->getObjectId());
+    }
+
+    bool TileMap::removeAllVisitors(const Graphics::Tile &tile) {
+        if (!tileHasVisitors(tile))
+            return false;
+        else {
+            auto occupant = std::move(children_[tile.getIndex()].front());
+            children_[tile.getIndex()].clear();
+            children_[tile.getIndex()].push_back(std::move(occupant));
+            return true;
+        }
+    }
+
+    bool TileMap::removeAllChildren(const Graphics::Tile &tile) {
+        if (isTileOccupied(tile)) {
+            children_[tile.getIndex()].clear();
+            return true;
         }
         return false;
     }

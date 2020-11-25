@@ -30,6 +30,7 @@ set(IME_SRC
     core/physics/TargetGridMover.cpp
     core/states/State.cpp
     core/states/StateManager.cpp
+    core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
