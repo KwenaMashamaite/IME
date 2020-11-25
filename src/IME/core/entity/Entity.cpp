@@ -25,19 +25,53 @@
 #include "IME/core/entity/Entity.h"
 #include <assert.h>
 
+//@warning Update copy constructor and assignment operator if a new member
+//variable is added, why? look at their respective implementations
+
 namespace IME {
+    Entity::Entity() : Entity({8, 8})
+    {}
+
+    Entity::Entity(const Entity &other) {
+        // Assign everything but create new id (Both must have unique id's)
+        // We are using manual assignment because we can't use std::swap()
+        // due to a pure virtual method in the class
+        type_ = other.type_;
+        id_ = prevEntityId++; //Default copy constructor assigns same Id
+        boundingRect_ = other.boundingRect_;
+        isVulnerable_ = other.isVulnerable_;
+        isAlive_ = other.isAlive_;
+        isCollidable_ = other.isCollidable_;
+        direction_ = other.direction_;
+        position_ = other.position_;
+        eventEmitter_ = other.eventEmitter_;
+    }
+
+    Entity &Entity::operator=(const Entity &other) {
+        // Assign everything but the id (Both must have unique id's)
+        // We are using manual assignment because we can't use std::swap()
+        // due to a pure virtual method in the class
+        type_ = other.type_;
+        boundingRect_ = other.boundingRect_;
+        isVulnerable_ = other.isVulnerable_;
+        isAlive_ = other.isAlive_;
+        isCollidable_ = other.isCollidable_;
+        direction_ = other.direction_;
+        position_ = other.position_;
+        eventEmitter_ = other.eventEmitter_;
+        return *this;
+    }
+
     Entity::Entity(const Vector2u &boundingRect, Type type) :
         type_(type),
+        id_{prevEntityId++},
         boundingRect_(boundingRect),
         isVulnerable_(true),
         isAlive_(true),
         isCollidable_(false),
         direction_(Direction::None),
         position_({0, 0})
-    {
-        static std::size_t prevEntityId = 0;
-        id_ = prevEntityId++;
-    }
+    {}
 
     void Entity::setPosition(float x, float y) {
         if (position_.x == x && position_.y == y)

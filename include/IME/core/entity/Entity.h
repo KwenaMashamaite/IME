@@ -51,10 +51,35 @@ namespace IME {
 
         /**
          * @brief Construct entity
-         * @param boundingRectSize Size of the entity's bounding rect
          *
-         * The entity is alive, has the position (0, 0) and no direction
-         * by default
+         * The entity has a bounding rect size of {8, 8} by default
+         */
+        Entity();
+
+        /**
+         * @brief Copy constructor
+         * @param other Object to be copied
+         */
+        Entity(const Entity& other);
+
+        /**
+         * @brief Assignment operator
+         */
+        Entity& operator=(const Entity& other);
+
+        /**
+         * @brief Move constructor
+         */
+        Entity(Entity&&) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Entity& operator=(Entity&&) = default;
+
+        /**
+         * @brief Construct entity
+         * @param boundingRectSize Size of the entity's bounding rect
          */
         explicit Entity(const Vector2u &boundingRectSize, Type type = Type::Unknown);
 
@@ -223,6 +248,8 @@ namespace IME {
         }
 
     private:
+        //Object Id counter
+        inline static std::size_t prevEntityId = 0;
         //The type of this entity object
         Type type_;
         //Objects unique identifier
