@@ -106,6 +106,23 @@ namespace IME {
         const PropertyContainer& getSettings() const;
 
         /**
+         * @brief Get persistent data
+         * @return Persistent data
+         *
+         * Data stored in the this object persists from state to state,
+         * this means that the data is preserved during a state push or
+         * pop. This is useful if you want share data between states. For
+         * example, a state may save data before its destroyed/paused and
+         * the next state can access the data and update for the next state
+         * or for the previous state when it is resumed
+         *
+         * @warning The data is destroyed if the engine is shutdown
+         *
+         * @see quit
+         */
+        PropertyContainer& getPersistentData();
+
+        /**
          * @brief Get frames per second (FPS) limit
          * @return FPS limit
          */
@@ -339,6 +356,8 @@ namespace IME {
         std::shared_ptr<EventDispatcher> eventDispatcher_;
         //Engine settings
         PropertyContainer settings_;
+        //Data that persists across states
+        PropertyContainer dataSaver_;
         //Holds a state to be pushed to the engine
         std::pair<std::shared_ptr<State>, Callback<>> stateToPush_;
         //Flag for popping

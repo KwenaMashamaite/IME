@@ -280,6 +280,10 @@ namespace IME {
         return appName_;
     }
 
+    PropertyContainer &Engine::getPersistentData() {
+        return dataSaver_;
+    }
+
     Audio::AudioManager &Engine::getAudioManager() {
         return *audioManager_;
     }
