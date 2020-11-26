@@ -256,6 +256,16 @@ namespace IME {
         bool removeChild(std::shared_ptr<Entity> child);
 
         /**
+         * @brief Remove children from the grid using a condition
+         * @param callback Function that determines if the condition is
+         *        satisfied or not
+         *
+         * All children for which @param callback returns true are removed
+         * from the grid
+         */
+        void removeChildrenIf(std::function<bool(std::shared_ptr<Entity>)> callback);
+
+        /**
          * @brief Remove all the visitors of a tile
          * @param tile Tile whose visitors are to be removed
          * @return True if all visitors have been removed or false if the

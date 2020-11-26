@@ -369,6 +369,11 @@ namespace IME {
         return removeChildWithId(child->getObjectId());
     }
 
+    void TileMap::removeChildrenIf(std::function<bool(std::shared_ptr<Entity>)> callback) {
+        for (auto& [index, childList] : children_)
+            childList.erase(std::remove_if(childList.begin(), childList.end(), callback), childList.end());
+    }
+
     bool TileMap::removeAllVisitors(const Graphics::Tile &tile) {
         if (!tileHasVisitors(tile))
             return false;
