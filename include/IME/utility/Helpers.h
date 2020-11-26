@@ -52,7 +52,7 @@ namespace IME::Utility {
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    extern sf::Color convertToSFMLColour(Graphics::Colour colour);
+    extern sf::Color convertToSFMLColour(Colour colour);
 
     /**
      * @internal
@@ -60,7 +60,7 @@ namespace IME::Utility {
      * @param color colour Colour to be converted to TGUI colour object
      * @return TGUI colour object
      */
-    extern tgui::Color convertToTGUIColour(Graphics::Colour color);
+    extern tgui::Color convertToTGUIColour(Colour color);
 
     /**
      * @internal
@@ -72,7 +72,7 @@ namespace IME::Utility {
      * colour. This means that the colour after the conversion is
      * the same as the one before the conversion
      */
-    extern Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
+    extern Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
 
     /**
      * @internal

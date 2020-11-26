@@ -61,7 +61,7 @@ namespace IME {
          * @brief Create a random colour
          * @return A random colour
          */
-        IME_API extern Graphics::Colour generateRandomColour();
+        IME_API extern Colour generateRandomColour();
     }
 }
 

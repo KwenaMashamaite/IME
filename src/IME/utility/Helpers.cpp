@@ -27,21 +27,21 @@
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 
 namespace IME::Utility {
-    sf::Color convertToSFMLColour(Graphics::Colour colour) {
+    sf::Color convertToSFMLColour(Colour colour) {
         return {static_cast<sf::Uint8>(colour.red),
                 static_cast<sf::Uint8>(colour.green),
                 static_cast<sf::Uint8>(colour.blue),
                 static_cast<sf::Uint8>(colour.opacity)};
     }
 
-    tgui::Color convertToTGUIColour(Graphics::Colour color) {
+    tgui::Color convertToTGUIColour(Colour color) {
         return {static_cast<std::uint8_t>(color.red),
                 static_cast<std::uint8_t>(color.green),
                 static_cast<std::uint8_t>(color.blue),
                 static_cast<std::uint8_t>(color.opacity)};
     }
 
-    Graphics::Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
+    Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
         return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
     }
 

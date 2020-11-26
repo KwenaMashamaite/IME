@@ -30,7 +30,7 @@ namespace IME::Utility {
         return min + (rand() % (max - min + 1));
     }
 
-    Graphics::Colour generateRandomColour() {
+    Colour generateRandomColour() {
         return {static_cast<unsigned int>(generateRandomNum(0, 255)),
                 static_cast<unsigned int>(generateRandomNum(0, 255)),
                 static_cast<unsigned int>(generateRandomNum(0, 255)),255};
