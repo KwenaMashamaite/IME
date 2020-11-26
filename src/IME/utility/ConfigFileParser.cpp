@@ -39,9 +39,23 @@ namespace IME::Utility {
         return hasCharacter(str, ' ').first;
     }
 
-    bool isFundamentalType(const std::string& type) {
-        return (type == "string" || type == "int" || type == "char" || type == "float"
-            || type == "double" || type == "bool");
+    bool addProperty(PropertyContainer& container, std::string key, std::string type, std::string value) {
+        auto property = Property(key, type);
+        if (type == "STRING")
+            property.setValue(value);
+        else if (type == "INT")
+            property.setValue(std::stoi(value));
+        else if (type == "FLOAT")
+            property.setValue(std::stof(value));
+        else if (type == "BOOL")
+            property.setValue(static_cast<bool>(std::stoi(value)));
+        else if (type == "DOUBLE")
+            property.setValue(std::stod(value));
+        else
+            return false;
+
+        container.addProperty(std::move(property));
+        return true;
     }
 
     PropertyContainer ConfigFileParser::parse(const std::string &filename) {
@@ -62,16 +76,19 @@ namespace IME::Utility {
             if (auto [foundColon, colonPos] = hasCharacter(configEntry, ':'); foundColon) {
                 auto key = configEntry.substr(0, colonPos);
                 auto typeAndValue = configEntry.substr(colonPos + 1);
-                if (auto[found, equalSignPos] = hasCharacter(typeAndValue,'='); found) {
+                if (auto [found, equalSignPos] = hasCharacter(typeAndValue,'='); found) {
                     auto type = typeAndValue.substr(0, equalSignPos);
                     auto value = typeAndValue.substr(equalSignPos + 1);
+                    if (key.empty())
+                        throw InvalidArgument(errorMessage("It's missing a key"));
+                    if (value.empty() && type != "STRING")
+                        throw InvalidArgument(errorMessage("Only values of type STRING can be left unspecified"));
                     if (hasWhiteSpace(key) || hasWhiteSpace(type))
                         throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
-                    if (!isFundamentalType(type))
-                        throw InvalidArgument(errorMessage("'" + type + "'" + " is not a fundamental type"));
-                    if(hasWhiteSpace(value) && type != "string")
-                        throw InvalidArgument(errorMessage("the value contains whitespace(s) and its not of type string"));
-                    properties.addProperty(key, type, value);
+                    if (hasWhiteSpace(value) && type != "STRING")
+                        throw InvalidArgument(errorMessage("the value contains whitespace(s) and its not of type STRING"));
+                    if (!addProperty(properties, key, type, value))
+                        throw InvalidArgument(errorMessage(R"(The type ')" + type + "' is not a supported type"));
                 } else
                     throw InvalidArgument(errorMessage(R"(type and value not separated by '=')"));
             } else

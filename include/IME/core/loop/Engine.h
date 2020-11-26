@@ -35,7 +35,7 @@
 #include "IME/core/managers/AudioManager.h"
 #include "IME/core/managers/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
-#include "IME/common/PropertiesContainer.h"
+#include "IME/common/PropertyContainer.h"
 #include "IME/core/states/StateManager.h"
 
 namespace IME {
@@ -43,9 +43,13 @@ namespace IME {
     public:
         /**
          * @brief Constructor
-         * @param gameName Name of the application
-         * @param settingsFile Name of the file (including the path) that
-         *        contains the engines settings
+         * @param gameName Name of the game run by the engine
+         * @param settingsFile filename of the file that contains the
+         *        engines settings
+         *
+         * @param settingsFile must have the filename preceded by the path
+         * to the file. The path must be relative to the directory that
+         * contains the game executable
          */
         Engine(const std::string &gameName, const std::string &settingsFile);
 
@@ -53,14 +57,14 @@ namespace IME {
          * @brief Constructor
          * @param gameName Name of the game to be run by the engine
          * @param settings Engine settings
+         *
+         * @warning This function is unstable at the moment, use the constructor
+         * that loads the settings from the disk
          */
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
-         * @brief Initialize base engine
-         * @throw InvalidArgument if at least one of the mandatory settings
-         *        is missing in the settings file provided during instantiation
-         *        @see Engine(const std::string&, const std::string&)
+         * @brief Initialize engine
          *
          * This function will perform all the necessary initialization and
          * create the engines render target, therefore calling the function
@@ -94,10 +98,10 @@ namespace IME {
         bool isRunning() const;
 
         /**
-         * @brief Get the engines configuration entries
-         * @return The engines configuration entries
+         * @brief Get the engines settings
+         * @return The engines settings
          *
-         * This entries are used to initialize the engine
+         * @warning This function is experimental
          */
         const PropertyContainer& getSettings() const;
 

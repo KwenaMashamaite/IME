@@ -26,27 +26,17 @@
  * @brief A container for a group of properties
  */
 
-#ifndef IME_PROPERTIES_H
-#define IME_PROPERTIES_H
+#ifndef IME_PROPERTYCONTAINER_H
+#define IME_PROPERTYCONTAINER_H
 
 #include "IME/Config.h"
 #include "IME/common/Property.h"
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 namespace IME {
     class IME_API PropertyContainer {
     public:
-        /**
-         * @brief Default constructor
-         */
-        PropertyContainer() = default;
-
-        /**
-         * @brief Copy constructor
-         */
-        PropertyContainer(const PropertyContainer &other);
-
         /**
          * @brief Add a property
          * @param Property Property to add
@@ -54,41 +44,37 @@ namespace IME {
          *         with the same name already exits
          */
         bool addProperty(const Property &Property);
-
-        /**
-         * @brief add a property
-         * @param name Name of the property
-         * @param value Value of the property
-         * @return True if the property was added or false if a property
-         *         with the same name already exits
-         *
-         * The name, value and type of the property cannot be empty
-         */
-        bool addProperty(const std::string &name, const std::string &type,
-                         const std::string &key);
+        bool addProperty(Property&& property);
 
         /**
          * @brief Set the value of a property
          * @param name Name of the property
          * @param value New value of the property
+         *
+         * The type of @tparam T must be remembered in order to retrieve
+         * the value later
+         *
+         * @see getValueFor
          */
-        void setValueFor(const std::string &name, const std::string &value);
-
-        /**
-         * @brief Get a property
-         * @param name Name of the property to retrieve
-         * @return Specified property or an empty property if a property with
-         *         the specified name doesnt exist
-         */
-        Property getProperty(const std::string &name) const;
+        template<typename T>
+        void setValueFor(const std::string &name, T&& value);
 
         /**
          * @brief Get the value of a property
          * @param name Name of the property to get value for
-         * @return The value of a property if such a property exists, otherwise
-         *         an empty string
+         * @throws std::bad_any_cast if the value stored by the property is
+         *         not of type @tparam T
+         * @return The value of a property
+         *
+         * This function will throw an exception if the template argument
+         * and the value type don't match. This means that the property
+         * must always have a value before calling this function
+         *
+         * @see propertyHasValue
+         * @see setValueFor
          */
-        std::string getValueFor(const std::string name) const;
+        template<typename T>
+        T getValueFor(const std::string name) const;
 
         /**
          * @brief Get the type of a property
@@ -114,33 +100,27 @@ namespace IME {
         bool hasProperty(const std::string &name) const;
 
         /**
+         * @brief Check if a property has a value or not
+         * @param name Name of the property to be checked
+         * @return True if property has value or false if the property does
+         *         not have a value or does not exist
+         *
+         * @see hasProperty
+         */
+        bool propertyHasValue(const std::string& name) const;
+
+        /**
          * @brief Get the number of properties in the container
          * @return The number of properties in the container
          */
         int getSize() const;
 
     private:
-        /**
-         * @brief Check if container has a property
-         * @param name Name of the property
-         * @return True if property exists otherwise false
-         */
-        std::pair<bool, int> hasProperty_(const std::string &name) const;
-
-        /**
-         * @brief Get a property attribute
-         * @param name Name of the property
-         * @param what Type of the attribute
-         * @return The value of the property attribute if it exists, otherwise
-         *          an empty string
-         */
-        std::string getAttributeFor(const std::string &name,
-                const std::string &what) const;
-
-    private:
         //Container for the properties
-        std::vector<Property> properties_;
+        std::unordered_map<std::string, Property> properties_;
     };
+
+    #include "IME/common/PropertyContainer.inl"
 }
 
 #endif

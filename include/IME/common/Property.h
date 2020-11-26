@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Class for defining attributes
+ * @brief Class that can store a value of any type
  */
 
 #ifndef IME_PROPERTY_H
@@ -31,31 +31,64 @@
 
 #include "IME/Config.h"
 #include <string>
+#include <any>
 
 namespace IME {
     class IME_API Property {
     public:
         /**
          * @brief Constructor
-         * @param name NAme of the property
+         * @param name Name of the property
          * @param type Type of the property
-         * @param value Value of the property
-         * @param isReadOnly Set true if property must be modified after
-         *        construction, otherwise false
+         *
+         * The property will be created without a value
+         *
+         * @see setValue
          */
-        Property(const std::string& name, const std::string& type, const std::string& value,
-             bool isReadOnly = false);
+        Property(const std::string& name, const std::string& type);
 
         /**
-         * @brief Copy constructor
+         * @brief Constructor
+         * @param name Name of the property
+         * @param type Type of the property
+         * @param value Value of the property
+         *
+         * The value can be of any type (Primitive or custom).
+         *
+         * @warning the type of @tparam T must be remembered in order to
+         * retrieve the value later
+         *
+         * @see getValue
          */
-        Property(const Property&) = default;
+        template<typename T>
+        Property(const std::string& name, const std::string& type, T&& value);
 
         /**
          * @brief Set the value of the property
          * @param value New value of the property
+         *
+         * This function will overwrite the previous value. The new value
+         * need not be the same type as the previous value and it can be
+         * of any type (Primitive or custom). However, the type of @tparam T
+         * must be remembered in order to retrieve the value later
+         *
+         * @see getValue
          */
-        void setValue(const std::string& value);
+        template<typename T>
+        void setValue(T&& value);
+
+        /**
+         * @brief Get the value of the property
+         * @throws std::bad_any_cast if the stored value is not of type T
+         * @return The value of the property
+         *
+         * @warning Don't call this function if the property does not have
+         * a value, otherwise it will throw an exception. In addition, always
+         * make sure that the template argument @tparam T matches the type
+         * of the stored value when calling this function
+         */
+        template<typename T>
+        T getValue() const;
 
         /**
          * @brief Get the name of the property
@@ -64,52 +97,28 @@ namespace IME {
         const std::string& getName() const;
 
         /**
-         * @brief Get the value of the property
-         * @return The value of the property
-         */
-        const std::string& getValue() const;
-
-        /**
          * @brief Get the type of the property
          * @return The type of the property
          */
         const std::string& getType() const;
 
         /**
-         * @brief Check if property is modifiable or not
-         * @return True if property is not modifiable, otherwise false
+         * @brief Check if the property has a value set or not
+         * @return True if the property contains a value or false
+         *         if not it does not contain a value
          */
-        bool isReadOnly() const;
-
-        /**
-         * @brief Assignment operator
-         */
-        Property& operator=(const Property&) = default;
-
-        /**
-         * @brief Check if a property is the same as this property
-         * @param other The property to check against for equality
-         * @return True if the properties are the same, otherwise false
-         */
-        bool operator==(const Property& other);
-
-        /**
-         * @brief Check if a property is not the same as this property
-         * @param other The property to check against for inequality
-         * @return True if the properties are not the same, otherwise false
-         */
-        bool operator!=(const Property& other);
+        bool hasValue() const;
 
     private:
         //Name of the property
         std::string name_;
-        //Value of the property
-        std::string value_;
         //Type of the property
         std::string type_;
-        //Immutability state
-        bool isReadOnly_;
+        //Value of the property
+        std::any value_;
     };
+
+    #include "IME/common/Property.inl"
 }
 
 #endif

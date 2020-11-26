@@ -29,28 +29,40 @@
 #include <assert.h>
 #include <cstdlib>
 
+template <class T>
+void setDefaultValueIfNotSet(IME::PropertyContainer& settings,
+     const std::string& setting, const std::string& type, T&& defaultValue)
+{
+    if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
+        return;
+    else if (!settings.hasProperty(setting))
+        settings.addProperty({setting, type, std::forward<T>(defaultValue)});
+    else
+        settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
+    static auto consoleLogger = IME::Utility::ConsoleLogger();
+    consoleLogger.log(IME::Utility::MessageType::Warning,
+        R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
+}
+
 namespace IME {
-    Engine::Engine(const std::string &gameName, const PropertyContainer &settings)
-        : Engine(gameName, "")
+    Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
+        Engine(gameName, "")
     {
-        srand(time(0));
-        settings_ = settings;
+        //@TODO - Fix engine throwing std::bad_cast during initialization
+        //        when constructed with this constructor
+        srand(time(nullptr));
+        settings_ = std::move(settings);
     }
 
-    Engine::Engine(const std::string &gameName, const std::string &settingsFile)
-        : isSettingsLoadedFromFile_(!settingsFile.empty()),
-          isRunning_{false},
-          isInitialized_{false},
-          appName_{gameName},
-          settingFile_{settingsFile},
-          shouldPop_{false},
-          elapsedTime_{0.0f}
-    {
-        if (settingsFile.empty())
-            isSettingsLoadedFromFile_ = false;
-        else
-            isSettingsLoadedFromFile_ = true;
-    }
+    Engine::Engine(const std::string &gameName, const std::string &settingsFile) :
+        isSettingsLoadedFromFile_(!settingsFile.empty()),
+        isRunning_{false},
+        isInitialized_{false},
+        appName_{gameName},
+        settingFile_{settingsFile},
+        shouldPop_{false},
+        elapsedTime_{0.0f}
+    {}
 
     void Engine::init() {
         if (isSettingsLoadedFromFile_)
@@ -72,33 +84,26 @@ namespace IME {
     }
 
     void Engine::processSettings() {
-        static auto setDefaultValueIfNotSet = [this](const std::string& setting,
-            const std::string& defaultValue) mutable {
-                static auto consoleLogger = Utility::ConsoleLogger();
-                if (!settings_.hasProperty(setting) && settings_.getValueFor(setting).empty()) {
-                    consoleLogger.log(Utility::MessageType::Warning,
-                        R"(Missing or invalid ")" + setting + R"(" entry in ")"
-                        + ((isSettingsLoadedFromFile_) ? settingFile_ : "settings")
-                        + R"(", using default value: ")" + setting + "=" + defaultValue + R"(")");
-                    settings_.addProperty(setting, "string", defaultValue);
-                }
-        };
-
-        setDefaultValueIfNotSet("windowTitle", "Untitled");
-        setDefaultValueIfNotSet("windowWidth", "600.0f");
-        setDefaultValueIfNotSet("windowHeight", "600.0f");
-        setDefaultValueIfNotSet("fullscreen", "0");
-        setDefaultValueIfNotSet("fpsLimit", "60");
-        setDefaultValueIfNotSet("vsync", "0");
+        setDefaultValueIfNotSet(settings_, "windowTitle", "STRING", std::string("Untitled"));
+        setDefaultValueIfNotSet(settings_, "windowWidth", "INT",  600);
+        setDefaultValueIfNotSet(settings_, "windowHeight", "INT", 600);
+        setDefaultValueIfNotSet(settings_, "fpsLimit", "INT", 60);
+        setDefaultValueIfNotSet(settings_, "fullscreen", "BOOL", false);
+        setDefaultValueIfNotSet(settings_, "vsync", "BOOL",  false);
+        setDefaultValueIfNotSet(settings_, "fontsPath", "STRING", std::string("")); // Same directory as the executable
+        setDefaultValueIfNotSet(settings_, "texturesPath", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "imagesPath", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "sfxPath", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "musicPath", "STRING", std::string(""));
     }
 
     void Engine::initRenderTarget() {
         auto desktopWidth = sf::VideoMode::getDesktopMode().width;
         auto desktopHeight = sf::VideoMode::getDesktopMode().height;
-        auto title = settings_.getValueFor("windowTitle");
-        auto width = std::stof(settings_.getValueFor("windowWidth"));
-        auto height = std::stof(settings_.getValueFor("windowHeight"));
-        auto isFullscreen = static_cast<bool>(std::stoi(settings_.getValueFor("fullscreen")));
+        auto title = settings_.getValueFor<std::string>("windowTitle");
+        auto width = settings_.getValueFor<int>("windowWidth");
+        auto height = settings_.getValueFor<int>("windowHeight");
+        auto isFullscreen = settings_.getValueFor<bool>("fullscreen");
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
             window_.create(title, desktopWidth, desktopHeight, Graphics::Window::Style::Fullscreen);
         } else {
@@ -109,25 +114,27 @@ namespace IME {
             window_.create(title, width, height, Graphics::Window::Style::Close);
         }
 
-        window_.setFramerateLimit(std::stoi(settings_.getValueFor("fpsLimit")));
-        window_.setVsyncEnabled(static_cast<bool>(std::stoi(settings_.getValueFor("vsync"))));
+        window_.setFramerateLimit(settings_.getValueFor<int>("fpsLimit"));
+        window_.setVsyncEnabled(settings_.getValueFor<bool>("vsync"));
         window_.setIcon("icon.png");
     }
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
-        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor("fontsPath"));
-        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor("imagesPath"));
-        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor("imagesPath"));
-        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor("sfxPath"));
-        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor("musicPath"));
+        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor<std::string>("fontsPath"));
+        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor<std::string>("texturesPath"));
+        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor<std::string>("imagesPath"));
+        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor<std::string>("sfxPath"));
+        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor<std::string>("musicPath"));
     }
 
     void Engine::processEvents() {
         sf::Event event;
         while (window_.pollEvent(event)) {
-            if (event.type == sf::Event::Closed && windowCloseHandler_)
+            if (event.type == sf::Event::Closed && windowCloseHandler_) {
                 windowCloseHandler_();
+                return;
+            }
             statesManager_.getActiveState()->handleEvent(event);
             globalInputManager_.handleEvent(event);
             inputManager_.handleEvent(event);
@@ -260,6 +267,8 @@ namespace IME {
     }
 
     const PropertyContainer &Engine::getSettings() const {
+        //@TODO - Fix this function throwing std::bad_cast when called outside
+        //        the class
         return settings_;
     }
 

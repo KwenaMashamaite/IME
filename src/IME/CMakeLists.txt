@@ -4,7 +4,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 set(IME_SRC
     common/Property.cpp
-    common/PropertiesContainer.cpp
+    common/PropertyContainer.cpp
     core/animation/Animation.cpp
     core/animation/Animator.cpp
     core/audio/AudioPlayer.cpp

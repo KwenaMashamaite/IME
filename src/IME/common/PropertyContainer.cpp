@@ -22,29 +22,43 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for passing engine settings read from a file on the disk
- */
-
-#ifndef IME_CONFIGFILEPARSER_H
-#define IME_CONFIGFILEPARSER_H
-
-#include "IME/Config.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/utility/Helpers.h"
 
 namespace IME {
-    namespace Utility {
-        class IME_API ConfigFileParser {
-        public:
-            /**
-             * @brief Parse a config file
-             * @param filename Name of the config fle to parse
-             * @return List of properties found i the config file
-             * @throw FileNotFound if the config file cannot be found on the disk
-             */
-            PropertyContainer parse(const std::string& filename);
-        };
+    bool PropertyContainer::addProperty(const Property &property) {
+        return properties_.emplace(property.getName(), property).second;
+    }
+
+    bool PropertyContainer::addProperty(Property &&property) {
+        return properties_.insert({property.getName(), std::move(property)}).second;
+    }
+
+    std::string PropertyContainer::getTypeFor(const std::string &name) const {
+        if (hasProperty(name))
+            return properties_.at(name).getType();
+        return "";
+    }
+
+    bool PropertyContainer::removeProperty(const std::string &name) {
+        if (hasProperty(name)) {
+            properties_.erase(name);
+            return true;
+        }
+        return false;
+    }
+
+    int PropertyContainer::getSize() const {
+        return properties_.size();
+    }
+
+    bool PropertyContainer::hasProperty(const std::string &name) const {
+        return properties_.find(name) != properties_.end();
+    }
+
+    bool PropertyContainer::propertyHasValue(const std::string &name) const {
+        if (hasProperty(name))
+            return properties_.at(name).hasValue();
+        return false;
     }
 }
-
-#endif
