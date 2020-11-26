@@ -519,7 +519,7 @@ namespace IME {
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTile(char id, Callback<Graphics::Tile&> callback);
+        void forEachTileWithId(char id, Callback<Graphics::Tile&> callback);
 
         /**
          * @brief Execute a callback on all tiles except tiles with a
@@ -543,7 +543,7 @@ namespace IME {
          *
          * @note Only horizontal ranges are supported
          */
-        void forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
+        void forEachTileInRange(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
 
         /**
          * @brief Check if the index is within bounds of the tilemap or not

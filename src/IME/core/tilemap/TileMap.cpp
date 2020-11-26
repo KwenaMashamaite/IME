@@ -432,7 +432,7 @@ namespace IME {
         });
     }
 
-    void TileMap::forEachTile(char id, Callback<Graphics::Tile&> callback) {
+    void TileMap::forEachTileWithId(char id, Callback<Graphics::Tile&> callback) {
         forEachTile([&](Graphics::Tile& tile) {
             if (tile.getId() == id)
                 callback(tile);
@@ -446,7 +446,7 @@ namespace IME {
         });
     }
 
-    void TileMap::forEachTile(Index startPos, Index endPos, Callback<Graphics::Tile&> callback) {
+    void TileMap::forEachTileInRange(Index startPos, Index endPos, Callback<Graphics::Tile&> callback) {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
                 tiledMap_[startPos.row].begin() + endPos.colm,
