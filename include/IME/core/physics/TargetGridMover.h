@@ -95,6 +95,26 @@ namespace IME {
         void pauseMovement();
 
         /**
+         * @brief Adaptively avoid solid tiles and obstacles
+         * @param isAdaptive True to enable, otherwise false
+         *
+         * When enabled the target will adaptively avoid collisions with
+         * solid tiles and obstacles. The targets path is updated every
+         * time it moves from one tile to the next. This makes the target
+         * aware of tile state changes before it reaches them
+         *
+         * When disabled, the target will continue moving in its current
+         * path to the destination until it either collides with something
+         * or reaches the destination. The targets path is updated each
+         * time the destination changes. Therefore if it remains fixed the
+         * target will not know of any tile state changes until it gets to
+         * that tile
+         *
+         * Adaptive movement is disabled by default
+         */
+        void enableAdaptiveMovement(bool isAdaptive);
+
+        /**
          * @brief Add an event listener to a destination reached event
          * @param callback Function to execute when the target reaches its
          *          destination tile
@@ -135,7 +155,7 @@ namespace IME {
         std::stack<Index> pathToTargetTile_;
         int obstacleHandlerId_;
         int solidTileHandlerId_;
-        int adjacentTileHandler;
+        Callback<> adjacentTileHandler_;
         //Flags whether the target has been stopped or not
         bool targetStopped_;
         //Flags whether the target tile was changed while target in motion

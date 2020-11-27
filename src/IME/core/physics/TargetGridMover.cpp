@@ -29,7 +29,6 @@ namespace IME {
     TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
-        adjacentTileHandler{-1},
         obstacleHandlerId_{-1},
         solidTileHandlerId_{-1},
         targetTileIndex_{-1, -1},
@@ -39,6 +38,8 @@ namespace IME {
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
+        enableAdaptiveMovement(false);
+
         onTargetChanged([this](EntityPtr target) {
             if (target) {
                 generatePath();
@@ -47,11 +48,8 @@ namespace IME {
         });
 
         onAdjacentTileReached([this](Graphics::Tile) {
-            if (targetTileChangedWhileMoving_) {
-                generatePath();
-                targetTileChangedWhileMoving_ = false;
-            }
-            moveTarget();
+            if (adjacentTileHandler_)
+                adjacentTileHandler_();
         });
 
         solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile tile) {
@@ -145,6 +143,23 @@ namespace IME {
         if (!pathToTargetTile_.empty() && !targetStopped_) {
             generateNewDirOfMotion(pathToTargetTile_.top());
             pathToTargetTile_.pop();
+        }
+    }
+
+    void TargetGridMover::enableAdaptiveMovement(bool isAdaptive) {
+        if (isAdaptive) {
+            adjacentTileHandler_ = [this]{
+                generatePath();
+                moveTarget();
+            };
+        } else {
+            adjacentTileHandler_ = [this] {
+                if (targetTileChangedWhileMoving_) {
+                    generatePath();
+                    targetTileChangedWhileMoving_ = false;
+                }
+                moveTarget();
+            };
         }
     }
 
