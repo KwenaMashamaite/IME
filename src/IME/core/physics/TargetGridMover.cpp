@@ -29,11 +29,11 @@ namespace IME {
     TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
-        targetTile_{-1, -1}, targetStopped_{false},
+        targetTileIndex_{-1, -1}, targetStopped_{false},
         targetTileChangedWhileMoving_{false}
     {
         if (getTarget())
-            targetTile_ = getGrid().getTile(getTarget()->getPosition()).getIndex();
+            targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
         onTargetChanged([this](EntityPtr target) {
             if (target) {
@@ -52,8 +52,8 @@ namespace IME {
     }
 
     void TargetGridMover::setDestination(Index index) {
-        if (index != targetTile_ && getGrid().isIndexValid(index)) {
-            targetTile_ = index;
+        if (index != targetTileIndex_ && getGrid().isIndexValid(index)) {
+            targetTileIndex_ = index;
             if (getTarget()) {
                 if (isTargetMoving())
                     targetTileChangedWhileMoving_ = true;
@@ -64,7 +64,7 @@ namespace IME {
     }
 
     Index TargetGridMover::getDestination() const {
-        return targetTile_;
+        return targetTileIndex_;
     }
 
     void TargetGridMover::setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder) {
@@ -112,8 +112,8 @@ namespace IME {
 
     void TargetGridMover::generatePath() {
         if (getTarget()) {
-            auto sourceTilePos = getGrid().getTile(getTarget()->getPosition()).getIndex();
-            pathToTargetTile_ = pathFinder_->findPath(getGrid(), sourceTilePos, targetTile_);
+            auto sourceTilePos = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
+            pathToTargetTile_ = pathFinder_->findPath(getGrid(), sourceTilePos, targetTileIndex_);
         }
     }
 
@@ -124,11 +124,11 @@ namespace IME {
         }
     }
 
-    int TargetGridMover::onDestinationReached(Callback<Vector2f> callback) {
+    int TargetGridMover::onDestinationReached(Callback<Graphics::Tile> callback) {
         return onAdjacentTileReached(
             [this, callback = std::move(callback)](Graphics::Tile tile) {
-                if (getGrid().getTile(targetTile_).getPosition() == tile.getPosition())
-                    callback(tile.getPosition());
+                if (targetTileIndex_ == tile.getIndex())
+                    callback(tile);
             }
         );
     }

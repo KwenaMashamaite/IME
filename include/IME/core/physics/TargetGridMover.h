@@ -103,10 +103,10 @@ namespace IME {
          * To get notified as the target progresses towards the destination
          * @see onAdjacentTileReached
          *
-         * The callback is passed the position of the target after it reaches
-         * its destination
+         * The callback is passed the destination tile of the target after it
+         * reaches it
          */
-        int onDestinationReached(Callback<Vector2f> callback);
+        int onDestinationReached(Callback<Graphics::Tile> callback);
 
     private:
         /**
@@ -130,7 +130,7 @@ namespace IME {
         //Finds the path from the source to the target
         std::unique_ptr<IGridPathFinder> pathFinder_;
         //Target tile position
-        Index targetTile_;
+        Index targetTileIndex_;
         //Stores the path to the target tile
         std::stack<Index> pathToTargetTile_;
         //Flags whether the target has been stopped or not
