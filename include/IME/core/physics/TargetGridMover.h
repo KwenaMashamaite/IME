@@ -133,6 +133,9 @@ namespace IME {
         Index targetTileIndex_;
         //Stores the path to the target tile
         std::stack<Index> pathToTargetTile_;
+        int obstacleHandlerId_;
+        int solidTileHandlerId_;
+        int adjacentTileHandler;
         //Flags whether the target has been stopped or not
         bool targetStopped_;
         //Flags whether the target tile was changed while target in motion

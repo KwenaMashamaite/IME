@@ -29,7 +29,11 @@ namespace IME {
     TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
-        targetTileIndex_{-1, -1}, targetStopped_{false},
+        adjacentTileHandler{-1},
+        obstacleHandlerId_{-1},
+        solidTileHandlerId_{-1},
+        targetTileIndex_{-1, -1},
+        targetStopped_{false},
         targetTileChangedWhileMoving_{false}
     {
         if (getTarget())
@@ -48,6 +52,27 @@ namespace IME {
                 targetTileChangedWhileMoving_ = false;
             }
             moveTarget();
+        });
+
+        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile tile) {
+            if (getTarget()) {
+                generatePath();
+                moveTarget();
+            }
+        });
+
+        obstacleHandlerId_ = onObstacleCollision([this](EntityPtr , EntityPtr) {
+            if (getTarget()) {
+                generatePath();
+                moveTarget();
+            }
+        });
+
+        onInternalHandlerRemove([this](std::string handler) {
+            if (handler == "solidTiles")
+                removeCollisionHandler(solidTileHandlerId_);
+            else if (handler == "obstacles")
+                removeCollisionHandler(obstacleHandlerId_);
         });
     }
 
@@ -95,8 +120,7 @@ namespace IME {
             return;
 
         auto newDirection = Direction::None;
-        auto currentPosIndex = getGrid().getTile(
-                getTarget()->getPosition()).getIndex();
+        auto currentPosIndex = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
         if (Index{currentPosIndex.row, currentPosIndex.colm + 1} == nextPos)
             newDirection = Direction::Right;
         else if (Index{currentPosIndex.row, currentPosIndex.colm - 1} == nextPos)
