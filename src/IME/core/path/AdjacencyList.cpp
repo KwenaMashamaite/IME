@@ -37,6 +37,7 @@ bool tileHasObstacle(IME::TileMap& grid, IME::Index index) {
 
 namespace IME {
     void AdjacencyList::generateFrom(TileMap &tileMap) {
+        adjacencyList_.clear();
         auto static addNeighbour = [](auto& tilemap, auto& neighbours, int row, int colm) {
             if (tilemap.isIndexValid({row, colm})
                 && !tilemap.getTile(Index{row, colm}).isSolid()
