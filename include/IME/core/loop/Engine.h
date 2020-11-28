@@ -150,6 +150,12 @@ namespace IME {
          * not the state to be pushed. A callback must be provided if the
          * need to perform an operation immediately after a state is pushed
          * arises
+         *
+         * @warning If multiple states are pushed to the engine in a single/same
+         * frame, the last state to be received before the frame end will be the
+         * active state. All the other states will be pushed without initialization
+         * This means that only the optional callback attached to the last state
+         * will be invoked
          */
         void pushState(std::shared_ptr<State> state, Callback<> callback = nullptr);
 
@@ -362,8 +368,8 @@ namespace IME {
         std::shared_ptr<EventDispatcher> eventDispatcher_;
         //Data that persists across states
         PropertyContainer dataSaver_;
-        //Holds a state to be pushed to the engine
-        std::pair<std::shared_ptr<State>, Callback<>> stateToPush_;
+        //Holds states to be pushed to the engine at the end of the frame
+        std::vector<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_;
         //Flag for popping
         bool shouldPop_;
         //Window close event listener

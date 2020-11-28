@@ -200,10 +200,8 @@ namespace IME {
         if (!isRunning_) {
             prevStateInputManager_.push(Input::InputManager());
             statesManager_.pushState(std::move(state));
-        } else {
-            stateToPush_.first = std::move(state);
-            stateToPush_.second = callback;
-        }
+        } else
+            statesToPush_.push_back({std::move(state), callback});
     }
 
     void Engine::popState() {
@@ -229,20 +227,22 @@ namespace IME {
             }
         }
 
-        if (stateToPush_.first) {
+        if (!statesToPush_.empty()) {
             prevStateInputManager_.push(inputManager_);
             inputManager_ = Input::InputManager(); //Clear prev state input handlers
-            statesManager_.pushState(stateToPush_.first);
-            stateToPush_.first->initialize();
-            stateToPush_.first = nullptr;
-            if (stateToPush_.second) { //Invoke post push callback
-                stateToPush_.second();
-                stateToPush_.second = nullptr;
+            while (!statesToPush_.empty()) {
+                prevStateInputManager_.push(Input::InputManager());
+                statesManager_.pushState(std::move(statesToPush_.back().first));
+                if (statesToPush_.size() == 1 && statesToPush_.back().second)
+                    statesToPush_.back().second();
+                statesToPush_.pop_back();
             }
+            statesManager_.getActiveState()->initialize();
         }
     }
 
     void Engine::shutdown() {
+        statesToPush_.clear();
         statesManager_.clear();
         window_.close();
         audioManager_->stopAllAudio();
