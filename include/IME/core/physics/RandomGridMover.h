@@ -47,15 +47,20 @@ namespace IME {
          * @brief Start moving the target in the grid
          *
          * This function will move the target if it hasn't been moved for the
-         * first time or the movement was stopped @see stopMovement()
+         * first time or the movement was stopped
+         *
+         * @see stopMovement()
          */
         void startMovement();
 
         /**
          * @brief Stop moving the target in the grid
          *
-         * If the target was moving prior to function call, it will be
-         * teleported to it's destination
+         * Since a child in the grid can never be in between tiles, the
+         * targets movement will be stopped after it completes its current
+         * move. The targets movement is stopped by default
+         *
+         * @see startMovement
          */
         void stopMovement();
 

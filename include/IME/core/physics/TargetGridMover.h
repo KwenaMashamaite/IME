@@ -63,14 +63,6 @@ namespace IME {
         void setDestination(Index index);
 
         /**
-         * @brief Get the destination position of the target
-         * @return The position that the target must reach
-         *
-         * This destination will be returned event if the target has reached it
-         */
-        Index getDestination() const;
-
-        /**
          * @brief Set the position the target should go to
          * @param position New target position
          *
@@ -82,17 +74,33 @@ namespace IME {
         void setDestination(Vector2f position);
 
         /**
-         * @brief Resume moving target to the destination tile
+         * @brief Get the destination position of the target
+         * @return The position that the target must reach
+         *
+         * This destination will be returned event if the target has reached it
          */
-        void resumeMovement();
+        Index getDestination() const;
 
         /**
-         * @brief Pause target movement moving the target in the grid
+         * @brief Start moving the target to its destination tile
          *
-         * If the target was moving prior to function call, it will be
-         * teleported to the adjacent tile it was headed towards
+         * This function has no effect if the targets movement is not
+         * stopped
+         *
+         * @see stopMovement
          */
-        void pauseMovement();
+        void startMovement();
+
+        /**
+         * @brief Stop the targets movement
+         *
+         * Since a child in the grid can never be in between tiles, the
+         * targets movement will be stopped after it completes its current
+         * move. The targets movement is stopped by default
+         *
+         * @see startMovement
+         */
+        void stopMovement();
 
         /**
          * @brief Adaptively avoid solid tiles and obstacles
@@ -157,7 +165,7 @@ namespace IME {
         int solidTileHandlerId_;
         Callback<> adjacentTileHandler_;
         //Flags whether the target has been stopped or not
-        bool targetStopped_;
+        bool movementStarted_;
         //Flags whether the target tile was changed while target in motion
         bool targetTileChangedWhileMoving_;
     };

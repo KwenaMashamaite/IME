@@ -32,7 +32,7 @@ namespace IME {
         obstacleHandlerId_{-1},
         solidTileHandlerId_{-1},
         targetTileIndex_{-1, -1},
-        targetStopped_{false},
+        movementStarted_{false},
         targetTileChangedWhileMoving_{false}
     {
         if (getTarget())
@@ -102,15 +102,15 @@ namespace IME {
         setDestination(getGrid().getTile(position).getIndex());
     }
 
-    void TargetGridMover::resumeMovement() {
-        if (targetStopped_) {
-            targetStopped_ = false;
+    void TargetGridMover::startMovement() {
+        if (!movementStarted_) {
+            movementStarted_ = true;
             moveTarget();
         }
     }
 
-    void TargetGridMover::pauseMovement() {
-        targetStopped_ = true;
+    void TargetGridMover::stopMovement() {
+        movementStarted_ = false;
     }
 
     void TargetGridMover::generateNewDirOfMotion(Index nextPos) {
@@ -140,7 +140,7 @@ namespace IME {
     }
 
     void TargetGridMover::moveTarget() {
-        if (!pathToTargetTile_.empty() && !targetStopped_) {
+        if (!pathToTargetTile_.empty() && movementStarted_) {
             generateNewDirOfMotion(pathToTargetTile_.top());
             pathToTargetTile_.pop();
         }
