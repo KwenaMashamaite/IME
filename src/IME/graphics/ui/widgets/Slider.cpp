@@ -168,7 +168,7 @@ namespace IME::Graphics::UI {
     }
 
     void Slider::setText(const std::string &content) {
-
+        text_ = content;
     }
 
     void Slider::setSize(float width, float height) {
@@ -184,7 +184,7 @@ namespace IME::Graphics::UI {
     }
 
     std::string Slider::getText() const {
-
+        return text_;
     }
 
     unsigned int Slider::getTextSize() const {

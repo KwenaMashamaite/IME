@@ -74,13 +74,13 @@ namespace IME::Graphics::UI {
         return boxLayoutRenderer_->getTransparentTexture();
     }
 
-    int BoxLayoutRenderer::onPropertyChange(const std::string &property,
-         Callback<const std::string &> callback)
+    int BoxLayoutRenderer::onPropertyChange(const std::string &,
+         Callback<const std::string &>)
     {
         return 0;
     }
 
-    void BoxLayoutRenderer::unsubscribe(int id) {
+    void BoxLayoutRenderer::unsubscribe(int) {
 
     }
 

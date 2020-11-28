@@ -28,7 +28,9 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Graphics {
-    Sprite::Sprite() : isHidden_(false), textureFileName_("")
+    Sprite::Sprite() :
+        textureFileName_(""),
+        isHidden_(false)
     {}
 
     void Sprite::setPosition(float x, float y) {

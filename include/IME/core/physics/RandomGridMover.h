@@ -36,12 +36,12 @@ namespace IME {
     public:
         /**
          * @brief Create a random grid mover object
-         * @param tileMap Grid to target in
+         * @param newTarget Grid to target in
          * @param target Entity to be moved in the grid
          *
          * The target must be placed in the grid prior to grid mover construction
          */
-        explicit RandomGridMover(TileMap &tileMap, EntityPtr target = nullptr);
+        explicit RandomGridMover(TileMap &newTarget, EntityPtr target = nullptr);
 
         /**
          * @brief Start moving the target in the grid
@@ -84,12 +84,14 @@ namespace IME {
         void revertAndGenerateDirection();
 
     private:
-        int obstacleHandlerId_;
-        int solidTileHandlerId_;
         //Keeps track of the targets prev direction
         Direction prevDirection_;
         //Tracks whether the target movement has been initiated or not
         bool movementStarted_;
+        //Id for obstacle collision handler
+        int obstacleHandlerId_;
+        //Id for solid tile collision handler
+        int solidTileHandlerId_;
     };
 }
 

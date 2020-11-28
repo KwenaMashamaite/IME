@@ -64,9 +64,9 @@ namespace IME::Utility {
         DiskFileReader().readFileInto(filename, configurations);
         auto configEntry = std::string();
         while (std::getline(configurations, configEntry)) {
-            static auto errorMessage = [&](const std::string& errorMessage) {
+            static auto errorMessage = [&](const std::string& errorMsg) {
                 return R"(The entry ")" + configEntry + R"(" in ")" + filename
-                       + R"(" is invalid because ")" + errorMessage + R"(")";
+                       + R"(" is invalid because ")" + errorMsg + R"(")";
             };
 
             ////Skip lines that are empty or begin with a comment or whitespaces

@@ -336,12 +336,16 @@ namespace IME {
         std::string appName_;
         //Filename of the engine settings (including path)
         std::string settingFile_;
+        //Engine settings
+        PropertyContainer settings_;
         //lags whether settings are provided or loaded from file
         bool isSettingsLoadedFromFile_;
-        //Running state
-        bool isRunning_;
         //Initialization state
         bool isInitialized_;
+        //Running state
+        bool isRunning_;
+        //Keeps track of how long the engine has been running
+        float elapsedTime_;
         //Engine states
         StateManager statesManager_;
         //Engines audio manager
@@ -352,26 +356,22 @@ namespace IME {
         Input::InputManager inputManager_;
         //Engines global input manager
         Input::InputManager globalInputManager_;
+        //Remembers the prev state local input handlers on state push
+        std::stack<Input::InputManager> prevStateInputManager_;
         //Engines Event dispatcher (This instance is kept alive for all states)
         std::shared_ptr<EventDispatcher> eventDispatcher_;
-        //Engine settings
-        PropertyContainer settings_;
         //Data that persists across states
         PropertyContainer dataSaver_;
         //Holds a state to be pushed to the engine
         std::pair<std::shared_ptr<State>, Callback<>> stateToPush_;
         //Flag for popping
         bool shouldPop_;
-        //Keeps track of how long the engine has been running
-        float elapsedTime_;
         //Window close event listener
         Callback<> windowCloseHandler_;
         //Function called at the start of a frame
         Callback<> onFrameStart_;
         //Function called at the end of a frame
         Callback<> onFrameEnd_;
-        //Remembers the prev state local input handlers on state push
-        std::stack<Input::InputManager> prevStateInputManager_;
     };
 }
 

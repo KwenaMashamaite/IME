@@ -34,8 +34,6 @@ namespace IME::Graphics {
     }
 
     void Window::create(const std::string& title, unsigned int width, unsigned int height, Style style) {
-        assert(width >= 0 && "Window width cannot be negative");
-        assert(height >= 0 && "Window height cannot be negative");
         window_.create(sf::VideoMode(width, height), title, static_cast<unsigned int>(style));
     }
 

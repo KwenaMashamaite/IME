@@ -27,9 +27,9 @@
 
 namespace IME {
     BFSPathFinder::BFSPathFinder(Vector2u gridSize) {
-        for (auto i = 0; i < gridSize.y; i++) {
+        for (auto i = 0u; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};
-            for (auto j = 0; j < gridSize.x; j++)
+            for (auto j = 0u; j < gridSize.x; j++)
                 innerVector.push_back(false);
             visited_.push_back(innerVector);
         }
@@ -60,8 +60,8 @@ namespace IME {
     }
 
     void BFSPathFinder::reset() {
-        for (auto i = 0; i < visited_.size(); i++) {
-            for (auto j = 0; j < visited_[0].size(); j++)
+        for (auto i = 0u; i < visited_.size(); i++) {
+            for (auto j = 0u; j < visited_[0].size(); j++)
                 visited_[i][j] = false;
         }
     }

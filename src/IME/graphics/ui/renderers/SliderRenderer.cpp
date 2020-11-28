@@ -149,13 +149,13 @@ namespace IME::Graphics::UI {
         return sliderRenderer_->getTransparentTexture();
     }
 
-    int SliderRenderer::onPropertyChange(const std::string &property,
-         Callback<const std::string &> callback)
+    int SliderRenderer::onPropertyChange(const std::string &,
+         Callback<const std::string &>)
     {
         return 0;
     }
 
-    void SliderRenderer::unsubscribe(int id) {
+    void SliderRenderer::unsubscribe(int) {
 
     }
 

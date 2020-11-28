@@ -465,6 +465,8 @@ namespace IME {
             std::shared_ptr<SliderRenderer> renderer_;
             //How long the slider takes before its completely hidden or shown
             static const int fadeAnimDuration_ = 100;
+            //
+            std::string text_;
         };
     }
 }

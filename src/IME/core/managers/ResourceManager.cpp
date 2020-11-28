@@ -27,7 +27,7 @@
 
 namespace IME {
     ResourceManager::ResourceManager()
-        : fonts_(""), textures_(""), images_(""), soundBuffers_(""), music_("")
+        : fonts_(""), images_(""), textures_(""), soundBuffers_(""), music_("")
     {}
 
     bool ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
@@ -43,6 +43,7 @@ namespace IME {
             case ResourceType::Music:
                 return music_.loadFromFile(filename);
         }
+        return false;
     }
 
     void ResourceManager::loadFromFile(ResourceType type,
@@ -88,6 +89,8 @@ namespace IME {
                 return soundBuffers_.unload(filename);
             case ResourceType::Music:
                 return music_.unload(filename);
+            default:
+                return false;
         }
     }
 
@@ -103,6 +106,8 @@ namespace IME {
                 return soundBuffers_.getPath();
             case ResourceType::Music:
                 return music_.getPath();
+            default:
+                return emptyStr_; //Avoid Returning reference to local temporary object warning
         }
     }
 
@@ -118,6 +123,8 @@ namespace IME {
                 return soundBuffers_.getUseCountFor(filename);
             case ResourceType::Music:
                 return music_.getUseCountFor(filename);
+            default:
+                return 0;
         }
     }
 

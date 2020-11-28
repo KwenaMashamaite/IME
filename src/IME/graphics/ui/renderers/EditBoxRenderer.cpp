@@ -293,13 +293,13 @@ namespace IME::Graphics::UI {
         return editBoxRenderer_->getTransparentTexture();
     }
 
-    int EditBoxRenderer::onPropertyChange(const std::string &property,
-        Callback<const std::string &> callback)
+    int EditBoxRenderer::onPropertyChange(const std::string &,
+        Callback<const std::string &>)
     {
         return 0;
     }
 
-    void EditBoxRenderer::unsubscribe(int id) {
+    void EditBoxRenderer::unsubscribe(int) {
 
     }
 

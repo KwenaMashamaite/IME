@@ -141,12 +141,12 @@ namespace IME::Graphics::UI {
         return labelRenderer_->getTransparentTexture();
     }
 
-    int LabelRenderer::onPropertyChange(const std::string &property,
-        Callback<const std::string &> callback) {
+    int LabelRenderer::onPropertyChange(const std::string &,
+        Callback<const std::string &> ) {
         return -1;
     }
 
-    void LabelRenderer::unsubscribe(int id) {
+    void LabelRenderer::unsubscribe(int) {
 
     }
 

@@ -208,16 +208,18 @@ namespace IME {
         ResourceManager& operator=(const ResourceManager&) = delete;
 
     private:
-        //Stores textures
-        TextureHolder textures_;
-        //Stores sound buffers
-        SoundBufferHolder soundBuffers_;
         //Stores fonts
         FontHolder fonts_;
         //Stores images
         ImageHolder images_;
+        //Stores textures
+        TextureHolder textures_;
+        //Stores sound buffers
+        SoundBufferHolder soundBuffers_;
         //Stores music
         MusicHolder music_;
+        //For compiler warning purposes
+        std::string emptyStr_;
     };
 }
 

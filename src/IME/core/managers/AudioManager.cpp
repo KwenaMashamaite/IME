@@ -85,6 +85,7 @@ namespace IME::Audio{
             case AudioType::Music:
                 return musicVolume_;
         }
+        return masterVolume_;
     }
 
     void AudioManager::setMasterVolume(float volume) {

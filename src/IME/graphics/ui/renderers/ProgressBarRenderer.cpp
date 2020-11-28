@@ -127,7 +127,7 @@ namespace IME::Graphics::UI {
         return progressBarRenderer_->getTransparentTexture();
     }
 
-    void ProgressBarRenderer::unsubscribe(int id) {
+    void ProgressBarRenderer::unsubscribe(int ) {
 
     }
 
@@ -139,8 +139,8 @@ namespace IME::Graphics::UI {
         return progressBarRenderer_;
     }
 
-    int ProgressBarRenderer::onPropertyChange(const std::string &property,
-        Callback<const std::string &> callback) {
+    int ProgressBarRenderer::onPropertyChange(const std::string &,
+        Callback<const std::string &>) {
         return 0;
     }
 

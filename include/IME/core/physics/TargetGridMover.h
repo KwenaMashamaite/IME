@@ -161,13 +161,16 @@ namespace IME {
         Index targetTileIndex_;
         //Stores the path to the target tile
         std::stack<Index> pathToTargetTile_;
-        int obstacleHandlerId_;
-        int solidTileHandlerId_;
-        Callback<> adjacentTileHandler_;
         //Flags whether the target has been stopped or not
         bool movementStarted_;
         //Flags whether the target tile was changed while target in motion
         bool targetTileChangedWhileMoving_;
+        //Function executed every time target reaches a tile
+        Callback<> adjacentTileHandler_;
+        //Id for obstacle collision handler
+        int obstacleHandlerId_;
+        //Id for solid tile collision handler
+        int solidTileHandlerId_;
     };
 }
 

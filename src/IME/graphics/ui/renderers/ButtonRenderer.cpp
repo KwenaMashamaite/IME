@@ -286,13 +286,13 @@ namespace IME::Graphics::UI {
         return buttonRenderer_->getTransparentTexture();
     }
 
-    int ButtonRenderer::onPropertyChange(const std::string &property,
-         Callback<const std::string &> callback)
+    int ButtonRenderer::onPropertyChange(const std::string &,
+         Callback<const std::string &>)
     {
         return 0;
     }
 
-    void ButtonRenderer::unsubscribe(int id) {
+    void ButtonRenderer::unsubscribe(int) {
 
     }
 

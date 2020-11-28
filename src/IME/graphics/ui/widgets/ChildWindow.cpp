@@ -133,7 +133,7 @@ namespace IME::Graphics::UI {
         window_->setTextSize(charSize);
     }
 
-    void ChildWindow::setText(const std::string &content) {
+    void ChildWindow::setText(const std::string &) {
 
     }
 
@@ -248,7 +248,7 @@ namespace IME::Graphics::UI {
     }
 
     const std::vector<IWidget> &ChildWindow::getWidgets() const {
-
+        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool ChildWindow::removeWidget(const std::string &widget) {

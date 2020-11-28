@@ -55,13 +55,13 @@ namespace IME {
     }
 
     Engine::Engine(const std::string &gameName, const std::string &settingsFile) :
-        isSettingsLoadedFromFile_(!settingsFile.empty()),
-        isRunning_{false},
-        isInitialized_{false},
         appName_{gameName},
         settingFile_{settingsFile},
-        shouldPop_{false},
-        elapsedTime_{0.0f}
+        isSettingsLoadedFromFile_(!settingsFile.empty()),
+        isInitialized_{false},
+        isRunning_{false},
+        elapsedTime_{0.0f},
+        shouldPop_{false}
     {}
 
     void Engine::init() {
@@ -98,8 +98,8 @@ namespace IME {
     }
 
     void Engine::initRenderTarget() {
-        auto desktopWidth = sf::VideoMode::getDesktopMode().width;
-        auto desktopHeight = sf::VideoMode::getDesktopMode().height;
+        auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
+        auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
         auto title = settings_.getValueFor<std::string>("windowTitle");
         auto width = settings_.getValueFor<int>("windowWidth");
         auto height = settings_.getValueFor<int>("windowHeight");
@@ -151,7 +151,7 @@ namespace IME {
         auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
         auto clock = Time::Clock();
         elapsedTime_ = 0.0f;
-        auto prevTime = clock.getElapsedTimeInSeconds();
+        auto prevTime = static_cast<float>(clock.getElapsedTimeInSeconds());
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             if (onFrameStart_)
                 onFrameStart_();

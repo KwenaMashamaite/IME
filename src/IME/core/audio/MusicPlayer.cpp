@@ -83,7 +83,7 @@ namespace IME::Audio {
                     return Status::Stopped;
             }
         }
-        return Audio::Status::Stopped;
+        return Status::Stopped;
     }
 
     float MusicPlayer::getVolume() const {

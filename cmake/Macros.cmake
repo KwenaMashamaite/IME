@@ -13,17 +13,17 @@ function(ime_set_global_compile_flags target)
     else()
         target_compile_options(${target}
             PRIVATE
-            #-Wall
-            #-Wextra
-            #-Wshadow
+            -Wall
+            -Wextra
+            -Wshadow
             -Wnon-virtual-dtor
-            #-Wold-style-cast
-            #-Wcast-align
-            #-Wunused
+            -Wold-style-cast
+            -Wcast-align
+            -Wunused
             -Woverloaded-virtual
-            #-Wpedantic
-            #-Wdouble-promotion
-            #-Wformat=2
+            -Wpedantic
+            -Wdouble-promotion
+            -Wformat=2
             )
     endif()
 

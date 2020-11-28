@@ -42,14 +42,14 @@ namespace IME {
     const Colour Colour::Gold{255, 215, 0, 255};
     const Colour Colour::Transparent{0, 0, 0, 0};
 
-    Colour::Colour() : red(0), green (0), blue(0), opacity(255)
+    Colour::Colour() : red(0u), green (0u), blue(0u), opacity(255u)
     {}
 
-    Colour::Colour(unsigned int red, unsigned int green, unsigned int blue, unsigned int opacity){
-        this->red = red;
-        this->green = green;
-        this->blue = blue;
-        this->opacity = opacity;
+    Colour::Colour(unsigned int r, unsigned int g, unsigned int b, unsigned int alpha){
+        red = r;
+        green = g;
+        blue = b;
+        opacity = alpha;
     }
 
     bool Colour::operator==(const Colour &rhs) {

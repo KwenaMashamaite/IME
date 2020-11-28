@@ -95,7 +95,7 @@ namespace IME::Graphics::UI {
     }
 
     const std::vector<IWidget> &GuiContainer::getWidgets() const {
-
+        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool GuiContainer::addWidget(std::shared_ptr<IWidget> widget,

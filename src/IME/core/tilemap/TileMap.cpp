@@ -94,7 +94,7 @@ namespace IME {
 
     bool TileMap::isIndexValid(const Index &index) const {
         auto [row, colm] = index;
-        return !(row >= numOfRows_ || row < 0 || colm >= numOfColms_ || colm < 0);
+        return !(row >= static_cast<int>(numOfRows_) || row < 0 || colm >= static_cast<int>(numOfColms_) || colm < 0);
     }
 
     void TileMap::loadFromFile(const std::string &filename, const char& separator) {
@@ -275,19 +275,19 @@ namespace IME {
         if (!child)
             return false;
 
-        for (auto& [index, childList] : children_) {
-            for (auto i = 0u; i < childList.size(); ++i)
-                if (childList[i] == child)
+        for (auto& childList : children_) {
+            for (auto i = 0u; i < childList.second.size(); ++i)
+                if (childList.second[i] == child)
                     return true;
         }
         return false;
     }
 
     std::shared_ptr<Entity> TileMap::getChildWithId(std::size_t id) const {
-        for (const auto& [index, childList] : children_) {
-            for (auto i = 0u; i < childList.size(); ++i)
-                if (childList[i]->getObjectId() == id) {
-                    return childList[i];
+        for (const auto& childList : children_) {
+            for (auto i = 0u; i < childList.second.size(); ++i)
+                if (childList.second[i]->getObjectId() == id) {
+                    return childList.second[i];
                 }
         }
         return nullptr;
@@ -353,10 +353,10 @@ namespace IME {
     }
 
     bool TileMap::removeChildWithId(std::size_t id) {
-        for (auto& [index, childList] : children_) {
-            for (auto i = 0u; i < childList.size(); ++i)
-                if (childList[i]->getObjectId() == id) {
-                    childList.erase(childList.begin() + i);
+        for (auto& childList : children_) {
+            for (auto i = 0u; i < childList.second.size(); ++i)
+                if (childList.second[i]->getObjectId() == id) {
+                    childList.second.erase(childList.second.begin() + i);
                     return true;
                 }
         }
@@ -370,8 +370,8 @@ namespace IME {
     }
 
     void TileMap::removeChildrenIf(std::function<bool(std::shared_ptr<Entity>)> callback) {
-        for (auto& [index, childList] : children_)
-            childList.erase(std::remove_if(childList.begin(), childList.end(), callback), childList.end());
+        for (auto& childList : children_)
+            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(), callback), childList.second.end());
     }
 
     bool TileMap::removeAllVisitors(const Graphics::Tile &tile) {

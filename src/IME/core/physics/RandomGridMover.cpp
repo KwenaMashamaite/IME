@@ -27,20 +27,21 @@
 
 namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
-        GridMover(tileMap, target), prevDirection_(Direction::None),
+        GridMover(tileMap, target),
+        prevDirection_(Direction::None),
+        movementStarted_{false},
         obstacleHandlerId_{-1},
-        solidTileHandlerId_{-1},
-        movementStarted_{false}
+        solidTileHandlerId_{-1}
     {
-        onTargetChanged([this](EntityPtr target) {
-            if (target) {
+        onTargetChanged([this](EntityPtr newTarget) {
+            if (newTarget) {
                 movementStarted_ = true;
                 generateNewDirection();
             } else
                 movementStarted_ = false;
         });
 
-        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile tile) {
+        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile) {
             revertAndGenerateDirection();
         });
 

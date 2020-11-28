@@ -49,7 +49,7 @@ namespace IME::Graphics::UI {
         layout_->setTextSize(charSize);
     }
 
-    void HorizontalLayout::setText(const std::string &content) {
+    void HorizontalLayout::setText(const std::string &) {
 
     }
 
@@ -156,8 +156,8 @@ namespace IME::Graphics::UI {
     }
 
     std::shared_ptr<IWidget>
-    HorizontalLayout::getWidgetAt(std::size_t index) const {
-        return std::shared_ptr<IWidget>();
+    HorizontalLayout::getWidgetAt(std::size_t) const {
+        return std::shared_ptr<IWidget>(); //@TODO implement
     }
 
     void HorizontalLayout::addSpace(float ratio) {
@@ -202,7 +202,7 @@ namespace IME::Graphics::UI {
     }
 
     const std::vector<IWidget> &HorizontalLayout::getWidgets() const {
-
+        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool HorizontalLayout::removeWidget(const std::string &widget) {

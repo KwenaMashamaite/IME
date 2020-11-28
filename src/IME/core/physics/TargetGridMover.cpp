@@ -29,19 +29,19 @@ namespace IME {
     TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
-        obstacleHandlerId_{-1},
-        solidTileHandlerId_{-1},
         targetTileIndex_{-1, -1},
         movementStarted_{false},
-        targetTileChangedWhileMoving_{false}
+        targetTileChangedWhileMoving_{false},
+        obstacleHandlerId_{-1},
+        solidTileHandlerId_{-1}
     {
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
         enableAdaptiveMovement(false);
 
-        onTargetChanged([this](EntityPtr target) {
-            if (target) {
+        onTargetChanged([this](EntityPtr newTarget) {
+            if (newTarget) {
                 generatePath();
                 moveTarget();
             }
@@ -52,7 +52,7 @@ namespace IME {
                 adjacentTileHandler_();
         });
 
-        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile tile) {
+        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();

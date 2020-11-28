@@ -38,17 +38,17 @@ bool tileHasObstacle(IME::TileMap& grid, IME::Index index) {
 namespace IME {
     void AdjacencyList::generateFrom(TileMap &tileMap) {
         adjacencyList_.clear();
-        auto static addNeighbour = [](auto& tilemap, auto& neighbours, int row, int colm) {
+        auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {
             if (tilemap.isIndexValid({row, colm})
                 && !tilemap.getTile(Index{row, colm}).isSolid()
                 && !tileHasObstacle(tilemap, Index{row, colm}))
             {
-                neighbours.push_back({row, colm});
+                neighboursVec.push_back({row, colm});
             }
         };
 
-        for (auto i = 0; i < tileMap.getSizeInTiles().y; i++) {
-            for (auto j = 0 ; j < tileMap.getSizeInTiles().x; j++) {
+        for (auto i = 0; i < static_cast<int>(tileMap.getSizeInTiles().y); i++) {
+            for (auto j = 0 ; j < static_cast<int>(tileMap.getSizeInTiles().x); j++) {
                 if (tileMap.getTile(Index{i, j}).isSolid() || tileHasObstacle(tileMap, Index{i, j}))
                     continue;
                 auto neighbours = std::vector<Index>{};

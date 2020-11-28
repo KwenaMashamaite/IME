@@ -38,12 +38,16 @@ void IME::Utility::DiskFileReader::readFileInto(const std::string &filename,
 void IME::Utility::DiskFileReader::writeToFile(const std::stringstream &buffer,
     const std::string &filename, WriteMode writeMode)
 {
-    if (writeMode == WriteMode::Overwrite)
-        outFile_.open(filename);
-    else
-        outFile_.open(filename, std::ios::app);
+    switch (writeMode) {
+        case WriteMode::Overwrite:
+            outFile_.open(filename);
+            break;
+        case WriteMode::Append:
+            outFile_.open(filename, std::ios::app);
+            break;
+    }
 
-	if(!outFile_.good())
+	if (!outFile_.good())
         throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
 	outFile_ << buffer.str(); //Write data to file
     outFile_.close();

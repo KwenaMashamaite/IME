@@ -49,7 +49,7 @@ namespace IME::Graphics::UI {
         layout_->setTextSize(charSize);
     }
 
-    void VerticalLayout::setText(const std::string &content) {
+    void VerticalLayout::setText(const std::string &) {
 
     }
 
@@ -156,8 +156,8 @@ namespace IME::Graphics::UI {
     }
 
     std::shared_ptr<IWidget>
-    VerticalLayout::getWidgetAt(std::size_t index) const {
-        return std::shared_ptr<IWidget>();
+    VerticalLayout::getWidgetAt(std::size_t ) const {
+        return std::shared_ptr<IWidget>{}; //@TODO implement
     }
 
     void VerticalLayout::addSpace(float ratio) {
@@ -202,7 +202,7 @@ namespace IME::Graphics::UI {
     }
 
     const std::vector<IWidget> &VerticalLayout::getWidgets() const {
-
+        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool VerticalLayout::removeWidget(const std::string &widget) {

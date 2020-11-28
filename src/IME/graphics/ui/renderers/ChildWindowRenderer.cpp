@@ -169,13 +169,13 @@ namespace IME::Graphics::UI {
         return windowRenderer_->getTransparentTexture();
     }
 
-    int ChildWindowRenderer::onPropertyChange(const std::string &property,
-        Callback<const std::string &> callback)
+    int ChildWindowRenderer::onPropertyChange(const std::string &,
+        Callback<const std::string &>)
     {
         return 0;
     }
 
-    void ChildWindowRenderer::unsubscribe(int id) {
+    void ChildWindowRenderer::unsubscribe(int) {
 
     }
 

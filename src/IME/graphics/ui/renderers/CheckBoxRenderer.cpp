@@ -353,13 +353,13 @@ namespace IME::Graphics::UI {
         return checkBoxRenderer_->getTransparentTexture();
     }
 
-    int CheckBoxRenderer::onPropertyChange(const std::string &property,
-           Callback<const std::string &> callback)
+    int CheckBoxRenderer::onPropertyChange(const std::string &,
+           Callback<const std::string &>)
     {
         return 0;
     }
 
-    void CheckBoxRenderer::unsubscribe(int id) {
+    void CheckBoxRenderer::unsubscribe(int) {
 
     }
 

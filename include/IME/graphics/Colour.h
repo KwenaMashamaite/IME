@@ -61,14 +61,14 @@ namespace IME {
 
         /**
          * @brief Construct the color from its 4 RGBA components
-         * @param red Red component
-         * @param green Green component
-         * @param blue Blue component
-         * @param opacity Alpha component
+         * @param r Red component
+         * @param g Green component
+         * @param b Blue component
+         * @param alpha Alpha component
          *
          * All components must be in the range [0, 255]
          */
-        Colour(unsigned int red, unsigned int green, unsigned int blue, unsigned opacity = 255);
+        Colour(unsigned int r, unsigned int g, unsigned int b, unsigned alpha = 255);
 
         /**
          * @brief Check if a colour is the same as this colour

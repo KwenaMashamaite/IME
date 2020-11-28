@@ -77,6 +77,7 @@ namespace IME::Audio{
             case sf::SoundSource::Status::Stopped:
                 return Status::Stopped;
         }
+        return Status::Stopped;
     }
 
     float SoundEffectPlayer::getVolume() const {
@@ -118,6 +119,6 @@ namespace IME::Audio{
     }
 
     float SoundEffectPlayer::getPitch() const {
-        soundEffect_.getPitch();
+        return soundEffect_.getPitch();
     }
 }
