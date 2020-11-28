@@ -25,23 +25,23 @@
 #include "IME/core/managers/AudioManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::Audio{
+namespace IME::Audio {
     AudioManager::AudioManager()
         : masterVolume_{100.0f}, sfxVolume_{100.0f}, musicVolume_{100.0f}, isMuted_(false)
     {}
 
     void AudioManager::play(AudioType audioType, const std::string &filename, bool isLooped) {
-        std::unique_ptr<AudioPlayer> audioPlayer;
+        std::unique_ptr<Audio> audio;
         if (audioType == AudioType::Music) {
-            audioPlayer = std::move(std::make_unique<MusicPlayer>());
-            audioPlayer->setVolume(musicVolume_);
+            audio = std::move(std::make_unique<Music>());
+            audio->setVolume(musicVolume_);
         } else if (audioType == AudioType::Sfx) {
-            audioPlayer = std::move(std::make_unique<SoundEffectPlayer>());
-            audioPlayer->setVolume(sfxVolume_);
+            audio = std::move(std::make_unique<SoundEffect>());
+            audio->setVolume(sfxVolume_);
         }
-        audioPlayer->setLoop(isLooped);
-        audioPlayer->play(filename);
-        playingAudio_.push_back(std::move(audioPlayer));
+        audio->setLoop(isLooped);
+        audio->play(filename);
+        playingAudio_.push_back(std::move(audio));
     }
 
     void AudioManager::setVolumeFor(AudioType audioType, float volume) {
@@ -55,26 +55,26 @@ namespace IME::Audio{
     }
 
     void AudioManager::playAllAudio() {
-        for (auto& audioPlayer : playingAudio_)
-            audioPlayer->play();
+        for (auto& audio : playingAudio_)
+            audio->play();
     }
 
     void AudioManager::pauseAllAudio() {
-        for (auto& audioPlayer : playingAudio_)
-            audioPlayer->pause();
+        for (auto& audio : playingAudio_)
+            audio->pause();
     }
 
     void AudioManager::stopAllAudio() {
-        for (auto& audioPlayer : playingAudio_)
-            audioPlayer->stop();
+        for (auto& audio : playingAudio_)
+            audio->stop();
     }
 
     void AudioManager::setMute(bool isMuted) {
         if (isMuted_ == isMuted)
             return;
         isMuted_ = isMuted;
-        for (auto& audioPlayer : playingAudio_)
-            audioPlayer->setMute(isMuted);
+        for (auto& audio : playingAudio_)
+            audio->setMute(isMuted);
         eventEmitter_.emit("muteChanged", isMuted_);
     }
 
@@ -106,11 +106,11 @@ namespace IME::Audio{
                 sfxVolume_ = masterVolume_;
 
             std::for_each(playingAudio_.begin(), playingAudio_.end(),
-                [this](auto& audioPlayer) {
-                    if (audioPlayer->getType() == "MusicPlayer")
-                        audioPlayer->setVolume(musicVolume_);
+                [this](auto& audio) {
+                    if (audio->getType() == "Music")
+                        audio->setVolume(musicVolume_);
                     else
-                        audioPlayer->setVolume(sfxVolume_);
+                        audio->setVolume(sfxVolume_);
             });
 
             eventEmitter_.emit("volumeChanged", masterVolume_);
@@ -135,8 +135,8 @@ namespace IME::Audio{
 
     void AudioManager::update() {
         playingAudio_.erase(std::remove_if(playingAudio_.begin(), playingAudio_.end(),
-            [] (auto& audioPLayer) {
-                return audioPLayer->getStatus() == Status::Stopped;
+            [] (auto& audio) {
+                return audio->getStatus() == Status::Stopped;
         }), playingAudio_.end());
     }
 }

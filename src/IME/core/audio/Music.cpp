@@ -22,11 +22,11 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/audio/MusicPlayer.h"
+#include "IME/core/audio/Music.h"
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio {
-    void MusicPlayer::play(const std::string &song) {
+    void Music::play(const std::string &song) {
         if (currentMusicFileName_ != song) {
             song_ = ResourceManager::getInstance()->getMusic(song);
             currentMusicFileName_ = song;
@@ -34,35 +34,35 @@ namespace IME::Audio {
         play();
     }
 
-    void MusicPlayer::setLoop(bool isLoop) {
+    void Music::setLoop(bool isLoop) {
         if (song_ && song_->getLoop() != isLoop) {
             song_->setLoop(isLoop);
             emit("loopChanged", isLoop);
         }
     }
 
-    void MusicPlayer::pause(){
+    void Music::pause(){
         if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
             song_->pause();
             emit("paused");
         }
     }
 
-    void MusicPlayer::play() {
+    void Music::play() {
         if (song_) {
             song_->play();
             emit("playing", currentMusicFileName_);
         }
     }
 
-    void MusicPlayer::stop() {
+    void Music::stop() {
         if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
             song_->stop();
             emit("stopped");
         }
     }
 
-    void MusicPlayer::setVolume(float volume) {
+    void Music::setVolume(float volume) {
         if (song_ && song_->getVolume() != volume
             && (volume >=0 && volume <= 100)) {
             if (isMuted())
@@ -72,7 +72,7 @@ namespace IME::Audio {
         }
     }
 
-    Status MusicPlayer::getStatus() const {
+    Status Music::getStatus() const {
         if (song_) {
             switch (song_->getStatus()) {
                 case sf::Sound::Status::Playing:
@@ -86,23 +86,23 @@ namespace IME::Audio {
         return Status::Stopped;
     }
 
-    float MusicPlayer::getVolume() const {
+    float Music::getVolume() const {
         if (song_)
             return song_->getVolume();
         return 100.0f; //Default volume is maximum
     }
 
-    bool MusicPlayer::isLooped() const {
+    bool Music::isLooped() const {
         if (song_)
             return song_->getLoop();
         return false;
     }
 
-    const std::string& MusicPlayer::getCurrentAudioFileName() const {
+    const std::string& Music::getCurrentAudioFileName() const {
         return currentMusicFileName_;
     }
 
-    Duration MusicPlayer::getDuration() const {
+    Duration Music::getDuration() const {
         if (song_)
             return {song_->getDuration().asSeconds(),
                     static_cast<float>(song_->getDuration().asMilliseconds()),
@@ -110,14 +110,14 @@ namespace IME::Audio {
         return {0.0f, 0.0f, 0.0f};
     }
 
-    void MusicPlayer::seek(float position) {
+    void Music::seek(float position) {
         if (song_) {
             song_->setPlayingOffset(sf::microseconds(position));
             emit("playingPositionChanged", position);
         }
     }
 
-    Duration MusicPlayer::getPlayingPosition() const {
+    Duration Music::getPlayingPosition() const {
         if (song_)
             return {song_->getPlayingOffset().asSeconds(),
                     static_cast<float>(song_->getPlayingOffset().asMicroseconds()),
@@ -125,16 +125,16 @@ namespace IME::Audio {
         return {0.0f, 0.0f, 0.0f};
     }
 
-    std::string MusicPlayer::getType() {
-        return "MusicPlayer";
+    std::string Music::getType() {
+        return "Music";
     }
 
-    void MusicPlayer::setPitch(float pitch) {
+    void Music::setPitch(float pitch) {
         if (song_)
             song_->setPitch(pitch);
     }
 
-    float MusicPlayer::getPitch() const {
+    float Music::getPitch() const {
         if (song_)
             return song_->getPitch();
         return 1;

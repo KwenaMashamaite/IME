@@ -22,15 +22,15 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/audio/AudioPlayer.h"
+#include "IME/core/audio/Audio.h"
 
-namespace IME{
-    Audio::AudioPlayer::AudioPlayer()
+namespace IME::Audio {
+    Audio::Audio()
         : isMuted_(false),
           volumeBeforeMute_(100.0f)
     {}
 
-    void Audio::AudioPlayer::adjustVolume(float offset) {
+    void Audio::adjustVolume(float offset) {
         if (auto currentVolume = getVolume(); currentVolume + offset > 100.0f)
             setVolume(100.0f);
         else if (currentVolume + offset < 0.0f)
@@ -39,7 +39,7 @@ namespace IME{
             setVolume(currentVolume + offset);
     }
 
-    void Audio::AudioPlayer::setMute(bool mute) {
+    void Audio::setMute(bool mute) {
         if (mute && !isMuted_) {
             isMuted_ = true;
             volumeBeforeMute_ = getVolume();
@@ -52,11 +52,11 @@ namespace IME{
         }
     }
 
-    bool Audio::AudioPlayer::isMuted() const {
+    bool Audio::isMuted() const {
         return isMuted_;
     }
 
-    void Audio::AudioPlayer::restart() {
+    void Audio::restart() {
         seek(0.0f);
     }
 }

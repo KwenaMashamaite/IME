@@ -22,11 +22,11 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/audio/SoundEffectPlayer.h"
+#include "IME/core/audio/SoundEffect.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Audio{
-    void SoundEffectPlayer::play(const std::string &filename){
+namespace IME::Audio {
+    void SoundEffect::play(const std::string &filename){
         if (currentEffectName_ != filename) {
             soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
             currentEffectName_ = filename;
@@ -34,26 +34,26 @@ namespace IME::Audio{
         play();
     }
 
-    void SoundEffectPlayer::stop() {
+    void SoundEffect::stop() {
         if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
             soundEffect_.stop();
             emit("stopped");
         }
     }
 
-    void SoundEffectPlayer::pause() {
+    void SoundEffect::pause() {
         if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
             soundEffect_.pause();
             emit("paused");
         }
     }
 
-    void SoundEffectPlayer::play() {
+    void SoundEffect::play() {
         soundEffect_.play();
         emit("playing", currentEffectName_);
     }
 
-    void SoundEffectPlayer::setVolume(float volume) {
+    void SoundEffect::setVolume(float volume) {
         if (volume != soundEffect_.getVolume()
             && (volume >=0 && volume <= 100)) {
             soundEffect_.setVolume(volume);
@@ -61,14 +61,14 @@ namespace IME::Audio{
         }
     }
 
-    void SoundEffectPlayer::setLoop(bool isLooped) {
+    void SoundEffect::setLoop(bool isLooped) {
         if (soundEffect_.getLoop() != isLooped) {
             soundEffect_.setLoop(isLooped);
             emit("loopChanged", isLooped);
         }
     }
 
-    Status SoundEffectPlayer::getStatus() const {
+    Status SoundEffect::getStatus() const {
         switch (soundEffect_.getStatus()) {
             case sf::SoundSource::Status::Playing:
                 return Status::Playing;
@@ -80,15 +80,15 @@ namespace IME::Audio{
         return Status::Stopped;
     }
 
-    float SoundEffectPlayer::getVolume() const {
+    float SoundEffect::getVolume() const {
         return soundEffect_.getVolume();
     }
 
-    bool SoundEffectPlayer::isLooped() const {
+    bool SoundEffect::isLooped() const {
         return soundEffect_.getLoop();
     }
 
-    Duration SoundEffectPlayer::getDuration() const {
+    Duration SoundEffect::getDuration() const {
         if (soundEffect_.getBuffer())
             return {soundEffect_.getPlayingOffset().asSeconds(),
                     static_cast<float>(soundEffect_.getBuffer()->getDuration().asMilliseconds()),
@@ -96,29 +96,29 @@ namespace IME::Audio{
         return {0.0f, 0.0f, 0.0f};
     }
 
-    void SoundEffectPlayer::seek(float position) {
+    void SoundEffect::seek(float position) {
         soundEffect_.setPlayingOffset(sf::milliseconds(position));
     }
 
-    const std::string &SoundEffectPlayer::getCurrentAudioFileName() const {
+    const std::string &SoundEffect::getCurrentAudioFileName() const {
         return currentEffectName_;
     }
 
-    Duration SoundEffectPlayer::getPlayingPosition() const {
+    Duration SoundEffect::getPlayingPosition() const {
         return {soundEffect_.getPlayingOffset().asSeconds(),
                 static_cast<float>(soundEffect_.getPlayingOffset().asMilliseconds()),
                 static_cast<float>(soundEffect_.getPlayingOffset().asMicroseconds())};
     }
 
-    std::string SoundEffectPlayer::getType() {
-        return "SfxPlayer";
+    std::string SoundEffect::getType() {
+        return "SoundEffect";
     }
 
-    void SoundEffectPlayer::setPitch(float pitch) {
+    void SoundEffect::setPitch(float pitch) {
         soundEffect_.setPitch(pitch);
     }
 
-    float SoundEffectPlayer::getPitch() const {
+    float SoundEffect::getPitch() const {
         return soundEffect_.getPitch();
     }
 }

@@ -34,9 +34,9 @@
 #define IME_AUDIOMANAGER_H
 
 #include "IME/Config.h"
-#include "IME/core/audio/AudioPlayer.h"
-#include "IME/core/audio/MusicPlayer.h"
-#include "IME/core/audio/SoundEffectPlayer.h"
+#include "IME/core/audio/Audio.h"
+#include "IME/core/audio/Music.h"
+#include "IME/core/audio/SoundEffect.h"
 #include "IME/core/event/EventEmitter.h"
 #include <unordered_map>
 #include <initializer_list>
@@ -44,15 +44,15 @@
 #include <string>
 
 namespace IME {
-    namespace Audio {
-        /**
-         * @brief Types of audio files managed by the audio manager
-         */
-        enum class AudioType{
-            Sfx,
-            Music
-        };
+    /**
+     * @brief Types of audio files managed by the audio manager
+     */
+    enum class AudioType{
+        Sfx,
+        Music
+    };
 
+    namespace Audio {
         class IME_API AudioManager {
         public:
             /**
@@ -170,7 +170,7 @@ namespace IME {
             //Event emitter
             EventEmitter eventEmitter_;
             //Audio players
-            std::vector<std::unique_ptr<AudioPlayer>> playingAudio_;
+            std::vector<std::unique_ptr<Audio>> playingAudio_;
         };
     }
 }

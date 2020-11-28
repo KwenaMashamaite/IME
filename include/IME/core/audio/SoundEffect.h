@@ -34,17 +34,17 @@
  * for long sounds such as background music.
  */
 
-#ifndef IME_SOUNDEFFECTPLAYER_H
-#define IME_SOUNDEFFECTPLAYER_H
+#ifndef IME_SOUNDEFFECT_H
+#define IME_SOUNDEFFECT_H
 
 #include "IME/Config.h"
-#include "AudioPlayer.h"
+#include "Audio.h"
 #include <SFML/Audio.hpp>
 #include <string>
 
 namespace IME {
     namespace Audio {
-        class IME_API SoundEffectPlayer final : public AudioPlayer {
+        class IME_API SoundEffect final : public Audio {
         public:
             /**
              * @brief Play sound

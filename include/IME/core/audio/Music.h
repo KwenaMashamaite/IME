@@ -33,18 +33,18 @@
  * gun shots and explosions
  */
 
-#ifndef IME_MUSICPLAYER_H
-#define IME_MUSICPLAYER_H
+#ifndef IME_MUSIC_H
+#define IME_MUSIC_H
 
 #include "IME/Config.h"
-#include "AudioPlayer.h"
+#include "Audio.h"
 #include <SFML/Audio.hpp>
 #include <string>
 #include <memory>
 
 namespace IME {
     namespace Audio {
-        class IME_API MusicPlayer final : public AudioPlayer{
+        class IME_API Music final : public Audio {
         public:
             /**
              * @brief play music file

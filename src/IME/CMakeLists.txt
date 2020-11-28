@@ -7,9 +7,9 @@ set(IME_SRC
     common/PropertyContainer.cpp
     core/animation/Animation.cpp
     core/animation/Animator.cpp
-    core/audio/AudioPlayer.cpp
-    core/audio/MusicPlayer.cpp
-    core/audio/SoundEffectPlayer.cpp
+    core/audio/Audio.cpp
+    core/audio/Music.cpp
+    core/audio/SoundEffect.cpp
     core/entity/Entity.cpp
     core/event/EventEmitter.cpp
     core/event/EventDispatcher.cpp

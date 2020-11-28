@@ -23,11 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Interface for audio players
+ * @brief Abstract base class for audio
  */
 
-#ifndef IME_AUDIOPLAYER_H
-#define IME_AUDIOPLAYER_H
+#ifndef IME_AUDIO_H
+#define IME_AUDIO_H
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
@@ -51,12 +51,12 @@ namespace IME {
             float Microseconds;
         };
 
-        class IME_API AudioPlayer : public EventEmitter{
+        class IME_API Audio : public EventEmitter {
         public:
             /**
              * @brief Default constructor
              */
-            AudioPlayer();
+            Audio();
 
             /**
              * @brief Play audio
@@ -193,7 +193,7 @@ namespace IME {
             /**
              * @brief Destructor
              */
-            virtual ~AudioPlayer() = default;
+            virtual ~Audio() = default;
 
         protected:
             /**
