@@ -230,12 +230,14 @@ namespace IME {
         while (!statesToPush_.empty()) {
             prevStateInputManager_.push(inputManager_);
             inputManager_ = Input::InputManager(); //Clear prev state input handlers
-            statesManager_.pushState(statesToPush_.back().first);
-            if (statesToPush_.size() == 1 && statesToPush_.back().second)
-                statesToPush_.back().second();
+            auto [state, callback] = statesToPush_.front();
+            statesManager_.pushState(std::move(state));
             statesToPush_.pop();
-            if (statesToPush_.empty())
+            if (statesToPush_.empty()) {
                 statesManager_.getActiveState()->initialize();
+                if (callback)
+                    callback();
+            }
         }
     }
 
