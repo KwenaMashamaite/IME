@@ -37,6 +37,7 @@
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/states/StateManager.h"
+#include <queue>
 
 namespace IME {
     class IME_API Engine {
@@ -369,7 +370,7 @@ namespace IME {
         //Data that persists across states
         PropertyContainer dataSaver_;
         //Holds states to be pushed to the engine at the end of the frame
-        std::vector<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_;
+        std::queue<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_;
         //Flag for popping
         bool shouldPop_;
         //Window close event listener

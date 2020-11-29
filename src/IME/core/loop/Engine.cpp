@@ -201,7 +201,7 @@ namespace IME {
             prevStateInputManager_.push(Input::InputManager());
             statesManager_.pushState(std::move(state));
         } else
-            statesToPush_.push_back({std::move(state), callback});
+            statesToPush_.push({std::move(state), callback});
     }
 
     void Engine::popState() {
@@ -214,7 +214,7 @@ namespace IME {
     }
 
     void Engine::postFrameUpdate() {
-        // Don't use if-else because popping and pushing are not mutually exclusive
+        // Always pop first
         if (shouldPop_) {
             shouldPop_ = false;
             statesManager_.popState();
@@ -227,22 +227,21 @@ namespace IME {
             }
         }
 
-        if (!statesToPush_.empty()) {
+        while (!statesToPush_.empty()) {
             prevStateInputManager_.push(inputManager_);
             inputManager_ = Input::InputManager(); //Clear prev state input handlers
-            while (!statesToPush_.empty()) {
-                prevStateInputManager_.push(Input::InputManager());
-                statesManager_.pushState(std::move(statesToPush_.back().first));
-                if (statesToPush_.size() == 1 && statesToPush_.back().second)
-                    statesToPush_.back().second();
-                statesToPush_.pop_back();
-            }
-            statesManager_.getActiveState()->initialize();
+            statesManager_.pushState(statesToPush_.back().first);
+            if (statesToPush_.size() == 1 && statesToPush_.back().second)
+                statesToPush_.back().second();
+            statesToPush_.pop();
+            if (statesToPush_.empty())
+                statesManager_.getActiveState()->initialize();
         }
     }
 
     void Engine::shutdown() {
-        statesToPush_.clear();
+        while (!statesToPush_.empty())
+            statesToPush_.pop();
         statesManager_.clear();
         window_.close();
         audioManager_->stopAllAudio();
