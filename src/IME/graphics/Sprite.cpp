@@ -82,9 +82,14 @@ namespace IME::Graphics {
         return textureFileName_;
     }
 
-    Vector2f Sprite::getSize() const {
-        return {static_cast<float>(sprite_.getTextureRect().width),
-                static_cast<float>(sprite_.getTextureRect().height)};
+    FloatRect Sprite::getLocalBounds() const {
+        return {sprite_.getLocalBounds().left, sprite_.getLocalBounds().top,
+                sprite_.getLocalBounds().width, sprite_.getLocalBounds().height};
+    }
+
+    FloatRect Sprite::getGlobalBounds() const {
+        return {sprite_.getGlobalBounds().left, sprite_.getGlobalBounds().top,
+                sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
     }
 
     void Sprite::setTextureRect(int left, int top, int width, int height) {

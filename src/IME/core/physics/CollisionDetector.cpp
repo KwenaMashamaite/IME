@@ -50,15 +50,25 @@ namespace IME {
     void CollisionDetector::spriteVsSpriteCollision(Sprite &spriteOne, Sprite &spriteTwo,
         Callback<Sprite &, Sprite &> callback)
     {
-        if (isCollideAABB(spriteOne, spriteTwo))
+        if (spriteOne.getPosition().x + spriteOne.getGlobalBounds().width >= spriteTwo.getPosition().x
+               && spriteOne.getPosition().x <= spriteTwo.getPosition().x + spriteTwo.getGlobalBounds().width
+               && spriteOne.getPosition().y + spriteOne.getGlobalBounds().height >= spriteTwo.getPosition().y
+               && spriteOne.getPosition().y <= spriteTwo.getPosition().y + spriteTwo.getGlobalBounds().height)
+        {
             callback(spriteOne, spriteTwo);
+        }
     }
 
     void CollisionDetector::spriteVsTileCollision(Sprite &sprite,
         Tile &tile,Callback<Sprite &, Tile &> callback)
     {
-        if (tile.isCollidable() && isCollideAABB(sprite, tile))
+        if (sprite.getPosition().x + sprite.getGlobalBounds().width >= tile.getPosition().x
+            && sprite.getPosition().x <= tile.getPosition().x + tile.getSize().x
+            && sprite.getPosition().y + sprite.getGlobalBounds().height >= tile.getPosition().y
+            && sprite.getPosition().y <= tile.getPosition().y + tile.getSize().y)
+        {
             callback(sprite, tile);
+        }
     }
 
     void CollisionDetector::spriteVsTileMapCollision(Sprite &sprite, TileMap &tileMap,

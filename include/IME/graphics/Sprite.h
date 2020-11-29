@@ -257,10 +257,28 @@ namespace IME {
             const std::string& getTexture() const;
 
             /**
-             * @brief Get the size of the object
-             * @return The size of the object
+             * @brief Get the local bounding rectangle of the sprite
+             * @return Local bounding rectangle of the sprite
+             *
+             * The returned rectangle is in local coordinates, which means
+             * that it ignores the transformations (translation, rotation,
+             * scale, ...) that are applied to the sprite. In other words,
+             * this function returns the bounds of the sprite in the sprite's
+             * coordinate system
              */
-            Vector2f getSize() const;
+            FloatRect getLocalBounds() const;
+
+            /**
+             * @brief Get the global bounding rectangle of the sprite
+             * @return Global bounding rectangle of the sprite
+             *
+             * The returned rectangle is in global coordinates, which means
+             * that it takes into account the transformations (translation,
+             * rotation, scale, ...) that are applied to the sprite. In other
+             * words, this function returns the bounds of the sprite in the
+             * global 2D world's coordinate system
+             */
+            FloatRect getGlobalBounds() const;
 
             /**
              * @brief Get the colour of the sprite
