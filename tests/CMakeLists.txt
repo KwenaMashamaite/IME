@@ -10,7 +10,7 @@ set(SRC_FILES
     )
 
 # Change executable output directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Create test executable
 add_executable(tests ${SRC_FILES})

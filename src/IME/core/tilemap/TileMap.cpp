@@ -256,7 +256,7 @@ namespace IME {
     }
 
     bool TileMap::isCollidable(const Index &index) const {
-        if (!isIndexValid(index))
+        if (isIndexValid(index))
             return tiledMap_[index.row][index.colm].isCollidable();
         return false;
     }
