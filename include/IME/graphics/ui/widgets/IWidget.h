@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Abstract base class Graphical User Interface (GUI) widgets
- */
-
 #ifndef IME_IWIDGET_H
 #define IME_IWIDGET_H
 
@@ -43,57 +39,31 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Abstract base class for Graphical User Interface (GUI) elements
+         */
         class IME_API IWidget : public ITransformable, public EventEmitter {
         public:
             /**
-             * @brief Set the character size of the widget's text
-             * @param charSize New character size
-             *
-             * The default character size is 30
-             */
-            virtual void setTextSize(unsigned int charSize) = 0;
-
-            /**
              * @brief Set the text content of the widget
-             * @param content New text content
+             * @param text New text content
              *
              * This function will overwrite any text that was previously
              * set
              */
-            virtual void setText(const std::string &content) = 0;
-
-            /**
-             * @brief Set the size of the widget
-             * @param width The width of the widget
-             * @param height The hieght of teh widget
-             */
-            virtual void setSize(float width, float height) = 0;
-
-            /**
-             * @brief Get the size of the widget
-             * @return Current size of the widget
-             *
-             * This function only returns the size of the widget, to get the
-             * absolute size (with the margin, outline thickness etc...)
-             * @see getAbsoluteSize()
-             */
-            virtual Vector2f getSize() const = 0;
-
-            /**
-             * @brief Get the absolute size of the widget
-             * @return The absolute size of the widget
-             *
-             * The absolute size includes the size of the widget, the padding,
-             * margin and outline thickness. To get just the size of the widget
-             * use @see getSize()
-             */
-            virtual Vector2f getAbsoluteSize() = 0;
+            virtual void setText(const std::string &text) = 0;
 
             /**
              * @brief Get the widgets text content
-             * @return Elements text content
+             * @return The widgets text content
              */
             virtual std::string getText() const = 0;
+
+            /**
+             * @brief Set the character size of the text
+             * @param charSize New character size
+             */
+            virtual void setTextSize(unsigned int charSize) = 0;
 
             /**
              * @brief Get the character size of the text
@@ -102,18 +72,65 @@ namespace IME {
             virtual unsigned int getTextSize() const = 0;
 
             /**
+             * @brief Set the size of the widget
+             * @param width The width of the widget
+             * @param height The height of the widget
+             */
+            virtual void setSize(float width, float height) = 0;
+
+            /**
+             * @brief Get the size of the widget
+             * @return Current size of the widget
+             *
+             * This function only returns the size of the widget (It does
+             * not accommodate margin, outline thickness etc ...)
+             *
+             * @see getAbsoluteSize
+             */
+            virtual Vector2f getSize() const = 0;
+
+            /**
+             * @brief Get the absolute size of the widget
+             * @return The absolute size of the widget
+             *
+             * The absolute size includes the size of the widget, the padding,
+             * margin and outline thickness
+             *
+             * @see getSize
+             */
+            virtual Vector2f getAbsoluteSize() = 0;
+
+            /**
              * @brief Get the type of the widget
-             * @return Type of the widget
+             * @return The type of the widget
              */
             virtual std::string getType() const = 0;
 
             /**
+             * @brief Show a hidden widget
+             *
+             * This function will reveal the widget that was hidden prior to
+             * function call. Calling this function on an widget that is not
+             * hidden has no effect
+             */
+            virtual void show() = 0;
+
+            /**
+             * @brief Hide widget
+             */
+            virtual void hide() = 0;
+
+            /**
+             * @brief Check if the widget is hidden or not
+             * @return True if the widget is hidden, otherwise false
+             */
+            virtual bool isHidden() const = 0;
+
+            /**
              * @brief Toggle the visibility of the widget
              *
-             * This function will make the widget invisible if its currently
-             * visible and vice versa. The visibility is not automatically
-             * reflected on the render target. A call to draw() must be made
-             * after calling this function
+             * This function will hide the widget if its currently
+             * visible and vice versa
              */
             virtual void toggleVisibility() = 0;
 
@@ -125,26 +142,6 @@ namespace IME {
              *         coordinates do not lie inside the widget
              */
             virtual bool contains(float x, float y) const = 0;
-
-            /**
-             * @brief Hide widget from a render target
-             */
-            virtual void hide() = 0;
-
-            /**
-             * @brief Show a hidden widget
-             *
-             * This function will reveal the widget that was hidden prior to
-             * function call. Calling this function on an object that is not
-             * hidden has no effect
-             */
-            virtual void show() = 0;
-
-            /**
-             * @brief Check is the widget is hidden or not
-             * @return True if the widget is hidden, otherwise false
-             */
-            virtual bool isHidden() const = 0;
 
             /**
              * @internal
@@ -177,4 +174,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_IWIDGET_H

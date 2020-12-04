@@ -25,8 +25,8 @@
 #include "IME/core/animation/Animation.h"
 
 namespace IME{
-    Animation::Animation(const std::string& name, const std::string& spriteSheetFilename,
-         float duration) : name_(name), spriteSheet_(spriteSheetFilename), duration_(duration)
+    Animation::Animation(const std::string& name, const std::string& spriteSheet,
+         float duration) : name_(name), spriteSheet_(spriteSheet), duration_(duration)
     {}
 
     std::string Animation::getSpriteSheet() const {
@@ -55,10 +55,6 @@ namespace IME{
             duration_ = 0.0f;
         else
             duration_ = duration;
-    }
-
-    void Animation::adjustDuration(float offset) {
-        setDuration(getDuration() + offset);
     }
 
     bool Animation::isLooped() const {

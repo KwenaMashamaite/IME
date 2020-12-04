@@ -39,10 +39,10 @@ namespace IME {
         return *this;
     }
 
-    bool EventEmitter::removeEventListener(const std::string &event, int listenerId) {
+    bool EventEmitter::removeEventListener(const std::string &event, int id) {
         std::scoped_lock lock(mutex_);
         if (hasEvent(event)) {
-            if (auto [found, index] = hasListener(event, listenerId); found) {
+            if (auto [found, index] = hasListener(event, id); found) {
                 eventList_.at(event).erase(eventList_.at(event).begin() + index);
                 return true;
             }
@@ -76,8 +76,8 @@ namespace IME {
         return eventList_.find(event) != eventList_.end();
     }
 
-    bool EventEmitter::hasEventListener(const std::string &event, int listenerId) const {
-        return hasListener(event, listenerId).first;
+    bool EventEmitter::hasEventListener(const std::string &event, int id) const {
+        return hasListener(event, id).first;
     }
 
     std::pair<bool, int> EventEmitter::hasListener(const std::string &event, int listenerId) const {

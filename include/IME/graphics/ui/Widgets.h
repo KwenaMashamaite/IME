@@ -22,9 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Includes all widgets
- */
+////////////////////////////////////////////////////
+// Includes all widgets
+////////////////////////////////////////////////////
 
 #ifndef IME_WIDGETS_H
 #define IME_WIDGETS_H
@@ -40,4 +40,4 @@
 #include "IME/graphics/ui/widgets/HorizontalLayout.h"
 #include "IME/graphics/ui/widgets/ChildWindow.h"
 
-#endif
+#endif // IME_WIDGETS_H

@@ -22,15 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for animating a sprite out the box
- *
- * This class is simply a sprite with an added feature. It packs a sprite and
- * its animator in a single unit. This is just a convenience because you don't
- * have to keep track of two objects at the same time (A sprite and an animator
- * object)
- */
-
 #ifndef IME_ANIMATABLESPRITE_H
 #define IME_ANIMATABLESPRITE_H
 
@@ -39,9 +30,18 @@
 #include "IME/core/event/EventEmitter.h"
 
 namespace IME {
-    class Animator;
+
+    class Animator; //!< Animator class Forward declaration
 
     namespace Graphics {
+        /**
+         * @brief An animatable sprite
+         *
+         * This class is simply a sprite with an added feature. It packs a sprite and
+         * its animator in a single unit. This is just a convenience because you don't
+         * have to keep track of two objects at the same time (A sprite and an animator
+         * object)
+         */
         class IME_API AnimatableSprite : public Sprite {
         public:
             /**
@@ -52,8 +52,9 @@ namespace IME {
             /**
              * @brief Add a sprite animation
              * @param animation Animation to be added
-             * @return True if the animation was added or false if an animation
-             *         with the same name as the specified animation already exists
+             * @return True if the animation was added or false if an
+             *         animation with the same name as the specified
+             *         animation already exists
              */
             bool addAnimation(std::shared_ptr<Animation> animation);
 
@@ -61,24 +62,24 @@ namespace IME {
              * @brief Update the current animation
              * @param deltaTime Time passed since last animation update
              *
-             * This function starts the current animation the first time its called.
-             * Subsequent calls determine which frame to display
+             * This function starts the current animation the first time its
+             * called. Subsequent calls determine which frame to display
              */
             void updateAnimation(float deltaTime);
 
             /**
-             * @brief Finish the currently playing animation
+             * @brief Finish the current animation
              *
-             * This function will stop the animation and jump straight to the last
-             * animation frame
+             * This function will stop the animation and jump straight to the
+             * last frame
              */
             void finishAnimation();
 
             /**
              * @brief Change the current animation
-             * @param name New animation
-             * @return True if animation was changed or false if animation does
-             *          not exist
+             * @param name Name of the animation to switch to
+             * @return True if animation was changed or false if the
+             *         specified animation does not exist
              */
             bool switchAnimation(const std::string &name);
 
@@ -88,10 +89,12 @@ namespace IME {
              * @param callback Function to execute when the animation starts
              * @return Event listeners identification number
              *
-             * The animation starts on the first call to the update(float) function
-             * and the callback is invoked when an animation starts for the first.
-             * This means that for looped animations,  the "animationStart" event
-             * will not fire when the animation restarts
+             * The animation starts on the first call to update and the
+             * callback is invoked when an animation starts for the first.
+             * This means that for looped animations, the callback will not
+             * be invoked when the animation restarts
+             *
+             * @see updateAnimation
              */
             int onAnimationStart(const std::string &name, Callback<> callback);
 
@@ -101,24 +104,30 @@ namespace IME {
              * @param callback Function to execute when the animation finishes
              * @return Event listeners identification number
              *
-             * The callback function is only executed for animations that are not
-             * looped
+             * The callback function is only invoked for animations that are
+             * not looped since a looped animation does not finish
              */
             int onAnimationFinish(const std::string &name, Callback<> callback);
 
             /**
              * @brief Remove an event listener from an animation event
              * @param name Name of the animation to remove listener from
-             * @param onTrigger When the event is fired ("start" or "finish")
+             * @param onTrigger When the event is fired ("onStart" or "onFinish")
              * @param id Identification number of the event listener
+             * @return true if the event listener was remove or false if the
+             *         given event does not have such an event listener
+             *
+             * The identification number is issued when an event listener is
+             * registered to an animation event
+             *
+             * @see onAnimationStart, onAnimationFinish
              */
             bool removeEventListener(const std::string &name, const std::string &onTrigger, int id);
 
         private:
-            //Sprite animator
-            std::shared_ptr<Animator> animator_;
+            std::shared_ptr<Animator> animator_; //!< Sprite animator
         };
     }
 }
 
-#endif
+#endif // IME_ANIMATABLESPRITE_H

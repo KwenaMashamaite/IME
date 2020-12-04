@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief A single line input field
- */
-
 #ifndef IME_EDITBOX_H
 #define IME_EDITBOX_H
 
@@ -35,6 +31,9 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief A single line input field
+         */
         class IME_API EditBox : public IClickableWidget {
         public:
             /**
@@ -48,7 +47,9 @@ namespace IME {
              *
              * The renderer determines how the edit box is displayed. The edit
              * box has a default renderer which can be manipulated using the
-             * @see getRenderer() function
+             * getRenderer function
+             *
+             * @see getRenderer
              */
             void setRenderer(std::shared_ptr<EditBoxRenderer> renderer);
 
@@ -96,7 +97,7 @@ namespace IME {
              *
              * When the text width is limited, you wont be able to enter more
              * text when the text field is full. The text field width is not
-             * limited by deafult
+             * limited by default
              */
             void limitTextWidth(bool limitWidth = true);
 
@@ -153,50 +154,185 @@ namespace IME {
             std::string getSuffix() const;
 
             /**
-             * @brief Set the position of the widget
-             * @param X coordinate of the new position
-             * @param Y coordinate of the new position
+             * @brief Set the text content of the edit box
+             * @param text New text content
+             *
+             * This function will overwrite any text that was previously
+             * set
+             */
+            void setText(const std::string &text) override;
+
+            /**
+             * @brief Get the edit boxs text content
+             * @return The edit boxs text content
+             */
+            std::string getText() const override;
+
+            /**
+             * @brief Set the character size of the text
+             * @param charSize New character size
+             */
+            void setTextSize(unsigned int charSize) override;
+
+            /**
+             * @brief Get the character size of the text
+             * @return The character size of the text
+             */
+            unsigned int getTextSize() const override;
+
+            /**
+             * @brief Set the size of the edit box
+             * @param width The width of the edit box
+             * @param height The height of the edit box
+             */
+            void setSize(float width, float height) override;
+
+            /**
+             * @brief Get the size of the edit box
+             * @return Current size of the edit box
+             *
+             * This function only returns the size of the edit box (It does
+             * not accommodate margin, outline thickness etc ...)
+             *
+             * @see getAbsoluteSize
+             */
+            Vector2f getSize() const override;
+
+            /**
+             * @brief Get the absolute size of the edit box
+             * @return The absolute size of the edit box
+             *
+             * The absolute size includes the size of the edit box, the padding,
+             * margin and outline thickness
+             *
+             * @see getSize
+             */
+            Vector2f getAbsoluteSize() override;
+
+            /**
+             * @brief Get the type of the edit box
+             * @return The type of the edit box
+             */
+            std::string getType() const override;
+
+            /**
+             * @brief Show a hidden edit box
+             *
+             * This function will reveal the edit box that was hidden prior to
+             * function call. Calling this function on a edit box that is not
+             * hidden has no effect
+             */
+            void show() override;
+
+            /**
+             * @brief Hide edit box
+             */
+            void hide() override;
+
+            /**
+             * @brief Check if the edit box is hidden or not
+             * @return True if the edit box is hidden, otherwise false
+             */
+            bool isHidden() const override;
+
+            /**
+             * @brief Toggle the visibility of the edit box
+             *
+             * This function will hide the edit box if its currently
+             * visible and vice versa
+             */
+            void toggleVisibility() override;
+
+            /**
+             * @brief Check if coordinates lie inside the edit box
+             * @param x X coordinate to be checked
+             * @param y Y coordinate to be checked
+             * @return true if coordinates lie inside the edit box, false if
+             *         coordinates do not lie inside the edit box
+             */
+            bool contains(float x, float y) const override;
+
+            /**
+             * @brief Set the position of the edit box
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
              *
              * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the edit box is (0, 0)
+             *
+             * @see move
              */
             void setPosition(float x, float y) override;
 
             /**
-             * @brief Set the position of the widget
+             * @brief Set the position of the edit box
              * @param position New position
              *
              * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * Use the move function to apply an offset based on the previous
+             * position instead. 
+             * 
+             * The default position of the edit box is (0, 0)
+             * 
+             * @see move
              */
             void setPosition(Vector2f position) override;
 
             /**
-             * @brief Set the orientation of the widget
+             * @brief Get the position of the edit box
+             * @return Current position of the edit box
+             */
+            Vector2f getPosition() const override;
+
+            /**
+             * @brief Set the orientation of the edit box
              * @param angle New rotation, in degrees
              *
              * This function completely overwrites the previous rotation.
              * See the rotate function to add an angle based on the previous
-             * rotation instead. The default rotation of a transformable widget
-             * is 0.
+             * rotation instead. 
+             * 
+             * The default rotation of the edit box is 0
+             *
+             * @see rotate
              */
             void setRotation(float angle) override;
 
             /**
-             * @brief Set the scale factors of the widget
+             * @brief Rotate the edit box
+             * @param angle Angle of rotation, in degrees
+             *
+             * This function adds to the current rotation of the edit box,
+             * unlike setRotation which overwrites it
+             * 
+             * @see setRotation
+             */
+            void rotate(float angle) override;
+
+            /**
+             * @brief Get the orientation of the edit box
+             * @return Current rotation, in degrees
+             *
+             * The rotation is always in the range [0, 360]
+             */
+            float getRotation() const override;
+
+            /**
+             * @brief Set the scale factors of the edit box
              * @param factorX New horizontal scale factor
              * @param factorY New vertical scale factor
              *
-             * This function completely overwrites the previous scale.
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
              */
             void setScale(float factorX, float factorY) override;
 
             /**
-             * @brief Set the scale factors of the object
+             * @brief Set the scale factor of the edit box
              * @param scale New scale
              *
              * This function completely overwrites the previous scale
@@ -206,255 +342,125 @@ namespace IME {
             void setScale(Vector2f scale) override;
 
             /**
-             * @brief Get the current scale of the object
-             * @return Current scale of the object
-             */
-            Vector2f getScale() const override;
-
-            /**
-             * @brief set the local origin of the object
-             * @param origin New origin
-             *
-             * The origin of an object defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the object, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable object is (0, 0)
-             */
-            void setOrigin(Vector2f origin) override;
-
-            /**
-             * @brief Move the object by a given offset
-             * @param offset Offset to apply
-             *
-             * This function adds to the current position of the object,
-             * unlike @see setPosition which overwrites it
-             */
-            void move(Vector2f offset) override;
-
-            /**
-             * @brief Scale the object by an offset
-             * @param offset Offset to apply
-             *
-             * This function multiplies the current scale of the object,
-             * unlike @see setScale which overwrites it
-             */
-            void scale(Vector2f offset) override;
-
-            /**
-             * @brief Set the local origin of the widget
-             * @param x X coordinate of the new origin
-             * @param y Y coordinate of the new origin
-             *
-             * The origin of an widget defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the widget, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable widget is (0, 0).
-             */
-            void setOrigin(float x, float y) override;
-
-            /**
-             * @brief Get the position of the widget
-             * @return Current position of the widget
-             */
-            Vector2f getPosition() const override;
-
-            /**
-             * @brief Get the local origin of the widget
-             * @return get the local origin of the widget
-             */
-            Vector2f getOrigin() const override;
-
-            /**
-             * @brief Get the orientation of the widget
-             * @return Current rotation, in degrees
-             *
-             * The rotation is always in the range [0, 360].
-             */
-            float getRotation() const override;
-
-            /**
-             * @brief Move the widget by a given offset
-             * @param offsetX Horizontal offset
-             * @param offsetY Vertical offset
-             *
-             * This function adds to the current position of the widget,
-             * unlike setPosition which overwrites it.
-             */
-            void move(float xOffset, float yOffset) override;
-
-            /**
-             * @brief Rotate the widget
-             * @param angle Angle of rotation, in degrees
-             *
-             * This function adds to the current rotation of the widget,
-             * unlike setRotation() which overwrites it
-             */
-            void rotate(float offset) override;
-
-            /**
-             * @brief Scale the widget
+             * @brief Scale the edit box by an offset
              * @param factorX Horizontal scale factor
              * @param factorY Vertical scale factor
              *
-             * This function multiplies the current scale of the widget,
-             * unlike setScale() which overwrites it.
+             * This function multiplies the current scale of the edit box,
+             * unlike setScale which overwrites it
+             * 
+             * @see setScale
              */
             void scale(float factorX, float factorY) override;
 
             /**
-            * @brief Hide widget from a render target
-            *
-            * A hidden widget will not be drawn on a render target when calling
-            * draw()
-            */
-            void hide() override;
-
-            /**
-             * @brief Show a hidden widget
+             * @brief Scale the edit box by an offset
+             * @param offset Offset to apply
              *
-             * This function will reveal an widget that was hidden prior to
-             * function call. Calling this function on an widget that is not
-             * hidden has no effect
+             * This function multiplies the current scale of the edit box,
+             * unlike setScale which overwrites it
+             * 
+             * @see setScale
              */
-            void show() override;
+            void scale(Vector2f offset) override;
 
             /**
-             * @brief Check if widget is hidden or not
-             * @return True if widget is hidden, false if widget is not hidden
+             * @brief Get the current scale of the edit box
+             * @return Current scale of the edit box
              */
-            bool isHidden() const override;
+            Vector2f getScale() const override;
 
             /**
-             * @brief Enable or disable the widget
-             * @param isEnable Set true to enable the widget, false to
-             *        disable the widget
+             * @brief Set the local origin of the edit box
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
              *
-             * The widget is enabled by default
+             * The origin of the edit box defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the edit box, and ignore all
+             * transformations (position, scale, rotation).
              *
-             * @note Disabling the widget cancels all the interaction events.
-             *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
-             *       and "mouseDown" events will not fire while the widget is
-             *       disabled
+             * The default origin of the edit box is (0, 0)
+             */
+            void setOrigin(float x, float y) override;
+
+            /**
+             * @brief Set the local origin of the edit box
+             * @param origin New origin
+             *
+             * The origin of the edit box defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the edit box, and ignore all
+             * transformations (position, scale, rotation).
+             * 
+             * The default origin of the edit box is (0, 0)
+             */
+            void setOrigin(Vector2f origin) override;
+
+            /**
+             * @brief Get the local origin of the edit box
+             * @return Local origin of the edit box
+             */
+            Vector2f getOrigin() const override;
+
+            /**
+             * @brief Move the edit box by a given offset
+             * @param offsetX Horizontal offset
+             * @param offsetY Vertical offset
+             *
+             * This function adds to the current position of the edit box,
+             * unlike setPosition which overwrites it
+             * 
+             * @see setPosition
+             */
+            void move(float offsetX, float offsetY) override;
+
+            /**
+             * @brief Move the edit box by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the edit box,
+             * unlike setPosition which overwrites it
+             * 
+             * @see setPosition
+             */
+            void move(Vector2f offset) override;
+
+            /**
+             * @brief Enable or disable the edit box
+             * @param isEnable Set true to enable the edit box, false to
+             *        disable the edit box
+             *
+             * The edit box is enabled by default
+             *
+             * @note Disabling the edit box cancels all the interaction events
              */
             void setEnabled(bool isEnable) override;
 
             /**
-              * @brief Check if widget is enabled or disabled
-              * @return True if widget is enabled, false if widget is disabled
-              *
-              * @note A disabled widget cannot be interacted with using the mouse.
-              * @see setEnabled(bool). Also, Hiding an widget disables it, @see hide()
-              * in @class IWidget
+              * @brief Check if edit box is enabled or disabled
+              * @return True if edit box is enabled, false if edit box is disabled
               */
             bool isEnabled() const override;
 
             /**
-             * @brief Disable widget if its currently enabled and vice versa
+             * @brief Disable edit box if its currently enabled and vice versa
              */
             void toggleEnabled() override;
 
             /**
-             * @brief Check if mouse cursor is currently over the widget or not
-             * @return True if mouse cursor is over the widget, false otherwise
-             */
-            bool isMouseOverElement() const override;
-
-            /**
-             * @brief Set the character size of the widget's text
-             * @param charSize New character size
-             *
-             * The default character size is 30
-             */
-            void setTextSize(unsigned int charSize) override;
-
-            /**
-             * @brief Set the text content of the widget
-             * @param content New text content
-             *
-             * This function will overwrite any text that was previously
-             * set
-             */
-            void setText(const std::string &content) override;
-
-            /**
-             * @brief Set the size of the widget
-             * @param width The width of the widget
-             * @param height The height of the widget
-             */
-            void setSize(float width, float height) override;
-
-            /**
-             * @brief Get the size of the widget
-             * @return Current size of the widget
-             *
-             * This function only returns the size of the widget, to get the
-             * absolute size (with the margin, outline thickness etc...)
-             * @see getAbsoluteSize()
-             */
-            Vector2f getSize() const override;
-
-            /**
-             * @brief Get the absolute size of the widget
-             * @return The absolute size of the widget
-             *
-             * The absolute size includes the size of the widget, the padding,
-             * margin and outline thickness. To get just the size of the widget
-             * use @see getSize()
-             */
-            Vector2f getAbsoluteSize() override;
-
-            /**
-             * @brief Get the widgets text content
-             * @return Widgets text content
-             */
-            std::string getText() const override;
-
-            /**
-             * @brief Get the character size of the text
-             * @return The character size of the text
-             */
-            unsigned int getTextSize() const override;
-
-            /**
-             * @brief Focus or unfocus widget
-             * @param isFocused Set to true to focus or false to unfocus widget
+             * @brief Focus or unfocus edit box
+             * @param isFocused True to focus or false to unfocus edit box
              */
             void setFocused(bool isFocused) override;
 
             /**
-             * @brief Check if widget is focused or not
-             * @return True if widget is focused. Otherwise, false
+             * @brief Check if edit box is focused or not
+             * @return True if edit box is focused. Otherwise, false
              */
             bool isFocused() const override;
-
-            /**
-             * @brief Get the type of the widget
-             * @return Type of the widget
-             */
-            std::string getType() const override;
-
-            /**
-             * @brief Toggle the visibility of the widget
-             *
-             * This function will make the widget invisible if its currently
-             * visible and vice versa. The visibility is not automatically
-             * reflected on the render target. A call to draw() must be made
-             * after calling this function
-             */
-            void toggleVisibility() override;
-
-            /**
-             * @brief Check if coordinates lie inside the widget
-             * @param x X coordinate to be checked
-             * @param y Y coordinate to be checked
-             * @return true if coordinates lie inside the widget, false if
-             *         coordinates do not lie inside the widget
-             */
-            bool contains(float x, float y) const override;
 
             /**
              * @internal
@@ -476,14 +482,10 @@ namespace IME {
             void initEvents();
 
         private:
-            //Pointer to third party edit box
-            std::shared_ptr<tgui::EditBox> editBox_;
-            //Renderer for this edit box
-            std::shared_ptr<EditBoxRenderer> renderer_;
-            //How long the edit box takes before its completely hidden or shown
-            static const int fadeAnimDuration_ = 100;
+            std::shared_ptr<tgui::EditBox> editBox_;    //!< Pointer to third party library
+            std::shared_ptr<EditBoxRenderer> renderer_; //!< Renderer for this edit box
         };
     }
 }
 
-#endif
+#endif // IME_EDITBOX_H

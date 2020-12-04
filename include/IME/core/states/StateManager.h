@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for managing game states. The states are managed using a LIFO method
- */
-
 #ifndef IME_STATEMANAGER_H
 #define IME_STATEMANAGER_H
 
@@ -35,6 +31,10 @@
 #include <memory>
 
 namespace IME {
+    /**
+     * @brief Class for managing game states. The states are managed using a
+     *        LIFO method
+     */
     class IME_API StateManager {
     public:
         /**
@@ -49,7 +49,7 @@ namespace IME {
          * @brief Remove a state
          *
          * @warning This function must not be called on an empty state
-         * manager. Such an event will result in a program crash
+         * manager. Such an event is undefined behavior
          */
         void popState();
 
@@ -64,7 +64,7 @@ namespace IME {
          * @return Pointer to the current state
          *
          * @warning This function must not be called on an empty state
-         * manager. Such an event will result in a program crash
+         * manager. Such an event is undefined behavior
          */
         std::shared_ptr<State> getActiveState() const;
 
@@ -80,9 +80,8 @@ namespace IME {
         bool isEmpty() const;
 
     private:
-        //States container
-        std::stack<std::shared_ptr<State>> states_;
+        std::stack<std::shared_ptr<State>> states_; //!< States container
     };
 }
 
-#endif
+#endif // IME_STATEMANAGER_H

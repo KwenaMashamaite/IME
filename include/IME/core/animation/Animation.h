@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for creating animations
- */
-
 #ifndef IME_ANIMATION_H
 #define IME_ANIMATION_H
 
@@ -37,137 +33,121 @@
 
 namespace IME {
     /**
-     * @brief Defines how the frames are arranged
+     * @brief Defines how the frames are arranged on a spritesheet
      */
     enum class Arrangement {
-        Horizontal,
-        Vertical
+        Horizontal, //!< Horizontal frame alignment
+        Vertical    //!< Vertical frame alignment
     };
 
+    /**
+     * @brief Class for creating animations
+     */
     class IME_API Animation {
     public:
         /**
          * @brief Create a new animation
          * @param name Name of the animation
-         * @param spriteSheetFilename Texture file with animation frames
-         * @param duration How long the animation plays before it stops/loops around
-         *
-         * The sprite sheet must be large enough to accommodate all the animation
-         * frames.
+         * @param spriteSheet Filename of the texture/image file with the 
+         *        animation frames
+         * @param duration How long the animation plays before it stops/loops 
+         *        around
          */
-        Animation(const std::string &name, const std::string &spriteSheetFilename, float duration);
+        Animation(const std::string &name, const std::string &spriteSheet, float duration);
 
         /**
-         * @brief Get the filename of the animation sprite sheet
-         * @return Filename of the animation sprite sheet
+         * @brief Get the filename of the spritesheet used to create animation
+         * @return Filename of the spritesheet
          */
         std::string getSpriteSheet() const;
 
         /**
-         * @brief Add an animation frame
-         * @param startPos Position of the first frame on the sprite sheet
+         * @brief Add animation frames
+         * @param startPos Position of the first frame on the spritesheet
          * @param frameSize Size of each animation frame
          * @param numOfFrames Number of animation frames
          * @param spacing Space between frames
-         * @param arrangement How the frames are arranged on the sprite sheet
+         * @param arrangement How the frames are arranged on the spritesheet
          *
          * This function will create contiguous frames of the same size. To
          * create an animation from frames at different position on the sprite
-         * sheet and different frame sizes @see addFrame(std::initializer_list<Frame>)
+         * sheet or from frames of different sizes
+         *
+         * @see addFrame(std::initializer_list)
          */
-        void addFrames(Vector2i startPos, Vector2i frameSize, unsigned int numOfFrames,
-            unsigned int spacing = 1, Arrangement arrangement = Arrangement::Horizontal);
+        void addFrames(Vector2i startPos, Vector2i frameSize,
+            unsigned int numOfFrames, unsigned int spacing = 1,
+            Arrangement arrangement = Arrangement::Horizontal);
 
         /**
-         * @brief Add frames to the animation
+         * @brief Add animation frames
          * @param frames Frames to add
          *
-         * This function allows creation of animation from non contiguous frames
-         * of different sizes. As a result frame coordinates and frame sizes must
-         * be provided for each frame that will be created. To create an animation
-         * from contiguous frames of the same size
-         * @see addFrame(Position, Dimensions, unsigned int, Arrangement)
+         * This function allows creation of animation from non contiguous
+         * frames of different sizes. As a result frame coordinates and
+         * frame sizes must be provided for each frame that will be created
          */
         void addFrames(const std::initializer_list<IntRect>& frames);
 
         /**
-         * @brief Loop/unloop the animation
-         * @param isLooped True to loop animation, otherwise set to false
+         * @brief Set whether or not the animation should loop after reaching
+         *        the end
+         * @param isLooped True to play animation in loop, false to play once
          *
-         * Animation is not looped by default
+         * The animation is not looped by default
          */
         void setLoop(bool isLooped);
+
+        /**
+         * @brief Check if animation is looped or not
+         * @return True if animation is looped, otherwise false
+         */
+        bool isLooped() const;
 
         /**
          * @brief Set the duration of the animation
          * @param duration Duration to set
          *
-         * This function will overwrite the previous duration. To add to the
-         * current duration @see adjustDuration(float)
-         * If the duration is negative, the animation will last zero seconds
+         * This function will overwrite the previous duration
+         *
+         * @note If the duration is negative, the animation will last zero
+         *       seconds
          */
         void setDuration(float duration);
 
         /**
-         * @brief Offset the current duration by a value
-         * @param offset Value to offset duration width
-         *
-         * This function does not overwrite the current duration, it  adds
-         * or subtracts from it
-         */
-        void adjustDuration(float offset);
-
-        /**
-         * @brief Check if animation is looped or not
-         * @return True if animation is looped, false if the animation
-         *         is not looped
-         */
-        bool isLooped() const;
-
-        /**
          * @brief Get the duration of the animation
-         * @return Animation duration
+         * @return The duration of the animation
          */
         float getDuration() const;
 
         /**
-         * @brief Get the frame at a specific location
-         * @param Index location of the frame to retrieve
-         * @return The frame at the specified location
+         * @brief Get the sub-rectangle that is displayed by s given frame
+         * @param frameNumber location of the frame to retrieve
          * @throw std::out_of_range if the specified index is invalid
-         *
-         * The returned frame is not textured. It only specifies the position
-         * and the size of the sprite sheet area that should be displayed. In
-         * other words, the presentation sprite must be textured with the
-         * appropriate sprite sheet before displaying it, otherwise a white
-         * rectangle will be displayed instead.
+         * @return The frame at the specified location
          */
         IntRect getFrameAt(unsigned int frameNumber) const;
 
         /**
          * @brief Get the total number of frames
-         * @return Number of animation frames
+         * @return The total number of frames
          */
         unsigned int getNumOfFrames() const;
 
         /**
          * @brief Get the name of the animation
-         * @return Name of the animation
+         * @return The name of the animation
          */
         const std::string &getName() const;
 
     private:
-        //Animation frames
-        std::vector<IntRect> frames_;
-        //Name of the animation
-        std::string name_;
-        //Animation sprite sheet filename
-        std::string spriteSheet_;
-        //Total duration of the animation
-        float duration_;
-        //Looping state
-        bool isLooped_;
+        std::vector<IntRect> frames_; //!< Animation frames container
+        std::string name_;            //!< Name of the animation
+        std::string spriteSheet_;     //!< Filename of the spritesheet
+        float duration_;              //!< Duration of the animation
+        bool isLooped_;               //!< Looping state of the animation
     };
 }
 
-#endif
+#endif // IME_ANIMATION_H

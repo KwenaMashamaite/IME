@@ -28,6 +28,9 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
+//How long the button takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     BitmapButton::BitmapButton() : BitmapButton("") 
     {}
@@ -130,11 +133,6 @@ namespace IME::UI {
 
     void BitmapButton::toggleEnabled() {
         setEnabled(!isEnabled());
-    }
-
-    bool BitmapButton::isMouseOverElement() const {
-        //@todo
-        return false;
     }
 
     void BitmapButton::setPosition(Vector2f position) {

@@ -25,14 +25,13 @@
 #ifndef IME_RECT_H
 #define IME_RECT_H
 
-/**
- * @brief Class for manipulating 2D axis aligned rectangles
- */
-
 #include "IME/common/Vector2.h"
 #include <algorithm>
 
 namespace IME {
+    /**
+     * @brief Class for manipulating 2D axis aligned rectangles
+     */
     template <typename T>
     class Rect {
     public:
@@ -117,7 +116,7 @@ namespace IME {
          * @return True if rectangles overlap, false otherwise
          *
          * This overload returns the overlapped rectangle in the
-         * @param intersection parameter
+         * @a intersection parameter
          *
          * @see contains
          */
@@ -151,7 +150,7 @@ namespace IME {
      * @brief Overload of binary operator ==
      * @param left Left operand (a rectangle)
      * @param right Right operand (a rectangle)
-     * @return True if \a left is equal to \a right
+     * @return True if @a left is equal to @a right
      *
      * This operator compares strict equality between two rectangles
      */
@@ -163,7 +162,7 @@ namespace IME {
      * @brief Overload of binary operator !=
      * @param left Left operand (a rectangle)
      * @param right Right operand (a rectangle)
-     * @return True if \a left is not equal to \a right
+     * @return True if @a left is not equal to @a right
      *
      * This operator compares strict difference between two rectangles
      */
@@ -172,9 +171,9 @@ namespace IME {
 
     #include <IME/common/Rect.inl>
 
-    // Create most common types
-    using IntRect = Rect<int>;
-    using FloatRect = Rect<float>;
+    ///< Create most common types
+    using IntRect = Rect<int>;      //!< Int rect
+    using FloatRect = Rect<float>;  //!< Float rect
 }
 
-#endif
+#endif // IME_RECT_H

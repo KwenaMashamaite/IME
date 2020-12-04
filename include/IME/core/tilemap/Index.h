@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Represents a position of a tile in the tilemap
- */
-
 #ifndef IME_INDEX_H
 #define IME_INDEX_H
 
@@ -33,6 +29,9 @@
 #include <unordered_map>
 
 namespace IME {
+    /**
+     * @brief Represents a position of a tile in the tilemap
+     */
     struct IME_API Index {
         int row;    //!< Y coordinate of the tile
         int colm;   //!< X coordinate of the tile
@@ -42,7 +41,7 @@ namespace IME {
      * @brief Overload of binary operator ==
      * @param lhs Left operand
      * @param rhs Right operand
-     * @return True if @param lhs is equal to @param rhs
+     * @return True if @a lhs is equal to @a rhs
      */
     IME_API extern bool operator==(const Index& lhs, const Index& rhs);
 
@@ -50,14 +49,16 @@ namespace IME {
      * @brief Overload of binary operator !=
      * @param lhs Left operand
      * @param rhs Right operand
-     * @return True if @param lhs is not equal to @param rhs
+     * @return True if @a lhs is not equal to @a rhs
      */
     IME_API extern bool operator!=(const Index& lhs, const Index& rhs);
 }
 
 namespace std {
-    // Hash specialization for IME::Index so that it can be used as a key
-    // in an std::unordered_map
+    /**
+     * @brief Hash specialization for IME::Index so that it can be used
+     *        as a key in an std::unordered_map
+     */
     template <>
     struct hash<IME::Index> {
         size_t operator()(const IME::Index& index) const {

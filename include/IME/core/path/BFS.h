@@ -22,11 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for finding the path from a source tile to a destination tile
- *        using the Breadth First Search algorithm
- */
-
 #ifndef IME_BFS_H
 #define IME_BFS_H
 
@@ -35,6 +30,10 @@
 #include <queue>
 
 namespace IME {
+    /**
+     * @brief Class for finding the path from a source tile to a destination
+     *        tile using the Breadth First Search algorithm
+     */
     class IME_API BFSPathFinder : public IGridPathFinder {
     public:
         /**
@@ -45,6 +44,7 @@ namespace IME {
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid
+         * @param grid Grid to generate path in
          * @param sourceTile The position of the starting position in tiles
          * @param targetTile The position of the destination in tiles
          * @return The path from the source to the destination if reachable,
@@ -72,16 +72,14 @@ namespace IME {
              std::vector<Node>& exploredNodes);
 
         /**
-         * @brief Set visited nodes as not visited
+         * @brief Set all visited nodes as not visited
          */
         void reset();
 
     private:
-        //A list containing a list of adjacent nodes for each accessible node in the grid
-        AdjacencyList adjacencyList_;
-        //Vector storing the visited state of a grid node
-        std::vector<std::vector<bool>> visited_;
+        AdjacencyList adjacencyList_;            //!< Stores a list of adjacent nodes for each accessible node in the grid
+        std::vector<std::vector<bool>> visited_; //!< Vector storing the visited state of a node
     };
 }
 
-#endif
+#endif // IME_BFS_H

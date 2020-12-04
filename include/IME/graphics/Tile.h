@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Tile map Tile
- */
-
 #ifndef IME_TILE_H
 #define IME_TILE_H
 
@@ -40,6 +36,9 @@
 
 namespace IME {
     namespace Graphics {
+        /**
+         * @brief Represents a tile in the tilemap
+         */
         class IME_API Tile : public IDrawable {
         public:
             /**
@@ -50,31 +49,24 @@ namespace IME {
             Tile(const Vector2u &size, const Vector2f &position);
 
             /**
-             * @brief Construct a tile from an existing tile
-             * @param other Tile to construct this tile from
+             * @brief Copy constructor
              */
-            Tile(const Tile &other) = default;
+            Tile(const Tile &) = default;
 
             /**
              * @brief Assignment operator
              */
-            Tile &operator=(const Tile &other) = default;
+            Tile &operator=(const Tile &) = default;
 
             /**
              * @brief Move constructor
              */
-            Tile(Tile &&other) = default;
+            Tile(Tile &&) = default;
 
             /**
              * @brief Move assignment operator
              */
-            Tile &operator=(Tile &&other) = default;
-
-            /**
-             * @brief Get the position of the tile
-             * @return The position of the tile
-             */
-            Vector2f getPosition() const;
+            Tile &operator=(Tile &&) = default;
 
             /**
              * @brief Add a sprite to the tile
@@ -84,6 +76,12 @@ namespace IME {
              * calls to this function will replace the previous sprite
              */
             void addSprite(Sprite sprite);
+
+            /**
+             * @brief Get the sprite set on the tile
+             * @return Sprite on the tile
+             */
+            Sprite &getSprite();
 
             /**
              * @brief Set the fill colour of the tile
@@ -105,31 +103,23 @@ namespace IME {
             void setPosition(float x, float y);
 
             /**
-             * @brief Set the position of the sprite within the tile
-             * @param x X coordinate of the sprite
-             * @param y Y coordinate of the sprite
-             *
-             * The sprite will be moved to the new position immediately. Nothing
-             * will happen if the specified position lies outside the tile
-             * borders. @note This function will not check if the entire sprite
-             * lies in within the borders of the tile, it only checks if the
-             * sprites origin lies within the tile borders or not. The sprite
-             * has the same position as the tile by default
-             */
-            void setSpritePosition(float x, float y);
-
-            /**
              * @brief Set the position of the tile in coordinates
              * @param position Position to set
              */
-            void setPosition(const Vector2f &position);
+            void setPosition(Vector2f position);
+
+            /**
+             * @brief Get the position of the tile
+             * @return The position of the tile
+             */
+            Vector2f getPosition() const;
 
             /**
              * @brief Set the size of the tile
              * @param width The horizontal size
              * @param height The vertical size
              */
-            void setSize(unsigned int, unsigned int height);
+            void setSize(unsigned int width, unsigned int height);
 
             /**
              * @brief Set the size of the tile
@@ -150,11 +140,13 @@ namespace IME {
             void setBorderVisible(bool isVisible);
 
             /**
-             * @internal
              * @brief Set the index of the tile in the tilemap
              * @param index The index of the tile in the tilemap
              *
              * The index corresponds to the position of the tile in the tilemap
+             *
+             * @warning This function is called by the tilemap and should never
+             * be called directly if the tile is part of a tilemap
              */
             void setIndex(Index index);
 
@@ -173,6 +165,12 @@ namespace IME {
             void setId(char id);
 
             /**
+             * @brief Get the tiles id
+             * @return The tiles id
+             */
+            char getId() const;
+
+            /**
              * @brief Set whether the tile is a solid or an empty tile
              * @param isSolid True to set solid or false to set empty
              *
@@ -186,12 +184,6 @@ namespace IME {
              * @return True if solid or false if empty
              */
             bool isSolid() const;
-
-            /**
-             * @brief Get the tiles id
-             * @return The tiles id
-             */
-            char getId() const;
 
             /**
              * @brief Render tile
@@ -231,41 +223,19 @@ namespace IME {
             bool contains(float x, float y) const;
 
             /**
-             * @brief Add an event listener to a tile collision event
-             * @param callback Function to execute when a collision occurs
-             * @return Event listeners identification number
-             *
-             * The callback function is invoked each time this tile is collided
-             * with. The tile will be passed as an argument to the callback
-             */
-            int onCollision(Callback<Tile &> callback);
-
-            /**
-             * @brief Get the sprite set on the tile
-             * @return Sprite on the tile
-             */
-            Sprite &getSprite();
-
-            /**
              * @brief Destructor
              */
             ~Tile() = default;
 
         private:
-            //Stores whether tile is a solid or an empty tile
-            bool isSolid_;
-            //Stores the id of the actual object that will be in this tile
-            char id_;
-            //The position of the tile in the tilemap
-            Index index_;
-            //Tile representation
-            Sprite sprite_;
-            //Tile border
-            sf::RectangleShape tile_;
-            //For hiding purposes
-            sf::Color prevFillColour_;
+            bool isSolid_;             //!< Stores whether tile is a solid or an empty tile
+            char id_;                  //!< Tile id
+            Index index_;              //!< Position of the tile in the tilemap
+            Sprite sprite_;            //!< Tile texture representation
+            sf::RectangleShape tile_;  //!< Tile
+            sf::Color prevFillColour_; //!< Tiles fill colour before it was hidden
         };
     }
 }
 
-#endif
+#endif // IME_TILE_H

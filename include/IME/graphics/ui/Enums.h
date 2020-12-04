@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Enums used by UI classes
- */
-
 #ifndef IME_ENUMS_H
 #define IME_ENUMS_H
 
@@ -71,6 +67,9 @@ namespace IME {
         Left         //!< Draw the widget at the left side of the cell (vertically centered)
     };
 
+    /**
+     * @brief Text styles
+     */
     enum class TextStyle {
         Regular       = 0,      //!< Regular characters, no style
         Bold          = 1 << 0, //!< Bold characters
@@ -80,4 +79,4 @@ namespace IME {
     };
 }
 
-#endif
+#endif // IME_ENUMS_H

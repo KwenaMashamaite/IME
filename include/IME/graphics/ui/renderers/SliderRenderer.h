@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief A class for rendering a slider
- */
-
 #ifndef IME_SLIDERRENDERER_H
 #define IME_SLIDERRENDERER_H
 
@@ -37,6 +33,11 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief A class for rendering a slider
+         *
+         * This class allows you to manipulate the render properties of a slider
+         */
         class IME_API SliderRenderer : public IWidgetRenderer {
         public:
             /**
@@ -55,7 +56,7 @@ namespace IME {
              * @brief Set the colour of the track
              * @param colour The colour to set
              */
-            void setTrackColour(Colour color);
+            void setTrackColour(Colour colour);
 
             /**
              * @brief Get the track colour
@@ -67,7 +68,7 @@ namespace IME {
              * @brief Set the colour of the track when the mouse enters it
              * @param colour The track colour to set 
              */
-            void setTrackHoverColour(Colour color);
+            void setTrackHoverColour(Colour colour);
             
             /**
              * @brief Get the colour of the track when the mouse enters it
@@ -79,7 +80,7 @@ namespace IME {
              * @brief Set the thumb colour
              * @param colour The thumb colour to set 
              */
-            void setThumbColour(Colour color);
+            void setThumbColour(Colour colour);
 
             /**
              * @brief Get the thumb colour
@@ -89,9 +90,9 @@ namespace IME {
             
             /**
              * @brief Set the colour of the thumb when the mouse enter it
-             * @param color The thumb colour to set
+             * @param colour The thumb colour to set
              */
-            void setThumbHoverColour(Colour color);
+            void setThumbHoverColour(Colour colour);
 
             /**
              * @brief Get the colour of the thumb when the mouse enters it
@@ -103,7 +104,7 @@ namespace IME {
              * @brief Set the border colour
              * @param colour The border colour to set
              */
-            void setBorderColour(Colour color);
+            void setBorderColour(Colour colour);
 
             /**
              * @brief Get the border colour
@@ -116,7 +117,7 @@ namespace IME {
              *        slider
              * @param colour The slider colour to set
              */
-            void setBorderHoverColour(Colour color);
+            void setBorderHoverColour(Colour colour);
 
             /**
              *@brief Get the colour of the borders when the mouse enters the
@@ -228,7 +229,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -246,7 +247,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -276,10 +279,9 @@ namespace IME {
             virtual ~SliderRenderer();
 
         private:
-            //Pointer to third party slider render
-            tgui::SliderRenderer* sliderRenderer_;
+            tgui::SliderRenderer* sliderRenderer_; //!< Pointer to third party renderer
         };
     }
 }
 
-#endif
+#endif // IME_SLIDERRENDERER_H

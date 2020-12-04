@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Window that can serve as a target for 2D drawing
- */
-
 #ifndef IME_WINDOW_H
 #define IME_WINDOW_H
 
@@ -39,22 +35,25 @@
 
 namespace IME {
     namespace UI {
-        class GuiContainer;
+        class GuiContainer; //!< GuiContainer class forward declaration
     }
 
     namespace Graphics {
+        /**
+         * @brief Window that can serve as a target for 2D drawing
+         */
         class IME_API Window : Utility::NonCopyable {
         public:
             /**
              * @brief Window styles
              */
-            enum class Style{
-                None = 0,            // No border / title bar (this flag and all others are mutually exclusive)
-                Titlebar = 1 << 0,   // Title bar + fixed border
-                Resize = 1 << 1,     // Title bar + resizable border + maximize button
-                Close = 1 << 2,      // Title bar + close button
-                Fullscreen = 1 << 3,  // Fullscreen mode
-                Default = Titlebar | Resize | Close ///< Default window style
+            enum class Style {
+                None = 0,                           //!< No border / title bar (this flag and all others are mutually exclusive)
+                Titlebar = 1 << 0,                  //!< Title bar + fixed border
+                Resize = 1 << 1,                    //!< Title bar + resizable border + maximize button
+                Close = 1 << 2,                     //!< Title bar + close button
+                Fullscreen = 1 << 3,                //!< Fullscreen mode
+                Default = Titlebar | Resize | Close //!< Default window style
             };
 
             /**
@@ -172,16 +171,14 @@ namespace IME {
             ~Window();
 
         private:
-            //SFML render window.
-            sf::RenderWindow window_;
-            //Frame rate limit
-            unsigned int frameRateLimit_;
-            //Instantiation state
-            inline static auto isInstantiated_ = false;
+            sf::RenderWindow window_;      //!< Render window
+            unsigned int frameRateLimit_;  //!< Framerate limit
+            static bool isInstantiated_;   //!< Instantiation state
+
             //Needs access to the sf::RenderWindow
             friend class UI::GuiContainer;
         };
     }
 }
 
-#endif
+#endif // IME_WINDOW_H

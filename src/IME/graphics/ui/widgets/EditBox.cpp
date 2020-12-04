@@ -26,6 +26,9 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <TGUI/GuiBase.hpp>
 
+//How long the edit box takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     EditBox::EditBox()
         : editBox_{tgui::EditBox::create()},
@@ -159,11 +162,6 @@ namespace IME::UI {
 
     void EditBox::toggleEnabled() {
         setEnabled(!isEnabled());
-    }
-
-    bool EditBox::isMouseOverElement() const {
-        //@todo
-        return false;
     }
 
     void EditBox::setPosition(Vector2f position) {

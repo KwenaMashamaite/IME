@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for passing engine settings read from a file on the disk
- */
-
 #ifndef IME_CONFIGFILEPARSER_H
 #define IME_CONFIGFILEPARSER_H
 
@@ -34,17 +30,21 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Class for parsing config files
+         */
         class IME_API ConfigFileParser {
         public:
             /**
              * @brief Parse a config file
              * @param filename Name of the config fle to parse
-             * @return List of properties found i the config file
-             * @throw FileNotFound if the config file cannot be found on the disk
+             * @return List of properties found in the config file
+             * @throws FileNotFound if the config file cannot be found on
+             *        the disk
              */
             PropertyContainer parse(const std::string& filename);
         };
     }
 }
 
-#endif
+#endif // IME_CONFIGFILEPARSER_H

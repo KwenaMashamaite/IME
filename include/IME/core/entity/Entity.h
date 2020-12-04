@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for all game entities (players, projectiles, enemies etc...)
- */
-
 #ifndef IME_IENTITY_H
 #define IME_IENTITY_H
 
@@ -38,21 +34,27 @@
 #include <memory>
 
 namespace IME {
+    /**
+     * @brief Abstract base class for all game entities (players, enemies etc...)
+     */
     class IME_API Entity {
     public:
-        // The type of an entity
+        /**
+         * @brief The type of an entity
+         */
         enum class Type {
-            Unknown = -1,
-            Player = 0,
-            Enemy,
-            Collectable,
-            Obstacle,
+            Unknown = -1, //!< Unknown object
+            Player = 0,   //!< Player object
+            Enemy,        //!< Enemy object
+            Collectable,  //!< Collectable object
+            Obstacle,     //!< Obstacle object
         };
 
         /**
          * @brief Construct entity
          *
-         * The entity has a bounding rect size of {8, 8} by default
+         * The entity has a bounding box size of {0, 0} and Type::Unknown
+         * by default
          */
         Entity();
 
@@ -65,7 +67,7 @@ namespace IME {
         /**
          * @brief Assignment operator
          */
-        Entity& operator=(const Entity& other);
+        Entity& operator=(const Entity&);
 
         /**
          * @brief Move constructor
@@ -79,96 +81,16 @@ namespace IME {
 
         /**
          * @brief Construct entity
-         * @param boundingRectSize Size of the entity's bounding rect
+         * @param boundingBoxSize Size of the entity's bounding box
+         * @param type Type of the entity
          */
-        explicit Entity(const Vector2u &boundingRectSize, Type type = Type::Unknown);
-
-        /**
-         * @brief Set the position of the entity
-         * @param x New x coordinate of the entity
-         * @param y New y coordinate of the entity
-         */
-        void setPosition(float x, float y);
-
-        /**
-         * @brief Set the direction of the entity
-         * @param dir new direction of the entity
-         */
-        void setDirection(Direction dir);
-
-        /**
-         * @brief Get the dimensions of the entity's bounding box
-         * @return Dimensions of the entity's bounding box
-         */
-        Vector2u getSize() const;
-
-        /**
-         * @brief Set the alive state of the entity
-         * @param isAlive True to set alive or false to kill
-         */
-        void setAlive(bool isAlive);
-
-        /**
-         * @brief Set entity as vulnerable or inVulnerable
-         * @param isVulnerable True to set vulnerable or false to set invulnerable
-         *
-         * A vulnerable entity can be killed whilst an invulnerable entity
-         * cannot be killed. That is, @see setAlive(bool) on an entity that is
-         * alive and invulnerable will always fail.
-         *
-         * The entity is vulnerable by default
-         */
-        void setVulnerable(bool isVulnerable);
-
-        /**
-         * @brief Enable or disable collision for this entity
-         * @param isCollidable True to enable collision or false to disable collision
-         *
-         * Collisions are disabled by default
-         */
-        void setCollidable(bool isCollidable);
-
-        /**
-         * @brief Check if entity is alive or not
-         * @return True if entity is alive, false if it's not alive
-         */
-         bool isAlive() const;
-
-        /**
-         * @brief Get the direction of the entity
-         * @return Direction of the entity
-         */
-        Direction getDirection() const;
-
-        /**
-         * @brief Get the position of the entity
-         * @return Position of the entity
-         */
-        Vector2f getPosition() const;
-
-        /**
-         * @brief Check if entity is vulnerable or not
-         * @return True if entity is vulnerable or false if inVulnerable
-         *
-         * @see setVulnerable(bool)
-         */
-        bool isVulnerable() const;
-
-        /**
-         * @brief Check if entity is collidable or not
-         * @return True if entity is collidable, otherwise false
-         */
-        bool isCollidable() const;
-
-        /**
-         * @brief Get concrete class the object belongs to
-         * @return Name of the concrete class the objects belongs to
-         */
-        virtual std::string getClassType() = 0;
+        explicit Entity(const Vector2u &boundingBoxSize, Type type = Type::Unknown);
 
         /**
          * @brief Set the type of the entity
          * @param type Type to set
+         *
+         * The new type will overwrite the previous type
          */
         void setType(Type type);
 
@@ -179,11 +101,113 @@ namespace IME {
         Type getType() const;
 
         /**
-         * @brief Get the entities unique identifier
-         * @return Entities unique identifier
+         * @brief Set the position of the entity
+         * @param x X coordinate of the entity
+         * @param y Y coordinate of the entity
+         */
+        void setPosition(float x, float y);
+
+        /**
+         * @brief Set the position of the entity
+         * @param position New position
+         */
+        void setPosition(Vector2f position);
+
+        /**
+         * @brief Get the position of the entity
+         * @return The position of the entity
+         */
+        Vector2f getPosition() const;
+
+        /**
+         * @brief Set the direction of the entity
+         * @param dir New direction of the entity
+         */
+        void setDirection(Direction dir);
+
+        /**
+         * @brief Get the direction of the entity
+         * @return The direction of the entity
+         */
+        Direction getDirection() const;
+
+        /**
+         * @brief Set the size of the entities bounding box
+         * @param size New bounding box size
+         */
+        void setSize(Vector2u size);
+
+        /**
+         * @brief Get the dimensions of the entity's bounding box
+         * @return The dimensions of the entity's bounding box
+         */
+        Vector2u getSize() const;
+
+        /**
+         * @brief Set whether entity is active or inactive
+         * @param isActive True to set active or false to set inactive
          *
-         * An entity object cannot have the same identifier as another
-         * entity object
+         * An active entity in this context refers to an entity that is
+         * in a good state, not killed or completely destroyed, whilst
+         * an inactive entity refers to one that is killed or destroyed
+         */
+        void setActive(bool isActive);
+
+        /**
+         * @brief Check if entity is active or not
+         * @return True if entity is active, otherwise false
+         */
+        bool isActive() const;
+
+        /**
+         * @brief Set whether entity is vulnerable or inVulnerable
+         * @param isVulnerable True to set vulnerable or false to set
+         *                     invulnerable
+         *
+         * A vulnerable entity can be deactivated whilst an invulnerable
+         * entity cannot be deactivated. That is, setActive(false) on an
+         * entity that is active and invulnerable will always fail.
+         *
+         * The entity is vulnerable by default
+         */
+        void setVulnerable(bool isVulnerable);
+
+        /**
+         * @brief Check if entity is vulnerable or not
+         * @return True if entity is vulnerable or false if inVulnerable
+         *
+         * @see setVulnerable
+         */
+        bool isVulnerable() const;
+
+        /**
+         * @brief Set whether entity is collidable or not
+         * @param isCollidable True to make collidable, otherwise false
+         *
+         * Entity is not collidable by default
+         */
+        void setCollidable(bool isCollidable);
+
+        /**
+         * @brief Check if entity is collidable or not
+         * @return True if entity is collidable, otherwise false
+         */
+        bool isCollidable() const;
+
+        /**
+         * @brief Get concrete class type
+         * @return Name of the concrete class the entity is instantiated from
+         *
+         * If a concrete class is derived further, this function must always
+         * be overridden to reflect the new concrete class
+         */
+        virtual std::string getClassType() = 0;
+
+        /**
+         * @brief Get the entity's unique identifier
+         * @return The entity's unique identifier
+         *
+         * Each entity instance has it's own unique identification number
          */
         std::size_t getObjectId() const;
 
@@ -204,8 +228,13 @@ namespace IME {
          * @param id Identification number of the event listener
          * @return True if the event listener was removed or false if no such
          *         event listener exists for the specified event
+         *
+         * The identification number is the number issued when an event
+         * listener is added to an entity event
+         *
+         * @see onEvent
          */
-        bool removeEventListener(const std::string& event, int id);
+        bool unsubscribe(const std::string& event, int id);
 
         /**
          * @brief Check if two entity objects are the same object or not
@@ -248,27 +277,17 @@ namespace IME {
         }
 
     private:
-        //Object Id counter
-        inline static std::size_t prevEntityId = 0;
-        //The type of this entity object
-        Type type_;
-        //Objects unique identifier
-        std::size_t id_;
-        //The entities bounding rectangle
-        Vector2u boundingRect_;
-        //Vulnerability state state
-        bool isVulnerable_;
-        //The entities alive state
-        bool isAlive_;
-        //The entities collidable state
-        bool isCollidable_;
-        //The direction of the entity
-        Direction direction_;
-        //The position of the entity
-        Vector2f position_;
-        //The event publisher of the entity
-        EventEmitter eventEmitter_;
+        static std::size_t prevEntityId_; //!< Object id counter
+        Type type_;                       //!< The type of the entity
+        std::size_t id_;                  //!< Unique identifier
+        Vector2u boundingRect_;           //!< Bounding box size
+        bool isVulnerable_;               //!< Vulnerability state
+        bool isActive_;                   //!< Active state
+        bool isCollidable_;               //!< Collidable state
+        Direction direction_;             //!< Current direction
+        Vector2f position_;               //!< Current position
+        EventEmitter eventEmitter_;       //!< Event publisher
     };
 }
 
-#endif
+#endif // IME_IENTITY_H

@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Defines possible exceptions that may be thrown in the game
- */
-
 #ifndef IME_EXCEPTIONS_H
 #define IME_EXCEPTIONS_H
 
@@ -38,6 +34,10 @@ namespace IME {
      */
     class FileNotFound : public std::runtime_error {
     public:
+        /**
+         * @brief Constructor
+         * @param message Exception message
+         */
         explicit FileNotFound(const std::string &message) : std::runtime_error(message) {}
     };
 
@@ -46,8 +46,12 @@ namespace IME {
      */
     class InvalidArgument: public std::runtime_error {
     public:
+        /**
+         * @brief Constructor
+         * @param message Exception message
+         */
         explicit InvalidArgument(const std::string& message) : std::runtime_error(message) {}
     };
-} // namespace IME
+}
 
-#endif
+#endif // IME_EXCEPTIONS_H

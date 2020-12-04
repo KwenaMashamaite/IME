@@ -22,26 +22,23 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for moving an entity randomly in a grid/tilemap
- */
-
 #ifndef IME_RANDOMGRIDMOVER_H
 #define IME_RANDOMGRIDMOVER_H
 
 #include "GridMover.h"
 
 namespace IME {
+    /**
+     * @brief Class for moving an entity randomly in a grid
+     */
     class IME_API RandomGridMover : public GridMover {
     public:
         /**
          * @brief Create a random grid mover object
-         * @param newTarget Grid to target in
+         * @param tileMap Grid to move target in
          * @param target Entity to be moved in the grid
-         *
-         * The target must be placed in the grid prior to grid mover construction
          */
-        explicit RandomGridMover(TileMap &newTarget, EntityPtr target = nullptr);
+        explicit RandomGridMover(TileMap &tileMap, EntityPtr target = nullptr);
 
         /**
          * @brief Start moving the target in the grid
@@ -49,7 +46,7 @@ namespace IME {
          * This function will move the target if it hasn't been moved for the
          * first time or the movement was stopped
          *
-         * @see stopMovement()
+         * @see stopMovement
          */
         void startMovement();
 
@@ -84,15 +81,11 @@ namespace IME {
         void revertAndGenerateDirection();
 
     private:
-        //Keeps track of the targets prev direction
-        Direction prevDirection_;
-        //Tracks whether the target movement has been initiated or not
-        bool movementStarted_;
-        //Id for obstacle collision handler
-        int obstacleHandlerId_;
-        //Id for solid tile collision handler
-        int solidTileHandlerId_;
+        Direction prevDirection_; //!< Keeps track of the targets previous direction
+        bool movementStarted_;    //!< Tracks whether the target movement has been initiated or not
+        int obstacleHandlerId_;   //!< Obstacle collision handler id
+        int solidTileHandlerId_;  //!< Solid tile collision handler id
     };
 }
 
-#endif
+#endif // IME_RANDOMGRIDMOVER_H

@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Abstract base class for audio
- */
-
 #ifndef IME_AUDIO_H
 #define IME_AUDIO_H
 
@@ -39,18 +35,24 @@ namespace IME {
         /**
          * @brief Audio status
          */
-        enum class Status{
-            Stopped,
-            Paused,
-            Playing
+        enum class Status {
+            Stopped, //!< Audio is not playing
+            Paused,  //!< Audio is paused
+            Playing  //!< Audio is playing
         };
 
+        /**
+         * @brief Duration of the audio
+         */
         struct Duration {
-            float Seconds;
-            float Milliseconds;
-            float Microseconds;
+            float Seconds;      //!< Time in seconds
+            float Milliseconds; //!< Time in milliseconds
+            float Microseconds; //!< Time in microseconds
         };
 
+        /**
+         * @brief Abstract base class for audio
+         */
         class IME_API Audio : public EventEmitter {
         public:
             /**
@@ -59,136 +61,169 @@ namespace IME {
             Audio();
 
             /**
-             * @brief Play audio
-             * @param filename Filename of the audio to play
+             * @brief Set audio source to be manipulated
+             * @param filename Filename of an audio file
+             *
+             * The @a filename must refer to an actual audio file on
+             * the disk. This audio file is the one to be played,
+             * pitched and done all sorts of things
              */
-            virtual void play(const std::string &filename) = 0;
+            virtual void setSource(const std::string &filename) = 0;
 
             /**
-             * @brief Stop the currently playing or paused audio
+             * @brief Get audio source
+             * @return Filename of the actual audio file
              */
-            virtual void stop() = 0;
-
-            /**
-             * @brief Pause the currently playing audio
-             */
-            virtual void pause() = 0;
-
-            /**
-             * @brief Play paused or stopped audio file
-             */
-            virtual void play() = 0;
+            virtual const std::string& getSource() const = 0;
 
             /**
              * @brief Set the volume of the audio
              * @param volume Volume to set
              *
-             * This function completely overrides the current volume. To adjust the
-             * volume by a certain offset @see setVolumeOffset
+             * The volume is a value between 0 (mute) and 100 (full volume).
+             *
+             * The default value for the volume is 100
              */
             virtual void setVolume(float volume) = 0;
-
-            /**
-             * @brief Set the pitch of the audio file
-             * @param pitch The new pitch of the audio file
-             *
-             * The default pitch is 1
-             */
-            virtual void setPitch(float pitch) = 0;
-
-            /**
-             * @brief Get the pitch of the audio file
-             * @return The pitch of the audio file
-             */
-            virtual float getPitch() const = 0;
-
-            /**
-             * @brief Loop/unloop audio
-             * @param isLooped Set to true to loop audio, false to unloop audio
-             */
-            virtual void setLoop(bool isLooped) = 0;
-
-            /**
-             * @brief Check if playing audio file is looped or not
-             * @return True if audio file is looped, false if audio file is not
-             *          looped
-             */
-            virtual bool isLooped() const = 0;
-
-            /**
-             * @brief Check if audio player is muted or not
-             * @return True if audio player is muted or false if audio player is
-             *         not muted
-             */
-            bool isMuted() const;
 
             /**
              * @brief Turn the volume up/down by a given offset
              * @param offset Value to increase/decrease the volume by
              *
-             * This function adds on to the current volume of the audio player.
-             * A positive offset increases the volume while a negative offset
-             * decreases the volume. This function will unmmute the audio player
-             * if its muted
+             * This function adds on to the current volume. A positive
+             * offset increases the volume while a negative offset
+             * decreases the volume. This function will unmmute the
+             * audio if its muted
+             *
+             * @see setMute
              */
             void adjustVolume(float offset);
 
             /**
-             * @brief Get the duration of the current audio file
-             * @return Duration of the current audio file
-             *
-             * The duration is in seconds
-             */
-            virtual Duration getDuration() const = 0;
-
-            /**
-             * @brief Get the current playing position of the audio file
-             * @return Current playing position of the audio file
-             */
-            virtual Duration getPlayingPosition() const = 0;
-
-            /**
-             * @brief Change the current playing position of the audio file
-             * @param position New playing position of the audio file
-             *
-             * The new position must be between zero and the duration of the song
-             */
-            virtual void seek(float position) = 0;
-
-            /**
-             * @brief Get the current status of the audio file
-             * @return Current status of the audio file
-             */
-            virtual Status getStatus() const = 0;
-
-            /**
-             * @brief Get the volume of an audio file
-             * @return Volume of an audio file
+             * @brief Get the volume of the audio
+             * @return Volume of the audio, in the range [0, 100]
              */
             virtual float getVolume() const = 0;
 
             /**
-             * @brief Get the name of the current audio file
-             * @return Name of the current audio file
-             */
-            virtual const std::string& getCurrentAudioFileName() const = 0;
-
-            /**
-             * @brief Get the type of the audio player
-             * @return The type of the audio player
-             */
-            virtual std::string getType() = 0;
-
-            /**
-             * @brief Mute or ummute the audio
-             * @param mute True to mute the audio or false to unmute the audio
+             * @brief Set whether or not the audio should be audible
+             * @param mute True to make audio inaudible, or false to make
+             *             audio audible
+             *
+             * When set to true the audio will not be audible but will
+             * continue to play if currently playing
              */
             void setMute(bool mute);
 
             /**
-             * @brief Reset the playing position to the beginning (zero)
+             * @brief Check if audio is muted or not
+             * @return True if audio is muted or false if audio is not muted
+             */
+            bool isMuted() const;
+
+            /**
+             * @brief Set the pitch of the audio
+             * @param pitch The new pitch of the audio
+             *
+             * The pitch represents the perceived fundamental frequency
+             * of a sound; thus you can make a sound more acute or grave
+             * by changing its pitch. Changing the pitch also changes
+             * the playing speed of the audio.
+             *
+             * The default value for the pitch is 1
+             */
+            virtual void setPitch(float pitch) = 0;
+
+            /**
+             * @brief Get the pitch of the audio
+             * @return The pitch of the audio
+             */
+            virtual float getPitch() const = 0;
+
+            /**
+             * @brief Set whether or not the audio should loop after reaching
+             *        the end
+             * @param isLooped True to play in loop, false to play once
+             */
+            virtual void setLoop(bool isLooped) = 0;
+
+            /**
+             * @brief Check if audio is looped or not
+             * @return True if audio is looped, otherwise false
+             */
+            virtual bool isLooped() const = 0;
+
+            /**
+             * @brief Change the current playing position of the audio
+             * @param position New playing position of the audio
+             *
+             * The playing position can be changed when the audio is
+             * either paused or playing. Changing the playing position
+             * when the audio is stopped has no effect, since playing
+             * the audio would reset its position
+             */
+            virtual void seek(float position) = 0;
+
+            /**
+            * @brief Get the current playing position of the audio
+            * @return Current playing position of the audio
+            */
+            virtual Duration getPlayingPosition() const = 0;
+
+            /**
+             * @brief Play audio
+             *
+             * This function starts the audio if it was stopped, resumes
+             * it if it was paused, and restarts it from the beginning if
+             * it was already playing. This function uses its own thread
+             * so that it doesn't block the rest of the program while the
+             * audio is played
+             */
+            virtual void play() = 0;
+
+            /**
+             * @brief Pause audio
+             *
+             * This function pauses the stream if it was playing, otherwise
+             * (audio already paused or stopped) it has no effect
+             */
+            virtual void pause() = 0;
+
+            /**
+             * @brief Stop playing the audio
+             *
+             * This function stops the audio if it was playing or paused,
+             * and does nothing if it was already stopped. It also resets
+             * the playing position
+             */
+            virtual void stop() = 0;
+
+            /**
+             * @brief Reset the playing position to the beginning
+             *
+             * This function will reset the playing position without stopping
+             * the audio (unlike stop function), which would require play to
+             * be called to get the audio to play again
              */
             void restart();
+
+            /**
+             * @brief Get the total duration of the audio
+             * @return The total duration of the audio
+             */
+            virtual Duration getDuration() const = 0;
+
+            /**
+             * @brief Get the current status of the audio (stopped, paused, playing)
+             * @return Current status of the audio
+             */
+            virtual Status getStatus() const = 0;
+
+            /**
+             * @brief Get the type of the audio
+             * @return The type of the audio
+             */
+            virtual std::string getType() = 0;
 
             /**
              * @brief Destructor
@@ -207,12 +242,10 @@ namespace IME {
             using EventEmitter::emit;
 
         private:
-            //Muted state
-            bool isMuted_;
-            //Volume of the music player before it was muted
-            float volumeBeforeMute_;
+            bool isMuted_;           //!< Mute state
+            float volumeBeforeMute_; //!< Volume before audio was muted
         };
     }
 }
 
-#endif
+#endif // IME_AUDIO_H

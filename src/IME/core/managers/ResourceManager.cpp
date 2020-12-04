@@ -111,23 +111,6 @@ namespace IME {
         }
     }
 
-    int ResourceManager::getUseCount(ResourceType type, const std::string &filename) {
-        switch (type) {
-            case ResourceType::Texture:
-                return textures_.getUseCountFor(filename);
-            case ResourceType::Font:
-                return fonts_.getUseCountFor(filename);
-            case ResourceType::Image:
-                return images_.getUseCountFor(filename);
-            case ResourceType::SoundBuffer:
-                return soundBuffers_.getUseCountFor(filename);
-            case ResourceType::Music:
-                return music_.getUseCountFor(filename);
-            default:
-                return 0;
-        }
-    }
-
     void ResourceManager::setPathFor(ResourceType type, const std::string& path) {
         switch (type) {
             case ResourceType::Texture:

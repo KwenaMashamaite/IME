@@ -39,8 +39,8 @@ namespace IME::UI {
                 sliderRenderer_->getBorders().getBottom()};
     }
 
-    void SliderRenderer::setTrackColour(Colour color) {
-        sliderRenderer_->setTrackColor(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setTrackColour(Colour colour) {
+        sliderRenderer_->setTrackColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getTrackColour() const {
@@ -48,8 +48,8 @@ namespace IME::UI {
             sliderRenderer_->getTrackColor());
     }
 
-    void SliderRenderer::setTrackHoverColour(Colour color) {
-        sliderRenderer_->setTrackColorHover(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setTrackHoverColour(Colour colour) {
+        sliderRenderer_->setTrackColorHover(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getTrackHoverColour() const {
@@ -57,8 +57,8 @@ namespace IME::UI {
             sliderRenderer_->getTrackColorHover());
     }
 
-    void SliderRenderer::setThumbColour(Colour color) {
-        sliderRenderer_->setThumbColor(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setThumbColour(Colour colour) {
+        sliderRenderer_->setThumbColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getThumbColour() const {
@@ -66,8 +66,8 @@ namespace IME::UI {
                 sliderRenderer_->getThumbColor());
     }
 
-    void SliderRenderer::setThumbHoverColour(Colour color) {
-        sliderRenderer_->setThumbColorHover(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setThumbHoverColour(Colour colour) {
+        sliderRenderer_->setThumbColorHover(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getThumbHoverColour() const {
@@ -75,8 +75,8 @@ namespace IME::UI {
             sliderRenderer_->getThumbColorHover());
     }
 
-    void SliderRenderer::setBorderColour(Colour color) {
-        sliderRenderer_->setBorderColor(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setBorderColour(Colour colour) {
+        sliderRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getBorderColour() const {
@@ -84,8 +84,8 @@ namespace IME::UI {
             sliderRenderer_->getBorderColor());
     }
 
-    void SliderRenderer::setBorderHoverColour(Colour color) {
-        sliderRenderer_->setBorderColorHover(Utility::convertToTGUIColour(color));
+    void SliderRenderer::setBorderHoverColour(Colour colour) {
+        sliderRenderer_->setBorderColorHover(Utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getBorderHoverColour() const {

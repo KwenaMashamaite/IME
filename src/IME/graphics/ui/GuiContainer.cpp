@@ -95,10 +95,6 @@ namespace IME::UI {
         sfmlGui_.requestMouseCursor(static_cast<tgui::Cursor::Type>(cursorType));
     }
 
-    const std::vector<IWidget> &GuiContainer::getWidgets() const {
-        return std::move(std::vector<IWidget>{}); //@TODO implement
-    }
-
     bool GuiContainer::addWidget(std::shared_ptr<IWidget> widget,
          const std::string &widgetName)
     {

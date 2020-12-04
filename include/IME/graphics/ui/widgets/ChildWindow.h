@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief A window that can be displayed on top of the another window
- */
-
 #ifndef IME_CHILDWINDOW_H
 #define IME_CHILDWINDOW_H
 
@@ -35,17 +31,24 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief A window that can be displayed on top of the another window
+         */
         class IME_API ChildWindow : public IContainer {
         public:
-            /// Title alignments, possible options for the setTitleAlignment function
+            /**
+             * @brief Title alignments, possible options for the setTitleAlignment function
+             */
             enum class TitleAlignment {
                 Left,   //!< Places the title on the left side of the title bar
                 Center, //!< Places the title in the middle of the title bar
                 Right   //!< Places the title on the right side of the title bar
             };
 
-            /// Title buttons (use bitwise OR to combine)
-            enum TitleButton{
+            /**
+             * @brief Title buttons (use bitwise OR to combine)
+             */
+            enum TitleButton {
                 None     = 0,      //!< No buttons
                 Close    = 1 << 0, //!< Include a close button
                 Maximize = 1 << 1, //!< Include a maximize button
@@ -64,9 +67,10 @@ namespace IME {
              * @brief Set the child window renderer
              * @param renderer The new renderer
              *
-             * The renderer determines how the button is displayed. The window
-             * has a default renderer which can be manipulated using the
-             * @see getRenderer() function
+             * The renderer determines how the window is displayed. The
+             * window has a default renderer
+             *
+             * @see getRenderer
              */
             void setRenderer(std::shared_ptr<ChildWindowRenderer> renderer);
 
@@ -76,7 +80,7 @@ namespace IME {
              *
              * The renderer gives access to functions that determine how the
              * window is displayed. It allows you to manipulate things such
-             * as the background colour, text colour, border colour etc...
+             * as the background colour, border colour etc...
              */
             std::shared_ptr<ChildWindowRenderer> getRenderer();
 
@@ -198,7 +202,9 @@ namespace IME {
              * the window is removed from its parent.
              *
              * If you want to close the window without those callbacks being
-             * triggered then you need to use the @see destroy() function
+             * triggered then you need to use the destroy function
+             *
+             * @see destroy
              */
             void close();
 
@@ -260,153 +266,185 @@ namespace IME {
             bool isKeptInParent() const;
 
             /**
-             * @brief Set the character size of the widget's text
-             * @param charSize New character size
+             * @brief Set the position of the window
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
              *
-             * The default character size is 30
+             * This function completely overwrites the previous position.
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the window is (0, 0)
+             *
+             * @see move
              */
-            void setTextSize(unsigned int charSize) override;
+            void setPosition(float x, float y) override;
 
             /**
-             * @brief Set the text content of the widget
-             * @param content New text content
+             * @brief Set the text content of the window
+             * @param text New text content
              *
              * This function will overwrite any text that was previously
              * set
              */
-            void setText(const std::string &content) override;
+            void setText(const std::string &text) override;
 
             /**
-             * @brief Set the size of the widget
-             * @param width The width of the widget
-             * @param height The hieght of teh widget
-             */
-            void setSize(float width, float height) override;
-
-            /**
-             * @brief Get the size of the widget
-             * @return Current size of the widget
-             *
-             * This function only returns the size of the widget, to get the
-             * absolute size (with the margin, outline thickness etc...)
-             * @see getAbsoluteSize()
-             */
-            Vector2f getSize() const override;
-
-            /**
-            * @brief Get the absolute size of the widget
-            * @return The absolute size of the widget
-            *
-            * The absolute size includes the size of the widget, the padding,
-            * margin and outline thickness. To get just the size of the widget
-            * use @see getSize()
-            */
-            Vector2f getAbsoluteSize() override;
-
-            /**
-             * @brief Get the widgets text content
-             * @return Elements text content
+             * @brief Get the windows text content
+             * @return The windows text content
              */
             std::string getText() const override;
 
             /**
-             * @brief Set the character size of the widget's text
+             * @brief Set the character size of the text
              * @param charSize New character size
-             *
-             * The default character size is 30
+             */
+            void setTextSize(unsigned int charSize) override;
+
+            /**
+             * @brief Get the character size of the text
+             * @return The character size of the text
              */
             unsigned int getTextSize() const override;
 
             /**
-             * @brief Get the type of the widget
-             * @return Type of the widget
+             * @brief Set the size of the window
+             * @param width The width of the window
+             * @param height The height of the window
+             */
+            void setSize(float width, float height) override;
+
+            /**
+             * @brief Get the size of the window
+             * @return Current size of the window
+             *
+             * This function only returns the size of the window (It does
+             * not accommodate margin, outline thickness etc ...)
+             *
+             * @see getAbsoluteSize
+             */
+            Vector2f getSize() const override;
+
+            /**
+             * @brief Get the absolute size of the window
+             * @return The absolute size of the window
+             *
+             * The absolute size includes the size of the window, the padding,
+             * margin and outline thickness
+             *
+             * @see getSize
+             */
+            Vector2f getAbsoluteSize() override;
+
+            /**
+             * @brief Get the type of the window
+             * @return The type of the window
              */
             std::string getType() const override;
 
             /**
-             * @brief Toggle the visibility of the widget
+             * @brief Show a hidden window
              *
-             * This function will make the widget invisible if its currently
-             * visible and vice versa. The visibility is not automatically
-             * reflected on the render target. A call to draw() must be made
-             * after calling this function
-             */
-            void toggleVisibility() override;
-
-            /**
-             * @brief Check if coordinates lie inside the widget
-             * @param x X coordinate to be checked
-             * @param y Y coordinate to be checked
-             * @return true if coordinates lie inside the widget, false if
-             *         coordinates do not lie inside the widget
-             */
-            bool contains(float x, float y) const override;
-
-            /**
-             * @brief Hide widget from a render target
-             */
-            void hide() override;
-
-            /**
-             * @brief Show a hidden widget
-             *
-             * This function will reveal the widget that was hidden prior to
-             * function call. Calling this function on an object that is not
+             * This function will reveal the window that was hidden prior to
+             * function call. Calling this function on a window that is not
              * hidden has no effect
              */
             void show() override;
 
             /**
-             * @brief Check is the widget is hidden or not
-             * @return True if the widget is hidden, otherwise false
+             * @brief Hide window
+             */
+            void hide() override;
+
+            /**
+             * @brief Check if the window is hidden or not
+             * @return True if the window is hidden, otherwise false
              */
             bool isHidden() const override;
 
             /**
-             * @brief Set the position of the widget
-             * @param X coordinate of the new position
-             * @param Y coordinate of the new position
+             * @brief Toggle the visibility of the window
              *
-             * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * This function will hide the window if its currently
+             * visible and vice versa
              */
-            void setPosition(float x, float y) override;
+            void toggleVisibility() override;
 
             /**
-             * @brief Set the position of the widget
+             * @brief Check if coordinates lie inside the window
+             * @param x X coordinate to be checked
+             * @param y Y coordinate to be checked
+             * @return true if coordinates lie inside the window, false if
+             *         coordinates do not lie inside the window
+             */
+            bool contains(float x, float y) const override;
+
+            /**
+             * @brief Set the position of the window
              * @param position New position
              *
              * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the window is (0, 0)
+             *
+             * @see move
              */
             void setPosition(Vector2f position) override;
 
             /**
-             * @brief Set the orientation of the widget
+             * @brief Get the position of the window
+             * @return Current position of the window
+             */
+            Vector2f getPosition() const override;
+
+            /**
+             * @brief Set the orientation of the window
              * @param angle New rotation, in degrees
              *
              * This function completely overwrites the previous rotation.
              * See the rotate function to add an angle based on the previous
-             * rotation instead. The default rotation of a transformable widget
-             * is 0.
+             * rotation instead.
+             *
+             * The default rotation of the window is 0
+             *
+             * @see rotate
              */
             void setRotation(float angle) override;
 
             /**
-             * @brief Set the scale factors of the widget
+             * @brief Rotate the window
+             * @param angle Angle of rotation, in degrees
+             *
+             * This function adds to the current rotation of the window,
+             * unlike setRotation which overwrites it
+             *
+             * @see setRotation
+             */
+            void rotate(float angle) override;
+
+            /**
+             * @brief Get the orientation of the window
+             * @return Current rotation, in degrees
+             *
+             * The rotation is always in the range [0, 360]
+             */
+            float getRotation() const override;
+
+            /**
+             * @brief Set the scale factors of the window
              * @param factorX New horizontal scale factor
              * @param factorY New vertical scale factor
              *
-             * This function completely overwrites the previous scale.
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
              */
             void setScale(float factorX, float factorY) override;
 
             /**
-             * @brief Set the scale factors of the object
+             * @brief Set the scale factor of the window
              * @param scale New scale
              *
              * This function completely overwrites the previous scale
@@ -416,121 +454,108 @@ namespace IME {
             void setScale(Vector2f scale) override;
 
             /**
-             * @brief Get the current scale of the object
-             * @return Current scale of the object
-             */
-            Vector2f getScale() const override;
-
-            /**
-             * @brief set the local origin of the object
-             * @param origin New origin
-             *
-             * The origin of an object defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the object, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable object is (0, 0)
-             */
-            void setOrigin(Vector2f origin) override;
-
-            /**
-             * @brief Move the object by a given offset
-             * @param offset Offset to apply
-             *
-             * This function adds to the current position of the object,
-             * unlike @see setPosition which overwrites it
-             */
-            void move(Vector2f offset) override;
-
-            /**
-             * @brief Scale the object by an offset
-             * @param offset Offset to apply
-             *
-             * This function multiplies the current scale of the object,
-             * unlike @see setScale which overwrites it
-             */
-            void scale(Vector2f offset) override;
-
-            /**
-             * @brief Set the local origin of the widget
-             * @param x X coordinate of the new origin
-             * @param y Y coordinate of the new origin
-             *
-             * The origin of an widget defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the widget, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable widget is (0, 0).
-             */
-            void setOrigin(float x, float y) override;
-
-            /**
-             * @brief Get the position of the widget
-             * @return Current position of the widget
-             */
-            Vector2f getPosition() const override;
-
-            /**
-             * @brief Get the local origin of the widget
-             * @return get the local origin of the widget
-             */
-            Vector2f getOrigin() const override;
-
-            /**
-             * @brief Get the orientation of the widget
-             * @return Current rotation, in degrees
-             *
-             * The rotation is always in the range [0, 360].
-             */
-            float getRotation() const override;
-
-            /**
-             * @brief Move the widget by a given offset
-             * @param offsetX Horizontal offset
-             * @param offsetY Vertical offset
-             *
-             * This function adds to the current position of the widget,
-             * unlike setPosition which overwrites it.
-             */
-            void move(float offsetX, float offsetY) override;
-
-            /**
-             * @brief Rotate the widget
-             * @param angle Angle of rotation, in degrees
-             *
-             * This function adds to the current rotation of the widget,
-             * unlike setRotation() which overwrites it
-             */
-            void rotate(float angle) override;
-
-            /**
-             * @brief Scale the widget
+             * @brief Scale the window by an offset
              * @param factorX Horizontal scale factor
              * @param factorY Vertical scale factor
              *
-             * This function multiplies the current scale of the widget,
-             * unlike setScale() which overwrites it.
+             * This function multiplies the current scale of the window,
+             * unlike setScale which overwrites it
+             *
+             * @see setScale
              */
             void scale(float factorX, float factorY) override;
 
             /**
+             * @brief Scale the window by an offset
+             * @param offset Offset to apply
+             *
+             * This function multiplies the current scale of the window,
+             * unlike setScale which overwrites it
+             *
+             * @see setScale
+             */
+            void scale(Vector2f offset) override;
+
+            /**
+             * @brief Get the current scale of the window
+             * @return Current scale of the window
+             */
+            Vector2f getScale() const override;
+
+            /**
+             * @brief Set the local origin of the window
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
+             *
+             * The origin of the window defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the window, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the window is (0, 0)
+             */
+            void setOrigin(float x, float y) override;
+
+            /**
+             * @brief Set the local origin of the window
+             * @param origin New origin
+             *
+             * The origin of the window defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the window, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the window is (0, 0)
+             */
+            void setOrigin(Vector2f origin) override;
+
+            /**
+             * @brief Get the local origin of the window
+             * @return Local origin of the window
+             */
+            Vector2f getOrigin() const override;
+
+            /**
+             * @brief Move the window by a given offset
+             * @param offsetX Horizontal offset
+             * @param offsetY Vertical offset
+             *
+             * This function adds to the current position of the window,
+             * unlike setPosition which overwrites it
+             *
+             * @see setPosition
+             */
+            void move(float offsetX, float offsetY) override;
+
+            /**
+             * @brief Move the window by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the window,
+             * unlike setPosition which overwrites it
+             *
+             * @see setPosition
+             */
+            void move(Vector2f offset) override;
+
+            /**
              * @brief Add a widget to the container
-             * @param widgetPtr Widget to be added
-             * @param widgetName Unique name of the widget
+             * @param widget Widget to be added
+             * @param name Unique Name of the widget
              * @return True if the widget was added to the container or false
              *         if the container already has a widget with the same name
              *         as the specified widget name
              *
              * The name of the widget must not contain whitespaces
              */
-             bool addWidget(std::shared_ptr<IWidget> widgetPtr,
-                const std::string &widgetName) override;
+            bool addWidget(std::shared_ptr<IWidget> widget,
+                const std::string &name) override;
 
             /**
              * @brief Get a widget in the container
-             * @param widgetName Name of the widget to retrieve
+             * @param name Name of the widget to retrieve
              * @return Pointer to the specified widget or a nullptr if the
              *         container does not have a widget with the specified
              *         name
@@ -539,14 +564,7 @@ namespace IME {
              * children of it, but when none of the child widgets match the
              * given name, a recursive search will be performed.
              */
-            std::shared_ptr<IWidget> getWidget(const std::string &widgetName)
-            const override;
-
-            /**
-             * @brief Get a list of all widgets in the container
-             * @return A vector of all widgets in the container
-             */
-            const std::vector<IWidget> &getWidgets() const override;
+            std::shared_ptr<IWidget> getWidget(const std::string &name) const override;
 
             /**
              * @brief Remove a widget from the container
@@ -581,8 +599,7 @@ namespace IME {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t
-            moveWidgetForward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetForward(std::shared_ptr<IWidget> widget) override;
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -590,8 +607,7 @@ namespace IME {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t
-            moveWidgetBackward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget) override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -600,8 +616,9 @@ namespace IME {
              *
              * @note If the focused widget is a container, then a pointer to
              * the container is returned rather than a pointer to the focused
-             * widget inside that container. @see getFocusedLeaf() should be
-             * used to get the widget that is focused inside a container
+             * widget inside that container
+             *
+             * @see getFocusedLeaf
              */
             std::shared_ptr<IWidget> getFocusedWidget() const override;
 
@@ -610,11 +627,13 @@ namespace IME {
              * @return Pointer to the focused child widget or a nullptr if none
              *         of the widgets are currently focused
              *
-             * @note Unlike @see getFocusedWidget() which returns a pointer to
+             * @note Unlike getFocusedWidget which returns a pointer to
              * a container when the focused widget is a child of another
              * container within the container, this function will always return
              * the focused widget regardless of whether its a direct child of
              * the container or not
+             *
+             * @see getFocusedWidget
              */
             std::shared_ptr<IWidget> getFocusedLeaf() const override;
 
@@ -625,8 +644,7 @@ namespace IME {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<IWidget>
-            getWidgetAtPosition(Vector2f pos) const override;
+            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const override;
 
             /**
              * @brief Focus the next widget in the container
@@ -666,16 +684,11 @@ namespace IME {
             void initEvents();
 
         private:
-            //Widgets container
-            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_;
-            //Pointer to third party window
-            std::shared_ptr<tgui::ChildWindow> window_;
-            //Renderer for this layout
-            std::shared_ptr<ChildWindowRenderer> renderer_;
-            //How long the layout takes before its completely hidden or shown
-            static const int fadeAnimDuration_ = 100;
+            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
+            std::shared_ptr<tgui::ChildWindow> window_;                         //!< Pointer to third party window
+            std::shared_ptr<ChildWindowRenderer> renderer_;                     //!< Renderer for this window
         };
     }
 }
 
-#endif
+#endif // IME_CHILDWINDOW_H

@@ -50,22 +50,22 @@ namespace IME::Input {
             std::to_string(static_cast<int>(key)) + "Down", std::move(callback));
     }
 
-    bool Keyboard::removeEventListener(Event event, Key key, int callbackId){
+    bool Keyboard::removeEventListener(Event event, Key key, int id){
         if (event == Event::KeyUp)
             return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(key)) + "Up", callbackId);
+                std::to_string(static_cast<int>(key)) + "Up", id);
         else if (event == Event::KeyDown)
             return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(key)) + "Down", callbackId);
+                std::to_string(static_cast<int>(key)) + "Down", id);
         return false;
     }
 
-    bool Keyboard::removeEventListener(Keyboard::Event event, int callbackId) {
+    bool Keyboard::removeEventListener(Keyboard::Event event, int id) {
         switch (event) {
             case Event::KeyDown:
-                return eventEmitter_.removeEventListener("anyKeyDown", callbackId);
+                return eventEmitter_.removeEventListener("anyKeyDown", id);
             case Event::KeyUp:
-                return eventEmitter_.removeEventListener("anyKeyPressed", callbackId);
+                return eventEmitter_.removeEventListener("anyKeyPressed", id);
             default:
                 return false;
         }

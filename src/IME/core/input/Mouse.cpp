@@ -31,17 +31,24 @@ namespace IME::Input {
     }
 
     void Mouse::handleEvent(sf::Event event) {
-        if (event.type == sf::Event::MouseButtonPressed)
+        if (event.type == sf::Event::MouseButtonPressed) {
+            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down");
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down",
                 event.mouseButton.x, event.mouseButton.y);
-        else if (event.type == sf::Event::MouseButtonReleased)
+        } else if (event.type == sf::Event::MouseButtonReleased) {
+            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up");
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up",
                 event.mouseButton.x, event.mouseButton.y);
-        else if (event.type == sf::Event::MouseMoved)
+        } else if (event.type == sf::Event::MouseMoved)
             eventEmitter_.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
     }
 
     int Mouse::onButtonUp(Button button, Callback<int, int> callback) {
+        return  eventEmitter_.addEventListener(
+            std::to_string(static_cast<int>(button)) + "Up", std::move(callback));
+    }
+
+    int Mouse::onButtonUp(Mouse::Button button, Callback<> callback) {
         return  eventEmitter_.addEventListener(
             std::to_string(static_cast<int>(button)) + "Up", std::move(callback));
     }
@@ -51,17 +58,22 @@ namespace IME::Input {
             std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
     }
 
+    int Mouse::onButtonDown(Mouse::Button button, Callback<> callback) {
+        return eventEmitter_.addEventListener(
+            std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
+    }
+
     int Mouse::onMouseMove(Callback<int, int> callback) {
         return eventEmitter_.addEventListener("mouseMoved", std::move(callback));
     }
 
-    bool Mouse::removeEventListener(Event event, Button button,int listenerId) {
+    bool Mouse::removeEventListener(Event event, Button button,int id) {
         if (event == Event::MouseDown)
             return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(button)) + "Down", listenerId);
+                std::to_string(static_cast<int>(button)) + "Down", id);
         else if (event == Event::MouseUp)
             return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(button)) + "Up", listenerId);
+                std::to_string(static_cast<int>(button)) + "Up", id);
         return false;
     }
 

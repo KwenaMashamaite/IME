@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a checkbox
- *
- * This class allows you to manipulate the render properties of a checkbox
- */
-
 #ifndef IME_CHECKBOXRENDERER_H
 #define IME_CHECKBOXRENDERER_H
 
@@ -39,6 +33,12 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a checkbox
+         *
+         * This class allows you to manipulate the render properties of a
+         * checkbox
+         */
         class IME_API CheckBoxRenderer : public IWidgetRenderer {
         public:
             /**
@@ -114,7 +114,7 @@ namespace IME {
              * @brief Get the colour of text when the checkbox is checked
              * @return The colour of text when the checkbox is checked
              */
-            Colour getTextColorChecked() const;
+            Colour getTextColourChecked() const;
             
             /**
              * @brief Set the colour of the text when the mouse enters the
@@ -564,7 +564,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -585,7 +585,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -615,10 +617,9 @@ namespace IME {
             virtual ~CheckBoxRenderer();
 
         private:
-            //Pointer to third party checkbox renderer
-            tgui::CheckBoxRenderer* checkBoxRenderer_;
+            tgui::CheckBoxRenderer* checkBoxRenderer_; //!< Pointer to third party checkbox renderer
         };
     }
 }
 
-#endif
+#endif // IME_CHECKBOXRENDERER_H

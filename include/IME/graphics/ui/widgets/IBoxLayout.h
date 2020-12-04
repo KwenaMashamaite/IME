@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for box layout
- */
-
 #ifndef IME_IBOXLAYOUT_H
 #define IME_IBOXLAYOUT_H
 
@@ -33,27 +29,31 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Interface for box layouts
+         */
         class IME_API IBoxLayout : public IContainer {
         public:
             /**
              * @brief Insert a widget to the container
              * @param index Where the widget should be inserted
              * @param widget Pointer to the widget to be inserted
-             * @param widgetName Name of the widget
+             * @param widgetName Unique Name of the widget
              *
-             * The widget name must be set if the widget is to be retrieved at
-             * a later time. In addition, the name must not contain whitespaces
-             * @note If the index is too high, the widget will simply be added
-             * at the end of the list
+             * The name must be unique and contain no whitespaces because the
+             * container cannot store two distinct widgets with the same name
+             *
+             * @note If @a index is too high, the widget will simply be
+             * added at the end of the list
              */
             virtual void insertWidget(std::size_t index, std::shared_ptr<IWidget> widget,
-                const std::string& widgetName = "") = 0;
+                const std::string& widgetName) = 0;
 
             /**
-             * @brief Remove a single widget that was added to the container
+             * @brief Remove a widget from the container
              * @param index Position of the widget to be removed
              * @return True if the widget was removed, or false if the index is
-             *          invalid
+             *         invalid
              */
             virtual bool removeWidgetAt(std::size_t index) = 0;
 
@@ -79,8 +79,7 @@ namespace IME {
              * @param index Index of the widget in the container
              * @param ratio Ratio to determine the size compared to other widgets
              *
-             * The space will act as an invisible non-interactable widget, the
-             * ratio will be part of the total ratio of all widgets.
+             * The ratio will be part of the total ratio of all widgets.
              */
             virtual void insertSpace(std::size_t index, float ratio) = 0;
 

@@ -73,7 +73,7 @@ namespace IME::UI {
         checkBoxRenderer_->setTextColorChecked(Utility::convertToTGUIColour(colour));
     }
 
-    Colour CheckBoxRenderer::getTextColorChecked() const {
+    Colour CheckBoxRenderer::getTextColourChecked() const {
         return Utility::convertFrom3rdPartyColour(
             checkBoxRenderer_->getTextColorChecked());
     }

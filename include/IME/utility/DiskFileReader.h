@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Reads/writes data to/from the disk drive
- */
-
 #ifndef IME_DISKFILEREADER_H
 #define IME_DISKFILEREADER_H
 
@@ -40,10 +36,13 @@ namespace IME {
          * @brief Modes in which a file can be written to in
          */
         enum class WriteMode {
-            Overwrite, // Overwrites file content with new data
-            Append     // Appends (At the end of file) new data to existing data
+            Overwrite, //!< Overwrites file content with new data
+            Append     //!< Appends (At the end of file) new data to existing data
         };
 
+        /**
+         * @brief Reads/writes data to/from the disk
+         */
         class IME_API DiskFileReader {
         public:
             /**
@@ -63,18 +62,16 @@ namespace IME {
              * @param mode Mode in which file is opened in
              * @throws FileNotFound If the file cannot be found on the disk
              *
-             * @note The file name must be preceded by the path to the file.
+             * @note The file name must be preceded by the path to the file
              */
             void writeToFile(const std::stringstream &buffer,const std::string &filename,
                 WriteMode mode = WriteMode::Overwrite);
 
         private:
-            //Reads from file
-            std::ifstream inFile_;
-            //Writes to file
-            std::ofstream outFile_;
+            std::ifstream inFile_;  //!< File reader
+            std::ofstream outFile_; //!< File writer
         };
     }
 }
 
-#endif
+#endif // IME_DISKFILEREADER_H

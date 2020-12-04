@@ -34,7 +34,6 @@ namespace IME {
         isGridVisible_(true),
         isBackgroundDrawable_(false),
         isTilesDrawable_(true),
-        isObjectsDrawable_(true),
         invalidTile_({0, 0}, {-1, -1})
     {
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
@@ -232,8 +231,6 @@ namespace IME {
             isBackgroundDrawable_ = false;
         else if (layer == "tiles")
             isTilesDrawable_ = false;
-        else if (layer == "objects")
-            isObjectsDrawable_ = false;
     }
 
     void TileMap::showLayer(const std::string &layer) {
@@ -241,8 +238,6 @@ namespace IME {
             isBackgroundDrawable_ = true;
         else if (layer == "tiles")
             isTilesDrawable_ = true;
-        else if (layer == "objects")
-            isObjectsDrawable_ = true;
     }
 
     bool TileMap::isLayerHidden(const std::string &layer) const {
@@ -250,8 +245,6 @@ namespace IME {
             return isBackgroundDrawable_;
         else if (layer == "tiles")
             return isTilesDrawable_;
-        else if (layer == "objects")
-            return isObjectsDrawable_;
         return false;
     }
 

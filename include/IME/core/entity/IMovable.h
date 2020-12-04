@@ -22,23 +22,17 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for movable entities
- */
-
 #ifndef IME_IMOVABLE_H
 #define IME_IMOVABLE_H
 
 #include "IME/Config.h"
 
 namespace IME {
+    /**
+     * @brief Interface for movable entities
+     */
     class IME_API IMovable {
     public:
-        /**
-         * @brief Move the object in the current direction at the current speed
-         */
-        virtual void move() = 0;
-
         /**
          * @brief Set the speed of the object
          * @param speed The new speed of the object
@@ -54,15 +48,29 @@ namespace IME {
         virtual float getSpeed() const = 0;
 
         /**
+         * @brief Move the object in the current direction at the
+         *        current speed
+         *
+         * @note After calling this function, the object will keep moving
+         *       and isMoving() will always return true for as long as
+         *       the movement is not stopped
+         *
+         * @see isMoving
+         * @see stop
+         */
+        virtual void move() = 0;
+
+        /**
          * @brief Check if object is moving or not
          * @return True if object is moving, otherwise false
          */
         virtual bool isMoving() const = 0;
 
         /**
-         * @brief Stop a moving object
+         * @brief Stop moving the object
          *
-         * This function does nothing if the object is not moving
+         * This function will has no effect if the object is currently
+         * not moving
          */
         virtual void stop() = 0;
 

@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Utility class for logging messages to a file on the disk
- */
-
 #ifndef IME_DISKFILELOGGER_H
 #define IME_DISKFILELOGGER_H
 
@@ -34,6 +30,9 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Utility class for logging messages to a file on the disk
+         */
         class IME_API DiskFileLogger : public ILogger {
         public:
             /**
@@ -50,16 +49,16 @@ namespace IME {
             void setPath(const std::string& path);
 
             /**
-             * @brief Set the file where messages are logged
-             * @param filename Name of the file where log messages are written
-             */
-            void setFile(const std::string& filename);
-
-            /**
              * @brief Get the path to the file used for writing log messages
              * @return The path t the file used for writing log messages
              */
             const std::string& getPath() const;
+
+            /**
+             * @brief Set the file where messages are logged
+             * @param filename Name of the file where log messages are written
+             */
+            void setFile(const std::string& filename);
 
             /**
              * @brief Get the name of the file used for writing log messages
@@ -86,12 +85,10 @@ namespace IME {
             void log(MessageType messageType, const std::string& msg) override;
 
         private:
-            //Path to the log file
-            std::string path_;
-            //Log file
-            std::string file_;
+            std::string path_; //!< Path to the log file
+            std::string file_; //!< File where messages are logged
         };
     }
 }
 
-#endif
+#endif // IME_DISKFILELOGGER_H

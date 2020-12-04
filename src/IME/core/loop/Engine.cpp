@@ -64,7 +64,7 @@ namespace IME {
         shouldPop_{false}
     {}
 
-    void Engine::init() {
+    void Engine::initialize() {
         if (isSettingsLoadedFromFile_)
             loadSettings();
 
@@ -147,7 +147,7 @@ namespace IME {
 
         statesManager_.getActiveState()->initialize();
         isRunning_ = true;
-        auto const frameTime = 1.0f / getFPSLimit();
+        auto const frameTime = 1.0f / settings_.getValueFor<int>("FPS_LIMIT");
         auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
         auto clock = Time::Clock();
         elapsedTime_ = 0.0f;
@@ -253,6 +253,8 @@ namespace IME {
         resourceManager_.reset();
         isRunning_ = false;
         isInitialized_ = false;
+        elapsedTime_ = 0.0f;
+        shouldPop_ = false;
     }
 
     bool Engine::isRunning() const {
@@ -271,10 +273,6 @@ namespace IME {
         //@TODO - Fix this function throwing std::bad_cast when called outside
         //        the class
         return settings_;
-    }
-
-    unsigned int Engine::getFPSLimit() const {
-        return window_.getFramerateLimit();
     }
 
     const std::string &Engine::getGameName() const {

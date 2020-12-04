@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for managing keyboard and mouse inputs
- */
-
 #ifndef IME_INPUTMANAGER_H
 #define IME_INPUTMANAGER_H
 
@@ -35,6 +31,9 @@
 
 namespace IME {
     namespace Input {
+        /**
+         * @brief Class for managing keyboard and mouse inputs
+         */
         class IME_API InputManager {
         public:
             /**
@@ -86,7 +85,7 @@ namespace IME {
             /**
              * @brief Remove an event listener from a key down or key up event
              * @param event Event to remove event listener from
-             * @param callbackId Identification number of the listener to be removed
+             * @param id Identification number of the listener to be removed
              * @return True if a listener was removed from an event, false if the
               *        specified event does not have a listener with the specified id
              */
@@ -155,12 +154,10 @@ namespace IME {
             void handleEvent(sf::Event event);
 
         private:
-            //Managed keyboard
-            Keyboard keyboard_;
-            //Managed Mouse
-            Mouse mouse_;
+            Keyboard keyboard_; //!< Managed keyboard
+            Mouse mouse_;       //!< Managed Mouse
         };
     }
-} // namespace IME
+}
 
-#endif
+#endif // IME_INPUTMANAGER_H

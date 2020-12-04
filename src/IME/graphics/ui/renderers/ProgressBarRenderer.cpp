@@ -40,40 +40,40 @@ namespace IME::UI {
                 progressBarRenderer_->getBorders().getBottom()};
     }
 
-    void ProgressBarRenderer::setTextColour(Colour color) {
-        progressBarRenderer_->setTextColor(Utility::convertToTGUIColour(color));
+    void ProgressBarRenderer::setTextColour(Colour colour) {
+        progressBarRenderer_->setTextColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getTextColour() const {
         return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColor());
     }
 
-    void ProgressBarRenderer::setTextColourFilled(Colour color) {
-        progressBarRenderer_->setTextColorFilled(Utility::convertToTGUIColour(color));
+    void ProgressBarRenderer::setTextColourFilled(Colour colour) {
+        progressBarRenderer_->setTextColorFilled(Utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getTextColourFilled() const {
         return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColorFilled());
     }
 
-    void ProgressBarRenderer::setBackgroundColour(Colour color) {
-        progressBarRenderer_->setBackgroundColor(Utility::convertToTGUIColour(color));
+    void ProgressBarRenderer::setBackgroundColour(Colour colour) {
+        progressBarRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getBackgroundColour() const {
         return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getBackgroundColor());
     }
 
-    void ProgressBarRenderer::setFillColour(Colour color) {
-        progressBarRenderer_->setFillColor(Utility::convertToTGUIColour(color));
+    void ProgressBarRenderer::setFillColour(Colour colour) {
+        progressBarRenderer_->setFillColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getFillColour() const {
         return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getFillColor());
     }
 
-    void ProgressBarRenderer::setBorderColour(Colour color) {
-        progressBarRenderer_->setBorderColor(Utility::convertToTGUIColour(color));
+    void ProgressBarRenderer::setBorderColour(Colour colour) {
+        progressBarRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getBorderColour() const {

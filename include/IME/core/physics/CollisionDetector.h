@@ -22,11 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for checking a collision between two objects
- */
-
-
 #ifndef IME_COLLISIONDETECTOR_H
 #define IME_COLLISIONDETECTOR_H
 
@@ -37,6 +32,9 @@
 #include "IME/core/entity/Entity.h"
 
 namespace IME {
+    /**
+     * @brief Class for checking a collision between two objects
+     */
     class IME_API CollisionDetector {
     public:
         /**
@@ -122,6 +120,6 @@ namespace IME {
     private:
 
     };
-} // namespace IME
+}
 
-#endif
+#endif // IME_COLLISIONDETECTOR_H

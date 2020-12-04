@@ -25,10 +25,6 @@
 #ifndef IME_UTILS_H
 #define IME_UTILS_H
 
-/**
- * @brief Utility functions
- */
-
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include <random>
@@ -51,4 +47,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_UTILS_H

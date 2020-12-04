@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a button
- *
- * This class allows you to manipulate the render properties of a Button
- */
-
 #ifndef IME_BUTTONRENDERER_H
 #define IME_BUTTONRENDERER_H
 
@@ -39,6 +33,11 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a button
+         *
+         * This class allows you to manipulate the render properties of a Button
+         */
         class IME_API ButtonRenderer : public IWidgetRenderer {
         public:
             /**
@@ -151,7 +150,7 @@ namespace IME {
              * @return The background colour of the button when the mouse 
              *         enters it
              */
-            Colour getBackgroundColorHover() const;
+            Colour getBackgroundColourHover() const;
             
             /**
              * @brief Set the background colour when the left mouse button is 
@@ -160,7 +159,7 @@ namespace IME {
              * 
              * @note This colour is ignored when you set a background image
              */
-            void setBackgroundColorDown(Colour colour);
+            void setBackgroundColourDown(Colour colour);
 
             /**
              * @brief Get the background colour when the left mouse button is 
@@ -168,7 +167,7 @@ namespace IME {
              * @return The background colour when the left mouse button is 
              *          down on the button
              */
-            Colour getBackgroundColorDown() const;
+            Colour getBackgroundColourDown() const;
 
             /**
              * @brief Set the background colour of the button when it is 
@@ -271,7 +270,7 @@ namespace IME {
              * @return The border colour when the button is focused but not 
              *        hovered
              */
-            Colour getBorderColorFocused() const;
+            Colour getBorderColourFocused() const;
             
             /**
              * @brief Set the background image of the button
@@ -364,7 +363,7 @@ namespace IME {
             TextStyle getTextStyleOnMouseDown() const;
             
             /**
-             * @param Set the text style used when the button is disabled
+             * @brief Set the text style used when the button is disabled
              * @param style The text style to be ste
              */
             void setTextStyleDisabled(TextStyle style);
@@ -389,9 +388,9 @@ namespace IME {
             
             /**
              * @brief Set the outline colour of the text 
-             * @param outlineColor The outline colour to set
+             * @param outlineColour The outline colour to set
              */
-            void setTextOutlineColor(Colour outlineColor);
+            void setTextOutlineColour(Colour outlineColour);
 
             /**
              * @brief Get the outline colour of the text
@@ -471,7 +470,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -492,7 +491,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 

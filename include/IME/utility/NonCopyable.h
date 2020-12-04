@@ -22,13 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for making other classes non copyable
- *
- * @note Classes that inherit from this class will implicitly have their move
- * constructor deleted
- */
-
 #ifndef IME_NONCOPYABLE_H
 #define IME_NONCOPYABLE_H
 
@@ -36,6 +29,12 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Class for making other classes non copyable
+         *
+         * @note Classes that inherit from this class will implicitly have their move
+         * constructor deleted
+         */
         class IME_API NonCopyable {
         public:
             /**
@@ -62,4 +61,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_NONCOPYABLE_H

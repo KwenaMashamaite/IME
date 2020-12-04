@@ -22,35 +22,34 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief RGBA colour
- */
-
 #ifndef IME_COLOUR_H
 #define IME_COLOUR_H
 
 #include "IME/Config.h"
 
 namespace IME {
+    /**
+     * @brief RGBA colour
+     */
     class IME_API Colour {
     public:
         // Predefined colours
-        static const Colour Black;
-        static const Colour White;
-        static const Colour Red;
-        static const Colour Green;
-        static const Colour Blue;
-        static const Colour Yellow;
-        static const Colour Orange;
-        static const Colour Cyan;
-        static const Colour Magenta;
-        static const Colour Purple;
-        static const Colour Pink;
-        static const Colour Grey;
-        static const Colour Violet;
-        static const Colour Turquoise;
-        static const Colour Gold;
-        static const Colour Transparent;
+        static const Colour Black;       //!< Black
+        static const Colour White;       //!< White
+        static const Colour Red;         //!< Red
+        static const Colour Green;       //!< Green
+        static const Colour Blue;        //!< Blue
+        static const Colour Yellow;      //!< Yellow
+        static const Colour Orange;      //!< Orange
+        static const Colour Cyan;        //!< Cyan
+        static const Colour Magenta;     //!< Magenta
+        static const Colour Purple;      //!< Purple
+        static const Colour Pink;        //!< Pink
+        static const Colour Grey;        //!< Grey
+        static const Colour Violet;      //!< Violet
+        static const Colour Turquoise;   //!< Turquoise
+        static const Colour Gold;        //!< Gold
+        static const Colour Transparent; //!< Transparent
 
         /**
          * @brief Default constructor
@@ -85,11 +84,11 @@ namespace IME {
         bool operator!=(const Colour& rhs);
 
         // Colour components
-        unsigned int red = 0;
-        unsigned int green = 0;
-        unsigned int blue = 0;
-        unsigned int opacity = 255;
+        unsigned int red = 0;        //!< Red component
+        unsigned int green = 0;      //!< Green component
+        unsigned int blue = 0;       //!< Blue component
+        unsigned int opacity = 255;  //!< Opacity
     };
 }
 
-#endif
+#endif // IME_COLOUR_H

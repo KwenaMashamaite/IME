@@ -28,6 +28,9 @@
 #include <TGUI/GuiBase.hpp>
 #include <cassert>
 
+//How long the edit box takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     CheckBox::CheckBox(const std::string &text)
         : checkBox_{tgui::CheckBox::create(text)},
@@ -129,11 +132,6 @@ namespace IME::UI {
 
     void CheckBox::toggleEnabled() {
         setEnabled(!isEnabled());
-    }
-
-    bool CheckBox::isMouseOverElement() const {
-        //@todo
-        return false;
     }
 
     void CheckBox::setPosition(Vector2f position) {

@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
-* @brief Class template for a resource container
-*/
-
 #ifndef IME_RESOURCEHOLDER_H
 #define IME_RESOURCEHOLDER_H
 
@@ -43,14 +39,17 @@
 #include <utility>
 
 namespace IME {
+    /**
+     * @brief Class template for a resource container
+     */
     template <class T>
     class ResourceHolder : public Utility::NonCopyable {
     public:
         /**
-         * @brief Ensures resources can be located
+         * @brief Construct a resource holder
          * @param filePath Path to the resource to store
          */
-        ResourceHolder(const std::string &filePath);
+        explicit ResourceHolder(const std::string &filePath);
 
         /**
          * @brief Change the path where resources are located on the disk
@@ -62,80 +61,53 @@ namespace IME {
         void setPath(const std::string& filepath);
 
         /**
+         * @brief Get the path to the resources being held
+         * @return The path to the resource on the disk
+         *
+         * This path is where the program looks for the specified resources
+         * when loading them
+         */
+        const std::string& getPath() const;
+
+        /**
          * @brief Load a resource from the disk and store it in a buffer
-         * @param filename File name of the resource to load
+         * @param filename Filename of the resource to load
          * @throws FileNotFound If the file cannot be found on the disk
+         * @return True if resource was loaded successfully, otherwise false
          *
          * This function will look for the resource in the file path specified
          * during instantiation. A FileNotFound exception will be raised if the
-         * resource cannot be found
+         * resource with the specified filename cannot be found
          */
         bool loadFromFile(const std::string& filename);
 
         /**
          * @brief Remove a resource from the resource holder
-         * @param filename File name of the resource to be removed
-         * @return True if the resource was successfully removed, false if the
-         *         resource with the specified file name does not exist or the
-         *         resource is still used elsewhere @see get(const std::string&)
+         * @param filename Filename of the resource to be removed
+         * @return True if the resource was successfully removed, or false
+         *         if the resource with the given filename does not exist
          */
         bool unload(const std::string& filename);
 
         /**
          * @brief Remove all resources from the resource holder
-         * @return @return True if all the resource were removed or false if the
-         *         resource holder is empty or some of the resources are still
-         *         used elsewhere @see get(const std::string&)
-         *
-         * @note This function may partially remove some resources and leave
-         * others depending on the usage status of the resource. Therefore
-         * a return of false does not necessarily mean that no resources were
-         * unloaded. Use this function when you absolutely  know that the stored
-         * resources are not being utilised, otherwise use @see unload(const td::string&)
+         * @return True if all the resource were removed or false if the
+         *         resource holder is already empty
          */
         bool unloadAll();
 
         /**
          * @brief Get a resource
-         * @param filename File name of the resource to be retrieved
+         * @param filename Filename of the resource to be retrieved
          * @throws FileNotFound If the the file cannot be found on the disk
          * @return Shared pointer to a resource in a buffer
          *
          * If the specified resource does not exist in the resource holder, an
          * attempt will be made to load it from the disk. If it cannot be loaded
          * from the disk, a "FileNotFound" exception will be raised. This means
-         * that the returned pointer can never be a nullptr.
-         *
-         * @warning The returned pointer must be kept alive for as long as the
-         * resource is being used, otherwise the resource might be unloaded from
-         * the program while its in use. The outcome of such an event is undefined
+         * that the returned pointer can never be a nullptr
          */
         [[nodiscard]] std::shared_ptr<T> get(const std::string& filename);
-
-        /**
-         * @brief Check if a resource exists or not
-         * @param filename Name of the file to check
-         * @return True if the resource exists, otherwise false
-         */
-        bool hasResource(const std::string& filename) const;
-
-        /**
-         * @brief Get the number of objects currently using a resource
-         * @param filename Filename of the resource to get use count for
-         * @return The number of objects currently using the specified resource
-         *         or -1 if the resource does not exist
-         */
-        int getUseCountFor(const std::string& filename) const;
-
-        /**
-         * @brief Get the disk path to the resources being held
-         * @return Disk path to the resource
-         *
-         * This path is where the program looks for the specified resources when
-         * loading them. @note Whether the path is absolute or relative depends
-         * on the argument given to the constructor during instantiation
-         */
-        const std::string& getPath() const;
 
         /**
          * @brief Get the number of resources in the resource holder
@@ -143,21 +115,26 @@ namespace IME {
          */
         unsigned int getSize() const;
 
+        /**
+         * @brief Check if a resource exists or not
+         * @param filename Filename of the resource to check
+         * @return True if the resource exists, otherwise false
+         */
+        bool hasResource(const std::string& filename) const;
+
     private:
-        //Resources container
-        std::unordered_map<std::string, std::shared_ptr<T>> resourceHolder_;
-        //File path to resources
-        std::string filePath_;
+        std::unordered_map<std::string, std::shared_ptr<T>> resourceHolder_; //!< Resources container
+        std::string filePath_;                                               //!< File path to resources
     };
 
     #include "IME/core/resources/ResourceHolder.inl"
 
-    // Common resource holders
-    using FontHolder = ResourceHolder<sf::Font>;
-    using TextureHolder = ResourceHolder<sf::Texture>;
-    using ImageHolder = ResourceHolder<sf::Image>;
-    using MusicHolder = ResourceHolder<sf::Music>;
-    using SoundBufferHolder = ResourceHolder<sf::SoundBuffer>;
-} // namespace IME
+    //!< Common resource holders
+    using FontHolder = ResourceHolder<sf::Font>;               //!< sf::Font holder
+    using TextureHolder = ResourceHolder<sf::Texture>;         //!< sf::Texture holder
+    using ImageHolder = ResourceHolder<sf::Image>;             //!< sf::Image holder
+    using MusicHolder = ResourceHolder<sf::Music>;             //!< sf::Music holder
+    using SoundBufferHolder = ResourceHolder<sf::SoundBuffer>; //!< sf::SoundBuffer holder
+}
 
-#endif
+#endif // IME_RESOURCEHOLDER_H

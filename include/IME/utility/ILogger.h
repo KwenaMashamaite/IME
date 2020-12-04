@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for logging
- */
-
 #ifndef IME_LOGGER_H
 #define IME_LOGGER_H
 
@@ -33,13 +29,19 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Type of message to be logged
+         */
         enum class MessageType {
-            General, // General message
-            Status,  // Status reporting message
-            Warning, // Warning message
-            Error    // Error message
+            General, //!< General message
+            Status,  //!< Status reporting message
+            Warning, //!< Warning message
+            Error    //!< Error message
         };
 
+        /**
+         * @brief Interface for logging classes
+         */
         class IME_API ILogger {
         public:
             /**
@@ -57,4 +59,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_LOGGER_H

@@ -26,18 +26,21 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio {
-    void Music::play(const std::string &song) {
-        if (currentMusicFileName_ != song) {
-            song_ = ResourceManager::getInstance()->getMusic(song);
-            currentMusicFileName_ = song;
+    void Music::setSource(const std::string &source) {
+        if (sourceFilename_ != source) {
+            song_ = ResourceManager::getInstance()->getMusic(source);
+            sourceFilename_ = source;
         }
-        play();
     }
 
-    void Music::setLoop(bool isLoop) {
-        if (song_ && song_->getLoop() != isLoop) {
-            song_->setLoop(isLoop);
-            emit("loopChanged", isLoop);
+    const std::string &Music::getSource() const {
+        return sourceFilename_;
+    }
+
+    void Music::setLoop(bool isLooped) {
+        if (song_ && song_->getLoop() != isLooped) {
+            song_->setLoop(isLooped);
+            emit("loopChanged", isLooped);
         }
     }
 
@@ -51,7 +54,7 @@ namespace IME::Audio {
     void Music::play() {
         if (song_) {
             song_->play();
-            emit("playing", currentMusicFileName_);
+            emit("playing", sourceFilename_);
         }
     }
 
@@ -96,10 +99,6 @@ namespace IME::Audio {
         if (song_)
             return song_->getLoop();
         return false;
-    }
-
-    const std::string& Music::getCurrentAudioFileName() const {
-        return currentMusicFileName_;
     }
 
     Duration Music::getDuration() const {

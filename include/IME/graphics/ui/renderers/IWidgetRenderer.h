@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for widget renderers
- */
-
 #ifndef IME_IWIDGETRENDERER_H
 #define IME_IWIDGETRENDERER_H
 
@@ -36,6 +32,9 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Interface for widget renderers
+         */
         class IWidgetRenderer {
         public:
             /**
@@ -98,7 +97,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             virtual bool isTransparentTextureIgnored() const = 0;
 
@@ -116,7 +115,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             virtual void unsubscribe(int id) = 0;
 
@@ -148,4 +149,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_IWIDGETRENDERER_H

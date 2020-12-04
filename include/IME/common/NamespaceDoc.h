@@ -22,20 +22,46 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_DIRECTION_H
-#define IME_DIRECTION_H
+/////////////////////////////////////////////////
+// Documents all the namespaces
+////////////////////////////////////////////////
 
-namespace IME {
-    /**
-     * @brief Directions
-     */
-    enum class Direction {
-        None = 0, //!< No direction
-        Left,     //!< Left Direction
-        Right,    //!< Right direction
-        Up,       //!< Up direction
-        Down      //!< Down direction
-    };
-}
+#ifndef IME_NAMESPACEDOC_H
+#define IME_NAMESPACEDOC_H
 
-#endif // IME_DIRECTION_H
+/**
+ * @brief Global namespace - Contains all namespaces, classes and functions
+ */
+namespace IME {}
+
+/**
+ * @brief Container for all input related classes and functions
+ */
+namespace IME::Input {}
+
+/**
+ * @brief Container for all audio related classes and functions
+ */
+namespace IME::Audio {}
+
+/**
+ * @brief Container for all graphics related classes and functions
+ */
+namespace IME::Graphics {}
+
+/**
+ * @brief Container for all user interface classes anf functions
+ */
+namespace IME::UI {}
+
+/**
+ * @brief Container for all time related classes and functions
+ */
+namespace IME::Time {}
+
+/**
+ * @brief Container for all utility classes and functions
+ */
+namespace IME::Utility {}
+
+#endif //IME_NAMESPACEDOC_H

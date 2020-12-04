@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class that can store a value of any type
- */
-
 #ifndef IME_PROPERTY_H
 #define IME_PROPERTY_H
 
@@ -34,6 +30,9 @@
 #include <any>
 
 namespace IME {
+    /**
+     * @brief Class that can store a value of any type
+     */
     class IME_API Property {
     public:
         /**
@@ -64,6 +63,18 @@ namespace IME {
         Property(const std::string& name, const std::string& type, T&& value);
 
         /**
+         * @brief Get the name of the property
+         * @return Name of the property
+         */
+        const std::string& getName() const;
+
+        /**
+         * @brief Get the type of the property
+         * @return Type of the property
+         */
+        const std::string& getType() const;
+
+        /**
          * @brief Set the value of the property
          * @param value New value of the property
          *
@@ -80,7 +91,7 @@ namespace IME {
         /**
          * @brief Get the value of the property
          * @throws std::bad_any_cast if the stored value is not of type T
-         * @return The value of the property
+         * @return Value of the property
          *
          * @warning Don't call this function if the property does not have
          * a value, otherwise it will throw an exception. In addition, always
@@ -91,34 +102,19 @@ namespace IME {
         T getValue() const;
 
         /**
-         * @brief Get the name of the property
-         * @return The name of the property
-         */
-        const std::string& getName() const;
-
-        /**
-         * @brief Get the type of the property
-         * @return The type of the property
-         */
-        const std::string& getType() const;
-
-        /**
-         * @brief Check if the property has a value set or not
+         * @brief Check if the property has a value or not
          * @return True if the property contains a value or false
-         *         if not it does not contain a value
+         *         if it does not contain a value
          */
         bool hasValue() const;
 
     private:
-        //Name of the property
-        std::string name_;
-        //Type of the property
-        std::string type_;
-        //Value of the property
-        std::any value_;
+        std::string name_; //!< Name of the property
+        std::string type_; //!< Type of the property
+        std::any value_;   //!< Value of the property
     };
 
     #include "IME/common/Property.inl"
 }
 
-#endif
+#endif // IME_PROPERTY_H

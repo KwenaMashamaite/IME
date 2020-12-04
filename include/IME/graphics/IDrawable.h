@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for drawable objects
- */
-
 #ifndef IME_IDRAWABLE_H
 #define IME_IDRAWABLE_H
 
@@ -33,8 +29,11 @@
 
 namespace IME {
     namespace Graphics {
-        class Window; //Forward declaration
+        class Window; //!< Window class forward declaration
 
+        /**
+         * @brief Interface for drawable objects
+         */
         class IME_API IDrawable {
         public:
             /**
@@ -46,18 +45,17 @@ namespace IME {
             /**
              * @brief Hide object from a render target
              *
-             * A hidden object will not be drawn on a render target when calling
-             * draw(Window)
+             * A hidden object will not be drawn on a render target when
+             * calling draw function
              */
             virtual void hide() = 0;
 
             /**
              * @brief Show a hidden object
              *
-             * This function will reveal an object that was hidden prior to function
-             * call. Calling this function on an object that is not hidden has no
-             * effect. This function does not show the object on a render target, it
-             * only allows the object to be drawn on a render target
+             * This function will reveal an object that was hidden prior
+             * to function call. Calling this function on an object that
+             * is not hidden has no effect
              */
             virtual void show() = 0;
 
@@ -75,4 +73,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_IDRAWABLE_H

@@ -22,15 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for performing grid based movement on an entity in a grid
- *
- * This class monitors the movement of an entity in a grid and ensures that
- * it always moves from one cell to the next and never between grid cells.
- * The entities direction cannot be changed until it has completed it's current
- * movement
- */
-
 #ifndef IME_GRIDMOVER_H
 #define IME_GRIDMOVER_H
 
@@ -40,9 +31,17 @@
 #include "IME/core/event/EventEmitter.h"
 
 namespace IME {
+    /**
+     * @brief Class for performing grid based movement on an entity in a grid
+     *
+     * This class monitors the movement of an entity in a grid and ensures that
+     * it always moves from one cell to the next and never between grid cells.
+     * The entities direction cannot be changed until it has completed it's
+     * current movement
+     */
     class IME_API GridMover {
     public:
-        using EntityPtr = std::shared_ptr<Entity>;
+        using EntityPtr = std::shared_ptr<Entity>; //!< Shared pointer to Entity alias
         /**
          * @brief Create a grid mover
          * @param tileMap Grid to move a target entity in
@@ -116,7 +115,7 @@ namespace IME {
          * moved multiple tiles, the request to change direction must be made
          * immediately after the target reaches its destination
          *
-         * @see onAdjacentTileReached() and requestDirectionChange()
+         * @see onAdjacentTileReached and requestDirectionChange
          *
          * @warning The target will never move if this function is never called
          */
@@ -145,6 +144,7 @@ namespace IME {
          * @brief Add an event listener to an adjacent tile reached event
          * @param callback Function to execute when the target reaches its
          *        target tile
+         * @return The event listeners identification number
          *
          * This event is emitted when the target moves from its current tile
          * to any of its adjacent tiles.
@@ -326,25 +326,16 @@ namespace IME {
         void snapTargetToTargetTile();
 
     private:
-        //Grid to move entity in
-        TileMap& tileMap_;
-        //Target to be moved in the grid
-        EntityPtr target_;
-        //Stores the direction in which the target wishes to go
-        Direction targetDirection_;
-        //The grid tile the target wishes to reach in the current frame
-        Graphics::Tile targetTile_;
-        //Tile target was in before moving to adjacent tile
-        Graphics::Tile prevTile_;
-        //Collision event publisher
-        EventEmitter eventEmitter_;
-        //Tracks if controlled entity has reached target tile or not
-        bool reachedTarget_;
-        //Function called when targets collides with an obstacle
-        Callback<> obstacleCollisionHandler_;
-        //Function called when a target collides with a solid tile
-        Callback<> solidTileCollisionHandler_;
+        TileMap& tileMap_;                     //!< Grid to move entity in
+        EntityPtr target_;                     //!< Target to be moved in the grid
+        Direction targetDirection_;            //!< Stores the direction in which the target wishes to go
+        Graphics::Tile targetTile_;            //!< The grid tile the target wishes to reach
+        Graphics::Tile prevTile_;              //!< Tile target was in before moving to adjacent tile
+        EventEmitter eventEmitter_;            //!< Collision event publisher
+        bool reachedTarget_;                   //!< Tracks if controlled entity has reached target tile or not
+        Callback<> obstacleCollisionHandler_;  //!< Function called when targets collides with an obstacle
+        Callback<> solidTileCollisionHandler_; //!< Function called when a target collides with a solid tile
     };
 }
 
-#endif
+#endif // IME_GRIDMOVER_H

@@ -22,17 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Stream audio files from disk
- *
- * This class is ideal for playing long and big audio file such
- * as background music. The audio file is not loaded in memory
- * but rather streamed from the disk. The file must remain
- * accessible on the disk for as long as its being used. You can
- * use Audio::SoundEffectPLayer to play short sounds such as
- * gun shots and explosions
- */
-
 #ifndef IME_MUSIC_H
 #define IME_MUSIC_H
 
@@ -44,125 +33,158 @@
 
 namespace IME {
     namespace Audio {
+        /**
+         * @brief Stream music files from disk
+         *
+         * This class is ideal for playing long and big audio file such
+         * as background music. The audio file is not loaded in memory
+         * but rather streamed from the disk. Therefore, The file must remain
+         * accessible on the disk for as long as its being used. You can
+         * use Audio::SoundEffect to play short sounds such as gun shots
+         * and explosions
+         */
         class IME_API Music final : public Audio {
         public:
             /**
-             * @brief play music file
-             * @param filename File name of the Music to play
+             * @brief Set the music file to be played
+             * @param source Filename of an audio file
              *
-             * This function will play an audio file if currently there's no audio
-             * file playing. The function will change the audio file if
-             */
-            void play(const std::string &filename) override;
-
-            /**
-             * @brief Loop/unloop music
-             * @param isLoop Set to true to loop music, false to unloop music
+             * The @a source must refer to an actual music file on the
+             * disk. This music file is the one to be played, pitched and
+             * done all sorts of things. This function doesn't start the
+             * music, it sets the music that will be played when play() is
+             * called
              *
-             * The music is not looped by default
+             * @see play
+             *
+             * @warning The music is not loaded but rather streamed continuously
+             * from the disk. Therefore the the specified music file must
+             * remain accessible for as long as its being used
              */
-            void setLoop(bool isLoop) override ;
+            void setSource(const std::string &source) override;
 
             /**
-             * @brief Get the type of the audio player
-             * @return The type of the audio player
+             * @brief Get music source
+             * @return Filename of the actual music file
              */
-            std::string getType() override;
+            const std::string& getSource() const override;
 
             /**
-             * @brief Pause the Music
-             */
-            void pause() override;
-
-            /**
-             * @brief Resume paused music
-             */
-            void play() override;
-
-            /**
-             * @brief Stop playing or paused music
-             */
-            void stop() override;
-
-            /**
-             * @brief Set the audio volume
+             * @brief Set the volume of the music
              * @param volume Volume to set
              *
-             * The volume must be between 0 (mute) and 100 (full volume)
-             * The default volume is 100.
+             * The volume is a value between 0 (mute) and 100 (full volume).
              *
-             * @note The volume must be set after playing the song
+             * The default value for the volume is 100
              */
             void setVolume(float volume) override;
 
             /**
-             * @brief Get the current status of the audio file
-             * @return Current status of the audio file
-             */
-            Status getStatus() const override;
-
-            /**
              * @brief Get the volume of the music
-             * @return Volume of the music
+             * @return Volume of the music, in the range [0, 100]
              */
             float getVolume() const override;
 
             /**
-             * @brief Check if the music is looped or not
-             * @return True if song is looped, false if song is not looped
-             */
-            bool isLooped() const override;
-
-            /**
-             * @brief Get the name of the song that's currently selected
-             * @return Name of the currently selected song
+             * @brief Set the pitch of the music
+             * @param pitch The new pitch of the music
              *
-             * A song is selected if its playing, paused or stopped. This function
-             * will return an empty string if there's no selected song
-             */
-            const std::string &getCurrentAudioFileName() const override;
-
-            /**
-             * @brief Get the duration of the current song
-             * @return Duration of the current song
-             */
-            Duration getDuration() const override;
-
-            /**
-             * @brief Change the playing position of the current song
-             * @param position New playing position
+             * The pitch represents the perceived fundamental frequency
+             * of a sound; thus you can make a sound more acute or grave
+             * by changing its pitch. Changing the pitch also changes
+             * the playing speed of the music.
              *
-             * The position must be between the start of the song and the end (duration)
-             */
-            void seek(float position) override;
-
-            /**
-             * @brief Get the current playing position
-             * @return Current playing position
-             */
-            Duration getPlayingPosition() const override;
-
-            /**
-             * @brief Set the pitch of the audio file
-             * @param pitch The new pitch of the audio file
-             *
-             * The default pitch is 1
+             * The default value for the pitch is 1
              */
             void setPitch(float pitch) override;
 
             /**
-             * @brief Get the pitch of the audio file
-             * @return The pitch of the audio file
+             * @brief Get the pitch of the music
+             * @return The pitch of the music
              */
             float getPitch() const override;
 
+            /**
+             * @brief Set whether or not the music should loop after reaching
+             *        the end
+             * @param isLooped True to play in loop, false to play once
+             */
+            void setLoop(bool isLooped) override ;
+
+            /**
+             * @brief Check if music is looped or not
+             * @return True if music is looped, otherwise false
+             */
+            bool isLooped() const override;
+
+            /**
+             * @brief Change the current playing position of the music
+             * @param position New playing position of the music
+             *
+             * The playing position can be changed when the music is
+             * either paused or playing. Changing the playing position
+             * when the music is stopped has no effect, since playing
+             * the music would reset its position
+             */
+            void seek(float position) override;
+
+            /**
+             * @brief Get the current playing position of the music
+             * @return Current playing position of the music
+             */
+            Duration getPlayingPosition() const override;
+
+            /**
+            * @brief Play music
+            *
+            * This function starts the music if it was stopped, resumes
+            * it if it was paused, and restarts it from the beginning if
+            * it was already playing. This function uses its own thread
+            * so that it doesn't block the rest of the program while the
+            * music is played
+            */
+            void play() override;
+
+            /**
+             * @brief Pause music
+             *
+             * This function pauses the stream if it was playing, otherwise
+             * (music already paused or stopped) it has no effect
+             */
+            void pause() override;
+
+            /**
+             * @brief Stop playing the music
+             *
+             * This function stops the music if it was playing or paused,
+             * and does nothing if it was already stopped. It also resets
+             * the playing position
+             */
+            void stop() override;
+
+            /**
+             * @brief Get the total duration of the music
+             * @return The total duration of the music
+             */
+            Duration getDuration() const override;
+
+            /**
+             * @brief Get the current status of the music (stopped, paused, playing)
+             * @return Current status of the music
+             */
+            Status getStatus() const override;
+
+            /**
+             * @brief Get the type of the music
+             * @return The type of the music
+             */
+            std::string getType() override;
+
         private:
-            //pointer to playing music
-            std::shared_ptr<sf::Music> song_;
-            //Name of the current audio file
-            std::string currentMusicFileName_;
+            std::shared_ptr<sf::Music> song_; //!< Music to be played
+            std::string sourceFilename_;      //!< Filename of the music file being played
         };
     }
 }
 
-#endif
+#endif // IME_MUSIC_H

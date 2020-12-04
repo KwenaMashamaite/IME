@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Helper functions
- */
-
 #ifndef IME_UTILITY_H
 #define IME_UTILITY_H
 
@@ -130,4 +126,4 @@ namespace IME::Utility {
     #include "Helpers.inl"
 }
 
-#endif
+#endif // IME_UTILITY_H

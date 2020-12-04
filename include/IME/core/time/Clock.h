@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief This class models a clock
- */
-
 #ifndef IME_CLOCK_H
 #define IME_CLOCK_H
 
@@ -33,6 +29,9 @@
 
 namespace IME {
     namespace Time {
+        /**
+         * @brief This class models a clock
+         */
         class IME_API Clock {
         public:
             /**
@@ -54,9 +53,6 @@ namespace IME {
             double restart();
 
         private:
-            //Stores the amount of time passed since last call to restart().
-            double timeWhenClockWasLastReset_;
-
             /**
              * @brief Get the amount of time in seconds that has passed
              *        since the process started executing
@@ -64,8 +60,11 @@ namespace IME {
              *         started executing
              */
             double getProcessTimeInSeconds();
+
+        private:
+            double timeWhenClockWasLastReset_; //!< Stores the amount of time passed since last call to restart
         };
     }
 }
 
-#endif
+#endif // IME_CLOCK_H

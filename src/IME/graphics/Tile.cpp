@@ -55,7 +55,7 @@ namespace IME::Graphics {
         sprite_.setPosition(getPosition().x, getPosition().y);
     }
 
-    void Tile::setPosition(const Vector2f &position) {
+    void Tile::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
     }
 
@@ -145,10 +145,5 @@ namespace IME::Graphics {
 
     Colour Tile::getFillColour() const {
         return Utility::convertFrom3rdPartyColour(tile_.getFillColor());
-    }
-
-    void Tile::setSpritePosition(float x, float y) {
-        if (contains(x, y))
-            sprite_.setPosition(x, y);
     }
 }

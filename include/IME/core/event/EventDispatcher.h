@@ -22,18 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief A singleton class that creates a communication interface between
- *        separate parts of a program through event dispatching
- *
- * @warning This classes instance is accessible from anywhere withing the program,
- * however the instance is destroyed when the last pointer to it goes out of scope.
- * This means that all event listeners that have been registered will be destroyed
- * and a call to dispatchEvent will not do anything. Therefore there must be
- * at least one pointer to the class instance that keeps it alive for as long
- * as its being used. @see instance()
- */
-
 #ifndef IME_EVENTDISPATCHER_H
 #define IME_EVENTDISPATCHER_H
 
@@ -43,6 +31,17 @@
 #include <string>
 
 namespace IME {
+    /**
+     * @brief A singleton class that creates a communication interface between
+     *        separate parts of a program through event dispatching
+     *
+     * @warning This classes instance is accessible from anywhere withing the
+     * program, however the instance is destroyed when the last pointer to it
+     * goes out of scope. This means that all event listeners that have been
+     * registered will be destroyed and a call to dispatchEvent will not do
+     * anything. Therefore there must be at least one pointer to the class
+     * instance that keeps it alive for as long as its being used
+     */
     class IME_API EventDispatcher {
     public:
         /**
@@ -69,15 +68,16 @@ namespace IME {
          * @param event Name of the event to fire
          * @param args Arguments to be passed to event listeners
          *
-         * This function will invoke all event listeners of the fired event
+         * This function will invoke all event listeners of the specified
+         * event
          */
         template<typename... Args>
         void dispatchEvent(const std::string& event, Args&& ...args);
 
         /**
-         * @brief Remove a listener from an event
-         * @param event Event to remove listener from
-         * @param id Identification number of the listener to be removed
+         * @brief Remove an event listener from an event
+         * @param event Event to remove event listener from
+         * @param id Identification number of the event listener to be removed
          * @return True if the event listener was removed from the specified
          *         event or false if the specified event does not have an event
          *         listener with the specified id
@@ -97,14 +97,12 @@ namespace IME {
         EventDispatcher() = default;
 
     private:
-        //The sole class instance
-        std::shared_ptr<EventDispatcher> instance_;
-        //Event publisher
-        EventEmitter eventEmitter_;
-        inline static std::mutex mutex_;
+        std::shared_ptr<EventDispatcher> instance_; //!< The only class instance
+        EventEmitter eventEmitter_;                 //!< Event publisher
+        inline static std::mutex mutex_;            //!< Synchronization primitive
     };
 
-    #include "EventDispatcher.inl"
+    #include "IME/core/event/EventDispatcher.inl"
 }
 
 #endif

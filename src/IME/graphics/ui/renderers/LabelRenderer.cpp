@@ -83,8 +83,8 @@ namespace IME::UI {
             static_cast<unsigned int>(labelRenderer_->getTextStyle()));
     }
 
-    void LabelRenderer::setTextOutlineColour(Colour outlineColor) {
-        labelRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColor));
+    void LabelRenderer::setTextOutlineColour(Colour outlineColour) {
+        labelRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColour));
     }
 
     Colour LabelRenderer::getTextOutlineColour() const {

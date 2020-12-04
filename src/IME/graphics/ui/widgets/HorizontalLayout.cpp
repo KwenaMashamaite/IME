@@ -26,6 +26,9 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
+//How long the edit box takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     HorizontalLayout::HorizontalLayout(float width, float height)
         : layout_{tgui::HorizontalLayout::create({width, height})},
@@ -146,9 +149,9 @@ namespace IME::UI {
     }
 
     void HorizontalLayout::insertWidget(std::size_t index,
-        std::shared_ptr<IWidget> widget, const std::string &widgetName)
+        std::shared_ptr<IWidget> widget, const std::string &name)
     {
-        layout_->insert(index, widget->getInternalPtr(), widgetName);
+        layout_->insert(index, widget->getInternalPtr(), name);
     }
 
     bool HorizontalLayout::removeWidgetAt(std::size_t index) {
@@ -184,25 +187,21 @@ namespace IME::UI {
         return layout_->getRatio(index);
     }
 
-    bool HorizontalLayout::addWidget(std::shared_ptr<IWidget> widgetPtr,
-        const std::string &widgetName)
+    bool HorizontalLayout::addWidget(std::shared_ptr<IWidget> widget,
+        const std::string &name)
     {
-        assert(widgetPtr && "Cannot add null widget to Horizontal layout container");
-        if (widgets_.insert({widgetName, widgetPtr}).second) {
-            layout_->add(widgetPtr->getInternalPtr(), widgetName);
+        assert(widget && "Cannot add null widget to Horizontal layout container");
+        if (widgets_.insert({name, widget}).second) {
+            layout_->add(widget->getInternalPtr(), name);
             return true;
         }
         return false;
     }
 
-    std::shared_ptr<IWidget> HorizontalLayout::getWidget(const std::string &widgetName) const {
-        if (Utility::findIn(widgets_, widgetName))
-            return widgets_.at(widgetName);
+    std::shared_ptr<IWidget> HorizontalLayout::getWidget(const std::string &name) const {
+        if (Utility::findIn(widgets_, name))
+            return widgets_.at(name);
         return nullptr;
-    }
-
-    const std::vector<IWidget> &HorizontalLayout::getWidgets() const {
-        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool HorizontalLayout::removeWidget(const std::string &widget) {

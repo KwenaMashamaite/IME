@@ -31,6 +31,9 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Widget for displaying progress
+         */
         class IME_API ProgressBar : public IClickableWidget {
         public:
             /**
@@ -55,7 +58,9 @@ namespace IME {
              *
              * The renderer determines how the label is displayed. The progress
              * bar has a default renderer which can be manipulated using the
-             * @see getRenderer() function
+             * getRenderer function
+             *
+             * @see getRenderer
              */
             void setRenderer(std::shared_ptr<ProgressBarRenderer> renderer);
 
@@ -73,10 +78,11 @@ namespace IME {
              * @brief Set a minimum value
              * @param minValue The value to set
              *
-             * If the specified value is larger than the maximum value @see
-             * setMaximum() then it will be changed to this value and the
-             * previous maximum will be the new minimum. The default minimum
-             * value is 0
+             * If the specified value is larger than the maximum value then
+             * it will be changed to this value and the previous maximum will
+             * be the new minimum. The default minimum value is 0
+             *
+             * @see setMaximum
              */
             void setMinimumValue(unsigned int minValue);
 
@@ -91,6 +97,8 @@ namespace IME {
              * @param maxValue The value to be set
              *
              * The default maximum value is 10
+             *
+             * @see setMinimumValue
              */
             void setMaximumValue(unsigned int maxValue);
 
@@ -104,8 +112,8 @@ namespace IME {
              * @brief Set the current value
              * @param value The value to be set
              *
-             * The value must not be smaller than the minimum value  bigger than
-             * the maximum value
+             * The value must not be smaller than the minimum value or
+             * bigger than the maximum value
              */
             void setValue(unsigned int value);
 
@@ -141,113 +149,185 @@ namespace IME {
             FillDirection getFillDirection() const;
 
             /**
-             * @brief Set the position of the widget
-             * @param X coordinate of the new position
-             * @param Y coordinate of the new position
+             * @brief Set the text content of the progress bar
+             * @param text New text content
+             *
+             * This function will overwrite any text that was previously
+             * set
+             */
+            void setText(const std::string &text) override;
+
+            /**
+             * @brief Get the progress bars text content
+             * @return The progress bars text content
+             */
+            std::string getText() const override;
+
+            /**
+             * @brief Set the character size of the text
+             * @param charSize New character size
+             */
+            void setTextSize(unsigned int charSize) override;
+
+            /**
+             * @brief Get the character size of the text
+             * @return The character size of the text
+             */
+            unsigned int getTextSize() const override;
+
+            /**
+             * @brief Set the size of the progress bar
+             * @param width The width of the progress bar
+             * @param height The height of the progress bar
+             */
+            void setSize(float width, float height) override;
+
+            /**
+             * @brief Get the size of the progress bar
+             * @return Current size of the progress bar
+             *
+             * This function only returns the size of the progress bar (It does
+             * not accommodate margin, outline thickness etc ...)
+             *
+             * @see getAbsoluteSize
+             */
+            Vector2f getSize() const override;
+
+            /**
+             * @brief Get the absolute size of the progress bar
+             * @return The absolute size of the progress bar
+             *
+             * The absolute size includes the size of the progress bar, the padding,
+             * margin and outline thickness
+             *
+             * @see getSize
+             */
+            Vector2f getAbsoluteSize() override;
+
+            /**
+             * @brief Get the type of the progress bar
+             * @return The type of the progress bar
+             */
+            std::string getType() const override;
+
+            /**
+             * @brief Show a hidden progress bar
+             *
+             * This function will reveal the progress bar that was hidden prior to
+             * function call. Calling this function on a progress bar that is not
+             * hidden has no effect
+             */
+            void show() override;
+
+            /**
+             * @brief Hide progress bar
+             */
+            void hide() override;
+
+            /**
+             * @brief Check if the progress bar is hidden or not
+             * @return True if the progress bar is hidden, otherwise false
+             */
+            bool isHidden() const override;
+
+            /**
+             * @brief Toggle the visibility of the progress bar
+             *
+             * This function will hide the progress bar if its currently
+             * visible and vice versa
+             */
+            void toggleVisibility() override;
+
+            /**
+             * @brief Check if coordinates lie inside the progress bar
+             * @param x X coordinate to be checked
+             * @param y Y coordinate to be checked
+             * @return true if coordinates lie inside the progress bar, false if
+             *         coordinates do not lie inside the progress bar
+             */
+            bool contains(float x, float y) const override;
+
+            /**
+             * @brief Set the position of the progress bar
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
              *
              * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the progress bar is (0, 0)
+             *
+             * @see move
              */
             void setPosition(float x, float y) override;
 
             /**
-             * @brief Set the position of the widget
+             * @brief Set the position of the progress bar
              * @param position New position
              *
              * This function completely overwrites the previous position.
-             * See the move function to apply an offset based on the previous
-             * position instead. The default position of a transformable widget
-             * is (0, 0).
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the progress bar is (0, 0)
+             *
+             * @see move
              */
             void setPosition(Vector2f position) override;
 
             /**
-             * @brief Set the orientation of the widget
-             * @param angle New rotation, in degrees
-             *
-             * This function completely overwrites the previous rotation.
-             * See the rotate function to add an angle based on the previous
-             * rotation instead. The default rotation of a transformable widget
-             * is 0.
-             */
-            void setRotation(float angle) override;
-
-            /**
-             * @brief Set the scale factors of the widget
-             * @param factorX New horizontal scale factor
-             * @param factorY New vertical scale factor
-             *
-             * This function completely overwrites the previous scale.
-             */
-            void setScale(float factorX, float factorY) override;
-
-            /**
-             * @brief Set the local origin of the widget
-             * @param x X coordinate of the new origin
-             * @param y Y coordinate of the new origin
-             *
-             * The origin of an widget defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the widget, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable widget is (0, 0).
-             */
-            void setOrigin(float x, float y) override;
-
-            /**
-             * @brief Get the position of the widget
-             * @return Current position of the widget
+             * @brief Get the position of the progress bar
+             * @return Current position of the progress bar
              */
             Vector2f getPosition() const override;
 
             /**
-             * @brief Get the local origin of the widget
-             * @return get the local origin of the widget
+             * @brief Set the orientation of the progress bar
+             * @param angle New rotation, in degrees
+             *
+             * This function completely overwrites the previous rotation.
+             * See the rotate function to add an angle based on the previous
+             * rotation instead.
+             *
+             * The default rotation of the progress bar is 0
+             *
+             * @see rotate
              */
-            Vector2f getOrigin() const override;
+            void setRotation(float angle) override;
 
             /**
-             * @brief Get the orientation of the widget
+             * @brief Rotate the progress bar
+             * @param angle Angle of rotation, in degrees
+             *
+             * This function adds to the current rotation of the progress bar,
+             * unlike setRotation which overwrites it
+             *
+             * @see setRotation
+             */
+            void rotate(float angle) override;
+
+            /**
+             * @brief Get the orientation of the progress bar
              * @return Current rotation, in degrees
              *
-             * The rotation is always in the range [0, 360].
+             * The rotation is always in the range [0, 360]
              */
             float getRotation() const override;
 
             /**
-             * @brief Move the widget by a given offset
-             * @param offsetX Horizontal offset
-             * @param offsetY Vertical offset
+             * @brief Set the scale factors of the progress bar
+             * @param factorX New horizontal scale factor
+             * @param factorY New vertical scale factor
              *
-             * This function adds to the current position of the widget,
-             * unlike setPosition which overwrites it.
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
              */
-            void move(float xOffset, float yOffset) override;
+            void setScale(float factorX, float factorY) override;
 
             /**
-             * @brief Rotate the widget
-             * @param angle Angle of rotation, in degrees
-             *
-             * This function adds to the current rotation of the widget,
-             * unlike setRotation() which overwrites it
-             */
-            void rotate(float offset) override;
-
-            /**
-             * @brief Scale the widget
-             * @param factorX Horizontal scale factor
-             * @param factorY Vertical scale factor
-             *
-             * This function multiplies the current scale of the widget,
-             * unlike setScale() which overwrites it.
-             */
-            void scale(float factorX, float factorY) override;
-
-            /**
-             * @brief Set the scale factors of the object
+             * @brief Set the scale factor of the progress bar
              * @param scale New scale
              *
              * This function completely overwrites the previous scale
@@ -257,192 +337,125 @@ namespace IME {
             void setScale(Vector2f scale) override;
 
             /**
-             * @brief set the local origin of the object
-             * @param origin New origin
+             * @brief Scale the progress bar by an offset
+             * @param factorX Horizontal scale factor
+             * @param factorY Vertical scale factor
              *
-             * The origin of an object defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the object, and ignore all
-             * transformations (position, scale, rotation).
-             * The default origin of a transformable object is (0, 0)
+             * This function multiplies the current scale of the progress bar,
+             * unlike setScale which overwrites it
+             *
+             * @see setScale
              */
-            void setOrigin(Vector2f origin) override;
+            void scale(float factorX, float factorY) override;
 
             /**
-             * @brief Move the object by a given offset
+             * @brief Scale the progress bar by an offset
              * @param offset Offset to apply
              *
-             * This function adds to the current position of the object,
-             * unlike @see setPosition which overwrites it
-             */
-            void move(Vector2f offset) override;
-
-            /**
-             * @brief Scale the object by an offset
-             * @param offset Offset to apply
+             * This function multiplies the current scale of the progress bar,
+             * unlike setScale which overwrites it
              *
-             * This function multiplies the current scale of the object,
-             * unlike @see setScale which overwrites it
+             * @see setScale
              */
             void scale(Vector2f offset) override;
 
             /**
-             * @brief Get the current scale of the object
-             * @return Current scale of the object
+             * @brief Get the current scale of the progress bar
+             * @return Current scale of the progress bar
              */
             Vector2f getScale() const override;
 
             /**
-            * @brief Hide widget from a render target
-            *
-            * A hidden widget will not be drawn on a render target when calling
-            * draw()
-            */
-            void hide() override;
-
-            /**
-             * @brief Show a hidden widget
+             * @brief Set the local origin of the progress bar
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
              *
-             * This function will reveal an widget that was hidden prior to
-             * function call. Calling this function on an widget that is not
-             * hidden has no effect
+             * The origin of the progress bar defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the progress bar, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the progress bar is (0, 0)
              */
-            void show() override;
+            void setOrigin(float x, float y) override;
 
             /**
-             * @brief Check if widget is hidden or not
-             * @return True if widget is hidden, false if widget is not hidden
+             * @brief Set the local origin of the progress bar
+             * @param origin New origin
+             *
+             * The origin of the progress bar defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the progress bar, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the progress bar is (0, 0)
              */
-            bool isHidden() const override;
+            void setOrigin(Vector2f origin) override;
 
             /**
-             * @brief Enable or disable the widget
-             * @param isEnable Set true to enable the widget, false to
-             *        disable the widget
+             * @brief Get the local origin of the progress bar
+             * @return Local origin of the progress bar
+             */
+            Vector2f getOrigin() const override;
+
+            /**
+             * @brief Move the progress bar by a given offset
+             * @param offsetX Horizontal offset
+             * @param offsetY Vertical offset
              *
-             * The widget is enabled by default
+             * This function adds to the current position of the progress bar,
+             * unlike setPosition which overwrites it
              *
-             * @note Disabling the widget cancels all the interaction events.
-             *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
-             *       and "mouseDown" events will not fire while the widget is
-             *       disabled
+             * @see setPosition
+             */
+            void move(float offsetX, float offsetY) override;
+
+            /**
+             * @brief Move the progress bar by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the progress bar,
+             * unlike setPosition which overwrites it
+             *
+             * @see setPosition
+             */
+            void move(Vector2f offset) override;
+
+            /**
+             * @brief Enable or disable the progress bar
+             * @param isEnable Set true to enable the progress bar, false to
+             *        disable the progress bar
+             *
+             * The progress bar is enabled by default
+             *
+             * @note Disabling the progress bar cancels all the interaction events
              */
             void setEnabled(bool isEnable) override;
 
             /**
-              * @brief Check if widget is enabled or disabled
-              * @return True if widget is enabled, false if widget is disabled
-              *
-              * @note A disabled widget cannot be interacted with using the mouse.
-              * @see setEnabled(bool). Also, Hiding an widget disables it, @see hide()
-              * in @class IWidget
+              * @brief Check if progress bar is enabled or disabled
+              * @return True if progress bar is enabled, false if progress bar is disabled
               */
             bool isEnabled() const override;
 
             /**
-             * @brief Disable widget if its currently enabled and vice versa
+             * @brief Disable progress bar if its currently enabled and vice versa
              */
             void toggleEnabled() override;
 
             /**
-             * @brief Check if mouse cursor is currently over the widget or not
-             * @return True if mouse cursor is over the widget, false otherwise
-             */
-            bool isMouseOverElement() const override;
-
-            /**
-             * @brief Set the character size of the widget's text
-             * @param charSize New character size
-             *
-             * The default character size is 30
-             */
-            void setTextSize(unsigned int charSize) override;
-
-            /**
-             * @brief Set the text content of the widget
-             * @param content New text content
-             *
-             * This function will overwrite any text that was previously
-             * set
-             */
-            void setText(const std::string &content) override;
-
-            /**
-             * @brief Set the size of the widget
-             * @param width The width of the widget
-             * @param height The height of the widget
-             */
-            void setSize(float width, float height) override;
-
-            /**
-             * @brief Get the size of the widget
-             * @return Current size of the widget
-             *
-             * This function only returns the size of the widget, to get the
-             * absolute size (with the margin, outline thickness etc...)
-             * @see getAbsoluteSize()
-             */
-            Vector2f getSize() const override;
-
-            /**
-             * @brief Get the absolute size of the widget
-             * @return The absolute size of the widget
-             *
-             * The absolute size includes the size of the widget, the padding,
-             * margin and outline thickness. To get just the size of the widget
-             * use @see getSize()
-             */
-            Vector2f getAbsoluteSize() override;
-
-            /**
-             * @brief Get the widgets text content
-             * @return Widgets text content
-             */
-            std::string getText() const override;
-
-            /**
-             * @brief Get the character size of the text
-             * @return The character size of the text
-             */
-            unsigned int getTextSize() const override;
-
-            /**
-             * @brief Focus or unfocus widget
-             * @param isFocused Set to true to focus or false to unfocus widget
+             * @brief Focus or unfocus progress bar
+             * @param isFocused True to focus or false to unfocus progress bar
              */
             void setFocused(bool isFocused) override;
 
             /**
-             * @brief Check if widget is focused or not
-             * @return True if widget is focused. Otherwise, false
+             * @brief Check if progress bar is focused or not
+             * @return True if progress bar is focused. Otherwise, false
              */
             bool isFocused() const override;
-
-            /**
-             * @brief Get the type of the widget
-             * @return Type of the widget
-             */
-            std::string getType() const override;
-
-            /**
-             * @brief Toggle the visibility of the widget
-             *
-             * This function will make the widget invisible if its currently
-             * visible and vice versa. The visibility is not automatically
-             * reflected on the render target. A call to draw() must be made
-             * after calling this function
-             */
-            void toggleVisibility() override;
-
-            /**
-             * @brief Check if coordinates lie inside the widget
-             * @param x X coordinate to be checked
-             * @param y Y coordinate to be checked
-             * @return true if coordinates lie inside the widget, false if
-             *         coordinates do not lie inside the widget
-             */
-            bool contains(float x, float y) const override;
 
             /**
              * @internal
@@ -464,14 +477,10 @@ namespace IME {
             void initEvents();
 
         private:
-            //Pointer to third party progress bar
-            std::shared_ptr<tgui::ProgressBar> progressBar_;
-            //Renderer for this progress bar
-            std::shared_ptr<ProgressBarRenderer> renderer_;
-            //How long the progress bar takes before its completely hidden or shown
-            static const int fadeAnimDuration_ = 100;
+            std::shared_ptr<tgui::ProgressBar> progressBar_; //!< Pointer to third party library
+            std::shared_ptr<ProgressBarRenderer> renderer_;  //!< Renderer for this progress bar
         };
     }
 }
 
-#endif
+#endif // IME_PROGRESSBAR_H

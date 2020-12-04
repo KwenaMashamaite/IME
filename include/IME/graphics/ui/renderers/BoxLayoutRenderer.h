@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a box layout
- *
- * This class allows you to manipulate the render properties of a BoxLayout object
- */
-
 #include "IWidgetRenderer.h"
 #include "IME/graphics/ui/Structs.h"
 
@@ -38,6 +32,11 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a box layout
+         *
+         * This class allows you to manipulate the render properties of a BoxLayout object
+         */
         class IME_API BoxLayoutRenderer : public IWidgetRenderer {
         public:
             /**
@@ -124,7 +123,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -145,7 +144,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -175,10 +176,9 @@ namespace IME {
             virtual ~BoxLayoutRenderer();
 
         private:
-            //Pointer to third party renderer
-            tgui::BoxLayoutRenderer* boxLayoutRenderer_;
+            tgui::BoxLayoutRenderer* boxLayoutRenderer_; //!< Pointer to third party renderer
         };
     }
 }
 
-#endif
+#endif // IME_BOXLAYOUTRENDERER_H

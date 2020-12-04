@@ -23,10 +23,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/entity/Entity.h"
-#include <assert.h>
+#include <cassert>
 
-//@warning Update copy constructor and assignment operator if a new member
-//variable is added, why? look at their respective implementations
+/* @TODO - Remove this if copy constructor and assignment operator
+ *         implementation changes
+ *
+ * @warning Update copy constructor and assignment operator if a new member
+ * variable is added, why? look at their respective implementations
+ */
+
+std::size_t IME::Entity::prevEntityId_{0};
 
 namespace IME {
     Entity::Entity() : Entity({8, 8})
@@ -37,10 +43,10 @@ namespace IME {
         // We are using manual assignment because we can't use std::swap()
         // due to a pure virtual method in the class
         type_ = other.type_;
-        id_ = prevEntityId++; //Default copy constructor assigns same Id
+        id_ = prevEntityId_++; //Default copy constructor assigns same Id
         boundingRect_ = other.boundingRect_;
         isVulnerable_ = other.isVulnerable_;
-        isAlive_ = other.isAlive_;
+        isActive_ = other.isActive_;
         isCollidable_ = other.isCollidable_;
         direction_ = other.direction_;
         position_ = other.position_;
@@ -54,7 +60,7 @@ namespace IME {
         type_ = other.type_;
         boundingRect_ = other.boundingRect_;
         isVulnerable_ = other.isVulnerable_;
-        isAlive_ = other.isAlive_;
+        isActive_ = other.isActive_;
         isCollidable_ = other.isCollidable_;
         direction_ = other.direction_;
         position_ = other.position_;
@@ -62,15 +68,15 @@ namespace IME {
         return *this;
     }
 
-    Entity::Entity(const Vector2u &boundingRect, Type type) :
-        type_(type),
-        id_{prevEntityId++},
-        boundingRect_(boundingRect),
-        isVulnerable_(true),
-        isAlive_(true),
-        isCollidable_(false),
-        direction_(Direction::None),
-        position_({0, 0})
+    Entity::Entity(const Vector2u &boundingBoxSize, Type type) :
+            type_(type),
+            id_{prevEntityId_++},
+            boundingRect_(boundingBoxSize),
+            isVulnerable_(true),
+            isActive_(true),
+            isCollidable_(false),
+            direction_(Direction::None),
+            position_({0, 0})
     {}
 
     void Entity::setPosition(float x, float y) {
@@ -81,6 +87,14 @@ namespace IME {
         publishEvent("positionChanged", position_.x, position_.y);
     }
 
+    void Entity::setPosition(Vector2f position) {
+        setPosition(position.x, position.y);
+    }
+
+    Vector2f Entity::getPosition() const {
+        return position_;
+    }
+
     void Entity::setDirection(Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
@@ -88,16 +102,24 @@ namespace IME {
         }
     }
 
+    Direction Entity::getDirection() const {
+        return direction_;
+    }
+
+    void Entity::setSize(Vector2u size) {
+        boundingRect_ = size;
+    }
+
     Vector2u Entity::getSize() const {
         return boundingRect_;
     }
 
-    void Entity::setAlive(bool isAlive) {
-        if (isAlive_ == isAlive || (isAlive_ && !isVulnerable_))
+    void Entity::setActive(bool isActive) {
+        if (isActive_ == isActive || (isActive_ && !isVulnerable_))
             return;
-        isAlive_ = isAlive;
+        isActive_ = isActive;
 
-        if (!isAlive_)
+        if (!isActive_)
             publishEvent("killed");
         else
             publishEvent("revived"); //By default entity is alive (Will be killed first)
@@ -123,8 +145,8 @@ namespace IME {
         }
     }
 
-    bool Entity::isAlive() const {
-        return isAlive_;
+    bool Entity::isActive() const {
+        return isActive_;
     }
 
     bool Entity::isCollidable() const {
@@ -147,15 +169,7 @@ namespace IME {
         return id_;
     }
 
-    Direction Entity::getDirection() const {
-        return direction_;
-    }
-
-    Vector2f Entity::getPosition() const {
-        return position_;
-    }
-
-    bool Entity::removeEventListener(const std::string &event, int id) {
+    bool Entity::unsubscribe(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }
 

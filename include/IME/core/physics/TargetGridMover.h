@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for moving an entity to a specific position in the grid
- */
-
 #ifndef IME_TARGETGRIDMOVER_H
 #define IME_TARGETGRIDMOVER_H
 
@@ -33,14 +29,15 @@
 #include "IME/core/path/IGridPathFinder.h"
 
 namespace IME {
+    /**
+     * @brief Class for moving an entity to a specific position in the grid
+     */
     class IME_API TargetGridMover : public GridMover {
     public:
         /**
          * @brief Create a random grid mover object
-         * @param tileMap Grid to target in
+         * @param tileMap Grid to move target in
          * @param target Entity to be moved in the grid
-         *
-         * The target must be placed in the grid prior to grid mover construction
          */
         explicit TargetGridMover(TileMap &tileMap, EntityPtr target = nullptr);
 
@@ -48,12 +45,13 @@ namespace IME {
          * @brief Set the path finder
          * @param pathFinder New path finder
          *
-         * The default path finder is Breadth First Search (BFSPathFinder)
+         * The default path finder is Breadth First Search
          */
         void setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder);
 
         /**
          * @brief Set the index of the tile the target should go to
+         * @param index The targets new destination
          *
          * The specified index must be within the the bounds of the grid and
          * the tile at index must be reachable from the targets current tile,
@@ -77,7 +75,7 @@ namespace IME {
          * @brief Get the destination position of the target
          * @return The position that the target must reach
          *
-         * This destination will be returned event if the target has reached it
+         * This destination will be returned even if the target has reached it
          */
         Index getDestination() const;
 
@@ -106,10 +104,10 @@ namespace IME {
          * @brief Adaptively avoid solid tiles and obstacles
          * @param isAdaptive True to enable, otherwise false
          *
-         * When enabled the target will adaptively avoid collisions with
+         * When enabled, the target will adaptively avoid collisions with
          * solid tiles and obstacles. The targets path is updated every
          * time it moves from one tile to the next. This makes the target
-         * aware of tile state changes before it reaches them
+         * aware of tile state changes as they happen
          *
          * When disabled, the target will continue moving in its current
          * path to the destination until it either collides with something
@@ -126,13 +124,14 @@ namespace IME {
          * @brief Add an event listener to a destination reached event
          * @param callback Function to execute when the target reaches its
          *          destination tile
+         * @return The event listeners identification number
          *
-         * This event is fired when the target reaches the final target tile.
-         * To get notified as the target progresses towards the destination
-         * @see onAdjacentTileReached
+         * This event is fired when the target reaches the final target tile
          *
          * The callback is passed the destination tile of the target after it
          * reaches it
+         *
+         * @see onAdjacentTileReached
          */
         int onDestinationReached(Callback<Graphics::Tile> callback);
 
@@ -155,23 +154,15 @@ namespace IME {
         void moveTarget();
 
     private:
-        //Finds the path from the source to the target
-        std::unique_ptr<IGridPathFinder> pathFinder_;
-        //Target tile position
-        Index targetTileIndex_;
-        //Stores the path to the target tile
-        std::stack<Index> pathToTargetTile_;
-        //Flags whether the target has been stopped or not
-        bool movementStarted_;
-        //Flags whether the target tile was changed while target in motion
-        bool targetTileChangedWhileMoving_;
-        //Function executed every time target reaches a tile
-        Callback<> adjacentTileHandler_;
-        //Id for obstacle collision handler
-        int obstacleHandlerId_;
-        //Id for solid tile collision handler
-        int solidTileHandlerId_;
+        std::unique_ptr<IGridPathFinder> pathFinder_; //!< Finds the path from the source to the target
+        Index targetTileIndex_;                       //!< Index of the tile the entity wishes to go to
+        std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
+        bool movementStarted_;                        //!< Flags whether the target has been stopped or not
+        bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion
+        Callback<> adjacentTileHandler_;              //!< Function executed every time target reaches adjacent tile
+        int obstacleHandlerId_;                       //!< Obstacle collision handler id
+        int solidTileHandlerId_;                      //!< Solid tile collision handler id
     };
 }
 
-#endif
+#endif // IME_TARGETGRIDMOVER_H

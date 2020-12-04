@@ -22,19 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for creating and publishing events
- *
- * This class is invaluable when writing event-based systems such
- * as Graphical User interface (GUI) applications.
- *
- * @note There is no function for creating an event. Events are
- * created when a listener/callback is added for the first time.
- * All Subsequent event listeners will be added to the created
- * event. Events are not fired automatically, a call to the emit
- * function must be made to fire an event and notify event listeners
- */
-
 #ifndef IME_EVENTEMITTER_H
 #define IME_EVENTEMITTER_H
 
@@ -48,8 +35,17 @@
 
 namespace IME {
     template <typename... Args>
-    using Callback = std::function<void(Args...)>;
+    using Callback = std::function<void(Args...)>; //!< Event listener
 
+    /**
+     * @brief Class for creating and publishing events
+     *
+     * @note There is no function for creating an event. Events are
+     * created when a listener/callback is added for the first time.
+     * All Subsequent event listeners will be added to the created
+     * event. Events are not fired automatically, a call to the emit
+     * function must be made to fire an event and notify event listeners
+     */
     class IME_API EventEmitter {
     public:
         /**
@@ -60,83 +56,82 @@ namespace IME {
         /**
          * @brief Copy constructor
          */
-        EventEmitter(const EventEmitter& other);
+        EventEmitter(const EventEmitter&);
 
         /**
          * @brief Assignment operator
          */
-        EventEmitter& operator=(const EventEmitter& rhs);
+        EventEmitter& operator=(const EventEmitter&);
 
         /**
-         * @brief Add a listener (callback) to an event
-         * @tparam Args Template parameter pack name
-         * @param event Event to add listener to
+         * @brief Add an event listener (callback) to an event
+         * @param event Event to add event listener to
          * @param callback Function to execute when the event is fired
-         * @return listener's identification number
+         * @return The event listener's identification number
          *
-         * If the same listener is added multiple times, It will be treated
-         * as a unique listener and hence given an identification number.
-         * @warning If the added listener is a member of a class, then the
-         * listener must be removed from an event when the class instance
-         * goes out of scope. If not removed, a non-existent listener will
-         * be invoked when the event is fired; this may lead to undefined
-         * behavior
+         * Every event listener has a unique identification number. This
+         * number must be remembered in order to remove the event listener.
+         *
+         * @note If the same callback function is added multiple times, It
+         * will be treated as a unique event listener and hence given an
+         * identification number
          */
         template<typename...Args>
         int addEventListener(const std::string &event, Callback<Args...> callback);
 
         /**
-         * @brief Add listener to an event
+         * @brief Add an event listener to an event
+         * @param event Event to add event listener to
+         * @param callback Function to execute when the event is fired
+         * @return The event listener's identification number
          *
          * This function does the same thing as the addEventListener() function.
-         * It just provides a slightly more readable syntax. For example:
+         * It just provides a slightly more readable syntax:
          *
-         *  @example:
-         *  returnButton.on("click", showMainMenu) as opposed to
-         *  returnButton.addEventListener("click", showMainMenu)
+         *  @code
+         *  returnButton.on("click", showMainMenu); as opposed to
+         *  returnButton.addEventListener("click", showMainMenu);
+         *  @endcode
          */
         template<typename...Args>
         int on(const std::string &event, Callback<Args...> callback);
 
         /**
-         * @brief Add a listener to an event
-         * @param event Event to add listener to
+         * @brief Add an event listener to an event
+         * @param event Event to add event listener to
          * @param callback Function to execute when the event is fired
-         * @return Listener's identification number
+         * @return The event listener's identification number
          *
-         * The listener will only be invoked once and subsequently removed
+         * The event listener will be invoked once and subsequently removed
          * from the event. This means that the callback will only execute
-         * when an event is raised for the first time. Use addEventListener()
-         * or the on() function if the callback is to be invoked each time an
-         * event is fired
+         * when an event is fired for the first time. To execute a callback
+         * each time the an event is fired
+         *
+         * @see addEventListener
          */
          template <typename ...Args>
         int addOnceEventListener(const std::string &event, Callback<Args...> callback);
 
         /**
-         * @brief  Remove a listener from an event
-         * @param  event Event to remove listener from
-         * @param  listenerId Identification number of the listener to
-         *         be removed
-         * @return True if a listener was removed from an event, false
-         *         if the specified event does not have a listener with
-         *         the specified id
+         * @brief Remove an event listener from an event
+         * @param event Event to remove listener from
+         * @param id Identification number of the event listener to be removed
+         * @return True if the event listener was removed from athe specified
+         *         event or false if the specified event does exist or it does
+         *         not have a listener with the given id
          */
-         bool removeEventListener(const std::string &event, int listenerId);
+         bool removeEventListener(const std::string &event, int id);
 
          /**
-          * @brief Remove all listeners of an event
+          * @brief Remove all event listeners of an event
           * @param  event Event to remove all listeners from
           * @return True if all listeners were removed, false if no such
           *         event exists
-          *
-          * @warning Exercise caution when using this function
           */
          bool removeAllEventListeners(const std::string &event);
 
         /**
          * @brief Fire an event
-         * @tparam Args Template parameter pack name
          * @param event Name of the event to fire
          * @param args Arguments to be passed to event listeners
          */
@@ -151,15 +146,16 @@ namespace IME {
         bool hasEvent(const std::string& event) const;
 
         /**
-         * @brief Get the number of event listeners currently registered to an event
+         * @brief Get the number of event listeners currently registered to
+         *        an event
          * @param event Event to get number of event listeners for
-         * @return Number of event listeners registered to an event or -1 if
-         *         no such event exists
+         * @return The number of event listeners registered to an event or -1
+         *         if no such event exists
          */
         int getNumOfEventListenersFor(const std::string& event) const;
 
         /**
-         * @brief Get the current number of events
+         * @brief Get the current number of created events
          * @return Current umber of events
          */
         int getNumberOfEvents() const;
@@ -167,16 +163,15 @@ namespace IME {
         /**
          * @brief Check if an event has a certain event listener
          * @param event Name of the event
-         * @param listenerId Identification number of the listener to be checked
-         * @return True if the specified event has an event listener with the specified
-         *         id, otherwise false
+         * @param id Identification number of the listener to be checked
+         * @return True if the specified event has an event listener with the
+         *         specified id, otherwise false
          */
-        bool hasEventListener(const std::string& event, int listenerId) const;
+        bool hasEventListener(const std::string& event, int id) const;
 
     private:
         /**
-         * @brief  Add a listener (callback) to an event
-         * @tparam Args Template parameter pack name
+         * @brief  Add an event listener (callback) to an event
          * @param  event Event to add listener to
          * @param  callback Function to execute when the event is fired
          * @param  isCalledOnce True if listener is called only when the event
@@ -184,7 +179,8 @@ namespace IME {
          * @return listener's identification number
          */
         template<typename...Args>
-        int addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce);
+        int addListener(const std::string &event, Callback<Args...> callback,
+            bool isCalledOnce);
 
          /**
          * @brief Check if an event has a certain event listener
@@ -201,14 +197,20 @@ namespace IME {
         std::pair<bool, int>  hasListener(const std::string& event, int listenerId) const;
 
     private:
-        //Base class for template class
+        /**
+         * @brief Base class for template class
+         *
+         * This allows the template instance to be storable in a container
+         */
         struct IListener {
             explicit IListener(int id) : id_(id){}
             virtual ~IListener() = default;
             int id_;
         };
 
-        //Listener of an event
+        /**
+         * @brief Event listener
+         */
         template <typename ...Args>
         struct Listener : public IListener {
             Listener(int id, Callback<Args...> callback, bool isCalledOnce = false)
@@ -218,12 +220,12 @@ namespace IME {
             bool isCalledOnce_;
         };
 
-        using Listeners = std::vector<std::shared_ptr<IListener>>;
-        std::unordered_map<std::string, Listeners> eventList_;
-        mutable std::recursive_mutex mutex_;
+        using Listeners = std::vector<std::shared_ptr<IListener>>; //!< Alias
+        std::unordered_map<std::string, Listeners> eventList_;     //!< Events container
+        mutable std::recursive_mutex mutex_;                       //!< Synchronization primitive
     };
 
-    #include "EventEmitter.inl"
+    #include "IME/core/event/EventEmitter.inl"
 }
 
 #endif

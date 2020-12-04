@@ -86,7 +86,7 @@ namespace IME::UI {
         windowRenderer_->setBorderColorFocused(Utility::convertToTGUIColour(colour));
     }
 
-    Colour ChildWindowRenderer::getBorderColorFocused() const {
+    Colour ChildWindowRenderer::getBorderColourFocused() const {
         return Utility::convertFrom3rdPartyColour(
             windowRenderer_->getBorderColorFocused());
     }

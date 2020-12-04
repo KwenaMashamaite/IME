@@ -150,7 +150,7 @@ namespace IME::UI {
             Utility::convertToTGUIColour(colour));
     }
 
-    Colour EditBoxRenderer::getBackgroundColorHover() const {
+    Colour EditBoxRenderer::getBackgroundColourHover() const {
         return Utility::convertFrom3rdPartyColour(
             editBoxRenderer_->getBackgroundColorHover());
     }
@@ -195,7 +195,7 @@ namespace IME::UI {
             editBoxRenderer_->getCaretColorHover());
     }
 
-    void EditBoxRenderer::setCaretColorFocused(Colour caretColour) {
+    void EditBoxRenderer::setCaretColourFocused(Colour caretColour) {
         editBoxRenderer_->setCaretColorFocused(
             Utility::convertToTGUIColour(caretColour));
     }

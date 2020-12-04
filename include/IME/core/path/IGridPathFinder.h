@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for grid path finder algorithms
- */
-
 #ifndef IME_GRIDPATHFINDER_H
 #define IME_GRIDPATHFINDER_H
 
@@ -34,15 +30,19 @@
 #include <stack>
 
 namespace IME {
+    /**
+     * @brief Interface for grid path finder algorithms
+     */
     class IME_API IGridPathFinder {
     public:
         /**
          * @brief Find a path from a source tile to a target tile in a grid
-         * @param gird Grid to find path in
+         * @param grid Grid to find path in
          * @param sourceNode The starting tile
          * @param source The destination tile
-         * @return The path from the source to the destination if the destination
-         *         is reachable from the source, otherwise an empty vector
+         * @return The path from the source to the destination if the
+         *         destination is reachable from the source, otherwise
+         *         an empty path
          */
         virtual std::stack<Index> findPath(TileMap& grid, Index sourceNode, Index source) = 0;
 
@@ -58,20 +58,22 @@ namespace IME {
         virtual ~IGridPathFinder() = default;
 
     protected:
+        /**
+         * @brief A node in the grid
+         */
         struct Node {
-            Index parent; //Index of this nodes parent in the grid
-            Index index; //Position of this node in the grid
+            Index parent; //!< Index of this nodes parent in the grid
+            Index index;  //!< Position of this node in the grid
         };
 
         /**
          * @brief Generate path from the source to the target
          * @param exploredNodes Nodes explored before the target was found
          * @param path Vector to populate with path
-         * @return The path from the source to the target
          *
          * @warning This function will backtrack from the destination to the
          * source in order to generate the path. As such, it assumes that the
-         * last node in the @param exploredNodes container is the target node.
+         * last node in the @a exploredNodes container is the target node.
          * Therefore, it must only be called when the target was reached/found
          */
         void backtrack(const std::vector<Node>& exploredNodes, std::stack<Index>& path);

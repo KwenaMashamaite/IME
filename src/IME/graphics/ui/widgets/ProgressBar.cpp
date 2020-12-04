@@ -28,6 +28,9 @@
 #include <TGUI/GuiBase.hpp>
 #include <cassert>
 
+//How long the progress bar takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     ProgressBar::ProgressBar()
         : progressBar_{tgui::ProgressBar::create()},
@@ -148,11 +151,6 @@ namespace IME::UI {
 
     void ProgressBar::toggleEnabled() {
         setEnabled(!isEnabled());
-    }
-
-    bool ProgressBar::isMouseOverElement() const {
-        //@todo
-        return false;
     }
 
     void ProgressBar::setPosition(Vector2f position) {

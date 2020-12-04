@@ -22,14 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for managing audio
- *
- * This class allows us to play multiple audio files of different types
- * (Music or Sfx, @see @class Music and @class SoundEffectPlayer)
- * simultaneously. Each audio file is played in a separate thread
- */
-
 #ifndef IME_AUDIOMANAGER_H
 #define IME_AUDIOMANAGER_H
 
@@ -44,15 +36,26 @@
 #include <string>
 
 namespace IME {
-    /**
-     * @brief Types of audio files managed by the audio manager
-     */
-    enum class AudioType{
-        Sfx,
-        Music
-    };
-
     namespace Audio {
+        /**
+         * @brief Types of audio files managed by the audio manager
+         */
+        enum class Type {
+            Sfx,    //!< Sound Effects
+            Music   //!< Music
+        };
+
+        /**
+         * @brief Class for managing audio
+         *
+         * This class allows us to play multiple audio files at the same time.
+         * This class can play multiple sound effects at the same time as one
+         * music file. Playing another music file while there is a music file
+         * playing will replace it. Each audio file is played in a separate
+         * thread
+         *
+         * @see Music and SoundEffect
+         */
         class IME_API AudioManager {
         public:
             /**
@@ -67,38 +70,37 @@ namespace IME {
              * @param isLooped True if audio should be looped, otherwise false
              * @throws FileNotFound if the audio file cannot be found on the disk
              *
-             * The audio file are played in a separate thread. This means
-             * that, the main thread is not blocked and other audio file may be
-             * played simultaneously. @note It's much faster to preload the audio
-             * files with the @class ResourceManager rather than having the audio
-             * manager load each individual file from the disk before playing it
+             * The audio files are played in a separate thread. This means
+             * that, the main thread is not blocked and other audio file may
+             * be played simultaneously.
              */
-            void play(AudioType audioType, const std::string &filename,
-                      bool isLooped = false);
+            void play(Type audioType, const std::string &filename,
+                  bool isLooped = false);
 
             /**
-             * @brief Set the volume for an audio file
+             * @brief Set the volume for an audio type
              * @param audioType Type of the audio file to set volume for
              * @param volume Volume to set, in the range (mute) 0 <= volume <= 100 (max)
              *
-             * The default volume is 100 (max)
+             * The default volume is 100 (max) for all audio types
              */
-            void setVolumeFor(AudioType audioType, float volume);
+            void setVolumeFor(Type audioType, float volume);
 
             /**
-             * @brief Get the volume of an audio file
-             * @param audioType Type of the audio file to get volume for
-             * @return Volume of an audio file
+             * @brief Get the volume of an audio type
+             * @param audioType Type of the audio to get volume for
+             * @return The volume for a given audio type
              */
-            float getVolumeFor(AudioType audioType);
+            float getVolumeFor(Type audioType);
 
             /**
-             * @brief Set the maximum volume for all audio players
+             * @brief Set the maximum volume for all audio types
              * @param volume The new maximum volume
              *
-             * This function will overwrite the previous volume. To offset
-             * the volume by a constant @see adjustMasterVolume(float). The
-             * maximum volume for all audio players is 100.0 by default
+             * This function will overwrite the previous volume The
+             * maximum volume for all audio players is 100 by default
+             *
+             * @see adjustMasterVolume
              */
             void setMasterVolume(float volume);
 
@@ -106,8 +108,9 @@ namespace IME {
              * @brief Offset the maximum volume for all audio players
              * @param offset Volume offset
              *
-             * This function will add/subtract to/from the current volume.
-             * To overwrite the volume @see setMasterVolume(float)
+             * This function will add/subtract to/from the current volume
+             *
+             * @see setMasterVolume
              */
             void adjustMasterVolume(float offset);
 
@@ -136,7 +139,7 @@ namespace IME {
             void stopAllAudio();
 
             /**
-             * @param Mute or unmute all audio players
+             * @brief Mute or unmute all audio players
              * @param isMuted True to mute all audio, otherwise false
              */
             void setMute(bool isMuted);
@@ -153,26 +156,15 @@ namespace IME {
              */
             void onVolumeChanged(Callback<float> callback);
 
-            /**
-             * @brief Update the audio manager
-             */
-            void update();
-
         private:
-            //Maximum volume all audio players
-            float masterVolume_;
-            //Sound effect volume
-            float sfxVolume_;
-            //Music volume
-            float musicVolume_;
-            //Mute state
-            bool isMuted_;
-            //Event emitter
-            EventEmitter eventEmitter_;
-            //Audio players
-            std::vector<std::unique_ptr<Audio>> playingAudio_;
+            float masterVolume_;        //!< Maximum volume all audio players
+            float sfxVolume_;           //!< Sound effect volume
+            float musicVolume_;         //!< Music volume
+            bool isMuted_;              //!< Mute state
+            EventEmitter eventEmitter_; //!< Event emitter
+            std::vector<std::unique_ptr<Audio>> playingAudio_; //!< Playing audio container
         };
     }
 }
 
-#endif
+#endif // IME_AUDIOMANAGER_H

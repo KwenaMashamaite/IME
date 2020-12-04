@@ -22,6 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+//How long the button takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 #include "IME/graphics/ui/widgets/Button.h"
 #include "IME/utility/Helpers.h"
 #include <TGUI/GuiBase.hpp>
@@ -115,11 +118,6 @@ namespace IME::UI {
 
     void Button::toggleEnabled() {
         setEnabled(!isEnabled());
-    }
-
-    bool Button::isMouseOverElement() const {
-        //@todo
-        return false;
     }
 
     void Button::setPosition(Vector2f position) {

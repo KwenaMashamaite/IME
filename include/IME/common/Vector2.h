@@ -22,14 +22,13 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief 2D vector
- */
-
 #ifndef IME_VECTOR2_H
 #define IME_VECTOR2_H
 
 namespace IME {
+    /**
+     * @brief 2D vector
+     */
     template<typename T>
     class Vector2 {
     public:
@@ -53,13 +52,12 @@ namespace IME {
          *
          * This constructor doesn't replace the copy constructor, it's called
          * only when U != T. A call to this constructor will fail to compile if
-         * U is not convertible to T.
+         * U is not convertible to T
          */
         template<typename U>
         explicit Vector2(const Vector2<U> &vector);
-
-        // Member variables
-
+        
+        // Member data
         T x; //!< X coordinate of the vector
         T y; //!< Y coordinate of the vector
     };
@@ -81,7 +79,7 @@ namespace IME {
      * @return Overload of binary operator +=
      *
      * This operator performs a memberwise addition of both vectors,
-     * and assigns the result to \a left.
+     * and assigns the result to @a left.
      */
     template <typename T>
     Vector2<T>& operator +=(Vector2<T>& left, const Vector2<T>& right);
@@ -91,10 +89,10 @@ namespace IME {
      * @brief Overload of binary operator -=
      * @param left Left operand (a vector)
      * @param right Right operand (a vector)
-     * @return Reference to \a left
+     * @return Reference to @a left
      *
      * This operator performs a memberwise subtraction of both vectors,
-     *  and assigns the result to \a left.
+     *  and assigns the result to @a left.
      */
     template <typename T>
     Vector2<T>& operator -=(Vector2<T>& left, const Vector2<T>& right);
@@ -124,7 +122,7 @@ namespace IME {
      * @brief Overload of binary operator *
      * @param left Left operand (a vector)
      * @param right Right operand (a scalar value)
-     * @return Memberwise multiplication by \a right
+     * @return Memberwise multiplication by @a right
      */
     template <typename T>
     Vector2<T> operator *(const Vector2<T>& left, T right);
@@ -134,7 +132,7 @@ namespace IME {
      * @brief Overload of binary operator *
      * @param left Left operand (a scalar value)
      * @param right Right operand (a vector)
-     * @return Memberwise multiplication by \a left
+     * @return Memberwise multiplication by @a left
      */
     template <typename T>
     Vector2<T> operator *(T left, const Vector2<T>& right);
@@ -143,20 +141,20 @@ namespace IME {
      * @brief Overload of binary operator *=
      * @param left Left operand (a vector)
      * @param right Right operand (a scalar value)
-     * @return Reference to \a left
+     * @return Reference to @a left
      *
-     * This operator performs a memberwise multiplication by \a right,
-     * and assigns the result to \a left.
+     * This operator performs a memberwise multiplication by @a right,
+     * and assigns the result to @a left.
      */
     template <typename T>
     Vector2<T>& operator *=(Vector2<T>& left, T right);
 
     /**
-     * @relates relates Vector2
+     * @relates Vector2
      * @brief Overload of binary operator /
      * @param left Left operand (a vector)
      * @param right Right operand (a scalar value)
-     * @return return Memberwise division by \a right
+     * @return return Memberwise division by @a right
      */
     template <typename T>
     Vector2<T> operator /(const Vector2<T>& left, T right);
@@ -166,10 +164,10 @@ namespace IME {
      * @brief Overload of binary operator /=
      * @param left Left operand (a vector)
      * @param right Right operand (a scalar value)
-     * @return Reference to \a left
+     * @return Reference to @a left
      *
-     * This operator performs a memberwise division by \a right,
-     * and assigns the result to \a left.
+     * This operator performs a memberwise division by @a right,
+     * and assigns the result to @a left.
      */
     template <typename T>
     Vector2<T>& operator /=(Vector2<T>& left, T right);
@@ -179,7 +177,7 @@ namespace IME {
      * @brief Overload of binary operator ==
      * @param left Left operand (a vector)
      * @param right Right operand (a vector)
-     * @return True if \a left is equal to \a right
+     * @return True if @a left is equal to @a right
      *
      * This operator compares strict equality between two vectors
      */
@@ -191,7 +189,7 @@ namespace IME {
      * @brief Overload of binary operator !=
      * @param left Left operand (a vector)
      * @param right Right operand (a vector)
-     * @return True if \a left is not equal to \a right
+     * @return True if @a left is not equal to @a right
      *
      * This operator compares strict difference between two vectors
      */
@@ -200,10 +198,10 @@ namespace IME {
 
     #include <IME/common/Vector2.inl>
 
-    // Define the most common types
-    using Vector2i = Vector2<int>;
-    using Vector2u = Vector2<unsigned int>;
-    using Vector2f = Vector2<float>;
+    ///< Define the most common types
+    using Vector2i = Vector2<int>;          //!< 2D int vector
+    using Vector2u = Vector2<unsigned int>; //!< 2D unsigned int vector
+    using Vector2f = Vector2<float>;        //!< 2D float vector
 }
 
-#endif
+#endif // IME_VECTOR2_H

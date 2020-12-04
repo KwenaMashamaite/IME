@@ -12,7 +12,7 @@
     <body>
         <div id="banner-container">
             <div id="banner">
-                <span id="ime">IME @IME_VERSION_MAJOR@.@IME_VERSION_MINOR@.@IME_VERSION_PATCH@</span>
+                <span id="ime">Documentation of IME @IME_VERSION_MAJOR@.@IME_VERSION_MINOR@.@IME_VERSION_PATCH@</span>
             </div>
         </div>
         <div id="content">

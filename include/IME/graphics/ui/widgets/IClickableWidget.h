@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Interface for clickable widgets
- */
-
 #ifndef IME_ICLICKABLEWIDGET_H
 #define IME_ICLICKABLEWIDGET_H
 
@@ -34,6 +30,9 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Interface for clickable widgets
+         */
         class IME_API IClickableWidget : public IWidget {
         public:
             /**
@@ -43,32 +42,13 @@ namespace IME {
              *
              * The widget is enabled by default
              *
-             * @note Disabling the widget cancels all the interaction events.
-             *       That is, the "mouseEnter", "mouseLeave", "click", "mouseUp"
-             *       and "mouseDown" events will not fire while the widget is
-             *       disabled
+             * @note Disabling the widget cancels all the interaction events
              */
             virtual void setEnabled(bool isEnable) = 0;
 
             /**
-             * @brief Focus or unfocus widget
-             * @param isFocused Set to true to focus or false to unfocus widget
-             */
-            virtual void setFocused(bool isFocused) = 0;
-
-            /**
-             * @brief Check if widget is focused or not
-             * @return True if widget is focused. Otherwise, false
-             */
-            virtual bool isFocused() const = 0;
-
-            /**
               * @brief Check if widget is enabled or disabled
               * @return True if widget is enabled, false if widget is disabled
-              *
-              * @note A disabled widget cannot be interacted with using the mouse.
-              * @see setEnabled(bool). Also, Hiding an widget disables it, @see hide()
-              * in @class IWidget
               */
             virtual bool isEnabled() const = 0;
 
@@ -78,12 +58,18 @@ namespace IME {
             virtual void toggleEnabled() = 0;
 
             /**
-             * @brief Check if mouse cursor is currently over the widget or not
-             * @return True if mouse cursor is over the widget, false otherwise
+             * @brief Focus or unfocus widget
+             * @param isFocused True to focus or false to unfocus widget
              */
-            virtual bool isMouseOverElement() const = 0;
+            virtual void setFocused(bool isFocused) = 0;
+
+            /**
+             * @brief Check if widget is focused or not
+             * @return True if widget is focused. Otherwise, false
+             */
+            virtual bool isFocused() const = 0;
         };
     }
 }
 
-#endif
+#endif // IME_ICLICKABLEWIDGET_H

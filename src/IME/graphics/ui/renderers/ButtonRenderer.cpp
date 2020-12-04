@@ -94,16 +94,16 @@ namespace IME::UI {
         buttonRenderer_->setBackgroundColorHover(Utility::convertToTGUIColour(colour));
     }
 
-    Colour ButtonRenderer::getBackgroundColorHover() const {
+    Colour ButtonRenderer::getBackgroundColourHover() const {
         return Utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBackgroundColorHover());
     }
 
-    void ButtonRenderer::setBackgroundColorDown(Colour colour) {
+    void ButtonRenderer::setBackgroundColourDown(Colour colour) {
         buttonRenderer_->setBackgroundColorDown(Utility::convertToTGUIColour(colour));
     }
 
-    Colour ButtonRenderer::getBackgroundColorDown() const {
+    Colour ButtonRenderer::getBackgroundColourDown() const {
         return Utility::convertFrom3rdPartyColour(
                 buttonRenderer_->getBackgroundColorDown());
     }
@@ -166,7 +166,7 @@ namespace IME::UI {
         buttonRenderer_->setBorderColorFocused(Utility::convertToTGUIColour(colour));
     }
 
-    Colour ButtonRenderer::getBorderColorFocused() const {
+    Colour ButtonRenderer::getBorderColourFocused() const {
         return Utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBorderColorFocused());
     }
@@ -241,8 +241,8 @@ namespace IME::UI {
             static_cast<unsigned int>(buttonRenderer_->getTextStyleFocused()));
     }
 
-    void ButtonRenderer::setTextOutlineColor(Colour outlineColor) {
-        buttonRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColor));
+    void ButtonRenderer::setTextOutlineColour(Colour outlineColour) {
+        buttonRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColour));
     }
 
     Colour ButtonRenderer::getTextOutlineColour() const {

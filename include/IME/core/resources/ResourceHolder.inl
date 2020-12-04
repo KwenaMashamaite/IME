@@ -54,9 +54,7 @@ inline bool ResourceHolder<sf::Music>::loadFromFile(const std::string &filename)
 
 template<class T>
 bool ResourceHolder<T>::unload(const std::string &filename) {
-    if (getUseCountFor(filename) == 0) //Destroy resource only if its not being used outside the class
-        return resourceHolder_.erase(filename);
-    return false;
+    return resourceHolder_.erase(filename);
 }
 
 template<class T>
@@ -64,9 +62,8 @@ bool ResourceHolder<T>::unloadAll() {
     if (resourceHolder_.empty())
         return false;
 
-    for (auto& [key, value] : resourceHolder_)
-        unload(key);
-    return resourceHolder_.size() > 0;
+    resourceHolder_.clear();
+    return true;
 }
 
 template<class T>
@@ -79,17 +76,6 @@ std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
 template<class T>
 unsigned int ResourceHolder<T>::getSize() const {
     return resourceHolder_.size();
-}
-
-template<class T>
-int ResourceHolder<T>::getUseCountFor(const std::string &filename) const {
-    if (hasResource(filename)) {
-        auto useCount = resourceHolder_.at(filename).use_count();
-        if (useCount == 1) // No external pointers to the resource, only the internal pointer
-            return 0;
-        return useCount;
-    }
-    return -1;
 }
 
 template<class T>

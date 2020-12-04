@@ -22,13 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for animating sprites
- *
- * This class takes an Animation object and animates a sprite
- * with the properties of the animation object
- */
-
 #ifndef IME_ANIMATOR_H
 #define IME_ANIMATOR_H
 
@@ -43,9 +36,15 @@
 #include <utility>
 
 namespace IME {
+    /**
+     * @brief Class for animating sprites
+     *
+     * This class takes an Animation object and animates a sprite
+     * with the properties of the animation object
+     */
     class IME_API Animator {
     public:
-        using Animations = std::initializer_list<std::shared_ptr<Animation>>;
+        using Animations = std::initializer_list<std::shared_ptr<Animation>>; //!< Alias
 
         /**
          * @brief Constructor
@@ -73,26 +72,26 @@ namespace IME {
          * @brief Update the current animation
          * @param deltaTime Time passed since last animation update
          *
-         * This function starts the current animation the first time its called.
-         * Subsequent calls determine which frame to display
+         * This function starts the current animation the first time its
+         * called. Subsequent calls determine which frame to display
          */
         void update(float deltaTime);
-
-        /**
-         * @brief Finish the currently playing animation
-         *
-         * This function will stop the animation and jump straight to the last
-         * animation frame
-         */
-        void finishAnimation();
 
         /**
          * @brief Change the current animation
          * @param animation New animation
          * @return True if animation was changed or false if animation does
-         *          not exist
+         *         not exist
          */
         bool switchAnimation(const std::string& animation);
+
+        /**
+         * @brief Finish the current animation
+         *
+         * This function will stop the animation and jump straight to the
+         * last frame
+         */
+        void finishAnimation();
 
         /**
          * @brief Add a function to execute when an animation starts
@@ -100,10 +99,12 @@ namespace IME {
          * @param callback Function to execute when the animation starts
          * @return Event listeners identification number
          *
-         * The animation starts on the first call to the update(float) function
-         * and the callback is invoked when an animation starts for the first.
-         * This means that for looped animations,  the "animationStart" event
-         * will not fire when the animation restarts
+         * The animation starts on the first call to update and the
+         * callback is invoked when an animation starts for the first.
+         * This means that for looped animations, the callback will not
+         * be invoked when the animation restarts
+         *
+         * @see update
          */
         int onAnimationStart(const std::string& name, Callback<> callback);
 
@@ -113,31 +114,34 @@ namespace IME {
          * @param callback Function to execute when the animation finishes
          * @return Event listeners identification number
          *
-         * The callback function is only executed for animations that are not
-         * looped
+         * The callback function is only invoked for animations that are
+         * not looped since a looped animation does not finish
          */
         int onAnimationFinish(const std::string& name, Callback<> callback);
 
         /**
          * @brief Remove an event listener from an animation event
          * @param name Name of the animation to remove listener from
-         * @param onTrigger When the event is fired ("start" or "finish")
+         * @param onTrigger When the event is fired ("onStart" or "onFinish")
          * @param id Identification number of the event listener
+         * @return True if the event listener was removed or false if either
+         *        the given event does not exist or it does not have an event
+         *        listener with the given id
+         *
+         * The identification number is issued when an event listener is
+         * registered to an animation event
+         *
+         * @see onAnimationStart, onAnimationFinish
          */
         bool removeEventListener(const std::string& name, const std::string& onTrigger, int id);
 
     private:
-        //Animation sprite
-        Graphics::Sprite& animationTarget_;
-        //Animations container
-        std::unordered_map<std::string, std::shared_ptr<Animation>> animations_;
-        //Pointer to the currently running animation
-        std::shared_ptr<Animation> currentAnimation_;
-        //Elapsed time so far
-        float totalTime_;
-        //Event publisher
-        EventEmitter eventEmitter_;
+        Graphics::Sprite& animationTarget_;                                      //!< Sprite to be animated
+        std::unordered_map<std::string, std::shared_ptr<Animation>> animations_; //!< Animations container
+        std::shared_ptr<Animation> currentAnimation_;                            //!< Pointer to the current animation
+        float totalTime_;                                                        //!< Time passed since animation was started
+        EventEmitter eventEmitter_;                                              //!< Event publisher
     };
 }
 
-#endif
+#endif // IME_ANIMATOR_H

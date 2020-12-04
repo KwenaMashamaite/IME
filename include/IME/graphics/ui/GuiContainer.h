@@ -22,23 +22,41 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Container for Graphical User Interface (GUI) objects
- */
-
 #ifndef IME_GUI_H
 #define IME_GUI_H
 
 #include "IME/Config.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Vector2.h"
-#include "IME/graphics/CursorTypes.h"
 #include "IME/graphics/ui/widgets/IWidget.h"
 #include "IME/graphics/Window.h"
 #include <unordered_map>
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Mouse cursor types
+         */
+        enum class CursorType {
+            Arrow,                  //!< Arrow cursor (default)
+            Text,                   //!< I-beam, cursor when hovering over a text field
+            Hand,                   //!< Pointing hand cursor
+            SizeLeft,               //!< Left arrow on Linux, horizontal double arrow cursor on Windows and macOS
+            SizeRight,              //!< Right arrow on Linux, horizontal double arrow cursor on Windows and macOS
+            SizeTop,                //!< Up arrow on Linux, vertical double arrow cursor on Windows and macOS
+            SizeBottom,             //!< Down arrow on Linux, vertical double arrow cursor on Windows and macOS
+            SizeTopLeft,            //!< Top-left arrow on Linux, double arrow cursor going from top-left to bottom-right on Windows and macOS
+            SizeBottomRight,        //!< Bottom-right arrow on Linux, double arrow cursor going from top-left to bottom-right on Windows and
+            SizeBottomLeft,         //!< Bottom-left arrow on Linux, double arrow cursor going from bottom-left to top-right on Windows and macOS
+            SizeTopRight,           //!< Top-right arrow on Linux, double arrow cursor going from bottom-left to top-right on Windows and macOS
+            Crosshair,              //!< Crosshair cursor
+            Help,                   //!< Help cursor
+            NotAllowed              //!< Action not allowed cursor
+        };
+
+        /**
+         * @brief Container for Graphical User Interface (GUI) widgets
+         */
         class IME_API GuiContainer {
         public:
             /**
@@ -55,7 +73,9 @@ namespace IME {
              * @param target Render target that will be used by the gui
              *
              * This constructor will set the target therefore there is no need
-             * to call @see setTarget()
+             * to call setTarget
+             *
+             * @see setTarget
              */
             explicit GuiContainer(Graphics::Window& target);
 
@@ -142,24 +162,28 @@ namespace IME {
              * @brief Change the mouse cursor that gets shown
              * @param cursorType The mouse cursor to show
              *
-             * @warning The mouse cursor must be restored for every call to this
-             * function @see restoreMouseCursor(). If the cursor is not restored
-             * then it can no longer be changed by widgets. If this function is
-             * called multiple times, the cursors are stacked and restoring the
+             * @warning The mouse cursor must be restored for every call
+             * to this function. If the cursor is not restored then it can
+             * no longer be changed by widgets. If this function is called
+             * multiple times, the cursors are stacked and restoring the
              * cursors will only pop the last added cursor from the stack
              *
              * @note This function can also be used to prevent widgets from
              * changing the mouse cursor by setting the cursor of choice and
              * restoring it once widgets are allowed to change the cursor
+             *
+             * @see restoreMouseCursor
              */
             void setMouseCursor(CursorType cursorType);
 
             /**
              * @brief Restores the mouse cursor to the way it was prior to
-             *        @see setMouseCursor()
+             *        setMouseCursor
              *
-             * @note The mouse cursor is changeable only if there are no active
-             * mouse cursor changes @see setMouseCursor()
+             * The mouse cursor is changeable only if there are no active
+             * mouse cursor changes
+             *
+             * @see setMouseCursor
              */
             void restoreMouseCursor();
 
@@ -170,19 +194,15 @@ namespace IME {
              * This function is used by widgets to set the mouse cursor when
              * the mouse enters or leaves a widget. If you want to choose a
              * cursor that doesnt changed when moving the mouse, then use
-             * @see setMouseCursor(). If the cursor is already set using the
-             * setMouseCursor() function then this function wont be able to
-             * change the cursor. When the mouse cursor is restored @see
-             * restoreMouseCursor(), then the mouse cursor will be changed to
+             * setMouseCursor. If the cursor is already set using the
+             * setMouseCursor function then this function wont be able to
+             * change the cursor. When the mouse cursor is restored
+             * restoreMouseCursor, then the mouse cursor will be changed to
              * what was last requested here
+             *
+             * @see setMouseCursor and restoreMouseCursor
              */
             void requestMouseCursor(CursorType cursorType);
-
-            /**
-             * @brief Get a list of all widgets in the gui
-             * @return A vector of all widgets in the gui
-             */
-            const std::vector<IWidget>& getWidgets() const;
 
             /**
              * @brief Add a widget to the gui
@@ -199,7 +219,7 @@ namespace IME {
 
             /**
              * @brief Get a pointer to a widget in the gui
-             * @param widgetName Name of the widget to retrieve
+             * @param name Name of the widget to retrieve
              * @return Pointer to the specified widget or a nullptr if the gui
              *         does not have a widget with the specified name
              *
@@ -207,11 +227,11 @@ namespace IME {
              * of it, but when none of the child widgets match the given name,
              * a recursive search will be performed
              */
-            std::shared_ptr<IWidget> getWidget(const std::string& widgetName) const;
+            std::shared_ptr<IWidget> getWidget(const std::string& name) const;
 
             /**
              * @brief Get a pointer to a widget in the gui
-             * @param widgetName Name of the widget to retrieve
+             * @param name Name of the widget to retrieve
              * @return Pointer to the specified widget or a nullptr if the gui
              *         does not have a widget with the specified name or T is
              *         invalid
@@ -219,8 +239,8 @@ namespace IME {
              * @note The pointer will already be casted to the desired type (T)
              */
             template <class T>
-            std::shared_ptr<T> getWidget(const std::string& widgetName) const {
-                return std::dynamic_pointer_cast<T>(getWidget(widgetName));
+            std::shared_ptr<T> getWidget(const std::string& name) const {
+                return std::dynamic_pointer_cast<T>(getWidget(name));
             }
 
             /**
@@ -237,27 +257,32 @@ namespace IME {
             void removeAllWidgets();
 
             /**
-             * @brief Get the currently focused widget inside the gui
+             * @brief Get the currently focused widget inside the container
              * @return Pointer to the focused child widget or a nullptr if none
              *         of the widgets are currently focused
              *
-             * @note If the focused widget is a container, then a pointer to
-             * the container is returned rather than a pointer to the focused
-             * widget inside that container. @see getFocusedLeaf() should be
-             * used to get the widget that is focused inside a container
+             * @note Unlike getFocusedWidget which returns a pointer to
+             * a container when the focused widget is a child of another
+             * container within the container, this function will always return
+             * the focused widget regardless of whether its a direct child of
+             * the container or not
+             *
+             * @see getFocusedWidget
              */
             std::shared_ptr<IWidget> getFocusedWidget() const;
 
             /**
-             * @brief Get the currently focused widget inside the gui
+             * @brief Get the currently focused widget inside the container
              * @return Pointer to the focused child widget or a nullptr if none
              *         of the widgets are currently focused
              *
-             * @note Unlike @see getFocusedWidget() which returns a pointer to
+             * @note Unlike getFocusedWidget which returns a pointer to
              * a container when the focused widget is a child of another
-             * container within the gui, this function will always return the
-             * focused widget regardless of whether its a direct child of the
-             * gui or not
+             * container within the container, this function will always return
+             * the focused widget regardless of whether its a direct child of
+             * the container or not
+             *
+             * @see getFocusedWidget
              */
             std::shared_ptr<IWidget> getFocusedLeaf() const;
 
@@ -340,12 +365,10 @@ namespace IME {
             unsigned int getTextSize() const;
 
         private:
-            //Gui controller and renderer
-            tgui::GuiSFML sfmlGui_;
-            //Widgets container
-            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_;
+            tgui::GuiSFML sfmlGui_; //!< Gui controller and renderer
+            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
         };
     }
 }
 
-#endif
+#endif // IME_GUI_H

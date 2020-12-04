@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering an edit box
- *
- * This class allows you to manipulate the render properties of an edit box
- */
-
 #ifndef IME_EDITBOXRENDERER_H
 #define IME_EDITBOXRENDERER_H
 
@@ -39,6 +33,12 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering an edit box
+         *
+         * This class allows you to manipulate the render properties of an
+         * edit box
+         */
         class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:
             /**
@@ -151,8 +151,8 @@ namespace IME {
             void setSelectedTextColour(Colour colour);
 
             /**
-             * @brief Get the text color of the selected text
-             * @return The text color of the selected text
+             * @brief Get the text colour of the selected text
+             * @return The text colour of the selected text
              */
             Colour getSelectedTextColour() const;
 
@@ -209,7 +209,7 @@ namespace IME {
              * @return The background colour of the edit box when the mouse 
              *         enters it
              */
-            Colour getBackgroundColorHover() const;
+            Colour getBackgroundColourHover() const;
 
             /**
              * @brief Set the background colour of the edit box when it is 
@@ -247,7 +247,7 @@ namespace IME {
 
             /**
              * @brief Set the colour of the caret
-             * @param caretColor The colour of the caret 
+             * @param caretColour The colour of the caret
              */
             void setCaretColour(Colour caretColour);
 
@@ -276,7 +276,7 @@ namespace IME {
              * @brief Set the colour of the caret when the edit box is focused
              * @param caretColour The new caret colour
              */
-            void setCaretColorFocused(Colour caretColour);
+            void setCaretColourFocused(Colour caretColour);
             
             /**
              * @brief Get the colour of the caret when the edit box is focused
@@ -438,7 +438,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -459,7 +459,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -489,10 +491,9 @@ namespace IME {
             virtual ~EditBoxRenderer();
 
         private:
-            //Pointer to third party edit box renderer
-            tgui::EditBoxRenderer* editBoxRenderer_;
+            tgui::EditBoxRenderer* editBoxRenderer_; //!< Pointer to third party edit box renderer
         };
     }
 }
 
-#endif
+#endif // #ifndef IME_EDITBOXRENDERER_H

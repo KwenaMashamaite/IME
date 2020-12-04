@@ -3,7 +3,7 @@
 ///
 /// \section welcome Welcome
 /// Welcome to the official IME documentation. Here you will find a detailed
-/// view of all the IME <a href="./annotated.php">classes</a> and functions. <br/>
+/// view of all the classes and functions. <br/>
 ///
 /// \section example Short example
 /// IME is state based, which means that the game flow is controlled by pushing

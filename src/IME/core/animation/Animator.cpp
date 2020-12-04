@@ -89,9 +89,9 @@ namespace IME{
 
     bool Animator::removeEventListener(const std::string &name, const std::string &onTrigger, int id) {
         auto fullEventName = name;
-        if (onTrigger == "start")
+        if (onTrigger == "onStart")
             fullEventName += "AnimationStart";
-        else if (onTrigger == "finish")
+        else if (onTrigger == "onFinish")
             fullEventName += "AnimationFinish";
         else
             return false;

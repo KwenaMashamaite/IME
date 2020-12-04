@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a progress bar
- *
- * This class allows you to manipulate the render properties of a ProgressBar
- */
-
 #ifndef IME_PROGRESSBARRENDERER_H
 #define IME_PROGRESSBARRENDERER_H
 
@@ -39,6 +33,12 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a progress bar
+         *
+         * This class allows you to manipulate the render properties of a
+         * ProgressBar
+         */
         class IME_API ProgressBarRenderer : public IWidgetRenderer {
         public:
             /**
@@ -56,12 +56,12 @@ namespace IME {
             /**
              * @brief Set the colour of the text that is optionally displayed
              *        on top of the progress bar
-             * @param color The new test colour
+             * @param colour The new test colour
              */
-            void setTextColour(Colour color);
+            void setTextColour(Colour colour);
 
             /**
-             * @brief Get the color of the text that is optionally displayed on
+             * @brief Get the colour of the text that is optionally displayed on
              *        top of the progress bar
              * @return The colour of the progress bar text
              */
@@ -70,29 +70,30 @@ namespace IME {
             /**
              * @brief Set the text colour of the text that is on top of the
              *        filled part of the progress bar
-             * @param color he new text colour that is displayed on top of the
+             * @param colour he new text colour that is displayed on top of the
              *        filled part
              */
-            void setTextColourFilled(Colour color);
+            void setTextColourFilled(Colour colour);
 
             /**
              * @brief Get the colour of the text that is on top of the filled
              *        part of the progress bar
-             * @return Text color that is displayed on top of the filled part
+             * @return Text colour that is displayed on top of the filled part
              */
             Colour getTextColourFilled() const;
 
             /**
              * @brief Set the background colour of the progress bar
-             * @param color The background colour to set
+             * @param colour The background colour to set
              *
              * This is the colour that is displayed on the part of the progress
              * bar that is not filled.
              *
-             * @note that this color is ignored when you set a background image
-             * @see setBackgroundTexture()
+             * @note that this colour is ignored when you set a background image
+             *
+             * @see setBackgroundTexture
              */
-            void setBackgroundColour(Colour color);
+            void setBackgroundColour(Colour colour);
 
             /**
              * @brief Get the background colour of the progress bar
@@ -102,15 +103,14 @@ namespace IME {
 
             /**
              * @brief Set the fill colour of the progress bar
-             * @param The fill colour to set
+             * @param colour fill colour to set
              *
              * This is the colour that is used to fill the progress bar and is
              * drawn on top of the background colour
              *
-             * @note that this color is ignored when you set an fill image
-             * @see
+             * @note that this colour is ignored when you set an fill image
              */
-            void setFillColour(Colour color);
+            void setFillColour(Colour colour);
 
             /**
              * @brief Get the fill colour of the progress bar
@@ -122,7 +122,7 @@ namespace IME {
              * @brief Set the border colour
              * @param colour The border colour to set
              */
-            void setBorderColour(Colour color);
+            void setBorderColour(Colour colour);
 
             /**
              * @brief Get the border colour
@@ -222,7 +222,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -243,7 +243,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -267,13 +269,15 @@ namespace IME {
              */
             tgui::WidgetRenderer *getInternalPtr() override;
 
+            /**
+             * @brief Destructor
+             */
             virtual ~ProgressBarRenderer();
 
         private:
-            //Pointer to third party renderer
-            tgui::ProgressBarRenderer* progressBarRenderer_;
+            tgui::ProgressBarRenderer* progressBarRenderer_; //!< Pointer to third party renderer
         };
     }
 }
 
-#endif
+#endif // IME_PROGRESSBARRENDERER_H

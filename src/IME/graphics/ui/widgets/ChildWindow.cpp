@@ -26,6 +26,9 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
+//How long the edit box takes before its completely hidden or shown
+static const int fadeAnimDuration_ = 100;
+
 namespace IME::UI {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons)
         : window_{tgui::ChildWindow::create(title, titleButtons)},
@@ -241,14 +244,10 @@ namespace IME::UI {
     }
 
     std::shared_ptr<IWidget>
-    ChildWindow::getWidget(const std::string &widgetName) const {
-        if (Utility::findIn(widgets_, widgetName))
-            return widgets_.at(widgetName);
+    ChildWindow::getWidget(const std::string &name) const {
+        if (Utility::findIn(widgets_, name))
+            return widgets_.at(name);
         return nullptr;
-    }
-
-    const std::vector<IWidget> &ChildWindow::getWidgets() const {
-        return std::move(std::vector<IWidget>{}); //@TODO implement
     }
 
     bool ChildWindow::removeWidget(const std::string &widget) {

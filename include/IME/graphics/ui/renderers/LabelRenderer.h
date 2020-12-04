@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a label
- *
- * This class allows you to manipulate the render properties of a Label
- */
-
 #ifndef IME_LABELRENDERER_H
 #define IME_LABELRENDERER_H
 
@@ -40,6 +34,11 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a label
+         *
+         * This class allows you to manipulate the render properties of a Label
+         */
         class IME_API LabelRenderer : public IWidgetRenderer {
         public:
             /**
@@ -69,12 +68,12 @@ namespace IME {
             /**
              * @brief Set the colour of the text that is optionally displayed
              *        on top of the progress bar
-             * @param color The new test colour
+             * @param colour The new test colour
              */
             void setTextColour(Colour colour);
 
             /**
-             * @brief Get the color of the text that is optionally displayed on
+             * @brief Get the colour of the text that is optionally displayed on
              *        top of the progress bar
              * @return The colour of the progress bar text
              */
@@ -127,9 +126,9 @@ namespace IME {
 
             /**
              * @brief Set the outline colour of the text
-             * @param outlineColor The outline colour to set
+             * @param outlineColour The outline colour to set
              */
-            void setTextOutlineColour(Colour outlineColor);
+            void setTextOutlineColour(Colour outlineColour);
 
             /**
              * @brief Get the outline colour text
@@ -234,7 +233,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -255,7 +254,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -285,8 +286,7 @@ namespace IME {
             virtual ~LabelRenderer();
 
         private:
-            //Pointer to third party renderer
-            tgui::LabelRenderer* labelRenderer_;
+            tgui::LabelRenderer* labelRenderer_; //!< Pointer to third party renderer
         };
     }
 }

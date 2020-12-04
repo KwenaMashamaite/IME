@@ -30,27 +30,28 @@ namespace IME::Audio {
         : masterVolume_{100.0f}, sfxVolume_{100.0f}, musicVolume_{100.0f}, isMuted_(false)
     {}
 
-    void AudioManager::play(AudioType audioType, const std::string &filename, bool isLooped) {
+    void AudioManager::play(Type audioType, const std::string &filename, bool isLooped) {
         std::unique_ptr<Audio> audio;
-        if (audioType == AudioType::Music) {
-            audio = std::move(std::make_unique<Music>());
+        if (audioType == Type::Music) {
+            audio = std::make_unique<Music>();
             audio->setVolume(musicVolume_);
-        } else if (audioType == AudioType::Sfx) {
-            audio = std::move(std::make_unique<SoundEffect>());
+        } else if (audioType == Type::Sfx) {
+            audio = std::make_unique<SoundEffect>();
             audio->setVolume(sfxVolume_);
         }
         audio->setLoop(isLooped);
-        audio->play(filename);
+        audio->setSource(filename);
+        audio->play();
         playingAudio_.push_back(std::move(audio));
     }
 
-    void AudioManager::setVolumeFor(AudioType audioType, float volume) {
+    void AudioManager::setVolumeFor(Type audioType, float volume) {
         if (volume > masterVolume_)
             volume = masterVolume_;
 
-        if (audioType == AudioType::Music)
+        if (audioType == Type::Music)
             musicVolume_ = volume;
-        else if (audioType == AudioType::Sfx)
+        else if (audioType == Type::Sfx)
             sfxVolume_ = volume;
     }
 
@@ -78,11 +79,11 @@ namespace IME::Audio {
         eventEmitter_.emit("muteChanged", isMuted_);
     }
 
-    float AudioManager::getVolumeFor(AudioType audioType) {
+    float AudioManager::getVolumeFor(Type audioType) {
         switch (audioType) {
-            case AudioType::Sfx:
+            case Type::Sfx:
                 return sfxVolume_;
-            case AudioType::Music:
+            case Type::Music:
                 return musicVolume_;
         }
         return masterVolume_;
@@ -131,12 +132,5 @@ namespace IME::Audio {
 
     void AudioManager::onVolumeChanged(Callback<float> callback) {
         eventEmitter_.addEventListener("volumeChanged", std::move(callback));
-    }
-
-    void AudioManager::update() {
-        playingAudio_.erase(std::remove_if(playingAudio_.begin(), playingAudio_.end(),
-            [] (auto& audio) {
-                return audio->getStatus() == Status::Stopped;
-        }), playingAudio_.end());
     }
 }

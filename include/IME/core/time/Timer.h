@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for timing purposes
- */
-
 #ifndef IME_TIMER_H
 #define IME_TIMER_H
 
@@ -36,6 +32,9 @@
 
 namespace IME {
     namespace Time {
+        /**
+         * @brief Class for timing purposes
+         */
         class IME_API Timer {
         public:
             /**
@@ -53,8 +52,9 @@ namespace IME {
 
             /**
              * @brief Execute a callback function once after a delay
-             * @param callback Function to execute
              * @param delay Time to wait before executing callback in milliseconds
+             * @param callback Function to execute
+             * @param args Arguments passed to the callback function on invocation
              *
              * The callback execution is done in a separate thread, therefore
              * this function is not blocking. It will return immediately after
@@ -65,8 +65,9 @@ namespace IME {
 
             /**
              * @brief Execute a callback function repeatedly after a delay
-             * @param callback Function to execute
              * @param delay Time to wait before executing callback in milliseconds
+             * @param callback Function to execute
+             * @param args Arguments passed to the callback function on invocation
              *
              * This function is blocking as the current thread will wait for the
              * callback execution to finish. The callback function will execute
@@ -82,8 +83,9 @@ namespace IME {
 
             /**
              * @brief Execute a callback function repeatedly after a delay
-             * @param callback Function to execute
              * @param delay Time to wait before executing callback in milliseconds
+             * @param callback Function to execute
+             * @param args Arguments to pass to the callback on invocation
              *
              * The callback execution is done in a separate thread, therefore
              * this function is not blocking. It will return immediately after
@@ -103,4 +105,4 @@ namespace IME {
     }
 }
 
-#endif
+#endif // IME_TIMER_H

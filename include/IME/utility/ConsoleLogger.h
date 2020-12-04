@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Utility class for logging messages to the console
- */
-
 #ifndef IME_CONSOLELOGGER_H
 #define IME_CONSOLELOGGER_H
 
@@ -35,29 +31,27 @@
 
 namespace IME {
     namespace Utility {
+        /**
+         * @brief Utility class for logging messages to the console
+         */
         class IME_API ConsoleLogger : public ILogger {
         public:
             /**
              * @brief Log message to the console
-             * @param logType Log message type
+             * @param logType Message type
              * @param msg Message to be logged
              *
-             * This function will precede the log message with the message type
-             * (in caps) and a colon. If the message type is MessageType::General,
-             * then the log message will be logged as it is.
-             *
-             * @example:
-             *  log message "Assets loaded successfully"
-             *  log message type = MessageType::Status
-             *
-             *  console output- STATUS: Assets loaded successfully
+             * This function will precede the log message with the message
+             * type (in caps) and a colon. If the message type is
+             * MessageType::General, then the log message will be logged
+             * as it is.
              */
             void log(MessageType logType, const std::string& msg) override;
 
         private:
-            std::mutex mutex_;
+            std::mutex mutex_; //!< std::cout synchronization
         };
     }
 }
 
-#endif
+#endif // IME_CONSOLELOGGER_H

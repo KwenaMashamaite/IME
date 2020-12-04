@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief A container for a group of properties
- */
-
 #ifndef IME_PROPERTYCONTAINER_H
 #define IME_PROPERTYCONTAINER_H
 
@@ -36,6 +32,9 @@
 #include <unordered_map>
 
 namespace IME {
+    /**
+     * @brief A container for a group of properties
+     */
     class IME_API PropertyContainer {
     public:
         /**
@@ -45,11 +44,11 @@ namespace IME {
          *         with the same name already exits
          */
         bool addProperty(const Property &Property);
-        bool addProperty(Property&& property);
+        bool addProperty(Property&&);
 
         /**
          * @brief Set the value of a property
-         * @param name Name of the property
+         * @param name Name of the property to set value for
          * @param value New value of the property
          *
          * The type of @tparam T must be remembered in order to retrieve
@@ -65,11 +64,12 @@ namespace IME {
          * @param name Name of the property to get value for
          * @throws std::bad_any_cast if the value stored by the property is
          *         not of type @tparam T
-         * @return The value of a property
+         * @return Value of a property
          *
          * This function will throw an exception if the template argument
-         * and the value type don't match. This means that the property
-         * must always have a value before calling this function
+         * @tparam T and the type of the stored value don't match. This
+         * means that the property must always have a value before calling
+         * this function
          *
          * @see propertyHasValue
          * @see setValueFor
@@ -80,8 +80,8 @@ namespace IME {
         /**
          * @brief Get the type of a property
          * @param name Name of the property to get type for
-         * @return The type of the property if such a property exists, otherwise
-         *          an empty string
+         * @return The type of the property if such a property exists,
+         *         otherwise an empty string
          */
         std::string getTypeFor(const std::string &name) const;
 
@@ -94,9 +94,9 @@ namespace IME {
         bool removeProperty(const std::string &name);
 
         /**
-         * @brief Check if container has property
+         * @brief Check if container has a given property
          * @param name Name of the property to check
-         * @return True if property exists otherwise false
+         * @return True if property exists, otherwise false
          */
         bool hasProperty(const std::string &name) const;
 
@@ -117,11 +117,10 @@ namespace IME {
         int getSize() const;
 
     private:
-        //Container for the properties
-        std::unordered_map<std::string, Property> properties_;
+        std::unordered_map<std::string, Property> properties_; //!< Container for the properties
     };
 
     #include "IME/common/PropertyContainer.inl"
 }
 
-#endif
+#endif // IME_PROPERTYCONTAINER_H

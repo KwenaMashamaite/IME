@@ -22,10 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Structs used by UI classes
- */
-
 #ifndef IME_STRUCTS_H
 #define IME_STRUCTS_H
 
@@ -35,10 +31,10 @@ namespace IME {
       *        of the GUI widget
       */
     struct Margin {
-        float left = 0.0f;
-        float top = 0.0f;
-        float right = 0.0f;
-        float bottom = 0.0f;
+        float left = 0.0f;   //!< Lef margin
+        float top = 0.0f;    //!< Top margin
+        float right = 0.0f;  //!< Right margin
+        float bottom = 0.0f; //!< Bottom margin
     };
 
     /**
@@ -46,17 +42,20 @@ namespace IME {
      *        text and the border of the GUI widget
      */
     struct Padding {
-        float left = 0.0f;
-        float top = 0.0f;
-        float right = 0.0f;
-        float bottom = 0.0f;
+        float left = 0.0f;   //!< Left padding
+        float top = 0.0f;    //!< Top padding
+        float right = 0.0f;  //!< Right padding
+        float bottom = 0.0f; //!< Bottom padding
     };
 
+    /**
+     * @brief Widget borders
+     */
     struct Borders {
-        float left = 0.0f;
-        float top = 0.0f;
-        float right = 0.0f;
-        float bottom = 0.0f;
+        float left = 0.0f;   //!< Left border
+        float top = 0.0f;    //!< Top border
+        float right = 0.0f;  //!< Right border
+        float bottom = 0.0f; //!< Bottom border
     };
 }
 

@@ -26,12 +26,15 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace IME::Audio {
-    void SoundEffect::play(const std::string &filename){
-        if (currentEffectName_ != filename) {
+    void SoundEffect::setSource(const std::string &filename){
+        if (sfxName_ != filename) {
             soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
-            currentEffectName_ = filename;
+            sfxName_ = filename;
         }
-        play();
+    }
+
+    const std::string &SoundEffect::getSource() const {
+        return sfxName_;
     }
 
     void SoundEffect::stop() {
@@ -50,7 +53,7 @@ namespace IME::Audio {
 
     void SoundEffect::play() {
         soundEffect_.play();
-        emit("playing", currentEffectName_);
+        emit("playing", sfxName_);
     }
 
     void SoundEffect::setVolume(float volume) {
@@ -98,10 +101,6 @@ namespace IME::Audio {
 
     void SoundEffect::seek(float position) {
         soundEffect_.setPlayingOffset(sf::milliseconds(position));
-    }
-
-    const std::string &SoundEffect::getCurrentAudioFileName() const {
-        return currentEffectName_;
     }
 
     Duration SoundEffect::getPlayingPosition() const {

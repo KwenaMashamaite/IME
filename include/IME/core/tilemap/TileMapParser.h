@@ -22,16 +22,15 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Reads a file containing the tilemap data and returns it in grid form
- */
-
 #ifndef IME_TILEMAPPARSER_H
 #define IME_TILEMAPPARSER_H
 
 #include "IME/core/tilemap/TileMap.h"
 
 namespace IME {
+    /**
+     * @brief Reads a file containing the tilemap data and returns it in grid form
+     */
     class TileMapParser {
     public:
         /**
@@ -43,7 +42,7 @@ namespace IME {
          * This function parses a map file and returns a map object created
          * form the parsed date
          */
-        Map parse(const std::string& filename, const char& separator = ',');
+        Map parse(const std::string& filename, char separator = ',');
     };
 }
 

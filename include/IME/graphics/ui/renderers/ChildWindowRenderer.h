@@ -22,12 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @brief Class for rendering a child window
- *
- * This class allows you to manipulate the render properties of a child window
- */
-
 #ifndef IME_CHILDWINDOWRENDERER_H
 #define IME_CHILDWINDOWRENDERER_H
 
@@ -39,6 +33,12 @@
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering a child window
+         *
+         * This class allows you to manipulate the render properties of a
+         * child window
+         */
         class IME_API ChildWindowRenderer : public IWidgetRenderer {
         public:
             /**
@@ -130,7 +130,7 @@ namespace IME {
              * @return The border colour when the window is focused but not
              *        hovered
              */
-            Colour getBorderColorFocused() const;
+            Colour getBorderColourFocused() const;
 
             /**
              * @brief Set the distance between the title bar and the actual
@@ -181,7 +181,7 @@ namespace IME {
              * @param minimumBorderWidth Minimum amount of pixels where the
              *        child window can be dragged to resize it
              *
-             * If the border is larger than @param minimumBorderWidth then this
+             * If the border is larger than @a minimumBorderWidth then this
              * function has no effect. If the borders are smaller, several
              * invisible pixels next to the border can also be used to resize
              * the child window
@@ -227,7 +227,7 @@ namespace IME {
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
              *
-             * When this image is set, the background color property will be
+             * When this image is set, the background colour property will be
              * ignored
              */
             void setTextureBackground(const std::string& filename);
@@ -292,7 +292,7 @@ namespace IME {
              *        the texture or not
              * @return True if mouse events are ignored, otherwise false
              *
-             * @see ignoreTransparentTexture()
+             * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
 
@@ -313,7 +313,9 @@ namespace IME {
              * @param id The unique identification number of the event listener
              *
              * The id was given when the event listener was subscribed to the
-             * event @see onPropertyChange
+             * event
+             *
+             * @see onPropertyChange
              */
             void unsubscribe(int id) override;
 
@@ -343,10 +345,9 @@ namespace IME {
             virtual ~ChildWindowRenderer();
 
         private:
-            //Pointer to third party child window renderer
-            tgui::ChildWindowRenderer *windowRenderer_;
+            tgui::ChildWindowRenderer *windowRenderer_; //!< Pointer to third party child window renderer
         };
     }
 }
 
-#endif
+#endif // IME_CHILDWINDOWRENDERER_H
