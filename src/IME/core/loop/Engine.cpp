@@ -84,26 +84,26 @@ namespace IME {
     }
 
     void Engine::processSettings() {
-        setDefaultValueIfNotSet(settings_, "windowTitle", "STRING", std::string("Untitled"));
-        setDefaultValueIfNotSet(settings_, "windowWidth", "INT",  600);
-        setDefaultValueIfNotSet(settings_, "windowHeight", "INT", 600);
-        setDefaultValueIfNotSet(settings_, "fpsLimit", "INT", 60);
-        setDefaultValueIfNotSet(settings_, "fullscreen", "BOOL", false);
-        setDefaultValueIfNotSet(settings_, "vsync", "BOOL",  false);
-        setDefaultValueIfNotSet(settings_, "fontsPath", "STRING", std::string("")); // Same directory as the executable
-        setDefaultValueIfNotSet(settings_, "texturesPath", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "imagesPath", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "sfxPath", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "musicPath", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", "STRING", std::string("Untitled"));
+        setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH", "INT",  600);
+        setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", "INT", 600);
+        setDefaultValueIfNotSet(settings_, "FPS_LIMIT", "INT", 60);
+        setDefaultValueIfNotSet(settings_, "FULLSCREEN", "BOOL", false);
+        setDefaultValueIfNotSet(settings_, "VSYNC", "BOOL",  false);
+        setDefaultValueIfNotSet(settings_, "FONTS_DIR", "STRING", std::string("")); // Same directory as the executable
+        setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "IMAGES_DIR", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "SOUND_EFFECTS_DIR", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "MUSIC_DIR", "STRING", std::string(""));
     }
 
     void Engine::initRenderTarget() {
         auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
         auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-        auto title = settings_.getValueFor<std::string>("windowTitle");
-        auto width = settings_.getValueFor<int>("windowWidth");
-        auto height = settings_.getValueFor<int>("windowHeight");
-        auto isFullscreen = settings_.getValueFor<bool>("fullscreen");
+        auto title = settings_.getValueFor<std::string>("WINDOW_TITLE");
+        auto width = settings_.getValueFor<int>("WINDOW_WIDTH");
+        auto height = settings_.getValueFor<int>("WINDOW_HEIGHT");
+        auto isFullscreen = settings_.getValueFor<bool>("FULLSCREEN");
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
             window_.create(title, desktopWidth, desktopHeight, Graphics::Window::Style::Fullscreen);
         } else {
@@ -114,18 +114,18 @@ namespace IME {
             window_.create(title, width, height, Graphics::Window::Style::Close);
         }
 
-        window_.setFramerateLimit(settings_.getValueFor<int>("fpsLimit"));
-        window_.setVsyncEnabled(settings_.getValueFor<bool>("vsync"));
+        window_.setFramerateLimit(settings_.getValueFor<int>("FPS_LIMIT"));
+        window_.setVsyncEnabled(settings_.getValueFor<bool>("VSYNC"));
         window_.setIcon("icon.png");
     }
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
-        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor<std::string>("fontsPath"));
-        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor<std::string>("texturesPath"));
-        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor<std::string>("imagesPath"));
-        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor<std::string>("sfxPath"));
-        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor<std::string>("musicPath"));
+        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor<std::string>("FONTS_DIR"));
+        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor<std::string>("TEXTURES_DIR"));
+        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor<std::string>("IMAGES_DIR"));
+        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor<std::string>("SOUND_EFFECTS_DIR"));
+        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor<std::string>("MUSIC_DIR"));
     }
 
     void Engine::processEvents() {
