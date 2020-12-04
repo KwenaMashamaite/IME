@@ -42,7 +42,7 @@
 #include <string>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API IWidget : public ITransformable, public EventEmitter {
         public:
             /**

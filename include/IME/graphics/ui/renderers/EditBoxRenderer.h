@@ -38,7 +38,7 @@
 #include <TGUI/Renderers/EditBoxRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:
             /**

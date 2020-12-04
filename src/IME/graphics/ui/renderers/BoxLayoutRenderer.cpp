@@ -25,7 +25,7 @@
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     void BoxLayoutRenderer::setPadding(const Padding &padding) {
         boxLayoutRenderer_->setPadding({padding.left, padding.top, 
             padding.right, padding.bottom});

@@ -36,7 +36,7 @@
 #include <TGUI/Renderers/SliderRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API SliderRenderer : public IWidgetRenderer {
         public:
             /**

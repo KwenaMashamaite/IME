@@ -28,7 +28,7 @@
 #include <TGUI/GuiBase.hpp>
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     ProgressBar::ProgressBar()
         : progressBar_{tgui::ProgressBar::create()},
           renderer_{std::make_shared<ProgressBarRenderer>()}

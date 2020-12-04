@@ -38,7 +38,7 @@
 #include <TGUI/Renderers/ProgressBarRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API ProgressBarRenderer : public IWidgetRenderer {
         public:
             /**

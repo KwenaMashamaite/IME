@@ -38,7 +38,7 @@
 #include <unordered_map>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API GuiContainer {
         public:
             /**
@@ -57,7 +57,7 @@ namespace IME {
              * This constructor will set the target therefore there is no need
              * to call @see setTarget()
              */
-            explicit GuiContainer(Window& target);
+            explicit GuiContainer(Graphics::Window& target);
 
             /**
              * @brief Copy constructor
@@ -73,7 +73,7 @@ namespace IME {
              * @brief Set the target on which the gui should be drawn
              * @param target Render target that will be used by the gui
              */
-            void setTarget(Window& target);
+            void setTarget(Graphics::Window& target);
 
             /**
              * @brief Check if the target on which the gui should be drawn is

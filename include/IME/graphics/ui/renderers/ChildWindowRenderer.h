@@ -38,7 +38,7 @@
 #include <TGUI/Renderers/ChildWindowRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API ChildWindowRenderer : public IWidgetRenderer {
         public:
             /**

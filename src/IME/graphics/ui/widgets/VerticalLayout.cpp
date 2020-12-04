@@ -26,7 +26,7 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     VerticalLayout::VerticalLayout(float width, float height)
         : layout_{tgui::VerticalLayout::create({width, height})},
           renderer_{std::make_shared<BoxLayoutRenderer>()}

@@ -26,7 +26,7 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons)
         : window_{tgui::ChildWindow::create(title, titleButtons)},
           renderer_{std::make_shared<ChildWindowRenderer>()}

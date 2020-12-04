@@ -30,7 +30,7 @@
 #include <TGUI/Widgets/ProgressBar.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API ProgressBar : public IClickableWidget {
         public:
             /**

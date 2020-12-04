@@ -35,7 +35,7 @@
 #include <TGUI/Widgets/BitmapButton.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API BitmapButton : public IClickableWidget {
         public:
             /**

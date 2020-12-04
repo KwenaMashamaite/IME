@@ -26,7 +26,7 @@
 #include "IME/graphics/ui/renderers/LabelRenderer.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     void LabelRenderer::setBorders(const Borders &borders) {
         labelRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }

@@ -33,7 +33,7 @@
 #include <memory>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API IContainer : public IWidget {
         public:
             /**

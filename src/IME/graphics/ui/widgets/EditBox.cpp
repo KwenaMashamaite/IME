@@ -26,7 +26,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <TGUI/GuiBase.hpp>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     EditBox::EditBox()
         : editBox_{tgui::EditBox::create()},
           renderer_{std::make_shared<EditBoxRenderer>()}

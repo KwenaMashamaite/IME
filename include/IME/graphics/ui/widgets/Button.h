@@ -35,7 +35,7 @@
 #include <string>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API Button : public IClickableWidget {
         public:
             /**

@@ -36,7 +36,7 @@
 #include <TGUI/Widgets/HorizontalLayout.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API HorizontalLayout : public IBoxLayout {
         public:
             /**

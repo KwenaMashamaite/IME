@@ -26,7 +26,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     void CheckBoxRenderer::setBorders(const Borders &borders) {
         checkBoxRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }

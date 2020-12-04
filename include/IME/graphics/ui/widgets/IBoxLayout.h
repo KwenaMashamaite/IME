@@ -32,7 +32,7 @@
 #include "IContainer.h"
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API IBoxLayout : public IContainer {
         public:
             /**

@@ -27,7 +27,7 @@
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/utility/Helpers.h"
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     void ProgressBarRenderer::setBorders(const Borders &borders) {
         progressBarRenderer_->setBorders({borders.left, borders.top,
             borders.right, borders.bottom});

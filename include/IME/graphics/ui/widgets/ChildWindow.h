@@ -34,7 +34,7 @@
 #include <TGUI/Widgets/ChildWindow.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API ChildWindow : public IContainer {
         public:
             /// Title alignments, possible options for the setTitleAlignment function

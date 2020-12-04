@@ -34,7 +34,7 @@
 #include <TGUI/Widgets/CheckBox.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API CheckBox : public IClickableWidget {
         public:
             /**

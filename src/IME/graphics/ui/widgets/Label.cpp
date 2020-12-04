@@ -28,7 +28,7 @@
 #include <TGUI/GuiBase.hpp>
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     Label::Label() : Label("")
     {}
 

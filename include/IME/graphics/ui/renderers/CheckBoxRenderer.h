@@ -38,7 +38,7 @@
 #include <TGUI/Renderers/CheckBoxRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API CheckBoxRenderer : public IWidgetRenderer {
         public:
             /**

@@ -38,11 +38,11 @@
 #include <string>
 
 namespace IME {
-    namespace Graphics {
-        namespace UI {
-            class GuiContainer;
-        }
+    namespace UI {
+        class GuiContainer;
+    }
 
+    namespace Graphics {
         class IME_API Window : Utility::NonCopyable {
         public:
             /**

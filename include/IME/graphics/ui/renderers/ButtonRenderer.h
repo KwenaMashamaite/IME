@@ -38,7 +38,7 @@
 #include <TGUI/Renderers/ButtonRenderer.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API ButtonRenderer : public IWidgetRenderer {
         public:
             /**

@@ -26,7 +26,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     void EditBoxRenderer::setTextStyle(TextStyle style) {
         editBoxRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }

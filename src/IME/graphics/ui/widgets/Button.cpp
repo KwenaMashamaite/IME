@@ -28,7 +28,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     Button::Button() : Button("") {}
 
     Button::Button(const std::string &buttonText)

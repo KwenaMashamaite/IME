@@ -35,7 +35,7 @@
 #include <TGUI/Widgets/VerticalLayout.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API VerticalLayout : public IBoxLayout {
         public:
             /**

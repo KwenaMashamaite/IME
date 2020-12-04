@@ -29,8 +29,8 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-namespace IME::Graphics::UI {
-    GuiContainer::GuiContainer(Window &target) : sfmlGui_{target.window_}
+namespace IME::UI {
+    GuiContainer::GuiContainer(Graphics::Window &target) : sfmlGui_{target.window_}
     {}
 
     void GuiContainer::handleEvent(sf::Event event) {
@@ -58,7 +58,8 @@ namespace IME::Graphics::UI {
         widgets_.clear();
     }
 
-    void GuiContainer::setTarget(Window &target) {
+    void GuiContainer::setTarget(Graphics::
+    Window &target) {
         sfmlGui_.setTarget(target.window_);
     }
 

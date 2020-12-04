@@ -28,7 +28,7 @@
 #include <cassert>
 #include <TGUI/GuiBase.hpp>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     Slider::Slider(float minValue, float maxValue) 
         : slider_{tgui::Slider::create(minValue, maxValue)},
           renderer_{std::make_shared<SliderRenderer>()}

@@ -28,7 +28,7 @@
 #include <TGUI/GuiBase.hpp>
 #include <cassert>
 
-namespace IME::Graphics::UI {
+namespace IME::UI {
     CheckBox::CheckBox(const std::string &text)
         : checkBox_{tgui::CheckBox::create(text)},
           renderer_{std::make_shared<CheckBoxRenderer>()}

@@ -34,7 +34,7 @@
 #include <TGUI/Widgets/EditBox.hpp>
 
 namespace IME {
-    namespace Graphics::UI {
+    namespace UI {
         class IME_API EditBox : public IClickableWidget {
         public:
             /**
