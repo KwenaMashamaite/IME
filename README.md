@@ -1,37 +1,89 @@
-![IME logo](IME-Logo.png)
+<p align="center">
+    <img src="logo.png" alt="IME Logo">
+</p>
 
 # IME — Infinite Motion Engine
 
-IME is an open source state-based 2D game engine for the Windows platform. It is 
-written in C++17 and makes use of [SFML](https://github.com/SFML/SFML) and [TGUI](https://github.com/texus/TGUI).
+IME is an open source state-based 2D game engine. It is written in C++17 and 
+makes use of [SFML](https://github.com/SFML/SFML) and [TGUI](https://github.com/texus/TGUI).
 
 ## Features
  
-* **Graphics** - Tilemap, Sprites, GUI components (Label, Button, Checkbox, Input filed and much more)
-* **Anmations** - 2D animations which support both spritesheet and texture atlas
-* **Physics** - Shortest path finding in grid, grid based movement, collision detection system using callbacks
-* **Input** Mouse and Keyboard
-* **Sound** - Music and Sound effects manager
-* **Event system** - Thread safe locally and globally scoped event dispatchers
+* **Graphics** - Static tilemap, Sprites, GUI components (Label, Button, Checkbox, Input filed and much more)
+* **Animations** - 2D animations which support both spritesheet and texture atlas
+* **Physics** - Path finding, grid based movement, collision detection using callbacks
+* **Input** - Mouse and Keyboard
+* **Sound** - Music and Sound effects
+* **Event system** - Javascript inspired event emitter
 * **Asset management** - Just provide the filename and path to the asset and the engine will handle the rest
-* **Time** - Execute fuctions after delays and intervals using our callback system
+* **Time** - Execute functions after delays and intervals using callback system
 
-## Games developed with IME
+## Demos
 
-If you developed a game using IME, you may contact me with a link to your game so I can
-add it to the list. Here is a list of games developed with IME:
+Here is a list of games developed with IME:
 
 1. [Namco's 1982 Super Pac-Man clone](https://github.com/KwenaMashamaite/SuperPacMan)
 
-## Download
+##  Build 
 
-* Download [IME 1.0-beta](https://github.com/KwenaMashamaite/IME/releases/tag/v1.0-beta0)
-* Download [SFML 2.5.1](https://www.sfml-dev.org/download/sfml/2.5.1/)
-* Download [TGUI 0.9.0-beta](https://github.com/texus/TGUI/releases/tag/v0.9-beta)
+1. Clone the repository
+2. Download [GCC 7.3.0 MinGW (32-bit)](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-posix/dwarf/i686-7.3.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler and [CMake 3.17+](https://cmake.org/download/)
+3. Add the MinGW\bin directory to the PATH environment variable
+    #### You can do it using `Windows PowerShell` with the following command:
+```shell
+$Env:Path += ";your_mingw_folder\bin"
+```
+For example, adding `C:\mingw64\bin` to the value of the Path environment variable:
+
+```shell
+$Env:Path += ";C:\mingw64\bin"
+```
+3. Run the following commands from the project root directory:
+
+```shell
+mkdir build
+cd build
+cmake -G"MinGW Makefiles" ..
+cmake --build .
+cmake --install . --prefix "your_install_directory"
+```
+
+## Downloads
+
+The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/latest/download/IME-1.0.0.zip). 
+In addition, IME has dependencies on other libraries that must be downloaded.
+
+- Download [SFML 2.5.1](https://github.com/KwenaMashamaite/IME/releases/latest/download/SFML-2.5.1.zip)
+- Download [TGUI 0.9.0](https://github.com/KwenaMashamaite/IME/releases/latest/download/TGUI-0.9.0.zip)
+
+## Installation
+
+1. Using CMake 
+   
+```cmake
+# Find SFML
+set(SFML_DIR "your_path_to_SFML_directory/lib/cmake/SFML")
+find_package(SFML 2.5.1 COMPONENTS REQUIRED system window graphics audio)
+
+# Find TGUI
+set(TGUI_DIR "your_path_to_TGUI_directory/lib/cmake/TGUI")
+find_package(TGUI 0.9.0 REQUIRED)
+
+# Find IME
+set(IME_DIR "your_path_to_IME_directory/lib/cmake/IME")
+find_package(IME 1.0.0 REQUIRED)
+
+# Link TGUI, SFML and IME
+target_link_libraries (myGame PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio ime)
+```
 
 ## Learn
 
-* [Documentation](https://kwenamashamaite.github.io/IME/docs/v1.0-beta/html/index.html)
+* [Documentation](https://kwenamashamaite.github.io/IME/docs/v1.0.0/index.html)
+
+## Platform
+
+Currently, IME only supports Windows OS
 
 ## Contact
 
