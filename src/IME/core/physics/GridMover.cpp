@@ -287,6 +287,10 @@ namespace IME {
         return false;
     }
 
+    bool GridMover::removeEventListener(const std::string &event, int id) {
+        return eventEmitter_.removeEventListener(event, id);
+    }
+
     bool GridMover::removeInternalCollisionHandlerFor(const std::string &handler) {
         if (handler == "solidTiles") {
             solidTileCollisionHandler_ = nullptr;

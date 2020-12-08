@@ -253,6 +253,19 @@ namespace IME {
         bool removeCollisionHandler(int handlerId);
 
         /**
+         * @brief Remove an event listener from an event
+         * @param event Name of the event to remove event listener from
+         * @param id Identification number of the event listener
+         * @return True if the event listener was removed or false if the
+         *         given event does not have an event listener with the
+         *         given id
+         *
+         * The identification number is the number returned when a handler
+         * is added to an event
+         */
+        bool removeEventListener(const std::string& event, int id);
+
+        /**
          * @brief Remove the internal handler for a given collision event
          * @param handler Name of the handler to remove
          * @return True if the handler was removed or false if no such handler
