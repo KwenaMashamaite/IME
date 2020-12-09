@@ -30,9 +30,10 @@ namespace IME {
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
         onAdjacentTileReached([this](Graphics::Tile) {
-            if (auto&[changeDir, newDir] = newDir_; changeDir) { //If a direction switch was requested while a key was pressed
+            if (auto&[changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while a key was pressed
                 changeDir = false;
                 requestDirectionChange(newDir);
+                newDir = Direction::None;
             }
         });
     }
@@ -88,7 +89,7 @@ namespace IME {
         else
             return;
 
-        if (getTarget() && targetDirection != getTarget()->getDirection() && isTargetMoving()) {
+        if (getTarget() && isTargetMoving()) {
             newDir_.first = true;
             newDir_.second = targetDirection;
         } else

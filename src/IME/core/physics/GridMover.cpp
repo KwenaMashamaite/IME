@@ -116,18 +116,26 @@ namespace IME {
             if (!movable->isMoving() && targetDirection_ != Direction::None) {
                 setTargetTile();
 
-                // Stop further execution if a collision will occur if we move
+                // The grid border collision is always handled because whether or not the target is
+                // collidable, it cannot be allowed to move out of the grid, if that's desired it has
+                // to be done externally. For other collisions, the internal handler prevents the
+                // target from moving to a tile that results in a collision. If the internal handler is
+                // removed then the collision is emitted so that it can be handled externally
                 if (handleGridBorderCollision())
                     return;
-                else if (handleSolidTileCollision())
-                    return;
-                else if (auto [found, obstacle] = targetTileHasObstacle(); found) {
-                    if (obstacleCollisionHandler_) {
-                        obstacleCollisionHandler_();
-                        eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                else if (target_->isCollidable()) {
+                    if (handleSolidTileCollision())
                         return;
+                    else if (targetTile_.isCollidable())
+                        eventEmitter_.emit("solidTileCollision", targetTile_);
+                    else if (auto [found, obstacle] = targetTileHasObstacle(); found && obstacleCollisionHandler_) {
+                        if (obstacleCollisionHandler_) {
+                            obstacleCollisionHandler_();
+                            eventEmitter_.emit("obstacleCollision", target_, obstacle);
+                            return;
+                        } else
+                            eventEmitter_.emit("obstacleCollision", target_, obstacle);
                     }
-                    eventEmitter_.emit("obstacleCollision", target_, obstacle);
                 }
 
                 movable->move();
@@ -167,12 +175,12 @@ namespace IME {
     }
 
     bool GridMover::handleSolidTileCollision() {
-        if (targetTile_.isSolid() && target_->isCollidable()) {
+        if (targetTile_.isSolid()) {
             if (solidTileCollisionHandler_) {
                 solidTileCollisionHandler_();
                 return true;
-            }
-            eventEmitter_.emit("solidTileCollision", targetTile_);
+            } else
+                eventEmitter_.emit("solidTileCollision", targetTile_);
         }
         return false;
     }
@@ -223,7 +231,7 @@ namespace IME {
     }
 
     void GridMover::setTargetTile() {
-        prevTile_ = tileMap_.getTile(target_->getPosition());
+        prevTile_ = targetTile_;
         switch (targetDirection_) {
             case Direction::Left:
                 targetTile_ = tileMap_.getTileLeftOf(prevTile_);

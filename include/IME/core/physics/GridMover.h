@@ -179,10 +179,11 @@ namespace IME {
          * internal handler prevents the target from occupying the solid tile
          * by moving it back to its previous tile after the collision. This
          * behaviour may be removed if not desired by calling
-         * @see removeInternalCollisionHandlerFor() with "solidTiles" as the
-         * argument
+         * removeInternalCollisionHandlerFor with "solidTiles" as the argument
          *
          * The callback is passed the tile the target collided with
+         *
+         * @see removeInternalCollisionHandlerFor
          */
         int onSolidTileCollision(Callback<IME::Graphics::Tile> callback);
 
@@ -197,11 +198,12 @@ namespace IME {
          * target from occupying the same tile as the obstacle by moving it
          * back to its previous tile after the collision. This behaviour may
          * be removed if not desired by invoking
-         * @see removeInternalCollisionHandlerFor() with "obstacles" as the
-         * argument
+         * removeInternalCollisionHandlerFor with "obstacles" as the argument
          *
          * The callback is passed the target as the first argument and the
          * obstacle it collided with as the second argument
+         *
+         * @see removeInternalCollisionHandlerFor
          */
         int onObstacleCollision(Callback<EntityPtr, EntityPtr> callback);
 
@@ -305,8 +307,8 @@ namespace IME {
          * @brief Check for a solid tile collision and handle if it occurs
          * @return True if the collision was handled, otherwise false
          *
-         * The collision is only handled if the internal solid tile handler
-         * is not removed
+         * The collision is only handled if the the tile is a solid/collidable
+         * and the internal solid tile collision handler is not removed
          */
         bool handleSolidTileCollision();
 
