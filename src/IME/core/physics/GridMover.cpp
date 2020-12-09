@@ -64,6 +64,7 @@ namespace IME {
                 teleportTargetToDestination();
             targetTile_ = tileMap_.getTile(target->getPosition());
             target_ = std::move(target);
+            eventEmitter_.emit("targetChange", target_);
         }
     }
 
