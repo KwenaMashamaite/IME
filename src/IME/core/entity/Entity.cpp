@@ -69,14 +69,14 @@ namespace IME {
     }
 
     Entity::Entity(const Vector2u &boundingBoxSize, Type type) :
-            type_(type),
-            id_{prevEntityId_++},
-            boundingRect_(boundingBoxSize),
-            isVulnerable_(true),
-            isActive_(true),
-            isCollidable_(false),
-            direction_(Direction::None),
-            position_({0, 0})
+        type_(type),
+        id_{prevEntityId_++},
+        boundingRect_(boundingBoxSize),
+        isVulnerable_(true),
+        isActive_(true),
+        isCollidable_(false),
+        direction_(Direction::None),
+        position_({0, 0})
     {}
 
     void Entity::setPosition(float x, float y) {
@@ -84,7 +84,8 @@ namespace IME {
             return;
         position_.x = x;
         position_.y = y;
-        publishEvent("positionChanged", position_.x, position_.y);
+        publishEvent("positionChange", position_.x, position_.y);
+        publishEvent("positionChange", position_);
     }
 
     void Entity::setPosition(Vector2f position) {
@@ -98,7 +99,7 @@ namespace IME {
     void Entity::setDirection(Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
-            publishEvent("directionChanged", direction_);
+            publishEvent("directionChange", direction_);
         }
     }
 
@@ -107,7 +108,10 @@ namespace IME {
     }
 
     void Entity::setSize(Vector2u size) {
-        boundingRect_ = size;
+        if (boundingRect_ != size) {
+            boundingRect_ = size;
+            eventEmitter_.emit("sizeChange", boundingRect_);
+        }
     }
 
     Vector2u Entity::getSize() const {
@@ -120,9 +124,9 @@ namespace IME {
         isActive_ = isActive;
 
         if (!isActive_)
-            publishEvent("killed");
+            publishEvent("inactive");
         else
-            publishEvent("revived"); //By default entity is alive (Will be killed first)
+            publishEvent("active");
     }
 
     void Entity::setVulnerable(bool isVulnerable) {
@@ -139,9 +143,9 @@ namespace IME {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (isCollidable_)
-                publishEvent("collisionEnabled");
+                publishEvent("collisionEnable");
             else
-                publishEvent("collisionDisabled");
+                publishEvent("collisionDisable");
         }
     }
 
