@@ -160,8 +160,6 @@ namespace IME {
         bool movementStarted_;                        //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion
         Callback<> adjacentTileHandler_;              //!< Function executed every time target reaches adjacent tile
-        int obstacleHandlerId_;                       //!< Obstacle collision handler id
-        int solidTileHandlerId_;                      //!< Solid tile collision handler id
     };
 }
 

@@ -69,7 +69,10 @@ namespace IME {
     }
 
     void KeyboardControlledGridMover::attachInputEventListeners() {
-        static auto moveEntity = [this](Input::Keyboard::Key key) {moveTarget(key);};
+        auto moveEntity = [this](Input::Keyboard::Key key) {
+            moveTarget(key);
+        };
+
         if (trigger_ == MovementTrigger::OnKeyDown)
             onTriggerHandlerId_ = keyboard_.onKeyDown(moveEntity);
         else if (trigger_ == MovementTrigger::OnKeyUp)

@@ -83,8 +83,6 @@ namespace IME {
     private:
         Direction prevDirection_; //!< Keeps track of the targets previous direction
         bool movementStarted_;    //!< Tracks whether the target movement has been initiated or not
-        int obstacleHandlerId_;   //!< Obstacle collision handler id
-        int solidTileHandlerId_;  //!< Solid tile collision handler id
     };
 }
 

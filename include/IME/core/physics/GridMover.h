@@ -265,58 +265,53 @@ namespace IME {
         bool removeEventListener(const std::string& event, int id);
 
         /**
-         * @brief Remove the internal handler for a given collision event
-         * @param handler Name of the handler to remove
-         * @return True if the handler was removed or false if no such handler
-         *         exists
-         */
-        bool removeInternalCollisionHandlerFor(const std::string& handler);
-
-        /**
-         * @brief Check if the internal collision handler is removed or not
-         * @param handler Name of the handler to check
-         * @return True if the handler is removed, otherwise false
-         */
-        bool isInternalHandlerRemoved(const std::string& handler);
-
-        /**
          * @brief Destructor
          */
         virtual ~GridMover() = default;
 
-    protected:
-        /**
-         * @brief Execute a callback when an internal handler is removed
-         * @param callback Function to execute
-         *
-         * This event is useful if derived classes rely on the internal
-         * collision handler behavior because they can adapt themselves
-         * when the handler is removed.
-         *
-         * The callback is passed the name of the handler that got removed
-         */
-        void onInternalHandlerRemove(Callback<std::string> callback);
-
     private:
         /**
          * @brief Set the targets target tile
+         *
+         * This tile is the tile the target wishes to occupy
          */
         void setTargetTile();
 
         /**
-         * @brief Check for a solid tile collision and handle if it occurs
-         * @return True if the collision was handled, otherwise false
+         * @brief Resolve a solid tile collision
+         * * @return True if the collision was resolved or false if such a
+         *         collision is not taking place
          *
-         * The collision is only handled if the the tile is a solid/collidable
-         * and the internal solid tile collision handler is not removed
+         * This function will prevent the target from occupying a solid tile.
+         * (Solid tiles are considered collidable)
          */
         bool handleSolidTileCollision();
 
         /**
-         * @brief Check for a grid border collision and handle if it occurs
-         * @return True if the collision was handled, otherwise false
+         * @brief Resolve a grid border collision
+         * @return True if the collision was resolved or false if such a
+         *         collision is not taking place
+         *
+         * This function will prevent the target from leaving the tilemap
          */
         bool handleGridBorderCollision();
+
+        /**
+         * @brief Resolve an obstacle collision
+         * @return True if the collision was resolved or false if such a
+         *         collision is not taking place
+         *
+         * This function will prevent the target from occupying a tile which
+         * has obstacles
+         */
+        bool handleObstacleCollision();
+
+        /**
+         * @brief Check whether or not target has reached its adjacent tile
+         * @param deltaTime Time passed since last check
+         * @return True if target has reached its adjacent tile, otherwise false
+         */
+        bool isTargetTileReached(float deltaTime);
 
         /**
          * @brief Stop target and notify event listeners
@@ -338,15 +333,12 @@ namespace IME {
         void snapTargetToTargetTile();
 
     private:
-        TileMap& tileMap_;                     //!< Grid to move entity in
-        EntityPtr target_;                     //!< Target to be moved in the grid
-        Direction targetDirection_;            //!< Stores the direction in which the target wishes to go
-        Graphics::Tile targetTile_;            //!< The grid tile the target wishes to reach
-        Graphics::Tile prevTile_;              //!< Tile target was in before moving to adjacent tile
-        EventEmitter eventEmitter_;            //!< Collision event publisher
-        bool reachedTarget_;                   //!< Tracks if controlled entity has reached target tile or not
-        Callback<> obstacleCollisionHandler_;  //!< Function called when targets collides with an obstacle
-        Callback<> solidTileCollisionHandler_; //!< Function called when a target collides with a solid tile
+        TileMap& tileMap_;          //!< Grid to move entity in
+        EntityPtr target_;          //!< Target to be moved in the grid
+        Direction targetDirection_; //!< Stores the direction in which the target wishes to go
+        Graphics::Tile targetTile_; //!< The grid tile the target wishes to reach
+        Graphics::Tile prevTile_;   //!< Tile target was in before moving to adjacent tile
+        EventEmitter eventEmitter_; //!< Collision event publisher
     };
 }
 

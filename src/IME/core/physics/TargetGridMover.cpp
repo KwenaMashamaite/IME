@@ -31,9 +31,7 @@ namespace IME {
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         movementStarted_{false},
-        targetTileChangedWhileMoving_{false},
-        obstacleHandlerId_{-1},
-        solidTileHandlerId_{-1}
+        targetTileChangedWhileMoving_{false}
     {
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
@@ -52,25 +50,18 @@ namespace IME {
                 adjacentTileHandler_();
         });
 
-        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile) {
+        onSolidTileCollision([this](Graphics::Tile) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();
             }
         });
 
-        obstacleHandlerId_ = onObstacleCollision([this](EntityPtr , EntityPtr) {
+        onObstacleCollision([this](EntityPtr , EntityPtr) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();
             }
-        });
-
-        onInternalHandlerRemove([this](std::string handler) {
-            if (handler == "solidTiles")
-                removeCollisionHandler(solidTileHandlerId_);
-            else if (handler == "obstacles")
-                removeCollisionHandler(obstacleHandlerId_);
         });
     }
 
@@ -78,10 +69,12 @@ namespace IME {
         if (index != targetTileIndex_ && getGrid().isIndexValid(index)) {
             targetTileIndex_ = index;
             if (getTarget()) {
-                if (isTargetMoving())
+                if (isTargetMoving()) {
                     targetTileChangedWhileMoving_ = true;
-                generatePath();
-                moveTarget();
+                } else {
+                    generatePath();
+                    moveTarget();
+                }
             }
         }
     }
@@ -155,8 +148,8 @@ namespace IME {
         } else {
             adjacentTileHandler_ = [this] {
                 if (targetTileChangedWhileMoving_) {
-                    generatePath();
                     targetTileChangedWhileMoving_ = false;
+                    generatePath();
                 }
                 moveTarget();
             };

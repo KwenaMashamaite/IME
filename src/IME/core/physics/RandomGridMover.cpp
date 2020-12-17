@@ -29,9 +29,7 @@ namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         prevDirection_(Direction::None),
-        movementStarted_{false},
-        obstacleHandlerId_{-1},
-        solidTileHandlerId_{-1}
+        movementStarted_{false}
     {
         onTargetChanged([this](EntityPtr newTarget) {
             if (newTarget) {
@@ -41,11 +39,11 @@ namespace IME {
                 movementStarted_ = false;
         });
 
-        solidTileHandlerId_ = onSolidTileCollision([this](Graphics::Tile) {
+        onSolidTileCollision([this](Graphics::Tile) {
             revertAndGenerateDirection();
         });
 
-        obstacleHandlerId_ = onObstacleCollision([this](auto, auto) {
+        onObstacleCollision([this](EntityPtr, EntityPtr) {
             revertAndGenerateDirection();
         });
 
@@ -55,14 +53,7 @@ namespace IME {
         });
 
         onGridBorderCollision([this] {
-            generateNewDirection();
-        });
-
-        onInternalHandlerRemove([this](std::string handler) {
-            if (handler == "solidTiles")
-                removeCollisionHandler(solidTileHandlerId_);
-            else if (handler == "obstacles")
-                removeCollisionHandler(obstacleHandlerId_);
+            revertAndGenerateDirection();
         });
     }
 
