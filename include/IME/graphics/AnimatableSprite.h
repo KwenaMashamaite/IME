@@ -59,6 +59,13 @@ namespace IME {
             bool addAnimation(std::shared_ptr<Animation> animation);
 
             /**
+             * @brief Get the name of the current animation
+             * @return Name of the current animation or an empty string if there
+             *         is no animation set
+             */
+            std::string getCurrentAnimation() const;
+
+            /**
              * @brief Update the current animation
              * @param deltaTime Time passed since last animation update
              *

@@ -33,6 +33,10 @@ namespace IME::Graphics {
         return animator_->addAnimation(std::move(animation));
     }
 
+    std::string AnimatableSprite::getCurrentAnimation() const {
+        return animator_->getCurrentAnimation();
+    }
+
     void AnimatableSprite::updateAnimation(float deltaTime) {
         animator_->update(deltaTime);
     }

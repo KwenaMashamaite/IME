@@ -45,6 +45,12 @@ namespace IME{
         );
     }
 
+    std::string Animator::getCurrentAnimation() const {
+        if (currentAnimation_)
+            return currentAnimation_->getName();
+        return "";
+    }
+
     void Animator::update(float deltaTime) {
         if (currentAnimation_) {
             if (totalTime_ == 0.0f)
