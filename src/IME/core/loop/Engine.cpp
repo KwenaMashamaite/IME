@@ -27,7 +27,6 @@
 #include "IME/utility/ConfigFileParser.h"
 #include "IME/utility/ConsoleLogger.h"
 #include <assert.h>
-#include <cstdlib>
 
 template <class T>
 void setDefaultValueIfNotSet(IME::PropertyContainer& settings,
@@ -50,7 +49,6 @@ namespace IME {
     {
         //@TODO - Fix engine throwing std::bad_cast during initialization
         //        when constructed with this constructor
-        srand(time(nullptr));
         settings_ = std::move(settings);
     }
 

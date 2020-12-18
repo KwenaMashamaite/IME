@@ -23,16 +23,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/utility/Utils.h"
-#include <ctime>
 
 namespace IME::Utility {
     int generateRandomNum(int min, int max) {
-        return min + (rand() % (max - min + 1));
+        return createRandomNumGenerator(min, max)();
     }
 
     Colour generateRandomColour() {
-        return {static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),
-                static_cast<unsigned int>(generateRandomNum(0, 255)),255};
+        static auto gen_random_num_between_0_and_255 = createRandomNumGenerator(0, 255);
+        return {static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                static_cast<unsigned int>(gen_random_num_between_0_and_255())};
     }
 }

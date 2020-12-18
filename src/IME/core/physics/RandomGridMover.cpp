@@ -86,7 +86,8 @@ namespace IME {
             oppositeDirection = Direction::Up;
 
         do {
-            newDirection = static_cast<Direction>(Utility::generateRandomNum(1, 4));
+            static auto gen_random_num_between_1_and_4 = Utility::createRandomNumGenerator(1, 4);
+            newDirection = static_cast<Direction>(gen_random_num_between_1_and_4());
         } while (newDirection == oppositeDirection);
         requestDirectionChange(newDirection);
     }

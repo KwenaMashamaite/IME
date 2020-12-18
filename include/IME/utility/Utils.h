@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include <random>
+#include <ctime>
 
 namespace IME {
     namespace Utility {
@@ -38,6 +39,20 @@ namespace IME {
          * @return A random number in the given range
          */
         IME_API extern int generateRandomNum(int min, int max);
+
+        /**
+         * @brief Create a callable that generates random numbers in a range
+         * @param min The start of the range
+         * @param max The end of the range
+         * @return A callable object, when called returns a random number in
+         *         the specified range
+         */
+        static auto createRandomNumGenerator(int min, int max) {
+            return [distribution = std::uniform_int_distribution(min, max)]() mutable {
+                static auto randomEngine = std::mt19937(time(nullptr));
+                return distribution(randomEngine);
+            };
+        }
 
         /**
          * @brief Create a random colour
