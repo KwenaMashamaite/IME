@@ -33,7 +33,7 @@ namespace IME::Graphics {
         return animator_->addAnimation(std::move(animation));
     }
 
-    std::string AnimatableSprite::getCurrentAnimation() const {
+    std::shared_ptr<Animation> AnimatableSprite::getCurrentAnimation() const {
         return animator_->getCurrentAnimation();
     }
 

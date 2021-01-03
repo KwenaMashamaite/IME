@@ -45,10 +45,8 @@ namespace IME{
         );
     }
 
-    std::string Animator::getCurrentAnimation() const {
-        if (currentAnimation_)
-            return currentAnimation_->getName();
-        return "";
+    std::shared_ptr<Animation> Animator::getCurrentAnimation() const {
+        return currentAnimation_;
     }
 
     void Animator::update(float deltaTime) {

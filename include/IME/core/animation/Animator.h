@@ -69,11 +69,11 @@ namespace IME {
         void addAnimation(Animations animations);
 
         /**
-         * @brief Get the name of the current animation
-         * @return Name of the current animation or an empty string if there
-         *         is no animation set
+         * @brief Get the current animation
+         * @return Pointer to the current animation if there is one, otherwise
+         *         a nullptr
          */
-        std::string getCurrentAnimation() const;
+        std::shared_ptr<Animation> getCurrentAnimation() const;
 
         /**
          * @brief Update the current animation
