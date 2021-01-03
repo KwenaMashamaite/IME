@@ -28,11 +28,14 @@ namespace IME::Input {
     int InputManager::addKeyListener(Keyboard::Event event, Keyboard::Key key,
         Callback<> callback)
     {
-        if (event == Keyboard::Event::KeyDown)
-            return keyboard_.onKeyDown(key, std::move(callback));
-        else if (event == Keyboard::Event::KeyUp)
-            return keyboard_.onKeyUp(key, std::move(callback));
-        return -1;
+        switch (event) {
+            case Keyboard::Event::KeyDown:
+                return keyboard_.onKeyDown(key, std::move(callback));
+            case Keyboard::Event::KeyUp:
+                return keyboard_.onKeyUp(key, std::move(callback));
+            default:
+                return -1;
+        }
     }
 
     int InputManager::addAnyKeyUpListener(Callback<Keyboard::Key> callback) {
@@ -46,11 +49,14 @@ namespace IME::Input {
     int InputManager::addMouseButtonListener(Mouse::Event event, Mouse::Button button,
         Callback<int, int> callback)
     {
-        if (event == Mouse::Event::MouseDown)
-            mouse_.onButtonDown(button, std::move(callback));
-        else if (event == Mouse::Event::MouseUp)
-            mouse_.onButtonUp(button, std::move(callback));
-        return 0;
+        switch(event) {
+            case Mouse::Event::MouseDown:
+                return mouse_.onButtonDown(button, std::move(callback));
+            case Mouse::Event::MouseUp:
+                return mouse_.onButtonUp(button, std::move(callback));
+            default:
+                return -1;
+        }
     }
 
     bool InputManager::removeKeyListener(Keyboard::Event event, Keyboard::Key key, int id) {

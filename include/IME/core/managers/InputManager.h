@@ -48,8 +48,7 @@ namespace IME {
              * @param event Name of the event to add key listener to
              * @param key Key to listen for
              * @param callback Function to execute when the key event is raised
-             * @return The event listeners identification number or -1 if the
-             *         specified key event is invalid
+             * @return The event listeners identification number
              */
             int addKeyListener(Keyboard::Event event, Keyboard::Key key, Callback<> callback);
 
@@ -103,8 +102,7 @@ namespace IME {
              * @param event Name of the event to add mouse listener to
              * @param button Mouse button to listen for
              * @param callback Function to execute when the mouse event is raised
-             * @return The event listeners identification number or -1 if the
-             *         specified mouse event is invalid
+             * @return The event listeners identification number
              *
              * The callback will be passed the coordinates of where the mouse
              * event took place. That is, the coordinates of where the mouse was
