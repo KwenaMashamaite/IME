@@ -30,7 +30,7 @@ namespace IME {
     GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
         tileMap_(tileMap),
         target_(target),
-        targetDirection_(Direction::None),
+        targetDirection_(Direction::Unknown),
         targetTile_{tileMap.getTileSize(), {0, 0}},
         prevTile_({tileMap.getTileSize(), {}})
     {
@@ -74,11 +74,11 @@ namespace IME {
 
     bool GridMover::requestDirectionChange(Direction newDir) {
         auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
-        if (movableObj && !movableObj->isMoving() && targetDirection_ == Direction::None
+        if (movableObj && !movableObj->isMoving() && targetDirection_ == Direction::Unknown
             && targetTile_.getIndex() == tileMap_.getTileOccupiedByChild(target_).getIndex()) {
             switch (newDir) {
-                case Direction::None:
-                    target_->setDirection(Direction::None);
+                case Direction::Unknown:
+                    target_->setDirection(Direction::Unknown);
                     break;
                 case Direction::Left:
                     target_->setDirection(Direction::Left);
@@ -103,7 +103,7 @@ namespace IME {
         if (target_) {
             assert(tileMap_.hasChild(target_) && "Target removed from the grid while still controlled by a grid mover");
             auto movable = std::dynamic_pointer_cast<IMovable>(target_);
-            if (!movable->isMoving() && targetDirection_ != Direction::None) {
+            if (!movable->isMoving() && targetDirection_ != Direction::Unknown) {
                 setTargetTile();
 
                 // Prevent target from moving to a tile that results in a collision
@@ -127,7 +127,7 @@ namespace IME {
     void GridMover::snapTargetToTargetTile() {
         if (target_ && target_->getPosition() != targetTile_.getPosition()) {
             std::dynamic_pointer_cast<IMovable>(target_)->stop();
-            targetDirection_ = Direction::None;
+            targetDirection_ = Direction::Unknown;
             tileMap_.removeChildFromTile(prevTile_, target_);
             tileMap_.addChild(target_, targetTile_.getIndex());
         }
@@ -137,8 +137,9 @@ namespace IME {
         if (targetTile_.isSolid()) {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::None;
+            targetDirection_ = Direction::Unknown;
             eventEmitter_.emit("solidTileCollision", hitTile);
+            return true;
         }
         return false;
     }
@@ -146,7 +147,7 @@ namespace IME {
     bool GridMover::handleObstacleCollision() {
         if (auto [found, obstacle] = targetTileHasObstacle(); found) {
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::None;
+            targetDirection_ = Direction::Unknown;
             eventEmitter_.emit("obstacleCollision", target_, obstacle);
             return true;
         }
@@ -155,8 +156,8 @@ namespace IME {
 
     std::pair<bool, std::shared_ptr<Entity>> GridMover::targetTileHasObstacle() {
         EntityPtr obstacle;
-        tileMap_.forEachChildInTile(targetTile_, [&obstacle](EntityPtr child) {
-            if (child->getType() == Entity::Type::Obstacle && child->isCollidable()) {
+        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](EntityPtr child) {
+            if (child->getType() == Entity::Type::Obstacle && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
             }
@@ -168,7 +169,7 @@ namespace IME {
         //A tile outside the grid bounds has the index {-1, -1}
         if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::None;
+            targetDirection_ = Direction::Unknown;
             eventEmitter_.emit("gridBorderCollision");
             return true;
         }
@@ -225,7 +226,7 @@ namespace IME {
             case Direction::Down:
                 targetTile_ = tileMap_.getTileBelow(targetTile_);
                 break;
-            case Direction::None:
+            case Direction::Unknown:
                 return;
         }
     }

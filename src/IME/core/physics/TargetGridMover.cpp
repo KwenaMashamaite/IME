@@ -39,7 +39,7 @@ namespace IME {
         enableAdaptiveMovement(false);
 
         onTargetChanged([this](EntityPtr newTarget) {
-            if (newTarget) {
+            if (newTarget && movementStarted_) {
                 generatePath();
                 moveTarget();
             }
@@ -110,7 +110,7 @@ namespace IME {
         if (!getTarget())
             return;
 
-        auto newDirection = Direction::None;
+        auto newDirection = Direction::Unknown;
         auto currentPosIndex = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
         if (Index{currentPosIndex.row, currentPosIndex.colm + 1} == nextPos)
             newDirection = Direction::Right;
@@ -121,7 +121,7 @@ namespace IME {
         else if (Index{currentPosIndex.row + 1, currentPosIndex.colm} == nextPos)
             newDirection = Direction::Down;
         else
-            newDirection = Direction::None;
+            newDirection = Direction::Unknown;
         requestDirectionChange(newDirection);
     }
 

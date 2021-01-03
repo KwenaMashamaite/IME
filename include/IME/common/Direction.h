@@ -30,11 +30,11 @@ namespace IME {
      * @brief Directions
      */
     enum class Direction {
-        None = 0, //!< No direction
-        Left,     //!< Left Direction
-        Right,    //!< Right direction
-        Up,       //!< Up direction
-        Down      //!< Down direction
+        Unknown = 0, //!< Unknown direction
+        Left,        //!< Left Direction
+        Right,       //!< Right direction
+        Up,          //!< Up direction
+        Down         //!< Down direction
     };
 }
 

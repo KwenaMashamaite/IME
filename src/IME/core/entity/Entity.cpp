@@ -75,7 +75,7 @@ namespace IME {
         isVulnerable_(true),
         isActive_(true),
         isCollidable_(false),
-        direction_(Direction::None),
+        direction_(Direction::Unknown),
         position_({0, 0})
     {}
 

@@ -28,15 +28,15 @@
 namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
         GridMover(tileMap, target),
-        prevDirection_(Direction::None),
+        prevDirection_(Direction::Unknown),
         movementStarted_{false}
     {
         onTargetChanged([this](EntityPtr newTarget) {
             if (newTarget) {
-                movementStarted_ = true;
-                generateNewDirection();
-            } else
-                movementStarted_ = false;
+                prevDirection_ = newTarget->getDirection();
+                if (movementStarted_)
+                    generateNewDirection();
+            }
         });
 
         onSolidTileCollision([this](Graphics::Tile) {
@@ -73,8 +73,8 @@ namespace IME {
             return;
 
         prevDirection_ = getTarget()->getDirection();
-        auto newDirection = Direction::None;
-        auto oppositeDirection = Direction::None;
+        auto newDirection = Direction::Unknown;
+        auto oppositeDirection = Direction::Unknown;
 
         if (prevDirection_ == Direction::Left)
             oppositeDirection = Direction::Right;
@@ -93,7 +93,7 @@ namespace IME {
     }
 
     void RandomGridMover::revertAndGenerateDirection() {
-        if (getTarget() && movementStarted_) {
+        if (getTarget()) {
             getTarget()->setDirection(prevDirection_);
             generateNewDirection();
         }

@@ -30,10 +30,10 @@ namespace IME {
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
         onAdjacentTileReached([this](Graphics::Tile) {
-            if (auto&[changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while a key was pressed
+            if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while a key was pressed
                 changeDir = false;
                 requestDirectionChange(newDir);
-                newDir = Direction::None;
+                newDir = Direction::Unknown;
             }
         });
     }
@@ -80,7 +80,7 @@ namespace IME {
     }
 
     void KeyboardControlledGridMover::moveTarget(Input::Keyboard::Key key) {
-        auto targetDirection = IME::Direction::None;
+        auto targetDirection = IME::Direction::Unknown;
         if (key == goLeftKey_)
             targetDirection = IME::Direction::Left;
         else if (key == goRightKey_)
