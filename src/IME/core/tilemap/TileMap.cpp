@@ -87,7 +87,7 @@ namespace IME {
         return getTileRightOf(tile.getIndex());
     }
 
-    Graphics::Sprite &TileMap::getBackground() {
+    Graphics::AnimatableSprite &TileMap::getBackground() {
         return background_;
     }
 

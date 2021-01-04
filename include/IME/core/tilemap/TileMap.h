@@ -31,6 +31,7 @@
 #include "IME/graphics/Tile.h"
 #include "Index.h"
 #include "IME/core/entity/Entity.h"
+#include "IME/graphics/AnimatableSprite.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -226,7 +227,7 @@ namespace IME {
          *
          * @see showLayer
          */
-        Graphics::Sprite& getBackground();
+        Graphics::AnimatableSprite& getBackground();
 
         /**
          * @brief Get a tile at a certain index
@@ -644,11 +645,11 @@ namespace IME {
         unsigned int numOfColms_;      //!< The height of the tilemap in tiles
         Map mapData_;                  //!< Map data used to identify different tiles
         std::string tileSet_;          //!< Tileset the visual grid is constructed from
-        Graphics::Sprite background_;  //!< Background image (first layer)
         bool isGridVisible_;           //!< Visibility state of the grid
         bool isBackgroundDrawable_;    //!< First layer render state
         bool isTilesDrawable_;         //!< Second layer render state
         Graphics::Tile invalidTile_;   //!< Tile returned when an invalid index is provided
+        Graphics::AnimatableSprite background_;  //!< Background image (first layer)
 
         std::unordered_map<Index, std::vector<std::shared_ptr<Entity>>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;                    //!< Tilesets container
