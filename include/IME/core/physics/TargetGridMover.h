@@ -80,6 +80,26 @@ namespace IME {
         Index getDestination() const;
 
         /**
+         * @brief Check whether or not a destination is reachable
+         * @param index Destination to be checked
+         * @return True if the destination is reachable from the targets
+         *         current position otherwise false
+         *
+         * This function will return false when the destination is not
+         * reachable or when there is no target set. Therefore, for accurate
+         * results, the presence of the target should be checked first
+         *
+         * @warning This function is expensive when the tilemap has a lot of
+         * accessible tiles because the path is regenerated every time the
+         * function is called to accommodate changes in position since the
+         * destination was set
+         *
+         * @see setTarget
+         * @see setDestination
+         */
+        bool isDestinationReachable(IME::Index index);
+
+        /**
          * @brief Start moving the target to its destination tile
          *
          * This function has no effect if the targets movement is not

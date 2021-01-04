@@ -83,6 +83,14 @@ namespace IME {
         return targetTileIndex_;
     }
 
+    bool TargetGridMover::isDestinationReachable(IME::Index index) {
+        if (getTarget())
+            return !(pathFinder_->findPath(getGrid(),
+                getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
+                index).empty());
+        return false;
+    }
+
     void TargetGridMover::setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder) {
         if (pathFinder) {
             pathFinder_ = std::move(pathFinder);
