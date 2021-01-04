@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // IME - Infinite Motion Engine
 //
-// Copyright (c) 2020 Kwena Mashamaite (kmash.ime@gmail.com)
+// Copyright (c) 2020-2021 Kwena Mashamaite (kwena.mashamaite1@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
