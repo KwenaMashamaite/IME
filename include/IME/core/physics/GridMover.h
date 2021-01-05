@@ -240,6 +240,17 @@ namespace IME {
          */
         int onPlayerCollision(Callback<EntityPtr, EntityPtr> callback);
 
+        void resetTargetTile() {
+            if (target_ && targetTile_.getIndex() != tileMap_.getTileOccupiedByChild(target_).getIndex()) {
+                targetTile_ = tileMap_.getTileOccupiedByChild(target_);
+                eventEmitter_.emit("targetTileReset", targetTile_);
+            }
+        }
+
+        void onTargetTileReset(IME::Callback<Graphics::Tile> callback){
+            eventEmitter_.addEventListener("targetTileReset", callback);
+        }
+
         /**
          * @brief Remove an external collision handler
          * @param handlerId Identification number of the handler

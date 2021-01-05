@@ -29,7 +29,11 @@ namespace IME {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         prevDirection_(Direction::Unknown),
-        movementStarted_{false}
+        movementStarted_{false},
+        isAdvance_{false},
+        switchToAdvanced_{false},
+        switchToNormal_{false},
+        targetGridMover_(tileMap, target)
     {
         onTargetChanged([this](EntityPtr newTarget) {
             if (newTarget) {
@@ -37,6 +41,7 @@ namespace IME {
                 if (movementStarted_)
                     generateNewDirection();
             }
+            targetGridMover_.setTarget(newTarget);
         });
 
         onSolidTileCollision([this](Graphics::Tile) {
@@ -48,24 +53,53 @@ namespace IME {
         });
 
         onAdjacentTileReached([this](Graphics::Tile) {
-            if (movementStarted_)
+            if (!isAdvance_ && switchToAdvanced_) {
+                switchToAdvanced_ = false;
+                isAdvance_ = true;
+                targetGridMover_.resetTargetTile();
+                setRandomPosition();
+                targetGridMover_.startMovement();
+            } else if (movementStarted_ && !isAdvance_) {
+                resetTargetTile();
                 generateNewDirection();
+            }
         });
 
         onGridBorderCollision([this] {
             revertAndGenerateDirection();
         });
+
+        targetGridMover_.onDestinationReached([this](Graphics::Tile) {
+            setRandomPosition();
+        });
+
+        targetGridMover_.onAdjacentTileReached([this](IME::Graphics::Tile) {
+            if (isAdvance_ && switchToNormal_) {
+                switchToNormal_ = false;
+                isAdvance_ = false;
+                resetTargetTile();
+                if (movementStarted_)
+                    generateNewDirection();
+            }
+        });
+
+        enableAdvancedMovement(false);
     }
 
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;
-            generateNewDirection();
+            if (isAdvance_)
+                targetGridMover_.startMovement();
+            else
+                generateNewDirection();
         }
     }
 
     void RandomGridMover::stopMovement() {
         movementStarted_ = false;
+        if (isAdvance_)
+            targetGridMover_.stopMovement();
     }
 
     void RandomGridMover::generateNewDirection() {
@@ -97,5 +131,43 @@ namespace IME {
             getTarget()->setDirection(prevDirection_);
             generateNewDirection();
         }
+    }
+
+    void RandomGridMover::enableAdvancedMovement(bool enable) {
+        if (!isAdvance_ && enable) {
+            if (isTargetMoving())
+                switchToAdvanced_ = true;
+            else {
+                isAdvance_ = true;
+                targetGridMover_.resetTargetTile();
+                setRandomPosition();
+                if (movementStarted_)
+                    targetGridMover_.startMovement();
+            }
+        } else if (isAdvance_ && !enable) {
+            if (targetGridMover_.isTargetMoving())
+                switchToNormal_ = true;
+            else {
+                isAdvance_ = false;
+                resetTargetTile();
+            }
+        }
+    }
+
+    void RandomGridMover::setRandomPosition() {
+        static auto generateRandomRow = Utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().y);
+        static auto generateRandomColm = Utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().x);
+
+        auto newDestination = Index{generateRandomRow(), generateRandomColm()};
+        while(!targetGridMover_.isDestinationReachable(newDestination))
+            newDestination = Index{generateRandomRow(), generateRandomColm()};
+        targetGridMover_.setDestination(newDestination);
+    }
+
+    void RandomGridMover::update(float deltaTime) {
+        if (isAdvance_)
+            targetGridMover_.update(deltaTime);
+        else
+            GridMover::update(deltaTime);
     }
 }

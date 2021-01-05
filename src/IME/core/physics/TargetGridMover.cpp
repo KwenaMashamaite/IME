@@ -38,6 +38,10 @@ namespace IME {
 
         enableAdaptiveMovement(false);
 
+        onTargetTileReset([this](Graphics::Tile tile) {
+            targetTileIndex_ = tile.getIndex();
+        });
+
         onTargetChanged([this](EntityPtr newTarget) {
             if (newTarget && movementStarted_) {
                 generatePath();

@@ -26,6 +26,7 @@
 #define IME_RANDOMGRIDMOVER_H
 
 #include "GridMover.h"
+#include "TargetGridMover.h"
 
 namespace IME {
     /**
@@ -61,11 +62,41 @@ namespace IME {
          */
         void stopMovement();
 
+        /**
+         * @brief Update entity movement in the grid
+         * @param deltaTime Time passed since movement was last updated
+         */
+        void update(float deltaTime) override;
+
+        /**
+         * @brief Enable or disable advanced random movement
+         * @param enable True to enable or false to disable
+         *
+         * In advanced mode, instead of choosing a random adjacent tile, a
+         * random tile is anywhere in the grid is selected and the target
+         * advances to that tile. A new random tile is generated after the
+         * target reaches the current destination tile and so on. This
+         * prevents the stop and go movement. However this is expensive
+         * and the game may slow down depending on the size of the tilemap
+         *
+         * Advanced movement is disabled at by default
+         *
+         * @warning This function is experimental
+         */
+        void enableAdvancedMovement(bool enable);
+
     private:
         /**
          * @brief Generate the targets new direction of motion
          */
         void generateNewDirection();
+
+        /**
+         * @brief Set a random position to go to in the grid
+         *
+         * This function is only valid when in advance mode
+         */
+        void setRandomPosition();
 
         /**
          * @brief Restore previous direction and generate a new direction
@@ -83,6 +114,10 @@ namespace IME {
     private:
         Direction prevDirection_; //!< Keeps track of the targets previous direction
         bool movementStarted_;    //!< Tracks whether the target movement has been initiated or not
+        bool isAdvance_;          //!< Flags whether or not advanced random movement is enabled
+        bool switchToAdvanced_;
+        bool switchToNormal_;
+        TargetGridMover targetGridMover_;
     };
 }
 
