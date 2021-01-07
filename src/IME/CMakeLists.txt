@@ -46,6 +46,7 @@ set(IME_SRC
     graphics/ui/renderers/ProgressBarRenderer.cpp
     graphics/ui/renderers/SliderRenderer.cpp
     graphics/ui/renderers/RadioButtonRenderer.cpp
+    graphics/ui/renderers/PanelRenderer.cpp
     graphics/ui/widgets/BitmapButton.cpp
     graphics/ui/widgets/Button.cpp
     graphics/ui/widgets/CheckBox.cpp
@@ -54,6 +55,7 @@ set(IME_SRC
     graphics/ui/widgets/ProgressBar.cpp
     graphics/ui/widgets/Slider.cpp
     graphics/ui/widgets/RadioButton.cpp
+    graphics/ui/widgets/Panel.cpp
     graphics/ui/GuiContainer.cpp
     graphics/Sprite.cpp
     graphics/AnimatableSprite.cpp
