@@ -137,7 +137,7 @@ namespace IME {
              * property on invocation
              */
             int onPropertyChange(const std::string& property,
-                                 Callback<const std::string&> callback);
+                 Callback<const std::string&> callback) override;
 
             /**
              * @brief Remove an event listener from a property change event

@@ -42,7 +42,7 @@ namespace IME {
         class IME_API ProgressBarRenderer : public IWidgetRenderer {
         public:
             /**
-             * @brief Change the ize of the widget borders
+             * @brief Change the size of the widget borders
              * @param borders The size of the borders
              */
             void setBorders(const Borders& borders);
@@ -236,7 +236,7 @@ namespace IME {
              * property on invocation
              */
             int onPropertyChange(const std::string &property,
-                 Callback<const std::string &> callback) override;
+                Callback<const std::string &> callback) override;
 
             /**
              * @brief Remove an event listener from a property change event
