@@ -22,24 +22,25 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_CHECKBOXRENDERER_H
-#define IME_CHECKBOXRENDERER_H
+#ifndef IME_RADIOBUTTONRENDERER_H
+#define IME_RADIOBUTTONRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/ui/Structs.h"
+#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/CheckBoxRenderer.hpp>
+#include <TGUI/Renderers/RadioButtonRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a checkbox
+         * @brief A class for rendering a radio button
          *
-         * This class allows you to manipulate the render properties of a
-         * checkbox
+         * This class allows you to manipulate the render properties of a radio
+         * button
          */
-        class IME_API CheckBoxRenderer : public IWidgetRenderer {
+        class IME_API RadioButtonRenderer : public IWidgetRenderer {
         public:
             /**
              * @brief Change the ize of the widget borders
@@ -48,40 +49,40 @@ namespace IME {
             void setBorders(const Borders& borders);
 
             /**
-            * @brief Get the ize of the widgets borders
-            * @return The size of the widgets borders
-            */
-            Borders getBorders() const;
-
-            /**
-             * @brief Set the relative distance between the checkbox and the
-             *        text next to it
-             * @param ratio The ratio of the distance based on the width of the
-             *         checkbox
-             *         
-             * The default value is 0.2 which means that if the width of the 
-             * checkbox would be 50 pixels then the gap between the radio 
-             * button and the text will be 10 pixels.
+             * @brief Get the ize of the widgets borders
+             * @return The size of the widgets borders
              */
-            void setTextDistanceRatio(float ratio);
+            Borders getBorders() const;
             
             /**
-             * @brief Get the relative distance between the checkbox and the 
-             *        text next to it
-             * @return The relative distance between the checkbox and the text
-             *         next to it
+             * @brief Set the relative distance between the radio button and 
+             *        the text next to it
+             * @param ratio The ratio of the distance based on the width of 
+             *        the radio button
+             *        
+             * The default value is 0.2 which means that if the width of the 
+             * radio button would be 50 pixels then the gap between the radio 
+             * button and the text will be 10 pixels
+             */
+            void setTextDistanceRatio(float ratio);
+
+            /**
+             * @brief Get The relative distance between the radio button and 
+             *        the text next to it
+             * @return The ratio of the distance based on the width of the 
+             *         radio button
              */
             float getTextDistanceRatio() const;
 
-
             /**
-             * @brief Set the text colour that will be used inside the checkbox
-             * @param textColour The new text colour
+             * @brief Set the colour of the text displayed on the button
+             *
+             * @param colour The new test colour
              */
-            void setTextColour(Colour textColour);
+            void setTextColour(Colour colour);
 
             /**
-             * @brief Get the colour of the checkbox text
+             * @brief Get the colour of the button text
              * @return The colour of the button text
              */
             Colour getTextColour() const;
@@ -99,60 +100,60 @@ namespace IME {
             Colour getTextHoverColour() const;
 
             /**
-             * @brief Set the text colour when the checkbox is disabled        
-             * @param textColour Colour to set
+             * @brief Set the colour of the text when the button is disabled
+             * @param colour The colour to be set
              */
-            void setDisabledTextColour(Colour textColour);
+            void setDisabledTextColour(Colour colour);
 
             /**
-             * @brief Get the text colour when the checkbox is disabled     
-             * @return The text colour when the checkbox is disabled     
+             * @brief Get the colour of the text when the button is disabled
+             * @return The colour of the text when the button is disabled
              */
             Colour getDisabledTextColour() const;
 
             /**
-             * @brief Set the colour of text when the checkbox is checked
+             * @brief Set the colour of text when the button is checked
              * @param colour Colour to set 
              */
             void setCheckedTextColour(Colour colour);
-            
+
             /**
-             * @brief Get the colour of text when the checkbox is checked
-             * @return The colour of text when the checkbox is checked
+             * @brief Get the colour of text when the button is checked
+             * @return The colour of text when the button is checked
              */
             Colour getTextColourChecked() const;
             
             /**
              * @brief Set the colour of the text when the mouse enters the
-             *        checkbox and it is checked
+             *        button and it is checked
              * @param colour The colour to set
              */
             void setCheckedTextHoverColour(Colour colour);
-            
+
             /**
              * @brief Get the colour of the text when the mouse enters the
-             *        checkbox and it is checked
+             *        button and it is checked
              * @return The checked hover colour
              */
             Colour getCheckedTextHoverColour() const;
-            
+
             /**
-             * @brief Set the colour of the text when the checkbox is 
+             * @brief Set the colour of the text when the button is 
              *        checked and disabled
              * @param colour New colour 
              */
             void setCheckedDisabledTextColour(Colour colour);
 
             /**
-             * @brief Get the colour of the text when the checkbox is 
+             * @brief Get the colour of the text when the button is 
              *          checked and disabled
-             * @return The colour of the text when the checkbox is 
+             * @return The colour of the text when the button is 
              *          checked and disabled
              */
             Colour getCheckedDisabledTextColour() const;
             
             /**
-             * @brief Set the background colour of the checkbox
+             * @brief Set the background colour of the button
              * @param colour The background colour to set
              *
              * @note that this colour is ignored when you set a background image
@@ -160,13 +161,13 @@ namespace IME {
             void setBackgroundColour(Colour colour);
 
             /**
-            * @brief Get the background colour of checkbox
-            * @return The background colour of the checkbox
+            * @brief Get the background colour of button
+            * @return The background colour of the button
             */
             Colour getBackgroundColour() const;
 
             /**
-             * @brief Set the background colour of the checkbox when the mouse 
+             * @brief Set the background colour of the button when the mouse 
              *         enters it
              * @param colour The background colour to set
              *
@@ -175,15 +176,15 @@ namespace IME {
             void setBackgroundHoverColour(Colour colour);
 
             /**
-             * @brief Get the background colour of the checkbox when the mouse 
+             * @brief Get the background colour of the button when the mouse 
              *         enters it
-             * @return The background colour of the checkbox when the mouse 
+             * @return The background colour of the button when the mouse 
              *         enters it
              */
             Colour getBackgroundHoverColour() const;
-            
+
             /**
-             * @brief Set the background colour of the checkbox when it is 
+             * @brief Set the background colour of the button when it is 
              *        disabled
              * @param colour Background colour to set
              * 
@@ -192,57 +193,57 @@ namespace IME {
             void setDisabledBackgroundColour(Colour colour);
 
             /**
-             * @brief Get the background colour of the checkbox when it is 
+             * @brief Get the background colour of the button when it is 
              *        disabled
-             * @return The background colour of the checkbox when it is 
+             * @return The background colour of the button when it is 
              *        disabled
              */
             Colour getDisabledBackgroundColour() const;
 
             /**
-             * @brief Set the background colour used when the checkbox is
+             * @brief Set the background colour used when the button is
              *          checked
              * @param colour the new colour
              */
             void setCheckedBackgroundColour(Colour colour);
 
             /**
-             * @brief Get the background colour used when the checkbox is
+             * @brief Get the background colour used when the button is
              *          checked
-             * @return The background colour used when the checkbox is
+             * @return The background colour used when the button is
              *          checked
              */
             Colour getCheckedBackgroundColour() const;
 
             /**
              * @brief Set the background colour when the mouse cursor enters  
-             *         the checkbox and it's checked
+             *         the button and it's checked
              * @param colour colour to set
              */
             void setCheckedHoverBackgroundColour(Colour colour);
-            
+
             /**
              * @brief Get the background colour when the mouse cursor enters  
-             *         the checkbox and it's checked
+             *         the button and it's checked
              * @return Checked hover background colour
              */
             Colour getCheckedHoverBackgroundColour() const;
-            
+
             /**
-             * @brief Set the background colour when the checkbox is checked and 
+             * @brief Set the background colour when the button is checked and 
              *        disabled
              * @param colour Colour to set
              */
             void setCheckedDisabledBackgroundColour(Colour colour);
 
             /**
-             * @brief Get the background colour when the checkbox is checked and 
+             * @brief Get the background colour when the button is checked and 
              *        disabled
-             * @return The background colour when the checkbox is checked and 
+             * @return The background colour when the button is checked and 
              *        disabled
              */
             Colour getCheckedDisabledBackgroundColour() const;
-            
+
             /**
              * @brief Set the border colour
              * @param colour The border colour to set
@@ -254,153 +255,153 @@ namespace IME {
              * @return The border colour
              */
             Colour getBorderColour() const;
-            
+
             /**
              * @brief Set the background colour of when the mouse enters the 
-             *      checkbox
+             *      button
              * @param colour The background colour to set
              */
             void setBorderHoverColour(Colour colour);
 
             /**
               * @brief Get the background colour of when the mouse enters the 
-              *      checkbox
+              *      button
               * @return The background colour of when the mouse enters the 
-              *      checkbox
+              *      button
               */
             Colour getBorderHoverColour() const;
 
             /**
-             * @brief Set the background colour when the checkbox is disabled
-             * @param colour The background colour when the checkbox is disabled
+             * @brief Set the background colour when the button is disabled
+             * @param colour The background colour when the button is disabled
              */
             void setDisabledBorderColour(Colour colour);
 
             /**
-             * @brief Get the background colour when the checkbox is disabled
-             * @return The background colour when the checkbox is disabled
+             * @brief Get the background colour when the button is disabled
+             * @return The background colour when the button is disabled
              */
             Colour getDisabledBorderColour() const;
 
             /**
-             * @brief Set the border colour when the checkbox is focused but not 
+             * @brief Set the border colour when the button is focused but not 
              *        hovered
              * @param colour Border colour to set
              */
             void setFocusedBorderColour(Colour colour);
 
             /**
-             * @brief Get the border colour when the checkbox is focused but not 
+             * @brief Get the border colour when the button is focused but not 
              *        hovered
-             * @return The border colour when the checkbox is focused but not 
+             * @return The border colour when the button is focused but not 
              *        hovered
              */
             Colour getFocusedBorderColour() const;
 
             /**
-             * @brief Set the border colour when the checkbox is checked
+             * @brief Set the border colour when the button is checked
              * @param colour The colour to set
              */
             void setCheckedBorderColour(Colour colour);
 
             /**
-             * @brief Get the border colour when the checkbox is checked
-             * @return The border colour when the checkbox is checked
+             * @brief Get the border colour when the button is checked
+             * @return The border colour when the button is checked
              */
             Colour getCheckedBorderColour() const;
 
             /**
-             * @brief Set the colour of the checkbox when the mouse cursor
-             *         enters it and it's checked
+             * @brief Set the colour of the button when the mouse cursor
+             *        enters it and it's checked
              * @param colour Colour to set
              */
             void setCheckedHoverBorderColour(Colour colour);
 
             /**
-             * @brief Get the colour of the checkbox when the mouse cursor
+             * @brief Get the colour of the button when the mouse cursor
              *         enters it and it's checked
-             * @return The colour of the checkbox when the mouse cursor
+             * @return The colour of the button when the mouse cursor
              *         enters it and it's checked
              */
             Colour getCheckedHoverBorderColour() const;
 
             /**
-             * @brief Set the border colour when the checkbox is checked and
-             *         disabled
+             * @brief Set the border colour when the button is checked and
+             *        disabled
              * @param colour The colour to set
              */
             void setCheckedDisabledBorderColour(Colour colour);
 
             /**
-             * @brief Get the border colour when the checkbox is checked and
-             *         disabled
-             * @return  The border colour when the checkbox is checked and
+             * @brief Get the border colour when the button is checked and
+             *        disabled
+             * @return The border colour when the button is checked and
              *         disabled
              */
             Colour getCheckedDisabledBorderColour() const;
 
             /**
-             * @brief Set the border colour when the checkbox is checked and
-             *         focused
+             * @brief Set the border colour when the button is checked and
+             *        focused
              * @param colour The colour to set
              */
             void setCheckedFocusedBorderColour(Colour colour);
 
             /**
-             * @brief Get the border colour when the checkbox is checked and
+             * @brief Get the border colour when the button is checked and
              *         focused
-             * @return  The border colour when the checkbox is checked and
+             * @return The border colour when the button is checked and
              *         focused
              */
             Colour getCheckedFocusedBorderColour() const;
 
             /**
-             * @brief Set the colour that is used to fill the checkbox when
+             * @brief Set the colour that is used to fill the button when
              *          it is checked
              * @param colour Colour to set
              */
             void setCheckColour(Colour colour);
 
             /**
-             * @brief Get the colour that is used to fill the checkbox when
+             * @brief Get the colour that is used to fill the button when
              *          it is checked
-             * @return The colour that is used to fill the checkbox when
+             * @return The colour that is used to fill the button when
              *          it is checked
              */
             Colour getCheckColour() const;
 
             /**
-             * @brief Set the colour that is used to fill the checkbox when
+             * @brief Set the colour that is used to fill the button when
              *         the mouse is on top of it
              * @param colour The colour to set
              */
             void setCheckHoverColour(Colour colour);
 
             /**
-             * @brief Get the colour that is used to fill the checkbox when
+             * @brief Get the colour that is used to fill the button when
              *         the mouse is on top of it
-             * @return The colour that is used to fill the checkbox when
+             * @return The colour that is used to fill the button when
              *         the mouse is on top of it
              */
             Colour getCheckHoverColour() const;
 
             /**
-             * @brief Set the colour that is used to fill the checkbox when
-             *         the checkbox is disabled
+             * @brief Set the colour that is used to fill the button when
+             *         the button is disabled
              * @param colour The new colour to set
              */
             void setDisabledCheckedColour(Colour colour);
 
             /**
-             * @brief Get the colour that is used to fill the checkbox when
-             *         the checkbox is disabled
-             * @return The colour that is used to fill the checkbox when
-             *         the checkbox is disabled
+             * @brief Get the colour that is used to fill the button when
+             *         the button is disabled
+             * @return The colour that is used to fill the button when
+             *         the button is disabled
              */
             Colour getDisabledCheckColour() const;
-            
+
             /**
-             * @brief Set the image that is displayed when the checkbox is not 
+             * @brief Set the image that is displayed when the button is not 
              *      checked
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
@@ -409,9 +410,9 @@ namespace IME {
              * check colour properties will be ignored
              */
             void setUncheckedTexture(const std::string& filename);
-            
+
             /**
-             * @brief Set the image that is displayed when the checkbox is checked
+             * @brief Set the image that is displayed when the button is checked
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
              * 
@@ -421,8 +422,8 @@ namespace IME {
             void setCheckedTexture(const std::string& filename);
 
             /**
-             * @brief Set the image that is displayed when the checkbox is not 
-             *         checked and the mouse is on top of the checkbox
+             * @brief Set the image that is displayed when the button is not 
+             *         checked and the mouse is on top of the button
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
              * 
@@ -432,8 +433,8 @@ namespace IME {
             void setUncheckedHoverTexture(const std::string& filename);
 
             /**
-             * @brief Set the image that is displayed when the checkbox is
-             *         checked and the mouse is on top of the checkbox
+             * @brief Set the image that is displayed when the button is
+             *         checked and the mouse is on top of the button
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
              * 
@@ -443,7 +444,7 @@ namespace IME {
             void setCheckedHoverTexture(const std::string& filename);
 
             /**
-             * @brief Set the image that is displayed when the checkbox is not
+             * @brief Set the image that is displayed when the button is not
              *         checked and it's disabled
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
@@ -454,7 +455,7 @@ namespace IME {
             void setUncheckedDisabledTexture(const std::string& filename);
 
             /**
-             * @brief Set the image that is displayed when the checkbox is
+             * @brief Set the image that is displayed when the button is
              *         checked and it's disabled
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
@@ -463,9 +464,9 @@ namespace IME {
              * are also set
              */
             void setCheckedDisabledTexture(const std::string& filename);
-            
+
             /**
-             * @brief Set the image that is displayed on top of the checkbox 
+             * @brief Set the image that is displayed on top of the button 
              *          when it is unchecked and focused
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
@@ -476,7 +477,7 @@ namespace IME {
             void setUncheckedFocusedTexture(const std::string& filename);
 
             /**
-             * @brief Set the image that is displayed on top of the checkbox 
+             * @brief Set the image that is displayed on top of the button 
              *          when it is checked and focused
              * @param filename Filename of the image to be set
              * @throws FileNotFound If the image cannot be found on the disk
@@ -499,14 +500,14 @@ namespace IME {
             TextStyle getTextStyle() const;
 
             /**
-             * @brief Set the text style when the checkbox is checked
+             * @brief Set the text style when the button is checked
              * @param style The new style
              */
             void setCheckedTextStyle(TextStyle style);
 
             /**
-             * @brief Get the text style when the checkbox is checked
-             * @return The text style when the checkbox is checked
+             * @brief Get the text style when the button is checked
+             * @return The text style when the button is checked
              */
             TextStyle getCheckedTextStyle() const;
 
@@ -584,7 +585,7 @@ namespace IME {
              * property on invocation
              */
             int onPropertyChange(const std::string& property,
-                 Callback<const std::string&> callback);
+                Callback<const std::string&> callback) override;
 
             /**
              * @brief Remove an event listener from a property change event
@@ -620,12 +621,12 @@ namespace IME {
             /**
              * @brief Destructor
              */
-            virtual ~CheckBoxRenderer();
+            virtual ~RadioButtonRenderer();
 
         private:
-            tgui::CheckBoxRenderer* checkBoxRenderer_; //!< Pointer to third party checkbox renderer
+            tgui::RadioButtonRenderer* buttonRenderer_; //!< Pointer to third party button
         };
     }
 }
 
-#endif // IME_CHECKBOXRENDERER_H
+#endif //IME_RADIOBUTTONRENDERER_H

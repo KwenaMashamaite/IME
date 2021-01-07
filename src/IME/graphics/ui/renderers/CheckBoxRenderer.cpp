@@ -50,6 +50,10 @@ namespace IME::UI {
         checkBoxRenderer_->setTextColor(Utility::convertToTGUIColour(textColour));
     }
 
+    Colour CheckBoxRenderer::getTextColour() const {
+        return Utility::convertFrom3rdPartyColour(checkBoxRenderer_->getTextColor());
+    }
+
     void CheckBoxRenderer::setTextHoverColour(Colour colour) {
         checkBoxRenderer_->setTextColorHover(Utility::convertToTGUIColour(colour));
     }

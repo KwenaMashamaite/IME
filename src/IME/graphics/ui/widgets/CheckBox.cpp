@@ -96,7 +96,7 @@ namespace IME::UI {
 
     void CheckBox::move(float xOffset, float yOffset) {
         checkBox_->setPosition(getPosition().x + xOffset,
-                             getPosition().y + yOffset);
+            getPosition().y + yOffset);
     }
 
     void CheckBox::rotate(float offset) {
@@ -105,7 +105,7 @@ namespace IME::UI {
 
     void CheckBox::scale(float factorX, float factorY) {
         checkBox_->setScale({checkBox_->getScale().x + factorX,
-                           checkBox_->getScale().y + factorY});
+            checkBox_->getScale().y + factorY});
     }
 
     void CheckBox::hide() {
