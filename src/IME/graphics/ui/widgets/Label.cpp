@@ -69,6 +69,22 @@ namespace IME::UI {
         return static_cast<VerticalAlignment>(label_->getVerticalAlignment());
     }
 
+    void Label::setAutoSize(bool autoSize) {
+        label_->setAutoSize(autoSize);
+    }
+
+    bool Label::getAutoSize() const {
+        return label_->getAutoSize();
+    }
+
+    void Label::setMaximumTextWidth(float maximumWidth) {
+        label_->setMaximumTextWidth(maximumWidth);
+    }
+
+    float Label::getMaximumTextWidth() const {
+        return label_->getMaximumTextWidth();
+    }
+
     std::string Label::getType() const {
         return "Label";
     }

@@ -122,6 +122,54 @@ namespace IME {
             VerticalAlignment getVerticalAlignment() const;
 
             /**
+             * @brief Set whether ot not the label is auto-sized
+             * @param autoSize True to enable auto-size of false to disable
+             *
+             * When the label is in auto-size mode, the width and height of
+             * the label will be changed to fit the text. Otherwise, only
+             * the part defined by the size will be visible
+             *
+             * The label is auto-sized by default
+             */
+            void setAutoSize(bool autoSize);
+
+            /**
+             * @brief Check if the label is auto-sized or not
+             * @return True if the size of the label is changed when the text
+             *         change, otherwise false
+             */
+            bool getAutoSize() const;
+
+            /**
+             * @brief Set the maximum width that the text will have when
+             *        auto-sizing
+             * @param maximumWidth The new maximum text width
+             *
+             * When the label is auto-sizing the text will be split over
+             * several lines when its width would exceed the value passed
+             * to this function.
+             *
+             * @note This property is ignored when an exact size has been
+             * given. Pass 0 to this function to disable the maximum
+             *
+             * @see setAutoSize
+             */
+            void setMaximumTextWidth(float maximumWidth);
+
+            /**
+             * @brief Get the maximum width that the text will have when
+             *        auto-sizing
+             * @return The maximum width of the text
+             *
+             * This function will return:
+             * - The width of the label minus the padding when a specific
+             *   size was set.
+             * - The maximum text width when auto-sizing and a maximum was set.
+             * - 0 when auto-sizing but there is no maximum width.
+             */
+            float getMaximumTextWidth() const;
+
+            /**
              * @brief Set the text content of the label
              * @param text New text content
              *
