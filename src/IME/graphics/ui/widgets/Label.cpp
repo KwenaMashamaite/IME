@@ -53,6 +53,22 @@ namespace IME::UI {
         label_->setRenderer(renderer->getInternalPtr()->getData());
     }
 
+    void Label::setHorizontalAlignment(HorizontalAlignment alignment) {
+        label_->setHorizontalAlignment(static_cast<tgui::Label::HorizontalAlignment>(alignment));
+    }
+
+    Label::HorizontalAlignment Label::getHorizontalAlignment() const {
+        return static_cast<HorizontalAlignment>(label_->getHorizontalAlignment());
+    }
+
+    void Label::setVerticalAlignment(VerticalAlignment alignment) {
+        label_->setVerticalAlignment(static_cast<tgui::Label::VerticalAlignment>(alignment));
+    }
+
+    Label::VerticalAlignment Label::getVerticalAlignment() const {
+        return static_cast<VerticalAlignment>(label_->getVerticalAlignment());
+    }
+
     std::string Label::getType() const {
         return "Label";
     }

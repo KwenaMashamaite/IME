@@ -41,6 +41,24 @@ namespace IME {
             using sharedPtr = std::shared_ptr<Label>; //!< Shared widget pointer
 
             /**
+             * @brief The horizontal text alignment
+             */
+            enum class HorizontalAlignment {
+                Left,   //!< Put the text on the left side (default)
+                Center, //!< Center the text horizontally
+                Right   //!< Put the text on the right side (e.g. for numbers)
+            };
+
+            /**
+             * @brief The vertical text alignment
+             */
+            enum class VerticalAlignment {
+                Top ,   //!< Put the text at the top (default)
+                Center, //!< Center the text vertically
+                Bottom  //!< Put the text at the bottom
+            };
+
+            /**
              * @brief Create a label
              * @param text Text to be displayed on the label
              */
@@ -74,6 +92,34 @@ namespace IME {
              * as the background colour, text colour, border colour etc...
              */
             std::shared_ptr<LabelRenderer> getRenderer();
+
+            /**
+             * @brief Set the horizontal text alignment
+             * @param alignment The new horizontal alignment
+             *
+             * By default the alignment is to the left
+             */
+            void setHorizontalAlignment(HorizontalAlignment alignment);
+
+            /**
+             * @brief Get the current horizontal alignment
+             * @return The current horizontal alignment
+             */
+            HorizontalAlignment getHorizontalAlignment() const;
+
+            /**
+             * @brief Set the vertical text alignment
+             * @param alignment The new vertical text alignment
+             *
+             * By default the text is aligned to the top
+             */
+            void setVerticalAlignment(VerticalAlignment alignment);
+
+            /**
+             * @brief Get the current vertical text alignment
+             * @return Vertical text alignment
+             */
+            VerticalAlignment getVerticalAlignment() const;
 
             /**
              * @brief Set the text content of the label
