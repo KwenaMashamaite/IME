@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //How long the button takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 #include "IME/graphics/ui/widgets/Button.h"
 #include "IME/utility/Helpers.h"

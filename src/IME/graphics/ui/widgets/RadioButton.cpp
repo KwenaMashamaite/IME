@@ -26,7 +26,7 @@
 #include <cassert>
 
 //How long the radio button takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     RadioButton::RadioButton() : RadioButton("")

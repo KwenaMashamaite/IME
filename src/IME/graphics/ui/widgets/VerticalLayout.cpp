@@ -27,7 +27,7 @@
 #include <cassert>
 
 //How long the edit box takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     VerticalLayout::VerticalLayout(float width, float height)

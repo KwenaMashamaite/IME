@@ -29,7 +29,7 @@
 #include <cassert>
 
 //How long the progress bar takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     ProgressBar::ProgressBar()

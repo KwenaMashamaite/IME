@@ -29,7 +29,7 @@
 #include <cassert>
 
 //How long the label takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     Label::Label() : Label("")

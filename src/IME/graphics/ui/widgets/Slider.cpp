@@ -30,7 +30,7 @@
 #include <TGUI/GuiBase.hpp>
 
 //How long the button takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     Slider::Slider(float minValue, float maxValue) 

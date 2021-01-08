@@ -27,7 +27,7 @@
 #include <cassert>
 
 //How long the panel takes before its completely hidden or shown
-static const int fadeAnimDuration_ = 100;
+const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     Panel::Panel() :
