@@ -120,7 +120,7 @@ namespace IME::UI {
 
     Colour RadioButtonRenderer::getBackgroundHoverColour() const {
         return Utility::convertFrom3rdPartyColour(
-            buttonRenderer_->getTextColorCheckedHover());
+            buttonRenderer_->getBackgroundColorHover());
     }
 
     void RadioButtonRenderer::setDisabledBackgroundColour(Colour colour) {
@@ -134,13 +134,11 @@ namespace IME::UI {
     }
 
     void RadioButtonRenderer::setCheckedBackgroundColour(Colour colour) {
-        buttonRenderer_->setBackgroundColorChecked(
-            Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColorChecked(Utility::convertToTGUIColour(colour));
     }
 
     Colour RadioButtonRenderer::getCheckedBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
-            buttonRenderer_->getBackgroundColorChecked());
+        return Utility::convertFrom3rdPartyColour(buttonRenderer_->getBackgroundColorChecked());
     }
 
     void RadioButtonRenderer::setCheckedHoverBackgroundColour(Colour colour) {
@@ -150,7 +148,7 @@ namespace IME::UI {
 
     Colour RadioButtonRenderer::getCheckedHoverBackgroundColour() const {
         return Utility::convertFrom3rdPartyColour(
-            buttonRenderer_->getTextColorCheckedHover());
+            buttonRenderer_->getBackgroundColorCheckedHover());
     }
 
     void RadioButtonRenderer::setCheckedDisabledBackgroundColour(Colour colour) {
