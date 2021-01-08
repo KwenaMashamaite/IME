@@ -32,13 +32,15 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    Label::Label() : Label("")
-    {}
-
-    Label::Label(const std::string &text) : label_{tgui::Label::create(text)},
-                                            renderer_{std::make_shared<LabelRenderer>()}
+    Label::Label(const std::string &text) :
+        label_{tgui::Label::create(text)},
+        renderer_{std::make_shared<LabelRenderer>()}
     {
         renderer_->setInternalPtr(label_->getRenderer());
+    }
+
+    Label::sharedPtr Label::create(const std::string &text) {
+        return std::make_shared<Label>(text);
     }
 
     std::shared_ptr<LabelRenderer> Label::getRenderer() {

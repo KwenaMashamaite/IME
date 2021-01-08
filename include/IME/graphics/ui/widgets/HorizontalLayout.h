@@ -28,6 +28,7 @@
 #include "IBoxLayout.h"
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"
 #include <TGUI/Widgets/HorizontalLayout.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -38,12 +39,22 @@ namespace IME {
          */
         class IME_API HorizontalLayout : public IBoxLayout {
         public:
+            using sharedPtr = std::shared_ptr<HorizontalLayout>; //!< Shared widget pointer
+
             /**
              * @brief Create a horizontal layout
              * @param width Width of the layout
              * @param height Height of the layout
              */
             HorizontalLayout(float width, float height);
+
+            /**
+             * @brief Create a new horizontal layout widget
+             * @param width Width of the layout
+             * @param height height of the layout
+             * @return The new horizontal layout
+             */
+            static sharedPtr create(float width, float height);
 
             /**
              * @brief Set the layout renderer

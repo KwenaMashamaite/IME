@@ -30,6 +30,7 @@
 #include "IME/graphics/ui/renderers/ButtonRenderer.h"
 #include <TGUI/Widgets/Button.hpp>
 #include <string>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -38,16 +39,20 @@ namespace IME {
          */
         class IME_API Button : public IClickableWidget {
         public:
-            /**
-             * @brief Create a button without any text
-             */
-            Button();
+            using sharedPtr = std::shared_ptr<Button>; //!< Shared widget pointer
 
             /**
              * @brief Create a button
              * @param buttonText Text to be displayed on the button
              */
-            explicit Button(const std::string &buttonText);
+            explicit Button(const std::string &buttonText = "");
+
+            /**
+             * @brief Create a new button widget
+             * @param text The text to display on the button
+             * @return The new button
+             */
+            static sharedPtr create(const std::string& text = "");
 
             /**
              * @brief Set the buttons renderer

@@ -30,6 +30,7 @@
 #include "IWidget.h"
 #include "IME/graphics/ui/renderers/TabsRenderer.h"
 #include <TGUI/Widgets/Tabs.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -38,10 +39,18 @@ namespace IME {
          */
         class IME_API Tabs : public IWidget {
         public:
+            using sharedPtr = std::shared_ptr<Tabs>; //!< Shared widget pointer
+
             /**
              * @brief Constructor
              */
             Tabs();
+
+            /**
+             * @brief Create a new tabs widget
+             * @return The new tabs widget
+             */
+            static sharedPtr create();
 
             /**
              * @brief Set the tabs renderer

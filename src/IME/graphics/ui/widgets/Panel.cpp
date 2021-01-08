@@ -38,6 +38,10 @@ namespace IME::UI {
         initEvents();
     }
 
+    Panel::sharedPtr Panel::create() {
+        return std::make_shared<Panel>();
+    }
+
     void Panel::setRenderer(std::shared_ptr<PanelRenderer> renderer) {
         assert(renderer && "A nullptr cannot be set as a renderer");
         renderer_ = renderer;

@@ -29,9 +29,6 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    RadioButton::RadioButton() : RadioButton("")
-    {}
-
     RadioButton::RadioButton(const std::string &buttonText) :
         button_{tgui::RadioButton::create()},
         renderer_{std::make_shared<RadioButtonRenderer>()}
@@ -39,6 +36,10 @@ namespace IME::UI {
         renderer_->setInternalPtr(button_->getRenderer());
         button_->setText(buttonText);
         initEvents();
+    }
+
+    RadioButton::sharedPtr RadioButton::create(const std::string &text) {
+        return std::make_shared<RadioButton>(text);
     }
 
     void RadioButton::setRenderer(std::shared_ptr<RadioButtonRenderer> renderer) {

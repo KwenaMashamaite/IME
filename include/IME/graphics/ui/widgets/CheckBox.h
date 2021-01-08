@@ -28,6 +28,7 @@
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/CheckBoxRenderer.h"
 #include <TGUI/Widgets/CheckBox.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -36,6 +37,8 @@ namespace IME {
          */
         class IME_API CheckBox : public IClickableWidget {
         public:
+            using sharedPtr = std::shared_ptr<CheckBox>; //!< Shared widget pointer
+
             /**
              * @brief Create the checkbox
              * @param text Text to display next to the checkbox
@@ -43,7 +46,14 @@ namespace IME {
             explicit CheckBox(const std::string &text = "");
 
             /**
-             * @brief Set the checkbox's renderer
+             * @brief Create a new checkbox widget
+             * @param text Text to display next to the checkbox
+             * @return The new checkbox
+             */
+            static sharedPtr create(const std::string& text = "");
+
+            /**
+             * @brief Set the check boxes renderer
              * @param renderer The new renderer
              *
              * The renderer determines how the checkbox is displayed. The 

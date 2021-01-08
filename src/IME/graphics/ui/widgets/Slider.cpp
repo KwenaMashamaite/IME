@@ -41,6 +41,10 @@ namespace IME::UI {
         initEvents();
     }
 
+    Slider::sharedPtr Slider::create(float minimum, float maximum) {
+        return std::make_shared<Slider>(minimum, maximum);
+    }
+
     void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
         assert(renderer && "A nullptr cannot be set as a renderer");
         renderer_ = renderer;

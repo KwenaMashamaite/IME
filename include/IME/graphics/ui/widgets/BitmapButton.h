@@ -28,25 +28,30 @@
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/ButtonRenderer.h"
 #include <TGUI/Widgets/BitmapButton.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Button widget with an image displayed next to the text (or centered
-         *        in the button without text)
+         * @brief Button widget with an image displayed next to the text (or
+         *        centered in the button without text)
          */
         class IME_API BitmapButton : public IClickableWidget {
         public:
-            /**
-             * @brief Construct an empty bitmap button
-             */
-            BitmapButton();
+            using sharedPtr = std::shared_ptr<BitmapButton>; //!< Shared widget pointer
 
             /**
              * @brief Create a bitmap button
-             * @param buttonText Text to be displayed inside the button
+             * @param buttonText Text to be displayed on the button
              */
-            BitmapButton(const std::string &buttonText);
+            BitmapButton(const std::string &buttonText = "");
+
+            /**
+             * @brief Create a new bitmap button widget
+             * @param text Text to display on the button
+             * @return The new bitmap button
+             */
+            static sharedPtr create(const std::string& text = "");
 
             /**
              * @brief Set the buttons renderer

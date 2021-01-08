@@ -38,6 +38,10 @@ namespace IME::UI {
         initEvents();
     }
 
+    VerticalLayout::sharedPtr VerticalLayout::create(float width, float height) {
+        return std::make_shared<VerticalLayout>(width, height);
+    }
+
     void VerticalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
         assert(renderer && "A nullptr cannot be set as a renderer");
         renderer_ = renderer;

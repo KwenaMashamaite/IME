@@ -32,14 +32,16 @@ const int fadeAnimDuration_ = 100;
 #include <cassert>
 
 namespace IME::UI {
-    Button::Button() : Button("") {}
-
-    Button::Button(const std::string &buttonText)
-        : button_{tgui::Button::create(buttonText)},
-          renderer_{std::make_shared<ButtonRenderer>()}
+    Button::Button(const std::string &buttonText) :
+        button_{tgui::Button::create(buttonText)},
+        renderer_{std::make_shared<ButtonRenderer>()}
     {
         renderer_->setInternalPtr(button_->getRenderer());
         initEvents();
+    }
+
+    Button::sharedPtr Button::create(const std::string &text) {
+        return std::make_shared<Button>(text);
     }
 
     void Button::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {

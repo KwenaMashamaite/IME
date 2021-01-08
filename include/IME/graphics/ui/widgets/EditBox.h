@@ -28,6 +28,7 @@
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/EditBoxRenderer.h"
 #include <TGUI/Widgets/EditBox.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -36,10 +37,18 @@ namespace IME {
          */
         class IME_API EditBox : public IClickableWidget {
         public:
+            using sharedPtr = std::shared_ptr<EditBox>; //!< Shared widget pointer
+
             /**
              * @brief Construct an edit box
              */
             EditBox();
+
+            /**
+             * @brief Create a new edit box widget
+             * @return The new edit box
+             */
+            static sharedPtr create();
 
             /**
              * @brief Set the edit boxes renderer

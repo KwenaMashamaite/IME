@@ -28,6 +28,7 @@
 #include "IClickableWidget.h"
 #include "IME/graphics/ui/renderers/ProgressBarRenderer.h"
 #include <TGUI/Widgets/ProgressBar.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -36,6 +37,8 @@ namespace IME {
          */
         class IME_API ProgressBar : public IClickableWidget {
         public:
+            using sharedPtr = std::shared_ptr<ProgressBar>; //!< Shared widget pointer
+
             /**
              * @brief Determines in which direction the progress bar is filled
              *        when value goes from minimum to maximum
@@ -51,6 +54,12 @@ namespace IME {
              * @brief Construct a progress bar
              */
             ProgressBar();
+
+            /**
+             * @brief Create a new progress bar widget
+             * @return The new progress bar
+             */
+            static sharedPtr create();
 
             /**
              * @brief Set the progress bars renderer

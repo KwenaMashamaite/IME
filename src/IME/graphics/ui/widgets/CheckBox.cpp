@@ -32,12 +32,16 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    CheckBox::CheckBox(const std::string &text)
-        : checkBox_{tgui::CheckBox::create(text)},
-          renderer_{std::make_shared<CheckBoxRenderer>()}
+    CheckBox::CheckBox(const std::string &text) :
+        checkBox_{tgui::CheckBox::create(text)},
+        renderer_{std::make_shared<CheckBoxRenderer>()}
     {
         renderer_->setInternalPtr(checkBox_->getRenderer());
         initEvents();
+    }
+
+    CheckBox::sharedPtr CheckBox::create(const std::string &text) {
+        return std::make_shared<CheckBox>(text);
     }
 
     void CheckBox::setRenderer(std::shared_ptr<CheckBoxRenderer> renderer) {

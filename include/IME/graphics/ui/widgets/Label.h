@@ -29,6 +29,7 @@
 #include <TGUI/Widgets/Label.hpp>
 #include "IME/graphics/ui/renderers/LabelRenderer.h"
 #include <string>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -37,16 +38,20 @@ namespace IME {
          */
         class IME_API Label : public IWidget {
         public:
-            /**
-             * @brief Create a label with no text
-             */
-            Label();
+            using sharedPtr = std::shared_ptr<Label>; //!< Shared widget pointer
 
             /**
              * @brief Create a label
              * @param text Text to be displayed on the label
              */
-            explicit Label(const std::string &text);
+            explicit Label(const std::string &text = "");
+
+            /**
+             * @brief Create a new label widget
+             * @param text Text to be displayed on the label
+             * @return The new label
+             */
+            static sharedPtr create(const std::string& text = "");
 
             /**
              * @brief Set the labels renderer

@@ -29,6 +29,7 @@
 #include "IContainer.h"
 #include "IME/graphics/ui/renderers/PanelRenderer.h"
 #include <TGUI/Widgets/Panel.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -38,10 +39,18 @@ namespace IME {
          */
         class IME_API Panel : public IContainer {
         public:
+            using sharedPtr = std::shared_ptr<Panel>; //!< Shared widget pointer
+
             /**
              * @brief Constructor
              */
             Panel();
+
+            /**
+             * @brief Create a new panel widget
+             * @return The new panel
+             */
+            static sharedPtr create();
 
             /**
              * @brief Set the panels renderer

@@ -28,6 +28,7 @@
 #include "IContainer.h"
 #include "IME/graphics/ui/renderers/ChildWindowRenderer.h"
 #include <TGUI/Widgets/ChildWindow.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -36,6 +37,8 @@ namespace IME {
          */
         class IME_API ChildWindow : public IContainer {
         public:
+            using sharedPtr = std::shared_ptr<ChildWindow>; //!< Shared widget pointer
+
             /**
              * @brief Title alignments, possible options for the setTitleAlignment function
              */
@@ -62,6 +65,15 @@ namespace IME {
              */
             explicit ChildWindow(const std::string& title = "",
                  unsigned int titleButtons = TitleButton::Close);
+
+            /**
+             * @brief Create a child window
+             * @param title Title of the window
+             * @param titleButtons Title buttons
+             * @return The new child window
+             */
+            static sharedPtr create(const std::string& title = "",
+                unsigned int titleButtons = TitleButton::Close);
 
             /**
              * @brief Set the child window renderer

@@ -32,12 +32,16 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    ProgressBar::ProgressBar()
-        : progressBar_{tgui::ProgressBar::create()},
-          renderer_{std::make_shared<ProgressBarRenderer>()}
+    ProgressBar::ProgressBar() :
+        progressBar_{tgui::ProgressBar::create()},
+        renderer_{std::make_shared<ProgressBarRenderer>()}
     {
         renderer_->setInternalPtr(progressBar_->getRenderer());
         initEvents();
+    }
+
+    ProgressBar::sharedPtr ProgressBar::create() {
+        return std::make_shared<ProgressBar>();
     }
 
     void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {

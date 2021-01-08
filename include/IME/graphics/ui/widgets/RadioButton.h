@@ -29,6 +29,7 @@
 #include "IME/graphics/ui/widgets/IClickableWidget.h"
 #include "IME/graphics/ui/renderers/RadioButtonRenderer.h"
 #include <TGUI/Widgets/RadioButton.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -37,16 +38,20 @@ namespace IME {
          */
         class IME_API RadioButton : public IClickableWidget {
         public:
-            /**
-             * @brief Create a button without any text
-             */
-            RadioButton();
+            using sharedPtr = std::shared_ptr<RadioButton>; //!< Shared widget pointer
 
             /**
              * @brief Create a button
-             * @param buttonText Text to be displayed on the button
+             * @param buttonText Text to be displayed next to the button
              */
-            explicit RadioButton(const std::string &buttonText);
+            explicit RadioButton(const std::string &buttonText = "");
+
+            /**
+             * @brief Create a new radio button widget
+             * @param text Text to be displayed next to the button
+             * @return The new radio button
+             */
+            static sharedPtr create(const std::string& text = "");
 
             /**
              * @brief Set the buttons renderer

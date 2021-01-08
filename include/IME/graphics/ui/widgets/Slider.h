@@ -28,6 +28,7 @@
 #include "IWidget.h"
 #include "IME/graphics/ui/renderers/SliderRenderer.h"
 #include <TGUI/Widgets/Slider.hpp>
+#include <memory>
 
 namespace IME {
     namespace UI {
@@ -36,12 +37,22 @@ namespace IME {
          */
         class IME_API Slider : public IWidget {
         public:
+            using sharedPtr = std::shared_ptr<Slider>; //!< Shared widget pointer
+
             /**
              * @brief Construct a slider
              * @param minValue The minimum slider value
              * @param maxValue The maximum slider value
              */
-            Slider(float minValue = 0, float maxValue = 10);
+            explicit Slider(float minValue = 0, float maxValue = 10);
+
+            /**
+             * @brief Create a new slider widget
+             * @param minimum The minimum value of the slider
+             * @param maximum The maximum value of the slider
+             * @return The new slider
+             */
+            static sharedPtr create(float minimum = 0, float maximum = 10);
 
             /**
              * @brief Set the sliders renderer

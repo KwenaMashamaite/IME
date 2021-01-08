@@ -37,6 +37,10 @@ namespace IME::UI {
         initEvents();
     }
 
+    Tabs::sharedPtr Tabs::create() {
+        return std::make_shared<Tabs>();
+    }
+
     void Tabs::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
         assert(renderer && "A nullptr cannot be set as a renderer");
         renderer_ = renderer;

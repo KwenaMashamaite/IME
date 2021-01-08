@@ -30,15 +30,19 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    HorizontalLayout::HorizontalLayout(float width, float height)
-        : layout_{tgui::HorizontalLayout::create({width, height})},
-          renderer_{std::make_shared<BoxLayoutRenderer>()}
-        {
-            renderer_->setInternalPtr(layout_->getRenderer());
-            initEvents();
-        }
+    HorizontalLayout::HorizontalLayout(float width, float height) :
+        layout_{tgui::HorizontalLayout::create({width, height})},
+        renderer_{std::make_shared<BoxLayoutRenderer>()}
+    {
+        renderer_->setInternalPtr(layout_->getRenderer());
+        initEvents();
+    }
 
-        void HorizontalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
+    HorizontalLayout::sharedPtr HorizontalLayout::create(float width, float height) {
+        return std::make_shared<HorizontalLayout>(width, height);
+    }
+
+    void HorizontalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
             assert(renderer && "A nullptr cannot be set as a renderer");
             renderer_ = renderer;
             layout_->setRenderer(renderer->getInternalPtr()->getData());

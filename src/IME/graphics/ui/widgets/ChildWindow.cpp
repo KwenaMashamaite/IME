@@ -30,12 +30,18 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons)
-        : window_{tgui::ChildWindow::create(title, titleButtons)},
-          renderer_{std::make_shared<ChildWindowRenderer>()}
+    ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons) :
+        window_{tgui::ChildWindow::create(title, titleButtons)},
+        renderer_{std::make_shared<ChildWindowRenderer>()}
     {
         renderer_->setInternalPtr(window_->getRenderer());
         initEvents();
+    }
+
+    ChildWindow::sharedPtr ChildWindow::create(const std::string& title,
+        unsigned int titleButtons)
+    {
+        return std::make_shared<ChildWindow>(title, titleButtons);
     }
 
     void ChildWindow::setRenderer(std::shared_ptr<ChildWindowRenderer> renderer) {

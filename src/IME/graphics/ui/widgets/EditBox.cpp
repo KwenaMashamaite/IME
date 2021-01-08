@@ -30,12 +30,16 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    EditBox::EditBox()
-        : editBox_{tgui::EditBox::create()},
-          renderer_{std::make_shared<EditBoxRenderer>()}
+    EditBox::EditBox() :
+        editBox_{tgui::EditBox::create()},
+        renderer_{std::make_shared<EditBoxRenderer>()}
     {
         renderer_->setInternalPtr(editBox_->getRenderer());
         initEvents();
+    }
+
+    EditBox::sharedPtr EditBox::create() {
+        return std::make_shared<EditBox>();
     }
 
     void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
