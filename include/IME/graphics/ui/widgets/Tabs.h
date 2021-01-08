@@ -35,7 +35,10 @@
 namespace IME {
     namespace UI {
         /**
-         * @brief A widget that holds a panel
+         * @brief A Tabs widget
+         *
+         * This widget can hold multiple tabs. If you want Tabs with
+         * panels, checkout the TabsContainer class
          */
         class IME_API Tabs : public IWidget {
         public:

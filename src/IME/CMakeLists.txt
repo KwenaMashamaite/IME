@@ -58,6 +58,7 @@ set(IME_SRC
     graphics/ui/widgets/RadioButton.cpp
     graphics/ui/widgets/Panel.cpp
     graphics/ui/widgets/Tabs.cpp
+    graphics/ui/widgets/TabsContainer.cpp
     graphics/ui/GuiContainer.cpp
     graphics/Sprite.cpp
     graphics/AnimatableSprite.cpp

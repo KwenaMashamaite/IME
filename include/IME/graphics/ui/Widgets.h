@@ -39,5 +39,8 @@
 #include "IME/graphics/ui/widgets/VerticalLayout.h"
 #include "IME/graphics/ui/widgets/HorizontalLayout.h"
 #include "IME/graphics/ui/widgets/ChildWindow.h"
+#include "IME/graphics/ui/widgets/RadioButton.h"
+#include "IME/graphics/ui/widgets/Tabs.h"
+#include "IME/graphics/ui/widgets/TabsContainer.h"
 
 #endif // IME_WIDGETS_H
