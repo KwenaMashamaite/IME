@@ -31,7 +31,7 @@ namespace IME::UI {
         checkBoxRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    Borders CheckBoxRenderer::getBorders() const {
+    CheckBoxRenderer::Borders CheckBoxRenderer::getBorders() const {
         return {checkBoxRenderer_->getBorders().getLeft(),
                 checkBoxRenderer_->getBorders().getTop(),
                 checkBoxRenderer_->getBorders().getRight(),
@@ -315,16 +315,16 @@ namespace IME::UI {
         checkBoxRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle CheckBoxRenderer::getTextStyle() const {
+    CheckBoxRenderer::TextStyle CheckBoxRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
-                static_cast<unsigned int>(checkBoxRenderer_->getTextStyle()));
+            static_cast<unsigned int>(checkBoxRenderer_->getTextStyle()));
     }
 
     void CheckBoxRenderer::setCheckedTextStyle(TextStyle style) {
         checkBoxRenderer_->setTextStyleChecked(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle CheckBoxRenderer::getCheckedTextStyle() const {
+    CheckBoxRenderer::TextStyle CheckBoxRenderer::getCheckedTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(checkBoxRenderer_->getTextStyleChecked()));
     }

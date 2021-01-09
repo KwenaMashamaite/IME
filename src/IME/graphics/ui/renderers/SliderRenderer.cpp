@@ -32,7 +32,7 @@ namespace IME::UI {
                     borders.right, borders.bottom});
     }
 
-    Borders SliderRenderer::getBorders() const {
+    SliderRenderer::Borders SliderRenderer::getBorders() const {
         return {sliderRenderer_->getBorders().getLeft(),
                 sliderRenderer_->getBorders().getTop(),
                 sliderRenderer_->getBorders().getRight(),

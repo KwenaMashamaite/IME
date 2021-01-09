@@ -22,12 +22,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Structs.h"
-
 #ifndef IME_BOXLAYOUTRENDERER_H
 #define IME_BOXLAYOUTRENDERER_H
 
+#include "IWidgetRenderer.h"
 #include <TGUI/Renderers/BoxLayoutRenderer.hpp>
 
 namespace IME {
@@ -35,7 +33,8 @@ namespace IME {
         /**
          * @brief Class for rendering a box layout
          *
-         * This class allows you to manipulate the render properties of a BoxLayout object
+         * This class allows you to manipulate the render properties of a
+         * box layout
          */
         class IME_API BoxLayoutRenderer : public IWidgetRenderer {
         public:

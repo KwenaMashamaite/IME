@@ -31,7 +31,7 @@ namespace IME::UI {
         windowRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    Borders ChildWindowRenderer::getBorders() const {
+    ChildWindowRenderer::Borders ChildWindowRenderer::getBorders() const {
         return {windowRenderer_->getBorders().getLeft(),
                 windowRenderer_->getBorders().getTop(),
                 windowRenderer_->getBorders().getRight(),

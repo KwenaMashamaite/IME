@@ -26,15 +26,13 @@
 #define IME_BUTTONRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ButtonRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a button
+         * @brief Class for rendering a Button
          *
          * This class allows you to manipulate the render properties of a Button
          */

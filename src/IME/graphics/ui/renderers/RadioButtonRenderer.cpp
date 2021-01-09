@@ -32,7 +32,7 @@ namespace IME::UI {
             borders.right, borders.bottom});
     }
 
-    Borders RadioButtonRenderer::getBorders() const {
+    RadioButtonRenderer::Borders RadioButtonRenderer::getBorders() const {
         return {buttonRenderer_->getBorders().getLeft(),
                 buttonRenderer_->getBorders().getTop(),
                 buttonRenderer_->getBorders().getRight(),
@@ -314,7 +314,7 @@ namespace IME::UI {
         buttonRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle RadioButtonRenderer::getTextStyle() const {
+    RadioButtonRenderer::TextStyle RadioButtonRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyle()));
     }
@@ -323,7 +323,7 @@ namespace IME::UI {
         buttonRenderer_->setTextStyleChecked(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle RadioButtonRenderer::getCheckedTextStyle() const {
+    RadioButtonRenderer::TextStyle RadioButtonRenderer::getCheckedTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleChecked()));
     }

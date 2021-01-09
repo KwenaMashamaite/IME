@@ -32,7 +32,7 @@ namespace IME::UI {
             borders.right, borders.bottom});
     }
 
-    Borders PanelRenderer::getBorders() const {
+    PanelRenderer::Borders PanelRenderer::getBorders() const {
         return {panelRenderer_->getBorders().getLeft(),
                 panelRenderer_->getBorders().getTop(),
                 panelRenderer_->getBorders().getRight(),

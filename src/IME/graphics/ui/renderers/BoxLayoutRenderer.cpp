@@ -31,7 +31,7 @@ namespace IME::UI {
             padding.right, padding.bottom});
     }
 
-    Padding BoxLayoutRenderer::getPadding() const {
+    BoxLayoutRenderer::Padding BoxLayoutRenderer::getPadding() const {
         return {boxLayoutRenderer_->getPadding().getLeft(),
                 boxLayoutRenderer_->getPadding().getTop(),
                 boxLayoutRenderer_->getPadding().getRight(),

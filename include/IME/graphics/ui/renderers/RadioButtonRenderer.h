@@ -27,18 +27,16 @@
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Structs.h"
-#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/RadioButtonRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief A class for rendering a radio button
+         * @brief A class for rendering a RadioButton
          *
-         * This class allows you to manipulate the render properties of a radio
-         * button
+         * This class allows you to manipulate the render properties of a
+         * RadioButton
          */
         class IME_API RadioButtonRenderer : public IWidgetRenderer {
         public:

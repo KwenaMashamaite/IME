@@ -26,15 +26,13 @@
 #define IME_PROGRESSBARRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Structs.h"
-#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ProgressBarRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a progress bar
+         * @brief Class for rendering a ProgressBar
          *
          * This class allows you to manipulate the render properties of a
          * ProgressBar

@@ -25,8 +25,6 @@
 #ifndef IME_LABELRENDERER_H
 #define IME_LABELRENDERER_H
 
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include "IWidgetRenderer.h"
 #include <TGUI/Renderers/LabelRenderer.hpp>
@@ -35,7 +33,7 @@
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a label
+         * @brief Class for rendering a Label
          *
          * This class allows you to manipulate the render properties of a Label
          */

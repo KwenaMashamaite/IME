@@ -31,7 +31,7 @@ namespace IME::UI {
         editBoxRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle EditBoxRenderer::getTextStyle() const {
+    EditBoxRenderer::TextStyle EditBoxRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(editBoxRenderer_->getTextStyle()));
     }
@@ -40,7 +40,7 @@ namespace IME::UI {
         editBoxRenderer_->setDefaultTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle EditBoxRenderer::getDefaultTextStyle() const {
+    EditBoxRenderer::TextStyle EditBoxRenderer::getDefaultTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(editBoxRenderer_->getDefaultTextStyle()));
     }
@@ -49,7 +49,7 @@ namespace IME::UI {
         editBoxRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    Borders EditBoxRenderer::getBorders() const {
+    EditBoxRenderer::Borders EditBoxRenderer::getBorders() const {
         return {editBoxRenderer_->getBorders().getLeft(),
                 editBoxRenderer_->getBorders().getTop(),
                 editBoxRenderer_->getBorders().getRight(),
@@ -61,7 +61,7 @@ namespace IME::UI {
             padding.bottom});
     }
 
-    Padding EditBoxRenderer::getPadding() const {
+    EditBoxRenderer::Padding EditBoxRenderer::getPadding() const {
         return {editBoxRenderer_->getPadding().getLeft(),
                 editBoxRenderer_->getPadding().getTop(),
                 editBoxRenderer_->getPadding().getRight(),

@@ -33,7 +33,7 @@ namespace IME::UI {
             borders.right, borders.bottom});
     }
 
-    Borders TabsRenderer::getBorders() const {
+    TabsRenderer::Borders TabsRenderer::getBorders() const {
         return {tabsRenderer_->getBorders().getLeft(),
                 tabsRenderer_->getBorders().getTop(),
                 tabsRenderer_->getBorders().getRight(),

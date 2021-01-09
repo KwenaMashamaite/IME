@@ -27,17 +27,15 @@
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Structs.h"
-#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/Colour.h"
 #include <tgui/Renderers/PanelRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief A class for rendering a panel
+         * @brief A class for rendering a Panel
          *
-         * This class allows you to manipulate the render properties of a panel
+         * This class allows you to manipulate the render properties of a Panel
          */
         class IME_API PanelRenderer : public IWidgetRenderer {
         public:

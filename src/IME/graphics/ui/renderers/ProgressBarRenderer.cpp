@@ -33,7 +33,7 @@ namespace IME::UI {
             borders.right, borders.bottom});
     }
 
-    Borders ProgressBarRenderer::getBorders() const {
+    ProgressBarRenderer::Borders ProgressBarRenderer::getBorders() const {
         return {progressBarRenderer_->getBorders().getLeft(),
                 progressBarRenderer_->getBorders().getTop(),
                 progressBarRenderer_->getBorders().getRight(),
@@ -94,7 +94,7 @@ namespace IME::UI {
         progressBarRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ProgressBarRenderer::getTextStyle() const {
+    ProgressBarRenderer::TextStyle ProgressBarRenderer::getTextStyle() const {
         return static_cast<TextStyle>(static_cast<unsigned int>(
                 progressBarRenderer_->getTextStyle()));
     }

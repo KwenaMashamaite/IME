@@ -28,13 +28,16 @@
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Structs.h"
-#include "IME/graphics/ui/Enums.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/TabsRenderer.hpp>
 
 namespace IME {
     namespace UI {
+        /**
+         * @brief Class for rendering Tabs
+         *
+         * This class allows you to manipulate the render properties of Tabs
+         */
         class IME_API TabsRenderer : public IWidgetRenderer {
         public:
             /**

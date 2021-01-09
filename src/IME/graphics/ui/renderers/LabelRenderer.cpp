@@ -31,19 +31,19 @@ namespace IME::UI {
         labelRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    Borders LabelRenderer::getBorders() const {
+    LabelRenderer::Borders LabelRenderer::getBorders() const {
         return {labelRenderer_->getBorders().getLeft(),
                 labelRenderer_->getBorders().getTop(),
-        labelRenderer_->getBorders().getRight(),
-        labelRenderer_->getBorders().getBottom()};
+                labelRenderer_->getBorders().getRight(),
+                labelRenderer_->getBorders().getBottom()};
     }
 
     void LabelRenderer::setPadding(const Padding &padding) {
         labelRenderer_->setPadding({padding.left, padding.top, padding.right,
-                                    padding.bottom});
+            padding.bottom});
     }
 
-    Padding LabelRenderer::getPadding() const {
+    LabelRenderer::Padding LabelRenderer::getPadding() const {
         return {labelRenderer_->getPadding().getLeft(),
                 labelRenderer_->getPadding().getTop(),
                 labelRenderer_->getPadding().getRight(),
@@ -78,7 +78,7 @@ namespace IME::UI {
         labelRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle LabelRenderer::getTextStyle() const {
+    LabelRenderer::TextStyle LabelRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(labelRenderer_->getTextStyle()));
     }

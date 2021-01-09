@@ -26,18 +26,16 @@
 #define IME_EDITBOXRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/EditBoxRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering an edit box
+         * @brief Class for rendering an EditBox
          *
          * This class allows you to manipulate the render properties of an
-         * edit box
+         * EditBox
          */
         class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:

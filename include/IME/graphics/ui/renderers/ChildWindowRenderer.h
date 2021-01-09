@@ -26,18 +26,16 @@
 #define IME_CHILDWINDOWRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ChildWindowRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a child window
+         * @brief Class for rendering a ChildWindow
          *
          * This class allows you to manipulate the render properties of a
-         * child window
+         * ChildWindow
          */
         class IME_API ChildWindowRenderer : public IWidgetRenderer {
         public:

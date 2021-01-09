@@ -26,7 +26,6 @@
 #define IME_IWIDGETRENDERER_H
 
 #include "IME/Config.h"
-#include "IME/core/event/EventEmitter.h"
 #include <TGUI/Renderers/WidgetRenderer.hpp>
 #include <string>
 
@@ -37,6 +36,38 @@ namespace IME {
          */
         class IWidgetRenderer {
         public:
+            /**
+             * @brief Represents the spacing between the text and the
+             *        border of a widget
+             */
+            struct Padding {
+                float left = 0.0f;   //!< Left padding
+                float top = 0.0f;    //!< Top padding
+                float right = 0.0f;  //!< Right padding
+                float bottom = 0.0f; //!< Bottom padding
+            };
+
+            /**
+             * @brief Widget borders
+             */
+            struct Borders {
+                float left = 0.0f;   //!< Left border
+                float top = 0.0f;    //!< Top border
+                float right = 0.0f;  //!< Right border
+                float bottom = 0.0f; //!< Bottom border
+            };
+
+            /**
+             * @brief Text styles
+             */
+            enum class TextStyle {
+                Regular       = 0,      //!< Regular characters, no style
+                Bold          = 1 << 0, //!< Bold characters
+                Italic        = 1 << 1, //!< Italic characters
+                Underlined    = 1 << 2, //!< Underlined characters
+                StrikeThrough = 1 << 3  //!< Strike through characters
+            };
+
             /**
              * @brief Set the opacity of the widget
              * @param opacity The new opacity of the widget in between 0 and 1

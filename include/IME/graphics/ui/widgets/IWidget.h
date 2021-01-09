@@ -30,8 +30,6 @@
 #include "IME/core/event/EventEmitter.h"
 #include "IME/common/ITransformable.h"
 #include "IME/common/Vector2.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include <TGUI/Widget.hpp>
 #include <string>
 

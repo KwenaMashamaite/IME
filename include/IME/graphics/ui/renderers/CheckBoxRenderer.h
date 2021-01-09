@@ -26,18 +26,16 @@
 #define IME_CHECKBOXRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/CheckBoxRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief Class for rendering a checkbox
+         * @brief Class for rendering a CheckBox
          *
          * This class allows you to manipulate the render properties of a
-         * checkbox
+         * CheckBox
          */
         class IME_API CheckBoxRenderer : public IWidgetRenderer {
         public:

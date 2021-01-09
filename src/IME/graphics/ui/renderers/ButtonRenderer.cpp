@@ -31,7 +31,7 @@ namespace IME::UI {
         buttonRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    Borders ButtonRenderer::getBorders() const {
+    ButtonRenderer::Borders ButtonRenderer::getBorders() const {
         return {buttonRenderer_->getBorders().getLeft(),
                 buttonRenderer_->getBorders().getTop(),
                 buttonRenderer_->getBorders().getRight(),
@@ -200,43 +200,43 @@ namespace IME::UI {
         buttonRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ButtonRenderer::getTextStyle() const {
+    ButtonRenderer::TextStyle ButtonRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
-                static_cast<unsigned int>(buttonRenderer_->getTextStyle()));
+            static_cast<unsigned int>(buttonRenderer_->getTextStyle()));
     }
 
     void ButtonRenderer::setHoverTextStyle(TextStyle style) {
         buttonRenderer_->setTextStyleHover(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ButtonRenderer::getHoverTextStyle() const {
+    ButtonRenderer::TextStyle ButtonRenderer::getHoverTextStyle() const {
         return static_cast<TextStyle>(
-                static_cast<unsigned int>(buttonRenderer_->getTextStyleHover()));
+            static_cast<unsigned int>(buttonRenderer_->getTextStyleHover()));
     }
 
     void ButtonRenderer::setTextStyleOnMouseDown(TextStyle style) {
         buttonRenderer_->setTextStyleDown(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ButtonRenderer::getTextStyleOnMouseDown() const {
+    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleOnMouseDown() const {
         return static_cast<TextStyle>(
-                static_cast<unsigned int>(buttonRenderer_->getTextStyleDown()));
+            static_cast<unsigned int>(buttonRenderer_->getTextStyleDown()));
     }
 
     void ButtonRenderer::setTextStyleDisabled(TextStyle style) {
         buttonRenderer_->setTextStyleDisabled(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ButtonRenderer::getTextStyleDisabled() const {
+    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleDisabled() const {
         return static_cast<TextStyle>(
-                static_cast<unsigned int>(buttonRenderer_->getTextStyleDisabled()));
+            static_cast<unsigned int>(buttonRenderer_->getTextStyleDisabled()));
     }
 
     void ButtonRenderer::setTextStyleFocused(TextStyle style) {
         buttonRenderer_->setTextStyleFocused(static_cast<tgui::TextStyle>(style));
     }
 
-    TextStyle ButtonRenderer::getTextStyleFocused() const {
+    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleFocused() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleFocused()));
     }

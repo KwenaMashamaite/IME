@@ -26,17 +26,15 @@
 #define IME_SLIDERRENDERER_H
 
 #include "IWidgetRenderer.h"
-#include "IME/graphics/ui/Enums.h"
-#include "IME/graphics/ui/Structs.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/SliderRenderer.hpp>
 
 namespace IME {
     namespace UI {
         /**
-         * @brief A class for rendering a slider
+         * @brief A class for rendering a Slider
          *
-         * This class allows you to manipulate the render properties of a slider
+         * This class allows you to manipulate the render properties of a Slider
          */
         class IME_API SliderRenderer : public IWidgetRenderer {
         public:
