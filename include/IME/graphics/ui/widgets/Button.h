@@ -149,6 +149,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the button
+             * @param width New width of the button
+             *
+             * This function sets the width while keeping the height
+             * the same
+             *
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the button relative to its parent
+             * @param width New width
+             *
+             * The relative width is given in percentages as shown:
+             *
+             * @code
+             * button->setWidth("10%");
+             * @endcode
+             *
+             * This function sets the width of the button while keeping the
+             * height the same
+             *
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the button
+             * @param width New height of the button
+             *
+             * This function sets the height while keeping the width
+             * the same
+             *
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the button relative to its parent
+             * @param height New height
+             *
+             * The relative height is given in percentages as shown:
+             *
+             * @code
+             * button->setHeight("10%");
+             * @endcode
+             *
+             * This function sets the height of the button while keeping the
+             * width the same
+             *
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the button
              * @return The type of the button
              */

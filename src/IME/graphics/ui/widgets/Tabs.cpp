@@ -171,6 +171,22 @@ namespace IME::UI {
         return {tabs_->getFullSize().x, tabs_->getFullSize().y};
     }
 
+    void Tabs::setWidth(float width) {
+        tabs_->setWidth(width);
+    }
+
+    void Tabs::setWidth(const std::string &width) {
+        tabs_->setWidth(width.c_str());
+    }
+
+    void Tabs::setHeight(float height) {
+        tabs_->setHeight(height);
+    }
+
+    void Tabs::setHeight(const std::string &height) {
+        tabs_->setHeight(height.c_str());
+    }
+
     std::string Tabs::getType() const {
         return "Tab";
     }

@@ -158,6 +158,22 @@ namespace IME::UI {
         return {button_->getFullSize().x, button_->getFullSize().y};
     }
 
+    void Button::setWidth(float width) {
+        button_->setWidth(width);
+    }
+
+    void Button::setWidth(const std::string &width) {
+        button_->setWidth(width.c_str());
+    }
+
+    void Button::setHeight(float height) {
+        button_->setHeight(height);
+    }
+
+    void Button::setHeight(const std::string &height) {
+        button_->setHeight(height.c_str());
+    }
+
     unsigned int Button::getTextSize() const {
         return button_->getTextSize();
     }

@@ -100,6 +100,22 @@ namespace IME::UI {
         return {button_->getFullSize().x, button_->getFullSize().y};
     }
 
+    void RadioButton::setWidth(float width) {
+        button_->setWidth(width);
+    }
+
+    void RadioButton::setWidth(const std::string &width) {
+        button_->setWidth(width.c_str());
+    }
+
+    void RadioButton::setHeight(float height) {
+        button_->setHeight(height);
+    }
+
+    void RadioButton::setHeight(const std::string &height) {
+        button_->setHeight(height.c_str());
+    }
+
     std::string RadioButton::getType() const {
         return "RadioButton";
     }

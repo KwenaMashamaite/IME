@@ -257,6 +257,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the slider
+             * @param width New width of the slider
+             * 
+             * This function sets the width while keeping the height
+             * the same
+             * 
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the slider relative to its parent
+             * @param width New width
+             * 
+             * The relative width is given in percentages as shown:
+             * 
+             * @code
+             * slider->setWidth("10%");
+             * @endcode
+             * 
+             * This function sets the width of the slider while keeping the
+             * height the same
+             * 
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the slider
+             * @param width New height of the slider
+             * 
+             * This function sets the height while keeping the width 
+             * the same
+             * 
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the slider relative to its parent
+             * @param height New height
+             * 
+             * The relative height is given in percentages as shown:
+             * 
+             * @code
+             * slider->setHeight("10%");
+             * @endcode
+             * 
+             * This function sets the height of the slider while keeping the
+             * width the same
+             * 
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the slider
              * @return The type of the slider
              */

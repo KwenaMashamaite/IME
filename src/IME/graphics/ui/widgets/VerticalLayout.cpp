@@ -74,6 +74,22 @@ namespace IME::UI {
         return {layout_->getFullSize().x, layout_->getFullSize().y};
     }
 
+    void VerticalLayout::setWidth(float width) {
+        layout_->setWidth(width);
+    }
+
+    void VerticalLayout::setWidth(const std::string &width) {
+        layout_->setWidth(width.c_str());
+    }
+
+    void VerticalLayout::setHeight(float height) {
+        layout_->setHeight(height);
+    }
+
+    void VerticalLayout::setHeight(const std::string &height) {
+        layout_->setHeight(height.c_str());
+    }
+
     unsigned int VerticalLayout::getTextSize() const {
         return layout_->getTextSize();
     }

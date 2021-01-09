@@ -174,6 +174,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the checkbox
+             * @param width New width of the checkbox
+             *
+             * This function sets the width while keeping the height
+             * the same
+             *
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the checkbox relative to its parent
+             * @param width New width
+             *
+             * The relative width is given in percentages as shown:
+             *
+             * @code
+             * checkbox->setWidth("10%");
+             * @endcode
+             *
+             * This function sets the width of the checkbox while keeping the
+             * height the same
+             *
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the checkbox
+             * @param width New height of the checkbox
+             *
+             * This function sets the height while keeping the width
+             * the same
+             *
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the checkbox relative to its parent
+             * @param height New height
+             *
+             * The relative height is given in percentages as shown:
+             *
+             * @code
+             * checkbox->setHeight("10%");
+             * @endcode
+             *
+             * This function sets the height of the checkbox while keeping the
+             * width the same
+             *
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the check box
              * @return The type of the check box
              */

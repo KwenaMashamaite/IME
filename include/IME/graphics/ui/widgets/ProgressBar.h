@@ -229,6 +229,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the progress bar
+             * @param width New width of the progress bar
+             * 
+             * This function sets the width while keeping the height
+             * the same
+             * 
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the progress bar relative to its parent
+             * @param width New width
+             * 
+             * The relative width is given in percentages as shown:
+             * 
+             * @code
+             * progress bar->setWidth("10%");
+             * @endcode
+             * 
+             * This function sets the width of the progress bar while keeping the
+             * height the same
+             * 
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the progress bar
+             * @param width New height of the progress bar
+             * 
+             * This function sets the height while keeping the width 
+             * the same
+             * 
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the progress bar relative to its parent
+             * @param height New height
+             * 
+             * The relative height is given in percentages as shown:
+             * 
+             * @code
+             * progress bar->setHeight("10%");
+             * @endcode
+             * 
+             * This function sets the height of the progress bar while keeping the
+             * width the same
+             * 
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the progress bar
              * @return The type of the progress bar
              */

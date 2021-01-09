@@ -195,6 +195,22 @@ namespace IME::UI {
         return {slider_->getFullSize().x, slider_->getFullSize().y};;
     }
 
+    void Slider::setWidth(float width) {
+        slider_->setWidth(width);
+    }
+
+    void Slider::setWidth(const std::string &width) {
+        slider_->setWidth(width.c_str());
+    }
+
+    void Slider::setHeight(float height) {
+        slider_->setHeight(height);
+    }
+
+    void Slider::setHeight(const std::string &height) {
+        slider_->setHeight(height.c_str());
+    }
+
     unsigned int Slider::getTextSize() const {
         return slider_->getTextSize();
     }

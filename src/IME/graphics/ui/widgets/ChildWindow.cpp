@@ -158,6 +158,22 @@ namespace IME::UI {
         return {window_->getFullSize().x, window_->getFullSize().y};
     }
 
+    void ChildWindow::setWidth(float width) {
+        window_->setWidth(width);
+    }
+
+    void ChildWindow::setWidth(const std::string &width) {
+        window_->setWidth(width.c_str());
+    }
+
+    void ChildWindow::setHeight(float height) {
+        window_->setHeight(height);
+    }
+
+    void ChildWindow::setHeight(const std::string &height) {
+        window_->setHeight(height.c_str());
+    }
+
     unsigned int ChildWindow::getTextSize() const {
         return window_->getTextSize();
     }

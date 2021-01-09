@@ -274,6 +274,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the container
+             * @param width New width of the container
+             * 
+             * This function sets the width while keeping the height
+             * the same
+             * 
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the container relative to its parent
+             * @param width New width
+             * 
+             * The relative width is given in percentages as shown:
+             * 
+             * @code
+             * container->setWidth("10%");
+             * @endcode
+             * 
+             * This function sets the width of the container while keeping the
+             * height the same
+             * 
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the container
+             * @param width New height of the container
+             * 
+             * This function sets the height while keeping the width 
+             * the same
+             * 
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the container relative to its parent
+             * @param height New height
+             * 
+             * The relative height is given in percentages as shown:
+             * 
+             * @code
+             * container->setHeight("10%");
+             * @endcode
+             * 
+             * This function sets the height of the container while keeping the
+             * width the same
+             * 
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the container
              * @return The type of the container
              */

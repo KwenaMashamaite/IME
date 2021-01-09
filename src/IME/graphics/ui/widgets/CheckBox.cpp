@@ -202,6 +202,22 @@ namespace IME::UI {
         return {checkBox_->getFullSize().x, checkBox_->getFullSize().y};
     }
 
+    void CheckBox::setWidth(float width) {
+        checkBox_->setWidth(width);
+    }
+
+    void CheckBox::setWidth(const std::string &width) {
+        checkBox_->setWidth(width.c_str());
+    }
+
+    void CheckBox::setHeight(float height) {
+        checkBox_->setHeight(height);
+    }
+
+    void CheckBox::setHeight(const std::string &height) {
+        checkBox_->setHeight(height.c_str());
+    }
+
     void CheckBox::setScale(Vector2f scale) {
         setScale(scale.x, scale.y);
     }

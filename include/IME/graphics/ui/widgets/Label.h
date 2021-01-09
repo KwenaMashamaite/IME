@@ -244,6 +244,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the label
+             * @param width New width of the label
+             * 
+             * This function sets the width while keeping the height
+             * the same
+             * 
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the label relative to its parent
+             * @param width New width
+             * 
+             * The relative width is given in percentages as shown:
+             * 
+             * @code
+             * label->setWidth("10%");
+             * @endcode
+             * 
+             * This function sets the width of the label while keeping the
+             * height the same
+             * 
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the label
+             * @param width New height of the label
+             * 
+             * This function sets the height while keeping the width 
+             * the same
+             * 
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the label relative to its parent
+             * @param height New height
+             * 
+             * The relative height is given in percentages as shown:
+             * 
+             * @code
+             * label->setHeight("10%");
+             * @endcode
+             * 
+             * This function sets the height of the label while keeping the
+             * width the same
+             * 
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the label
              * @return The type of the label
              */

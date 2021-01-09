@@ -156,6 +156,62 @@ namespace IME {
             Vector2f getAbsoluteSize() override;
 
             /**
+             * @brief Set the width of the layout
+             * @param width New width of the layout
+             * 
+             * This function sets the width while keeping the height
+             * the same
+             * 
+             * @see setSize
+             */
+            void setWidth(float width) override;
+
+            /**
+             * @brief Set the width of the layout relative to its parent
+             * @param width New width
+             * 
+             * The relative width is given in percentages as shown:
+             * 
+             * @code
+             * layout->setWidth("10%");
+             * @endcode
+             * 
+             * This function sets the width of the layout while keeping the
+             * height the same
+             * 
+             * @see setSize
+             */
+            void setWidth(const std::string& width) override;
+
+            /**
+             * @brief Set the height of the layout
+             * @param width New height of the layout
+             * 
+             * This function sets the height while keeping the width 
+             * the same
+             * 
+             * @see setSize
+             */
+            void setHeight(float height) override;
+
+            /**
+             * @brief Set the height of the layout relative to its parent
+             * @param height New height
+             * 
+             * The relative height is given in percentages as shown:
+             * 
+             * @code
+             * layout->setHeight("10%");
+             * @endcode
+             * 
+             * This function sets the height of the layout while keeping the
+             * width the same
+             * 
+             * @see setSize
+             */
+            void setHeight(const std::string& height) override;
+
+            /**
              * @brief Get the type of the layout
              * @return The type of the layout
              */

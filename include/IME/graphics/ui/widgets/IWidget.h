@@ -112,6 +112,62 @@ namespace IME {
             virtual Vector2f getAbsoluteSize() = 0;
 
             /**
+             * @brief Set the width of the widget
+             * @param width New width of the widget
+             *
+             * This function sets the width while keeping the height
+             * the same
+             *
+             * @see setSize
+             */
+            virtual void setWidth(float width) = 0;
+
+            /**
+             * @brief Set the width of the widget relative to its parent
+             * @param width New width
+             *
+             * The relative width is given in percentages as shown:
+             *
+             * @code
+             * widget->setWidth("10%");
+             * @endcode
+             *
+             * This function sets the width of the widget while keeping the
+             * height the same
+             *
+             * @see setSize
+             */
+            virtual void setWidth(const std::string& width) = 0;
+
+            /**
+             * @brief Set the height of the widget
+             * @param width New height of the widget
+             *
+             * This function sets the height while keeping the width
+             * the same
+             *
+             * @see setSize
+             */
+            virtual void setHeight(float height) = 0;
+
+            /**
+             * @brief Set the height of the widget relative to its parent
+             * @param height New height
+             *
+             * The relative height is given in percentages as shown:
+             *
+             * @code
+             * widget->setHeight("10%");
+             * @endcode
+             *
+             * This function sets the height of the widget while keeping the
+             * width the same
+             *
+             * @see setSize
+             */
+            virtual void setHeight(const std::string& height) = 0;
+
+            /**
              * @brief Get the type of the widget
              * @return The type of the widget
              */

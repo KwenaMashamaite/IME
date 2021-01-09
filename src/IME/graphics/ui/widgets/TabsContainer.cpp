@@ -156,6 +156,22 @@ namespace IME::UI {
         return {tabContainer_->getFullSize().x, tabContainer_->getFullSize().y};
     }
 
+    void TabsContainer::setWidth(float width) {
+        tabContainer_->setWidth(width);
+    }
+
+    void TabsContainer::setWidth(const std::string &width) {
+        tabContainer_->setWidth(width.c_str());
+    }
+
+    void TabsContainer::setHeight(float height) {
+        tabContainer_->setHeight(height);
+    }
+
+    void TabsContainer::setHeight(const std::string &height) {
+        tabContainer_->setHeight(height.c_str());
+    }
+
     std::string TabsContainer::getType() const {
         return "Tab";
     }

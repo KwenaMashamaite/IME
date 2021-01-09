@@ -237,6 +237,22 @@ namespace IME::UI {
         return {progressBar_->getFullSize().x, progressBar_->getFullSize().y};
     }
 
+    void ProgressBar::setWidth(float width) {
+        progressBar_->setWidth(width);
+    }
+
+    void ProgressBar::setWidth(const std::string &width) {
+        progressBar_->setWidth(width.c_str());
+    }
+
+    void ProgressBar::setHeight(float height) {
+        progressBar_->setHeight(height);
+    }
+
+    void ProgressBar::setHeight(const std::string &height) {
+        progressBar_->setHeight(height.c_str());
+    }
+
     void ProgressBar::initEvents() {
         progressBar_->onMouseEnter([this]{emit("mouseEnter");});
         progressBar_->onMouseLeave([this]{emit("mouseLeave");});

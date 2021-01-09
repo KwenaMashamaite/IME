@@ -232,6 +232,22 @@ namespace IME::UI {
         return {editBox_->getFullSize().x, editBox_->getFullSize().y};
     }
 
+    void EditBox::setWidth(float width) {
+        editBox_->setWidth(width);
+    }
+
+    void EditBox::setWidth(const std::string &width) {
+        editBox_->setWidth(width.c_str());
+    }
+
+    void EditBox::setHeight(float height) {
+        editBox_->setHeight(height);
+    }
+
+    void EditBox::setHeight(const std::string &height) {
+        editBox_->setHeight(height.c_str());
+    }
+
     void EditBox::setScale(Vector2f scale) {
         setScale(scale.x, scale.y);
     }

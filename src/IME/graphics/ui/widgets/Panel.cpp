@@ -76,6 +76,22 @@ namespace IME::UI {
         return {panel_->getFullSize().x, panel_->getFullSize().y};
     }
 
+    void Panel::setWidth(float width) {
+        panel_->setWidth(width);
+    }
+
+    void Panel::setWidth(const std::string &width) {
+        panel_->setWidth(width.c_str());
+    }
+
+    void Panel::setHeight(float height) {
+        panel_->setHeight(height);
+    }
+
+    void Panel::setHeight(const std::string &height) {
+        panel_->setHeight(height.c_str());
+    }
+
     std::string Panel::getType() const {
         return "Panel";
     }

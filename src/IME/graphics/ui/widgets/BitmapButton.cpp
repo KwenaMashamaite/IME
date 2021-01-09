@@ -200,6 +200,22 @@ namespace IME::UI {
         return {button_->getFullSize().x, button_->getFullSize().y};
     }
 
+    void BitmapButton::setWidth(float width) {
+        button_->setWidth(width);
+    }
+
+    void BitmapButton::setWidth(const std::string &width) {
+        button_->setWidth(width.c_str());
+    }
+
+    void BitmapButton::setHeight(float height) {
+        button_->setHeight(height);
+    }
+
+    void BitmapButton::setHeight(const std::string &height) {
+        button_->setHeight(height.c_str());
+    }
+
     void BitmapButton::initEvents() {
         button_->onMouseEnter([this]{emit("mouseEnter");});
         button_->onMouseLeave([this]{emit("mouseLeave");});

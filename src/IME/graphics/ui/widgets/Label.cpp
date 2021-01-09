@@ -177,6 +177,22 @@ namespace IME::UI {
         return {label_->getFullSize().x, label_->getFullSize().y};;
     }
 
+    void Label::setWidth(float width) {
+        label_->setWidth(width);
+    }
+
+    void Label::setWidth(const std::string &width) {
+        label_->setWidth(width.c_str());
+    }
+
+    void Label::setHeight(float height) {
+        label_->setHeight(height);
+    }
+
+    void Label::setHeight(const std::string &height) {
+        label_->setHeight(height.c_str());
+    }
+
     std::string Label::getText() const {
         return label_->getText().toAnsiString();
     }
