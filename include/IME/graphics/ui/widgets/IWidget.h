@@ -26,8 +26,6 @@
 #define IME_IWIDGET_H
 
 #include "IME/Config.h"
-#include "IME/graphics/Window.h"
-#include "IME/graphics/IDrawable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/common/ITransformable.h"
@@ -42,7 +40,7 @@ namespace IME {
         /**
          * @brief Abstract base class for Graphical User Interface (GUI) elements
          */
-        class IME_API IWidget : public ITransformable, public EventEmitter {
+        class IME_API IWidget : public ITransformable {
         public:
             /**
              * @brief Set the position of the widget relative to the
@@ -174,6 +172,38 @@ namespace IME {
             virtual bool contains(float x, float y) const = 0;
 
             /**
+             * @brief Add an event listener to a widget event
+             * @param event Event to add an event listener to
+             * @param callback Function to execute when the event is fired
+             * @return The event listeners identification number
+             *
+             * The id must if the event listener is to be removed later
+             *
+             * @see unsubscribe
+             */
+            template<typename... Args>
+            int on(const std::string& event, Callback<Args...> callback) {
+                return eventEmitter_.on(event, std::move(callback));
+            }
+
+            /**
+             * @brief Remove an event listener from a widget event
+             * @param event Event to remove event listener from
+             * @param id Id number of the event listener
+             * @return True if the event listener was removed or false
+             *         if the given event does not exist or the event
+             *         does not have an event listener with the given id
+             *
+             * The id is the number given when the event listener was
+             * registered
+             *
+             * @see on
+             */
+            bool unsubscribe(const std::string& event, std::size_t id) {
+                return eventEmitter_.removeEventListener(event, id);
+            }
+
+            /**
              * @internal
              * @brief Get the internal pointer to a third party widget object
              * @return The internal pointer to a third party widget object
@@ -184,22 +214,26 @@ namespace IME {
             virtual std::shared_ptr<tgui::Widget> getInternalPtr() = 0;
 
             /**
-             * @brief Default destructor
+             * @brief Destructor
              */
             virtual ~IWidget() = default;
 
         protected:
             /**
-             * @brief Restrict the publication of widget events to
-             *        class level
+             * @brief Emit a widget event
+             * @param event Name of the event to be emitted
+             * @param args Arguments to pass to event listeners
              *
-             * This ensures that the publishing of events is exclusively
-             * controlled by the class. For instance, if the method is
-             * public, a click event can be raised on a button through
-             * an instance, even thought the said button is not clicked.
-             * This may cause bugs in the program
+             * This function will invoke all event listeners of the
+             * given event
              */
-            using EventEmitter::emit;
+            template<typename... Args>
+            void emit(const std::string& event, Args&& ...args) {
+                eventEmitter_.emit(event, std::forward<Args>(args)...);
+            }
+
+        private:
+            EventEmitter eventEmitter_; //!< Widgets event publisher
         };
     }
 }
