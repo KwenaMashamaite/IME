@@ -169,16 +169,6 @@ namespace IME::UI {
         return windowRenderer_->getTransparentTexture();
     }
 
-    int ChildWindowRenderer::onPropertyChange(const std::string &,
-        Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void ChildWindowRenderer::unsubscribe(int) {
-
-    }
-
     void ChildWindowRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         windowRenderer_ = dynamic_cast<tgui::ChildWindowRenderer*>(renderer);
     }

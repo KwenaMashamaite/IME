@@ -225,16 +225,6 @@ namespace IME::UI {
         return tabsRenderer_->getTransparentTexture();
     }
 
-    int TabsRenderer::onPropertyChange(const std::string&, 
-        Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void TabsRenderer::unsubscribe(int) {
-
-    }
-
     void TabsRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         tabsRenderer_ = dynamic_cast<tgui::TabsRenderer*>(renderer);
     }

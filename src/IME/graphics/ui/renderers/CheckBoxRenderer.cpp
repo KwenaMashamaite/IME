@@ -357,16 +357,6 @@ namespace IME::UI {
         return checkBoxRenderer_->getTransparentTexture();
     }
 
-    int CheckBoxRenderer::onPropertyChange(const std::string &,
-           Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void CheckBoxRenderer::unsubscribe(int) {
-
-    }
-
     void CheckBoxRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         checkBoxRenderer_ = dynamic_cast<tgui::CheckBoxRenderer*>(renderer);
     }

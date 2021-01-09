@@ -264,7 +264,7 @@ namespace IME {
              */
             void setSelectedTabTexture(const std::string& filename);
 
-            /*
+            /**
              * @brief Set the image of a selected tab when the mouse is on top
              *        of it
              * @param filename Filename of the image to set
@@ -356,29 +356,6 @@ namespace IME {
              * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
-
-            /**
-             * @brief Add an event listener to a property change event
-             * @param property Name of the property to listen for
-             * @param callback Function to execute when the property changes
-             * @return The event listeners identification number
-             *
-             * The callback function will be passed the new value of the
-             * property on invocation
-             */
-            int onPropertyChange(const std::string& property,
-                Callback<const std::string&> callback) override;
-
-            /**
-             * @brief Remove an event listener from a property change event
-             * @param id The unique identification number of the event listener
-             *
-             * The id was given when the event listener was subscribed to the
-             * event
-             *
-             * @see onPropertyChange
-             */
-            void unsubscribe(int id) override;
 
             /**
              * @internal

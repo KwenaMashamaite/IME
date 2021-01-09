@@ -74,16 +74,6 @@ namespace IME::UI {
         return boxLayoutRenderer_->getTransparentTexture();
     }
 
-    int BoxLayoutRenderer::onPropertyChange(const std::string &,
-         Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void BoxLayoutRenderer::unsubscribe(int) {
-
-    }
-
     void BoxLayoutRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         boxLayoutRenderer_ = dynamic_cast<tgui::BoxLayoutRenderer*>(renderer);
     }

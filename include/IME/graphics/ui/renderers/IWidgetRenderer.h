@@ -102,26 +102,6 @@ namespace IME {
             virtual bool isTransparentTextureIgnored() const = 0;
 
             /**
-             * @brief Add an event listener to a property change event
-             * @param callback Function to execute when the property changes
-             * @param property Name of the property to listen for
-             * @return The event listeners identification number
-             */
-            virtual int onPropertyChange(const std::string &property,
-                Callback<const std::string &> callback) = 0;
-
-            /**
-             * @brief Remove an event listener from a property change event
-             * @param id The unique identification number of the event listener
-             *
-             * The id was given when the event listener was subscribed to the
-             * event
-             *
-             * @see onPropertyChange
-             */
-            virtual void unsubscribe(int id) = 0;
-
-            /**
              * @internal
              * @brief Set the pointer to the third party renderer
              * @param renderer The third party

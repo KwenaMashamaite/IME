@@ -286,16 +286,6 @@ namespace IME::UI {
         return buttonRenderer_->getTransparentTexture();
     }
 
-    int ButtonRenderer::onPropertyChange(const std::string &,
-         Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void ButtonRenderer::unsubscribe(int) {
-
-    }
-
     void ButtonRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         buttonRenderer_ = dynamic_cast<tgui::ButtonRenderer*>(renderer);
     }

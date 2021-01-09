@@ -141,15 +141,6 @@ namespace IME::UI {
         return labelRenderer_->getTransparentTexture();
     }
 
-    int LabelRenderer::onPropertyChange(const std::string &,
-        Callback<const std::string &> ) {
-        return -1;
-    }
-
-    void LabelRenderer::unsubscribe(int) {
-
-    }
-
     void LabelRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         labelRenderer_ = dynamic_cast<tgui::LabelRenderer *>(renderer);
     }

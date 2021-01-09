@@ -149,16 +149,6 @@ namespace IME::UI {
         return sliderRenderer_->getTransparentTexture();
     }
 
-    int SliderRenderer::onPropertyChange(const std::string &,
-         Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void SliderRenderer::unsubscribe(int) {
-
-    }
-
     void SliderRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         sliderRenderer_ = dynamic_cast<tgui::SliderRenderer*>(renderer);
     }

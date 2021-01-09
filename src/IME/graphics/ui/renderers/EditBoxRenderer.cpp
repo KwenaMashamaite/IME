@@ -293,16 +293,6 @@ namespace IME::UI {
         return editBoxRenderer_->getTransparentTexture();
     }
 
-    int EditBoxRenderer::onPropertyChange(const std::string &,
-        Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void EditBoxRenderer::unsubscribe(int) {
-
-    }
-
     void EditBoxRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         editBoxRenderer_ = dynamic_cast<tgui::EditBoxRenderer*>(renderer);
     }

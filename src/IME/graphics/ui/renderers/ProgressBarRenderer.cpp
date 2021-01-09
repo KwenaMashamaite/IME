@@ -127,21 +127,12 @@ namespace IME::UI {
         return progressBarRenderer_->getTransparentTexture();
     }
 
-    void ProgressBarRenderer::unsubscribe(int ) {
-
-    }
-
     void ProgressBarRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         progressBarRenderer_ = dynamic_cast<tgui::ProgressBarRenderer*>(renderer);
     }
 
     tgui::WidgetRenderer *ProgressBarRenderer::getInternalPtr() {
         return progressBarRenderer_;
-    }
-
-    int ProgressBarRenderer::onPropertyChange(const std::string &,
-        Callback<const std::string &>) {
-        return 0;
     }
 
     ProgressBarRenderer::~ProgressBarRenderer() {

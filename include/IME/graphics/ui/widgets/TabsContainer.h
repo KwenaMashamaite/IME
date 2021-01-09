@@ -146,7 +146,7 @@ namespace IME {
 
             /**
              * @brief Remove a panel from the container
-             * @param Panel to remove
+             * @param panel Panel to remove
              */
             void removePanel(std::shared_ptr<Panel> panel);
 

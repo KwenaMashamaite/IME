@@ -88,15 +88,6 @@ namespace IME::UI {
         return panelRenderer_->getTransparentTexture();
     }
 
-    int PanelRenderer::onPropertyChange(const std::string&, Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void PanelRenderer::unsubscribe(int) {
-
-    }
-
     void PanelRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         panelRenderer_ = dynamic_cast<tgui::PanelRenderer*>(renderer);
     }

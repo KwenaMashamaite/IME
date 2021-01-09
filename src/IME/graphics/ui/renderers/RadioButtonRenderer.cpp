@@ -356,16 +356,6 @@ namespace IME::UI {
         return buttonRenderer_->getTransparentTexture();
     }
 
-    int RadioButtonRenderer::onPropertyChange(const std::string&,
-        Callback<const std::string &>)
-    {
-        return 0;
-    }
-
-    void RadioButtonRenderer::unsubscribe(int) {
-
-    }
-
     void RadioButtonRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         buttonRenderer_ = dynamic_cast<tgui::RadioButtonRenderer*>(renderer);
     }
