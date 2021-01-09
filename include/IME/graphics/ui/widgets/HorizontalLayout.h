@@ -185,7 +185,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the layout
-             * @param width New height of the layout
+             * @param height New height of the layout
              * 
              * This function sets the height while keeping the width 
              * the same

@@ -258,7 +258,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the progress bar
-             * @param width New height of the progress bar
+             * @param height New height of the progress bar
              * 
              * This function sets the height while keeping the width 
              * the same

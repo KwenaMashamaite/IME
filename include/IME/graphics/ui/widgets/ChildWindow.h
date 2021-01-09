@@ -403,7 +403,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the window
-             * @param width New height of the window
+             * @param height New height of the window
              *
              * This function sets the height while keeping the width
              * the same

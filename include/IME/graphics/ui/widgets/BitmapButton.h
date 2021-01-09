@@ -204,7 +204,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the button
-             * @param width New height of the button
+             * @param height New height of the button
              *
              * This function sets the height while keeping the width
              * the same

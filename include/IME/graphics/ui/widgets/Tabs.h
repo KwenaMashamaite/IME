@@ -398,7 +398,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the tabs
-             * @param width New height of the tabs
+             * @param height New height of the tabs
              * 
              * This function sets the height while keeping the width 
              * the same

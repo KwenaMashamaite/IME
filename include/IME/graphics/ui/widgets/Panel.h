@@ -187,7 +187,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the panel
-             * @param width New height of the panel
+             * @param height New height of the panel
              * 
              * This function sets the height while keeping the width 
              * the same

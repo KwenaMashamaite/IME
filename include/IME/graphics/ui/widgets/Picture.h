@@ -244,7 +244,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the picture
-             * @param width New height of the picture
+             * @param height New height of the picture
              *
              * This function sets the height while keeping the width
              * the same

@@ -141,7 +141,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the widget
-             * @param width New height of the widget
+             * @param height New height of the widget
              *
              * This function sets the height while keeping the width
              * the same

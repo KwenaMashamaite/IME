@@ -303,7 +303,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the container
-             * @param width New height of the container
+             * @param height New height of the container
              * 
              * This function sets the height while keeping the width 
              * the same

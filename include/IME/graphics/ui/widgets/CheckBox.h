@@ -203,7 +203,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the checkbox
-             * @param width New height of the checkbox
+             * @param height New height of the checkbox
              *
              * This function sets the height while keeping the width
              * the same

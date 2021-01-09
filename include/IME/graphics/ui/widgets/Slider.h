@@ -286,7 +286,7 @@ namespace IME {
 
             /**
              * @brief Set the height of the slider
-             * @param width New height of the slider
+             * @param height New height of the slider
              * 
              * This function sets the height while keeping the width 
              * the same
