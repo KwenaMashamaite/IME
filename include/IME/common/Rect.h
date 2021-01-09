@@ -172,8 +172,9 @@ namespace IME {
     #include <IME/common/Rect.inl>
 
     ///< Create most common types
-    using IntRect = Rect<int>;      //!< Int rect
-    using FloatRect = Rect<float>;  //!< Float rect
+    using UIntRect = Rect<unsigned int>; //!< Unsigned int rect
+    using IntRect = Rect<int>;          //!< Int rect
+    using FloatRect = Rect<float>;      //!< Float rect
 }
 
 #endif // IME_RECT_H

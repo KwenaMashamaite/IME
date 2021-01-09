@@ -48,6 +48,7 @@ set(IME_SRC
     graphics/ui/renderers/RadioButtonRenderer.cpp
     graphics/ui/renderers/PanelRenderer.cpp
     graphics/ui/renderers/TabsRenderer.cpp
+    graphics/ui/renderers/PictureRenderer.cpp
     graphics/ui/widgets/BitmapButton.cpp
     graphics/ui/widgets/Button.cpp
     graphics/ui/widgets/CheckBox.cpp
@@ -59,6 +60,7 @@ set(IME_SRC
     graphics/ui/widgets/Panel.cpp
     graphics/ui/widgets/Tabs.cpp
     graphics/ui/widgets/TabsContainer.cpp
+    graphics/ui/widgets/Picture.cpp
     graphics/ui/GuiContainer.cpp
     graphics/Sprite.cpp
     graphics/AnimatableSprite.cpp
