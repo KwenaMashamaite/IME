@@ -48,7 +48,7 @@ namespace IME {
              * @param height Height of the panel relative to the size of its
              *        parent
              *
-             * The relative position is specified in percentages as shown:
+             * The relative size is specified in percentages as shown:
              *
              * @code
              * Panel({"50%", "20%"});
@@ -67,7 +67,7 @@ namespace IME {
              *        parent
              * @return The new Panel
              *
-             * * The relative position is specified in percentages as shown:
+             * * The relative size is specified in percentages as shown:
              *
              * @code
              * Panel::create({"50%", "20%"});
@@ -97,24 +97,10 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * panel is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<PanelRenderer> getRenderer();
-
-            /**
-             * @brief Set the text content of the panel
-             * @param text New text content
-             *
-             * @note This function does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the panels text content
-             * @return The panels text content
-             *
-             * @note This function will always return an empty string
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text

@@ -90,6 +90,8 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * label is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<LabelRenderer> getRenderer();
 
@@ -170,19 +172,21 @@ namespace IME {
             float getMaximumTextWidth() const;
 
             /**
-             * @brief Set the text content of the label
+             * @brief Set the text displayed on the label
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * When the text is auto-sized (default), then the size of the
+             * label will be changed to fit the whole text
+             *
+             * @see setAutoSize
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
              * @brief Get the labels text content
              * @return The labels text content
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

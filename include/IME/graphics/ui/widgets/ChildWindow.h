@@ -34,6 +34,8 @@ namespace IME {
     namespace UI {
         /**
          * @brief A window that can be displayed on top of the another window
+         *
+         * This widget can also contain other widgets
          */
         class IME_API ChildWindow : public IContainer {
         public:
@@ -93,6 +95,8 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * window is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<ChildWindowRenderer> getRenderer();
 
@@ -313,22 +317,6 @@ namespace IME {
              * @see move
              */
             void setPosition(const std::string& x, const std::string& y) override;
-
-            /**
-             * @brief Set the text content of the window
-             * @param text New text content
-             *
-             * @note This function does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the windows text content
-             * @return The windows text content
-             *
-             * @note This function will always return an empty string
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text

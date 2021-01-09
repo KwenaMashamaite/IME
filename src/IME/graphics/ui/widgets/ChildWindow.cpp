@@ -142,10 +142,6 @@ namespace IME::UI {
         window_->setTextSize(charSize);
     }
 
-    void ChildWindow::setText(const std::string &) {
-
-    }
-
     void ChildWindow::setSize(float width, float height) {
         window_->setSize({width, height});
     }
@@ -160,10 +156,6 @@ namespace IME::UI {
 
     Vector2f ChildWindow::getAbsoluteSize() {
         return {window_->getFullSize().x, window_->getFullSize().y};
-    }
-
-    std::string ChildWindow::getText() const {
-        return "";
     }
 
     unsigned int ChildWindow::getTextSize() const {

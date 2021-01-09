@@ -163,19 +163,25 @@ namespace IME {
             std::string getSuffix() const;
 
             /**
-             * @brief Set the text content of the edit box
-             * @param text New text content
+             * @brief Set the text inside the edit box
+             * @param text Text inside the edit box
              *
-             * This function will overwrite any text that was previously
-             * set
+             * The last characters of the text might be removed if:
+             * - There is a set a character limit and this text contains
+             *   too much characters.
+             * - The text width is limited and the text does not fit inside
+             *   the EditBox.
+             *
+             * @see setMaximumCharacters
+             * @see limitTextWidth
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
-             * @brief Get the edit boxs text content
-             * @return The edit boxs text content
+             * @brief Get the text inside the edit box
+             * @return The text inside the edit box
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

@@ -147,14 +147,6 @@ namespace IME::UI {
         return tabs_->getTabsCount();
     }
 
-    void Tabs::setText(const std::string &) {
-
-    }
-
-    std::string Tabs::getText() const {
-        return "";
-    }
-
     void Tabs::setTextSize(unsigned int charSize) {
         tabs_->setTextSize(charSize);
     }

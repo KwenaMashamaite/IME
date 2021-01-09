@@ -103,19 +103,19 @@ namespace IME {
             bool isChecked() const;
 
             /**
-             * @brief Set the text content of the button
-             * @param text New text content
+             * @brief Set the text displayed next to the button
+             * @param text The text to display
              *
              * This function will overwrite any text that was previously
              * set
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
-             * @brief Get the buttons text content
+             * @brief Get the text displayed next to the button
              * @return The buttons text content
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

@@ -53,22 +53,26 @@ namespace IME {
             static sharedPtr create(const std::string& text = "");
 
             /**
-             * @brief Set the check boxes renderer
+             * @brief Set the checkboxes renderer
              * @param renderer The new renderer
              *
              * The renderer determines how the checkbox is displayed. The 
-             * checkbox has a default renderer which can be manipulated using 
-             * the @see getRenderer() function
+             *
+             * @note The checkbox has a default renderer
+             *
+             * @see getRenderer
              */
             void setRenderer(std::shared_ptr<CheckBoxRenderer> renderer);
 
             /**
-             * @brief Get the checkbox's renderer
-             * @return The checkbox's renderer
+             * @brief Get the checkboxes renderer
+             * @return The checkboxes renderer
              *
              * The renderer gives access to functions that determine how the
              * checkbox is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<CheckBoxRenderer> getRenderer();
 
@@ -100,19 +104,19 @@ namespace IME {
             bool isChecked() const;
 
             /**
-             * @brief Set the text content of the check box
-             * @param text New text content
+             * @brief Set the text to display next to the checkbox
+             * @param text Text to display
              *
              * This function will overwrite any text that was previously
              * set
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
-             * @brief Get the check boxs text content
-             * @return The check boxs text content
+             * @brief Get the text displayed next to the checkbox
+             * @return The text displayed next to the checkbox
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

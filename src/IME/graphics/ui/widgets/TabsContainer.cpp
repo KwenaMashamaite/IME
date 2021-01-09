@@ -132,14 +132,6 @@ namespace IME::UI {
         return tabContainer_->changeTabText(index, text);
     }
 
-    void TabsContainer::setText(const std::string &) {
-
-    }
-
-    std::string TabsContainer::getText() const {
-        return "";
-    }
-
     void TabsContainer::setTextSize(unsigned int charSize) {
         tabContainer_->setTextSize(charSize);
     }

@@ -58,10 +58,6 @@ namespace IME::UI {
         layout_->setTextSize(charSize);
     }
 
-    void HorizontalLayout::setText(const std::string &) {
-
-    }
-
     void HorizontalLayout::setSize(float width, float height) {
         layout_->setSize({width, height});
     }
@@ -78,10 +74,6 @@ namespace IME::UI {
 
     Vector2f HorizontalLayout::getAbsoluteSize() {
         return {layout_->getFullSize().x, layout_->getFullSize().y};
-    }
-
-    std::string HorizontalLayout::getText() const {
-        return "";
     }
 
     unsigned int HorizontalLayout::getTextSize() const {

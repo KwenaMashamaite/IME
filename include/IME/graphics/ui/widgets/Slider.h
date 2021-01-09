@@ -73,6 +73,8 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * widget is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<SliderRenderer> getRenderer();
 
@@ -198,22 +200,6 @@ namespace IME {
              *         otherwise false
              */
             bool isValueChangedOnScroll() const;
-
-            /**
-             * @brief Set the tooltip text
-             * @param text New text content
-             *
-             * The tooltip text is displayed when when hovering over the slider
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the tooltip text
-             * @return The tooltip text
-             *
-             * @see setText
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text
@@ -533,7 +519,6 @@ namespace IME {
         private:
             std::shared_ptr<tgui::Slider> slider_;     //!< Pointer to third party library
             std::shared_ptr<SliderRenderer> renderer_; //!< Renderer for this slider
-            std::string text_;                         //!< Tooltip text
         };
     }
 }

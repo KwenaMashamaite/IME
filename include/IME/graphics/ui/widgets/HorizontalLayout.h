@@ -48,7 +48,7 @@ namespace IME {
              * @param height Height of the layout relative to the size of its
              *        parent
              * 
-             * The relative position is specified in percentages as shown:
+             * The relative size is specified in percentages as shown:
              * 
              * @code
              * HorizontalLayout({"50%", "20%"});
@@ -65,7 +65,7 @@ namespace IME {
              * @param height Height of the panel relative to the size of its parent
              * @return The new HorizontalLayout
              * 
-             * * The relative position is specified in percentages as shown:
+             * * The relative size is specified in percentages as shown:
              * 
              * @code
              * HorizontalLayout::create({"50%", "20%"});
@@ -95,34 +95,20 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * layout is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<BoxLayoutRenderer> getRenderer();
 
             /**
-             * @brief Set the text content of the layout
-             * @param text New text content
-             *
-             * @note This function does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the layouts text content
-             * @return The layouts text content
-             *
-             * @note This function will always return an empty string
-             */
-            std::string getText() const override;
-
-            /**
-             * @brief Set the character size of the text
+             * @brief Set the character size of all existing and future widgets
              * @param charSize New character size
              */
             void setTextSize(unsigned int charSize) override;
 
             /**
-             * @brief Get the character size of the text
-             * @return The character size of the text
+             * @brief Get the character size of all widgets in the layout
+             * @return The character size of all the widgets
              */
             unsigned int getTextSize() const override;
 

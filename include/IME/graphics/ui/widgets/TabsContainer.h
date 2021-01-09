@@ -55,7 +55,7 @@ namespace IME {
              * @param height Height of the container relative to the size of its
              *        parent
              * 
-             * The relative position is specified in percentages as shown:
+             * The relative size is specified in percentages as shown:
              * 
              * @code
              * TabsContainer({"50%", "20%"});
@@ -74,7 +74,7 @@ namespace IME {
              *        parent
              * @return The new TabsContainer
              * 
-             * * The relative position is specified in percentages as shown:
+             * * The relative size is specified in percentages as shown:
              * 
              * @code
              * TabsContainer::create({"50%", "20%"});
@@ -104,6 +104,8 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * container is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<TabsRenderer> getRenderer();
 
@@ -212,22 +214,6 @@ namespace IME {
              * The index of the first container is 0
              */
             bool changeTabText(std::size_t index, const tgui::String& text);
-
-            /**
-             * @brief Set the text content of the container
-             * @param text New text content
-             *
-             * @note This function does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the tabs text content
-             * @return The tabs text content
-             *
-             * @note This function always returns an empty string
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text

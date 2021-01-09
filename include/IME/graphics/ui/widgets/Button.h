@@ -73,23 +73,25 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * button is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<ButtonRenderer> getRenderer();
 
             /**
-             * @brief Set the text content of the button
-             * @param text New text content
+             * @brief Set the text displayed on the button
+             * @param text Text to display
              *
              * This function will overwrite any text that was previously
              * set
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
-             * @brief Get the buttons text content
-             * @return The buttons text content
+             * @brief Get the text displayed on the button
+             * @return The text displayed oon the button
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

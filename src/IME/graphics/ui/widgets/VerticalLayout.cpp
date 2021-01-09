@@ -58,10 +58,6 @@ namespace IME::UI {
         layout_->setTextSize(charSize);
     }
 
-    void VerticalLayout::setText(const std::string &) {
-
-    }
-
     void VerticalLayout::setSize(float width, float height) {
         layout_->setSize({width, height});
     }
@@ -76,10 +72,6 @@ namespace IME::UI {
 
     Vector2f VerticalLayout::getAbsoluteSize() {
         return {layout_->getFullSize().x, layout_->getFullSize().y};
-    }
-
-    std::string VerticalLayout::getText() const {
-        return "";
     }
 
     unsigned int VerticalLayout::getTextSize() const {

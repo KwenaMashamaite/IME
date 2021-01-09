@@ -51,14 +51,6 @@ namespace IME::UI {
     std::shared_ptr<PanelRenderer> Panel::getRenderer() {
         return renderer_;
     }
-    
-    void Panel::setText(const std::string &) {
-
-    }
-
-    std::string Panel::getText() const {
-        return "";
-    }
 
     void Panel::setTextSize(unsigned int charSize) {
         panel_->setTextSize(charSize);

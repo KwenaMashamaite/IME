@@ -179,11 +179,6 @@ namespace IME::UI {
         return !slider_->isVisible();
     }
 
-    void Slider::setText(const std::string &content) {
-        slider_->setToolTip(Label(content).getInternalPtr());
-        text_ = content;
-    }
-
     void Slider::setSize(float width, float height) {
         slider_->setSize({width, height});
     }
@@ -198,10 +193,6 @@ namespace IME::UI {
 
     Vector2f Slider::getAbsoluteSize() {
         return {slider_->getFullSize().x, slider_->getFullSize().y};;
-    }
-
-    std::string Slider::getText() const {
-        return text_;
     }
 
     unsigned int Slider::getTextSize() const {

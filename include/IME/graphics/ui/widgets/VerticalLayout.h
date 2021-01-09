@@ -95,24 +95,10 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * layout is displayed. It allows you to manipulate things such
              * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<BoxLayoutRenderer> getRenderer();
-
-            /**
-             * @brief Set the text content of the layout
-             * @param text New text content
-             *
-             * @note This fucntion does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the layouts text content
-             * @return The layouts text content
-             *
-             * @note This function will always return an empty string
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text

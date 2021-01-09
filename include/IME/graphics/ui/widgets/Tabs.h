@@ -73,7 +73,9 @@ namespace IME {
              *
              * The renderer gives access to functions that determine how the
              * tab is displayed. It allows you to manipulate things such
-             * as the background colour, text colour, border colour etc...
+             * as the background colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<TabsRenderer> getRenderer();
 
@@ -307,22 +309,6 @@ namespace IME {
              * @return The number of tabs
              */
             std::size_t getTabsCount() const;
-            
-            /**
-             * @brief Set the text content of the tab
-             * @param text New text content
-             *
-             * @note This function does nothing
-             */
-            void setText(const std::string &text) override;
-
-            /**
-             * @brief Get the tabs text content
-             * @return The tabs text content
-             *
-             * @note This function will always return an empty string
-             */
-            std::string getText() const override;
 
             /**
              * @brief Set the character size of the text

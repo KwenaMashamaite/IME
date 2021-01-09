@@ -80,6 +80,8 @@ namespace IME {
              * The renderer gives access to functions that determine how the
              * widget is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
+             *
+             * @see setRenderer
              */
             std::shared_ptr<ProgressBarRenderer> getRenderer();
 
@@ -158,19 +160,18 @@ namespace IME {
             FillDirection getFillDirection() const;
 
             /**
-             * @brief Set the text content of the progress bar
+             * @brief Set the text displayed on the progress bar
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * This text is centered by default
              */
-            void setText(const std::string &text) override;
+            void setText(const std::string &text);
 
             /**
              * @brief Get the progress bars text content
              * @return The progress bars text content
              */
-            std::string getText() const override;
+            std::string getText() const;
 
             /**
              * @brief Set the character size of the text

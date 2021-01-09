@@ -56,21 +56,6 @@ namespace IME {
             using ITransformable::setPosition;
 
             /**
-             * @brief Set the text content of the widget
-             * @param text New text content
-             *
-             * This function will overwrite any text that was previously
-             * set
-             */
-            virtual void setText(const std::string &text) = 0;
-
-            /**
-             * @brief Get the widgets text content
-             * @return The widgets text content
-             */
-            virtual std::string getText() const = 0;
-
-            /**
              * @brief Set the character size of the text
              * @param charSize New character size
              */
