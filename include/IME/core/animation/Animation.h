@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Defines how the frames are arranged on a spritesheet
      */

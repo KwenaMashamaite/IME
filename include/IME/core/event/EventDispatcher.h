@@ -30,7 +30,7 @@
 #include <memory>
 #include <string>
 
-namespace IME {
+namespace ime {
     /**
      * @brief A singleton class that creates a communication interface between
      *        separate parts of a program through event dispatching

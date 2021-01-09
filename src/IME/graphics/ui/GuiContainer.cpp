@@ -29,8 +29,9 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-namespace IME::UI {
-    GuiContainer::GuiContainer(Graphics::Window &target) : sfmlGui_{target.window_}
+namespace ime::ui {
+    GuiContainer::GuiContainer(Window &target) :
+        sfmlGui_{target.window_}
     {}
 
     void GuiContainer::handleEvent(sf::Event event) {
@@ -50,7 +51,7 @@ namespace IME::UI {
     }
 
     void GuiContainer::setFont(const std::string& filename) {
-        sfmlGui_.setFont(Utility::get_TGUI_Font(filename));
+        sfmlGui_.setFont(utility::get_TGUI_Font(filename));
     }
 
     void GuiContainer::removeAllWidgets() {
@@ -58,8 +59,7 @@ namespace IME::UI {
         widgets_.clear();
     }
 
-    void GuiContainer::setTarget(Graphics::
-    Window &target) {
+    void GuiContainer::setTarget(Window &target) {
         sfmlGui_.setTarget(target.window_);
     }
 
@@ -108,13 +108,13 @@ namespace IME::UI {
 
     std::shared_ptr<IWidget>
     GuiContainer::getWidget(const std::string &widgetName) const {
-        if (Utility::findIn(widgets_, widgetName))
+        if (utility::findIn(widgets_, widgetName))
             return widgets_.at(widgetName);
         return nullptr;
     }
 
     bool GuiContainer::removeWidget(const std::string &widget) {
-        if (Utility::findIn(widgets_, widget)) {
+        if (utility::findIn(widgets_, widget)) {
             sfmlGui_.remove(widgets_[widget]->getInternalPtr());
             widgets_.erase(widget);
             return true;
@@ -159,13 +159,11 @@ namespace IME::UI {
         sfmlGui_.moveWidgetToBack(widget->getInternalPtr());
     }
 
-    size_t
-    GuiContainer::moveWidgetForward(std::shared_ptr<IWidget> widget) {
+    size_t GuiContainer::moveWidgetForward(std::shared_ptr<IWidget> widget) {
         return sfmlGui_.moveWidgetForward(widget->getInternalPtr());
     }
 
-    size_t
-    GuiContainer::moveWidgetBackward(std::shared_ptr<IWidget> widget) {
+    size_t GuiContainer::moveWidgetBackward(std::shared_ptr<IWidget> widget) {
         return sfmlGui_.moveWidgetBackward(widget->getInternalPtr());
     }
 

@@ -25,7 +25,7 @@
 #include "IME/core/audio/SoundEffect.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Audio {
+namespace ime::audio {
     void SoundEffect::setSource(const std::string &filename){
         if (sfxName_ != filename) {
             soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));

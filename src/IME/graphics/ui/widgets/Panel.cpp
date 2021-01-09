@@ -29,7 +29,7 @@
 //How long the panel takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     Panel::Panel(const std::string& width, const std::string& height) :
         panel_{tgui::Panel::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<PanelRenderer>()}
@@ -199,13 +199,13 @@ namespace IME::UI {
     }
 
     std::shared_ptr<IWidget> Panel::getWidget(const std::string &name) const {
-        if (Utility::findIn(widgets_, name))
+        if (utility::findIn(widgets_, name))
             return widgets_.at(name);
         return nullptr;
     }
 
     bool Panel::removeWidget(const std::string &widget) {
-        if (Utility::findIn(widgets_, widget)) {
+        if (utility::findIn(widgets_, widget)) {
             panel_->remove(widgets_[widget]->getInternalPtr());
             widgets_.erase(widget);
             return true;
@@ -226,29 +226,29 @@ namespace IME::UI {
        panel_->moveWidgetToBack(widget->getInternalPtr());
     }
 
-    size_t Panel::moveWidgetForward(std::shared_ptr<UI::IWidget> widget) {
+    size_t Panel::moveWidgetForward(std::shared_ptr<IWidget> widget) {
         return panel_->moveWidgetForward(widget->getInternalPtr());
     }
 
-    size_t Panel::moveWidgetBackward(std::shared_ptr<UI::IWidget> widget) {
+    size_t Panel::moveWidgetBackward(std::shared_ptr<IWidget> widget) {
         return panel_->moveWidgetBackward(widget->getInternalPtr());
     }
 
-    std::shared_ptr<UI::IWidget> Panel::getFocusedWidget() const {
+    std::shared_ptr<IWidget> Panel::getFocusedWidget() const {
         auto widget =panel_->getFocusedChild();
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> Panel::getFocusedLeaf() const {
+    std::shared_ptr<IWidget> Panel::getFocusedLeaf() const {
         auto widget = panel_->getFocusedLeaf();
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> Panel::getWidgetAtPosition(Vector2f pos) const {
+    std::shared_ptr<IWidget> Panel::getWidgetAtPosition(Vector2f pos) const {
         auto widget = panel_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());

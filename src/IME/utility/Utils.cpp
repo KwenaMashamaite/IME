@@ -24,7 +24,7 @@
 
 #include "IME/utility/Utils.h"
 
-namespace IME::Utility {
+namespace ime::utility {
     int generateRandomNum(int min, int max) {
         return createRandomNumGenerator(min, max)();
     }

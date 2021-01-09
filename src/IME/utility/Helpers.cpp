@@ -26,7 +26,7 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 
-namespace IME::Utility {
+namespace ime::utility {
     sf::Color convertToSFMLColour(Colour colour) {
         return {static_cast<sf::Uint8>(colour.red),
                 static_cast<sf::Uint8>(colour.green),
@@ -47,7 +47,7 @@ namespace IME::Utility {
 
     tgui::Font get_TGUI_Font(const std::string &filename) {
         auto tguiBackendFont = std::make_shared<tgui::BackendFontSFML>();
-        tguiBackendFont->getInternalFont() = IME::ResourceManager::getInstance()->getFont(filename);
+        tguiBackendFont->getInternalFont() = ime::ResourceManager::getInstance()->getFont(filename);
         auto tguiFont = tgui::Font(std::move(tguiBackendFont), filename);
         return tguiFont;
     }

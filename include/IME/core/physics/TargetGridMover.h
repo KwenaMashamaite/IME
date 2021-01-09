@@ -28,7 +28,7 @@
 #include "GridMover.h"
 #include "IME/core/path/IGridPathFinder.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for moving an entity to a specific position in the grid
      */
@@ -97,7 +97,7 @@ namespace IME {
          * @see setTarget
          * @see setDestination
          */
-        bool isDestinationReachable(IME::Index index);
+        bool isDestinationReachable(Index index);
 
         /**
          * @brief Start moving the target to its destination tile
@@ -153,7 +153,7 @@ namespace IME {
          *
          * @see onAdjacentTileReached
          */
-        int onDestinationReached(Callback<Graphics::Tile> callback);
+        int onDestinationReached(Callback<Tile> callback);
 
     private:
         /**

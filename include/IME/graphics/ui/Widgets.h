@@ -42,5 +42,6 @@
 #include "IME/graphics/ui/widgets/RadioButton.h"
 #include "IME/graphics/ui/widgets/Tabs.h"
 #include "IME/graphics/ui/widgets/TabsContainer.h"
+#include "IME/graphics/ui/widgets/Picture.h"
 
 #endif // IME_WIDGETS_H

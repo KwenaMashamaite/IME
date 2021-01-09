@@ -24,7 +24,7 @@
 
 #include "IME/core/managers/InputManager.h"
 
-namespace IME::Input {
+namespace ime::input {
     int InputManager::addKeyListener(Keyboard::Event event, Keyboard::Key key,
         Callback<> callback)
     {

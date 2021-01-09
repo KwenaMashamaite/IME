@@ -24,10 +24,10 @@
 
 #include "IME/core/audio/Audio.h"
 
-namespace IME::Audio {
-    Audio::Audio()
-        : isMuted_(false),
-          volumeBeforeMute_(100.0f)
+namespace ime::audio {
+    Audio::Audio() :
+        isMuted_(false),
+        volumeBeforeMute_(100.0f)
     {}
 
     void Audio::adjustVolume(float offset) {

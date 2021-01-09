@@ -29,8 +29,14 @@
 #include "IWidgetRenderer.h"
 #include <TGUI/Renderers/PictureRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
+        /**
+         * @brief A Picture widget renderer
+         *
+         * This class allows you to manipulate the render properties of a
+         * Picture widget
+         */
         class IME_API PictureRenderer : public IWidgetRenderer {
         public:
             /**

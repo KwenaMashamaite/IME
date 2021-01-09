@@ -31,7 +31,7 @@
 //How long the button takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     BitmapButton::BitmapButton(const std::string &buttonText) :
         button_{tgui::BitmapButton::create(buttonText)},
         renderer_{std::make_shared<ButtonRenderer>()}
@@ -55,7 +55,7 @@ namespace IME::UI {
     }
     
     void BitmapButton::setImage(const std::string &filename) {
-        button_->setImage(IME::ResourceManager::getInstance()->getTexture(filename));
+        button_->setImage(ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void BitmapButton::setImageScaling(float relativeHeight) {

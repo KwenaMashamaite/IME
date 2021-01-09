@@ -35,7 +35,7 @@
 #include <initializer_list>
 #include <utility>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for animating sprites
      *
@@ -50,7 +50,7 @@ namespace IME {
          * @brief Constructor
          * @param target Sprite to animate
          */
-        explicit Animator(Graphics::Sprite& target);
+        explicit Animator(Sprite& target);
 
         /**
          * @brief Add an animation to the animator
@@ -143,7 +143,7 @@ namespace IME {
         bool removeEventListener(const std::string& name, const std::string& onTrigger, int id);
 
     private:
-        Graphics::Sprite& animationTarget_;                                      //!< Sprite to be animated
+        Sprite& animationTarget_;                                      //!< Sprite to be animated
         std::unordered_map<std::string, std::shared_ptr<Animation>> animations_; //!< Animations container
         std::shared_ptr<Animation> currentAnimation_;                            //!< Pointer to the current animation
         float totalTime_;                                                        //!< Time passed since animation was started

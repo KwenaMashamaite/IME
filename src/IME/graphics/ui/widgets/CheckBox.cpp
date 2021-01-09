@@ -31,7 +31,7 @@
 //How long the edit box takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     CheckBox::CheckBox(const std::string &text) :
         checkBox_{tgui::CheckBox::create(text)},
         renderer_{std::make_shared<CheckBoxRenderer>()}

@@ -26,7 +26,7 @@
 #include "IME/core/entity/IMovable.h"
 #include <cassert>
 
-namespace IME {
+namespace ime {
     GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
         tileMap_(tileMap),
         target_(target),
@@ -235,7 +235,7 @@ namespace IME {
         return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
-    int GridMover::onSolidTileCollision(Callback<Graphics::Tile> callback) {
+    int GridMover::onSolidTileCollision(Callback<Tile> callback) {
         return eventEmitter_.addEventListener("solidTileCollision", std::move(callback));
     }
 
@@ -243,7 +243,7 @@ namespace IME {
         return eventEmitter_.addEventListener("gridBorderCollision", std::move(callback));
     }
 
-    int GridMover::onAdjacentTileReached(Callback<Graphics::Tile> callback) {
+    int GridMover::onAdjacentTileReached(Callback<Tile> callback) {
         return eventEmitter_.addEventListener("adjacentTileReached", std::move(callback));
     }
 

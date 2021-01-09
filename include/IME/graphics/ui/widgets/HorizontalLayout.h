@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/HorizontalLayout.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A widget container that stacks widgets horizontally
          * 
@@ -598,7 +598,7 @@ namespace IME {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(std::shared_ptr<UI::IWidget> widget) override;
+            size_t moveWidgetForward(std::shared_ptr<IWidget> widget) override;
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -606,7 +606,7 @@ namespace IME {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(std::shared_ptr<UI::IWidget> widget) override;
+            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget) override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -621,7 +621,7 @@ namespace IME {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<UI::IWidget> getFocusedWidget() const override;
+            std::shared_ptr<IWidget> getFocusedWidget() const override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -636,7 +636,7 @@ namespace IME {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<UI::IWidget> getFocusedLeaf() const override;
+            std::shared_ptr<IWidget> getFocusedLeaf() const override;
 
             /**
              * @brief Get a widget at a given position
@@ -645,7 +645,7 @@ namespace IME {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<UI::IWidget> getWidgetAtPosition(Vector2f pos) const override;
+            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const override;
 
             /**
              * @brief Focus the next widget in the container

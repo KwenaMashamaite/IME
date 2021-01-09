@@ -29,8 +29,8 @@
 #include "ILogger.h"
 #include <mutex>
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Utility class for logging messages to the console
          */

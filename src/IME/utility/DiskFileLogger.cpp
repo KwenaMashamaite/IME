@@ -28,7 +28,7 @@
 #include <ctime>
 #include <algorithm>
 
-namespace IME::Utility {
+namespace ime::utility {
     DiskFileLogger::DiskFileLogger(const std::string &path, const std::string &filename)
         : path_(path), file_(filename)
     {}

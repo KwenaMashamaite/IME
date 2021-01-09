@@ -28,8 +28,8 @@
 #include "IME/Config.h"
 #include "IME/common/PropertyContainer.h"
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Class for parsing config files
          */

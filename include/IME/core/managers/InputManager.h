@@ -29,8 +29,8 @@
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"
 
-namespace IME {
-    namespace Input {
+namespace ime {
+    namespace input {
         /**
          * @brief Class for managing keyboard and mouse inputs
          */

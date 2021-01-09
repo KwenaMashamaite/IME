@@ -27,13 +27,13 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <IME/utility/Helpers.h>
 
-namespace IME::UI {
+namespace ime::ui {
     void TabsRenderer::setBorders(const Borders &borders) {
         tabsRenderer_->setBorders({borders.left, borders.top,
             borders.right, borders.bottom});
     }
 
-    TabsRenderer::Borders TabsRenderer::getBorders() const {
+    Borders TabsRenderer::getBorders() const {
         return {tabsRenderer_->getBorders().getLeft(),
                 tabsRenderer_->getBorders().getTop(),
                 tabsRenderer_->getBorders().getRight(),
@@ -41,152 +41,152 @@ namespace IME::UI {
     }
 
     void TabsRenderer::setBackgroundColour(Colour colour) {
-        tabsRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(tabsRenderer_->getBackgroundColor());
+        return utility::convertFrom3rdPartyColour(tabsRenderer_->getBackgroundColor());
     }
 
     void TabsRenderer::setBackgroundHoverColour(Colour colour) {
-        tabsRenderer_->setBackgroundColorHover(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setBackgroundColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getBackgroundHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedBackgroundColorHover());
     }
 
     void TabsRenderer::setDisabledBackgroundColour(Colour colour) {
-        tabsRenderer_->setBackgroundColorDisabled(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setBackgroundColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getDisabledBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getBackgroundColorDisabled());
     }
 
     void TabsRenderer::setSelectedBackgroundColour(Colour backgroundColour) {
-        tabsRenderer_->setSelectedBackgroundColor(Utility::convertToTGUIColour(backgroundColour));
+        tabsRenderer_->setSelectedBackgroundColor(utility::convertToTGUIColour(backgroundColour));
     }
 
     Colour TabsRenderer::getSelectedBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedBackgroundColor());
     }
 
     void TabsRenderer::setSelectedBackgroundHoverColour(Colour backgroundColour) {
         tabsRenderer_->setSelectedBackgroundColorHover(
-            Utility::convertToTGUIColour(backgroundColour));
+            utility::convertToTGUIColour(backgroundColour));
     }
 
     Colour TabsRenderer::getSelectedBackgroundHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedBackgroundColorHover());
     }
 
     void TabsRenderer::setTextColour(Colour colour) {
-        tabsRenderer_->setTextColor(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setTextColor(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(tabsRenderer_->getTextColor());
+        return utility::convertFrom3rdPartyColour(tabsRenderer_->getTextColor());
     }
 
     void TabsRenderer::setTextHoverColour(Colour colour) {
-        tabsRenderer_->setTextColorHover(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setTextColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getTextHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getTextColorHover());
     }
 
     void TabsRenderer::setDisabledTextColour(Colour colour) {
-        tabsRenderer_->setTextColorDisabled(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setTextColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getDisabledTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getTextColorDisabled());
     }
 
     void TabsRenderer::setSelectedTextColour(Colour textColour) {
-        tabsRenderer_->setSelectedTextColor(Utility::convertToTGUIColour(textColour));
+        tabsRenderer_->setSelectedTextColor(utility::convertToTGUIColour(textColour));
     }
 
     Colour TabsRenderer::getSelectedTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedTextColor());
     }
 
     void TabsRenderer::setSelectedTextHoverColour(Colour textColour) {
         tabsRenderer_->setSelectedTextColorHover(
-            Utility::convertToTGUIColour(textColour));
+            utility::convertToTGUIColour(textColour));
     }
 
     Colour TabsRenderer::getSelectedTextColourHover() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
                 tabsRenderer_->getSelectedTextColorHover());
     }
 
     void TabsRenderer::setBorderColour(Colour colour) {
-        tabsRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(tabsRenderer_->getBorderColor());
+        return utility::convertFrom3rdPartyColour(tabsRenderer_->getBorderColor());
     }
 
     void TabsRenderer::setBorderHoverColour(Colour colour) {
-        tabsRenderer_->setBorderColorHover(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setBorderColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getBorderHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(tabsRenderer_->getBorderColorHover());
+        return utility::convertFrom3rdPartyColour(tabsRenderer_->getBorderColorHover());
     }
 
     void TabsRenderer::setSelectedBorderColour(Colour colour) {
-        tabsRenderer_->setSelectedBorderColor(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setSelectedBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getSelectedBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedBorderColor());
     }
 
     void TabsRenderer::setSelectedBorderHoverColour(Colour colour) {
-        tabsRenderer_->setSelectedBorderColorHover(Utility::convertToTGUIColour(colour));
+        tabsRenderer_->setSelectedBorderColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour TabsRenderer::getSelectedBorderHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             tabsRenderer_->getSelectedBorderColorHover());
     }
 
     void TabsRenderer::setTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureTab(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void TabsRenderer::setTabHoverTexture(const std::string &filename) {
         tabsRenderer_->setTextureTabHover(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void TabsRenderer::setSelectedTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureSelectedTab(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void TabsRenderer::setSelectedTabHoverTexture(const std::string &filename) {
         tabsRenderer_->setTextureSelectedTabHover(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void TabsRenderer::setDisabledTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureDisabledTab(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void TabsRenderer::setDistanceToSide(float distanceToSide) {
@@ -214,7 +214,7 @@ namespace IME::UI {
     }
 
     void TabsRenderer::setFont(const std::string &filename) {
-        tabsRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        tabsRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void TabsRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

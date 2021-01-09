@@ -24,10 +24,10 @@
 
 #include "IME/core/path/AdjacencyList.h"
 
-bool tileHasObstacle(IME::TileMap& grid, IME::Index index) {
+bool tileHasObstacle(ime::TileMap& grid, ime::Index index) {
     auto hasObstacle = false;
-    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<IME::Entity> child) {
-        if (child->getType() == IME::Entity::Type::Obstacle && child->isCollidable()) {
+    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<ime::Entity> child) {
+        if (child->getType() == ime::Entity::Type::Obstacle && child->isCollidable()) {
             hasObstacle = true;
             return;
         }
@@ -35,7 +35,7 @@ bool tileHasObstacle(IME::TileMap& grid, IME::Index index) {
     return hasObstacle;
 }
 
-namespace IME {
+namespace ime {
     void AdjacencyList::generateFrom(TileMap &tileMap) {
         adjacencyList_.clear();
         auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {

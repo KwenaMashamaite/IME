@@ -22,7 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef IME_TABS_H
 #define IME_TABS_H
 
@@ -32,8 +31,8 @@
 #include <TGUI/Widgets/Tabs.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A Tabs widget
          *

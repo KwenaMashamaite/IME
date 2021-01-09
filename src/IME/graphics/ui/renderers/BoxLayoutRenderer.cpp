@@ -25,13 +25,13 @@
 #include "IME/graphics/ui/renderers/BoxLayoutRenderer.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void BoxLayoutRenderer::setPadding(const Padding &padding) {
         boxLayoutRenderer_->setPadding({padding.left, padding.top, 
             padding.right, padding.bottom});
     }
 
-    BoxLayoutRenderer::Padding BoxLayoutRenderer::getPadding() const {
+    Padding BoxLayoutRenderer::getPadding() const {
         return {boxLayoutRenderer_->getPadding().getLeft(),
                 boxLayoutRenderer_->getPadding().getTop(),
                 boxLayoutRenderer_->getPadding().getRight(),
@@ -63,7 +63,7 @@ namespace IME::UI {
     }
 
     void BoxLayoutRenderer::setFont(const std::string &filename) {
-        boxLayoutRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        boxLayoutRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void BoxLayoutRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

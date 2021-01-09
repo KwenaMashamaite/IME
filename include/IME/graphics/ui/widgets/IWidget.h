@@ -33,8 +33,8 @@
 #include <TGUI/Widget.hpp>
 #include <string>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Abstract base class for Graphical User Interface (GUI) elements
          */

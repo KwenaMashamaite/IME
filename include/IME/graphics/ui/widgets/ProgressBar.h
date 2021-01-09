@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/ProgressBar.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Widget for displaying progress
          */
@@ -52,14 +52,16 @@ namespace IME {
 
             /**
              * @brief Construct a progress bar
+             * @param text Text displayed on the progress bar
              */
-            ProgressBar();
+            explicit ProgressBar(const std::string& text = "");
 
             /**
              * @brief Create a new progress bar widget
+             * @param text Text displayed on the progress bar
              * @return The new progress bar
              */
-            static sharedPtr create();
+            static sharedPtr create(const std::string& text = "");
 
             /**
              * @brief Set the progress bars renderer

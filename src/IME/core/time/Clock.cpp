@@ -25,7 +25,7 @@
 #include "IME/core/time/Clock.h"
 #include <ctime>
 
-namespace IME::Time {
+namespace ime {
     Clock::Clock() {
         timeWhenClockWasLastReset_ = getProcessTimeInSeconds();
     }

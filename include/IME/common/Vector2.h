@@ -25,7 +25,7 @@
 #ifndef IME_VECTOR2_H
 #define IME_VECTOR2_H
 
-namespace IME {
+namespace ime {
     /**
      * @brief 2D vector
      */

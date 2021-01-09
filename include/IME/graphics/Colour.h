@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief RGBA colour
      */

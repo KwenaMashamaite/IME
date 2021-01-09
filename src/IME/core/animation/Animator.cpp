@@ -27,9 +27,10 @@
 #include <algorithm>
 #include <cassert>
 
-namespace IME{
-    Animator::Animator(Graphics::Sprite& target)
-        : animationTarget_(target), totalTime_(0.0f)
+namespace ime {
+    Animator::Animator(Sprite& target) :
+        animationTarget_(target),
+        totalTime_(0.0f)
     {}
 
     bool Animator::addAnimation(std::shared_ptr<Animation> animation) {

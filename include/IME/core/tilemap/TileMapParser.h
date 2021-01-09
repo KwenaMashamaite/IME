@@ -27,7 +27,7 @@
 
 #include "IME/core/tilemap/TileMap.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Reads a file containing the tilemap data and returns it in grid form
      */

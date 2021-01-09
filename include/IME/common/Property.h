@@ -29,7 +29,7 @@
 #include <string>
 #include <any>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class that can store a value of any type
      */

@@ -29,17 +29,18 @@
 //How long the edit box takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
-    EditBox::EditBox() :
+namespace ime::ui {
+    EditBox::EditBox(const std::string& defaultText) :
         editBox_{tgui::EditBox::create()},
         renderer_{std::make_shared<EditBoxRenderer>()}
     {
         renderer_->setInternalPtr(editBox_->getRenderer());
+        editBox_->setDefaultText(defaultText);
         initEvents();
     }
 
-    EditBox::sharedPtr EditBox::create() {
-        return std::make_shared<EditBox>();
+    EditBox::sharedPtr EditBox::create(const std::string& defaultText) {
+        return std::make_shared<EditBox>(defaultText);
     }
 
     void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {

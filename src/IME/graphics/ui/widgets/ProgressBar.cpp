@@ -31,17 +31,18 @@
 //How long the progress bar takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
-    ProgressBar::ProgressBar() :
+namespace ime::ui {
+    ProgressBar::ProgressBar(const std::string& text) :
         progressBar_{tgui::ProgressBar::create()},
         renderer_{std::make_shared<ProgressBarRenderer>()}
     {
         renderer_->setInternalPtr(progressBar_->getRenderer());
+        progressBar_->setText(text);
         initEvents();
     }
 
-    ProgressBar::sharedPtr ProgressBar::create() {
-        return std::make_shared<ProgressBar>();
+    ProgressBar::sharedPtr ProgressBar::create(const std::string& text) {
+        return std::make_shared<ProgressBar>(text);
     }
 
     void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {

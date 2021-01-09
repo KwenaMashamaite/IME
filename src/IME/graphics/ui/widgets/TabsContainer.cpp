@@ -28,7 +28,7 @@
 //How long the tabs container take before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
         tabContainer_{tgui::TabContainer::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<TabsRenderer>()}

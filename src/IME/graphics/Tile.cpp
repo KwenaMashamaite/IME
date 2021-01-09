@@ -27,7 +27,7 @@
 #include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Graphics {
+namespace ime {
     Tile::Tile(const Vector2u &size, const Vector2f &position) :
         isSolid_{false},
         id_{'\0'},
@@ -140,10 +140,10 @@ namespace IME::Graphics {
     }
 
     void Tile::setFillColour(const Colour &colour) {
-        tile_.setFillColor(Utility::convertToSFMLColour(colour));
+        tile_.setFillColor(utility::convertToSFMLColour(colour));
     }
 
     Colour Tile::getFillColour() const {
-        return Utility::convertFrom3rdPartyColour(tile_.getFillColor());
+        return utility::convertFrom3rdPartyColour(tile_.getFillColor());
     }
 }

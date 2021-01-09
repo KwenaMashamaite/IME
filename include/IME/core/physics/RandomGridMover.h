@@ -28,7 +28,7 @@
 #include "GridMover.h"
 #include "TargetGridMover.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for moving an entity randomly in a grid
      */

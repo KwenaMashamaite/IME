@@ -28,8 +28,8 @@
 #include "IME/Config.h"
 #include "ILogger.h"
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Utility class for logging messages to a file on the disk
          */

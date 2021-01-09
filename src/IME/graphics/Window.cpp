@@ -27,10 +27,12 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
-bool IME::Graphics::Window::isInstantiated_{false};
+bool ime::Window::isInstantiated_{false};
 
-namespace IME::Graphics {
-    Window::Window() : frameRateLimit_(0) {
+namespace ime {
+    Window::Window() :
+        frameRateLimit_(0)
+    {
         assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
         isInstantiated_ = true;
     }
@@ -76,7 +78,7 @@ namespace IME::Graphics {
     }
 
     void Window::clear(Colour colour) {
-        window_.clear(Utility::convertToSFMLColour(colour));
+        window_.clear(utility::convertToSFMLColour(colour));
     }
 
     void Window::draw(const sf::Drawable &drawable) {

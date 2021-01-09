@@ -37,7 +37,7 @@
 #include <SFML/Window/Event.hpp>
 #include <TGUI/Font.hpp>
 
-namespace IME::Utility {
+namespace ime::utility {
     /**
      * @internal
      * @brief Convert own Colour object to SFML colour object

@@ -26,11 +26,11 @@
 #include "IME/utility/DiskFileReader.h"
 #include <sstream>
 
-namespace IME {
+namespace ime {
     Map TileMapParser::parse(const std::string &filename, char separator) {
         auto map = Map();
         auto mapData = std::stringstream();
-        Utility::DiskFileReader().readFileInto(filename, mapData);
+        utility::DiskFileReader().readFileInto(filename, mapData);
         auto line = std::string("");
         while (std::getline(mapData, line)) {
             ////Skip lines that are empty or begin with a comment

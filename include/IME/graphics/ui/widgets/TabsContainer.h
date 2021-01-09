@@ -32,8 +32,8 @@
 #include <TGUI/Widgets/TabContainer.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A widget which acts as a container for Tabs widget
          *

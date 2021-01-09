@@ -29,7 +29,7 @@
 //How long the picture takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     Picture::Picture() :
         picture_{tgui::Picture::create()},
         renderer_{std::make_shared<PictureRenderer>()}
@@ -40,7 +40,7 @@ namespace IME::UI {
 
     Picture::Picture(const std::string &filename, bool transparentTexture) :
         picture_{tgui::Picture::create(
-            IME::ResourceManager::getInstance()->getTexture(filename), transparentTexture)},
+            ime::ResourceManager::getInstance()->getTexture(filename), transparentTexture)},
         renderer_{std::make_shared<PictureRenderer>()}
     {
         renderer_->setInternalPtr(picture_->getRenderer());
@@ -50,7 +50,7 @@ namespace IME::UI {
     Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture) :
         renderer_{std::make_shared<PictureRenderer>()}
     {
-        IME::ResourceManager::getInstance()->getTexture(filename); // Use own error reporting if image cannot be loaded
+        ime::ResourceManager::getInstance()->getTexture(filename); //Load the image in the engine first
         picture_ = tgui::Picture::create(
             {filename, {frame.left, frame.top, frame.width, frame.height}},
             transparentTexture);

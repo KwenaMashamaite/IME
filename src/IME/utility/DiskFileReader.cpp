@@ -25,30 +25,32 @@
 #include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
 
-void IME::Utility::DiskFileReader::readFileInto(const std::string &filename,
-    std::stringstream& buffer)
-{
-    inFile_.open(filename);
-	if(!inFile_.good())
-		throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
-	buffer << inFile_.rdbuf(); //Read file content
-	inFile_.close();
-}
-
-void IME::Utility::DiskFileReader::writeToFile(const std::stringstream &buffer,
-    const std::string &filename, WriteMode writeMode)
-{
-    switch (writeMode) {
-        case WriteMode::Overwrite:
-            outFile_.open(filename);
-            break;
-        case WriteMode::Append:
-            outFile_.open(filename, std::ios::app);
-            break;
+namespace ime::utility {
+    void DiskFileReader::readFileInto(const std::string &filename,
+        std::stringstream& buffer)
+    {
+        inFile_.open(filename);
+        if(!inFile_.good())
+            throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
+        buffer << inFile_.rdbuf(); //Read file content
+        inFile_.close();
     }
 
-	if (!outFile_.good())
-        throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
-	outFile_ << buffer.str(); //Write data to file
-    outFile_.close();
+    void DiskFileReader::writeToFile(const std::stringstream &buffer,
+        const std::string &filename, WriteMode writeMode)
+    {
+        switch (writeMode) {
+            case WriteMode::Overwrite:
+                outFile_.open(filename);
+                break;
+            case WriteMode::Append:
+                outFile_.open(filename, std::ios::app);
+                break;
+        }
+
+        if (!outFile_.good())
+            throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
+        outFile_ << buffer.str(); //Write data to file
+        outFile_.close();
+    }
 }

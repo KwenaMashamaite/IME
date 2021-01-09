@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/CheckBox.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Checkbox widget
          */

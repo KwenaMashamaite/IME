@@ -25,9 +25,12 @@
 #include "IME/core/managers/AudioManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::Audio {
-    AudioManager::AudioManager()
-        : masterVolume_{100.0f}, sfxVolume_{100.0f}, musicVolume_{100.0f}, isMuted_(false)
+namespace ime::audio {
+    AudioManager::AudioManager() :
+        masterVolume_{100.0f},
+        sfxVolume_{100.0f},
+        musicVolume_{100.0f},
+        isMuted_(false)
     {}
 
     void AudioManager::play(Type audioType, const std::string &filename, bool isLooped) {

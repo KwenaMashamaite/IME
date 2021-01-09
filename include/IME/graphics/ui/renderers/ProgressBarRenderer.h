@@ -29,10 +29,10 @@
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ProgressBarRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief Class for rendering a ProgressBar
+         * @brief A ProgressBar widget renderer
          *
          * This class allows you to manipulate the render properties of a
          * ProgressBar

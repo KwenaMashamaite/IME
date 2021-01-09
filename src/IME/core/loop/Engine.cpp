@@ -29,7 +29,7 @@
 #include <assert.h>
 
 template <class T>
-void setDefaultValueIfNotSet(IME::PropertyContainer& settings,
+void setDefaultValueIfNotSet(ime::PropertyContainer& settings,
      const std::string& setting, const std::string& type, T&& defaultValue)
 {
     if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
@@ -38,12 +38,12 @@ void setDefaultValueIfNotSet(IME::PropertyContainer& settings,
         settings.addProperty({setting, type, std::forward<T>(defaultValue)});
     else
         settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
-    static auto consoleLogger = IME::Utility::ConsoleLogger();
-    consoleLogger.log(IME::Utility::MessageType::Warning,
+    static auto consoleLogger = ime::utility::ConsoleLogger();
+    consoleLogger.log(ime::utility::MessageType::Warning,
         R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
 }
 
-namespace IME {
+namespace ime {
     Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
         Engine(gameName, "")
     {
@@ -70,7 +70,7 @@ namespace IME {
         initResourceManager();
         initRenderTarget();
 
-        audioManager_ = std::make_unique<Audio::AudioManager>();
+        audioManager_ = std::make_unique<audio::AudioManager>();
         eventDispatcher_ = EventDispatcher::instance();
 
         windowCloseHandler_ = [this]{quit();};
@@ -78,7 +78,7 @@ namespace IME {
     }
 
     void Engine::loadSettings() {
-        settings_ = Utility::ConfigFileParser().parse(settingFile_);
+        settings_ = utility::ConfigFileParser().parse(settingFile_);
     }
 
     void Engine::processSettings() {
@@ -103,13 +103,13 @@ namespace IME {
         auto height = settings_.getValueFor<int>("WINDOW_HEIGHT");
         auto isFullscreen = settings_.getValueFor<bool>("FULLSCREEN");
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
-            window_.create(title, desktopWidth, desktopHeight, Graphics::Window::Style::Fullscreen);
+            window_.create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
         } else {
             if (width > desktopWidth)
                 width = desktopWidth;
             if (height > desktopHeight)
                 height = desktopHeight;
-            window_.create(title, width, height, Graphics::Window::Style::Close);
+            window_.create(title, width, height, Window::Style::Close);
         }
 
         window_.setFramerateLimit(settings_.getValueFor<int>("FPS_LIMIT"));
@@ -147,7 +147,7 @@ namespace IME {
         isRunning_ = true;
         auto const frameTime = 1.0f / settings_.getValueFor<int>("FPS_LIMIT");
         auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
-        auto clock = Time::Clock();
+        auto clock = Clock();
         elapsedTime_ = 0.0f;
         auto prevTime = static_cast<float>(clock.getElapsedTimeInSeconds());
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
@@ -196,7 +196,7 @@ namespace IME {
 
     void Engine::pushState(std::shared_ptr<State> state, Callback<> callback) {
         if (!isRunning_) {
-            prevStateInputManager_.push(Input::InputManager());
+            prevStateInputManager_.push(input::InputManager());
             statesManager_.pushState(std::move(state));
         } else
             statesToPush_.push({std::move(state), callback});
@@ -227,7 +227,7 @@ namespace IME {
 
         while (!statesToPush_.empty()) {
             prevStateInputManager_.push(inputManager_);
-            inputManager_ = Input::InputManager(); //Clear prev state input handlers
+            inputManager_ = input::InputManager(); //Clear prev state input handlers
             auto [state, callback] = statesToPush_.front();
             statesManager_.pushState(std::move(state));
             statesToPush_.pop();
@@ -245,8 +245,8 @@ namespace IME {
         statesManager_.clear();
         window_.close();
         audioManager_->stopAllAudio();
-        inputManager_ = Input::InputManager();
-        globalInputManager_ = Input::InputManager();
+        inputManager_ = input::InputManager();
+        globalInputManager_ = input::InputManager();
         eventDispatcher_.reset();
         resourceManager_.reset();
         isRunning_ = false;
@@ -281,19 +281,19 @@ namespace IME {
         return dataSaver_;
     }
 
-    Audio::AudioManager &Engine::getAudioManager() {
+    audio::AudioManager &Engine::getAudioManager() {
         return *audioManager_;
     }
 
-    Input::InputManager &Engine::getInputManager() {
+    input::InputManager &Engine::getInputManager() {
         return inputManager_;
     }
 
-    Input::InputManager &Engine::getGlobalInputManager() {
+    input::InputManager &Engine::getGlobalInputManager() {
         return globalInputManager_;
     }
 
-    Graphics::Window &Engine::getRenderTarget() {
+    Window &Engine::getRenderTarget() {
         return window_;
     }
 

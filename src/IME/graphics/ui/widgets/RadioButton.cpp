@@ -28,7 +28,7 @@
 //How long the radio button takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     RadioButton::RadioButton(const std::string &buttonText) :
         button_{tgui::RadioButton::create()},
         renderer_{std::make_shared<RadioButtonRenderer>()}

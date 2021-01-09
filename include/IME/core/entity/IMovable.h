@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Interface for movable entities
      */

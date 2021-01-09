@@ -29,8 +29,8 @@
 #include "IME/core/event/EventEmitter.h"
 #include <SFML/Window/Event.hpp>
 
-namespace IME {
-    namespace Input {
+namespace ime {
+    namespace input {
         /**
          * @brief Class for capturing keyboard inputs
          */

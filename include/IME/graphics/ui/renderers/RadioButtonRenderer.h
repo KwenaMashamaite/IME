@@ -30,10 +30,10 @@
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/RadioButtonRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief A class for rendering a RadioButton
+         * @brief A RadioButton widget renderer
          *
          * This class allows you to manipulate the render properties of a
          * RadioButton

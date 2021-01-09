@@ -26,12 +26,12 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void ButtonRenderer::setBorders(const Borders &borders) {
         buttonRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    ButtonRenderer::Borders ButtonRenderer::getBorders() const {
+    Borders ButtonRenderer::getBorders() const {
         return {buttonRenderer_->getBorders().getLeft(),
                 buttonRenderer_->getBorders().getTop(),
                 buttonRenderer_->getBorders().getRight(),
@@ -39,168 +39,168 @@ namespace IME::UI {
     }
 
     void ButtonRenderer::setTextColour(Colour colour) {
-        buttonRenderer_->setTextColor(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setTextColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(buttonRenderer_->getTextColor());
+        return utility::convertFrom3rdPartyColour(buttonRenderer_->getTextColor());
     }
 
     void ButtonRenderer::setTextHoverColour(Colour colour) {
-        buttonRenderer_->setTextColorHover(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setTextColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getTextHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
                 buttonRenderer_->getTextColorHover());
     }
 
     void ButtonRenderer::setTextColourOnMouseDown(Colour colour) {
-        buttonRenderer_->setTextColorDown(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setTextColorDown(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getTextColourOnMouseDown() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getTextColorDown());
     }
 
     void ButtonRenderer::setDisabledTextColour(Colour colour) {
-        buttonRenderer_->setTextColorDisabled(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setTextColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getDisabledTextColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getTextColorDisabled());
     }
 
     void ButtonRenderer::setFocusedTextColour(Colour colour) {
-        buttonRenderer_->setTextColorFocused(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setTextColorFocused(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getTextColourFocused() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getTextColorFocused());
     }
 
     void ButtonRenderer::setBackgroundColour(Colour colour) {
-        buttonRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(buttonRenderer_->getBackgroundColor());
+        return utility::convertFrom3rdPartyColour(buttonRenderer_->getBackgroundColor());
     }
 
     void ButtonRenderer::setBackgroundHoverColour(Colour colour) {
-        buttonRenderer_->setBackgroundColorHover(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBackgroundColourHover() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBackgroundColorHover());
     }
 
     void ButtonRenderer::setBackgroundColourDown(Colour colour) {
-        buttonRenderer_->setBackgroundColorDown(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColorDown(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBackgroundColourDown() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
                 buttonRenderer_->getBackgroundColorDown());
     }
 
     void ButtonRenderer::setDisabledBackgroundColour(Colour colour) {
-        buttonRenderer_->setBackgroundColorDisabled(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getDisabledBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBackgroundColorDisabled());
     }
 
     void ButtonRenderer::setFocusedBackgroundColour(Colour colour) {
-        buttonRenderer_->setBackgroundColorFocused(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBackgroundColorFocused(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getFocusedBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBackgroundColorFocused());
     }
 
     void ButtonRenderer::setBorderColour(Colour colour) {
-        buttonRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBorderColor());
     }
 
     void ButtonRenderer::setBorderHoverColour(Colour colour) {
-        buttonRenderer_->setBorderColorHover(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBorderColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBorderHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBorderColorHover());
     }
 
     void ButtonRenderer::setBorderColourOnMouseDown(Colour colour) {
-        buttonRenderer_->setBorderColorDown(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBorderColorDown(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBorderColourOnMouseDown() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBackgroundColorDown());
     }
 
     void ButtonRenderer::setDisabledBorderColour(Colour colour) {
-        buttonRenderer_->setBorderColorDisabled(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBorderColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getDisabledBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBorderColorDisabled());
     }
 
     void ButtonRenderer::setFocusedBorderColour(Colour colour) {
-        buttonRenderer_->setBorderColorFocused(Utility::convertToTGUIColour(colour));
+        buttonRenderer_->setBorderColorFocused(utility::convertToTGUIColour(colour));
     }
 
     Colour ButtonRenderer::getBorderColourFocused() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getBorderColorFocused());
     }
 
     void ButtonRenderer::setTexture(const std::string &texture) {
         buttonRenderer_->setTexture(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ButtonRenderer::setTextureHover(const std::string &texture) {
         buttonRenderer_->setTextureHover(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ButtonRenderer::setMouseDownTexture(const std::string &texture) {
         buttonRenderer_->setTextureDown(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ButtonRenderer::setDisabledTexture(const std::string &texture) {
         buttonRenderer_->setTextureDisabled(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ButtonRenderer::setFocusedTextureFocused(const std::string& texture) {
         buttonRenderer_->setTextureDisabled(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ButtonRenderer::setTextStyle(TextStyle style) {
         buttonRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    ButtonRenderer::TextStyle ButtonRenderer::getTextStyle() const {
+    TextStyle ButtonRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyle()));
     }
@@ -209,7 +209,7 @@ namespace IME::UI {
         buttonRenderer_->setTextStyleHover(static_cast<tgui::TextStyle>(style));
     }
 
-    ButtonRenderer::TextStyle ButtonRenderer::getHoverTextStyle() const {
+    TextStyle ButtonRenderer::getHoverTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleHover()));
     }
@@ -218,7 +218,7 @@ namespace IME::UI {
         buttonRenderer_->setTextStyleDown(static_cast<tgui::TextStyle>(style));
     }
 
-    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleOnMouseDown() const {
+    TextStyle ButtonRenderer::getTextStyleOnMouseDown() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleDown()));
     }
@@ -227,7 +227,7 @@ namespace IME::UI {
         buttonRenderer_->setTextStyleDisabled(static_cast<tgui::TextStyle>(style));
     }
 
-    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleDisabled() const {
+    TextStyle ButtonRenderer::getTextStyleDisabled() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleDisabled()));
     }
@@ -236,17 +236,17 @@ namespace IME::UI {
         buttonRenderer_->setTextStyleFocused(static_cast<tgui::TextStyle>(style));
     }
 
-    ButtonRenderer::TextStyle ButtonRenderer::getTextStyleFocused() const {
+    TextStyle ButtonRenderer::getTextStyleFocused() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(buttonRenderer_->getTextStyleFocused()));
     }
 
     void ButtonRenderer::setTextOutlineColour(Colour outlineColour) {
-        buttonRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColour));
+        buttonRenderer_->setTextOutlineColor(utility::convertToTGUIColour(outlineColour));
     }
 
     Colour ButtonRenderer::getTextOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             buttonRenderer_->getTextOutlineColor());
     }
 
@@ -275,7 +275,7 @@ namespace IME::UI {
     }
 
     void ButtonRenderer::setFont(const std::string &filename) {
-        buttonRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        buttonRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void ButtonRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

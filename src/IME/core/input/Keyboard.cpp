@@ -25,7 +25,7 @@
 #include "IME/core/input/Keyboard.h"
 #include <SFML/Window/Keyboard.hpp>
 
-namespace IME::Input {
+namespace ime::input {
     void Keyboard::handleEvent(sf::Event event) {
         if (event.type == sf::Event::KeyPressed) {
             eventEmitter_.emit("anyKeyDown", static_cast<Key>(event.key.code));

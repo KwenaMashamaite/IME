@@ -31,7 +31,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace IME {
+namespace ime {
     /**
      * @brief A container for a group of properties
      */

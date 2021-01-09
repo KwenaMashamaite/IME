@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/Slider.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Slider widget
          */

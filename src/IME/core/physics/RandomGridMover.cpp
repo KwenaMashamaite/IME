@@ -25,7 +25,7 @@
 #include "IME/core/physics/RandomGridMover.h"
 #include "IME/utility/Utils.h"
 
-namespace IME {
+namespace ime {
     RandomGridMover::RandomGridMover(TileMap &tileMap, RandomGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         prevDirection_(Direction::Unknown),
@@ -44,7 +44,7 @@ namespace IME {
             targetGridMover_.setTarget(newTarget);
         });
 
-        onSolidTileCollision([this](Graphics::Tile) {
+        onSolidTileCollision([this](Tile) {
             revertAndGenerateDirection();
         });
 
@@ -52,7 +52,7 @@ namespace IME {
             revertAndGenerateDirection();
         });
 
-        onAdjacentTileReached([this](Graphics::Tile) {
+        onAdjacentTileReached([this](Tile) {
             if (!isAdvance_ && switchToAdvanced_) {
                 switchToAdvanced_ = false;
                 isAdvance_ = true;
@@ -69,11 +69,11 @@ namespace IME {
             revertAndGenerateDirection();
         });
 
-        targetGridMover_.onDestinationReached([this](Graphics::Tile) {
+        targetGridMover_.onDestinationReached([this](Tile) {
             setRandomPosition();
         });
 
-        targetGridMover_.onAdjacentTileReached([this](IME::Graphics::Tile) {
+        targetGridMover_.onAdjacentTileReached([this](Tile) {
             if (isAdvance_ && switchToNormal_) {
                 switchToNormal_ = false;
                 isAdvance_ = false;
@@ -120,7 +120,7 @@ namespace IME {
             oppositeDirection = Direction::Up;
 
         do {
-            static auto gen_random_num_between_1_and_4 = Utility::createRandomNumGenerator(1, 4);
+            static auto gen_random_num_between_1_and_4 = utility::createRandomNumGenerator(1, 4);
             newDirection = static_cast<Direction>(gen_random_num_between_1_and_4());
         } while (newDirection == oppositeDirection);
         requestDirectionChange(newDirection);
@@ -155,8 +155,8 @@ namespace IME {
     }
 
     void RandomGridMover::setRandomPosition() {
-        static auto generateRandomRow = Utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().y);
-        static auto generateRandomColm = Utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().x);
+        static auto generateRandomRow = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().y);
+        static auto generateRandomColm = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().x);
 
         auto newDestination = Index{generateRandomRow(), generateRandomColm()};
         while(!targetGridMover_.isDestinationReachable(newDestination))

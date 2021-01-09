@@ -25,7 +25,7 @@
 #include "IME/core/path/BFS.h"
 #include <algorithm>
 
-namespace IME {
+namespace ime {
     BFSPathFinder::BFSPathFinder(Vector2u gridSize) {
         for (auto i = 0u; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};

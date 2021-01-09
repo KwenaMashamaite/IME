@@ -24,9 +24,10 @@
 
 #include "IME/common/Property.h"
 
-namespace IME {
-    Property::Property(const std::string &name, const std::string &type)
-        : name_(name), type_(type)
+namespace ime {
+    Property::Property(const std::string &name, const std::string &type) :
+        name_(name),
+        type_(type)
     {}
 
     const std::string &Property::getName() const {

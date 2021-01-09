@@ -38,12 +38,12 @@
 #include <memory>
 #include <utility>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class template for a resource container
      */
     template <class T>
-    class ResourceHolder : public Utility::NonCopyable {
+    class ResourceHolder : public utility::NonCopyable {
     public:
         /**
          * @brief Construct a resource holder

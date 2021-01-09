@@ -28,7 +28,7 @@
 #include "IME/core/input/Keyboard.h"
 #include "GridMover.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Defines how the movement is triggered based on the state of a key
      */
@@ -80,8 +80,8 @@ namespace IME {
          *
          * @see setMovementTrigger
          */
-        void setKeys(Input::Keyboard::Key leftKey, Input::Keyboard::Key rightKey,
-             Input::Keyboard::Key upKey, Input::Keyboard::Key downKey);
+        void setKeys(input::Keyboard::Key leftKey, input::Keyboard::Key rightKey,
+             input::Keyboard::Key upKey, input::Keyboard::Key downKey);
 
         /**
          * @brief Handle an event
@@ -94,7 +94,7 @@ namespace IME {
          * @brief Move target in the grid
          * @param key pressed key (Helps Determine which direction to go)
          */
-        void moveTarget(Input::Keyboard::Key key);
+        void moveTarget(input::Keyboard::Key key);
 
         /**
          * @brief Attach input event listeners to the set trigger
@@ -104,12 +104,12 @@ namespace IME {
     private:
         MovementTrigger trigger_;                                         //!< Key event that triggers target movement
         int onTriggerHandlerId_;                                          //!< Movement trigger Handler id
-        Input::Keyboard keyboard_;                                        //!< Input detector
+        input::Keyboard keyboard_;                                        //!< Input detector
         std::pair<bool, Direction> newDir_;                               //!< Flags if direction was changed during target movement
-        Input::Keyboard::Key goLeftKey_ = Input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target left
-        Input::Keyboard::Key goRightKey_ = Input::Keyboard::Key::Unknown; //!< A Key when triggered moves target right
-        Input::Keyboard::Key goUpKey_ = Input::Keyboard::Key::Unknown;    //!< A Key when triggered moves target up
-        Input::Keyboard::Key goDownKey_ = Input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target down
+        input::Keyboard::Key goLeftKey_ = input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target left
+        input::Keyboard::Key goRightKey_ = input::Keyboard::Key::Unknown; //!< A Key when triggered moves target right
+        input::Keyboard::Key goUpKey_ = input::Keyboard::Key::Unknown;    //!< A Key when triggered moves target up
+        input::Keyboard::Key goDownKey_ = input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target down
     };
 }
 

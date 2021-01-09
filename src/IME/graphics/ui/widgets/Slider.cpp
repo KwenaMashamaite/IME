@@ -32,10 +32,10 @@
 //How long the button takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
-    Slider::Slider(float minValue, float maxValue) 
-        : slider_{tgui::Slider::create(minValue, maxValue)},
-          renderer_{std::make_shared<SliderRenderer>()}
+namespace ime::ui {
+    Slider::Slider(float minValue, float maxValue) :
+        slider_{tgui::Slider::create(minValue, maxValue)},
+        renderer_{std::make_shared<SliderRenderer>()}
     {
         renderer_->setInternalPtr(slider_->getRenderer());
         initEvents();

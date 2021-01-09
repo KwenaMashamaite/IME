@@ -31,8 +31,8 @@
 #include <TGUI/Widgets/RadioButton.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Widget that can toggle between on and off states
          */

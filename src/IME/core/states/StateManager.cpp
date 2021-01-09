@@ -25,7 +25,7 @@
 #include "IME/core/states/StateManager.h"
 #include <cassert>
 
-namespace IME {
+namespace ime {
     void StateManager::pushState(std::shared_ptr<State> state) {
         assert(state && "A game state cannot be null");
         if (!states_.empty() && states_.top()->isInitialized())

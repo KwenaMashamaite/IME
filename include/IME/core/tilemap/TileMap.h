@@ -37,7 +37,7 @@
 #include <tuple>
 #include <map>
 
-namespace IME {
+namespace ime {
     using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
 
     /**
@@ -227,7 +227,7 @@ namespace IME {
          *
          * @see showLayer
          */
-        Graphics::AnimatableSprite& getBackground();
+        AnimatableSprite& getBackground();
 
         /**
          * @brief Get a tile at a certain index
@@ -237,7 +237,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTile(const Index& index);
+        Tile& getTile(const Index& index);
 
         /**
          * @brief Get the tile at at certain position
@@ -248,7 +248,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTile(const Vector2f& position);
+        Tile& getTile(const Vector2f& position);
 
         /**
          * @brief Get the tile above a certain tile
@@ -258,7 +258,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileAbove(const Graphics::Tile& tile);
+        Tile& getTileAbove(const Tile& tile);
 
         /**
          * @brief Get the tile below a certain tile
@@ -268,7 +268,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileBelow(const Graphics::Tile& tile);
+        Tile& getTileBelow(const Tile& tile);
 
         /**
          * @brief Get the tile to the left of a certain tile
@@ -278,7 +278,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile & getTileLeftOf(const Graphics::Tile& tile);
+        Tile & getTileLeftOf(const Tile& tile);
 
         /**
          * @brief Get the tile to the right of a certain tile
@@ -288,14 +288,14 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileRightOf(const Graphics::Tile& tile);
+        Tile& getTileRightOf(const Tile& tile);
 
         /**
          * @brief Execute a callback function on every tile with a certain id
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTileWithId(char id, Callback<Graphics::Tile&> callback);
+        void forEachTileWithId(char id, Callback<Tile&> callback);
 
         /**
          * @brief Execute a callback on all tiles except tiles with a
@@ -303,13 +303,13 @@ namespace IME {
          * @param id Id of the tiles to be ignored
          * @param callback Function to be executed
          */
-        void forEachTileExcept(char id, Callback<Graphics::Tile&> callback);
+        void forEachTileExcept(char id, Callback<Tile&> callback);
 
         /**
          * @brief Execute a callback on all the tiles of the tilemap
          * @param callback Function to execute for each tile
          */
-        void forEachTile(Callback<Graphics::Tile&> callback);
+        void forEachTile(Callback<Tile&> callback);
 
         /**
          * @brief Execute a callback function on each tile in a range
@@ -319,7 +319,7 @@ namespace IME {
          *
          * @note Only horizontal ranges are supported
          */
-        void forEachTileInRange(Index startPos, Index endPos, Callback<Graphics::Tile&> callback);
+        void forEachTileInRange(Index startPos, Index endPos, Callback<Tile&> callback);
 
         /**
          * @brief Texture a tile at given index
@@ -342,7 +342,7 @@ namespace IME {
          * for texturing the tile. The image will taken as is from the
          * tileset
          *
-         * @see textureTilesById(char, const Graphics::Sprite&)
+         * @see textureTilesById(char, const Sprite&)
          */
         void textureTilesById(char id, FloatRect rect);
 
@@ -356,7 +356,7 @@ namespace IME {
          * function is useful if the texture from the tileset must be transformed
          * first (scaled, rotated, etc...) before its applied to the tilemap
          */
-        void textureTilesById(char id, const Graphics::Sprite& sprite);
+        void textureTilesById(char id, const Sprite& sprite);
 
         /**
          * @brief Show a hidden layer
@@ -381,7 +381,7 @@ namespace IME {
          * @brief Render tilemap on a render target
          * @param renderTarget Target to render tilemap on
          */
-        void draw(Graphics::Window &renderTarget);
+        void draw(Window &renderTarget);
 
         /**
          * @brief Add an entity to the tilemap
@@ -393,7 +393,7 @@ namespace IME {
          * If the specified tile is already occupied, the child will be added
          * as a visitor of that tile
          */
-        bool addChild(std::shared_ptr<IME::Entity> child, Index index);
+        bool addChild(std::shared_ptr<Entity> child, Index index);
 
         /**
          * @brief Get the child in the tilemap with a certain id
@@ -417,7 +417,7 @@ namespace IME {
          * @return True if the child was removed or false if the child is not
          *         in the specified tile
          */
-        bool removeChildFromTile(const IME::Graphics::Tile& tile, const std::shared_ptr<Entity>& child);
+        bool removeChildFromTile(const Tile& tile, const std::shared_ptr<Entity>& child);
 
         /**
          * @brief Remove an occupant of a tile
@@ -430,7 +430,7 @@ namespace IME {
          * this function will result in visitors taking turns as occupants until
          * the tile is no longer occupied
          */
-        bool removeOccupant(const Graphics::Tile &tile);
+        bool removeOccupant(const Tile &tile);
 
         /**
          * @brief Remove a child with a certain id from the tilemap
@@ -470,7 +470,7 @@ namespace IME {
          *
          * @see tileHasVisitors
          */
-        bool removeAllVisitors(const IME::Graphics::Tile& tile);
+        bool removeAllVisitors(const Tile& tile);
 
         /**
          * @brief Remove all children in a tile
@@ -480,7 +480,7 @@ namespace IME {
          *
          * @see removeAllVisitors and removeOccupant
          */
-        bool removeAllChildren(const Graphics::Tile& tile);
+        bool removeAllChildren(const Tile& tile);
 
         /**
          * @brief Move child to a different position in the tilemap
@@ -492,7 +492,7 @@ namespace IME {
          *
          * @see addChild
          */
-        void moveChild(std::shared_ptr<IME::Entity> child, Index index);
+        void moveChild(std::shared_ptr<Entity> child, Index index);
 
         /**
          * @brief Move child to a different tile
@@ -504,7 +504,7 @@ namespace IME {
          *
          * @see addChild
          */
-        void moveChild(std::shared_ptr<IME::Entity> child, const Graphics::Tile& tile);
+        void moveChild(std::shared_ptr<Entity> child, const Tile& tile);
 
         /**
          * @brief Get the tile occupied by a child of the tilemap
@@ -514,7 +514,7 @@ namespace IME {
          *
          * An invalid tile has a negative index
          */
-        Graphics::Tile& getTileOccupiedByChild(std::shared_ptr<Entity> child);
+        Tile& getTileOccupiedByChild(std::shared_ptr<Entity> child);
 
         /**
          * @brief Check if tile is occupied or not
@@ -525,7 +525,7 @@ namespace IME {
          *
          * @see addChild
          */
-        bool isTileOccupied(const Graphics::Tile& tile) const;
+        bool isTileOccupied(const Tile& tile) const;
 
         /**
          * @brief Check if the tile at a specified index has visitors or not
@@ -536,7 +536,7 @@ namespace IME {
          * child. The first child to occupy the tile is the occupant of
          * that tile whilst other entities are visitors
          */
-        bool tileHasVisitors(const Graphics::Tile& tile) const;
+        bool tileHasVisitors(const Tile& tile) const;
 
         /**
          * @brief Get the occupant of a tile
@@ -547,9 +547,9 @@ namespace IME {
          * An occupant is the first child to occupy a tile, subsequent children
          * are considered visitors
          *
-         * @see forEachTile(Graphics::Tile&, Callback)
+         * @see forEachTile(Tile&, Callback)
          */
-        std::shared_ptr<Entity> getOccupant(const Graphics::Tile& tile);
+        std::shared_ptr<Entity> getOccupant(const Tile& tile);
 
         /**
          * @brief Execute a callback for each child in the tilemap
@@ -566,14 +566,14 @@ namespace IME {
          * child being the occupant of the tile. The callback will be ignored
          * if the specified index is invalid or the tile is not occupied
          */
-        void forEachChildInTile(const Graphics::Tile& tile, Callback<std::shared_ptr<Entity>> callback);
+        void forEachChildInTile(const Tile& tile, Callback<std::shared_ptr<Entity>> callback);
 
         /**
          * @brief Get the number of occupants in a tile
          * @param tile Tile to get the number of occupants for
          * @return The number of occupants in a tile
          */
-        std::size_t getNumOfOccupants(const Graphics::Tile& tile) const;
+        std::size_t getNumOfOccupants(const Tile& tile) const;
 
     private:
         /**
@@ -604,7 +604,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileAbove(const Index& index);
+        Tile& getTileAbove(const Index& index);
 
         /**
          * @brief Get the tile below a tile at a given location
@@ -614,7 +614,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileBelow(const Index& index);
+        Tile& getTileBelow(const Index& index);
 
         /**
          * @brief Get the tile to the left of a tile at a given location
@@ -624,7 +624,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile & getTileLeftOf(const Index& index);
+        Tile & getTileLeftOf(const Index& index);
 
         /**
          * @brief Get the tile to the right of a tile at a given location
@@ -634,7 +634,7 @@ namespace IME {
          *
          * A tile is invalid if it has a negative index
          */
-        Graphics::Tile& getTileRightOf(const Index& index);
+        Tile& getTileRightOf(const Index& index);
 
     private:
         unsigned int tileSpacing_;     //!< Spacing between tiles in all directions
@@ -648,12 +648,12 @@ namespace IME {
         bool isGridVisible_;           //!< Visibility state of the grid
         bool isBackgroundDrawable_;    //!< First layer render state
         bool isTilesDrawable_;         //!< Second layer render state
-        Graphics::Tile invalidTile_;   //!< Tile returned when an invalid index is provided
-        Graphics::AnimatableSprite background_;  //!< Background image (first layer)
+        Tile invalidTile_;   //!< Tile returned when an invalid index is provided
+        AnimatableSprite background_;  //!< Background image (first layer)
 
         std::unordered_map<Index, std::vector<std::shared_ptr<Entity>>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;                    //!< Tilesets container
-        std::vector<std::vector<Graphics::Tile>> tiledMap_;                        //!< Tiles container
+        std::vector<std::vector<Tile>> tiledMap_;                        //!< Tiles container
     };
 }
 

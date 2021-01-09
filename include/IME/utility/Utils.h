@@ -30,8 +30,8 @@
 #include <random>
 #include <ctime>
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Generate a random number in a range
          * @param min The start of the range
@@ -49,7 +49,7 @@ namespace IME {
          */
         static auto createRandomNumGenerator(int min, int max) {
             return [distribution = std::uniform_int_distribution(min, max)]() mutable {
-                static auto randomEngine = std::mt19937(time(nullptr));
+                static auto randomEngine = std::mt19937(std::time(nullptr));
                 return distribution(randomEngine);
             };
         }

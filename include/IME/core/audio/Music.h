@@ -31,8 +31,8 @@
 #include <string>
 #include <memory>
 
-namespace IME {
-    namespace Audio {
+namespace ime {
+    namespace audio {
         /**
          * @brief Stream music files from disk
          *

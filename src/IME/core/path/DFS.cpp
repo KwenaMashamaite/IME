@@ -24,7 +24,7 @@
 
 #include "IME/core/path/DFS.h"
 
-namespace IME {
+namespace ime {
     DFSPathFinder::DFSPathFinder(Vector2u gridSize) {
         for (auto i = 0u; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};

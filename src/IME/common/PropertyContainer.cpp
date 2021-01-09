@@ -25,7 +25,7 @@
 #include "IME/common/PropertyContainer.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME {
+namespace ime {
     bool PropertyContainer::addProperty(const Property &property) {
         return properties_.emplace(property.getName(), property).second;
     }

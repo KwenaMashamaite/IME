@@ -30,8 +30,8 @@
 #include <initializer_list>
 #include <string>
 
-namespace IME {
-    namespace Audio {
+namespace ime {
+    namespace audio {
         /**
          * @brief Audio status
          */

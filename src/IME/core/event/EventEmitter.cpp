@@ -25,7 +25,7 @@
 #include "IME/core/event/EventEmitter.h"
 #include <algorithm>
 
-namespace IME {
+namespace ime {
     EventEmitter::EventEmitter(const EventEmitter &other) {
         std::scoped_lock lock(other.mutex_);
         eventList_ = other.eventList_;

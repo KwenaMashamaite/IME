@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/BitmapButton.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Button widget with an image displayed next to the text (or
          *        centered in the button without text)

@@ -33,7 +33,7 @@
 #include <functional>
 #include <mutex>
 
-namespace IME {
+namespace ime {
     template <typename... Args>
     using Callback = std::function<void(Args...)>; //!< Event listener
 

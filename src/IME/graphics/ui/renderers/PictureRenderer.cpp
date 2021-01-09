@@ -26,7 +26,7 @@
 #include "IME/graphics/ui/renderers/PictureRenderer.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void PictureRenderer::setTexture(const std::string &filename) {
         pictureRenderer_->setTexture(ResourceManager::getInstance()->getTexture(filename));
     }
@@ -48,7 +48,7 @@ namespace IME::UI {
     }
 
     void PictureRenderer::setFont(const std::string &filename) {
-        pictureRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        pictureRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void PictureRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/ChildWindow.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A window that can be displayed on top of the another window
          *

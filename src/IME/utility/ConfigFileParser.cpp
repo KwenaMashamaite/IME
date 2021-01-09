@@ -28,7 +28,7 @@
 #include "IME/core/exceptions/Exceptions.h"
 #include <sstream>
 
-namespace IME::Utility {
+namespace ime::utility {
     std::pair<bool, std::size_t> hasCharacter(const std::string& str, char character) {
         if (auto found = str.find_first_of(character); found != std::string::npos)
             return {true, found};

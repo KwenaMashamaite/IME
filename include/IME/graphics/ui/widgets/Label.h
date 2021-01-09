@@ -31,8 +31,8 @@
 #include <string>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Widget that displays a single or multiple lines of text
          */

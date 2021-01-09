@@ -24,7 +24,7 @@
 
 #include "IME/core/path/IGridPathFinder.h"
 
-namespace IME {
+namespace ime {
     void IGridPathFinder::backtrack(const std::vector<Node> &exploredNodes,
         std::stack<Index> &path)
     {

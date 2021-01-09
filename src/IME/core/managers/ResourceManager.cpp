@@ -25,9 +25,13 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <algorithm>
 
-namespace IME {
-    ResourceManager::ResourceManager()
-        : fonts_(""), images_(""), textures_(""), soundBuffers_(""), music_("")
+namespace ime {
+    ResourceManager::ResourceManager() :
+        fonts_(""),
+        images_(""),
+        textures_(""),
+        soundBuffers_(""),
+        music_("")
     {}
 
     bool ResourceManager::loadFromFile(ResourceType type, const std::string &filename){

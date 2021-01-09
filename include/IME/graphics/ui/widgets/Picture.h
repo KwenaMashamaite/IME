@@ -31,8 +31,8 @@
 #include "IME/common/Rect.h"
 #include <TGUI/Widgets/Picture.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A widget which displays images
          */

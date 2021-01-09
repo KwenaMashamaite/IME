@@ -28,8 +28,8 @@
 #include "IWidgetRenderer.h"
 #include <TGUI/Renderers/BoxLayoutRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Class for rendering a box layout
          *

@@ -25,7 +25,7 @@
 #include "IME/core/physics/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
 
-namespace IME {
+namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
@@ -38,7 +38,7 @@ namespace IME {
 
         enableAdaptiveMovement(false);
 
-        onTargetTileReset([this](Graphics::Tile tile) {
+        onTargetTileReset([this](Tile tile) {
             targetTileIndex_ = tile.getIndex();
         });
 
@@ -49,12 +49,12 @@ namespace IME {
             }
         });
 
-        onAdjacentTileReached([this](Graphics::Tile) {
+        onAdjacentTileReached([this](Tile) {
             if (adjacentTileHandler_)
                 adjacentTileHandler_();
         });
 
-        onSolidTileCollision([this](Graphics::Tile) {
+        onSolidTileCollision([this](Tile) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();
@@ -87,7 +87,7 @@ namespace IME {
         return targetTileIndex_;
     }
 
-    bool TargetGridMover::isDestinationReachable(IME::Index index) {
+    bool TargetGridMover::isDestinationReachable(Index index) {
         if (getTarget())
             return !(pathFinder_->findPath(getGrid(),
                 getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
@@ -168,9 +168,9 @@ namespace IME {
         }
     }
 
-    int TargetGridMover::onDestinationReached(Callback<Graphics::Tile> callback) {
+    int TargetGridMover::onDestinationReached(Callback<Tile> callback) {
         return onAdjacentTileReached(
-            [this, callback = std::move(callback)](Graphics::Tile tile) {
+            [this, callback = std::move(callback)](Tile tile) {
                 if (targetTileIndex_ == tile.getIndex())
                     callback(tile);
             }

@@ -33,7 +33,7 @@
 #include <string>
 #include <memory>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Abstract base class for all game entities (players, enemies etc...)
      */

@@ -25,7 +25,7 @@
 #ifndef IME_DIRECTION_H
 #define IME_DIRECTION_H
 
-namespace IME {
+namespace ime {
     /**
      * @brief Directions
      */

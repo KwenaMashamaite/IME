@@ -22,7 +22,6 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef IME_BUTTON_H
 #define IME_BUTTON_H
 
@@ -32,8 +31,8 @@
 #include <string>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Widget that can display text perform actions
          */

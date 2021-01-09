@@ -25,8 +25,9 @@
 #include "IME/graphics/AnimatableSprite.h"
 #include "IME/core/animation/Animator.h"
 
-namespace IME::Graphics {
-    AnimatableSprite::AnimatableSprite() : animator_(std::make_shared<Animator>(*this))
+namespace ime {
+    AnimatableSprite::AnimatableSprite() :
+        animator_(std::make_shared<Animator>(*this))
     {}
 
     bool AnimatableSprite::addAnimation(std::shared_ptr<Animation> animation) {

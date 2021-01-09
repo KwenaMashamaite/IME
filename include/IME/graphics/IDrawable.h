@@ -27,50 +27,48 @@
 
 #include "IME/Config.h"
 
-namespace IME {
-    namespace Graphics {
-        class Window; //!< Window class forward declaration
+namespace ime {
+    class Window; //!< Window class forward declaration
+
+    /**
+     * @brief Interface for drawable objects
+     */
+    class IME_API IDrawable {
+    public:
+        /**
+         * @brief Draw object on a render target
+         * @param renderTarget Target to draw object on
+         */
+        virtual void draw(Window &renderTarget) const = 0;
 
         /**
-         * @brief Interface for drawable objects
+         * @brief Hide object from a render target
+         *
+         * A hidden object will not be drawn on a render target when
+         * calling draw function
          */
-        class IME_API IDrawable {
-        public:
-            /**
-             * @brief Draw object on a render target
-             * @param renderTarget Target to draw object on
-             */
-            virtual void draw(Window &renderTarget) const = 0;
+        virtual void hide() = 0;
 
-            /**
-             * @brief Hide object from a render target
-             *
-             * A hidden object will not be drawn on a render target when
-             * calling draw function
-             */
-            virtual void hide() = 0;
+        /**
+         * @brief Show a hidden object
+         *
+         * This function will reveal an object that was hidden prior
+         * to function call. Calling this function on an object that
+         * is not hidden has no effect
+         */
+        virtual void show() = 0;
 
-            /**
-             * @brief Show a hidden object
-             *
-             * This function will reveal an object that was hidden prior
-             * to function call. Calling this function on an object that
-             * is not hidden has no effect
-             */
-            virtual void show() = 0;
+        /**
+         * @brief Check is object is hidden or not
+         * @return True if object is hidden, false if object is not hidden
+         */
+        virtual bool isHidden() const = 0;
 
-            /**
-             * @brief Check is object is hidden or not
-             * @return True if object is hidden, false if object is not hidden
-             */
-            virtual bool isHidden() const = 0;
-
-            /**
-             * @brief Destructor
-             */
-            virtual ~IDrawable() = default;
-        };
-    }
+        /**
+         * @brief Destructor
+         */
+        virtual ~IDrawable() = default;
+    };
 }
 
 #endif // IME_IDRAWABLE_H

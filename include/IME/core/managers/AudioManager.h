@@ -35,8 +35,8 @@
 #include <memory>
 #include <string>
 
-namespace IME {
-    namespace Audio {
+namespace ime {
+    namespace audio {
         /**
          * @brief Types of audio files managed by the audio manager
          */

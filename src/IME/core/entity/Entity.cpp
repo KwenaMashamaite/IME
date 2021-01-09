@@ -32,10 +32,11 @@
  * variable is added, why? look at their respective implementations
  */
 
-std::size_t IME::Entity::prevEntityId_{0};
+std::size_t ime::Entity::prevEntityId_{0};
 
-namespace IME {
-    Entity::Entity() : Entity({8, 8})
+namespace ime {
+    Entity::Entity() :
+        Entity({8, 8})
     {}
 
     Entity::Entity(const Entity &other) {

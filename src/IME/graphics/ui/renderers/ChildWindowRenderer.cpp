@@ -26,12 +26,12 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void ChildWindowRenderer::setBorders(const Borders &borders) {
         windowRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    ChildWindowRenderer::Borders ChildWindowRenderer::getBorders() const {
+    Borders ChildWindowRenderer::getBorders() const {
         return {windowRenderer_->getBorders().getLeft(),
                 windowRenderer_->getBorders().getTop(),
                 windowRenderer_->getBorders().getRight(),
@@ -47,47 +47,47 @@ namespace IME::UI {
     }
 
     void ChildWindowRenderer::setTitleBarColour(Colour colour) {
-        windowRenderer_->setTitleBarColor(Utility::convertToTGUIColour(colour));
+        windowRenderer_->setTitleBarColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ChildWindowRenderer::getTitleBarColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             windowRenderer_->getTitleBarColor());
     }
 
     void ChildWindowRenderer::setTitleColour(Colour colour) {
-        windowRenderer_->setTitleColor(Utility::convertToTGUIColour(colour));
+        windowRenderer_->setTitleColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ChildWindowRenderer::getTitleColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             windowRenderer_->getTitleColor());
     }
 
     void ChildWindowRenderer::setBackgroundColour(Colour colour) {
-        windowRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        windowRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ChildWindowRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             windowRenderer_->getBackgroundColor());
     }
 
     void ChildWindowRenderer::setBorderColour(Colour colour) {
-        windowRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        windowRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ChildWindowRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             windowRenderer_->getBorderColor());
     }
 
     void ChildWindowRenderer::setFocusedBorderColour(Colour colour) {
-        windowRenderer_->setBorderColorFocused(Utility::convertToTGUIColour(colour));
+        windowRenderer_->setBorderColorFocused(utility::convertToTGUIColour(colour));
     }
 
     Colour ChildWindowRenderer::getBorderColourFocused() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             windowRenderer_->getBorderColorFocused());
     }
 
@@ -133,12 +133,12 @@ namespace IME::UI {
 
     void ChildWindowRenderer::setTextureTitleBar(const std::string &filename) {
         windowRenderer_->setTextureTitleBar(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void ChildWindowRenderer::setTextureBackground(const std::string &filename) {
         windowRenderer_->setTextureBackground(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void ChildWindowRenderer::setOpacity(float opacity) {
@@ -158,7 +158,7 @@ namespace IME::UI {
     }
 
     void ChildWindowRenderer::setFont(const std::string &filename) {
-        windowRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        windowRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void ChildWindowRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

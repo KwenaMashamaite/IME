@@ -30,7 +30,7 @@
 #include <stack>
 #include <memory>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for managing game states. The states are managed using a
      *        LIFO method

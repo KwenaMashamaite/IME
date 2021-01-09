@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include <unordered_map>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Represents a position of a tile in the tilemap
      */
@@ -56,12 +56,12 @@ namespace IME {
 
 namespace std {
     /**
-     * @brief Hash specialization for IME::Index so that it can be used
+     * @brief Hash specialization for ime::Index so that it can be used
      *        as a key in an std::unordered_map
      */
     template <>
-    struct hash<IME::Index> {
-        size_t operator()(const IME::Index& index) const {
+    struct hash<ime::Index> {
+        size_t operator()(const ime::Index& index) const {
             return hash<int>()(index.row) + hash<int>()(index.colm);
         }
     };

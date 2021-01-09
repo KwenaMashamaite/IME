@@ -29,10 +29,10 @@
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/SliderRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief A class for rendering a Slider
+         * @brief A Slider widget renderer
          *
          * This class allows you to manipulate the render properties of a Slider
          */

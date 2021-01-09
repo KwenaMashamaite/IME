@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Construct a list of neighbours for each accessible node/cell
      *        in a grid

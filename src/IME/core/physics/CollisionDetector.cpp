@@ -24,9 +24,7 @@
 
 #include "IME/core/physics/CollisionDetector.h"
 
-namespace IME {
-    using namespace Graphics;
-
+namespace ime {
     void CollisionDetector::entityVsEntityCollision(Entity &entityOne,Entity &entityTwo,
         Callback<Entity &, Entity &> callback)
     {

@@ -24,9 +24,12 @@
 
 #include "IME/core/animation/Animation.h"
 
-namespace IME{
+namespace ime {
     Animation::Animation(const std::string& name, const std::string& spriteSheet,
-         float duration) : name_(name), spriteSheet_(spriteSheet), duration_(duration)
+         float duration) :
+         name_(name),
+         spriteSheet_(spriteSheet),
+         duration_(duration)
     {}
 
     std::string Animation::getSpriteSheet() const {

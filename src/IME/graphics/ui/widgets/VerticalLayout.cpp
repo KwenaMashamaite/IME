@@ -29,7 +29,7 @@
 //How long the edit box takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
         layout_{tgui::VerticalLayout::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<BoxLayoutRenderer>()}
@@ -221,13 +221,13 @@ namespace IME::UI {
     }
 
     std::shared_ptr<IWidget> VerticalLayout::getWidget(const std::string &name) const {
-        if (Utility::findIn(widgets_, name))
+        if (utility::findIn(widgets_, name))
             return widgets_.at(name);
         return nullptr;
     }
 
     bool VerticalLayout::removeWidget(const std::string &widget) {
-        if (Utility::findIn(widgets_, widget)) {
+        if (utility::findIn(widgets_, widget)) {
             layout_->remove(widgets_[widget]->getInternalPtr());
             widgets_.erase(widget);
             return true;
@@ -248,29 +248,29 @@ namespace IME::UI {
         layout_->moveWidgetToBack(widget->getInternalPtr());
     }
 
-    size_t VerticalLayout::moveWidgetForward(std::shared_ptr<UI::IWidget> widget) {
+    size_t VerticalLayout::moveWidgetForward(std::shared_ptr<IWidget> widget) {
         return layout_->moveWidgetForward(widget->getInternalPtr());
     }
 
-    size_t VerticalLayout::moveWidgetBackward(std::shared_ptr<UI::IWidget> widget) {
+    size_t VerticalLayout::moveWidgetBackward(std::shared_ptr<IWidget> widget) {
         return layout_->moveWidgetBackward(widget->getInternalPtr());
     }
 
-    std::shared_ptr<UI::IWidget> VerticalLayout::getFocusedWidget() const {
+    std::shared_ptr<IWidget> VerticalLayout::getFocusedWidget() const {
         auto widget = layout_->getFocusedChild();
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> VerticalLayout::getFocusedLeaf() const {
+    std::shared_ptr<IWidget> VerticalLayout::getFocusedLeaf() const {
         auto widget = layout_->getFocusedLeaf();
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());
         return nullptr;
     }
 
-    std::shared_ptr<UI::IWidget> VerticalLayout::getWidgetAtPosition(Vector2f pos) const {
+    std::shared_ptr<IWidget> VerticalLayout::getWidgetAtPosition(Vector2f pos) const {
         auto widget = layout_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
             return widgets_.at(widget->getWidgetName().toAnsiString());

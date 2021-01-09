@@ -28,8 +28,8 @@
 #include "IME/graphics/ui/widgets/IWidget.h"
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Interface for widget containers
          */

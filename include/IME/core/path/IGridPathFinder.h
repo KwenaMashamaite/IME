@@ -29,7 +29,7 @@
 #include "IME/core/tilemap/TileMap.h"
 #include <stack>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Interface for grid path finder algorithms
      */

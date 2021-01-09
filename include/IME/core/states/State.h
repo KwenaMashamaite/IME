@@ -30,7 +30,7 @@
 #include <SFML/Window/Event.hpp>
 #include <string>
 
-namespace IME {
+namespace ime {
     class Engine; //!< Engine class forward declaration
 
     /**
@@ -104,7 +104,7 @@ namespace IME {
          * after all events have been handled and all updates have
          * been performed for the current frame
          */
-        virtual void render(Graphics::Window &renderTarget) = 0;
+        virtual void render(Window &renderTarget) = 0;
 
         /**
          * @brief Pause the state

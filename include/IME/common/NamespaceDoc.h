@@ -32,36 +32,26 @@
 /**
  * @brief Global namespace - Contains all namespaces, classes and functions
  */
-namespace IME {}
+namespace ime {}
 
 /**
  * @brief Container for all input related classes and functions
  */
-namespace IME::Input {}
+namespace ime::input {}
 
 /**
  * @brief Container for all audio related classes and functions
  */
-namespace IME::Audio {}
-
-/**
- * @brief Container for all graphics related classes and functions
- */
-namespace IME::Graphics {}
+namespace ime::audio {}
 
 /**
  * @brief Container for all user interface classes anf functions
  */
-namespace IME::UI {}
-
-/**
- * @brief Container for all time related classes and functions
- */
-namespace IME::Time {}
+namespace ime::ui {}
 
 /**
  * @brief Container for all utility classes and functions
  */
-namespace IME::Utility {}
+namespace ime::utility {}
 
 #endif //IME_NAMESPACEDOC_H

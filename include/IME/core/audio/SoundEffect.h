@@ -30,8 +30,8 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
-namespace IME {
-    namespace Audio {
+namespace ime {
+    namespace audio {
         /**
          * @brief Play sound effects (Short audio clips)
          *

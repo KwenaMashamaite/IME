@@ -26,13 +26,13 @@
 #include "IME/graphics/ui/renderers/PanelRenderer.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void PanelRenderer::setBorders(const Borders &borders) {
         panelRenderer_->setBorders({borders.left, borders.top,
             borders.right, borders.bottom});
     }
 
-    PanelRenderer::Borders PanelRenderer::getBorders() const {
+    Borders PanelRenderer::getBorders() const {
         return {panelRenderer_->getBorders().getLeft(),
                 panelRenderer_->getBorders().getTop(),
                 panelRenderer_->getBorders().getRight(),
@@ -40,24 +40,24 @@ namespace IME::UI {
     }
 
     void PanelRenderer::setBorderColour(Colour colour) {
-        panelRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        panelRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour PanelRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(panelRenderer_->getBorderColor());
+        return utility::convertFrom3rdPartyColour(panelRenderer_->getBorderColor());
     }
 
     void PanelRenderer::setBackgroundColour(Colour colour) {
-        panelRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        panelRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour PanelRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(panelRenderer_->getBackgroundColor());
+        return utility::convertFrom3rdPartyColour(panelRenderer_->getBackgroundColor());
     }
 
     void PanelRenderer::setBackgroundTexture(const std::string &texture) {
         panelRenderer_->setTextureBackground(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void PanelRenderer::setOpacity(float opacity) {
@@ -77,7 +77,7 @@ namespace IME::UI {
     }
 
     void PanelRenderer::setFont(const std::string &filename) {
-        panelRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        panelRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void PanelRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

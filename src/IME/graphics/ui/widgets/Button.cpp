@@ -31,7 +31,7 @@ const int fadeAnimDuration_ = 100;
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
-namespace IME::UI {
+namespace ime::ui {
     Button::Button(const std::string &buttonText) :
         button_{tgui::Button::create(buttonText)},
         renderer_{std::make_shared<ButtonRenderer>()}

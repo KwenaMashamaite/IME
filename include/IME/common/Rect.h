@@ -28,7 +28,7 @@
 #include "IME/common/Vector2.h"
 #include <algorithm>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for manipulating 2D axis aligned rectangles
      */

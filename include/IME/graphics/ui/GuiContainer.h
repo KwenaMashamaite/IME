@@ -32,8 +32,8 @@
 #include "IME/graphics/Window.h"
 #include <unordered_map>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Mouse cursor types
          */
@@ -77,7 +77,7 @@ namespace IME {
              *
              * @see setTarget
              */
-            explicit GuiContainer(Graphics::Window& target);
+            explicit GuiContainer(Window& target);
 
             /**
              * @brief Copy constructor
@@ -93,7 +93,7 @@ namespace IME {
              * @brief Set the target on which the gui should be drawn
              * @param target Render target that will be used by the gui
              */
-            void setTarget(Graphics::Window& target);
+            void setTarget(Window& target);
 
             /**
              * @brief Check if the target on which the gui should be drawn is

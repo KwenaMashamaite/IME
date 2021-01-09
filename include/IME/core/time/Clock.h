@@ -27,44 +27,42 @@
 
 #include "IME/Config.h"
 
-namespace IME {
-    namespace Time {
+namespace ime {
+    /**
+     * @brief This class models a clock
+     */
+    class IME_API Clock {
+    public:
         /**
-         * @brief This class models a clock
+         * @brief Constructor
          */
-        class IME_API Clock {
-        public:
-            /**
-             * @brief Constructor
-             */
-            Clock();
+        Clock();
 
-            /**
-             * @brief Get the time passed since the clock was reset
-             * @return Time passed since the clock was reset in seconds
-             */
-            double getElapsedTimeInSeconds();
+        /**
+         * @brief Get the time passed since the clock was reset
+         * @return Time passed since the clock was reset in seconds
+         */
+        double getElapsedTimeInSeconds();
 
-            /**
-             * @brief Reset the clock and get the time passed since the clock
-             *        last reset
-             * @return Time passed since the clock was reset in seconds
-             */
-            double restart();
+        /**
+         * @brief Reset the clock and get the time passed since the clock
+         *        last reset
+         * @return Time passed since the clock was reset in seconds
+         */
+        double restart();
 
-        private:
-            /**
-             * @brief Get the amount of time in seconds that has passed
-             *        since the process started executing
-             * @return Time that has passed since the process
-             *         started executing
-             */
-            double getProcessTimeInSeconds();
+    private:
+        /**
+         * @brief Get the amount of time in seconds that has passed
+         *        since the process started executing
+         * @return Time that has passed since the process
+         *         started executing
+         */
+        double getProcessTimeInSeconds();
 
-        private:
-            double timeWhenClockWasLastReset_; //!< Stores the amount of time passed since last call to restart
-        };
-    }
+    private:
+        double timeWhenClockWasLastReset_; //!< Stores the amount of time passed since last call to restart
+    };
 }
 
 #endif // IME_CLOCK_H

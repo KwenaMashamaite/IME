@@ -30,8 +30,8 @@
 #include <sstream>
 #include <string>
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Modes in which a file can be written to in
          */

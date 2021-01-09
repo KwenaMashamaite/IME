@@ -31,7 +31,7 @@
 //How long the label takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     Label::Label(const std::string &text) :
         label_{tgui::Label::create(text)},
         renderer_{std::make_shared<LabelRenderer>()}

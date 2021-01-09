@@ -24,7 +24,7 @@
 
 #include "IME/core/event/EventDispatcher.h"
 
-namespace IME {
+namespace ime {
     bool EventDispatcher::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }

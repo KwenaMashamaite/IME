@@ -29,7 +29,7 @@
 //How long the edit box takes before its completely hidden or shown
 const int fadeAnimDuration_ = 100;
 
-namespace IME::UI {
+namespace ime::ui {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons) :
         window_{tgui::ChildWindow::create(title, titleButtons)},
         renderer_{std::make_shared<ChildWindowRenderer>()}
@@ -267,13 +267,13 @@ namespace IME::UI {
 
     std::shared_ptr<IWidget>
     ChildWindow::getWidget(const std::string &name) const {
-        if (Utility::findIn(widgets_, name))
+        if (utility::findIn(widgets_, name))
             return widgets_.at(name);
         return nullptr;
     }
 
     bool ChildWindow::removeWidget(const std::string &widget) {
-        if (Utility::findIn(widgets_, widget)) {
+        if (utility::findIn(widgets_, widget)) {
             window_->remove(widgets_[widget]->getInternalPtr());
             widgets_.erase(widget);
             return true;

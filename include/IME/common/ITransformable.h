@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "Vector2.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Interface for transformable entities
      */

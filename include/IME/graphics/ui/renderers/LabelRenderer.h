@@ -30,10 +30,10 @@
 #include <TGUI/Renderers/LabelRenderer.hpp>
 #include <string>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief Class for rendering a Label
+         * @brief A Label widget renderer
          *
          * This class allows you to manipulate the render properties of a Label
          */

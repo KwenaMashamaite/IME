@@ -25,7 +25,7 @@
 #include "IME/core/input/Mouse.h"
 #include <SFML/Window/Mouse.hpp>
 
-namespace IME::Input {
+namespace ime::input {
     bool Mouse::isButtonPressed(Button button){
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
     }

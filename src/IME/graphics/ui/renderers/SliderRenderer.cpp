@@ -26,13 +26,13 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void SliderRenderer::setBorders(const Borders &borders) {
         sliderRenderer_->setBorders({borders.left, borders.top,
-                    borders.right, borders.bottom});
+            borders.right, borders.bottom});
     }
 
-    SliderRenderer::Borders SliderRenderer::getBorders() const {
+    Borders SliderRenderer::getBorders() const {
         return {sliderRenderer_->getBorders().getLeft(),
                 sliderRenderer_->getBorders().getTop(),
                 sliderRenderer_->getBorders().getRight(),
@@ -40,77 +40,77 @@ namespace IME::UI {
     }
 
     void SliderRenderer::setTrackColour(Colour colour) {
-        sliderRenderer_->setTrackColor(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setTrackColor(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getTrackColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             sliderRenderer_->getTrackColor());
     }
 
     void SliderRenderer::setTrackHoverColour(Colour colour) {
-        sliderRenderer_->setTrackColorHover(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setTrackColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getTrackHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             sliderRenderer_->getTrackColorHover());
     }
 
     void SliderRenderer::setThumbColour(Colour colour) {
-        sliderRenderer_->setThumbColor(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setThumbColor(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getThumbColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
                 sliderRenderer_->getThumbColor());
     }
 
     void SliderRenderer::setThumbHoverColour(Colour colour) {
-        sliderRenderer_->setThumbColorHover(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setThumbColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getThumbHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             sliderRenderer_->getThumbColorHover());
     }
 
     void SliderRenderer::setBorderColour(Colour colour) {
-        sliderRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             sliderRenderer_->getBorderColor());
     }
 
     void SliderRenderer::setBorderHoverColour(Colour colour) {
-        sliderRenderer_->setBorderColorHover(Utility::convertToTGUIColour(colour));
+        sliderRenderer_->setBorderColorHover(utility::convertToTGUIColour(colour));
     }
 
     Colour SliderRenderer::getBorderHoverColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             sliderRenderer_->getBorderColorHover());
     }
 
     void SliderRenderer::setTrackTexture(const std::string &filename) {
         sliderRenderer_->setTextureTrack(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void SliderRenderer::setTrackHoverTexture(const std::string &filename) {
         sliderRenderer_->setTextureTrackHover(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void SliderRenderer::setThumbTexture(const std::string &filename) {
         sliderRenderer_->setTextureThumb(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void SliderRenderer::setThumbHoverTexture(const std::string &filename) {
         sliderRenderer_->setTextureThumbHover(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void SliderRenderer::setThumbWithinTrack(bool keepThumbInside) {
@@ -138,7 +138,7 @@ namespace IME::UI {
     }
 
     void SliderRenderer::setFont(const std::string &filename) {
-        sliderRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        sliderRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void SliderRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

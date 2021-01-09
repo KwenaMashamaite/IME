@@ -30,8 +30,8 @@
 #include <TGUI/Widgets/EditBox.hpp>
 #include <memory>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief A single line input field
          */
@@ -41,14 +41,16 @@ namespace IME {
 
             /**
              * @brief Construct an edit box
+             * @param defaultText Text is displayed when the edit box is empty
              */
-            EditBox();
+            explicit EditBox(const std::string& defaultText = "");
 
             /**
              * @brief Create a new edit box widget
+             * @param defaultText Text is displayed when the edit box is empty
              * @return The new edit box
              */
-            static sharedPtr create();
+            static sharedPtr create(const std::string& defaultText = "");
 
             /**
              * @brief Set the edit boxes renderer

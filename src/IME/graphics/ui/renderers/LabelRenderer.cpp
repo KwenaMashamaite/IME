@@ -26,12 +26,12 @@
 #include "IME/graphics/ui/renderers/LabelRenderer.h"
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void LabelRenderer::setBorders(const Borders &borders) {
         labelRenderer_->setBorders({borders.left, borders.top, borders.right, borders.bottom});
     }
 
-    LabelRenderer::Borders LabelRenderer::getBorders() const {
+    Borders LabelRenderer::getBorders() const {
         return {labelRenderer_->getBorders().getLeft(),
                 labelRenderer_->getBorders().getTop(),
                 labelRenderer_->getBorders().getRight(),
@@ -43,7 +43,7 @@ namespace IME::UI {
             padding.bottom});
     }
 
-    LabelRenderer::Padding LabelRenderer::getPadding() const {
+    Padding LabelRenderer::getPadding() const {
         return {labelRenderer_->getPadding().getLeft(),
                 labelRenderer_->getPadding().getTop(),
                 labelRenderer_->getPadding().getRight(),
@@ -51,44 +51,44 @@ namespace IME::UI {
     }
 
     void LabelRenderer::setTextColour(Colour colour) {
-        labelRenderer_->setTextColor(Utility::convertToTGUIColour(colour));
+        labelRenderer_->setTextColor(utility::convertToTGUIColour(colour));
     }
 
     Colour LabelRenderer::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(labelRenderer_->getTextColor());
+        return utility::convertFrom3rdPartyColour(labelRenderer_->getTextColor());
     }
 
     void LabelRenderer::setBackgroundColour(Colour colour) {
-        labelRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        labelRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour LabelRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(labelRenderer_->getBorderColor());
+        return utility::convertFrom3rdPartyColour(labelRenderer_->getBorderColor());
     }
 
     void LabelRenderer::setBorderColour(Colour colour) {
-        labelRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        labelRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour LabelRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(labelRenderer_->getBorderColor());
+        return utility::convertFrom3rdPartyColour(labelRenderer_->getBorderColor());
     }
 
     void LabelRenderer::setTextStyle(TextStyle style) {
         labelRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    LabelRenderer::TextStyle LabelRenderer::getTextStyle() const {
+    TextStyle LabelRenderer::getTextStyle() const {
         return static_cast<TextStyle>(
             static_cast<unsigned int>(labelRenderer_->getTextStyle()));
     }
 
     void LabelRenderer::setTextOutlineColour(Colour outlineColour) {
-        labelRenderer_->setTextOutlineColor(Utility::convertToTGUIColour(outlineColour));
+        labelRenderer_->setTextOutlineColor(utility::convertToTGUIColour(outlineColour));
     }
 
     Colour LabelRenderer::getTextOutlineColour() const {
-        return Utility::convertFrom3rdPartyColour(
+        return utility::convertFrom3rdPartyColour(
             labelRenderer_->getTextOutlineColor());
     }
 
@@ -102,7 +102,7 @@ namespace IME::UI {
 
     void LabelRenderer::setBackgroundTexture(const std::string &filename) {
         labelRenderer_->setTextureBackground(
-            IME::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename));
     }
 
     void LabelRenderer::setScrollbarWidth(float scrollbarWidth) {
@@ -130,7 +130,7 @@ namespace IME::UI {
     }
 
     void LabelRenderer::setFont(const std::string &filename) {
-        labelRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        labelRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void LabelRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

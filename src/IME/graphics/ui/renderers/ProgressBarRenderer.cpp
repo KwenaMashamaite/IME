@@ -27,13 +27,13 @@
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/utility/Helpers.h"
 
-namespace IME::UI {
+namespace ime::ui {
     void ProgressBarRenderer::setBorders(const Borders &borders) {
         progressBarRenderer_->setBorders({borders.left, borders.top,
             borders.right, borders.bottom});
     }
 
-    ProgressBarRenderer::Borders ProgressBarRenderer::getBorders() const {
+    Borders ProgressBarRenderer::getBorders() const {
         return {progressBarRenderer_->getBorders().getLeft(),
                 progressBarRenderer_->getBorders().getTop(),
                 progressBarRenderer_->getBorders().getRight(),
@@ -41,60 +41,60 @@ namespace IME::UI {
     }
 
     void ProgressBarRenderer::setTextColour(Colour colour) {
-        progressBarRenderer_->setTextColor(Utility::convertToTGUIColour(colour));
+        progressBarRenderer_->setTextColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getTextColour() const {
-        return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColor());
+        return utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColor());
     }
 
     void ProgressBarRenderer::setTextColourFilled(Colour colour) {
-        progressBarRenderer_->setTextColorFilled(Utility::convertToTGUIColour(colour));
+        progressBarRenderer_->setTextColorFilled(utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getTextColourFilled() const {
-        return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColorFilled());
+        return utility::convertFrom3rdPartyColour(progressBarRenderer_->getTextColorFilled());
     }
 
     void ProgressBarRenderer::setBackgroundColour(Colour colour) {
-        progressBarRenderer_->setBackgroundColor(Utility::convertToTGUIColour(colour));
+        progressBarRenderer_->setBackgroundColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getBackgroundColour() const {
-        return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getBackgroundColor());
+        return utility::convertFrom3rdPartyColour(progressBarRenderer_->getBackgroundColor());
     }
 
     void ProgressBarRenderer::setFillColour(Colour colour) {
-        progressBarRenderer_->setFillColor(Utility::convertToTGUIColour(colour));
+        progressBarRenderer_->setFillColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getFillColour() const {
-        return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getFillColor());
+        return utility::convertFrom3rdPartyColour(progressBarRenderer_->getFillColor());
     }
 
     void ProgressBarRenderer::setBorderColour(Colour colour) {
-        progressBarRenderer_->setBorderColor(Utility::convertToTGUIColour(colour));
+        progressBarRenderer_->setBorderColor(utility::convertToTGUIColour(colour));
     }
 
     Colour ProgressBarRenderer::getBorderColour() const {
-        return Utility::convertFrom3rdPartyColour(progressBarRenderer_->getBorderColor());
+        return utility::convertFrom3rdPartyColour(progressBarRenderer_->getBorderColor());
     }
 
     void ProgressBarRenderer::setBackgroundTexture(const std::string &texture) {
         progressBarRenderer_->setTextureBackground(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ProgressBarRenderer::setFillTexture(const std::string &texture) {
         progressBarRenderer_->setTextureFill(
-            IME::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture));
     }
 
     void ProgressBarRenderer::setTextStyle(TextStyle style) {
         progressBarRenderer_->setTextStyle(static_cast<tgui::TextStyle>(style));
     }
 
-    ProgressBarRenderer::TextStyle ProgressBarRenderer::getTextStyle() const {
+    TextStyle ProgressBarRenderer::getTextStyle() const {
         return static_cast<TextStyle>(static_cast<unsigned int>(
                 progressBarRenderer_->getTextStyle()));
     }
@@ -116,7 +116,7 @@ namespace IME::UI {
     }
 
     void ProgressBarRenderer::setFont(const std::string &filename) {
-        progressBarRenderer_->setFont(Utility::get_TGUI_Font(filename));
+        progressBarRenderer_->setFont(utility::get_TGUI_Font(filename));
     }
 
     void ProgressBarRenderer::ignoreTransparentTexture(bool ignoreTransparentParts) {

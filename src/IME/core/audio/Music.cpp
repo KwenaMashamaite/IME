@@ -25,7 +25,7 @@
 #include "IME/core/audio/Music.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Audio {
+namespace ime::audio {
     void Music::setSource(const std::string &source) {
         if (sourceFilename_ != source) {
             song_ = ResourceManager::getInstance()->getMusic(source);

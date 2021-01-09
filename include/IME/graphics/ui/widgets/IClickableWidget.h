@@ -28,8 +28,8 @@
 #include "IWidget.h"
 #include <string>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
          * @brief Interface for clickable widgets
          */

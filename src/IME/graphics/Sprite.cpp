@@ -27,7 +27,7 @@
 #include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
 
-namespace IME::Graphics {
+namespace ime {
     Sprite::Sprite() :
         textureFileName_(""),
         isHidden_(false)
@@ -128,11 +128,11 @@ namespace IME::Graphics {
     }
 
     void Sprite::setColour(Colour colour) {
-        sprite_.setColor(Utility::convertToSFMLColour(colour));
+        sprite_.setColor(utility::convertToSFMLColour(colour));
     }
 
     Colour Sprite::getColour() const {
-        return Utility::convertFrom3rdPartyColour(sprite_.getColor());
+        return utility::convertFrom3rdPartyColour(sprite_.getColor());
     }
 
     void Sprite::setOrigin(float x, float y) {

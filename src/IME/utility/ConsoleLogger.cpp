@@ -25,7 +25,7 @@
 #include "IME/utility/ConsoleLogger.h"
 #include <iostream>
 
-namespace IME::Utility {
+namespace ime::utility {
     void ConsoleLogger::log(MessageType logType, const std::string &msg) {
         std::scoped_lock lock(mutex_);
         switch (logType) {

@@ -28,7 +28,7 @@
 #include "IGridPathFinder.h"
 #include "AdjacencyList.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for finding the path from a source tile to a destination
      *        tile using the Depth First Search algorithm

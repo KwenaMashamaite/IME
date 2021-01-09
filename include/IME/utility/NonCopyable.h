@@ -27,8 +27,8 @@
 
 #include "IME/Config.h"
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Class for making other classes non copyable
          *

@@ -85,5 +85,5 @@ const std::string &ResourceHolder<T>::getPath() const {
 
 template<class T>
 bool ResourceHolder<T>::hasResource(const std::string &filename) const {
-    return Utility::findIn(resourceHolder_, filename);
+    return utility::findIn(resourceHolder_, filename);
 }

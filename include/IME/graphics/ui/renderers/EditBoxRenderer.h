@@ -29,10 +29,10 @@
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/EditBoxRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief Class for rendering an EditBox
+         * @brief An EditBox widget renderer
          *
          * This class allows you to manipulate the render properties of an
          * EditBox

@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Exception class for when a file cannot be found
      */

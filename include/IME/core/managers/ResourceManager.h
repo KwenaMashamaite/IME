@@ -36,7 +36,7 @@
 #include <string>
 #include <initializer_list>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Resource identifiers (Types of resources that can be handled
      *        by resource manager)

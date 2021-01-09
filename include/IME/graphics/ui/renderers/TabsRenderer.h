@@ -31,12 +31,13 @@
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/TabsRenderer.hpp>
 
-namespace IME {
-    namespace UI {
+namespace ime {
+    namespace ui {
         /**
-         * @brief Class for rendering Tabs
+         * @brief A Tabs widget renderer
          *
-         * This class allows you to manipulate the render properties of Tabs
+         * This class allows you to manipulate the render properties of a
+         * Tabs widget
          */
         class IME_API TabsRenderer : public IWidgetRenderer {
         public:

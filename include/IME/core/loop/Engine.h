@@ -35,7 +35,7 @@
 #include "IME/core/states/StateManager.h"
 #include <queue>
 
-namespace IME {
+namespace ime {
     /**
      * @brief Runs the main loop
      */
@@ -181,7 +181,7 @@ namespace IME {
          * @brief Get access to the engines audio manager
          * @return The engines audio manager
          */
-        Audio::AudioManager& getAudioManager();
+        audio::AudioManager& getAudioManager();
 
         /**
          * @brief Get access to the engines local input manager
@@ -193,7 +193,7 @@ namespace IME {
          * (push or pop). For a push operation, input event listeners are
          * remembered and restored when the state is resumed
          */
-        Input::InputManager& getInputManager();
+        input::InputManager& getInputManager();
 
         /**
          * @brief Get access to the engines global input manager
@@ -203,7 +203,7 @@ namespace IME {
          * notified when the corresponding event is fired regardless of
          * state. That is, they persist from state to state
          */
-        Input::InputManager& getGlobalInputManager();
+        input::InputManager& getGlobalInputManager();
 
         /**
          * @brief Get access to the engines render target
@@ -219,7 +219,7 @@ namespace IME {
          *
          * @see initialize
          */
-        Graphics::Window& getRenderTarget();
+        Window& getRenderTarget();
 
         /**
          * @brief Add an event lister to a window close event
@@ -322,7 +322,7 @@ namespace IME {
         void shutdown();
 
     private:
-        Graphics::Window window_;                               //!< Render target
+        Window window_;                               //!< Render target
         std::string appName_;                                   //!< Game name
         std::string settingFile_;                               //!< Engine settings filename
         PropertyContainer settings_;                            //!< Engine settings container
@@ -331,11 +331,11 @@ namespace IME {
         bool isRunning_;                                        //!< Engine's running state
         float elapsedTime_;                                     //!< How long the engine has been running
         StateManager statesManager_;                            //!< Engine states manager
-        std::unique_ptr<Audio::AudioManager> audioManager_;     //!< Engines audio manager
+        std::unique_ptr<audio::AudioManager> audioManager_;     //!< Engines audio manager
         std::shared_ptr<ResourceManager> resourceManager_;      //!< Engines resource manager
-        Input::InputManager inputManager_;                      //!< Engines local input manager
-        Input::InputManager globalInputManager_;                //!< Engines global input manager
-        std::stack<Input::InputManager> prevStateInputManager_; //!< Previous states local input handlers
+        input::InputManager inputManager_;                      //!< Engines local input manager
+        input::InputManager globalInputManager_;                //!< Engines global input manager
+        std::stack<input::InputManager> prevStateInputManager_; //!< Previous states local input handlers
         std::shared_ptr<EventDispatcher> eventDispatcher_;      //!< Engines Event dispatcher
         PropertyContainer dataSaver_;                           //!< Data that persists across states
         bool shouldPop_;                                        //!< Flags whether o not current state should be popped

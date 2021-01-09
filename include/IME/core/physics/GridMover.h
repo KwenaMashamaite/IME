@@ -30,7 +30,7 @@
 #include "IME/core/entity/Entity.h"
 #include "IME/core/event/EventEmitter.h"
 
-namespace IME {
+namespace ime {
     /**
      * @brief Class for performing grid based movement on an entity in a grid
      *
@@ -151,7 +151,7 @@ namespace IME {
          *
          * The callback is passed the tile the target moved to
          */
-        int onAdjacentTileReached(Callback<Graphics::Tile> callback);
+        int onAdjacentTileReached(Callback<Tile> callback);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
@@ -185,7 +185,7 @@ namespace IME {
          *
          * @see removeInternalCollisionHandlerFor
          */
-        int onSolidTileCollision(Callback<IME::Graphics::Tile> callback);
+        int onSolidTileCollision(Callback<Tile> callback);
 
         /**
          * @brief Add an event listener to an obstacle collision
@@ -247,7 +247,7 @@ namespace IME {
             }
         }
 
-        void onTargetTileReset(IME::Callback<Graphics::Tile> callback){
+        void onTargetTileReset(Callback<Tile> callback){
             eventEmitter_.addEventListener("targetTileReset", callback);
         }
 
@@ -347,8 +347,8 @@ namespace IME {
         TileMap& tileMap_;          //!< Grid to move entity in
         EntityPtr target_;          //!< Target to be moved in the grid
         Direction targetDirection_; //!< Stores the direction in which the target wishes to go
-        Graphics::Tile targetTile_; //!< The grid tile the target wishes to reach
-        Graphics::Tile prevTile_;   //!< Tile target was in before moving to adjacent tile
+        Tile targetTile_; //!< The grid tile the target wishes to reach
+        Tile prevTile_;   //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_; //!< Collision event publisher
     };
 }

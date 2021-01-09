@@ -27,8 +27,8 @@
 
 #include <string>
 
-namespace IME {
-    namespace Utility {
+namespace ime {
+    namespace utility {
         /**
          * @brief Type of message to be logged
          */
