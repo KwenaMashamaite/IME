@@ -31,7 +31,8 @@ const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     Picture::Picture() :
-        picture_{tgui::Picture::create()}
+        picture_{tgui::Picture::create()},
+        renderer_{std::make_shared<PictureRenderer>()}
     {
         renderer_->setInternalPtr(picture_->getRenderer());
         initEvents();
@@ -39,13 +40,15 @@ namespace IME::UI {
 
     Picture::Picture(const std::string &filename, bool transparentTexture) :
         picture_{tgui::Picture::create(
-            IME::ResourceManager::getInstance()->getTexture(filename), transparentTexture)}
+            IME::ResourceManager::getInstance()->getTexture(filename), transparentTexture)},
+        renderer_{std::make_shared<PictureRenderer>()}
     {
         renderer_->setInternalPtr(picture_->getRenderer());
         initEvents();
     }
 
-    Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture)
+    Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture) :
+        renderer_{std::make_shared<PictureRenderer>()}
     {
         IME::ResourceManager::getInstance()->getTexture(filename); // Use own error reporting if image cannot be loaded
         picture_ = tgui::Picture::create(
