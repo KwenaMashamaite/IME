@@ -45,6 +45,21 @@ namespace IME {
         class IME_API IWidget : public ITransformable, public EventEmitter {
         public:
             /**
+             * @brief Set the position of the widget relative to the
+             *        size of its parent
+             * @param x New x coordinate of the widget
+             * @param y New y coordinate of the widget
+             *
+             * The position is specified using percentages as shown below:
+             *
+             * @code
+             * widget->setPosition({"5%", "10%"});
+             * @endcode
+             */
+            virtual void setPosition(const std::string& x, const std::string& y) = 0;
+            using ITransformable::setPosition;
+
+            /**
              * @brief Set the text content of the widget
              * @param text New text content
              *
@@ -77,6 +92,21 @@ namespace IME {
              * @param height The height of the widget
              */
             virtual void setSize(float width, float height) = 0;
+
+            /**
+             * @brief Set the size of the widget relative to the size of
+             *        its parent
+             * @param width The new width of the widget
+             * @param height The new height of the widget
+             *
+             * The size is specified in percentages as shown below
+             *
+             * @code
+             * widget->setSize({"20%", "5%"});
+             * @endcode
+             */
+            virtual void setSize(const std::string& width,
+                 const std::string& height) = 0;
 
             /**
              * @brief Get the size of the widget

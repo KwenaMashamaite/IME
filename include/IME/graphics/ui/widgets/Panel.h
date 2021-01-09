@@ -43,14 +43,40 @@ namespace IME {
 
             /**
              * @brief Constructor
+             * @param width Width of the panel relative to the size of its
+             *        parent
+             * @param height Height of the panel relative to the size of its
+             *        parent
+             *
+             * The relative position is specified in percentages as shown:
+             *
+             * @code
+             * Panel({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the panel is the same size as its parent
              */
-            Panel();
+            explicit Panel(const std::string& width = "100%", 
+                const std::string& height = "100%");
 
             /**
-             * @brief Create a new panel widget
-             * @return The new panel
+             * @brief Create a new Panel widget
+             * @param width Width of the panel relative to the size of its
+             *        parent
+             * @param height Height of the panel relative to the size of its
+             *        parent
+             * @return The new Panel
+             *
+             * * The relative position is specified in percentages as shown:
+             *
+             * @code
+             * Panel::create({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create();
+            static sharedPtr create(const std::string& width = "100%",
+                const std::string& height = "100%");
 
             /**
              * @brief Set the panels renderer
@@ -78,14 +104,15 @@ namespace IME {
              * @brief Set the text content of the panel
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * @note This function does nothing
              */
             void setText(const std::string &text) override;
 
             /**
              * @brief Get the panels text content
              * @return The panels text content
+             *
+             * @note This function will always return an empty string
              */
             std::string getText() const override;
 
@@ -107,6 +134,20 @@ namespace IME {
              * @param height The height of the panel
              */
             void setSize(float width, float height) override;
+
+            /**
+             * @brief Set the size of the panel relative to the size of
+             *        its parent
+             * @param width The new width of the panel
+             * @param height The new height of the panel
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * panel->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
 
             /**
              * @brief Get the size of the panel
@@ -201,6 +242,28 @@ namespace IME {
              * @see move
              */
             void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the position of the panel relative to the
+             *        size of its parent
+             * @param x New x coordinate of the panel
+             * @param y New y coordinate of the panel
+             * 
+             * The position is specified in percentages as shown below:
+             * 
+             * @code
+             * panel->setPosition({"5%", "10%"});
+             * @endcode
+             * 
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the panel is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
 
             /**
              * @brief Get the position of the panel

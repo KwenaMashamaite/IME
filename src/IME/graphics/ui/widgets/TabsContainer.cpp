@@ -29,15 +29,17 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    TabsContainer::TabsContainer(float width, float height) :
-        tabContainer_{tgui::TabContainer::create({width, height})},
+    TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
+        tabContainer_{tgui::TabContainer::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<TabsRenderer>()}
     {
         renderer_->setInternalPtr(tabContainer_->getTabsRenderer());
         initEvents();
     }
 
-    TabsContainer::sharedPtr TabsContainer::create(float width, float height) {
+    TabsContainer::sharedPtr TabsContainer::create(const std::string& width,
+        const std::string& height)
+    {
         return std::make_shared<TabsContainer>(width, height);
     }
 
@@ -150,6 +152,10 @@ namespace IME::UI {
         tabContainer_->setSize({width, height});
     }
 
+    void TabsContainer::setSize(const std::string &width, const std::string &height) {
+        tabContainer_->setSize({width.c_str(), height.c_str()});
+    }
+
     Vector2f TabsContainer::getSize() const {
         return {tabContainer_->getSize().x, tabContainer_->getSize().y};
     }
@@ -190,6 +196,10 @@ namespace IME::UI {
 
     void TabsContainer::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void TabsContainer::setPosition(const std::string &x, const std::string &y) {
+        tabContainer_->setPosition({x.c_str(), y.c_str()});
     }
 
     Vector2f TabsContainer::getPosition() const {

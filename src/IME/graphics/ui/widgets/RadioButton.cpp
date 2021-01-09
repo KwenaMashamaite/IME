@@ -88,6 +88,10 @@ namespace IME::UI {
         button_->setSize({width, height});
     }
 
+    void RadioButton::setSize(const std::string &width, const std::string &height) {
+        button_->setSize({width.c_str(), height.c_str()});
+    }
+
     Vector2f RadioButton::getSize() const {
         return {button_->getSize().x, button_->getSize().y};
     }
@@ -128,6 +132,10 @@ namespace IME::UI {
 
     void RadioButton::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void RadioButton::setPosition(const std::string &x, const std::string &y) {
+        button_->setPosition({x.c_str(), y.c_str()});
     }
 
     Vector2f RadioButton::getPosition() const {

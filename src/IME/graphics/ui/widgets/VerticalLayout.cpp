@@ -30,15 +30,17 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    VerticalLayout::VerticalLayout(float width, float height)
-        : layout_{tgui::VerticalLayout::create({width, height})},
-          renderer_{std::make_shared<BoxLayoutRenderer>()}
+    VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
+        layout_{tgui::VerticalLayout::create({width.c_str(), height.c_str()})},
+        renderer_{std::make_shared<BoxLayoutRenderer>()}
     {
         renderer_->setInternalPtr(layout_->getRenderer());
         initEvents();
     }
 
-    VerticalLayout::sharedPtr VerticalLayout::create(float width, float height) {
+    VerticalLayout::sharedPtr VerticalLayout::create(const std::string& width,
+        const std::string& height)
+    {
         return std::make_shared<VerticalLayout>(width, height);
     }
 
@@ -62,6 +64,10 @@ namespace IME::UI {
 
     void VerticalLayout::setSize(float width, float height) {
         layout_->setSize({width, height});
+    }
+
+    void VerticalLayout::setSize(const std::string &width, const std::string &height) {
+        layout_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f VerticalLayout::getSize() const {
@@ -113,6 +119,10 @@ namespace IME::UI {
 
     void VerticalLayout::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void VerticalLayout::setPosition(const std::string &x, const std::string &y) {
+        layout_->setPosition({x.c_str(), y.c_str()});
     }
 
     void VerticalLayout::setRotation(float angle) {

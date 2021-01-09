@@ -50,18 +50,40 @@ namespace IME {
 
             /**
              * @brief Constructor
-             * @param width Width of the container
-             * @param height Height of the container
+             * @param width Width of the container relative to the size of its 
+             *        parent
+             * @param height Height of the container relative to the size of its
+             *        parent
+             * 
+             * The relative position is specified in percentages as shown:
+             * 
+             * @code
+             * TabsContainer({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the container is the same size as its parent
              */
-            TabsContainer(float width, float height);
+            explicit TabsContainer(const std::string& width = "100%",
+                const std::string& height = "100%");
 
             /**
-             * @brief Create a new tabs container widget
-             * @param width Width of the widget
-             * @param height Height of the widget
-             * @return The new widget
+             * @brief Create a new TabsContainer widget
+             * @param width Width of the panel relative to the size of its 
+             *        parent
+             * @param height Height of the panel relative to the size of its
+             *        parent
+             * @return The new TabsContainer
+             * 
+             * * The relative position is specified in percentages as shown:
+             * 
+             * @code
+             * TabsContainer::create({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create(float width, float height);
+            static sharedPtr create(const std::string& width = "100%",
+                const std::string& height = "100%");
 
             /**
              * @brief Set the tabs renderer
@@ -230,6 +252,20 @@ namespace IME {
             void setSize(float width, float height) override;
 
             /**
+             * @brief Set the size of the container relative to the size of
+             *        its parent
+             * @param width The new width of the container
+             * @param height The new height of the container
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * container->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
+
+            /**
              * @brief Get the size of the container
              * @return Current size of the container
              *
@@ -322,6 +358,28 @@ namespace IME {
              * @see move
              */
             void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the position of the container relative to the
+             *        size of its parent
+             * @param x New x coordinate of the container
+             * @param y New y coordinate of the container
+             * 
+             * The position is specified in percentages as shown below:
+             * 
+             * @code
+             * container->setPosition({"5%", "10%"});
+             * @endcode
+             * 
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the container is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
 
             /**
              * @brief Get the position of the container

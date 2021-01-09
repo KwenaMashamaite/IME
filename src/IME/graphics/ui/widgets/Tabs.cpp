@@ -30,8 +30,8 @@ const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
     Tabs::Tabs() :
-            tabs_{tgui::Tabs::create()},
-            renderer_{std::make_shared<TabsRenderer>()}
+        tabs_{tgui::Tabs::create()},
+        renderer_{std::make_shared<TabsRenderer>()}
     {
         renderer_->setInternalPtr(tabs_->getRenderer());
         initEvents();
@@ -167,6 +167,10 @@ namespace IME::UI {
         tabs_->setSize({width, height});
     }
 
+    void Tabs::setSize(const std::string &width, const std::string &height) {
+        tabs_->setSize({width.c_str(), height.c_str()});
+    }
+
     Vector2f Tabs::getSize() const {
         return {tabs_->getSize().x, tabs_->getSize().y};
     }
@@ -207,6 +211,10 @@ namespace IME::UI {
 
     void Tabs::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void Tabs::setPosition(const std::string &x, const std::string &y) {
+        tabs_->setPosition({x.c_str(), y.c_str()});
     }
 
     Vector2f Tabs::getPosition() const {

@@ -293,17 +293,40 @@ namespace IME {
             void setPosition(float x, float y) override;
 
             /**
+             * @brief Set the position of the window relative to the
+             *        size of its parent
+             * @param x New x coordinate of the window
+             * @param y New y coordinate of the window
+             *
+             * The position is specified in percentages as shown below:
+             *
+             * @code
+             * window->setPosition({"5%", "10%"});
+             * @endcode
+             *
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the window is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
+
+            /**
              * @brief Set the text content of the window
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * @note This function does nothing
              */
             void setText(const std::string &text) override;
 
             /**
              * @brief Get the windows text content
              * @return The windows text content
+             *
+             * @note This function will always return an empty string
              */
             std::string getText() const override;
 
@@ -325,6 +348,20 @@ namespace IME {
              * @param height The height of the window
              */
             void setSize(float width, float height) override;
+
+            /**
+             * @brief Set the size of the window relative to the size of
+             *        its parent
+             * @param width The new width of the window
+             * @param height The new height of the window
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * window->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
 
             /**
              * @brief Get the size of the window

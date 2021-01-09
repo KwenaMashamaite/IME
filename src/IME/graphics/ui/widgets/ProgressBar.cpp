@@ -95,6 +95,10 @@ namespace IME::UI {
         progressBar_->setPosition({x, y});
     }
 
+    void ProgressBar::setPosition(const std::string &x, const std::string &y) {
+        progressBar_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void ProgressBar::setRotation(float angle) {
         progressBar_->setRotation(angle);
     }
@@ -171,6 +175,10 @@ namespace IME::UI {
 
     void ProgressBar::setSize(float width, float height) {
         progressBar_->setSize({width, height});
+    }
+
+    void ProgressBar::setSize(const std::string &width, const std::string &height) {
+        progressBar_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f ProgressBar::getSize() const {

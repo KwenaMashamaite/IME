@@ -140,6 +140,10 @@ namespace IME::UI {
         setPosition(position.x, position.y);
     }
 
+    void BitmapButton::setPosition(const std::string &x, const std::string &y) {
+        button_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void BitmapButton::setTextSize(unsigned int charSize) {
         button_->setTextSize(charSize);
     }
@@ -150,6 +154,10 @@ namespace IME::UI {
 
     void BitmapButton::setSize(float width, float height) {
         button_->setSize({width, height});
+    }
+
+    void BitmapButton::setSize(const std::string &width, const std::string &height) {
+        button_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f BitmapButton::getSize() const {

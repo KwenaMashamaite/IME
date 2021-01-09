@@ -30,16 +30,16 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    Panel::Panel() :
-        panel_{tgui::Panel::create()},
+    Panel::Panel(const std::string& width, const std::string& height) :
+        panel_{tgui::Panel::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<PanelRenderer>()}
     {
         renderer_->setInternalPtr(panel_->getRenderer());
         initEvents();
     }
 
-    Panel::sharedPtr Panel::create() {
-        return std::make_shared<Panel>();
+    Panel::sharedPtr Panel::create(const std::string& width, const std::string& height) {
+        return std::make_shared<Panel>(width, height);
     }
 
     void Panel::setRenderer(std::shared_ptr<PanelRenderer> renderer) {
@@ -70,6 +70,10 @@ namespace IME::UI {
 
     void Panel::setSize(float width, float height) {
         panel_->setSize({width, height});
+    }
+
+    void Panel::setSize(const std::string &width, const std::string &height) {
+        panel_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f Panel::getSize() const {
@@ -112,6 +116,10 @@ namespace IME::UI {
 
     void Panel::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void Panel::setPosition(const std::string &x, const std::string &y) {
+        panel_->setPosition({x.c_str(), y.c_str()});
     }
 
     Vector2f Panel::getPosition() const {

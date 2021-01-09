@@ -312,14 +312,15 @@ namespace IME {
              * @brief Set the text content of the tab
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * @note This function does nothing
              */
             void setText(const std::string &text) override;
 
             /**
              * @brief Get the tabs text content
              * @return The tabs text content
+             *
+             * @note This function will always return an empty string
              */
             std::string getText() const override;
 
@@ -344,6 +345,20 @@ namespace IME {
              * @param height The height of the tab
              */
             void setSize(float width, float height) override;
+
+            /**
+             * @brief Set the size of the tabs relative to the size of
+             *        its parent
+             * @param width The new width of the tabs
+             * @param height The new height of the tabs
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * tabs->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
 
             /**
              * @brief Get the size of the tab
@@ -438,6 +453,28 @@ namespace IME {
              * @see move
              */
             void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the position of the tabs relative to the
+             *        size of its parent
+             * @param x New x coordinate of the tabs
+             * @param y New y coordinate of the tabs
+             * 
+             * The position is specified in percentages as shown below:
+             * 
+             * @code
+             * tabs->setPosition({"5%", "10%"});
+             * @endcode
+             * 
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the tabs is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
 
             /**
              * @brief Get the position of the tab

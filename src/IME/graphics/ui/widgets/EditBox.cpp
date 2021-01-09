@@ -172,6 +172,10 @@ namespace IME::UI {
         setPosition(position.x, position.y);
     }
 
+    void EditBox::setPosition(const std::string &x, const std::string &y) {
+        editBox_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void EditBox::setTextSize(unsigned int charSize) {
         editBox_->setTextSize(charSize);
     }
@@ -182,6 +186,10 @@ namespace IME::UI {
 
     void EditBox::setSize(float width, float height) {
         editBox_->setSize({width, height});
+    }
+
+    void EditBox::setSize(const std::string &width, const std::string &height) {
+        editBox_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f EditBox::getSize() const {

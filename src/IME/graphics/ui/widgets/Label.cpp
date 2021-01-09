@@ -97,6 +97,10 @@ namespace IME::UI {
         setPosition(position.x, position.y);
     }
 
+    void Label::setPosition(const std::string &x, const std::string &y) {
+        label_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void Label::setRotation(float angle) {
         label_->setRotation(angle);
     }
@@ -159,6 +163,10 @@ namespace IME::UI {
 
     void Label::setSize(float width, float height) {
         label_->setSize({width, height});
+    }
+
+    void Label::setSize(const std::string &width, const std::string &height) {
+        label_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f Label::getSize() const {

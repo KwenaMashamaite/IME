@@ -142,6 +142,10 @@ namespace IME::UI {
         setPosition(position.x, position.y);
     }
 
+    void CheckBox::setPosition(const std::string &x, const std::string &y) {
+        checkBox_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void CheckBox::setTextSize(unsigned int charSize) {
         checkBox_->setTextSize(charSize);
     }
@@ -152,6 +156,10 @@ namespace IME::UI {
 
     void CheckBox::setSize(float width, float height) {
         checkBox_->setSize({width, height});
+    }
+
+    void CheckBox::setSize(const std::string &width, const std::string &height) {
+        checkBox_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f CheckBox::getSize() const {

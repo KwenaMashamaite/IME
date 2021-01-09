@@ -30,15 +30,17 @@
 const int fadeAnimDuration_ = 100;
 
 namespace IME::UI {
-    HorizontalLayout::HorizontalLayout(float width, float height) :
-        layout_{tgui::HorizontalLayout::create({width, height})},
+    HorizontalLayout::HorizontalLayout(const std::string& width, const std::string& height) :
+        layout_{tgui::HorizontalLayout::create({width.c_str(), height.c_str()})},
         renderer_{std::make_shared<BoxLayoutRenderer>()}
     {
         renderer_->setInternalPtr(layout_->getRenderer());
         initEvents();
     }
 
-    HorizontalLayout::sharedPtr HorizontalLayout::create(float width, float height) {
+    HorizontalLayout::sharedPtr HorizontalLayout::create(const std::string& width,
+        const std::string& height)
+    {
         return std::make_shared<HorizontalLayout>(width, height);
     }
 
@@ -62,6 +64,12 @@ namespace IME::UI {
 
     void HorizontalLayout::setSize(float width, float height) {
         layout_->setSize({width, height});
+    }
+
+    void HorizontalLayout::setSize(const std::string &width,
+        const std::string &height)
+    {
+        layout_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f HorizontalLayout::getSize() const {
@@ -113,6 +121,10 @@ namespace IME::UI {
 
     void HorizontalLayout::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    void HorizontalLayout::setPosition(const std::string &x, const std::string &y) {
+        layout_->setPosition({x.c_str(), y.c_str()});
     }
 
     void HorizontalLayout::setRotation(float angle) {

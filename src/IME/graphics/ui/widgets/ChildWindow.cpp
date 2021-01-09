@@ -150,6 +150,10 @@ namespace IME::UI {
         window_->setSize({width, height});
     }
 
+    void ChildWindow::setSize(const std::string &width, const std::string &height) {
+        window_->setSize({width.c_str(), height.c_str()});
+    }
+
     Vector2f ChildWindow::getSize() const {
         return {window_->getSize().x, window_->getSize().y};
     }
@@ -195,6 +199,10 @@ namespace IME::UI {
 
     void ChildWindow::setPosition(float x, float y) {
         window_->setPosition({x, y});
+    }
+
+    void ChildWindow::setPosition(const std::string &x, const std::string &y) {
+        window_->setPosition({x.c_str(), y.c_str()});
     }
 
     void ChildWindow::setPosition(Vector2f position) {

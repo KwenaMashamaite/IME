@@ -197,6 +197,20 @@ namespace IME {
             void setSize(float width, float height) override;
 
             /**
+             * @brief Set the size of the edit box relative to the size of
+             *        its parent
+             * @param width The new width of the edit box
+             * @param height The new height of the edit box
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * editbox->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
+
+            /**
              * @brief Get the size of the edit box
              * @return Current size of the edit box
              *
@@ -289,6 +303,28 @@ namespace IME {
              * @see move
              */
             void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the position of the edit box relative to the
+             *        size of its parent
+             * @param x New x coordinate of the edit box
+             * @param y New y coordinate of the edit box
+             * 
+             * The position is specified in percentages as shown below:
+             * 
+             * @code
+             * editbox->setPosition({"5%", "10%"});
+             * @endcode
+             * 
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the edit box is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
 
             /**
              * @brief Get the position of the edit box

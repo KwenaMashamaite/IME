@@ -119,6 +119,10 @@ namespace IME::UI {
         setPosition(position.x, position.y);
     }
 
+    void Slider::setPosition(const std::string &x, const std::string &y) {
+        slider_->setPosition({x.c_str(), y.c_str()});
+    }
+
     void Slider::setRotation(float angle) {
         slider_->setRotation(angle);
     }
@@ -182,6 +186,10 @@ namespace IME::UI {
 
     void Slider::setSize(float width, float height) {
         slider_->setSize({width, height});
+    }
+
+    void Slider::setSize(const std::string &width, const std::string &height) {
+        slider_->setSize({width.c_str(), height.c_str()});
     }
 
     Vector2f Slider::getSize() const {

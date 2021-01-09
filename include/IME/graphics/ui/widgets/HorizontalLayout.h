@@ -33,28 +33,48 @@
 namespace IME {
     namespace UI {
         /**
-         * @brief Container that automatically resizes children to fit the entire
-         *        available space between children. The children are stacked
-         *        horizontally
+         * @brief A widget container that stacks widgets horizontally
+         * 
+         * The widget automatically resizes children to fit the entire 
+         * size of the container
          */
         class IME_API HorizontalLayout : public IBoxLayout {
         public:
             using sharedPtr = std::shared_ptr<HorizontalLayout>; //!< Shared widget pointer
 
             /**
-             * @brief Create a horizontal layout
-             * @param width Width of the layout
-             * @param height Height of the layout
+             * @brief Constructor
+             * @param width Width of the layout relative to the size of its parent
+             * @param height Height of the layout relative to the size of its
+             *        parent
+             * 
+             * The relative position is specified in percentages as shown:
+             * 
+             * @code
+             * HorizontalLayout({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the layout is the same size as its parent
              */
-            HorizontalLayout(float width, float height);
+            explicit HorizontalLayout(const std::string& width = "100%",
+                const std::string& height = "100%");
 
             /**
-             * @brief Create a new horizontal layout widget
-             * @param width Width of the layout
-             * @param height height of the layout
-             * @return The new horizontal layout
+             * @brief Create a new HorizontalLayout widget
+             * @param width Width of the panel relative to the size of its parent
+             * @param height Height of the panel relative to the size of its parent
+             * @return The new HorizontalLayout
+             * 
+             * * The relative position is specified in percentages as shown:
+             * 
+             * @code
+             * HorizontalLayout::create({"50%", "20%"});
+             * @endcode
+             * 
+             * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create(float width, float height);
+            static sharedPtr create(const std::string& width = "100%",
+                const std::string& height = "100%");
 
             /**
              * @brief Set the layout renderer
@@ -82,14 +102,15 @@ namespace IME {
              * @brief Set the text content of the layout
              * @param text New text content
              *
-             * This function will overwrite any text that was previously
-             * set
+             * @note This function does nothing
              */
             void setText(const std::string &text) override;
 
             /**
              * @brief Get the layouts text content
              * @return The layouts text content
+             *
+             * @note This function will always return an empty string
              */
             std::string getText() const override;
 
@@ -111,6 +132,20 @@ namespace IME {
              * @param height The height of the layout
              */
             void setSize(float width, float height) override;
+
+            /**
+             * @brief Set the size of the layout relative to the size of
+             *        its parent
+             * @param width The new width of the layout
+             * @param height The new height of the layout
+             *
+             * The size is specified in percentages as shown below:
+             *
+             * @code
+             * layout->setSize({"20%", "5%"});
+             * @endcode
+             */
+            void setSize(const std::string& width, const std::string& height) override;
 
             /**
              * @brief Get the size of the layout
@@ -205,6 +240,28 @@ namespace IME {
              * @see move
              */
             void setPosition(Vector2f position) override;
+
+            /**
+             * @brief Set the position of the layout relative to the
+             *        size of its parent
+             * @param x New x coordinate of the layout
+             * @param y New y coordinate of the layout
+             * 
+             * The position is specified in percentages as shown below:
+             * 
+             * @code
+             * layout->setPosition({"5%", "10%"});
+             * @endcode
+             * 
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the layout is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
 
             /**
              * @brief Get the position of the layout
