@@ -178,7 +178,7 @@ namespace ime::ui {
         return button_->getTextSize();
     }
 
-    std::string Button::getType() const {
+    std::string Button::getWidgetType() const {
         return "Button";
     }
 

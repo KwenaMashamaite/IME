@@ -194,7 +194,7 @@ namespace ime::ui {
         return progressBar_->getTextSize();
     }
 
-    std::string ProgressBar::getType() const {
+    std::string ProgressBar::getWidgetType() const {
         return "ProgressBar";
     }
 

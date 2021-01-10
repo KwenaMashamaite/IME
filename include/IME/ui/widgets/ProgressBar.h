@@ -290,7 +290,7 @@ namespace ime {
              * @brief Get the type of the progress bar
              * @return The type of the progress bar
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden progress bar

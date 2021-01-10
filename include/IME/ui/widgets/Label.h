@@ -303,7 +303,7 @@ namespace ime {
              * @brief Get the type of the label
              * @return The type of the label
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden label

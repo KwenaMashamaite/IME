@@ -85,7 +85,7 @@ namespace ime::ui {
         return label_->getMaximumTextWidth();
     }
 
-    std::string Label::getType() const {
+    std::string Label::getWidgetType() const {
         return "Label";
     }
 

@@ -300,7 +300,7 @@ namespace ime {
              * @brief Get the type of the edit box
              * @return The type of the edit box
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden edit box

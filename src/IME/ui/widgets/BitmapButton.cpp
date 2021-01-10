@@ -172,7 +172,7 @@ namespace ime::ui {
         return button_->getTextSize();
     }
 
-    std::string BitmapButton::getType() const {
+    std::string BitmapButton::getWidgetType() const {
         return "BitmapButton";
     }
 

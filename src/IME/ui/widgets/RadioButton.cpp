@@ -116,7 +116,7 @@ namespace ime::ui {
         button_->setHeight(height.c_str());
     }
 
-    std::string RadioButton::getType() const {
+    std::string RadioButton::getWidgetType() const {
         return "RadioButton";
     }
 

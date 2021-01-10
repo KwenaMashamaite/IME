@@ -92,7 +92,7 @@ namespace ime::ui {
         panel_->setHeight(height.c_str());
     }
 
-    std::string Panel::getType() const {
+    std::string Panel::getWidgetType() const {
         return "Panel";
     }
 

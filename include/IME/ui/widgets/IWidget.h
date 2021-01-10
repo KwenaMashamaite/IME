@@ -171,7 +171,7 @@ namespace ime {
              * @brief Get the type of the widget
              * @return The type of the widget
              */
-            virtual std::string getType() const = 0;
+            virtual std::string getWidgetType() const = 0;
 
             /**
              * @brief Show a hidden widget

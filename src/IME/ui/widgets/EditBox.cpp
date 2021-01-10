@@ -205,7 +205,7 @@ namespace ime::ui {
         return editBox_->getTextSize();
     }
 
-    std::string EditBox::getType() const {
+    std::string EditBox::getWidgetType() const {
         return "EditBox";
     }
 

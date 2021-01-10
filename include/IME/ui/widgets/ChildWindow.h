@@ -433,7 +433,7 @@ namespace ime {
              * @brief Get the type of the window
              * @return The type of the window
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden window

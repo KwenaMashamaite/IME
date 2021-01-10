@@ -215,7 +215,7 @@ namespace ime {
              * @brief Get the type of the layout
              * @return The type of the layout
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden layout

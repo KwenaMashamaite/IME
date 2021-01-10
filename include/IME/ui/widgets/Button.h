@@ -207,7 +207,7 @@ namespace ime {
              * @brief Get the type of the button
              * @return The type of the button
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden button

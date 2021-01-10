@@ -178,7 +178,7 @@ namespace ime::ui {
         return window_->getTextSize();
     }
 
-    std::string ChildWindow::getType() const {
+    std::string ChildWindow::getWidgetType() const {
         return "ChildWindow";
     }
 

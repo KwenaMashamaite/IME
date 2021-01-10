@@ -130,7 +130,7 @@ namespace ime::ui {
         picture_->setHeight(height.c_str());
     }
 
-    std::string Picture::getType() const {
+    std::string Picture::getWidgetType() const {
         return "Picture";
     }
 

@@ -316,7 +316,7 @@ namespace ime {
              * @brief Get the type of the slider
              * @return The type of the slider
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden slider

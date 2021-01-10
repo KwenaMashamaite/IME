@@ -274,7 +274,7 @@ namespace ime {
              * @brief Get the type of the picture
              * @return The type of the picture
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden picture

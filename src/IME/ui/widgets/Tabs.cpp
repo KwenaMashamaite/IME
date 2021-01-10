@@ -187,7 +187,7 @@ namespace ime::ui {
         tabs_->setHeight(height.c_str());
     }
 
-    std::string Tabs::getType() const {
+    std::string Tabs::getWidgetType() const {
         return "Tab";
     }
 

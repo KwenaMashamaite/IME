@@ -174,7 +174,7 @@ namespace ime::ui {
         return checkBox_->getTextSize();
     }
 
-    std::string CheckBox::getType() const {
+    std::string CheckBox::getWidgetType() const {
         return "CheckBox";
     }
 

@@ -427,7 +427,7 @@ namespace ime {
              * @brief Get the type of the tab
              * @return The type of the tab
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden tab

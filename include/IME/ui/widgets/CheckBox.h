@@ -233,7 +233,7 @@ namespace ime {
              * @brief Get the type of the check box
              * @return The type of the check box
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden check box

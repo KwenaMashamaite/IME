@@ -96,7 +96,7 @@ namespace ime::ui {
         return layout_->getTextSize();
     }
 
-    std::string HorizontalLayout::getType() const {
+    std::string HorizontalLayout::getWidgetType() const {
         return "HorizontalLayout";
     }
 

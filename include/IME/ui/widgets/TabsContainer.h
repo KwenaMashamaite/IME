@@ -333,7 +333,7 @@ namespace ime {
              * @brief Get the type of the container
              * @return The type of the container
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden container

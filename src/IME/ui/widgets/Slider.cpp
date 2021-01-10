@@ -218,7 +218,7 @@ namespace ime::ui {
         slider_->setVisible(!slider_->isVisible());
     }
 
-    std::string Slider::getType() const {
+    std::string Slider::getWidgetType() const {
         return "Slider";
     }
 

@@ -94,7 +94,7 @@ namespace ime::ui {
         return layout_->getTextSize();
     }
 
-    std::string VerticalLayout::getType() const {
+    std::string VerticalLayout::getWidgetType() const {
         return "VerticalLayout";
     }
 

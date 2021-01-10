@@ -217,7 +217,7 @@ namespace ime {
              * @brief Get the type of the panel
              * @return The type of the panel
              */
-            std::string getType() const override;
+            std::string getWidgetType() const override;
 
             /**
              * @brief Show a hidden panel
