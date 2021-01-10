@@ -23,13 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ProgressBar.h"
-#include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
-#include <TGUI/GuiBase.hpp>
 #include <cassert>
-
-//How long the progress bar takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
 
 namespace ime::ui {
     ProgressBar::ProgressBar(const std::string& text) :
@@ -138,18 +132,6 @@ namespace ime::ui {
             progressBar_->getScale().y + factorY});
     }
 
-    void ProgressBar::hide() {
-        progressBar_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    void ProgressBar::show() {
-        progressBar_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    bool ProgressBar::isHidden() const {
-        return !progressBar_->isVisible();
-    }
-
     void ProgressBar::setEnabled(bool isEnable) {
         progressBar_->setEnabled(isEnable);
     }
@@ -196,6 +178,26 @@ namespace ime::ui {
 
     std::string ProgressBar::getWidgetType() const {
         return "ProgressBar";
+    }
+
+    void ProgressBar::showWithEffect(ShowAnimationType type, int duration) {
+        progressBar_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void ProgressBar::hideWithEffect(ShowAnimationType type, int duration) {
+        progressBar_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool ProgressBar::isAnimationPlaying() const {
+        return progressBar_->isAnimationPlaying();
+    }
+
+    void ProgressBar::setVisible(bool visible) {
+        progressBar_->setVisible(visible);
+    }
+
+    bool ProgressBar::isVisible() const {
+        return progressBar_->isVisible();
     }
 
     void ProgressBar::toggleVisibility() {

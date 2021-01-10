@@ -23,11 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/EditBox.h"
-#include "IME/core/managers/ResourceManager.h"
-#include <TGUI/GuiBase.hpp>
-
-//How long the edit box takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
+#include <cassert>
 
 namespace ime::ui {
     EditBox::EditBox(const std::string& defaultText) :
@@ -143,20 +139,6 @@ namespace ime::ui {
             editBox_->getScale().y + factorY});
     }
 
-    void EditBox::hide() {
-        editBox_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    void EditBox::show() {
-        editBox_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    bool EditBox::isHidden() const {
-        return !editBox_->isVisible();
-    }
-
     void EditBox::setEnabled(bool isEnable) {
         editBox_->setEnabled(isEnable);
     }
@@ -207,6 +189,26 @@ namespace ime::ui {
 
     std::string EditBox::getWidgetType() const {
         return "EditBox";
+    }
+
+    void EditBox::showWithEffect(ShowAnimationType type, int duration) {
+        editBox_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void EditBox::hideWithEffect(ShowAnimationType type, int duration) {
+        editBox_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool EditBox::isAnimationPlaying() const {
+        return editBox_->isAnimationPlaying();
+    }
+
+    void EditBox::setVisible(bool visible) {
+        editBox_->setVisible(visible);
+    }
+
+    bool EditBox::isVisible() const {
+        return editBox_->isVisible();
     }
 
     void EditBox::toggleVisibility() {

@@ -25,9 +25,6 @@
 #include "IME/ui/widgets/TabsContainer.h"
 #include <cassert>
 
-//How long the tabs container take before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
         tabContainer_{tgui::TabContainer::create({width.c_str(), height.c_str()})},
@@ -173,21 +170,27 @@ namespace ime::ui {
     }
 
     std::string TabsContainer::getWidgetType() const {
-        return "Tab";
+        return "TabsContainer";
     }
 
-    void TabsContainer::show() {
-        tabContainer_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void TabsContainer::showWithEffect(ShowAnimationType type, int duration) {
+        tabContainer_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    void TabsContainer::hide() {
-        tabContainer_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void TabsContainer::hideWithEffect(ShowAnimationType type, int duration) {
+        tabContainer_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    bool TabsContainer::isHidden() const {
-        return !tabContainer_->isVisible();
+    bool TabsContainer::isAnimationPlaying() const {
+        return tabContainer_->isAnimationPlaying();
+    }
+
+    void TabsContainer::setVisible(bool visible) {
+        tabContainer_->setVisible(visible);
+    }
+
+    bool TabsContainer::isVisible() const {
+        return tabContainer_->isVisible();
     }
 
     void TabsContainer::toggleVisibility() {

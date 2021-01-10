@@ -306,30 +306,74 @@ namespace ime {
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show a hidden label
+             * @brief Show the label with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
              *
-             * This function will reveal the label that was hidden prior to
-             * function call. Calling this function on a label that is not
-             * hidden has no effect
+             * The animation will be played if the label currently
+             * visible
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the label
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see hideWithEffect
+             * @see isAnimationPlaying
              */
-            void show() override;
+            void showWithEffect(ShowAnimationType type, int duration) override;
 
             /**
-             * @brief Hide label
+             * @brief Hide the label with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
+             *
+             * The animation will also be played if the label currently
+             * hidden but it will not be seen
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the label
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see showWithEffect
+             * @see isAnimationPlaying
              */
-            void hide() override;
+            void hideWithEffect(ShowAnimationType type, int duration) override;
 
             /**
-             * @brief Check if the label is hidden or not
-             * @return True if the label is hidden, otherwise false
+             * @brief Check whether or not an animation is currently playing
+             * @return True if an animation is playing, otherwise false
+             *
+             * @see showWithEffect
+             * @see hideWithEffect
              */
-            bool isHidden() const override;
+            bool isAnimationPlaying() const override;
+
+            /**
+             * @brief Show or hide a label
+             * @param visible True to show or false to hide
+             *
+             * If the label is hidden, it won't receive events
+             * (and thus won't send callbacks) nor will it be drawn
+             *
+             * The label is visible by default.
+             */
+            void setVisible(bool visible) override;
+
+            /**
+             * @brief Check if the label is visible or not
+             * @return True if the label is visible or false if hidden
+             */
+            bool isVisible() const override;
 
             /**
              * @brief Toggle the visibility of the label
              *
              * This function will hide the label if its currently
              * visible and vice versa
+             * 
+             * @see setVisible
              */
             void toggleVisibility() override;
 

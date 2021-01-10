@@ -26,9 +26,6 @@
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
-//How long the picture takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     Picture::Picture() :
         picture_{tgui::Picture::create()},
@@ -134,18 +131,24 @@ namespace ime::ui {
         return "Picture";
     }
 
-    void Picture::show() {
-        picture_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Picture::showWithEffect(ShowAnimationType type, int duration) {
+        picture_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    void Picture::hide() {
-        picture_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Picture::hideWithEffect(ShowAnimationType type, int duration) {
+        picture_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    bool Picture::isHidden() const {
-        return !picture_->isVisible();
+    bool Picture::isAnimationPlaying() const {
+        return picture_->isAnimationPlaying();
+    }
+
+    void Picture::setVisible(bool visible) {
+        picture_->setVisible(visible);
+    }
+
+    bool Picture::isVisible() const {
+        return picture_->isVisible();
     }
 
     void Picture::toggleVisibility() {

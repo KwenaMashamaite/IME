@@ -430,30 +430,74 @@ namespace ime {
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show a hidden tab
+             * @brief Show the tabs with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
              *
-             * This function will reveal the tab that was hidden prior to
-             * function call. Calling this function on a tab that is not
-             * hidden has no effect
-             */
-            void show() override;
-
-            /**
-             * @brief Hide tab
-             */
-            void hide() override;
-
-            /**
-             * @brief Check if the tab is hidden or not
-             * @return True if the tab is hidden, otherwise false
-             */
-            bool isHidden() const override;
-
-            /**
-             * @brief Toggle the visibility of the tab
+             * The animation will be played if the tabs currently
+             * visible
              *
-             * This function will hide the tab if its currently
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the tabs
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see hideWithEffect
+             * @see isAnimationPlaying
+             */
+            void showWithEffect(ShowAnimationType type, int duration) override;
+
+            /**
+             * @brief Hide the tabs with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
+             *
+             * The animation will also be played if the tabs currently
+             * hidden but it will not be seen
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the tabs
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see showWithEffect
+             * @see isAnimationPlaying
+             */
+            void hideWithEffect(ShowAnimationType type, int duration) override;
+
+            /**
+             * @brief Check whether or not an animation is currently playing
+             * @return True if an animation is playing, otherwise false
+             *
+             * @see showWithEffect
+             * @see hideWithEffect
+             */
+            bool isAnimationPlaying() const override;
+
+            /**
+             * @brief Show or hide a tabs
+             * @param visible True to show or false to hide
+             *
+             * If the tabs is hidden, it won't receive events
+             * (and thus won't send callbacks) nor will it be drawn
+             *
+             * The tabs is visible by default.
+             */
+            void setVisible(bool visible) override;
+
+            /**
+             * @brief Check if the tabs is visible or not
+             * @return True if the tabs is visible or false if hidden
+             */
+            bool isVisible() const override;
+
+            /**
+             * @brief Toggle the visibility of the tabs
+             *
+             * This function will hide the tabs if its currently
              * visible and vice versa
+             * 
+             * @see setVisible
              */
             void toggleVisibility() override;
 

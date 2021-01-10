@@ -436,30 +436,74 @@ namespace ime {
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show a hidden window
+             * @brief Show the window with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
              *
-             * This function will reveal the window that was hidden prior to
-             * function call. Calling this function on a window that is not
-             * hidden has no effect
+             * The animation will be played if the window currently
+             * visible
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the window
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see hideWithEffect
+             * @see isAnimationPlaying
              */
-            void show() override;
+            void showWithEffect(ShowAnimationType type, int duration) override;
 
             /**
-             * @brief Hide window
+             * @brief Hide the window with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
+             *
+             * The animation will also be played if the window currently
+             * hidden but it will not be seen
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the window
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see showWithEffect
+             * @see isAnimationPlaying
              */
-            void hide() override;
+            void hideWithEffect(ShowAnimationType type, int duration) override;
 
             /**
-             * @brief Check if the window is hidden or not
-             * @return True if the window is hidden, otherwise false
+             * @brief Check whether or not an animation is currently playing
+             * @return True if an animation is playing, otherwise false
+             *
+             * @see showWithEffect
+             * @see hideWithEffect
              */
-            bool isHidden() const override;
+            bool isAnimationPlaying() const override;
+
+            /**
+             * @brief Show or hide a window
+             * @param visible True to show or false to hide
+             *
+             * If the window is hidden, it won't receive events
+             * (and thus won't send callbacks) nor will it be drawn
+             *
+             * The window is visible by default.
+             */
+            void setVisible(bool visible) override;
+
+            /**
+             * @brief Check if the window is visible or not
+             * @return True if the window is visible or false if hidden
+             */
+            bool isVisible() const override;
 
             /**
              * @brief Toggle the visibility of the window
              *
              * This function will hide the window if its currently
              * visible and vice versa
+             *
+             * @see setVisible
              */
             void toggleVisibility() override;
 

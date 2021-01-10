@@ -23,13 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Label.h"
-#include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
-#include <TGUI/GuiBase.hpp>
 #include <cassert>
-
-//How long the label takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
 
 namespace ime::ui {
     Label::Label(const std::string &text) :
@@ -89,6 +83,26 @@ namespace ime::ui {
         return "Label";
     }
 
+    void Label::showWithEffect(ShowAnimationType type, int duration) {
+        label_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void Label::hideWithEffect(ShowAnimationType type, int duration) {
+        label_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool Label::isAnimationPlaying() const {
+        return label_->isAnimationPlaying();
+    }
+
+    void Label::setVisible(bool visible) {
+        label_->setVisible(visible);
+    }
+
+    bool Label::isVisible() const {
+        return label_->isVisible();
+    }
+
     void Label::setPosition(float x, float y) {
         label_->setPosition({x, y});
     }
@@ -137,20 +151,6 @@ namespace ime::ui {
     void Label::scale(float factorX, float factorY) {
         label_->setScale({label_->getScale().x + factorX,
             label_->getScale().y + factorY});
-    }
-
-    void Label::hide() {
-        label_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    void Label::show() {
-        label_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    bool Label::isHidden() const {
-        return !label_->isVisible();
     }
 
     void Label::setTextSize(unsigned int charSize) {

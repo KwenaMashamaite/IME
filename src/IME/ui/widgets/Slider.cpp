@@ -23,13 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Slider.h"
-#include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
 #include <cassert>
-#include <TGUI/GuiBase.hpp>
-
-//How long the button takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
 
 namespace ime::ui {
     Slider::Slider(float minValue, float maxValue) :
@@ -164,20 +158,6 @@ namespace ime::ui {
             slider_->getScale().y + factorY});
     }
 
-    void Slider::hide() {
-        slider_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    void Slider::show() {
-        slider_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    bool Slider::isHidden() const {
-        return !slider_->isVisible();
-    }
-
     void Slider::setSize(float width, float height) {
         slider_->setSize({width, height});
     }
@@ -220,6 +200,26 @@ namespace ime::ui {
 
     std::string Slider::getWidgetType() const {
         return "Slider";
+    }
+
+    void Slider::showWithEffect(ShowAnimationType type, int duration) {
+        slider_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void Slider::hideWithEffect(ShowAnimationType type, int duration) {
+        slider_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool Slider::isAnimationPlaying() const {
+        return slider_->isAnimationPlaying();
+    }
+
+    void Slider::setVisible(bool visible) {
+        slider_->setVisible(visible);
+    }
+
+    bool Slider::isVisible() const {
+        return slider_->isVisible();
     }
 
     bool Slider::contains(float x, float y) const {

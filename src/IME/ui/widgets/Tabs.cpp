@@ -25,9 +25,6 @@
 #include "IME/ui/widgets/Tabs.h"
 #include <cassert>
 
-//How long the tabs take before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     Tabs::Tabs() :
         tabs_{tgui::Tabs::create()},
@@ -188,21 +185,27 @@ namespace ime::ui {
     }
 
     std::string Tabs::getWidgetType() const {
-        return "Tab";
+        return "Tabs";
     }
 
-    void Tabs::show() {
-        tabs_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Tabs::showWithEffect(ShowAnimationType type, int duration) {
+        tabs_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    void Tabs::hide() {
-        tabs_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Tabs::hideWithEffect(ShowAnimationType type, int duration) {
+        tabs_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    bool Tabs::isHidden() const {
-        return !tabs_->isVisible();
+    bool Tabs::isAnimationPlaying() const {
+        return tabs_->isAnimationPlaying();
+    }
+
+    void Tabs::setVisible(bool visible) {
+        tabs_->setVisible(visible);
+    }
+
+    bool Tabs::isVisible() const {
+        return tabs_->isVisible();
     }
 
     void Tabs::toggleVisibility() {

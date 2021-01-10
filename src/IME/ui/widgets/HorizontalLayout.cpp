@@ -26,9 +26,6 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-//How long the edit box takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     HorizontalLayout::HorizontalLayout(const std::string& width, const std::string& height) :
         layout_{tgui::HorizontalLayout::create({width.c_str(), height.c_str()})},
@@ -100,27 +97,32 @@ namespace ime::ui {
         return "HorizontalLayout";
     }
 
+    void HorizontalLayout::showWithEffect(ShowAnimationType type, int duration) {
+        layout_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void HorizontalLayout::hideWithEffect(ShowAnimationType type, int duration) {
+        layout_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool HorizontalLayout::isAnimationPlaying() const {
+        return layout_->isAnimationPlaying();
+    }
+
+    void HorizontalLayout::setVisible(bool visible) {
+        layout_->setVisible(visible);
+    }
+
+    bool HorizontalLayout::isVisible() const {
+        return layout_->isVisible();
+    }
+
     void HorizontalLayout::toggleVisibility() {
-        if (isHidden())
-            show();
-        else
-            hide();
+        layout_->setVisible(!layout_->isVisible());
     }
 
     bool HorizontalLayout::contains(float x, float y) const {
         return layout_->isMouseOnWidget({x, y});
-    }
-
-    void HorizontalLayout::hide() {
-        layout_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    void HorizontalLayout::show() {
-        layout_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    bool HorizontalLayout::isHidden() const {
-        return !layout_->isVisible();
     }
 
     void HorizontalLayout::setPosition(float x, float y) {

@@ -26,9 +26,6 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-//How long the edit box takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
         layout_{tgui::VerticalLayout::create({width.c_str(), height.c_str()})},
@@ -98,27 +95,32 @@ namespace ime::ui {
         return "VerticalLayout";
     }
 
+    void VerticalLayout::showWithEffect(ShowAnimationType type, int duration) {
+        layout_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void VerticalLayout::hideWithEffect(ShowAnimationType type, int duration) {
+        layout_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool VerticalLayout::isAnimationPlaying() const {
+        return layout_->isAnimationPlaying();
+    }
+
+    void VerticalLayout::setVisible(bool visible) {
+        layout_->setVisible(visible);
+    }
+
+    bool VerticalLayout::isVisible() const {
+        return layout_->isVisible();
+    }
+
     void VerticalLayout::toggleVisibility() {
-        if (isHidden())
-            show();
-        else
-            hide();
+        layout_->setVisible(!layout_->isVisible());
     }
 
     bool VerticalLayout::contains(float x, float y) const {
         return layout_->isMouseOnWidget({x, y});
-    }
-
-    void VerticalLayout::hide() {
-        layout_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    void VerticalLayout::show() {
-        layout_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    bool VerticalLayout::isHidden() const {
-        return !layout_->isVisible();
     }
 
     void VerticalLayout::setPosition(float x, float y) {

@@ -23,13 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/CheckBox.h"
-#include "IME/core/managers/ResourceManager.h"
-#include "IME/utility/Helpers.h"
-#include <TGUI/GuiBase.hpp>
 #include <cassert>
-
-//How long the edit box takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
 
 namespace ime::ui {
     CheckBox::CheckBox(const std::string &text) :
@@ -112,20 +106,6 @@ namespace ime::ui {
             checkBox_->getScale().y + factorY});
     }
 
-    void CheckBox::hide() {
-        checkBox_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    void CheckBox::show() {
-        checkBox_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    bool CheckBox::isHidden() const {
-        return !checkBox_->isVisible();
-    }
-
     void CheckBox::setEnabled(bool isEnable) {
         checkBox_->setEnabled(isEnable);
     }
@@ -176,6 +156,26 @@ namespace ime::ui {
 
     std::string CheckBox::getWidgetType() const {
         return "CheckBox";
+    }
+
+    void CheckBox::showWithEffect(ShowAnimationType type, int duration) {
+        checkBox_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void CheckBox::hideWithEffect(ShowAnimationType type, int duration) {
+        checkBox_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool CheckBox::isAnimationPlaying() const {
+        return checkBox_->isAnimationPlaying();
+    }
+
+    void CheckBox::setVisible(bool visible) {
+        checkBox_->setVisible(visible);
+    }
+
+    bool CheckBox::isVisible() const {
+        return checkBox_->isVisible();
     }
 
     void CheckBox::toggleVisibility() {

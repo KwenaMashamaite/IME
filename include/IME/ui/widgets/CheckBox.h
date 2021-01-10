@@ -236,30 +236,74 @@ namespace ime {
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show a hidden check box
+             * @brief Show the checkbox with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
              *
-             * This function will reveal the check box that was hidden prior to
-             * function call. Calling this function on a check box that is not
-             * hidden has no effect
-             */
-            void show() override;
-
-            /**
-             * @brief Hide check box
-             */
-            void hide() override;
-
-            /**
-             * @brief Check if the check box is hidden or not
-             * @return True if the check box is hidden, otherwise false
-             */
-            bool isHidden() const override;
-
-            /**
-             * @brief Toggle the visibility of the check box
+             * The animation will be played if the checkbox currently
+             * visible
              *
-             * This function will hide the check box if its currently
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the checkbox
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see hideWithEffect
+             * @see isAnimationPlaying
+             */
+            void showWithEffect(ShowAnimationType type, int duration) override;
+
+            /**
+             * @brief Hide the checkbox with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
+             *
+             * The animation will also be played if the checkbox currently
+             * hidden but it will not be seen
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the checkbox
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see showWithEffect
+             * @see isAnimationPlaying
+             */
+            void hideWithEffect(ShowAnimationType type, int duration) override;
+
+            /**
+             * @brief Check whether or not an animation is currently playing
+             * @return True if an animation is playing, otherwise false
+             *
+             * @see showWithEffect
+             * @see hideWithEffect
+             */
+            bool isAnimationPlaying() const override;
+
+            /**
+             * @brief Show or hide a checkbox
+             * @param visible True to show or false to hide
+             *
+             * If the checkbox is hidden, it won't receive events
+             * (and thus won't send callbacks) nor will it be drawn
+             *
+             * The checkbox is visible by default.
+             */
+            void setVisible(bool visible) override;
+
+            /**
+             * @brief Check if the checkbox is visible or not
+             * @return True if the checkbox is visible or false if hidden
+             */
+            bool isVisible() const override;
+
+            /**
+             * @brief Toggle the visibility of the checkbox
+             *
+             * This function will hide the checkbox if its currently
              * visible and vice versa
+             *
+             * @see setVisible
              */
             void toggleVisibility() override;
 

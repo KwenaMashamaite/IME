@@ -25,9 +25,6 @@
 #include "IME/ui/widgets/RadioButton.h"
 #include <cassert>
 
-//How long the radio button takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     RadioButton::RadioButton(const std::string &buttonText) :
         button_{tgui::RadioButton::create()},
@@ -120,18 +117,24 @@ namespace ime::ui {
         return "RadioButton";
     }
 
-    void RadioButton::show() {
-        button_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void RadioButton::showWithEffect(ShowAnimationType type, int duration) {
+        button_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    void RadioButton::hide() {
-        button_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void RadioButton::hideWithEffect(ShowAnimationType type, int duration) {
+        button_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    bool RadioButton::isHidden() const {
-        return !button_->isVisible();
+    bool RadioButton::isAnimationPlaying() const {
+        return button_->isAnimationPlaying();
+    }
+
+    void RadioButton::setVisible(bool visible) {
+        button_->setVisible(visible);
+    }
+
+    bool RadioButton::isVisible() const {
+        return button_->isVisible();
     }
 
     void RadioButton::toggleVisibility() {

@@ -23,13 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/BitmapButton.h"
-#include "IME/utility/Helpers.h"
-#include <TGUI/GuiBase.hpp>
 #include "IME/core/managers/ResourceManager.h"
 #include <cassert>
-
-//How long the button takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
 
 namespace ime::ui {
     BitmapButton::BitmapButton(const std::string &buttonText) :
@@ -112,18 +107,6 @@ namespace ime::ui {
     button_->getScale().y + factorY});
     }
 
-    void BitmapButton::hide() {
-        button_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    void BitmapButton::show() {
-        button_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    bool BitmapButton::isHidden() const {
-        return !button_->isVisible();
-    }
-
     void BitmapButton::setEnabled(bool isEnable) {
         button_->setEnabled(isEnable);
     }
@@ -174,6 +157,26 @@ namespace ime::ui {
 
     std::string BitmapButton::getWidgetType() const {
         return "BitmapButton";
+    }
+
+    void BitmapButton::showWithEffect(ShowAnimationType type, int duration) {
+        button_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void BitmapButton::hideWithEffect(ShowAnimationType type, int duration) {
+        button_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool BitmapButton::isAnimationPlaying() const {
+        return button_->isAnimationPlaying();
+    }
+
+    void BitmapButton::setVisible(bool visible) {
+        button_->setVisible(visible);
+    }
+
+    bool BitmapButton::isVisible() const {
+        return button_->isVisible();
     }
 
     void BitmapButton::toggleVisibility() {

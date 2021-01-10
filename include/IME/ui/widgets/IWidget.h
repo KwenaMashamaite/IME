@@ -34,6 +34,20 @@
 #include <string>
 
 namespace ime {
+    enum class ShowAnimationType {
+        Fade,          //!< Fade widget in or out
+        Scale,         //!< Shrink to the center of the widget to hide or grow from its center to show
+        SlideToRight,  //!< Slide to the right to hide or from left to show
+        SlideToLeft,   //!< Slide to the left to hide or from right to show
+        SlideToBottom, //!< Slide to the bottom to hide or from top to show
+        SlideToTop,    //!< Slide to the top to hide or from bottom to show
+
+        SlideFromLeft = SlideToRight, //!< Slide from left to show or to the right to hide
+        SlideFromRight = SlideToLeft, //!< Slide from right to show or to the left to hide
+        SlideFromTop = SlideToBottom, //!< Slide from top to show or to the bottom to hide
+        SlideFromBottom = SlideToTop  //!< Slide from bottom to show or to the top to hide
+    };
+
     namespace ui {
         /**
          * @brief Abstract base class for Graphical User Interface (GUI) elements
@@ -174,30 +188,74 @@ namespace ime {
             virtual std::string getWidgetType() const = 0;
 
             /**
-             * @brief Show a hidden widget
+             * @brief Show the widget with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
              *
-             * This function will reveal the widget that was hidden prior to
-             * function call. Calling this function on an widget that is not
-             * hidden has no effect
+             * The animation will be played if the widget currently
+             * visible
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the widget
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see hideWithEffect
+             * @see isAnimationPlaying
              */
-            virtual void show() = 0;
+            virtual void showWithEffect(ShowAnimationType type, int duration) = 0;
 
             /**
-             * @brief Hide widget
+             * @brief Hide the widget with an animation
+             * @param type Type of the animation
+             * @param duration Duration of the animation in milliseconds
+             *
+             * The animation will also be played if the widget currently
+             * hidden but it will not be seen
+             *
+             * @note During the animation the position, size and/or opacity
+             * opacity may change. Once the animation is done the widget
+             * will be back in the state in which it was when this function
+             * was called
+             *
+             * @see showWithEffect
+             * @see isAnimationPlaying
              */
-            virtual void hide() = 0;
+            virtual void hideWithEffect(ShowAnimationType type, int duration) = 0;
 
             /**
-             * @brief Check if the widget is hidden or not
-             * @return True if the widget is hidden, otherwise false
+             * @brief Check whether or not an animation is currently playing
+             * @return True if an animation is playing, otherwise false
+             *
+             * @see showWithEffect
+             * @see hideWithEffect
              */
-            virtual bool isHidden() const = 0;
+            virtual bool isAnimationPlaying() const = 0;
+
+            /**
+             * @brief Show or hide a widget
+             * @param visible True to show or false to hide
+             *
+             * If the widget is hidden, it won't receive events
+             * (and thus won't send callbacks) nor will it be drawn
+             *
+             * The widget is visible by default.
+             */
+            virtual void setVisible(bool visible) = 0;
+
+            /**
+             * @brief Check if the widget is visible or not
+             * @return True if the widget is visible or false if hidden
+             */
+            virtual bool isVisible() const = 0;
 
             /**
              * @brief Toggle the visibility of the widget
              *
              * This function will hide the widget if its currently
              * visible and vice versa
+             *
+             * @see setVisible
              */
             virtual void toggleVisibility() = 0;
 

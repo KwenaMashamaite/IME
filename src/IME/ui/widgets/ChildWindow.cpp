@@ -26,9 +26,6 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-//How long the edit box takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons) :
         window_{tgui::ChildWindow::create(title, titleButtons)},
@@ -182,27 +179,32 @@ namespace ime::ui {
         return "ChildWindow";
     }
 
+    void ChildWindow::showWithEffect(ShowAnimationType type, int duration) {
+        window_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void ChildWindow::hideWithEffect(ShowAnimationType type, int duration) {
+        window_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool ChildWindow::isAnimationPlaying() const {
+        return window_->isAnimationPlaying();
+    }
+
+    void ChildWindow::setVisible(bool visible) {
+        window_->setVisible(visible);
+    }
+
+    bool ChildWindow::isVisible() const {
+        return window_->isVisible();
+    }
+
     void ChildWindow::toggleVisibility() {
-        if (isHidden())
-            show();
-        else
-            hide();
+        window_->setVisible(!window_->isVisible());
     }
 
     bool ChildWindow::contains(float x, float y) const {
         return window_->isMouseOnWidget({x, y});
-    }
-
-    void ChildWindow::hide() {
-        window_->hideWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    void ChildWindow::show() {
-        window_->showWithEffect(tgui::ShowAnimationType::Fade, fadeAnimDuration_);
-    }
-
-    bool ChildWindow::isHidden() const {
-        return !window_->isVisible();
     }
 
     void ChildWindow::setPosition(float x, float y) {

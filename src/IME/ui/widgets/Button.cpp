@@ -22,13 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-//How long the button takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 #include "IME/ui/widgets/Button.h"
-#include "IME/utility/Helpers.h"
-#include <TGUI/GuiBase.hpp>
-#include "IME/core/managers/ResourceManager.h"
 #include <cassert>
 
 namespace ime::ui {
@@ -94,20 +88,6 @@ namespace ime::ui {
     void Button::scale(float factorX, float factorY) {
         button_->setScale({button_->getScale().x + factorX,
             button_->getScale().y + factorY});
-    }
-
-    void Button::hide() {
-        button_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    void Button::show() {
-        button_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
-    }
-
-    bool Button::isHidden() const {
-        return !button_->isVisible();
     }
 
     void Button::setEnabled(bool isEnable) {
@@ -180,6 +160,26 @@ namespace ime::ui {
 
     std::string Button::getWidgetType() const {
         return "Button";
+    }
+
+    void Button::showWithEffect(ShowAnimationType type, int duration) {
+        button_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    void Button::hideWithEffect(ShowAnimationType type, int duration) {
+        button_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
+    }
+
+    bool Button::isAnimationPlaying() const {
+        return button_->isAnimationPlaying();
+    }
+
+    void Button::setVisible(bool visible) {
+        button_->setVisible(visible);
+    }
+
+    bool Button::isVisible() const {
+        return button_->isVisible();
     }
 
     void Button::toggleVisibility() {

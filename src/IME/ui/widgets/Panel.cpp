@@ -26,9 +26,6 @@
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
-//How long the panel takes before its completely hidden or shown
-const int fadeAnimDuration_ = 100;
-
 namespace ime::ui {
     Panel::Panel(const std::string& width, const std::string& height) :
         panel_{tgui::Panel::create({width.c_str(), height.c_str()})},
@@ -96,18 +93,24 @@ namespace ime::ui {
         return "Panel";
     }
 
-    void Panel::show() {
-        panel_->showWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Panel::showWithEffect(ShowAnimationType type, int duration) {
+        panel_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    void Panel::hide() {
-        panel_->hideWithEffect(tgui::ShowAnimationType::Fade,
-            fadeAnimDuration_);
+    void Panel::hideWithEffect(ShowAnimationType type, int duration) {
+        panel_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
     }
 
-    bool Panel::isHidden() const {
-        return !panel_->isVisible();
+    bool Panel::isAnimationPlaying() const {
+        return panel_->isAnimationPlaying();
+    }
+
+    void Panel::setVisible(bool visible) {
+        panel_->setVisible(visible);
+    }
+
+    bool Panel::isVisible() const {
+        return panel_->isVisible();
     }
 
     void Panel::toggleVisibility() {
