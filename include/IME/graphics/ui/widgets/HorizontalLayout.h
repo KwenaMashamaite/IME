@@ -564,6 +564,7 @@ namespace ime {
              * given name, a recursive search will be performed.
              */
             std::shared_ptr<IWidget> getWidget(const std::string &name) const override;
+            using IContainer::getWidget;
 
             /**
              * @brief Remove a widget from the container

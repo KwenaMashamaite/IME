@@ -62,6 +62,27 @@ namespace ime {
             virtual std::shared_ptr<IWidget> getWidget(const std::string& name) const = 0;
 
             /**
+             * @brief Get access to a widget in the container
+             * @param name Name of the widget to get access to
+             * @return Pointer to the specified widget or nullptr if the
+             *         container does not have a widget with the given
+             *         name
+             *
+             * The container will first search for widgets that are direct
+             * children of it, but when none of the child widgets match the
+             * given name, a recursive search will be performed.
+             *
+             * If the widget is found, it will be casted to the desired type
+             *
+             * @warning This function will return nullptr if the widget
+             * cannot be casted to the desired type
+             */
+            template<class T>
+            std::shared_ptr<T> getWidget(const std::string& name) const {
+                return std::dynamic_pointer_cast<T>(getWidget(name));
+            }
+
+            /**
              * @brief Remove a widget from the container
              * @param name Name of the widget to be removed from the container
              * @return True if the widget was removed or false if the widget
