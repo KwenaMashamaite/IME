@@ -375,6 +375,18 @@ namespace ime {
             Vector2f getPosition() const override;
 
             /**
+             * @brief Get the absolute position of the button
+             * @return The absolute position of the button
+             *
+             * Unlike getPosition, this function returns the absolute
+             * position of the top-left point of the widget instead
+             * of the relative position to its parent
+             *
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
+
+            /**
              * @brief Set the orientation of the button
              * @param angle New rotation, in degrees
              *

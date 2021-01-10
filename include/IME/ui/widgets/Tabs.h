@@ -568,6 +568,18 @@ namespace ime {
             Vector2f getPosition() const override;
 
             /**
+             * @brief Get the absolute position of the tab
+             * @return The absolute position of the tab
+             * 
+             * Unlike getPosition, this function returns the absolute 
+             * position of the top-left point of the tab instead 
+             * of the relative position to its parent
+             * 
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
+
+            /**
              * @brief Set the orientation of the tab
              * @param angle New rotation, in degrees
              *

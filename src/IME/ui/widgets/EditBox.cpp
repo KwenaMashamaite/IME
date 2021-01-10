@@ -117,6 +117,10 @@ namespace ime::ui {
         return {editBox_->getPosition().x, editBox_->getPosition().y};
     }
 
+    Vector2f EditBox::getAbsolutePosition() const {
+        return {editBox_->getAbsolutePosition().x, editBox_->getAbsolutePosition().y};
+    }
+
     Vector2f EditBox::getOrigin() const {
         return {editBox_->getOrigin().x, editBox_->getOrigin().y};
     }

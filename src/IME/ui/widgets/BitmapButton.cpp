@@ -85,6 +85,10 @@ namespace ime::ui {
         return {button_->getPosition().x, button_->getPosition().y};
     }
 
+    Vector2f BitmapButton::getAbsolutePosition() const {
+        return {button_->getAbsolutePosition().x, button_->getAbsolutePosition().y};
+    }
+
     Vector2f BitmapButton::getOrigin() const {
         return {button_->getOrigin().x, button_->getOrigin().y};
     }

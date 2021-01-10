@@ -161,6 +161,10 @@ namespace ime::ui {
         return {button_->getPosition().x, button_->getPosition().y};
     }
 
+    Vector2f RadioButton::getAbsolutePosition() const {
+        return {button_->getAbsolutePosition().x, button_->getAbsolutePosition().y};
+    }
+
     void RadioButton::setRotation(float angle) {
         button_->setRotation(angle);
     }

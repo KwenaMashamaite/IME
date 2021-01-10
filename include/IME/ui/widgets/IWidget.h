@@ -70,6 +70,18 @@ namespace ime {
             using ITransformable::setPosition;
 
             /**
+             * @brief Get the absolute position of the widget
+             * @return The absolute position of the widget
+             *
+             * Unlike getPosition, this function returns the absolute
+             * position of the top-left point of the widget instead
+             * of the relative position to its parent
+             *
+             * @see setPosition
+             */
+            virtual Vector2f getAbsolutePosition() const = 0;
+
+            /**
              * @brief Set the character size of the text
              * @param charSize New character size
              */

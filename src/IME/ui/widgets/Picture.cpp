@@ -175,6 +175,10 @@ namespace ime::ui {
         return {picture_->getPosition().x, picture_->getPosition().y};
     }
 
+    Vector2f Picture::getAbsolutePosition() const {
+        return {picture_->getAbsolutePosition().x, picture_->getAbsolutePosition().y};
+    }
+
     void Picture::setRotation(float angle) {
         picture_->setRotation(angle);
     }

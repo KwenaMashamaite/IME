@@ -137,6 +137,10 @@ namespace ime::ui {
         return {panel_->getPosition().x, panel_->getPosition().y};
     }
 
+    Vector2f Panel::getAbsolutePosition() const {
+        return {panel_->getAbsolutePosition().x, panel_->getAbsolutePosition().y};
+    }
+
     void Panel::setRotation(float angle) {
         panel_->setRotation(angle);
     }

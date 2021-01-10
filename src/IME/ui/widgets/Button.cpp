@@ -68,6 +68,10 @@ namespace ime::ui {
         return {button_->getPosition().x, button_->getPosition().y};
     }
 
+    Vector2f Button::getAbsolutePosition() const {
+        return {button_->getAbsolutePosition().x, button_->getAbsolutePosition().y};
+    }
+
     Vector2f Button::getOrigin() const {
         return {button_->getOrigin().x, button_->getOrigin().y};
     }

@@ -282,43 +282,6 @@ namespace ime {
             bool isKeptInParent() const;
 
             /**
-             * @brief Set the position of the window
-             * @param x X coordinate of the new position
-             * @param y Y coordinate of the new position
-             *
-             * This function completely overwrites the previous position.
-             * use move function to apply an offset based on the previous
-             * position instead
-             *
-             * The default position of a the window is (0, 0)
-             *
-             * @see move
-             */
-            void setPosition(float x, float y) override;
-
-            /**
-             * @brief Set the position of the window relative to the
-             *        size of its parent
-             * @param x New x coordinate of the window
-             * @param y New y coordinate of the window
-             *
-             * The position is specified in percentages as shown below:
-             *
-             * @code
-             * window->setPosition({"5%", "10%"});
-             * @endcode
-             *
-             * This function completely overwrites the previous position.
-             * Use the move function to apply an offset based on the previous
-             * position instead.
-             *
-             * The default position of the window is (0, 0)
-             *
-             * @see move
-             */
-            void setPosition(const std::string& x, const std::string& y) override;
-
-            /**
              * @brief Set the character size of the text
              * @param charSize New character size
              */
@@ -518,6 +481,43 @@ namespace ime {
 
             /**
              * @brief Set the position of the window
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
+             *
+             * This function completely overwrites the previous position.
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the window is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(float x, float y) override;
+
+            /**
+             * @brief Set the position of the window relative to the
+             *        size of its parent
+             * @param x New x coordinate of the window
+             * @param y New y coordinate of the window
+             *
+             * The position is specified in percentages as shown below:
+             *
+             * @code
+             * window->setPosition({"5%", "10%"});
+             * @endcode
+             *
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the window is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(const std::string& x, const std::string& y) override;
+
+            /**
+             * @brief Set the position of the window
              * @param position New position
              *
              * This function completely overwrites the previous position.
@@ -535,6 +535,18 @@ namespace ime {
              * @return Current position of the window
              */
             Vector2f getPosition() const override;
+
+            /**
+             * @brief Get the absolute position of the window
+             * @return The absolute position of the window
+             *
+             * Unlike getPosition, this function returns the absolute
+             * position of the top-left point of the window instead
+             * of the relative position to its parent
+             *
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
 
             /**
              * @brief Set the orientation of the window

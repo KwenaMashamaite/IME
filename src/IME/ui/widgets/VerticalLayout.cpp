@@ -151,6 +151,10 @@ namespace ime::ui {
         return {layout_->getPosition().x, layout_->getPosition().y};
     }
 
+    Vector2f VerticalLayout::getAbsolutePosition() const {
+        return {layout_->getAbsolutePosition().x, layout_->getAbsolutePosition().y};
+    }
+
     Vector2f VerticalLayout::getOrigin() const {
         return {layout_->getOrigin().x, layout_->getOrigin().y};
     }

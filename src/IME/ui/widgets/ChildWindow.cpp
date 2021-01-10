@@ -235,6 +235,10 @@ namespace ime::ui {
         return {window_->getPosition().x, window_->getPosition().y};
     }
 
+    Vector2f ChildWindow::getAbsolutePosition() const {
+        return {window_->getAbsolutePosition().x, window_->getAbsolutePosition().y};
+    }
+
     Vector2f ChildWindow::getOrigin() const {
         return {window_->getOrigin().x, window_->getOrigin().y};
     }

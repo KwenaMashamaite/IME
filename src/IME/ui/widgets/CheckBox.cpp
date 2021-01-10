@@ -84,6 +84,10 @@ namespace ime::ui {
         return {checkBox_->getPosition().x, checkBox_->getPosition().y};
     }
 
+    Vector2f CheckBox::getAbsolutePosition() const {
+        return {checkBox_->getAbsolutePosition().x, checkBox_->getAbsolutePosition().y};
+    }
+
     Vector2f CheckBox::getOrigin() const {
         return {checkBox_->getOrigin().x, checkBox_->getOrigin().y};
     }

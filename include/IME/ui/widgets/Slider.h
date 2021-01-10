@@ -457,6 +457,18 @@ namespace ime {
             Vector2f getPosition() const override;
 
             /**
+             * @brief Get the absolute position of the slider
+             * @return The absolute position of the slider
+             * 
+             * Unlike getPosition, this function returns the absolute 
+             * position of the top-left point of the slider instead 
+             * of the relative position to its parent
+             * 
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
+
+            /**
              * @brief Set the orientation of the slider
              * @param angle New rotation, in degrees
              *

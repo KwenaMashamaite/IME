@@ -356,6 +356,18 @@ namespace ime {
             Vector2f getPosition() const override;
 
             /**
+             * @brief Get the absolute position of the layout
+             * @return The absolute position of the layout
+             * 
+             * Unlike getPosition, this function returns the absolute 
+             * position of the top-left point of the layout instead 
+             * of the relative position to its parent
+             * 
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
+
+            /**
              * @brief Set the orientation of the layout
              * @param angle New rotation, in degrees
              *

@@ -131,6 +131,10 @@ namespace ime::ui {
         return {label_->getPosition().x, label_->getPosition().y};
     }
 
+    Vector2f Label::getAbsolutePosition() const {
+        return {label_->getAbsolutePosition().x, label_->getAbsolutePosition().y};
+    }
+
     Vector2f Label::getOrigin() const {
         return {label_->getOrigin().x, label_->getOrigin().y};
     }

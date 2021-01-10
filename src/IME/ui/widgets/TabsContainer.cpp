@@ -217,6 +217,10 @@ namespace ime::ui {
         return {tabContainer_->getPosition().x, tabContainer_->getPosition().y};
     }
 
+    Vector2f TabsContainer::getAbsolutePosition() const {
+        return {tabContainer_->getAbsolutePosition().x, tabContainer_->getAbsolutePosition().y};
+    }
+
     void TabsContainer::setRotation(float angle) {
         tabContainer_->setRotation(angle);
     }

@@ -232,6 +232,10 @@ namespace ime::ui {
         return {tabs_->getPosition().x, tabs_->getPosition().y};
     }
 
+    Vector2f Tabs::getAbsolutePosition() const {
+        return {tabs_->getAbsolutePosition().x, tabs_->getAbsolutePosition().y};
+    }
+
     void Tabs::setRotation(float angle) {
         tabs_->setRotation(angle);
     }

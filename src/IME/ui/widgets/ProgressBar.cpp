@@ -110,6 +110,10 @@ namespace ime::ui {
         return {progressBar_->getPosition().x, progressBar_->getPosition().y};
     }
 
+    Vector2f ProgressBar::getAbsolutePosition() const {
+        return {progressBar_->getAbsolutePosition().x, progressBar_->getAbsolutePosition().y};
+    }
+
     Vector2f ProgressBar::getOrigin() const {
         return {progressBar_->getOrigin().x, progressBar_->getOrigin().y};
     }

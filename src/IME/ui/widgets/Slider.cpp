@@ -132,6 +132,10 @@ namespace ime::ui {
         return {slider_->getPosition().x, slider_->getPosition().y};
     }
 
+    Vector2f Slider::getAbsolutePosition() const {
+        return {slider_->getAbsolutePosition().x, slider_->getAbsolutePosition().y};
+    }
+
     Vector2f Slider::getOrigin() const {
         return {slider_->getOrigin().x, slider_->getOrigin().y};
     }

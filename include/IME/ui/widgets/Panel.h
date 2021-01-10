@@ -358,6 +358,18 @@ namespace ime {
             Vector2f getPosition() const override;
 
             /**
+             * @brief Get the absolute position of the panel
+             * @return The absolute position of the panel
+             * 
+             * Unlike getPosition, this function returns the absolute 
+             * position of the top-left point of the panel instead 
+             * of the relative position to its parent
+             * 
+             * @see setPosition
+             */
+            Vector2f getAbsolutePosition() const override;
+
+            /**
              * @brief Set the orientation of the panel
              * @param angle New rotation, in degrees
              *
