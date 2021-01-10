@@ -34,34 +34,34 @@ set(IME_SRC
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
-    graphics/ui/widgets/ChildWindow.cpp
-    graphics/ui/widgets/VerticalLayout.cpp
-    graphics/ui/widgets/HorizontalLayout.cpp
-    graphics/ui/renderers/BoxLayoutRenderer.cpp
-    graphics/ui/renderers/ButtonRenderer.cpp
-    graphics/ui/renderers/CheckBoxRenderer.cpp
-    graphics/ui/renderers/ChildWindowRenderer.cpp
-    graphics/ui/renderers/EditBoxRenderer.cpp
-    graphics/ui/renderers/LabelRenderer.cpp
-    graphics/ui/renderers/ProgressBarRenderer.cpp
-    graphics/ui/renderers/SliderRenderer.cpp
-    graphics/ui/renderers/RadioButtonRenderer.cpp
-    graphics/ui/renderers/PanelRenderer.cpp
-    graphics/ui/renderers/TabsRenderer.cpp
-    graphics/ui/renderers/PictureRenderer.cpp
-    graphics/ui/widgets/BitmapButton.cpp
-    graphics/ui/widgets/Button.cpp
-    graphics/ui/widgets/CheckBox.cpp
-    graphics/ui/widgets/EditBox.cpp
-    graphics/ui/widgets/Label.cpp
-    graphics/ui/widgets/ProgressBar.cpp
-    graphics/ui/widgets/Slider.cpp
-    graphics/ui/widgets/RadioButton.cpp
-    graphics/ui/widgets/Panel.cpp
-    graphics/ui/widgets/Tabs.cpp
-    graphics/ui/widgets/TabsContainer.cpp
-    graphics/ui/widgets/Picture.cpp
-    graphics/ui/GuiContainer.cpp
+    ui/widgets/ChildWindow.cpp
+    ui/widgets/VerticalLayout.cpp
+    ui/widgets/HorizontalLayout.cpp
+    ui/renderers/BoxLayoutRenderer.cpp
+    ui/renderers/ButtonRenderer.cpp
+    ui/renderers/CheckBoxRenderer.cpp
+    ui/renderers/ChildWindowRenderer.cpp
+    ui/renderers/EditBoxRenderer.cpp
+    ui/renderers/LabelRenderer.cpp
+    ui/renderers/ProgressBarRenderer.cpp
+    ui/renderers/SliderRenderer.cpp
+    ui/renderers/RadioButtonRenderer.cpp
+    ui/renderers/PanelRenderer.cpp
+    ui/renderers/TabsRenderer.cpp
+    ui/renderers/PictureRenderer.cpp
+    ui/widgets/BitmapButton.cpp
+    ui/widgets/Button.cpp
+    ui/widgets/CheckBox.cpp
+    ui/widgets/EditBox.cpp
+    ui/widgets/Label.cpp
+    ui/widgets/ProgressBar.cpp
+    ui/widgets/Slider.cpp
+    ui/widgets/RadioButton.cpp
+    ui/widgets/Panel.cpp
+    ui/widgets/Tabs.cpp
+    ui/widgets/TabsContainer.cpp
+    ui/widgets/Picture.cpp
+    ui/GuiContainer.cpp
     graphics/Sprite.cpp
     graphics/AnimatableSprite.cpp
     graphics/Colour.cpp
