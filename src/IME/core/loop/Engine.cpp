@@ -143,7 +143,7 @@ namespace ime {
         assert(isInitialized_ && "ERROR: Failed to start engine because its not initialized");
         assert(!statesManager_.isEmpty() && "ERROR: Failed to start engine because it has no states");
 
-        statesManager_.getActiveState()->initialize();
+        statesManager_.getActiveState()->onEnter();
         isRunning_ = true;
         auto const frameTime = 1.0f / settings_.getValueFor<int>("FPS_LIMIT");
         auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
@@ -220,8 +220,8 @@ namespace ime {
                 //Restore input manager
                 inputManager_ = prevStateInputManager_.top();
                 prevStateInputManager_.pop();
-                if (!statesManager_.getActiveState()->isInitialized())
-                    statesManager_.getActiveState()->initialize();
+                if (!statesManager_.getActiveState()->isEntered())
+                    statesManager_.getActiveState()->onEnter();
             }
         }
 
@@ -232,7 +232,7 @@ namespace ime {
             statesManager_.pushState(std::move(state));
             statesToPush_.pop();
             if (statesToPush_.empty()) {
-                statesManager_.getActiveState()->initialize();
+                statesManager_.getActiveState()->onEnter();
                 if (callback)
                     callback();
             }

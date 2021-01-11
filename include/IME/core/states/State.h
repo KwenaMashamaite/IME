@@ -34,7 +34,7 @@ namespace ime {
     class Engine; //!< Engine class forward declaration
 
     /**
-     * @brief Base class for states
+     * @brief Abstract base class for engine states
      */
     class IME_API State {
     public:
@@ -42,32 +42,33 @@ namespace ime {
          * @brief Constructor
          * @param engine Reference to the game
          */
-        State(Engine &engine);
+        explicit State(Engine &engine);
 
         /**
-         * @brief Initialize state
+         * @brief Enter a state
          *
          * This function will be called by the engine before the state is
-         * entered for the first time. After the state is entered, the
-         * function isInitialized returns true
+         * entered for the first time.
          *
-         * @see isInitialized
+         * @note After the state is entered, the function isEntered must
+         * return true
+         *
+         * @see isEntered
          */
-        virtual void initialize() = 0;
+        virtual void onEnter() = 0;
 
         /**
-         * @brief Check if a state is initialized or not
-         * @return True if state is initialized or false if state is not
-         *         initialized
+         * @brief Check whether or not a state is entered
+         * @return True if the state is entered or false if the state
+         *         is not entered
          *
-         * This function will be called by the engine before a state push
-         * or a state pop operation. This ensures that a previously
-         * initialized state is resumed instead of being reinitialized and
-         * vice versa
+         * This function will be called by the engine after a state
+         * pop operation. This ensures that a previously entered state
+         * is resumed instead of being re-entered
          *
-         * @see initialize, pause, resume
+         * @see onEnter, onPause, onResume
          */
-        virtual bool isInitialized() const = 0;
+        virtual bool isEntered() const = 0;
 
         /**
          * @brief Update the state
@@ -75,7 +76,7 @@ namespace ime {
          *
          * This function will be called once per frame by the engine.
          * The delta passed to it is frame rate dependent. This means
-         * that it depends on how long the current frames takes to
+         * that it depends on how long the current frame takes to
          * complete. All updates that need a variable time step must
          * be defined in this function
          *
@@ -84,13 +85,15 @@ namespace ime {
         virtual void update(float deltaTime) = 0;
 
         /**
-         * @brief Update state in fixed time steps
+         * @brief Update the state in fixed time steps
          * @param deltaTime Time passed since last update
          *
          * This function may be called multiple times per frame or not
          * called at all. The delta passed to it is always the same. All
          * update that require a fixed time step must be defined in this
          * function, such updates are frame-rate independent
+         *
+         * The delta time is always 1.0f / FPS_LIMIT
          *
          * @see update
          */
@@ -112,29 +115,31 @@ namespace ime {
          * This function will be called by the game engine before a state
          * push operation. This function allows a state to pause itself
          * such that when it is returned to, it can resume where it left
-         * of instead of being reinitialized
+         * of instead of being re-entered
+         *
+         * @see onEnter and onResume
          */
-        virtual void pause() = 0;
+        virtual void onPause() = 0;
 
         /**
          * @brief Resume a paused state
          *
          * This function will be called by the game engine after a state
-         * pop if the state was paused
+         * pop operation if the state was paused
          *
-         * @see pause
+         * @see onPause
          */
-        virtual void resume() = 0;
+        virtual void onResume() = 0;
 
         /**
          * @brief Exit a state
          *
          * This function will be called by the engine before the state
-         * is destroyed. It may be useful if there are some cleanup
+         * is popped. It may be useful if there are some cleanup
          * procedures that need to be taken care of before the state
-         * object is destroyed
+         * is destroyed
          */
-        virtual void exit() = 0;
+        virtual void onExit() = 0;
 
         /**
          * @brief Handle an event
