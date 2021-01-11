@@ -49,6 +49,7 @@ set(IME_SRC
     ui/renderers/PanelRenderer.cpp
     ui/renderers/TabsRenderer.cpp
     ui/renderers/PictureRenderer.cpp
+    ui/renderers/SeparatorRenderer.cpp
     ui/widgets/BitmapButton.cpp
     ui/widgets/Button.cpp
     ui/widgets/CheckBox.cpp
@@ -61,6 +62,7 @@ set(IME_SRC
     ui/widgets/Tabs.cpp
     ui/widgets/TabsContainer.cpp
     ui/widgets/Picture.cpp
+    ui/widgets/Separator.cpp
     ui/GuiContainer.cpp
     graphics/Sprite.cpp
     graphics/AnimatableSprite.cpp
