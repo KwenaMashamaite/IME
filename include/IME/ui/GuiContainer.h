@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Vector2.h"
+#include "IME/common/Rect.h"
 #include "IME/ui/widgets/IWidget.h"
 #include "IME/graphics/Window.h"
 #include <unordered_map>
@@ -62,8 +63,10 @@ namespace ime {
             /**
              * @brief Construct the gui
              *
-             * @warning When constructed with this constructor, @see setTarget()
-             * must be called before the gui is used
+             * @warning When constructed with this constructor, setTarget
+             * must be called before the gui container is used
+             *
+             * @see setTarget
              */
             GuiContainer() = default;
 
@@ -88,6 +91,104 @@ namespace ime {
              * @brief Assignment operator
              */
             GuiContainer& operator=(const GuiContainer&) = delete;
+
+            /**
+             * @brief Set the part of the window the gui will render on
+             * @param viewport Rect of the window to which the gui should draw
+             *
+             * Example code to render the gui on only the right side of an
+             * 800x600 window:
+             *
+             * @code
+             * gui.setAbsoluteViewport({400, 0, 400, 600});
+             * @endcode
+             *
+             * By default, the gui fills the entire window
+             *
+             * @see setRelativeViewPort
+             */
+            void setAbsoluteViewport(const FloatRect& viewport);
+
+            /**
+             * @brief Set the part of the window the gui will render on as a
+             *        ratio relative to the window size
+             * @param viewport Rect of the window to which the gui should draw
+             *        relative to the window size
+             *
+             * Example code to render the gui on only the right side of window:
+             * @code
+             * gui.setRelativeViewport({0.5f, 0, 0.5f, 1});
+             * @endcode
+             *
+             * The default viewport is (0, 0, 1, 1) so that the gui fills
+             * the entire window
+             *
+             * @see setViewPort
+             */
+            void setRelativeViewport(const FloatRect& viewport);
+
+            /**
+             * @brief Get the part of the window the gui renders
+             * @return Rect of the window to which the gui will draw
+             *
+             * @see setViewPort and setRelativeViewPort
+             */
+            FloatRect getViewport() const;
+
+            /**
+             * @brief Set the part of the gui that will be used to fill the
+             *        viewport
+             * @param view
+             *
+             * Example code to use the contents of the gui container from
+             * top-left (200,100) to bottom-right (600, 400) and stretch
+             * it to fill the viewport (which equals the entire window
+             * by default):
+             * @code
+             * gui.setAbsoluteView({200, 100, 400, 300});
+             * @endcode
+             */
+            void setAbsoluteView(const FloatRect& view);
+
+            /**
+             * @brief Set the part of the gui that is used to fill the viewport
+             * @param view Rect of the gui that will be stretched to fill the
+             *             viewport relative to the viewport size
+             *
+             * The default view is (0, 0, 1, 1) so that no scaling happens
+             * when the viewport is changed
+             *
+             * Example code to zoom in on the gui and display everything at
+             * 2x the size:
+             * @code
+             * gui.setRelativeView({0, 0, 0.5f, 0.5f});
+             * @endcode
+             *
+             * @see setViewPort
+             */
+            void setRelativeView(const FloatRect& view);
+
+            /**
+             * @brief Get the part of the gui that is used to fill the viewport
+             * @return The part of the gui that fills the viewport
+             *
+             * By default, the view will have the same size as the viewport
+             * @see setViewPort and setRelativeViewPort
+             */
+            FloatRect getView() const;
+
+            /**
+             * @brief Set the character size of all existing and future child
+             *        widgets
+             * @param size The new character size
+             */
+            void setTextSize(unsigned int size);
+
+            /**
+             * @brief Get the text size of all existing and future child widgets
+             * @return The text size of all existing and future child widgets
+             */
+            unsigned int getTextSize() const;
 
             /**
              * @brief Set the target on which the gui should be drawn
@@ -137,11 +238,6 @@ namespace ime {
              * @throws FileNotFound if the font cannot be found on the disk
              */
             void setFont(const std::string& filename);
-
-            /**
-             * @brief Unfocus all widgets
-             */
-            void unfocusAllWidgets();
 
             /**
              * @brief Set the opacity of all widgets
@@ -322,6 +418,11 @@ namespace ime {
             bool focusPreviousWidget(bool recursive = true);
 
             /**
+             * @brief Unfocus all widgets in the container
+             */
+            void unfocusAllWidgets();
+
+            /**
              * @brief Place a widget before all other widgets to the front
              * @param widget The widget to be moved to the front
              */
@@ -339,8 +440,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t
-            moveWidgetForward(std::shared_ptr<IWidget> widget);
+            size_t moveWidgetForward(std::shared_ptr<IWidget> widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -348,21 +448,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t
-            moveWidgetBackward(std::shared_ptr<IWidget> widget);
-
-            /**
-             * @brief Set the character size of all existing and future child
-             *        widgets
-             * @param size The new character size
-             */
-            void setTextSize(unsigned int size);
-
-            /**
-             * @brief Get the text size of all existing and future child widgets
-             * @return The text size of all existing and future child widgets
-             */
-            unsigned int getTextSize() const;
+            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget);
 
         private:
             tgui::GuiSFML sfmlGui_; //!< Gui controller and renderer

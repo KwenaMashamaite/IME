@@ -32,6 +32,40 @@ namespace ime::ui {
         sfmlGui_{target.window_}
     {}
 
+    void GuiContainer::setAbsoluteViewport(const FloatRect &viewport) {
+        sfmlGui_.setAbsoluteViewport(
+            {viewport.left, viewport.top, viewport.width, viewport.height});
+    }
+
+    void GuiContainer::setRelativeViewport(const FloatRect &viewport) {
+        sfmlGui_.setRelativeViewport(
+            {viewport.left, viewport.top, viewport.width, viewport.height});
+    }
+
+    FloatRect GuiContainer::getViewport() const {
+        return {sfmlGui_.getViewport().getPosition().x,
+            sfmlGui_.getViewport().getPosition().y,
+            sfmlGui_.getViewport().getSize().x,
+            sfmlGui_.getViewport().getSize().y
+        };
+    }
+
+    void GuiContainer::setAbsoluteView(const FloatRect &view) {
+        sfmlGui_.setAbsoluteView({view.left, view.top, view.width, view.height});
+    }
+
+    void GuiContainer::setRelativeView(const FloatRect &view) {
+        sfmlGui_.setRelativeView({view.left, view.top, view.width, view.height});
+    }
+
+    FloatRect GuiContainer::getView() const {
+        return {sfmlGui_.getView().getPosition().x,
+           sfmlGui_.getView().getPosition().y,
+           sfmlGui_.getView().getSize().x,
+           sfmlGui_.getView().getSize().y
+        };
+    }
+
     void GuiContainer::handleEvent(sf::Event event) {
         sfmlGui_.handleEvent(event);
     }
