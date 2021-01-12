@@ -56,7 +56,7 @@ namespace ime::ui {
     void TabsContainer::addPanel(std::shared_ptr<Panel> panel,
         const std::string &text, bool select)
     {
-        IME_ASSERT(panel, "Cannot add nullptr to a TabsContainer container");
+        IME_ASSERT(panel, "Cannot add nullptr to a TabsContainer");
         panels_.insert({tabContainer_->getPanelCount() + 1, panel});
         tabContainer_->addPanel(
             std::dynamic_pointer_cast<tgui::Panel>(panel->getInternalPtr()), text, select);
