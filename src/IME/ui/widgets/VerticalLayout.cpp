@@ -32,6 +32,7 @@ namespace ime::ui {
         renderer_{std::make_shared<BoxLayoutRenderer>()}
     {
         renderer_->setInternalPtr(layout_->getRenderer());
+        setAsContainer(true);
         initEvents();
     }
 
@@ -229,7 +230,7 @@ namespace ime::ui {
     std::shared_ptr<IWidget> VerticalLayout::getWidget(const std::string &name) const {
         if (utility::findIn(widgets_, name))
             return widgets_.at(name);
-        return nullptr;
+        return utility::findRecursively(widgets_, name);
     }
 
     bool VerticalLayout::removeWidget(const std::string &widget) {

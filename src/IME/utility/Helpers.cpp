@@ -24,6 +24,7 @@
 
 #include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
+#include "IME/ui/widgets/IContainer.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 
 namespace ime::utility {
@@ -50,5 +51,23 @@ namespace ime::utility {
         tguiBackendFont->getInternalFont() = ime::ResourceManager::getInstance()->getFont(filename);
         auto tguiFont = tgui::Font(std::move(tguiBackendFont), filename);
         return tguiFont;
+    }
+
+    std::shared_ptr<ui::IWidget> findRecursively(
+        const std::unordered_map<std::string, std::shared_ptr<ui::IWidget>>& widgets,
+        const std::string &widgetName)
+    {
+        for (const auto& widget : widgets) {
+            if (widget.second->isContainer()) {
+                auto container = std::static_pointer_cast<ui::IContainer>(widget.second);
+                if (container) {
+                    auto widgetInContainer = container->getWidget(widgetName);
+                    if (widgetInContainer)
+                        return widgetInContainer;
+                }
+            }
+        }
+
+        return nullptr;
     }
 }

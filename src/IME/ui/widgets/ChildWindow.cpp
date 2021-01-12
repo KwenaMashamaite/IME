@@ -32,6 +32,7 @@ namespace ime::ui {
         renderer_{std::make_shared<ChildWindowRenderer>()}
     {
         renderer_->setInternalPtr(window_->getRenderer());
+        setAsContainer(true);
         initEvents();
     }
 
@@ -271,11 +272,10 @@ namespace ime::ui {
         return false;
     }
 
-    std::shared_ptr<IWidget>
-    ChildWindow::getWidget(const std::string &name) const {
+    std::shared_ptr<IWidget> ChildWindow::getWidget(const std::string &name) const {
         if (utility::findIn(widgets_, name))
             return widgets_.at(name);
-        return nullptr;
+        return utility::findRecursively(widgets_, name);;
     }
 
     bool ChildWindow::removeWidget(const std::string &widget) {

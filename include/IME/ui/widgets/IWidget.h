@@ -272,6 +272,15 @@ namespace ime {
             virtual void toggleVisibility() = 0;
 
             /**
+             * @brief Check if the widget is a container or not
+             * @return True if the widget is a container, otherwise false
+             *
+             * A container widget is a widget that can store other widgets
+             * inside it. Such widgets inherit from IWidget class
+             */
+            bool isContainer() const { return isContainer_;}
+
+            /**
              * @brief Check if coordinates lie inside the widget
              * @param x X coordinate to be checked
              * @param y Y coordinate to be checked
@@ -341,8 +350,20 @@ namespace ime {
                 eventEmitter_.emit(event, std::forward<Args>(args)...);
             }
 
+            /**
+             * @brief Set whether or not the widget is a container
+             * @param container True to flag as container, otherwise false
+             *
+             * A container widget is a widget that can store other widgets
+             * inside it. Such widgets inherit from IWidget class
+             *
+             * All widgets are not containers by default
+             */
+            void setAsContainer(bool container) {isContainer_ = container;}
+
         private:
             EventEmitter eventEmitter_; //!< Widgets event publisher
+            bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
         };
     }
 }

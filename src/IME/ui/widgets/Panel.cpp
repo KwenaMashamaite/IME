@@ -32,6 +32,7 @@ namespace ime::ui {
         renderer_{std::make_shared<PanelRenderer>()}
     {
         renderer_->setInternalPtr(panel_->getRenderer());
+        setAsContainer(true);
         initEvents();
     }
 
@@ -208,7 +209,7 @@ namespace ime::ui {
     std::shared_ptr<IWidget> Panel::getWidget(const std::string &name) const {
         if (utility::findIn(widgets_, name))
             return widgets_.at(name);
-        return nullptr;
+        return utility::findRecursively(widgets_, name);
     }
 
     bool Panel::removeWidget(const std::string &widget) {

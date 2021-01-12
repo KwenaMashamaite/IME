@@ -36,6 +36,7 @@
 #include <TGUI/Event.hpp>
 #include <SFML/Window/Event.hpp>
 #include <TGUI/Font.hpp>
+#include "IME/ui/widgets/IWidget.h"
 
 namespace ime::utility {
     /**
@@ -122,6 +123,16 @@ namespace ime::utility {
      * @return TGUI font
      */
     extern tgui::Font get_TGUI_Font(const std::string& filename);
+
+    /**
+     * @brief Recursively search for a widget
+     * @param container Container to recursively search
+     * @param widgetName Name of the widget to search for
+     * @return Pointer to the widget if found, otherwise a nullptr
+     */
+    extern std::shared_ptr<ui::IWidget> findRecursively(
+        const std::unordered_map<std::string, std::shared_ptr<ui::IWidget>>& container,
+        const std::string& widgetName);
 
     #include "Helpers.inl"
 }

@@ -24,6 +24,7 @@
 
 #include "IME/ui/GuiContainer.h"
 #include "IME/core/managers/ResourceManager.h"
+#include "IME/ui/widgets/IContainer.h"
 #include "IME/utility/Helpers.h"
 #include <cassert>
 
@@ -138,11 +139,10 @@ namespace ime::ui {
         return false;
     }
 
-    std::shared_ptr<IWidget>
-    GuiContainer::getWidget(const std::string &widgetName) const {
+    std::shared_ptr<IWidget> GuiContainer::getWidget(const std::string &widgetName) const {
         if (utility::findIn(widgets_, widgetName))
             return widgets_.at(widgetName);
-        return nullptr;
+        return utility::findRecursively(widgets_, widgetName);
     }
 
     bool GuiContainer::removeWidget(const std::string &widget) {
