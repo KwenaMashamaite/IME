@@ -120,11 +120,11 @@ namespace ime::ui {
     }
 
     void ChildWindow::setDraggable(bool draggable) {
-        window_->setPositionLocked(draggable);
+        window_->setPositionLocked(!draggable);
     }
 
     bool ChildWindow::isDraggable() const {
-        return window_->isPositionLocked();
+        return !window_->isPositionLocked();
     }
 
     void ChildWindow::setKeepInParent(bool enabled) {
