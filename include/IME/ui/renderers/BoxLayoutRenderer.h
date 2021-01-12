@@ -25,6 +25,7 @@
 #ifndef IME_BOXLAYOUTRENDERER_H
 #define IME_BOXLAYOUTRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include <TGUI/Renderers/BoxLayoutRenderer.hpp>
 

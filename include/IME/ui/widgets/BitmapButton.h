@@ -25,6 +25,7 @@
 #ifndef IME_BITMAPBUTTON_H
 #define IME_BITMAPBUTTON_H
 
+#include "IME/Config.h"
 #include "IClickableWidget.h"
 #include "IME/ui/renderers/ButtonRenderer.h"
 #include <TGUI/Widgets/BitmapButton.hpp>

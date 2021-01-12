@@ -25,6 +25,7 @@
 #ifndef IME_PROGRESSBARRENDERER_H
 #define IME_PROGRESSBARRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ProgressBarRenderer.hpp>

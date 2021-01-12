@@ -34,9 +34,6 @@ set(IME_SRC
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
-    ui/widgets/ChildWindow.cpp
-    ui/widgets/VerticalLayout.cpp
-    ui/widgets/HorizontalLayout.cpp
     ui/renderers/BoxLayoutRenderer.cpp
     ui/renderers/ButtonRenderer.cpp
     ui/renderers/CheckBoxRenderer.cpp
@@ -59,6 +56,9 @@ set(IME_SRC
     ui/widgets/Slider.cpp
     ui/widgets/RadioButton.cpp
     ui/widgets/Panel.cpp
+    ui/widgets/ChildWindow.cpp
+    ui/widgets/VerticalLayout.cpp
+    ui/widgets/HorizontalLayout.cpp
     ui/widgets/Tabs.cpp
     ui/widgets/TabsContainer.cpp
     ui/widgets/Picture.cpp

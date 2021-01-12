@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/RadioButton.h"
-#include <cassert>
 
 namespace ime::ui {
     RadioButton::RadioButton(const std::string &buttonText) :
@@ -40,7 +39,7 @@ namespace ime::ui {
     }
 
     void RadioButton::setRenderer(std::shared_ptr<RadioButtonRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         button_->setRenderer(renderer->getInternalPtr()->getData());
     }

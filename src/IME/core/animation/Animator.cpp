@@ -25,7 +25,6 @@
 #include "IME/core/animation/Animator.h"
 #include "IME/core/managers/ResourceManager.h"
 #include <algorithm>
-#include <cassert>
 
 namespace ime {
     Animator::Animator(Sprite& target) :
@@ -34,7 +33,7 @@ namespace ime {
     {}
 
     bool Animator::addAnimation(std::shared_ptr<Animation> animation) {
-        assert(animation && "A null animation cannot be added to an Animator");
+        IME_ASSERT(animation, "Cannot add nullptr to animator");
         return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
 

@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Tabs.h"
-#include <cassert>
 
 namespace ime::ui {
     Tabs::Tabs() :
@@ -39,7 +38,7 @@ namespace ime::ui {
     }
 
     void Tabs::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         tabs_->setRenderer(renderer->getInternalPtr()->getData());
     }

@@ -25,6 +25,7 @@
 #ifndef IME_ICONTAINER_H
 #define IME_ICONTAINER_H
 
+#include "IME/Config.h"
 #include "IWidget.h"
 #include <memory>
 

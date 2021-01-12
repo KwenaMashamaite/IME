@@ -25,6 +25,7 @@
 #ifndef IME_EDITBOXRENDERER_H
 #define IME_EDITBOXRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/EditBoxRenderer.hpp>

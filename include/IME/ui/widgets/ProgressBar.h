@@ -25,6 +25,7 @@
 #ifndef IME_PROGRESSBAR_H
 #define IME_PROGRESSBAR_H
 
+#include "IME/Config.h"
 #include "IClickableWidget.h"
 #include "IME/ui/renderers/ProgressBarRenderer.h"
 #include <TGUI/Widgets/ProgressBar.hpp>

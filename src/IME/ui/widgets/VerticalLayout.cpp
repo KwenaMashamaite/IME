@@ -24,7 +24,6 @@
 
 #include "IME/ui/widgets/VerticalLayout.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace ime::ui {
     VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
@@ -43,7 +42,7 @@ namespace ime::ui {
     }
 
     void VerticalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         layout_->setRenderer(renderer->getInternalPtr()->getData());
     }
@@ -219,7 +218,7 @@ namespace ime::ui {
     bool VerticalLayout::addWidget(std::shared_ptr<IWidget> widget,
         const std::string &name)
     {
-        assert(widget && "Cannot add null widget to Vertical layout container");
+        IME_ASSERT(widget, "Cannot add nullptr to a widget container");
         if (widgets_.insert({name, widget}).second) {
             layout_->add(widget->getInternalPtr(), name);
             return true;

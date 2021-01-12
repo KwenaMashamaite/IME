@@ -25,6 +25,7 @@
 #ifndef IME_HORIZONTALLAYOUT_H
 #define IME_HORIZONTALLAYOUT_H
 
+#include "IME/Config.h"
 #include "IBoxLayout.h"
 #include "IME/ui/renderers/BoxLayoutRenderer.h"
 #include <TGUI/Widgets/HorizontalLayout.hpp>

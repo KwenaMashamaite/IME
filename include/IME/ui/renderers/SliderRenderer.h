@@ -25,6 +25,7 @@
 #ifndef IME_SLIDERRENDERER_H
 #define IME_SLIDERRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/SliderRenderer.hpp>

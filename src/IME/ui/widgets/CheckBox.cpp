@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/CheckBox.h"
-#include <cassert>
 
 namespace ime::ui {
     CheckBox::CheckBox(const std::string &text) :
@@ -39,7 +38,7 @@ namespace ime::ui {
     }
 
     void CheckBox::setRenderer(std::shared_ptr<CheckBoxRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         checkBox_->setRenderer(renderer->getInternalPtr()->getData());
     }

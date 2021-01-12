@@ -25,6 +25,7 @@
 #ifndef IME_IBOXLAYOUT_H
 #define IME_IBOXLAYOUT_H
 
+#include "IME/Config.h"
 #include "IContainer.h"
 
 namespace ime {

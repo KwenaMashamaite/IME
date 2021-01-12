@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Slider.h"
-#include <cassert>
 
 namespace ime::ui {
     Slider::Slider(float minValue, float maxValue) :
@@ -39,7 +38,7 @@ namespace ime::ui {
     }
 
     void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         slider_->setRenderer(renderer->getInternalPtr()->getData());
     }

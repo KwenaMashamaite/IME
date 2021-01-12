@@ -25,6 +25,7 @@
 #ifndef IME_LABEL_H
 #define IME_LABEL_H
 
+#include "IME/Config.h"
 #include "IWidget.h"
 #include <TGUI/Widgets/Label.hpp>
 #include "IME/ui/renderers/LabelRenderer.h"

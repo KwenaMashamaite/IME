@@ -27,7 +27,6 @@
 
 #include "IME/Config.h"
 #include "IME/common/Property.h"
-#include <cassert>
 #include <string>
 #include <unordered_map>
 

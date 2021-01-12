@@ -26,7 +26,6 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/ui/widgets/IContainer.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace ime::ui {
     GuiContainer::GuiContainer(Window &target) :
@@ -131,7 +130,7 @@ namespace ime::ui {
     bool GuiContainer::addWidget(std::shared_ptr<IWidget> widget,
          const std::string &widgetName)
     {
-        assert(widget && "Cannot add null widget to gui container");
+        IME_ASSERT(widget, "Cannot add nullptr to a GUI container");
         if (widgets_.insert({widgetName, widget}).second) {
             sfmlGui_.add(widget->getInternalPtr(), widgetName);
             return true;

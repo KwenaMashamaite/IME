@@ -25,6 +25,7 @@
 #ifndef IME_BUTTONRENDERER_H
 #define IME_BUTTONRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ButtonRenderer.hpp>

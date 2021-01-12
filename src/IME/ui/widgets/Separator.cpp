@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Separator.h"
-#include <cassert>
 
 namespace ime::ui {
     Separator::Separator() :
@@ -39,7 +38,7 @@ namespace ime::ui {
     }
 
     void Separator::setRenderer(std::shared_ptr<SeparatorRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         separator_->setRenderer(renderer->getInternalPtr()->getData());
     }

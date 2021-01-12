@@ -24,7 +24,6 @@
 
 #include "IME/ui/widgets/Picture.h"
 #include "IME/core/managers/ResourceManager.h"
-#include <cassert>
 
 namespace ime::ui {
     Picture::Picture() :
@@ -70,7 +69,7 @@ namespace ime::ui {
     }
 
     void Picture::setRenderer(std::shared_ptr<PictureRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         picture_->setRenderer(renderer->getInternalPtr()->getData());
     }

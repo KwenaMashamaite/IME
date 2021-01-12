@@ -25,7 +25,6 @@
 #include "IME/graphics/Window.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/managers/ResourceManager.h"
-#include <cassert>
 
 bool ime::Window::isInstantiated_{false};
 
@@ -33,7 +32,7 @@ namespace ime {
     Window::Window() :
         frameRateLimit_(0)
     {
-        assert(!isInstantiated_ && "Only a single instance of Window can be instantiated");
+        IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated");
         isInstantiated_ = true;
     }
 

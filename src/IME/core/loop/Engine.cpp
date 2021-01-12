@@ -25,8 +25,6 @@
 #include "IME/core/loop/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
-#include "IME/utility/ConsoleLogger.h"
-#include <assert.h>
 
 template <class T>
 void setDefaultValueIfNotSet(ime::PropertyContainer& settings,
@@ -38,9 +36,7 @@ void setDefaultValueIfNotSet(ime::PropertyContainer& settings,
         settings.addProperty({setting, type, std::forward<T>(defaultValue)});
     else
         settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
-    static auto consoleLogger = ime::utility::ConsoleLogger();
-    consoleLogger.log(ime::utility::MessageType::Warning,
-        R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
+    IME_PRINT_WARNING(R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
 }
 
 namespace ime {
@@ -140,8 +136,8 @@ namespace ime {
     }
 
     void Engine::run() {
-        assert(isInitialized_ && "ERROR: Failed to start engine because its not initialized");
-        assert(!statesManager_.isEmpty() && "ERROR: Failed to start engine because it has no states");
+        IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
+        IME_ASSERT(!statesManager_.isEmpty(), "Failed to start engine because it has no states");
 
         statesManager_.getActiveState()->onEnter();
         isRunning_ = true;

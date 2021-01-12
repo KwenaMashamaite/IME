@@ -24,7 +24,6 @@
 
 #include "IME/core/physics/GridMover.h"
 #include "IME/core/entity/IMovable.h"
-#include <cassert>
 
 namespace ime {
     GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
@@ -35,8 +34,8 @@ namespace ime {
         prevTile_({tileMap.getTileSize(), {}})
     {
         if (target) {
-            assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
-            assert(tileMap_.hasChild(target) && "Target must already be in the grid before instantiating a grid mover");
+            IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot instantiate grid mover with an unmovable entity (not derived from ime::IMovable)");
+            IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before instantiation a grid mover");
             targetTile_ = tileMap.getTile(target->getPosition());
         }
     }
@@ -45,8 +44,8 @@ namespace ime {
         if (target_ == target)
             return;
         else if (target) {
-            assert(std::dynamic_pointer_cast<IMovable>(target) && "Provided entity is not movable (derived from IMovable)");
-            assert(tileMap_.hasChild(target) && "Target must already be in the grid before calling setTarget()");
+            IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot set an unmovable entity (not derived from ime::IMovable) as a target");
+            IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before calling setTarget(std::shared_ptr<ime::Entity>)");
             if (target_)
                 teleportTargetToDestination();
             targetTile_ = tileMap_.getTile(target->getPosition());
@@ -101,7 +100,7 @@ namespace ime {
 
     void GridMover::update(float deltaTime) {
         if (target_) {
-            assert(tileMap_.hasChild(target_) && "Target removed from the grid while still controlled by a grid mover");
+            IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover");
             auto movable = std::dynamic_pointer_cast<IMovable>(target_);
             if (!movable->isMoving() && targetDirection_ != Direction::Unknown) {
                 setTargetTile();

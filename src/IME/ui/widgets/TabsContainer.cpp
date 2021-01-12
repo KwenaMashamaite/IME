@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/TabsContainer.h"
-#include <cassert>
 
 namespace ime::ui {
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
@@ -41,7 +40,7 @@ namespace ime::ui {
     }
 
     void TabsContainer::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         tabContainer_->setRenderer(renderer->getInternalPtr()->getData());
     }
@@ -57,7 +56,7 @@ namespace ime::ui {
     void TabsContainer::addPanel(std::shared_ptr<Panel> panel,
         const std::string &text, bool select)
     {
-        assert(panel && "A nullptr cannot be added as a panel");
+        IME_ASSERT(panel, "Cannot add nullptr to a TabsContainer container");
         panels_.insert({tabContainer_->getPanelCount() + 1, panel});
         tabContainer_->addPanel(
             std::dynamic_pointer_cast<tgui::Panel>(panel->getInternalPtr()), text, select);

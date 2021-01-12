@@ -30,6 +30,6 @@ void PropertyContainer::setValueFor(const std::string &name, T&& value) {
 
 template<typename T>
 T PropertyContainer::getValueFor(const std::string name) const {
-    assert(hasProperty(name) && "Cannot get value for non-existent property");
+    IME_ASSERT(hasProperty(name), "Cannot get value for non-existent property");
     return properties_.at(name).getValue<T>();
 }

@@ -25,6 +25,7 @@
 #ifndef IME_ICLICKABLEWIDGET_H
 #define IME_ICLICKABLEWIDGET_H
 
+#include "IME/Config.h"
 #include "IWidget.h"
 #include <string>
 

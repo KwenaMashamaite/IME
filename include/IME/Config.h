@@ -66,6 +66,21 @@
     #define IME_API
 #endif
 
+#if !defined(NDEBUG) && !defined(IME_NO_RUNTIME_WARNINGS)
+#include <iostream>
+#define IME_PRINT_WARNING(msg) { std::cerr << "IME warning: " << msg << "\n"; }
+#else
+#define IME_PRINT_WARNING(msg)
+#endif
+
+#if !defined(NDEBUG) && !defined(IME_DISABLE_ASSERTS)
+#include <iostream>
+#include <cassert>
+#define IME_ASSERT(condition, msg) { if (!(condition)) { std::cerr << "IME assertion: " << msg << "\n"; assert(condition); } }
+#else
+#define IME_ASSERT(condition, msg)
+#endif
+
 // Version of the library
 #define IME_VERSION_MAJOR 2
 #define IME_VERSION_MINOR 0

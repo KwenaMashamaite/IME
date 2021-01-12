@@ -24,7 +24,6 @@
 
 #include "IME/ui/widgets/ChildWindow.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace ime::ui {
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons) :
@@ -43,7 +42,7 @@ namespace ime::ui {
     }
 
     void ChildWindow::setRenderer(std::shared_ptr<ChildWindowRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         window_->setRenderer(renderer->getInternalPtr()->getData());
     }
@@ -261,12 +260,12 @@ namespace ime::ui {
         setScale(window_->getScale().x + factorX, window_->getScale().y + factorY);
     }
 
-    bool ChildWindow::addWidget(std::shared_ptr<IWidget> widgetPtr,
+    bool ChildWindow::addWidget(std::shared_ptr<IWidget> widget,
         const std::string &widgetName)
     {
-        assert(widgetPtr && "Cannot add null widget to Child window container");
-        if (widgets_.insert({widgetName, widgetPtr}).second) {
-            window_->add(widgetPtr->getInternalPtr(), widgetName);
+        IME_ASSERT(widget, "Cannot add nullptr to a widget container");
+        if (widgets_.insert({widgetName, widget}).second) {
+            window_->add(widget->getInternalPtr(), widgetName);
             return true;
         }
         return false;

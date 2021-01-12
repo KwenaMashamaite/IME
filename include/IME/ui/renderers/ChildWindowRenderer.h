@@ -25,6 +25,7 @@
 #ifndef IME_CHILDWINDOWRENDERER_H
 #define IME_CHILDWINDOWRENDERER_H
 
+#include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
 #include <TGUI/Renderers/ChildWindowRenderer.hpp>

@@ -25,6 +25,7 @@
 #ifndef IME_BUTTON_H
 #define IME_BUTTON_H
 
+#include "IME/Config.h"
 #include "IClickableWidget.h"
 #include "IME/ui/renderers/ButtonRenderer.h"
 #include <TGUI/Widgets/Button.hpp>

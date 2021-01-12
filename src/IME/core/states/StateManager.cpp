@@ -23,18 +23,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/states/StateManager.h"
-#include <cassert>
 
 namespace ime {
     void StateManager::pushState(std::shared_ptr<State> state) {
-        assert(state && "A game state cannot be null");
+        IME_ASSERT(state, "Cannot add nullptr as a state");
         if (!states_.empty() && states_.top()->isEntered())
             states_.top()->onPause();
         states_.push(std::move(state));
     }
 
     void StateManager::popState() {
-        assert(!states_.empty() && "Cannot pop a state from an empty state manager");
+        IME_ASSERT(!states_.empty(), "Cannot pop a state from an empty state manager");
         if (states_.top()->isEntered())
             states_.top()->onExit();
         states_.pop();
@@ -52,7 +51,7 @@ namespace ime {
     }
 
     std::shared_ptr<State> StateManager::getActiveState() const {
-        assert(!states_.empty() && "Cannot retrieve a state from an empty state manager");
+        IME_ASSERT(!states_.empty(), "Cannot retrieve a state from an empty state manager");
         return states_.top();
     }
 

@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ProgressBar.h"
-#include <cassert>
 
 namespace ime::ui {
     ProgressBar::ProgressBar(const std::string& text) :
@@ -40,7 +39,7 @@ namespace ime::ui {
     }
 
     void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         progressBar_->setRenderer(renderer->getInternalPtr()->getData());
     }

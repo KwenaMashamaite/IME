@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/EditBox.h"
-#include <cassert>
 
 namespace ime::ui {
     EditBox::EditBox(const std::string& defaultText) :
@@ -40,7 +39,7 @@ namespace ime::ui {
     }
 
     void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         editBox_->setRenderer(renderer->getInternalPtr()->getData());
     }

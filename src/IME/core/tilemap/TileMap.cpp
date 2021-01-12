@@ -26,7 +26,6 @@
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/graphics/Window.h"
-#include <cassert>
 
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight) :
@@ -255,7 +254,7 @@ namespace ime {
     }
 
     bool TileMap::addChild(std::shared_ptr<Entity> child, Index index) {
-        assert(child && "Object added to the tilemap cannot be null");
+        IME_ASSERT(child, "Cannot add nullptr to a tilemap");
         if (isIndexValid(index) && !hasChild(child)) {
             child->setPosition(getTile(index).getPosition().x, getTile(index).getPosition().y);
             children_[index].push_back(std::move(child));
@@ -402,7 +401,7 @@ namespace ime {
     }
 
      void TileMap::textureTile(Index index, FloatRect rect) {
-        assert(!tilesets_.empty() && "Cannot texture tile with an empty tileset, set tileset to be used first");
+        IME_ASSERT(!tilesets_.empty(), "Cannot texture tile with an empty tileset, set tileset to be used first");
         if (isIndexValid(index)) {
             auto& sprite = tiledMap_[index.row][index.colm].getSprite();
             sprite.setTexture(tileSet_);

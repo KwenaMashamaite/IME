@@ -25,6 +25,7 @@
 #ifndef IME_CHECKBOX_H
 #define IME_CHECKBOX_H
 
+#include "IME/Config.h"
 #include "IClickableWidget.h"
 #include "IME/ui/renderers/CheckBoxRenderer.h"
 #include <TGUI/Widgets/CheckBox.hpp>

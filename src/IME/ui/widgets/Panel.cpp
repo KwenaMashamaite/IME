@@ -24,7 +24,6 @@
 
 #include "IME/ui/widgets/Panel.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace ime::ui {
     Panel::Panel(const std::string& width, const std::string& height) :
@@ -41,7 +40,7 @@ namespace ime::ui {
     }
 
     void Panel::setRenderer(std::shared_ptr<PanelRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         panel_->setRenderer(renderer->getInternalPtr()->getData());
     }
@@ -198,7 +197,7 @@ namespace ime::ui {
     bool Panel::addWidget(std::shared_ptr<IWidget> widget,
         const std::string &name)
     {
-        assert(widget && "Cannot add null widget to Panel");
+        IME_ASSERT(widget, "Cannot add nullptr to a widget container");
         if (widgets_.insert({name, widget}).second) {
             panel_->add(widget->getInternalPtr(), name);
             return true;

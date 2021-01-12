@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Label.h"
-#include <cassert>
 
 namespace ime::ui {
     Label::Label(const std::string &text) :
@@ -42,7 +41,7 @@ namespace ime::ui {
     }
 
     void Label::setRenderer(std::shared_ptr<LabelRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         label_->setRenderer(renderer->getInternalPtr()->getData());
     }

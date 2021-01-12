@@ -36,7 +36,7 @@ namespace ime::utility {
                 std::cout << "STATUS: " << msg << std::endl;
                 break;
             case MessageType::Warning:
-                std::cout << "WARNING: " << msg << std::endl;
+                IME_PRINT_WARNING(msg);
                 break;
             case MessageType::Error:
                 std::cout << "ERROR: " << msg << std::endl;

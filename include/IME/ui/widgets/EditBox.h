@@ -25,6 +25,7 @@
 #ifndef IME_EDITBOX_H
 #define IME_EDITBOX_H
 
+#include "IME/Config.h"
 #include "IClickableWidget.h"
 #include "IME/ui/renderers/EditBoxRenderer.h"
 #include <TGUI/Widgets/EditBox.hpp>

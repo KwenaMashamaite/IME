@@ -24,7 +24,6 @@
 
 #include "IME/ui/widgets/HorizontalLayout.h"
 #include "IME/utility/Helpers.h"
-#include <cassert>
 
 namespace ime::ui {
     HorizontalLayout::HorizontalLayout(const std::string& width, const std::string& height) :
@@ -43,7 +42,7 @@ namespace ime::ui {
     }
 
     void HorizontalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
-            assert(renderer && "A nullptr cannot be set as a renderer");
+            IME_ASSERT(renderer, "Cannot set nullptr as renderer");
             renderer_ = renderer;
             layout_->setRenderer(renderer->getInternalPtr()->getData());
         }
@@ -221,7 +220,7 @@ namespace ime::ui {
     bool HorizontalLayout::addWidget(std::shared_ptr<IWidget> widget,
         const std::string &name)
     {
-        assert(widget && "Cannot add null widget to Horizontal layout container");
+        IME_ASSERT(widget, "Cannot add nullptr to a widget container");
         if (widgets_.insert({name, widget}).second) {
             layout_->add(widget->getInternalPtr(), name);
             return true;

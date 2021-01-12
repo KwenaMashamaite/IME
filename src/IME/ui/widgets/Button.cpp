@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Button.h"
-#include <cassert>
 
 namespace ime::ui {
     Button::Button(const std::string &buttonText) :
@@ -39,7 +38,7 @@ namespace ime::ui {
     }
 
     void Button::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {
-        assert(renderer && "A nullptr cannot be set as a renderer");
+        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;
         button_->setRenderer(renderer->getInternalPtr()->getData());
     }

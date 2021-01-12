@@ -25,6 +25,7 @@
 #ifndef IME_VERTICALLAYOUT_H
 #define IME_VERTICALLAYOUT_H
 
+#include "IME/Config.h"
 #include "IBoxLayout.h"
 #include "IME/ui/renderers/BoxLayoutRenderer.h"
 #include <TGUI/Widgets/VerticalLayout.hpp>

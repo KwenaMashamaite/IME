@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/entity/Entity.h"
-#include <cassert>
 
 /* @TODO - Remove this if copy constructor and assignment operator
  *         implementation changes

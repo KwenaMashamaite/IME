@@ -25,6 +25,7 @@
 #ifndef IME_CHILDWINDOW_H
 #define IME_CHILDWINDOW_H
 
+#include "IME/Config.h"
 #include "IContainer.h"
 #include "IME/ui/renderers/ChildWindowRenderer.h"
 #include <TGUI/Widgets/ChildWindow.hpp>
