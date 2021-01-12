@@ -276,6 +276,19 @@ namespace ime {
         return false;
     }
 
+    void GridMover::resetTargetTile() {
+        if (target_ && !isTargetMoving() && targetTile_.getIndex()
+            != tileMap_.getTileOccupiedByChild(target_).getIndex())
+        {
+            targetTile_ = tileMap_.getTileOccupiedByChild(target_);
+            eventEmitter_.emit("targetTileReset", targetTile_);
+        }
+    }
+
+    void GridMover::onTargetTileReset(Callback<Tile> callback) {
+        eventEmitter_.addEventListener("targetTileReset", callback);
+    }
+
     bool GridMover::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }

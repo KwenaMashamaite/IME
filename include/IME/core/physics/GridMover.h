@@ -177,13 +177,9 @@ namespace ime {
          * in the grid (Solid tiles are always collidable). By default, the
          * event is handled internally before its emitted to the outside. The
          * internal handler prevents the target from occupying the solid tile
-         * by moving it back to its previous tile after the collision. This
-         * behaviour may be removed if not desired by calling
-         * removeInternalCollisionHandlerFor with "solidTiles" as the argument
+         * by moving it back to its previous tile after the collision
          *
          * The callback is passed the tile the target collided with
-         *
-         * @see removeInternalCollisionHandlerFor
          */
         int onSolidTileCollision(Callback<Tile> callback);
 
@@ -196,14 +192,10 @@ namespace ime {
          * in the grid. By default the event is handled internally before
          * its emitted to the outside. The internal handler prevents the
          * target from occupying the same tile as the obstacle by moving it
-         * back to its previous tile after the collision. This behaviour may
-         * be removed if not desired by invoking
-         * removeInternalCollisionHandlerFor with "obstacles" as the argument
+         * back to its previous tile after the collision
          *
          * The callback is passed the target as the first argument and the
          * obstacle it collided with as the second argument
-         *
-         * @see removeInternalCollisionHandlerFor
          */
         int onObstacleCollision(Callback<EntityPtr, EntityPtr> callback);
 
@@ -240,27 +232,16 @@ namespace ime {
          */
         int onPlayerCollision(Callback<EntityPtr, EntityPtr> callback);
 
-        void resetTargetTile() {
-            if (target_ && targetTile_.getIndex() != tileMap_.getTileOccupiedByChild(target_).getIndex()) {
-                targetTile_ = tileMap_.getTileOccupiedByChild(target_);
-                eventEmitter_.emit("targetTileReset", targetTile_);
-            }
-        }
-
-        void onTargetTileReset(Callback<Tile> callback){
-            eventEmitter_.addEventListener("targetTileReset", callback);
-        }
-
         /**
-         * @brief Remove an external collision handler
-         * @param handlerId Identification number of the handler
+         * @brief Remove a collision handler
+         * @param id Identification number of the handler
          * @return True if the handler was removed or false if no such handler
          *         exits
          *
-         * The identification number is the number returned when a handler
-         * is added to a collision event
+         * The identification number is the number returned when an event
+         * listener was added to a collision event
          */
-        bool removeCollisionHandler(int handlerId);
+        bool removeCollisionHandler(int id);
 
         /**
          * @brief Remove an event listener from an event
@@ -270,10 +251,25 @@ namespace ime {
          *         given event does not have an event listener with the
          *         given id
          *
-         * The identification number is the number returned when a handler
-         * is added to an event
+         * The identification number is the number returned when an event
+         * listener was added to an events
          */
         bool removeEventListener(const std::string& event, int id);
+
+        /**
+         * @internal
+         * @brief Reset the target tile to be the same as the entity tile
+         *
+         * The tile can only be rest if the entity is not moving
+         */
+        void resetTargetTile();
+
+        /**
+         * @internal
+         * @brief Add an event listener to target tile reset event
+         * @param callback Function to execute when the target tile is reset
+         */
+        void onTargetTileReset(Callback<Tile> callback);
 
         /**
          * @brief Destructor
@@ -347,8 +343,8 @@ namespace ime {
         TileMap& tileMap_;          //!< Grid to move entity in
         EntityPtr target_;          //!< Target to be moved in the grid
         Direction targetDirection_; //!< Stores the direction in which the target wishes to go
-        Tile targetTile_; //!< The grid tile the target wishes to reach
-        Tile prevTile_;   //!< Tile target was in before moving to adjacent tile
+        Tile targetTile_;           //!< The grid tile the target wishes to reach
+        Tile prevTile_;             //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_; //!< Collision event publisher
     };
 }
