@@ -366,6 +366,98 @@ namespace ime {
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
         };
     }
+
+    /**
+     * @brief Bind to the x position of a widget
+     * @param widget Widget to bind to
+     * @return The bound position
+     */
+    extern IME_API std::string bindLeft(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the y position of the widget
+     * @param widget Widget to bind to
+     * @return The bound position
+     */
+    extern IME_API std::string bindTop(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the width of a widget
+     * @param widget The widget to bind to
+     * @return The bound size
+     */
+    extern IME_API std::string bindWidth(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the height of a widget
+     * @param widget The widget to bind to
+     * @return The bound size
+     */
+    extern IME_API std::string bindHeight(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the right position of a widget
+     * @param widget Widget to bind to
+     * @return The bound position
+     */
+    extern IME_API std::string bindRight(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the bottom position of a widget
+     * @param widget Widget to bind to
+     * @return The bound position
+     */
+    extern IME_API std::string bindBottom(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the position of the widget
+     * @param widget Widget to bind to
+     * @return The bound position
+     */
+    extern IME_API std::string bindPosition(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the size of the widget
+     * @param widget The widget to bind to
+     * @return The bound size
+     */
+    extern IME_API std::string bindSize(std::shared_ptr<ui::IWidget> widget);
+
+    /**
+     * @brief Bind to the minimum value of two values
+     * @param value1 The first value
+     * @param value2 The second value
+     * @return The bound minimum
+     *
+     * The values can be relative or absolute. For relative values insert
+     * the percentage (%) at the end
+     *
+     * @code
+     * widget->setHeight(ime::bindMin("50, "100"); //Height will be set to 50 pixels
+     *
+     * widget->setHeight(ime::bindMin("10%", "15%"); //Height will be set to 10% of the widgets parent height
+     *
+     * @endcode
+     */
+    extern IME_API std::string bindMin(const std::string& value1, const std::string& value2);
+
+    /**
+     * @brief Bind to the maximum of two values
+     * @param value1 The first value
+     * @param value2 The second value
+     * @return The bound value
+     *
+     * The values can be relative or absolute. For relative values insert
+     * the percentage (%) at the end
+     *
+     * @code
+     * widget->setHeight(ime::bindMin("50, "100"); //Height will be set to 100 pixels
+     *
+     * widget->setHeight(ime::bindMin("10%", "15%"); //Height will be set to 15% of the widgets parent height
+     *
+     * @endcode
+     */
+    extern IME_API std::string bindMax(const std::string& value1, const std::string& value2);
 }
 
 #endif // IME_IWIDGET_H

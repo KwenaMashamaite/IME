@@ -22,17 +22,60 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <IME/ui/widgets/IWidget.h>
 #include "IME/utility/Utils.h"
 
-namespace ime::utility {
-    int generateRandomNum(int min, int max) {
-        return createRandomNumGenerator(min, max)();
+namespace ime { 
+    namespace utility {
+        int generateRandomNum(int min, int max) {
+            return createRandomNumGenerator(min, max)();
+        }
+    
+        Colour generateRandomColour() {
+            static auto gen_random_num_between_0_and_255 = createRandomNumGenerator(0, 255);
+            return {static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                    static_cast<unsigned int>(gen_random_num_between_0_and_255()),
+                    static_cast<unsigned int>(gen_random_num_between_0_and_255())};
+        }
     }
 
-    Colour generateRandomColour() {
-        static auto gen_random_num_between_0_and_255 = createRandomNumGenerator(0, 255);
-        return {static_cast<unsigned int>(gen_random_num_between_0_and_255()),
-                static_cast<unsigned int>(gen_random_num_between_0_and_255()),
-                static_cast<unsigned int>(gen_random_num_between_0_and_255())};
+    std::string bindLeft(std::shared_ptr<ui::IWidget> widget){
+        return tgui::bindLeft(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindTop(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindTop(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindWidth(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindWidth(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindHeight(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindHeight(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindRight(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindRight(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindBottom(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindBottom(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindPosition(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindPosition(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindSize(std::shared_ptr<ui::IWidget> widget) {
+        return tgui::bindSize(widget->getInternalPtr()).toString().toAnsiString();
+    }
+
+    std::string bindMin(const std::string& value1, const std::string& value2) {
+        return tgui::bindMin(value1.c_str(), value2.c_str()).toString().toAnsiString();
+    }
+
+    std::string bindMax(const std::string& value1, const std::string& value2) {
+        return tgui::bindMax(value1.c_str(), value2.c_str()).toString().toAnsiString();
     }
 }
