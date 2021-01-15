@@ -42,7 +42,8 @@ namespace ime {
         class IME_API HorizontalLayout : public IBoxLayout {
         public:
             using sharedPtr = std::shared_ptr<HorizontalLayout>; //!< Shared widget pointer
-
+            using constSharedPtr = std::shared_ptr<const HorizontalLayout>; //!< const shared widget pointer
+            
             /**
              * @brief Constructor
              * @param width Width of the layout relative to the size of its parent
@@ -76,6 +77,31 @@ namespace ime {
              */
             static sharedPtr create(const std::string& width = "100%",
                 const std::string& height = "100%");
+
+            /**
+             * @brief Create a copy of another layout
+             * @param other The layout to copy
+             * @param shareRenderer True if the new layout should have the
+             *          same renderer as the copied layout
+             * @return The new layout widget
+             *
+             * When the layouts share a renderer, changes in a render
+             * property of one of the layouts automatically reflect on
+             * the other layout, otherwise each layout has its own renderer
+             * and changes in render properties are isolated to the specific
+             * layout.
+             *
+             * @note when the layouts don't share a render, the renderer of
+             * the new layout widget will initially have the properties of
+             * the copied layout such that the two look the same after this
+             * function returns
+             *
+             * By default, the layouts share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the layout renderer

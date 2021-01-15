@@ -42,6 +42,7 @@ namespace ime {
         class IME_API Separator : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<Separator>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Separator>; //!< const shared widget pointer
 
             /**
              * @brief Constructor
@@ -53,6 +54,31 @@ namespace ime {
              * @return The new separator separator
              */
             static sharedPtr create();
+
+            /**
+             * @brief Create a copy of another separator
+             * @param other The separator to copy
+             * @param shareRenderer True if the new separator should have the
+             *          same renderer as the copied separator
+             * @return The new separator widget
+             *
+             * When the separators share a renderer, changes in a render
+             * property of one of the separators automatically reflect on
+             * the other separator, otherwise each separator has its own renderer
+             * and changes in render properties are isolated to the specific
+             * separator.
+             *
+             * @note when the separators don't share a render, the renderer of
+             * the new separator widget will initially have the properties of
+             * the copied separator such that the two look the same after this
+             * function returns
+             *
+             * By default, the separators share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the separators renderer

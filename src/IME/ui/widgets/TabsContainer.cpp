@@ -39,6 +39,19 @@ namespace ime::ui {
         return std::make_shared<TabsContainer>(width, height);
     }
 
+    TabsContainer::sharedPtr TabsContainer::copy(
+        TabsContainer::constSharedPtr other, bool shareRenderer)
+    {
+        auto widget = create();
+        widget->tabContainer_ = widget->tabContainer_->copy(other->tabContainer_);
+
+        if (!shareRenderer)
+            widget->tabContainer_->setRenderer(other->tabContainer_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->tabContainer_->getRenderer());
+
+        return widget;
+    }
+
     void TabsContainer::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

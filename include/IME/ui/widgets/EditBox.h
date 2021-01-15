@@ -39,6 +39,7 @@ namespace ime {
         class IME_API EditBox : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<EditBox>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
 
             /**
              * @brief Construct an edit box
@@ -52,6 +53,31 @@ namespace ime {
              * @return The new edit box
              */
             static sharedPtr create(const std::string& defaultText = "");
+
+            /**
+             * @brief Create a copy of another edit box
+             * @param other The edit box to copy
+             * @param shareRenderer True if the new edit box should have the
+             *          same renderer as the copied edit box
+             * @return The new edit box widget
+             *
+             * When the edit boxes share a renderer, changes in a render
+             * property of one of the edit boxes automatically reflect on
+             * the other edit box, otherwise each edit box has its own renderer
+             * and changes in render properties are isolated to the specific
+             * edit box.
+             *
+             * @note when the edit boxes don't share a render, the renderer of
+             * the new edit box widget will initially have the properties of
+             * the copied edit box such that the two look the same after this
+             * function returns
+             *
+             * By default, the edit boxes share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the edit boxes renderer

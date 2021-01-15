@@ -42,6 +42,7 @@ namespace ime {
         class IME_API Tabs : public IWidget {
         public:
             using sharedPtr = std::shared_ptr<Tabs>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Tabs>; //!< const shared widget pointer
 
             /**
              * @brief Constructor
@@ -53,6 +54,31 @@ namespace ime {
              * @return The new tabs widget
              */
             static sharedPtr create();
+
+            /**
+             * @brief Create a copy of another tabs
+             * @param other The tabs to copy
+             * @param shareRenderer True if the new tabs should have the
+             *          same renderer as the copied tabs
+             * @return The new tabs widget
+             *
+             * When the tabs share a renderer, changes in a render
+             * property of one of the tabs automatically reflect on
+             * the other tabs, otherwise each tabs has its own renderer
+             * and changes in render properties are isolated to the specific
+             * tabs.
+             *
+             * @note when the tabs don't share a render, the renderer of
+             * the new tabs widget will initially have the properties of
+             * the copied tabs such that the two look the same after this
+             * function returns
+             *
+             * By default, the tabs share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the tabs renderer

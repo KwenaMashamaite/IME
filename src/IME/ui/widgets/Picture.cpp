@@ -58,6 +58,17 @@ namespace ime::ui {
         return std::make_shared<Picture>();
     }
 
+    Picture::sharedPtr Picture::copy(Picture::constSharedPtr other, bool shareRenderer) {
+        auto widget = create();
+        widget->picture_ = widget->picture_->copy(other->picture_);
+
+        if (!shareRenderer)
+            widget->picture_->setRenderer(other->picture_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->picture_->getRenderer());
+
+        return widget;
+    }
+
     Picture::sharedPtr Picture::create(const std::string &filename, bool transparentTexture) {
         return std::make_shared<Picture>(filename, transparentTexture);
     }

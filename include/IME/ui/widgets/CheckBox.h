@@ -39,6 +39,7 @@ namespace ime {
         class IME_API CheckBox : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<CheckBox>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const CheckBox>; //!< const shared widget pointer
 
             /**
              * @brief Create the checkbox
@@ -52,6 +53,31 @@ namespace ime {
              * @return The new checkbox
              */
             static sharedPtr create(const std::string& text = "");
+
+            /**
+             * @brief Create a copy of another checkbox
+             * @param other The checkbox to copy
+             * @param shareRenderer True if the new checkbox should have the
+             *          same renderer as the copied checkbox
+             * @return The new checkbox widget
+             *
+             * When the checkboxes share a renderer, changes in a render
+             * property of one of the checkboxes automatically reflect on
+             * the other checkbox, otherwise each checkbox has its own renderer
+             * and changes in render properties are isolated to the specific
+             * checkbox.
+             *
+             * @note when the checkboxes don't share a render, the renderer of
+             * the new checkbox widget will initially have the properties of
+             * the copied checkbox such that the two look the same after this
+             * function returns
+             *
+             * By default, the checkboxes share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the checkboxes renderer

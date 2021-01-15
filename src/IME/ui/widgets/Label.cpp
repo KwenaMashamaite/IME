@@ -36,6 +36,17 @@ namespace ime::ui {
         return std::make_shared<Label>(text);
     }
 
+    Label::sharedPtr Label::copy(Label::constSharedPtr other, bool shareRenderer) {
+        auto widget = create();
+        widget->label_ = widget->label_->copy(other->label_);
+
+        if (!shareRenderer)
+            widget->label_->setRenderer(other->label_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->label_->getRenderer());
+
+        return widget;
+    }
+
     std::shared_ptr<LabelRenderer> Label::getRenderer() {
         return renderer_;
     }

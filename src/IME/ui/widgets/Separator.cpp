@@ -37,6 +37,19 @@ namespace ime::ui {
         return std::make_shared<Separator>();
     }
 
+    Separator::sharedPtr Separator::copy(Separator::constSharedPtr other, 
+        bool shareRenderer) 
+    {
+        auto widget = create();
+        widget->separator_ = widget->separator_->copy(other->separator_);
+
+        if (!shareRenderer)
+            widget->separator_->setRenderer(other->separator_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->separator_->getRenderer());
+
+        return widget;
+    }
+
     void Separator::setRenderer(std::shared_ptr<SeparatorRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

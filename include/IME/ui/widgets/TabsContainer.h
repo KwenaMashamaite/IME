@@ -47,6 +47,7 @@ namespace ime {
         class IME_API TabsContainer : public IWidget {
         public:
             using sharedPtr = std::shared_ptr<TabsContainer>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const TabsContainer>; //!< const shared widget pointer
 
             /**
              * @brief Constructor
@@ -84,6 +85,31 @@ namespace ime {
              */
             static sharedPtr create(const std::string& width = "100%",
                 const std::string& height = "100%");
+
+            /**
+             * @brief Create a copy of another container
+             * @param other The container to copy
+             * @param shareRenderer True if the new container should have the
+             *          same renderer as the copied container
+             * @return The new container widget
+             *
+             * When the containers share a renderer, changes in a render
+             * property of one of the containers automatically reflect on
+             * the other container, otherwise each container has its own renderer
+             * and changes in render properties are isolated to the specific
+             * container.
+             *
+             * @note when the containers don't share a render, the renderer of
+             * the new container widget will initially have the properties of
+             * the copied container such that the two look the same after this
+             * function returns
+             *
+             * By default, the containers share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the tabs renderer
@@ -336,15 +362,15 @@ namespace ime {
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show the layout with an animation
+             * @brief Show the container with an animation
              * @param type Type of the animation
              * @param duration Duration of the animation in milliseconds
              *
-             * The animation will be played if the layout currently
+             * The animation will be played if the container currently
              * visible
              *
              * @note During the animation the position, size and/or opacity
-             * opacity may change. Once the animation is done the layout
+             * opacity may change. Once the animation is done the container
              * will be back in the state in which it was when this function
              * was called
              *
@@ -354,15 +380,15 @@ namespace ime {
             void showWithEffect(ShowAnimationType type, int duration) override;
 
             /**
-             * @brief Hide the layout with an animation
+             * @brief Hide the container with an animation
              * @param type Type of the animation
              * @param duration Duration of the animation in milliseconds
              *
-             * The animation will also be played if the layout currently
+             * The animation will also be played if the container currently
              * hidden but it will not be seen
              *
              * @note During the animation the position, size and/or opacity
-             * opacity may change. Once the animation is done the layout
+             * opacity may change. Once the animation is done the container
              * will be back in the state in which it was when this function
              * was called
              *
@@ -381,26 +407,26 @@ namespace ime {
             bool isAnimationPlaying() const override;
 
             /**
-             * @brief Show or hide a layout
+             * @brief Show or hide a container
              * @param visible True to show or false to hide
              *
-             * If the layout is hidden, it won't receive events
+             * If the container is hidden, it won't receive events
              * (and thus won't send callbacks) nor will it be drawn
              *
-             * The layout is visible by default.
+             * The container is visible by default.
              */
             void setVisible(bool visible) override;
 
             /**
-             * @brief Check if the layout is visible or not
-             * @return True if the layout is visible or false if hidden
+             * @brief Check if the container is visible or not
+             * @return True if the container is visible or false if hidden
              */
             bool isVisible() const override;
 
             /**
-             * @brief Toggle the visibility of the layout
+             * @brief Toggle the visibility of the container
              *
-             * This function will hide the layout if its currently
+             * This function will hide the container if its currently
              * visible and vice versa
              * 
              * @see setVisible

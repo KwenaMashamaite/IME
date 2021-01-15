@@ -40,6 +40,7 @@ namespace ime {
         class IME_API Panel : public IContainer {
         public:
             using sharedPtr = std::shared_ptr<Panel>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Panel>; //!< const shared widget pointer
 
             /**
              * @brief Constructor
@@ -77,6 +78,31 @@ namespace ime {
              */
             static sharedPtr create(const std::string& width = "100%",
                 const std::string& height = "100%");
+
+            /**
+             * @brief Create a copy of another panel
+             * @param other The panel to copy
+             * @param shareRenderer True if the new panel should have the
+             *          same renderer as the copied panel
+             * @return The new panel widget
+             *
+             * When the panels share a renderer, changes in a render
+             * property of one of the panels automatically reflect on
+             * the other panel, otherwise each panel has its own renderer
+             * and changes in render properties are isolated to the specific
+             * panel.
+             *
+             * @note when the panels don't share a render, the renderer of
+             * the new panel widget will initially have the properties of
+             * the copied panel such that the two look the same after this
+             * function returns
+             *
+             * By default, the panels share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the panels renderer

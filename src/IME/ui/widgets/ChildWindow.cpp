@@ -41,6 +41,19 @@ namespace ime::ui {
         return std::make_shared<ChildWindow>(title, titleButtons);
     }
 
+    ChildWindow::sharedPtr ChildWindow::copy(ChildWindow::constSharedPtr other,
+        bool shareRenderer)
+    {
+        auto widget = create();
+        widget->window_ = widget->window_->copy(other->window_);
+
+        if (!shareRenderer)
+            widget->window_->setRenderer(other->window_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->window_->getRenderer());
+
+        return widget;
+    }
+
     void ChildWindow::setRenderer(std::shared_ptr<ChildWindowRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

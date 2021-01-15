@@ -37,6 +37,19 @@ namespace ime::ui {
         return std::make_shared<CheckBox>(text);
     }
 
+    CheckBox::sharedPtr CheckBox::copy(CheckBox::constSharedPtr other,
+        bool shareRenderer)
+    {
+        auto widget = create();
+        widget->checkBox_ = widget->checkBox_->copy(other->checkBox_);
+
+        if (!shareRenderer)
+            widget->checkBox_->setRenderer(other->checkBox_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->checkBox_->getRenderer());
+
+        return widget;
+    }
+
     void CheckBox::setRenderer(std::shared_ptr<CheckBoxRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

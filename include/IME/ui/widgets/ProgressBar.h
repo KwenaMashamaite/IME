@@ -39,6 +39,7 @@ namespace ime {
         class IME_API ProgressBar : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<ProgressBar>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const ProgressBar>; //!< const shared widget pointer
 
             /**
              * @brief Determines in which direction the progress bar is filled
@@ -63,6 +64,31 @@ namespace ime {
              * @return The new progress bar
              */
             static sharedPtr create(const std::string& text = "");
+
+            /**
+             * @brief Create a copy of another progress bar
+             * @param other The progress bar to copy
+             * @param shareRenderer True if the new progress bar should have the
+             *          same renderer as the copied progress bar
+             * @return The new progress bar widget
+             *
+             * When the progress bars share a renderer, changes in a render
+             * property of one of the progress bars automatically reflect on
+             * the other progress bar, otherwise each progress bar has its own renderer
+             * and changes in render properties are isolated to the specific
+             * progress bar.
+             *
+             * @note when the progress bars don't share a render, the renderer of
+             * the new progress bar widget will initially have the properties of
+             * the copied progress bar such that the two look the same after this
+             * function returns
+             *
+             * By default, the progress bars share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the progress bars renderer

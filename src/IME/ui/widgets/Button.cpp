@@ -37,6 +37,17 @@ namespace ime::ui {
         return std::make_shared<Button>(text);
     }
 
+    Button::sharedPtr Button::copy(Button::constSharedPtr other, bool shareRenderer) {
+        auto widget = create();
+        widget->button_ = widget->button_->copy(other->button_);
+
+        if (!shareRenderer)
+            widget->button_->setRenderer(other->button_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->button_->getRenderer());
+
+        return widget;
+    }
+
     void Button::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

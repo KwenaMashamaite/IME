@@ -40,6 +40,7 @@ namespace ime {
         class IME_API Label : public IWidget {
         public:
             using sharedPtr = std::shared_ptr<Label>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Label>; //!< const shared widget pointer
 
             /**
              * @brief The horizontal text alignment
@@ -71,6 +72,31 @@ namespace ime {
              * @return The new label
              */
             static sharedPtr create(const std::string& text = "");
+
+            /**
+             * @brief Create a copy of another label
+             * @param other The label to copy
+             * @param shareRenderer True if the new label should have the
+             *          same renderer as the copied label
+             * @return The new label widget
+             *
+             * When the labels share a renderer, changes in a render
+             * property of one of the labels automatically reflect on
+             * the other label, otherwise each label has its own renderer
+             * and changes in render properties are isolated to the specific
+             * label.
+             *
+             * @note when the labels don't share a render, the renderer of
+             * the new label widget will initially have the properties of
+             * the copied label such that the two look the same after this
+             * function returns
+             *
+             * By default, the labels share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the labels renderer

@@ -39,6 +39,8 @@ namespace ime {
         class IME_API Picture : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<Picture>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Picture>; //!< const shared widget pointer
+            
             /**
              * @brief Create an empty picture
              */
@@ -81,6 +83,31 @@ namespace ime {
              * @return The new picture widget
              */
             static sharedPtr create();
+
+            /**
+             * @brief Create a copy of another picture
+             * @param other The picture to copy
+             * @param shareRenderer True if the new picture should have the
+             *          same renderer as the copied picture
+             * @return The new picture widget
+             *
+             * When the pictures share a renderer, changes in a render
+             * property of one of the pictures automatically reflect on
+             * the other picture, otherwise each picture has its own renderer
+             * and changes in render properties are isolated to the specific
+             * picture.
+             *
+             * @note when the pictures don't share a render, the renderer of
+             * the new picture widget will initially have the properties of
+             * the copied picture such that the two look the same after this
+             * function returns
+             *
+             * By default, the pictures share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Create a new picture widget

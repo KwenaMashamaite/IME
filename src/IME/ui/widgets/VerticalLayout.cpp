@@ -41,6 +41,19 @@ namespace ime::ui {
         return std::make_shared<VerticalLayout>(width, height);
     }
 
+    VerticalLayout::sharedPtr VerticalLayout::copy(
+        VerticalLayout::constSharedPtr other, bool shareRenderer)
+    {
+        auto widget = create();
+        widget->layout_ = widget->layout_->copy(other->layout_);
+
+        if (!shareRenderer)
+            widget->layout_->setRenderer(other->layout_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->layout_->getRenderer());
+
+        return widget;
+    }
+
     void VerticalLayout::setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

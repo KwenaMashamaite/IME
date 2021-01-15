@@ -41,6 +41,7 @@ namespace ime {
         class IME_API ChildWindow : public IContainer {
         public:
             using sharedPtr = std::shared_ptr<ChildWindow>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const ChildWindow>; //!< const shared widget pointer
 
             /**
              * @brief Title alignments, possible options for the setTitleAlignment function
@@ -77,6 +78,31 @@ namespace ime {
              */
             static sharedPtr create(const std::string& title = "",
                 unsigned int titleButtons = TitleButton::Close);
+
+            /**
+             * @brief Create a copy of another window
+             * @param other The window to copy
+             * @param shareRenderer True if the new window should have the
+             *          same renderer as the copied window
+             * @return The new window widget
+             *
+             * When the windows share a renderer, changes in a render
+             * property of one of the windows automatically reflect on
+             * the other window, otherwise each window has its own renderer
+             * and changes in render properties are isolated to the specific
+             * window.
+             *
+             * @note when the windows don't share a render, the renderer of
+             * the new window widget will initially have the properties of
+             * the copied window such that the two look the same after this
+             * function returns
+             *
+             * By default, the windows share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the child window renderer

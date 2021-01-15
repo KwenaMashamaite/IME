@@ -38,6 +38,19 @@ namespace ime::ui {
         return std::make_shared<ProgressBar>(text);
     }
 
+    ProgressBar::sharedPtr ProgressBar::copy(ProgressBar::constSharedPtr other,
+        bool shareRenderer)
+    {
+        auto widget = create();
+        widget->progressBar_ = widget->progressBar_->copy(other->progressBar_);
+
+        if (!shareRenderer)
+            widget->progressBar_->setRenderer(other->progressBar_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->progressBar_->getRenderer());
+
+        return widget;
+    }
+
     void ProgressBar::setRenderer(std::shared_ptr<ProgressBarRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

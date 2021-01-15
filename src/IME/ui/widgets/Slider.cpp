@@ -37,6 +37,19 @@ namespace ime::ui {
         return std::make_shared<Slider>(minimum, maximum);
     }
 
+    Slider::sharedPtr Slider::copy(Slider::constSharedPtr other,
+        bool shareRenderer)
+    {
+        auto widget = create();
+        widget->slider_ = widget->slider_->copy(other->slider_);
+
+        if (!shareRenderer)
+            widget->slider_->setRenderer(other->slider_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->slider_->getRenderer());
+
+        return widget;
+    }
+
     void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

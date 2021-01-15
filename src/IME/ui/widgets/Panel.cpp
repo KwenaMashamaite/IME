@@ -39,6 +39,17 @@ namespace ime::ui {
         return std::make_shared<Panel>(width, height);
     }
 
+    Panel::sharedPtr Panel::copy(Panel::constSharedPtr other, bool shareRenderer) {
+        auto widget = create();
+        widget->panel_ = widget->panel_->copy(other->panel_);
+
+        if (!shareRenderer)
+            widget->panel_->setRenderer(other->panel_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->panel_->getRenderer());
+
+        return widget;
+    }
+
     void Panel::setRenderer(std::shared_ptr<PanelRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

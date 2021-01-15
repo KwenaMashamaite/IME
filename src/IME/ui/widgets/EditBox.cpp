@@ -38,6 +38,17 @@ namespace ime::ui {
         return std::make_shared<EditBox>(defaultText);
     }
 
+    EditBox::sharedPtr EditBox::copy(EditBox::constSharedPtr other, bool shareRenderer) {
+        auto widget = create();
+        widget->editBox_ = widget->editBox_->copy(other->editBox_);
+
+        if (!shareRenderer)
+            widget->editBox_->setRenderer(other->editBox_->getRenderer()->clone());
+        widget->renderer_->setInternalPtr(other->editBox_->getRenderer());
+
+        return widget;
+    }
+
     void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
         IME_ASSERT(renderer, "Cannot set nullptr as renderer");
         renderer_ = renderer;

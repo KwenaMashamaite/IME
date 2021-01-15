@@ -39,6 +39,7 @@ namespace ime {
         class IME_API Slider : public IWidget {
         public:
             using sharedPtr = std::shared_ptr<Slider>; //!< Shared widget pointer
+            using constSharedPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
 
             /**
              * @brief Construct a slider
@@ -54,6 +55,31 @@ namespace ime {
              * @return The new slider
              */
             static sharedPtr create(float minimum = 0, float maximum = 10);
+
+            /**
+             * @brief Create a copy of another slider
+             * @param other The slider to copy
+             * @param shareRenderer True if the new slider should have the
+             *          same renderer as the copied slider
+             * @return The new slider widget
+             *
+             * When the sliders share a renderer, changes in a render
+             * property of one of the sliders automatically reflect on
+             * the other slider, otherwise each slider has its own renderer
+             * and changes in render properties are isolated to the specific
+             * slider.
+             *
+             * @note when the sliders don't share a render, the renderer of
+             * the new slider widget will initially have the properties of
+             * the copied slider such that the two look the same after this
+             * function returns
+             *
+             * By default, the sliders share a renderer
+             *
+             * @warning Once a renderer is shared, it cannot be unshared at
+             * a later time
+             */
+            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
              * @brief Set the sliders renderer
