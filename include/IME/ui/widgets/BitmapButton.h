@@ -258,6 +258,22 @@ namespace ime {
             void setHeight(const std::string& height) override;
 
             /**
+             * @brief Set the mouse cursor that is displayed when the mouse
+             *        is on top of the button
+             * @param cursor The cursor to be shown
+             *
+             * By default, the arrow cursor is shown
+             */
+            void setMouseCursor(CursorType cursor) override;
+
+            /**
+             * @brief Get the mouse cursor that is displayed when the mouse
+             *        is on top of the button
+             * @return The cursor shown when hovering above the button
+             */
+            CursorType getMouseCursor() const override;
+
+            /**
              * @brief Get the type of the button
              * @return The type of the button
              */
@@ -406,7 +422,7 @@ namespace ime {
              * @return The absolute position of the button
              *
              * Unlike getPosition, this function returns the absolute
-             * position of the top-left point of the widget instead
+             * position of the top-left point of the button instead
              * of the relative position to its parent
              *
              * @see setPosition

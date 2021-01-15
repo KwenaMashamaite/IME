@@ -298,6 +298,22 @@ namespace ime {
             void setHeight(const std::string& height) override;
 
             /**
+             * @brief Set the mouse cursor that is displayed when the mouse
+             *        is on top of the picture
+             * @param cursor The cursor to be shown
+             *
+             * By default, the arrow cursor is shown
+             */
+            void setMouseCursor(CursorType cursor) override;
+
+            /**
+             * @brief Get the mouse cursor that is displayed when the mouse
+             *        is on top of the picture
+             * @return The cursor shown when hovering above the picture
+             */
+            CursorType getMouseCursor() const override;
+
+            /**
              * @brief Get the type of the picture
              * @return The type of the picture
              */

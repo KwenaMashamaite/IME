@@ -235,6 +235,14 @@ namespace ime::ui {
         button_->setHeight(height.c_str());
     }
 
+    void BitmapButton::setMouseCursor(CursorType cursor) {
+        button_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType BitmapButton::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(button_->getMouseCursor()));
+    }
+
     void BitmapButton::initEvents() {
         button_->onMouseEnter([this]{emit("mouseEnter");});
         button_->onMouseLeave([this]{emit("mouseLeave");});

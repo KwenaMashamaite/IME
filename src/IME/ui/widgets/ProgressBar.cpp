@@ -272,6 +272,14 @@ namespace ime::ui {
         progressBar_->setHeight(height.c_str());
     }
 
+    void ProgressBar::setMouseCursor(CursorType cursor) {
+        progressBar_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType ProgressBar::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(progressBar_->getMouseCursor()));
+    }
+
     void ProgressBar::initEvents() {
         progressBar_->onMouseEnter([this]{emit("mouseEnter");});
         progressBar_->onMouseLeave([this]{emit("mouseLeave");});

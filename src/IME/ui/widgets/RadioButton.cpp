@@ -125,6 +125,14 @@ namespace ime::ui {
         button_->setHeight(height.c_str());
     }
 
+    void RadioButton::setMouseCursor(CursorType cursor) {
+        button_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType RadioButton::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(button_->getMouseCursor()));
+    }
+
     std::string RadioButton::getWidgetType() const {
         return "RadioButton";
     }

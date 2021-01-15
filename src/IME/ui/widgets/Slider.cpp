@@ -206,6 +206,14 @@ namespace ime::ui {
         slider_->setHeight(height.c_str());
     }
 
+    void Slider::setMouseCursor(CursorType cursor) {
+        slider_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Slider::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(slider_->getMouseCursor()));
+    }
+
     unsigned int Slider::getTextSize() const {
         return slider_->getTextSize();
     }

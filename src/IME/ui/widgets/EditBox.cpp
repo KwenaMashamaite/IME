@@ -265,6 +265,14 @@ namespace ime::ui {
         editBox_->setHeight(height.c_str());
     }
 
+    void EditBox::setMouseCursor(CursorType cursor) {
+        editBox_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType EditBox::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(editBox_->getMouseCursor()));
+    }
+
     void EditBox::setScale(Vector2f scale) {
         setScale(scale.x, scale.y);
     }

@@ -168,6 +168,14 @@ namespace ime::ui {
         button_->setHeight(height.c_str());
     }
 
+    void Button::setMouseCursor(CursorType cursor) {
+        button_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Button::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(button_->getMouseCursor()));
+    }
+
     unsigned int Button::getTextSize() const {
         return button_->getTextSize();
     }

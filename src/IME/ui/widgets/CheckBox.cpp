@@ -234,6 +234,14 @@ namespace ime::ui {
         checkBox_->setHeight(height.c_str());
     }
 
+    void CheckBox::setMouseCursor(CursorType cursor) {
+        checkBox_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType CheckBox::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(checkBox_->getMouseCursor()));
+    }
+
     void CheckBox::setScale(Vector2f scale) {
         setScale(scale.x, scale.y);
     }

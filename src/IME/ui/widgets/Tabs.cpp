@@ -194,6 +194,14 @@ namespace ime::ui {
         tabs_->setHeight(height.c_str());
     }
 
+    void Tabs::setMouseCursor(CursorType cursor) {
+        tabs_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Tabs::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(tabs_->getMouseCursor()));
+    }
+
     std::string Tabs::getWidgetType() const {
         return "Tabs";
     }

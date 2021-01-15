@@ -137,6 +137,14 @@ namespace ime::ui {
         picture_->setHeight(height.c_str());
     }
 
+    void Picture::setMouseCursor(CursorType cursor) {
+        picture_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Picture::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(picture_->getMouseCursor()));
+    }
+
     std::string Picture::getWidgetType() const {
         return "Picture";
     }

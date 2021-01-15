@@ -207,6 +207,14 @@ namespace ime::ui {
         label_->setHeight(height.c_str());
     }
 
+    void Label::setMouseCursor(CursorType cursor) {
+        label_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Label::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(label_->getMouseCursor()));
+    }
+
     std::string Label::getText() const {
         return label_->getText().toAnsiString();
     }

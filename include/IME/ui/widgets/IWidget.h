@@ -34,6 +34,26 @@
 #include <string>
 
 namespace ime {
+    /**
+     * @brief Mouse cursor types
+     */
+    enum class CursorType {
+        Arrow,                  //!< Arrow cursor (default)
+        Text,                   //!< I-beam, cursor when hovering over a text field
+        Hand,                   //!< Pointing hand cursor
+        SizeLeft,               //!< Left arrow on Linux, horizontal double arrow cursor on Windows and macOS
+        SizeRight,              //!< Right arrow on Linux, horizontal double arrow cursor on Windows and macOS
+        SizeTop,                //!< Up arrow on Linux, vertical double arrow cursor on Windows and macOS
+        SizeBottom,             //!< Down arrow on Linux, vertical double arrow cursor on Windows and macOS
+        SizeTopLeft,            //!< Top-left arrow on Linux, double arrow cursor going from top-left to bottom-right on Windows and macOS
+        SizeBottomRight,        //!< Bottom-right arrow on Linux, double arrow cursor going from top-left to bottom-right on Windows and
+        SizeBottomLeft,         //!< Bottom-left arrow on Linux, double arrow cursor going from bottom-left to top-right on Windows and macOS
+        SizeTopRight,           //!< Top-right arrow on Linux, double arrow cursor going from bottom-left to top-right on Windows and macOS
+        Crosshair,              //!< Crosshair cursor
+        Help,                   //!< Help cursor
+        NotAllowed              //!< Action not allowed cursor
+    };
+
     enum class ShowAnimationType {
         Fade,          //!< Fade widget in or out
         Scale,         //!< Shrink to the center of the widget to hide or grow from its center to show
@@ -192,6 +212,22 @@ namespace ime {
              * @see setSize
              */
             virtual void setHeight(const std::string& height) = 0;
+
+            /**
+             * @brief Set the mouse cursor that is displayed when the mouse
+             *        is on top of the widget
+             * @param cursor The cursor to be shown
+             *
+             * By default, the arrow cursor is shown
+             */
+            virtual void setMouseCursor(CursorType cursor) = 0;
+
+            /**
+             * @brief Get the mouse cursor that is displayed when the mouse
+             *        is on top of the widget
+             * @return The cursor shown when hovering above the widget
+             */
+            virtual CursorType getMouseCursor() const = 0;
 
             /**
              * @brief Get the type of the widget

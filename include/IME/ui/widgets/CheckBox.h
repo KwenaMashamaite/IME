@@ -257,6 +257,22 @@ namespace ime {
             void setHeight(const std::string& height) override;
 
             /**
+             * @brief Set the mouse cursor that is displayed when the mouse
+             *        is on top of the checkbox
+             * @param cursor The cursor to be shown
+             *
+             * By default, the arrow cursor is shown
+             */
+            void setMouseCursor(CursorType cursor) override;
+
+            /**
+             * @brief Get the mouse cursor that is displayed when the mouse
+             *        is on top of the checkbox
+             * @return The cursor shown when hovering above the checkbox
+             */
+            CursorType getMouseCursor() const override;
+
+            /**
              * @brief Get the type of the check box
              * @return The type of the check box
              */

@@ -102,6 +102,14 @@ namespace ime::ui {
         layout_->setHeight(height.c_str());
     }
 
+    void HorizontalLayout::setMouseCursor(CursorType cursor) {
+        layout_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType HorizontalLayout::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(layout_->getMouseCursor()));
+    }
+
     unsigned int HorizontalLayout::getTextSize() const {
         return layout_->getTextSize();
     }

@@ -100,6 +100,14 @@ namespace ime::ui {
         separator_->setHeight(height.c_str());
     }
 
+    void Separator::setMouseCursor(CursorType cursor) {
+        separator_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType Separator::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(separator_->getMouseCursor()));
+    }
+
     std::string Separator::getWidgetType() const {
         return "Separator";
     }

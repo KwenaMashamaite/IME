@@ -184,6 +184,14 @@ namespace ime::ui {
         window_->setHeight(height.c_str());
     }
 
+    void ChildWindow::setMouseCursor(CursorType cursor) {
+        window_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
+    }
+
+    CursorType ChildWindow::getMouseCursor() const {
+        return static_cast<CursorType>(static_cast<int>(window_->getMouseCursor()));
+    }
+
     unsigned int ChildWindow::getTextSize() const {
         return window_->getTextSize();
     }
