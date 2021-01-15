@@ -22,6 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+// All of the Functions in this file are meant for internal use and should
+// never be called externally
+
 #ifndef IME_UTILITY_H
 #define IME_UTILITY_H
 
@@ -125,6 +128,7 @@ namespace ime::utility {
     extern tgui::Font get_TGUI_Font(const std::string& filename);
 
     /**
+     * @internal
      * @brief Recursively search for a widget
      * @param container Container to recursively search
      * @param widgetName Name of the widget to search for
@@ -134,7 +138,7 @@ namespace ime::utility {
         const std::unordered_map<std::string, std::shared_ptr<ui::IWidget>>& container,
         const std::string& widgetName);
 
-    #include "Helpers.inl"
+    #include "IME/utility/Helpers.inl"
 }
 
 #endif // IME_UTILITY_H
