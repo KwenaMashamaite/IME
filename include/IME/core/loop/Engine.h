@@ -33,6 +33,7 @@
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/states/StateManager.h"
+#include "IME/core/time/Timer.h"
 #include <queue>
 
 namespace ime {
@@ -222,6 +223,31 @@ namespace ime {
         Window& getRenderTarget();
 
         /**
+         * @brief Schedule a callback to be executed after a delay
+         * @param delay Time to wait (in seconds) before executing the callback
+         * @param callback Function to be executed
+         *
+         * This function will execute a callback function once after
+         * @a delay seconds. To execute a callback repeatedly every
+         * interval, checkout the setInterval function
+         *
+         * @see setInterval
+         */
+        void setTimeout(float delay, ime::Callback<> callback);
+
+        /**
+         * @brief Schedule a callback to be executed every interval
+         * @param delay Time to wait (in seconds) before executing the callback
+         * @param callback Function to be executed
+         *
+         * Unlike setTimeout, this function will execute a callback
+         * every @a delay seconds while the engine is running
+         *
+         * @see setTimeout
+         */
+        void setInterval(float delay, ime::Callback<> callback);
+
+        /**
          * @brief Add an event lister to a window close event
          * @param callback Function to execute when a window close event is fired
          *
@@ -342,6 +368,7 @@ namespace ime {
         Callback<> windowCloseHandler_;                         //!< Window close event listener
         Callback<> onFrameStart_;                               //!< Function called at the start of a frame
         Callback<> onFrameEnd_;                                 //!< Function called at the end of a frame
+        std::vector<Timer> activeTimers_;                       //!< Timers that are counting down
         std::queue<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_; //!< Holds states to be pushed to the engine at the end of the current frame
     };
 }

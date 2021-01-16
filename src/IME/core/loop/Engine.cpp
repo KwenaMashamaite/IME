@@ -26,20 +26,31 @@
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
 
-template <class T>
-void setDefaultValueIfNotSet(ime::PropertyContainer& settings,
-     const std::string& setting, const std::string& type, T&& defaultValue)
-{
-    if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
-        return;
-    else if (!settings.hasProperty(setting))
-        settings.addProperty({setting, type, std::forward<T>(defaultValue)});
-    else
-        settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
-    IME_PRINT_WARNING(R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
-}
-
 namespace ime {
+    namespace {
+        template <class T>
+        void setDefaultValueIfNotSet(PropertyContainer& settings,
+            const std::string& setting, const std::string& type, T&& defaultValue)
+        {
+            if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
+                return;
+            else if (!settings.hasProperty(setting))
+                settings.addProperty({setting, type, std::forward<T>(defaultValue)});
+            else
+                settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
+            IME_PRINT_WARNING(R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
+        }
+
+        Timer createTimer(float delay, Callback<> callback, bool isRepeating) {
+            auto timer = Timer();
+            timer.setInterval(delay);
+            timer.setTimeoutCallback(std::move(callback));
+            timer.setRepeat(isRepeating);
+            timer.start();
+            return timer;
+        }
+    }
+
     Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
         Engine(gameName, "")
     {
@@ -175,6 +186,9 @@ namespace ime {
     }
 
     void Engine::update(float deltaTime) {
+        for (auto& timer : activeTimers_)
+            timer.update(deltaTime);
+
         statesManager_.getActiveState()->update(deltaTime);
     }
 
@@ -208,6 +222,11 @@ namespace ime {
     }
 
     void Engine::postFrameUpdate() {
+        //Remove timers that have completed countdown
+        activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer& timer) {
+            return !timer.isRunning();
+        }), activeTimers_.end());
+
         // Always pop first
         if (shouldPop_) {
             shouldPop_ = false;
@@ -291,6 +310,14 @@ namespace ime {
 
     Window &Engine::getRenderTarget() {
         return window_;
+    }
+
+    void Engine::setTimeout(float delay, ime::Callback<> callback) {
+        activeTimers_.push_back(createTimer(delay, std::move(callback),false));
+    }
+
+    void Engine::setInterval(float delay, ime::Callback<> callback) {
+        activeTimers_.push_back(createTimer(delay, std::move(callback), true));
     }
 
     void Engine::onWindowClose(Callback<> callback) {

@@ -29,6 +29,8 @@
 #include "IME/graphics/Colour.h"
 #include <random>
 #include <ctime>
+#include <chrono>
+#include <thread>
 
 namespace ime {
     namespace utility {
@@ -59,6 +61,76 @@ namespace ime {
          * @return A random colour
          */
         IME_API extern Colour generateRandomColour();
+
+        /**
+         * @brief Execute a one time callback function after a delay
+         * @param delay Time to wait before executing callback in milliseconds
+         * @param callback Callback function to execute
+         * @param args Arguments passed to the callback function on invocation
+         *
+         * This function is blocking as the current thread will wait for the
+         * callback execution to finish. The countdown is initiated right
+         * away
+         */
+        template <typename Callable, typename...Args>
+        void setTimeoutSync(int delay, const Callable& callback, Args&&...args);
+
+        /**
+         * @brief Execute a callback function once after a delay
+         * @param delay Time to wait before executing callback in milliseconds
+         * @param callback Function to execute
+         * @param args Arguments passed to the callback function on invocation
+         *
+         * The callback execution is done in a separate thread, therefore
+         * this function is not blocking. It will return immediately after
+         * initiating the new thread
+         */
+        template <typename Callable, typename...Args>
+        void setTimeout(int delay, const Callable& callback, Args&&...args);
+
+        /**
+         * @brief Execute a callback function repeatedly after a delay
+         * @param delay Time to wait before executing callback in milliseconds
+         * @param callback Function to execute
+         * @param args Arguments passed to the callback function on invocation
+         *
+         * This function is blocking as the current thread will wait for the
+         * callback execution to finish. The callback function will execute
+         * forever every delay milliseconds. The interval can be stopped
+         * by setting the first argument of the callback to false. This
+         * argument must be taken by reference otherwise the callback will
+         * continue executing
+         *
+         * @note Provided arguments will be passed to the callback after
+         * the first bool argument which is provided by this function,
+         * therefore the callback must take at least one argument of
+         * type bool&
+         */
+        template <typename Callable, typename...Args>
+        void setIntervalSync(int delay, const Callable& callback, Args&&...args);
+
+        /**
+         * @brief Execute a callback function repeatedly after a delay
+         * @param delay Time to wait before executing callback in milliseconds
+         * @param callback Function to execute
+         * @param args Arguments to pass to the callback on invocation
+         *
+         * The callback execution is done in a separate thread, therefore
+         * this function is not blocking. It will return immediately after
+         * initiating the new thread. The callback function will execute
+         * forever every delay milliseconds. The interval can be stopped
+         * by setting the first argument of the callback to false. This
+         * argument must be taken by reference otherwise the callback will
+         * continue executing.
+         *
+         * @note Provided arguments will be passed to the callback after the
+         * first bool argument which is provided by this function, therefore
+         * the callback must take at least one argument of type bool&
+         */
+        template <typename Callable, typename...Args>
+        void setInterval(int delay, const Callable& callback, Args&&...args);
+
+        #include "IME/utility/Utils.inl"
     }
 }
 

@@ -27,79 +27,152 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
-#include <chrono>
-#include <thread>
 
 namespace ime {
     /**
-     * @brief Class for timing purposes
+     * @brief Execute a callback after an interval/delay
      */
     class IME_API Timer {
     public:
         /**
-         * @brief Execute a one time callback function after a delay
-         * @param delay Time to wait before executing callback in milliseconds
-         * @param callback Callback function to execute
-         * @param args Arguments passed to the callback function on invocation
-         *
-         * This function is blocking as the current thread will wait for the
-         * callback execution to finish. The countdown is initiated right
-         * away
+         * @brief Constructor
          */
-        template <typename Callable, typename...Args>
-        void setTimeoutSync(int delay, Callable callback, Args&&...args);
+        Timer();
 
         /**
-         * @brief Execute a callback function once after a delay
-         * @param delay Time to wait before executing callback in milliseconds
-         * @param callback Function to execute
-         * @param args Arguments passed to the callback function on invocation
+         * @brief Set the countdown starting point
+         * @param interval Countdown starting point
          *
-         * The callback execution is done in a separate thread, therefore
-         * this function is not blocking. It will return immediately after
-         * initiating the new thread
+         * if the interval is set while the timer is running and the
+         * interval is not zero, then the timer will restart. If the
+         * interval is less than zero, it will be set to zero and the
+         * timer will stop immediately without executing the callback
+         * if it was running
+         *
+         * @see restart
          */
-        template <typename Callable, typename...Args>
-        void setTimeout(int delay, Callable callback, Args...args);
+        void setInterval(float interval);
 
         /**
-         * @brief Execute a callback function repeatedly after a delay
-         * @param delay Time to wait before executing callback in milliseconds
-         * @param callback Function to execute
-         * @param args Arguments passed to the callback function on invocation
-         *
-         * This function is blocking as the current thread will wait for the
-         * callback execution to finish. The callback function will execute
-         * forever every delay milliseconds. The interval can be stopped
-         * by setting the first argument of the callback to false. This
-         * argument must be taken by reference otherwise the callback will
-         * continue executing. @note Provided arguments will be passed to
-         * the callback after the first bool& argument which is provided by
-         * this function
+         * @brief Get the countdown starting point
+         * @return The countdown starting point
          */
-        template <typename Callable, typename...Args>
-        void setIntervalSync(int delay, Callable callback, Args...args);
+        float getInterval() const;
 
         /**
-         * @brief Execute a callback function repeatedly after a delay
-         * @param delay Time to wait before executing callback in milliseconds
-         * @param callback Function to execute
-         * @param args Arguments to pass to the callback on invocation
-         *
-         * The callback execution is done in a separate thread, therefore
-         * this function is not blocking. It will return immediately after
-         * initiating the new thread. The callback function will execute
-         * forever every delay milliseconds. The interval can be stopped
-         * by setting the first argument of the callback to false. This
-         * argument must be taken by reference otherwise the callback will
-         * continue executing. @note Provided arguments will be passed to
-         * the callback after the first bool& argument which is provided by
-         * this function
+         * @brief Get time remaining before the timer reaches zero
+         * @return The time remaining before the timer reaches zero
          */
-        template <typename Callable, typename...Args>
-        void setInterval(int delay, Callable callback, Args...args);
+        float getRemainingDuration() const;
+
+        /**
+         * @brief Set whether or not the timer restarts after reaching zero
+         * @param repeat True to restart the timer after it reaches zero,
+         *               otherwise false
+         *
+         * By default, the timer does not restart, it stops after executing
+         * the callback. That is, the callback is called once. To execute
+         * the callback every interval, enable repeat
+         *
+         * @see stop and setInterval
+         */
+        void setRepeat(bool repeat);
+
+        /**
+         * @brief Check if the timer restarts after reaching zero or not
+         * @return True if the timer restarts, otherwise false
+         *
+         * @see setRepeat
+         */
+        bool isRepeating() const;
+
+        /**
+         * @brief Set the function that is executed when the timer reaches zero
+         * @param callback Function to execute
+         *
+         * The timer will stop immediately if the callback is a nullptr.
+         * The timer will not start the countdown if the start function
+         * is called and there is no callback set for when the timer reaches
+         * zero
+         *
+         * @see start
+         */
+        void setTimeoutCallback(Callback<> callback);
+
+        /**
+         * @brief Start the countdown
+         * @return True if the countdown was started or false if there is
+         *         no callback set or the interval is zero
+         *
+         * The callback function will be called when the countdown reaches
+         * zero. The countdown will not start if the interval is zero or
+         * the callback is nullptr (not set)
+         *
+         * @note This function will start the countdown if it was not started
+         * or resume it if it was paused. If called while the timer is running
+         * then, the timer will restart
+         *
+         * @see setInterval, setTimeoutCallback, restart and pause
+         */
+        void start();
+
+        /**
+         * @brief Stop the timer
+         *
+         * This function resets the remaining duration to the value of the
+         * interval and stops the timer without executing the callback. This
+         * behavior is similar to the restart function except the timer is
+         * not immediately started after it has been stooped. The function
+         * start must be called to restart the timer after it has been stopped
+         *
+         * @see start and getRemainingDuration
+         */
+        void stop();
+
+        /**
+         * @brief Stop the timer without resetting the remaining duration
+         *
+         * When the timer is paused it can be resumed by calling the start
+         * function. The timer will begin the countdown from the remaining
+         * duration instead of restarting from the interval
+         *
+         * @see start and setInterval
+         */
+        void pause();
+
+        /**
+         * @brief Restart the countdown
+         *
+         * Unlike stop, this function stops the timer and immediately
+         * starts it. The countdown will start from the interval. The
+         * remaining duration will also be reset to the value of the
+         * interval
+         *
+         * @see setInterval
+         */
+        void restart();
+
+        /**
+         * @brief Check whether or not the countdown has began
+         * @return True if the countdown has began, otherwise false
+         *
+         * @see start
+         */
+        bool isRunning() const;
+
+        /**
+         * @brief Update the time
+         * @param deltaTime Time passed since last update
+         */
+        void update(float deltaTime);
+
+    private:
+        bool isRunning_;          //!< Flags whether or not the countdown has been started
+        bool isRepeating_;        //!< Flags whether or not the timer restarts after reaching zero
+        float interval_;          //!< Countdown starting point
+        float remainingDuration_; //!< The time remaining before the timer reaches zero
+        Callback<> callback_;     //!< Function executed when the timer reaches zero
     };
-    #include "IME/core/time/Timer.inl"
 }
 
 #endif // IME_TIMER_H
