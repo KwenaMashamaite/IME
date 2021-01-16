@@ -91,7 +91,7 @@ namespace ime {
         setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", "INT", 600);
         setDefaultValueIfNotSet(settings_, "FPS_LIMIT", "INT", 60);
         setDefaultValueIfNotSet(settings_, "FULLSCREEN", "BOOL", false);
-        setDefaultValueIfNotSet(settings_, "VSYNC", "BOOL",  false);
+        setDefaultValueIfNotSet(settings_, "V_SYNC", "BOOL",  false);
         setDefaultValueIfNotSet(settings_, "FONTS_DIR", "STRING", std::string("")); // Same directory as the executable
         setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", "STRING", std::string(""));
         setDefaultValueIfNotSet(settings_, "IMAGES_DIR", "STRING", std::string(""));
@@ -117,7 +117,7 @@ namespace ime {
         }
 
         window_.setFramerateLimit(settings_.getValueFor<int>("FPS_LIMIT"));
-        window_.setVsyncEnabled(settings_.getValueFor<bool>("VSYNC"));
+        window_.setVsyncEnabled(settings_.getValueFor<bool>("V_SYNC"));
         window_.setIcon("icon.png");
     }
 

@@ -28,18 +28,15 @@
 ///  class DemoState : public IME::State {
 ///  public:
 ///      explicit DemoState(IME::Engine &engine) : State(engine) {}
-///      void initialize() override {}
+///      void onEnter() override {}
+///      bool isEntered() const override {}
+///      void handleEvent(sf::Event event) override {}
 ///      void update(float deltaTime) override {}
 ///      void fixedUpdate(float deltaTime) override {}
 ///      void render(IME::Graphics::Window &renderTarget) override {}
-///      void pause() override {}
-///      void handleEvent(sf::Event event) override {}
-///      void resume() override {}
-///      bool isInitialized() const override {}
-///      void exit() override {}
-///
-///  private:
-///
+///      void onPause() override {}
+///      void onResume() override {}
+///      void onExit() override {}
 ///  };
 ///
 /// int main()
@@ -51,15 +48,17 @@
 ///     // All these configurations except the window title have defaults so they
 ///     // can be left undefined. You can add you own entries if you wish to do so
 ///     auto configurations = IME::PropertyContainer();
-///     configurations.addProperty({"windowTitle", "STRING", "Demo"});
-///     configurations.addProperty({"windowWidth", "INT", "504"});
-///     configurations.addProperty({"windowHeight", "INT", "636"});
-///     configurations.addProperty({"fpsLimit", "INT", "60"});
-///     configurations.addProperty({"fullscreen", "BOOL", "0"});
-///     configurations.addProperty({"fontsPath", "STRING", "/assets/fonts/"});
-///     configurations.addProperty({"imagesPath", "STRING", "/assets/images/"});
-///     configurations.addProperty({"musicPath", "STRING", "/assets/music/"});
-///     configurations.addProperty({"sfxPath", "STRING", "/assets/soundEffects/"});
+///     configurations.addProperty({"WINDOW_TITLE", "STRING", "Demo"});
+///     configurations.addProperty({"WINDOW_WIDTH", "INT", 504});
+///     configurations.addProperty({"WINDOW_HEIGHT", "INT", 636});
+///     configurations.addProperty({"FPS_LIMIT", "INT", 60});
+///     configurations.addProperty({"FULLSCREEN", "BOOL", false});
+///     configurations.addProperty({"V_SYNC", "BOOL", true});
+///     configurations.addProperty({"FONTS_DIR", "STRING", "/assets/fonts/"});
+///     configurations.addProperty({"TEXTURES_DIR", "STRING", "/assets/textures/"});
+///     configurations.addProperty({"IMAGES_DIR", "STRING", "/assets/textures/"});
+///     configurations.addProperty({"MUSIC_DIR", "STRING", "/assets/music/"});
+///     configurations.addProperty({"SOUND_EFFECTS_DIR", "STRING", "/assets/soundEffects/"});
 ///
 ///     // Step 3: Create the engine and initialize it
 ///     auto engine = IME::Engine("Your awesome game name here", configurations);

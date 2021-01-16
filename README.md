@@ -7,6 +7,12 @@
 IME is an open source state-based 2D game engine. It is written in C++17 and 
 makes use of [SFML](https://github.com/SFML/SFML) and [TGUI](https://github.com/texus/TGUI).
 
+## Overview
+
+This game engine is not the next Unity or Godot. I developed it to improve my
+Object Oriented Programming (OOP) skills and my knowledge of shared libraries
+and build tools in C++. I would appreciate any constructive feedback.
+
 ## Features
  
 * **Graphics** - Static tilemap, Sprites, GUI components (Label, Button, Checkbox, Input filed and much more)
@@ -24,16 +30,24 @@ Here is a list of games developed with IME:
 
 1. [Namco's 1982 Super Pac-Man clone](https://github.com/KwenaMashamaite/SuperPacMan)
 
-##  Build 
+## Downloads
+
+The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/latest/download/IME-1.0.0.zip). 
+In addition, IME has dependencies on other libraries that must be downloaded.
+
+- Download [SFML 2.5.1](https://github.com/KwenaMashamaite/IME/releases/latest/download/SFML-2.5.1.zip)
+- Download [TGUI 0.9.0](https://github.com/KwenaMashamaite/IME/releases/latest/download/TGUI-0.9.0.zip)
+
+##  Build
 
 1. Clone the repository
 2. Download [GCC 7.3.0 MinGW (32-bit)](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-posix/dwarf/i686-7.3.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler and [CMake 3.17+](https://cmake.org/download/)
-3. Add the MinGW\bin directory to the PATH environment variable
-    #### You can do it using `Windows PowerShell` with the following command:
+3. Add the MinGW\bin directory to the PATH environment variable </br>
+   _You can do it using **Windows PowerShell** with the following command:_
 ```shell
 $Env:Path += ";your_mingw_folder\bin"
 ```
-For example, adding `C:\mingw64\bin` to the value of the Path environment variable:
+For example, adding **_C:\mingw64\bin_** to the value of the Path environment variable:
 
 ```shell
 $Env:Path += ";C:\mingw64\bin"
@@ -47,14 +61,6 @@ cmake -G"MinGW Makefiles" ..
 cmake --build .
 cmake --install . --prefix "your_install_directory"
 ```
-
-## Downloads
-
-The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/latest/download/IME-1.0.0.zip). 
-In addition, IME has dependencies on other libraries that must be downloaded.
-
-- Download [SFML 2.5.1](https://github.com/KwenaMashamaite/IME/releases/latest/download/SFML-2.5.1.zip)
-- Download [TGUI 0.9.0](https://github.com/KwenaMashamaite/IME/releases/latest/download/TGUI-0.9.0.zip)
 
 ## Installation
 
@@ -71,7 +77,7 @@ find_package(TGUI 0.9.0 REQUIRED)
 
 # Find IME
 set(IME_DIR "your_path_to_IME_directory/lib/cmake/IME")
-find_package(IME 1.0.0 REQUIRED)
+find_package(IME 2.0.0 REQUIRED)
 
 # Link TGUI, SFML and IME
 target_link_libraries (myGame PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio ime)
