@@ -156,6 +156,15 @@ namespace ime {
              */
             void onVolumeChanged(Callback<float> callback);
 
+            /**
+             * @brief Remove audio that has finished playing
+             *
+             * The number of audio that played and stopped must not be left
+             * to reach 255, otherwise an error would occur and audio will
+             * stop playing
+             */
+            void removePlayedAudio();
+
         private:
             float masterVolume_;        //!< Maximum volume all audio players
             float sfxVolume_;           //!< Sound effect volume

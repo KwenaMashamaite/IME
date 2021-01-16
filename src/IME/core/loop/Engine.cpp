@@ -219,6 +219,8 @@ namespace ime {
     }
 
     void Engine::postFrameUpdate() {
+        audioManager_->removePlayedAudio();
+
         //Remove timers that have completed countdown
         activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer& timer) {
             return !timer.isRunning();

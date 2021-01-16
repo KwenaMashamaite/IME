@@ -136,4 +136,11 @@ namespace ime::audio {
     void AudioManager::onVolumeChanged(Callback<float> callback) {
         eventEmitter_.addEventListener("volumeChanged", std::move(callback));
     }
+
+    void AudioManager::removePlayedAudio() {
+        playingAudio_.erase(std::remove_if(playingAudio_.begin(), playingAudio_.end(),
+            [] (std::unique_ptr<Audio>& audio) {
+                return audio->getStatus() == Status::Stopped;
+        }), playingAudio_.end());
+    }
 }
