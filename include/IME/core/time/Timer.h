@@ -40,6 +40,23 @@ namespace ime {
         Timer();
 
         /**
+         * @brief Create a timer
+         * @param callback Function to execute when the timer reaches zero
+         * @param interval Countdown starting point
+         * @param repeat True to restart the timer after it reaches zero,
+         *          otherwise false
+         * @return The new timer
+         *
+         * The timer is not repeated be default, this means that the timer
+         * will stop after calling the callback
+         *
+         * @note The timer is not started after creation
+         *
+         * @see start and setRepeat
+         */
+        static Timer create(Callback<> callback, float interval, bool repeat = false);
+
+        /**
          * @brief Set the countdown starting point
          * @param interval Countdown starting point
          *

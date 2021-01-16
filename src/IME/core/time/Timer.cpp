@@ -32,6 +32,14 @@ namespace ime {
         remainingDuration_{0.0f}
     {}
 
+    Timer Timer::create(Callback<> callback, float interval, bool repeat) {
+        auto timer = Timer();
+        timer.setInterval(interval);
+        timer.setRepeat(repeat);
+        timer.setTimeoutCallback(std::move(callback));
+        return timer;
+    }
+
     void Timer::setInterval(float interval) {
         if (interval_ == interval)
             return;
