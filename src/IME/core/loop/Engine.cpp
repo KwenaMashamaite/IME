@@ -42,10 +42,7 @@ namespace ime {
         }
 
         Timer createTimer(float delay, Callback<> callback, bool isRepeating) {
-            auto timer = Timer();
-            timer.setInterval(delay);
-            timer.setTimeoutCallback(std::move(callback));
-            timer.setRepeat(isRepeating);
+            auto timer = Timer::create(std::move(callback), delay, isRepeating);
             timer.start();
             return timer;
         }
@@ -59,8 +56,8 @@ namespace ime {
         settings_ = std::move(settings);
     }
 
-    Engine::Engine(const std::string &gameName, const std::string &settingsFile) :
-        appName_{gameName},
+    Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
+        gameTitle_{gameTitle},
         settingFile_{settingsFile},
         isSettingsLoadedFromFile_(!settingsFile.empty()),
         isInitialized_{false},
@@ -80,7 +77,7 @@ namespace ime {
         audioManager_ = std::make_unique<audio::AudioManager>();
         eventDispatcher_ = EventDispatcher::instance();
 
-        windowCloseHandler_ = [this]{quit();};
+        onWindowClose_ = [this]{quit();};
         isInitialized_ = true;
     }
 
@@ -136,8 +133,8 @@ namespace ime {
     void Engine::processEvents() {
         sf::Event event;
         while (window_.pollEvent(event)) {
-            if (event.type == sf::Event::Closed && windowCloseHandler_) {
-                windowCloseHandler_();
+            if (event.type == sf::Event::Closed && onWindowClose_) {
+                onWindowClose_();
                 return;
             }
             statesManager_.getActiveState()->handleEvent(event);
@@ -255,19 +252,32 @@ namespace ime {
     }
 
     void Engine::shutdown() {
-        while (!statesToPush_.empty())
-            statesToPush_.pop();
-        statesManager_.clear();
-        window_.close();
         audioManager_->stopAllAudio();
+        audioManager_.reset();
+        window_.close();
+        isInitialized_ = false;
+        isRunning_ = false;
+        shouldPop_ = false;
+        isSettingsLoadedFromFile_ = false;
+        elapsedTime_ = 0.0f;
+        gameTitle_.clear();
+        settingFile_.clear();
+        settings_.clear();
+        statesManager_.clear();
+        activeTimers_.clear();
+        dataSaver_.clear();
+        resourceManager_.reset();
         inputManager_ = input::InputManager();
         globalInputManager_ = input::InputManager();
         eventDispatcher_.reset();
-        resourceManager_.reset();
-        isRunning_ = false;
-        isInitialized_ = false;
-        elapsedTime_ = 0.0f;
-        shouldPop_ = false;
+        onWindowClose_ = nullptr;
+        onFrameEnd_ = nullptr;
+        onFrameStart_ = nullptr;
+
+        while (!prevStateInputManager_.empty())
+            prevStateInputManager_.pop();
+        while (!statesToPush_.empty())
+            statesToPush_.pop();
     }
 
     bool Engine::isRunning() const {
@@ -289,7 +299,7 @@ namespace ime {
     }
 
     const std::string &Engine::getGameName() const {
-        return appName_;
+        return gameTitle_;
     }
 
     PropertyContainer &Engine::getPersistentData() {
@@ -321,7 +331,7 @@ namespace ime {
     }
 
     void Engine::onWindowClose(Callback<> callback) {
-        windowCloseHandler_ = std::move(callback);
+        onWindowClose_ = std::move(callback);
     }
 
     void Engine::onFrameStart(Callback<> callback) {

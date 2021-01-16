@@ -115,6 +115,11 @@ namespace ime {
          */
         int getSize() const;
 
+        /**
+         * @brief Remove all the stored properties from the container
+         */
+        void clear();
+
     private:
         std::unordered_map<std::string, Property> properties_; //!< Container for the properties
     };

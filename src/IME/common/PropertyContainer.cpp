@@ -52,6 +52,10 @@ namespace ime {
         return properties_.size();
     }
 
+    void PropertyContainer::clear() {
+        properties_.clear();
+    }
+
     bool PropertyContainer::hasProperty(const std::string &name) const {
         return properties_.find(name) != properties_.end();
     }

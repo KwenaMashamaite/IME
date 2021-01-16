@@ -44,7 +44,7 @@ namespace ime {
     public:
         /**
          * @brief Constructor
-         * @param gameName Name of the game run by the engine
+         * @param gameTitle Name of the game run by the engine
          * @param settingsFile Filename of the file that contains the
          *        engines settings
          *
@@ -52,7 +52,7 @@ namespace ime {
          * to the file. The path must be relative to the directory that
          * contains the game executable
          */
-        Engine(const std::string &gameName, const std::string &settingsFile);
+        Engine(const std::string &gameTitle, const std::string &settingsFile);
 
         /**
          * @brief Constructor
@@ -348,8 +348,8 @@ namespace ime {
         void shutdown();
 
     private:
-        Window window_;                               //!< Render target
-        std::string appName_;                                   //!< Game name
+        Window window_;                                         //!< Render target
+        std::string gameTitle_;                                 //!< Game name
         std::string settingFile_;                               //!< Engine settings filename
         PropertyContainer settings_;                            //!< Engine settings container
         bool isSettingsLoadedFromFile_;                         //!< Flags whether settings are provided or loaded from file
@@ -365,7 +365,7 @@ namespace ime {
         std::shared_ptr<EventDispatcher> eventDispatcher_;      //!< Engines Event dispatcher
         PropertyContainer dataSaver_;                           //!< Data that persists across states
         bool shouldPop_;                                        //!< Flags whether o not current state should be popped
-        Callback<> windowCloseHandler_;                         //!< Window close event listener
+        Callback<> onWindowClose_;                              //!< Function executed when a request to close the window is received
         Callback<> onFrameStart_;                               //!< Function called at the start of a frame
         Callback<> onFrameEnd_;                                 //!< Function called at the end of a frame
         std::vector<Timer> activeTimers_;                       //!< Timers that are counting down
