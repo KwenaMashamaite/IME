@@ -44,6 +44,8 @@ namespace ime {
      */
     class IME_API KeyboardControlledGridMover : public GridMover {
     public:
+        using Key = input::Keyboard::Key; //!< Keyboard key alias
+
         /**
          * @brief Constructor
          * @param tileMap Grid to move target in
@@ -56,7 +58,8 @@ namespace ime {
          * @param trigger The targets movement trigger
          *
          * The actual keys that trigger the movements must be set, in order to
-         * determine the direction of motion
+         * determine the direction of motion. The default movement trigger is
+         * MovementTrigger::OnKeyDown
          *
          * @see setKeys
          */
@@ -76,12 +79,13 @@ namespace ime {
          * @param downKey Key to move target down on trigger
          *
          * In addition to setting the keys, the movement trigger must be set.
-         * There are no set keys by default
+         * The default keys are as follows:
+         *
+         * A = Left, W = Up, S = Down and D = Right
          *
          * @see setMovementTrigger
          */
-        void setKeys(input::Keyboard::Key leftKey, input::Keyboard::Key rightKey,
-             input::Keyboard::Key upKey, input::Keyboard::Key downKey);
+        void setKeys(Key leftKey, Key rightKey, Key upKey, Key downKey);
 
         /**
          * @brief Handle an event
@@ -94,22 +98,27 @@ namespace ime {
          * @brief Move target in the grid
          * @param key pressed key (Helps Determine which direction to go)
          */
-        void moveTarget(input::Keyboard::Key key);
+        void moveTarget(Key key);
 
         /**
          * @brief Attach input event listeners to the set trigger
          */
         void attachInputEventListeners();
 
+        /**
+         * @brief Remove input event listeners from the set trigger
+         */
+        void removeInputEventListeners();
+
     private:
-        MovementTrigger trigger_;                                         //!< Key event that triggers target movement
-        int onTriggerHandlerId_;                                          //!< Movement trigger Handler id
-        input::Keyboard keyboard_;                                        //!< Input detector
-        std::pair<bool, Direction> newDir_;                               //!< Flags if direction was changed during target movement
-        input::Keyboard::Key goLeftKey_ = input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target left
-        input::Keyboard::Key goRightKey_ = input::Keyboard::Key::Unknown; //!< A Key when triggered moves target right
-        input::Keyboard::Key goUpKey_ = input::Keyboard::Key::Unknown;    //!< A Key when triggered moves target up
-        input::Keyboard::Key goDownKey_ = input::Keyboard::Key::Unknown;  //!< A Key when triggered moves target down
+        MovementTrigger trigger_;           //!< Key event that triggers target movement
+        int onTriggerHandlerId_;            //!< Movement trigger Handler id
+        input::Keyboard keyboard_;          //!< Detects keyboard inputs
+        std::pair<bool, Direction> newDir_; //!< Flags if direction was changed during target movement
+        Key goLeftKey_ = Key::Unknown;      //!< A Key when triggered moves target left
+        Key goRightKey_ = Key::Unknown;     //!< A Key when triggered moves target right
+        Key goUpKey_ = Key::Unknown;        //!< A Key when triggered moves target up
+        Key goDownKey_ = Key::Unknown;      //!< A Key when triggered moves target down
     };
 }
 

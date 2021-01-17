@@ -30,26 +30,21 @@ namespace ime {
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
         onAdjacentTileReached([this](Tile) {
-            if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while a key was pressed
+            if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
                 requestDirectionChange(newDir);
                 newDir = Direction::Unknown;
             }
         });
+
+        setMovementTrigger(MovementTrigger::OnKeyDown);
+        setKeys(Key::A, Key::D, Key::W, Key::S);
     }
 
     void KeyboardControlledGridMover::setMovementTrigger(MovementTrigger trigger) {
         if (trigger_ != trigger) {
             trigger_ = trigger;
-            if (trigger_ == MovementTrigger::None && onTriggerHandlerId_ != -1) {
-                keyboard_.removeEventListener(input::Keyboard::Event::KeyDown, onTriggerHandlerId_);
-                keyboard_.removeEventListener(input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
-                onTriggerHandlerId_ = -1;
-                return;
-            } else if (trigger_ == MovementTrigger::OnKeyDown)
-                keyboard_.removeEventListener(input::Keyboard::Event::KeyDown, onTriggerHandlerId_);
-            else
-                keyboard_.removeEventListener(input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
+            removeInputEventListeners();
             attachInputEventListeners();
         }
     }
@@ -58,17 +53,20 @@ namespace ime {
         return trigger_;
     }
 
-    void KeyboardControlledGridMover::setKeys(input::Keyboard::Key leftKey, input::Keyboard::Key rightKey,
-        input::Keyboard::Key upKey, input::Keyboard::Key downKey)
+    void KeyboardControlledGridMover::setKeys(input::Keyboard::Key leftKey,
+        input::Keyboard::Key rightKey, input::Keyboard::Key upKey,
+        input::Keyboard::Key downKey)
     {
         goLeftKey_ = leftKey;
         goRightKey_ = rightKey;
         goUpKey_ = upKey;
         goDownKey_ = downKey;
-        attachInputEventListeners();
     }
 
     void KeyboardControlledGridMover::attachInputEventListeners() {
+        if (trigger_ == MovementTrigger::None)
+            return;
+
         auto moveEntity = [this](input::Keyboard::Key key) {
             moveTarget(key);
         };
@@ -77,6 +75,15 @@ namespace ime {
             onTriggerHandlerId_ = keyboard_.onKeyDown(moveEntity);
         else if (trigger_ == MovementTrigger::OnKeyUp)
             onTriggerHandlerId_ = keyboard_.onKeyUp(moveEntity);
+    }
+
+    void KeyboardControlledGridMover::removeInputEventListeners() {
+        if (onTriggerHandlerId_ != -1) {
+            if (!keyboard_.removeEventListener(input::Keyboard::Event::KeyDown, onTriggerHandlerId_))
+                keyboard_.removeEventListener(input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
+
+            onTriggerHandlerId_ = -1;
+        }
     }
 
     void KeyboardControlledGridMover::moveTarget(input::Keyboard::Key key) {
