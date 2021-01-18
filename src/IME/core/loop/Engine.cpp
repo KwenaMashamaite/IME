@@ -324,12 +324,14 @@ namespace ime {
         return window_;
     }
 
-    void Engine::setTimeout(float delay, ime::Callback<> callback) {
+    Timer& Engine::setTimeout(float delay, ime::Callback<> callback) {
         activeTimers_.push_back(createTimer(delay, std::move(callback),false));
+        return activeTimers_.back();
     }
 
-    void Engine::setInterval(float delay, ime::Callback<> callback) {
+    Timer& Engine::setInterval(float delay, ime::Callback<> callback) {
         activeTimers_.push_back(createTimer(delay, std::move(callback), true));
+        return activeTimers_.back();
     }
 
     void Engine::onWindowClose(Callback<> callback) {

@@ -231,9 +231,14 @@ namespace ime {
          * @a delay seconds. To execute a callback repeatedly every
          * interval, checkout the setInterval function
          *
+         * @warning The timer will be destroyed after the callback is invoked
+         * or if it is externally stopped/paused before the callback is invoked,
+         * therefore caution is advised when the returned reference is kept
+         * alive
+         *
          * @see setInterval
          */
-        void setTimeout(float delay, ime::Callback<> callback);
+        Timer& setTimeout(float delay, ime::Callback<> callback);
 
         /**
          * @brief Schedule a callback to be executed every interval
@@ -241,11 +246,17 @@ namespace ime {
          * @param callback Function to be executed
          *
          * Unlike setTimeout, this function will execute a callback
-         * every @a delay seconds while the engine is running
+         * every @a delay seconds while the engine is running. The
+         * repetition can be cancelled by calling setRepeat(false)
+         * on the returned timer
+         *
+         * @warning The timer will be destroyed if the timer is externally
+         * stopped/paused or the repetition is cancelled, therefore caution
+         * is advised when the returned reference is kept alive
          *
          * @see setTimeout
          */
-        void setInterval(float delay, ime::Callback<> callback);
+        Timer& setInterval(float delay, ime::Callback<> callback);
 
         /**
          * @brief Add an event lister to a window close event
