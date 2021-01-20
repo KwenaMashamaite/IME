@@ -80,7 +80,6 @@ namespace ime {
     void Timer::start() {
         if (!isRunning_ && interval_ > 0.0f && callback_) {
             isRunning_ = true;
-            remainingDuration_ = interval_;
         } else if (isRunning_)
             restart();
     }
@@ -108,14 +107,12 @@ namespace ime {
             return;
 
         remainingDuration_ -= deltaTime;
-        if (remainingDuration_ <= 0.0f) {
+        if (remainingDuration_ <= 0.0f && callback_) {
             callback_();
             if (isRepeating_)
                 restart();
-            else {
-                isRunning_ = false;
-                remainingDuration_ = 0.0f;
-            }
+            else
+                stop();
         }
     }
 }
