@@ -157,7 +157,7 @@ namespace ime {
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             if (onFrameStart_)
                 onFrameStart_();
-            now = clock.getElapsedTimeInSeconds();
+            now = static_cast<float>(clock.getElapsedTimeInSeconds());
             deltaTime = now - prevTime;
             prevTime = now;
             accumulator += deltaTime;

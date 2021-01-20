@@ -353,7 +353,7 @@ namespace ime {
              *
              * @see on
              */
-            bool unsubscribe(const std::string& event, std::size_t id) {
+            bool unsubscribe(const std::string& event, int id) {
                 return eventEmitter_.removeEventListener(event, id);
             }
 

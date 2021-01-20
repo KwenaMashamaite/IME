@@ -113,7 +113,7 @@ namespace ime {
          * @brief Get the number of properties in the container
          * @return The number of properties in the container
          */
-        int getSize() const;
+        std::size_t getSize() const;
 
         /**
          * @brief Remove all the stored properties from the container

@@ -66,7 +66,7 @@ namespace ime {
         /**
          * @brief Interface for widget renderers
          */
-        class IWidgetRenderer {
+        class IME_API IWidgetRenderer {
         public:
             /**
              * @brief Set the opacity of the widget
