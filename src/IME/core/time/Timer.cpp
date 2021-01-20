@@ -78,7 +78,7 @@ namespace ime {
     }
 
     void Timer::start() {
-        if (status_ != Status::Running && interval_ > 0.0f && callback_) {
+        if (status_ != Status::Running && canStart()) {
             status_ = Status::Running;
         } else if (status_ == Status::Running)
             restart();
@@ -90,12 +90,17 @@ namespace ime {
     }
 
     void Timer::pause() {
-        status_ = Status::Paused;
+        if (status_ == Status::Running)
+            status_ = Status::Paused;
     }
 
     void Timer::restart() {
-        stop();
-        start();
+        if (status_ == Status::Stopped)
+            start();
+        else {
+            stop();
+            start();
+        }
     }
 
     Timer::Status Timer::getStatus() const {
@@ -114,5 +119,9 @@ namespace ime {
             else
                 stop();
         }
+    }
+
+    bool Timer::canStart() const {
+        return interval_ > 0.0f && callback_;
     }
 }

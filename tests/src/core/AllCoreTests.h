@@ -28,3 +28,4 @@
 
 #include "Tilemap.hpp"
 #include "EventEmitter.hpp"
+#include "Timer.hpp"

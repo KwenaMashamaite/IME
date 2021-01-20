@@ -192,6 +192,23 @@ namespace ime {
          */
         void update(float deltaTime);
 
+        /**
+         * @brief Check if the timer can be started when calling start()
+         * @return True if the timer can be started, otherwise false
+         *
+         * The timer can only be started/run if the interval is greater
+         * than zero and the callback for when the timer reaches zero
+         * has been set (setTimeoutCallback invoked with an argument
+         * that is not a nullptr).
+         *
+         * This function will return true even when the engine is already
+         * running because calling start() when the timer is running
+         * restarts it
+         *
+         * @see setTimeoutCallback and setInterval and start
+         */
+        bool canStart() const;
+
     private:
         Status status_;           //!< The current state of the timer
         bool isRepeating_;        //!< Flags whether or not the timer restarts after reaching zero
