@@ -35,6 +35,15 @@ namespace ime {
     class IME_API Timer {
     public:
         /**
+         * @brief States the timer can be in
+         */
+        enum class Status {
+            Running, //!< Timer is running
+            Paused,  //!< Timer is paused
+            Stopped, //!< Timer is stopped
+        };
+
+        /**
          * @brief Constructor
          */
         Timer();
@@ -170,12 +179,12 @@ namespace ime {
         void restart();
 
         /**
-         * @brief Check whether or not the countdown has began
-         * @return True if the countdown has began, otherwise false
+         * @brief Get the current status of the timer (running, paused, stopped)
+         * @return The current status of the timer
          *
-         * @see start
+         * By default, the timer is stopped
          */
-        bool isRunning() const;
+        Status getStatus() const;
 
         /**
          * @brief Update the time
@@ -184,7 +193,7 @@ namespace ime {
         void update(float deltaTime);
 
     private:
-        bool isRunning_;          //!< Flags whether or not the countdown has been started
+        Status status_;           //!< The current state of the timer
         bool isRepeating_;        //!< Flags whether or not the timer restarts after reaching zero
         float interval_;          //!< Countdown starting point
         float remainingDuration_; //!< The time remaining before the timer reaches zero

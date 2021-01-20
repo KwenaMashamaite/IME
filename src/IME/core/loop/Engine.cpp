@@ -223,7 +223,7 @@ namespace ime {
 
         //Remove timers that have completed countdown
         activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer& timer) {
-            return !timer.isRunning();
+            return timer.getStatus() != Timer::Status::Running;
         }), activeTimers_.end());
 
         // Always pop first

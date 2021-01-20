@@ -26,7 +26,7 @@
 
 namespace ime {
     Timer::Timer() :
-        isRunning_{false},
+        status_{Status::Stopped},
         isRepeating_{false},
         interval_{0.0f},
         remainingDuration_{0.0f}
@@ -47,9 +47,9 @@ namespace ime {
         interval_ = interval;
         if (interval_ < 0.0f) {
             interval_ = remainingDuration_ = 0.0f;
-            if (isRunning_)
+            if (status_ == Status::Running)
                 stop();
-        } else if (isRunning_)
+        } else if (status_ == Status::Running)
             restart();
         else
             remainingDuration_ = interval_;
@@ -73,24 +73,24 @@ namespace ime {
 
     void Timer::setTimeoutCallback(Callback<> callback) {
         callback_ = std::move(callback);
-        if (!callback_ && isRunning_)
+        if (!callback_ && status_ == Status::Running)
             stop();
     }
 
     void Timer::start() {
-        if (!isRunning_ && interval_ > 0.0f && callback_) {
-            isRunning_ = true;
-        } else if (isRunning_)
+        if (status_ != Status::Running && interval_ > 0.0f && callback_) {
+            status_ = Status::Running;
+        } else if (status_ == Status::Running)
             restart();
     }
 
     void Timer::stop() {
-        isRunning_ = false;
+        status_ = Status::Stopped;
         remainingDuration_ = interval_;
     }
 
     void Timer::pause() {
-        isRunning_ = false;
+        status_ = Status::Paused;
     }
 
     void Timer::restart() {
@@ -98,12 +98,12 @@ namespace ime {
         start();
     }
 
-    bool Timer::isRunning() const {
-        return isRunning_;
+    Timer::Status Timer::getStatus() const {
+        return status_;
     }
 
     void Timer::update(float deltaTime) {
-        if (!isRunning_ || remainingDuration_ <= 0.0f)
+        if (status_ != Status::Running || remainingDuration_ <= 0.0f)
             return;
 
         remainingDuration_ -= deltaTime;
