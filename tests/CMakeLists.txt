@@ -1,6 +1,15 @@
 # Include doctest unit testing framework
 include_directories(${PROJECT_SOURCE_DIR}/extlibs/doctest)
 
+# Set compiler flags to enable coverage
+if (IME_RUN_TESTS_WITH_COVERAGE)
+    if (IME_COMPILER_GCC OR IME_COMPILER_CLANG)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    else()
+        message(WARNING "Run with coverage enabled for an unsupported compiler")
+    endif ()
+endif ()
+
 # Set test source root directory
 set(SRC_ROOT ${CMAKE_CURRENT_LIST_DIR}/src)
 
