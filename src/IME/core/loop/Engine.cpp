@@ -34,11 +34,13 @@ namespace ime {
         {
             if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
                 return;
-            else if (!settings.hasProperty(setting))
+            else if (!settings.hasProperty(setting)) {
                 settings.addProperty({setting, type, std::forward<T>(defaultValue)});
-            else
+                IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)");
+            } else {
                 settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
-            IME_PRINT_WARNING(R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
+                IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)");
+            }
         }
 
         Timer createTimer(Time delay, Callback<> callback, bool isRepeating) {
@@ -86,6 +88,10 @@ namespace ime {
 
     void Engine::processSettings() {
         setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", "STRING", std::string("Untitled"));
+        setDefaultValueIfNotSet(settings_, "WINDOW_ICON", "STRING", std::string(""));
+        if (settings_.getValueFor<std::string>("WINDOW_ICON").empty())
+            settings_.setValueFor<std::string>("WINDOW_ICON", "OS"); //Operating System icon
+
         setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH", "INT",  600);
         setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", "INT", 600);
         setDefaultValueIfNotSet(settings_, "FPS_LIMIT", "INT", 60);
@@ -117,7 +123,8 @@ namespace ime {
 
         window_.setFramerateLimit(settings_.getValueFor<int>("FPS_LIMIT"));
         window_.setVsyncEnabled(settings_.getValueFor<bool>("V_SYNC"));
-        window_.setIcon("icon.png");
+        if (settings_.getValueFor<std::string>("WINDOW_ICON") != "OS")
+            window_.setIcon(settings_.getValueFor<std::string>("WINDOW_ICON"));
     }
 
     void Engine::initResourceManager() {

@@ -82,7 +82,7 @@ namespace ime::utility {
                     if (key.empty())
                         throw InvalidArgument(errorMessage("It's missing a key"));
                     if (value.empty() && type != "STRING")
-                        throw InvalidArgument(errorMessage("Only values of type STRING can be left unspecified"));
+                        throw InvalidArgument(errorMessage(R"(Only values of type 'STRING' can be left unspecified)"));
                     if (hasWhiteSpace(key) || hasWhiteSpace(type))
                         throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
                     if (hasWhiteSpace(value) && type != "STRING")

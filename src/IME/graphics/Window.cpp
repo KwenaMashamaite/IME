@@ -41,10 +41,13 @@ namespace ime {
     }
 
     void Window::setIcon(const std::string &filename) {
+        auto currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
         try {
             auto icon = ResourceManager::getInstance()->getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
         } catch (...) {} // No rethrow, Use current icon if set otherwise use OS icon
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {
