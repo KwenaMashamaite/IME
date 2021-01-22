@@ -26,10 +26,10 @@
 
 namespace ime {
     Animation::Animation(const std::string& name, const std::string& spriteSheet,
-         float duration) :
-         name_(name),
-         spriteSheet_(spriteSheet),
-         duration_(duration)
+         Time duration) :
+         name_{name},
+         spriteSheet_{spriteSheet},
+         duration_{duration}
     {}
 
     std::string Animation::getSpriteSheet() const {
@@ -53,9 +53,9 @@ namespace ime {
         isLooped_ = isLooped;
     }
 
-    void Animation::setDuration(float duration) {
-        if (duration < 0.0f)
-            duration_ = 0.0f;
+    void Animation::setDuration(Time duration) {
+        if (duration < Time::Zero)
+            duration_ = Time::Zero;
         else
             duration_ = duration;
     }
@@ -64,7 +64,7 @@ namespace ime {
         return isLooped_;
     }
 
-    float Animation::getDuration() const {
+    Time Animation::getDuration() const {
         return duration_;
     }
 

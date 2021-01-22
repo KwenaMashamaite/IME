@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/graphics/Window.h"
+#include "IME/core/time/Time.h"
 #include <SFML/Window/Event.hpp>
 #include <string>
 
@@ -82,7 +83,7 @@ namespace ime {
          *
          * @see fixedUpdate
          */
-        virtual void update(float deltaTime) = 0;
+        virtual void update(Time deltaTime) = 0;
 
         /**
          * @brief Update the state in fixed time steps
@@ -97,7 +98,7 @@ namespace ime {
          *
          * @see update
          */
-        virtual void fixedUpdate(float deltaTime) = 0;
+        virtual void fixedUpdate(Time deltaTime) = 0;
 
         /**
          * @brief Render the state on a render target

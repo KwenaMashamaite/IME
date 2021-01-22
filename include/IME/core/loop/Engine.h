@@ -170,7 +170,7 @@ namespace ime {
          *
          * @note The elapsed time will reset to zero when the engine is stopped
          */
-        float getElapsedTime() const;
+        Time getElapsedTime() const;
 
         /**
          * @brief Get access to the engines resource manager
@@ -224,7 +224,7 @@ namespace ime {
 
         /**
          * @brief Schedule a callback to be executed after a delay
-         * @param delay Time to wait (in seconds) before executing the callback
+         * @param delay Time to wait before executing the callback
          * @param callback Function to be executed
          *
          * This function will execute a callback function once after
@@ -238,11 +238,11 @@ namespace ime {
          *
          * @see setInterval
          */
-        Timer& setTimeout(float delay, ime::Callback<> callback);
+        Timer& setTimeout(Time delay, ime::Callback<> callback);
 
         /**
          * @brief Schedule a callback to be executed every interval
-         * @param delay Time to wait (in seconds) before executing the callback
+         * @param delay Time to wait before executing the callback
          * @param callback Function to be executed
          *
          * Unlike setTimeout, this function will execute a callback
@@ -256,7 +256,7 @@ namespace ime {
          *
          * @see setTimeout
          */
-        Timer& setInterval(float delay, ime::Callback<> callback);
+        Timer& setInterval(Time delay, ime::Callback<> callback);
 
         /**
          * @brief Add an event lister to a window close event
@@ -331,7 +331,7 @@ namespace ime {
          * @brief Update current frame
          * @param deltaTime Time passed since last frame update
          */
-        void update(float deltaTime);
+        void update(Time deltaTime);
 
         /**
          * @brief Clear contents of the previous frame from the render window
@@ -366,7 +366,7 @@ namespace ime {
         bool isSettingsLoadedFromFile_;                         //!< Flags whether settings are provided or loaded from file
         bool isInitialized_;                                    //!< Engine's initialization state
         bool isRunning_;                                        //!< Engine's running state
-        float elapsedTime_;                                     //!< How long the engine has been running
+        Time elapsedTime_;                                     //!< How long the engine has been running
         StateManager statesManager_;                            //!< Engine states manager
         std::unique_ptr<audio::AudioManager> audioManager_;     //!< Engines audio manager
         std::shared_ptr<ResourceManager> resourceManager_;      //!< Engines resource manager

@@ -266,6 +266,26 @@ namespace ime::ui {
         move(offset.x, offset.y);
     }
 
+    void Slider::setEnabled(bool isEnable) {
+        slider_->setEnabled(isEnable);
+    }
+
+    bool Slider::isEnabled() const {
+        return slider_->isEnabled();
+    }
+
+    void Slider::toggleEnabled() {
+        setEnabled(!isEnabled());
+    }
+
+    void Slider::setFocused(bool isFocused) {
+        slider_->setFocused(isFocused);
+    }
+
+    bool Slider::isFocused() const {
+        return slider_->isFocused();
+    }
+
     void Slider::scale(Vector2f offset) {
         scale(offset.x, offset.y);
     }

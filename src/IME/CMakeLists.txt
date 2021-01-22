@@ -35,6 +35,7 @@ set(IME_SRC
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
     core/time/Timer.cpp
+    core/time/Time.cpp
     ui/renderers/BoxLayoutRenderer.cpp
     ui/renderers/ButtonRenderer.cpp
     ui/renderers/CheckBoxRenderer.cpp

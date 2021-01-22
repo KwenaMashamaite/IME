@@ -41,17 +41,17 @@ TEST_CASE("A timer can be set to repeat") {
 }
 
 TEST_CASE("The remaining duration of a timer is zero by default") {
-    CHECK_EQ(ime::Timer().getRemainingDuration(), 0.0f);
+    CHECK_EQ(ime::Timer().getRemainingDuration(), ime::Time::Zero);
 }
 
 TEST_CASE("A timer has an interval of zero by default") {
-    CHECK_EQ(ime::Timer().getInterval(), 0.0f);
+    CHECK_EQ(ime::Timer().getInterval(), ime::Time::Zero);
 }
 
 TEST_CASE("A timer cannot be started if the interval is zero") {
-    auto timer = ime::Timer::create([]{}, 0.0f);
+    auto timer = ime::Timer::create([]{}, ime::seconds(0.0f));
     REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
-    REQUIRE_EQ(timer.getInterval(), 0.0f);
+    REQUIRE_EQ(timer.getInterval(), ime::Time::Zero);
     CHECK_FALSE(timer.canStart());
     timer.start();
     CHECK_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
@@ -61,8 +61,8 @@ TEST_CASE("A timer cannot be started if the timeout callback is not set") {
     auto timer = ime::Timer();
     REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
 
-    timer.setInterval(10.0f);
-    REQUIRE_EQ(timer.getInterval(), 10.0f);
+    timer.setInterval(ime::seconds(10.0f));
+    REQUIRE_EQ(timer.getInterval(), ime::seconds(10.0f));
     CHECK_FALSE(timer.canStart());
     timer.start();
     CHECK_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
@@ -73,8 +73,8 @@ TEST_CASE("A timer can be started if the timeout callback is set and the interva
     REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
     REQUIRE_FALSE(timer.canStart());
 
-    timer.setInterval(5.0f);
-    REQUIRE_GT(timer.getInterval(), 0.0f);
+    timer.setInterval(ime::seconds(5.0f));
+    REQUIRE_GT(timer.getInterval(), ime::Time::Zero);
     timer.setTimeoutCallback([]{}); //timeout callback set implies the callback is not a nullptr (default)
     CHECK(timer.canStart());
     timer.start();
@@ -85,14 +85,14 @@ TEST_CASE("If a timer is running and the countdown reaches zero, a callback is i
     auto callbackInvoked = false;
     auto timer = ime::Timer();
     timer.setTimeoutCallback([&callbackInvoked]{callbackInvoked = true;});
-    timer.setInterval(2.0f);
+    timer.setInterval(ime::seconds(2.0f));
     timer.start();
 
     REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
-    REQUIRE_EQ(timer.getInterval(), 2.0f);
-    REQUIRE_EQ(timer.getRemainingDuration(), 2.0f);
+    REQUIRE_EQ(timer.getInterval(), ime::seconds(2.0f));
+    REQUIRE_EQ(timer.getRemainingDuration(), ime::seconds(2.0f));
     REQUIRE_FALSE(callbackInvoked);
-    timer.update(2.0f);
+    timer.update(ime::seconds(2.0f));
     CHECK(callbackInvoked);
 
     WHEN("the timer is not repeating") {
@@ -109,46 +109,45 @@ TEST_CASE("If a timer is running and the countdown reaches zero, a callback is i
 
 SCENARIO("The interval of the timer needs to be changed") {
     auto timer = ime::Timer();
-    auto interval = 0.0f;
+    auto interval = ime::Time::Zero;
 
     WHEN("the given interval is greater than zero") {
-        interval = 5.0f;
-        REQUIRE_GT(interval, 0.0f);
-        timer.setInterval(5.0f);
+        interval = ime::seconds(5.0f);
+        REQUIRE_GT(interval, ime::Time::Zero);
+        timer.setInterval(interval);
 
         THEN("the timers interval is set to the given value") {
-            CHECK_EQ(timer.getInterval(), 5.0f);
+            CHECK_EQ(timer.getInterval(), ime::seconds(5.0f));
 
             SUBCASE("The remaining duration is also set to the given interval") {
-                REQUIRE_EQ(timer.getInterval(), 5.0f);
-                CHECK_EQ(timer.getRemainingDuration(), 5.0f);
+                REQUIRE_EQ(timer.getInterval(), ime::seconds(5.0f));
+                CHECK_EQ(timer.getRemainingDuration(), ime::seconds(5.0f));
             }
         }
+    }
 
-        WHEN("the given interval is less than zero") {
-            interval = -5.0f;
-            REQUIRE_LT(interval, 0.0f);
-            timer.setInterval(interval);
+    WHEN("the given interval is less than zero") {
+        interval = ime::seconds(-5.0f);
+        REQUIRE_LT(interval, ime::Time::Zero);
+        timer.setInterval(interval);
 
-            THEN("the timers interval is set to zero") {
-                CHECK_EQ(timer.getInterval(), 0.0f);
+        THEN("the timers interval is set to zero") {
+            CHECK_EQ(timer.getInterval(), ime::Time::Zero);
 
-                SUBCASE("The remaining duration is also set to zero") {
-                    REQUIRE_EQ(timer.getInterval(), 0.0f);
-                    CHECK_EQ(timer.getRemainingDuration(), 0.0f);
-                }
+            SUBCASE("The remaining duration is also set to zero") {
+                REQUIRE_EQ(timer.getInterval(), ime::Time::Zero);
+                CHECK_EQ(timer.getRemainingDuration(), ime::Time::Zero);
             }
         }
     }
 }
 
 SCENARIO("A timer is running and its member functions are invoked") {
-    auto timer = ime::Timer::create([]{}, 5.0f);
+    auto timer = ime::Timer::create([]{}, ime::seconds(5.0f));
     timer.start();
-    timer.update(1.0f);
+    timer.update(ime::seconds(1.0f));
 
     WHEN("start() is called") {
-        REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
         REQUIRE_NE(timer.getRemainingDuration(), timer.getInterval());
         timer.start();
         THEN("the timer restarts") {
@@ -200,9 +199,9 @@ SCENARIO("A timer is running and its member functions are invoked") {
     AND_WHEN("setInterval(float) is called with a new positive argument") {
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
         REQUIRE_LT(timer.getRemainingDuration(), timer.getInterval());
-        REQUIRE_NE(timer.getInterval(), 10.0f);
-        timer.setInterval(10.0f);
-        REQUIRE_GT(timer.getInterval(), 0.0f);
+        REQUIRE_NE(timer.getInterval(), ime::seconds(10.0f));
+        timer.setInterval(ime::seconds(10.0f));
+        REQUIRE_GT(timer.getInterval(), ime::Time::Zero);
         THEN("the timer restarts") {
             CHECK_EQ(timer.getRemainingDuration(), timer.getInterval());
             CHECK_EQ(timer.getStatus(), ime::Timer::Status::Running);
@@ -212,7 +211,7 @@ SCENARIO("A timer is running and its member functions are invoked") {
     AND_WHEN("setInterval(float) is called with an argument of zero") {
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
         REQUIRE_NE(timer.getRemainingDuration(), timer.getInterval());
-        timer.setInterval(0.0f);
+        timer.setInterval(ime::Time::Zero);
         THEN("the timer stops") {
             CHECK_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
 
@@ -225,7 +224,7 @@ SCENARIO("A timer is running and its member functions are invoked") {
     AND_WHEN("setInterval(float) is called with a negative value") {
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
         REQUIRE_NE(timer.getRemainingDuration(), timer.getInterval());
-        timer.setInterval(-1.0f);
+        timer.setInterval(ime::seconds(-1.0f));
         THEN("the timer stops") {
             CHECK_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
 
@@ -237,7 +236,7 @@ SCENARIO("A timer is running and its member functions are invoked") {
 }
 
 SCENARIO("A timer is stopped and its member functions are invoked") {
-    auto timer = ime::Timer::create([]{}, 1.0f);
+    auto timer = ime::Timer::create([]{}, ime::seconds(1.0f));
     REQUIRE(timer.canStart()); //The timer has been properly initialized such that calling start will make it run
 
     WHEN("start() is called") {
@@ -267,7 +266,7 @@ SCENARIO("A timer is stopped and its member functions are invoked") {
 }
 
 SCENARIO("The time is updates under different states (running, paused and stopped") {
-    auto timer = ime::Timer::create([]{}, 5.0f);
+    auto timer = ime::Timer::create([]{}, ime::seconds(5.0f));
     REQUIRE(timer.canStart());
 
     WHEN("the timer is running") {
@@ -275,10 +274,10 @@ SCENARIO("The time is updates under different states (running, paused and stoppe
         timer.start();
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Running);
         auto remainingDurationBeforeUpdate = timer.getRemainingDuration();
-        timer.update(2.0f);
+        timer.update(ime::seconds(2.0f));
 
         THEN("the given delta time will be subtracted from the remaining duration") {
-            CHECK_EQ(timer.getRemainingDuration(), remainingDurationBeforeUpdate - 2.0f);
+            CHECK_EQ(timer.getRemainingDuration(), remainingDurationBeforeUpdate - ime::seconds(2.0f));
         }
     }
 
@@ -289,7 +288,7 @@ SCENARIO("The time is updates under different states (running, paused and stoppe
         timer.pause();
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Paused);
         auto remainingDurationBeforeUpdate = timer.getRemainingDuration();
-        timer.update(2.0f);
+        timer.update(ime::seconds(2.0f));
         THEN("the given delta time will have no effect on the remaining duration") {
             CHECK_EQ(timer.getRemainingDuration(), remainingDurationBeforeUpdate);
         }
@@ -298,8 +297,8 @@ SCENARIO("The time is updates under different states (running, paused and stoppe
     AND_WHEN("the timer is stopped") {
         REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
         auto remainingDurationBeforeUpdate = timer.getRemainingDuration();
-        timer.update(2.0f);
-            THEN("the given delta time will have no effect on the remaining duration") {
+        timer.update(ime::seconds(2.0f));
+        THEN("the given delta time will have no effect on the remaining duration") {
             CHECK_EQ(timer.getRemainingDuration(), remainingDurationBeforeUpdate);
         }
     }

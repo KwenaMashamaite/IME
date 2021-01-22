@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
+#include "IME/core/time/Time.h"
 #include <random>
 #include <ctime>
 #include <chrono>
@@ -64,7 +65,7 @@ namespace ime {
 
         /**
          * @brief Execute a one time callback function after a delay
-         * @param delay Time to wait before executing callback in milliseconds
+         * @param delay Time to wait before executing callback
          * @param callback Callback function to execute
          * @param args Arguments passed to the callback function on invocation
          *
@@ -73,11 +74,11 @@ namespace ime {
          * away
          */
         template <typename Callable, typename...Args>
-        void setTimeoutSync(int delay, const Callable& callback, Args&&...args);
+        void setTimeoutSync(Time delay, const Callable& callback, Args&&...args);
 
         /**
          * @brief Execute a callback function once after a delay
-         * @param delay Time to wait before executing callback in milliseconds
+         * @param delay Time to wait before executing callback
          * @param callback Function to execute
          * @param args Arguments passed to the callback function on invocation
          *
@@ -86,11 +87,11 @@ namespace ime {
          * initiating the new thread
          */
         template <typename Callable, typename...Args>
-        void setTimeout(int delay, const Callable& callback, Args&&...args);
+        void setTimeout(Time delay, const Callable& callback, Args&&...args);
 
         /**
          * @brief Execute a callback function repeatedly after a delay
-         * @param delay Time to wait before executing callback in milliseconds
+         * @param delay Time to wait before executing callback
          * @param callback Function to execute
          * @param args Arguments passed to the callback function on invocation
          *
@@ -107,11 +108,11 @@ namespace ime {
          * type bool&
          */
         template <typename Callable, typename...Args>
-        void setIntervalSync(int delay, const Callable& callback, Args&&...args);
+        void setIntervalSync(Time delay, const Callable& callback, Args&&...args);
 
         /**
          * @brief Execute a callback function repeatedly after a delay
-         * @param delay Time to wait before executing callback in milliseconds
+         * @param delay Time to wait before executing callback
          * @param callback Function to execute
          * @param args Arguments to pass to the callback on invocation
          *
@@ -128,7 +129,7 @@ namespace ime {
          * the callback must take at least one argument of type bool&
          */
         template <typename Callable, typename...Args>
-        void setInterval(int delay, const Callable& callback, Args&&...args);
+        void setInterval(Time delay, const Callable& callback, Args&&...args);
 
         #include "IME/utility/Utils.inl"
     }

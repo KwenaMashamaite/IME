@@ -41,7 +41,7 @@ namespace ime {
             IME_PRINT_WARNING(R"(Missing or valueless ")" + setting + R"(" entry in settings, using default value)");
         }
 
-        Timer createTimer(float delay, Callback<> callback, bool isRepeating) {
+        Timer createTimer(Time delay, Callback<> callback, bool isRepeating) {
             auto timer = Timer::create(std::move(callback), delay, isRepeating);
             timer.start();
             return timer;
@@ -62,7 +62,6 @@ namespace ime {
         isSettingsLoadedFromFile_(!settingsFile.empty()),
         isInitialized_{false},
         isRunning_{false},
-        elapsedTime_{0.0f},
         shouldPop_{false}
     {}
 
@@ -147,17 +146,16 @@ namespace ime {
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
         IME_ASSERT(!statesManager_.isEmpty(), "Failed to start engine because it has no states");
 
-        statesManager_.getActiveState()->onEnter();
         isRunning_ = true;
-        auto const frameTime = 1.0f / settings_.getValueFor<int>("FPS_LIMIT");
-        auto deltaTime = 0.0f, now = 0.0f, accumulator = 0.0f;
+        statesManager_.getActiveState()->onEnter();
+        auto const frameTime = seconds( 1.0f / settings_.getValueFor<int>("FPS_LIMIT"));
+        auto deltaTime = Time::Zero, now = Time::Zero, accumulator = Time::Zero;
         auto clock = Clock();
-        elapsedTime_ = 0.0f;
-        auto prevTime = static_cast<float>(clock.getElapsedTimeInSeconds());
+        auto prevTime = now = clock.restart();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
             if (onFrameStart_)
                 onFrameStart_();
-            now = static_cast<float>(clock.getElapsedTimeInSeconds());
+            now = clock.getElapsedTime();
             deltaTime = now - prevTime;
             prevTime = now;
             accumulator += deltaTime;
@@ -166,6 +164,7 @@ namespace ime {
                 statesManager_.getActiveState()->fixedUpdate(frameTime);
                 accumulator -= frameTime;
             }
+
             update(deltaTime);
             clear();
             render();
@@ -182,7 +181,7 @@ namespace ime {
         isRunning_ = false;
     }
 
-    void Engine::update(float deltaTime) {
+    void Engine::update(Time deltaTime) {
         for (auto& timer : activeTimers_)
             timer.update(deltaTime);
 
@@ -261,7 +260,7 @@ namespace ime {
         isRunning_ = false;
         shouldPop_ = false;
         isSettingsLoadedFromFile_ = false;
-        elapsedTime_ = 0.0f;
+        elapsedTime_ = Time::Zero;
         gameTitle_.clear();
         settingFile_.clear();
         settings_.clear();
@@ -286,7 +285,7 @@ namespace ime {
         return isRunning_;
     }
 
-    float Engine::getElapsedTime() const {
+    Time Engine::getElapsedTime() const {
         return elapsedTime_;
     }
 
@@ -324,12 +323,12 @@ namespace ime {
         return window_;
     }
 
-    Timer& Engine::setTimeout(float delay, ime::Callback<> callback) {
+    Timer& Engine::setTimeout(Time delay, ime::Callback<> callback) {
         activeTimers_.push_back(createTimer(delay, std::move(callback),false));
         return activeTimers_.back();
     }
 
-    Timer& Engine::setInterval(float delay, ime::Callback<> callback) {
+    Timer& Engine::setInterval(Time delay, ime::Callback<> callback) {
         activeTimers_.push_back(createTimer(delay, std::move(callback), true));
         return activeTimers_.back();
     }

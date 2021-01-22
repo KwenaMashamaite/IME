@@ -122,13 +122,13 @@ namespace ime {
              * when the sound effect is stopped has no effect, since playing
              * the sound effect would reset its position
              */
-            void seek(float position) override;
+            void seek(Time position) override;
 
             /**
              * @brief Get the current playing position of the sound effect
              * @return Current playing position of the sound effect
              */
-            Duration getPlayingPosition() const override;
+            Time getPlayingPosition() const override;
 
             /**
             * @brief Play sound effect
@@ -162,7 +162,7 @@ namespace ime {
              * @brief Get the total duration of the sound effect
              * @return The total duration of the sound effect
              */
-            Duration getDuration() const override;
+            Time getDuration() const override;
 
             /**
              * @brief Get the current status of the sound effect

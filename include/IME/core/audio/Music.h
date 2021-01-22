@@ -126,13 +126,13 @@ namespace ime {
              * when the music is stopped has no effect, since playing
              * the music would reset its position
              */
-            void seek(float position) override;
+            void seek(Time position) override;
 
             /**
              * @brief Get the current playing position of the music
              * @return Current playing position of the music
              */
-            Duration getPlayingPosition() const override;
+            Time getPlayingPosition() const override;
 
             /**
             * @brief Play music
@@ -166,7 +166,7 @@ namespace ime {
              * @brief Get the total duration of the music
              * @return The total duration of the music
              */
-            Duration getDuration() const override;
+            Time getDuration() const override;
 
             /**
              * @brief Get the current status of the music (stopped, paused, playing)

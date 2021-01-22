@@ -26,42 +26,43 @@
 #define IME_CLOCK_H
 
 #include "IME/Config.h"
+#include "IME/core/time/Time.h"
 
 namespace ime {
     /**
-     * @brief This class models a clock
+     * @brief Class that measures time
      */
     class IME_API Clock {
     public:
         /**
-         * @brief Constructor
+         * @brief Default constructor
+         *
+         * The clock is started immediately after construction
          */
         Clock();
 
         /**
-         * @brief Get the time passed since the clock was reset
-         * @return Time passed since the clock was reset in seconds
+         * @brief Get the elapsed time
+         * @return The elapsed time
+         *
+         * This function returns the time passed since the clock was
+         * created or the time passed since the last call to restart
+         *
+         * @see restart
          */
-        double getElapsedTimeInSeconds();
+        Time getElapsedTime() const;
 
         /**
-         * @brief Reset the clock and get the time passed since the clock
-         *        last reset
-         * @return Time passed since the clock was reset in seconds
+         * @brief Restart the clock
+         * @return The elapsed time
+         *
+         * This function resets the counter to zero and returns the
+         * time passed since the clock was started
          */
-        double restart();
+        Time restart();
 
     private:
-        /**
-         * @brief Get the amount of time in seconds that has passed
-         *        since the process started executing
-         * @return Time that has passed since the process
-         *         started executing
-         */
-        double getProcessTimeInSeconds();
-
-    private:
-        double timeWhenClockWasLastReset_; //!< Stores the amount of time passed since last call to restart
+        Time startTime_; //!< The time when the clock was last reset
     };
 }
 

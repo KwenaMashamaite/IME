@@ -66,7 +66,7 @@ namespace ime {
          * @brief Update entity movement in the grid
          * @param deltaTime Time passed since movement was last updated
          */
-        void update(float deltaTime) override;
+        void update(Time deltaTime) override;
 
         /**
          * @brief Enable or disable advanced random movement

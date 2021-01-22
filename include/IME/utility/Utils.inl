@@ -23,29 +23,29 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename Callable, typename...Args>
-void setTimeoutSync(int delay, const Callable& callback, Args&&...args) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+void setTimeoutSync(Time delay, const Callable& callback, Args&&...args) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(delay.asMilliseconds()));
     std::invoke(callback, std::forward<Args>(args)...);
 }
 
 template <typename Callable, typename...Args>
-void setTimeout(int delay, const Callable& callback, Args&&...args){
+void setTimeout(Time delay, const Callable& callback, Args&&...args){
     std::thread([=] {
         setTimeoutSync(delay, callback, std::forward<Args>(args)...);
     }).detach();
 }
 
 template <typename Callable, typename...Args>
-void setIntervalSync(int delay, const Callable& callback, Args&&...args){
+void setIntervalSync(Time delay, const Callable& callback, Args&&...args){
     auto cancelInterval = false;
     while (!cancelInterval) { //Loop terminated by callback
-        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay.asMilliseconds()));
         callback(cancelInterval, std::forward<Args>(args)...);
     }
 }
 
 template <typename Callable, typename...Args>
-void setInterval(int delay, const Callable& callback, Args&&...args){
+void setInterval(Time delay, const Callable& callback, Args&&...args){
     std::thread([=] {
         setIntervalSync(delay, callback, std::forward<Args>(args)...);
     }).detach();

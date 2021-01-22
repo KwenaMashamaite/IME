@@ -25,15 +25,15 @@
 ///  // Step 1: Define a state
 ///  // Define the behaviour of the game state by overriding the state methods.
 ///  // These functions will be called by the engine at specific times
-///  class DemoState : public IME::State {
+///  class DemoState : public ime::State {
 ///  public:
-///      explicit DemoState(IME::Engine &engine) : State(engine) {}
+///      explicit DemoState(ime::Engine &engine) : State(engine) {}
 ///      void onEnter() override {}
 ///      bool isEntered() const override {}
 ///      void handleEvent(sf::Event event) override {}
-///      void update(float deltaTime) override {}
-///      void fixedUpdate(float deltaTime) override {}
-///      void render(IME::Graphics::Window &renderTarget) override {}
+///      void update(ime::Time deltaTime) override {}
+///      void fixedUpdate(ime::Time deltaTime) override {}
+///      void render(ime::Window &renderTarget) override {}
 ///      void onPause() override {}
 ///      void onResume() override {}
 ///      void onExit() override {}
@@ -47,7 +47,7 @@
 ///     //
 ///     // All these configurations except the window title have defaults so they
 ///     // can be left undefined. You can add you own entries if you wish to do so
-///     auto configurations = IME::PropertyContainer();
+///     auto configurations = ime::PropertyContainer();
 ///     configurations.addProperty({"WINDOW_TITLE", "STRING", "Demo"});
 ///     configurations.addProperty({"WINDOW_WIDTH", "INT", 504});
 ///     configurations.addProperty({"WINDOW_HEIGHT", "INT", 636});
@@ -61,7 +61,7 @@
 ///     configurations.addProperty({"SOUND_EFFECTS_DIR", "STRING", "/assets/soundEffects/"});
 ///
 ///     // Step 3: Create the engine and initialize it
-///     auto engine = IME::Engine("Your awesome game name here", configurations);
+///     auto engine = ime::Engine("Your awesome game name here", configurations);
 ///     engine.init();
 ///
 ///     // Step 4: Push the initial state and run the engine

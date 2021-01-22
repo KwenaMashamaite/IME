@@ -23,25 +23,34 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/time/Clock.h"
-#include <ctime>
+#include <chrono>
 
 namespace ime {
+    namespace {
+        /**
+         * @brief Get the amount of time that has passed since the process
+         *        started executing
+         * @return Time that has passed since the process started executing
+         */
+        Time getProcessTime() {
+            using namespace std::chrono;
+            auto now_in_ns = time_point_cast<std::chrono::nanoseconds>(steady_clock::now());
+            return ime::nanoseconds(now_in_ns.time_since_epoch().count());
+        }
+    }
+
     Clock::Clock() {
-        timeWhenClockWasLastReset_ = getProcessTimeInSeconds();
+        startTime_ = getProcessTime();
     }
 
-    double Clock::getProcessTimeInSeconds() {
-        clock_t time = clock();
-        return static_cast<double>(time) / CLOCKS_PER_SEC;
+    Time Clock::getElapsedTime() const {
+        return getProcessTime() - startTime_;
     }
 
-    double Clock::getElapsedTimeInSeconds() {
-        return getProcessTimeInSeconds() - timeWhenClockWasLastReset_;
-    }
-
-    double Clock::restart() {
-        auto timeElasped = getElapsedTimeInSeconds();
-        timeWhenClockWasLastReset_ = getProcessTimeInSeconds();
-        return timeElasped;
+    Time Clock::restart() {
+        auto now = getProcessTime();
+        auto elapsed = now - startTime_;
+        startTime_ = now;
+        return elapsed;
     }
 }

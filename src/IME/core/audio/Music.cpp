@@ -101,27 +101,23 @@ namespace ime::audio {
         return false;
     }
 
-    Duration Music::getDuration() const {
+    Time Music::getDuration() const {
         if (song_)
-            return {song_->getDuration().asSeconds(),
-                    static_cast<float>(song_->getDuration().asMilliseconds()),
-                    static_cast<float>(song_->getDuration().asMicroseconds())};
-        return {0.0f, 0.0f, 0.0f};
+            return microseconds(song_->getDuration().asMicroseconds());
+        return Time::Zero;
     }
 
-    void Music::seek(float position) {
+    void Music::seek(Time position) {
         if (song_) {
-            song_->setPlayingOffset(sf::microseconds(position));
+            song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
             emit("playingPositionChanged", position);
         }
     }
 
-    Duration Music::getPlayingPosition() const {
+    Time Music::getPlayingPosition() const {
         if (song_)
-            return {song_->getPlayingOffset().asSeconds(),
-                    static_cast<float>(song_->getPlayingOffset().asMicroseconds()),
-                    static_cast<float>(song_->getPlayingOffset().asMicroseconds())};
-        return {0.0f, 0.0f, 0.0f};
+            return microseconds(song_->getPlayingOffset().asMicroseconds());
+        return Time::Zero;
     }
 
     std::string Music::getType() {

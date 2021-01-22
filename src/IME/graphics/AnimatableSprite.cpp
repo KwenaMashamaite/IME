@@ -38,7 +38,7 @@ namespace ime {
         return animator_->getCurrentAnimation();
     }
 
-    void AnimatableSprite::updateAnimation(float deltaTime) {
+    void AnimatableSprite::updateAnimation(Time deltaTime) {
         animator_->update(deltaTime);
     }
 

@@ -58,8 +58,8 @@ namespace ime {
 
         /**
          * @brief Get the current animation
-         * @return Pointer to the current animation if there is one, otherwise
-         *         a nullptr
+         * @return Pointer to the current animation if there is one,
+         *         otherwise a nullptr
          */
         std::shared_ptr<Animation> getCurrentAnimation() const;
 
@@ -70,7 +70,7 @@ namespace ime {
          * This function starts the current animation the first time its
          * called. Subsequent calls determine which frame to display
          */
-        void updateAnimation(float deltaTime);
+        void updateAnimation(Time deltaTime);
 
         /**
          * @brief Finish the current animation

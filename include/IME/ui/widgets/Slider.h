@@ -26,7 +26,7 @@
 #define IME_SLIDER_H
 
 #include "IME/Config.h"
-#include "IWidget.h"
+#include "IClickableWidget.h"
 #include "IME/ui/renderers/SliderRenderer.h"
 #include <TGUI/Widgets/Slider.hpp>
 #include <memory>
@@ -36,7 +36,7 @@ namespace ime {
         /**
          * @brief Slider widget
          */
-        class IME_API Slider : public IWidget {
+        class IME_API Slider : public IClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<Slider>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
@@ -651,6 +651,40 @@ namespace ime {
              * @see setPosition
              */
             void move(Vector2f offset) override;
+
+            /**
+             * @brief Enable or disable the slider
+             * @param isEnable Set true to enable the slider, false to
+             *        disable the slider
+             *
+             * The slider is enabled by default
+             *
+             * @note Disabling the slider cancels all the interaction events
+             */
+            void setEnabled(bool isEnable) override;
+
+            /**
+             * @brief Check if slider is enabled or disabled
+             * @return True if slider is enabled, false if slider is disabled
+             */
+            bool isEnabled() const override;
+
+            /**
+             * @brief Disable slider if its currently enabled and vice versa
+             */
+            void toggleEnabled() override;
+
+            /**
+             * @brief Focus or unfocus slider
+             * @param isFocused True to focus or false to unfocus slider
+             */
+            void setFocused(bool isFocused) override;
+
+            /**
+             * @brief Check if slider is focused or not
+             * @return True if slider is focused. Otherwise, false
+             */
+            bool isFocused() const override;
 
             /**
              * @internal

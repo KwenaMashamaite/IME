@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
+#include "IME/core/time/Time.h"
 #include <string>
 #include <vector>
 
@@ -53,7 +54,7 @@ namespace ime {
          * @param duration How long the animation plays before it stops/loops 
          *        around
          */
-        Animation(const std::string &name, const std::string &spriteSheet, float duration);
+        Animation(const std::string &name, const std::string &spriteSheet, Time duration);
 
         /**
          * @brief Get the filename of the spritesheet used to create animation
@@ -113,13 +114,13 @@ namespace ime {
          * @note If the duration is negative, the animation will last zero
          *       seconds
          */
-        void setDuration(float duration);
+        void setDuration(Time duration);
 
         /**
          * @brief Get the duration of the animation
          * @return The duration of the animation
          */
-        float getDuration() const;
+        Time getDuration() const;
 
         /**
          * @brief Get the sub-rectangle that is displayed by s given frame
@@ -145,7 +146,7 @@ namespace ime {
         std::vector<IntRect> frames_; //!< Animation frames container
         std::string name_;            //!< Name of the animation
         std::string spriteSheet_;     //!< Filename of the spritesheet
-        float duration_;              //!< Duration of the animation
+        Time duration_;              //!< Duration of the animation
         bool isLooped_;               //!< Looping state of the animation
     };
 }

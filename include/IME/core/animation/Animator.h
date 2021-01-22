@@ -29,6 +29,7 @@
 #include "Animation.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
+#include "IME/core/time/Time.h"
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -82,7 +83,7 @@ namespace ime {
          * This function starts the current animation the first time its
          * called. Subsequent calls determine which frame to display
          */
-        void update(float deltaTime);
+        void update(Time deltaTime);
 
         /**
          * @brief Change the current animation
@@ -146,7 +147,7 @@ namespace ime {
         Sprite& animationTarget_;                                      //!< Sprite to be animated
         std::unordered_map<std::string, std::shared_ptr<Animation>> animations_; //!< Animations container
         std::shared_ptr<Animation> currentAnimation_;                            //!< Pointer to the current animation
-        float totalTime_;                                                        //!< Time passed since animation was started
+        Time totalTime_;                                                        //!< Time passed since animation was started
         EventEmitter eventEmitter_;                                              //!< Event publisher
     };
 }

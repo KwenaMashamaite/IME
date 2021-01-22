@@ -27,12 +27,10 @@
 namespace ime {
     Timer::Timer() :
         status_{Status::Stopped},
-        isRepeating_{false},
-        interval_{0.0f},
-        remainingDuration_{0.0f}
+        isRepeating_{false}
     {}
 
-    Timer Timer::create(Callback<> callback, float interval, bool repeat) {
+    Timer Timer::create(Callback<> callback, Time interval, bool repeat) {
         auto timer = Timer();
         timer.setInterval(interval);
         timer.setRepeat(repeat);
@@ -40,13 +38,13 @@ namespace ime {
         return timer;
     }
 
-    void Timer::setInterval(float interval) {
+    void Timer::setInterval(Time interval) {
         if (interval_ == interval)
             return;
 
         interval_ = interval;
-        if (interval_ < 0.0f) {
-            interval_ = remainingDuration_ = 0.0f;
+        if (interval_ < Time::Zero) {
+            interval_ = remainingDuration_ = Time::Zero;
             if (status_ == Status::Running)
                 stop();
         } else if (status_ == Status::Running)
@@ -55,11 +53,11 @@ namespace ime {
             remainingDuration_ = interval_;
     }
 
-    float Timer::getInterval() const {
+    Time Timer::getInterval() const {
         return interval_;
     }
 
-    float Timer::getRemainingDuration() const {
+    Time Timer::getRemainingDuration() const {
         return remainingDuration_;
     }
 
@@ -107,12 +105,12 @@ namespace ime {
         return status_;
     }
 
-    void Timer::update(float deltaTime) {
-        if (status_ != Status::Running || remainingDuration_ <= 0.0f)
+    void Timer::update(Time deltaTime) {
+        if (status_ != Status::Running || remainingDuration_ <= Time::Zero)
             return;
 
         remainingDuration_ -= deltaTime;
-        if (remainingDuration_ <= 0.0f && callback_) {
+        if (remainingDuration_ <= Time::Zero && callback_) {
             callback_();
             if (isRepeating_)
                 restart();
@@ -122,6 +120,6 @@ namespace ime {
     }
 
     bool Timer::canStart() const {
-        return interval_ > 0.0f && callback_;
+        return interval_ > Time::Zero && callback_;
     }
 }

@@ -29,6 +29,7 @@
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/entity/Entity.h"
 #include "IME/core/event/EventEmitter.h"
+#include "IME/core/time/Time.h"
 
 namespace ime {
     /**
@@ -119,7 +120,7 @@ namespace ime {
          *
          * @warning The target will never move if this function is never called
          */
-        virtual void update(float deltaTime);
+        virtual void update(Time deltaTime);
 
         /**
          * @brief Force the target to reach it's destination
@@ -318,7 +319,7 @@ namespace ime {
          * @param deltaTime Time passed since last check
          * @return True if target has reached its adjacent tile, otherwise false
          */
-        bool isTargetTileReached(float deltaTime);
+        bool isTargetTileReached(Time deltaTime);
 
         /**
          * @brief Stop target and notify event listeners

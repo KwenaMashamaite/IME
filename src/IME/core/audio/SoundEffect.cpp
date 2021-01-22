@@ -91,22 +91,18 @@ namespace ime::audio {
         return soundEffect_.getLoop();
     }
 
-    Duration SoundEffect::getDuration() const {
+    Time SoundEffect::getDuration() const {
         if (soundEffect_.getBuffer())
-            return {soundEffect_.getPlayingOffset().asSeconds(),
-                    static_cast<float>(soundEffect_.getBuffer()->getDuration().asMilliseconds()),
-                    static_cast<float>(soundEffect_.getPlayingOffset().asMicroseconds())};
-        return {0.0f, 0.0f, 0.0f};
+            return microseconds(soundEffect_.getPlayingOffset().asMicroseconds());
+        return Time::Zero;
     }
 
-    void SoundEffect::seek(float position) {
-        soundEffect_.setPlayingOffset(sf::milliseconds(position));
+    void SoundEffect::seek(Time position) {
+        soundEffect_.setPlayingOffset(sf::microseconds(position.asMicroseconds()));
     }
 
-    Duration SoundEffect::getPlayingPosition() const {
-        return {soundEffect_.getPlayingOffset().asSeconds(),
-                static_cast<float>(soundEffect_.getPlayingOffset().asMilliseconds()),
-                static_cast<float>(soundEffect_.getPlayingOffset().asMicroseconds())};
+    Time SoundEffect::getPlayingPosition() const {
+        return microseconds(soundEffect_.getPlayingOffset().asMicroseconds());
     }
 
     std::string SoundEffect::getType() {

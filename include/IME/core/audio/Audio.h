@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
+#include "IME/core/time/Time.h"
 #include <initializer_list>
 #include <string>
 
@@ -39,15 +40,6 @@ namespace ime {
             Stopped, //!< Audio is not playing
             Paused,  //!< Audio is paused
             Playing  //!< Audio is playing
-        };
-
-        /**
-         * @brief Duration of the audio
-         */
-        struct Duration {
-            float Seconds;      //!< Time in seconds
-            float Milliseconds; //!< Time in milliseconds
-            float Microseconds; //!< Time in microseconds
         };
 
         /**
@@ -162,13 +154,13 @@ namespace ime {
              * when the audio is stopped has no effect, since playing
              * the audio would reset its position
              */
-            virtual void seek(float position) = 0;
+            virtual void seek(Time position) = 0;
 
             /**
             * @brief Get the current playing position of the audio
             * @return Current playing position of the audio
             */
-            virtual Duration getPlayingPosition() const = 0;
+            virtual Time getPlayingPosition() const = 0;
 
             /**
              * @brief Play audio
@@ -211,7 +203,7 @@ namespace ime {
              * @brief Get the total duration of the audio
              * @return The total duration of the audio
              */
-            virtual Duration getDuration() const = 0;
+            virtual Time getDuration() const = 0;
 
             /**
              * @brief Get the current status of the audio (stopped, paused, playing)

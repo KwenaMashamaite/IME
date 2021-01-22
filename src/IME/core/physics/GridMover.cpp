@@ -98,7 +98,7 @@ namespace ime {
         return false;
     }
 
-    void GridMover::update(float deltaTime) {
+    void GridMover::update(Time deltaTime) {
         if (target_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover");
             auto movable = std::dynamic_pointer_cast<IMovable>(target_);
@@ -175,15 +175,15 @@ namespace ime {
         return false;
     }
 
-    bool GridMover::isTargetTileReached(float deltaTime) {
+    bool GridMover::isTargetTileReached(Time deltaTime) {
         auto movable = std::dynamic_pointer_cast<IMovable>(target_);
         if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
             auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
-            if (movable->getSpeed() * deltaTime >= horizontalDistToTarget)
+            if (movable->getSpeed() * deltaTime.asSeconds() >= horizontalDistToTarget)
                 return true;
         } else if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
             auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getPosition().y);
-            if (movable->getSpeed() * deltaTime >= verticalDistToTarget)
+            if (movable->getSpeed() * deltaTime.asSeconds() >= verticalDistToTarget)
                 return true;
         }
         return false;

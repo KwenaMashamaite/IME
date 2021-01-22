@@ -28,8 +28,7 @@
 
 namespace ime {
     Animator::Animator(Sprite& target) :
-        animationTarget_(target),
-        totalTime_(0.0f)
+        animationTarget_(target)
     {}
 
     bool Animator::addAnimation(std::shared_ptr<Animation> animation) {
@@ -49,9 +48,9 @@ namespace ime {
         return currentAnimation_;
     }
 
-    void Animator::update(float deltaTime) {
+    void Animator::update(Time deltaTime) {
         if (currentAnimation_) {
-            if (totalTime_ == 0.0f)
+            if (totalTime_ == Time::Zero)
                 eventEmitter_.emit(currentAnimation_->getName() + "AnimationStart");
 
             totalTime_ += deltaTime;
@@ -77,7 +76,7 @@ namespace ime {
             auto firstFrame = newAnimation->getFrameAt(0);
             animationTarget_.setTextureRect(firstFrame.left, firstFrame.top, firstFrame.width, firstFrame.height);
             currentAnimation_ = newAnimation;
-            totalTime_ = 0.0f;
+            totalTime_ = Time::Zero;
             return true;
         }
         return false;
@@ -103,8 +102,8 @@ namespace ime {
     }
 
     void Animator::finishAnimation() {
-        if (currentAnimation_ && totalTime_ != 0.0f){
-            totalTime_ = 0.0f;
+        if (currentAnimation_ && totalTime_ != Time::Zero){
+            totalTime_ = Time::Zero;
             auto lastFrame = currentAnimation_->getFrameAt(currentAnimation_->getNumOfFrames() - 1);
             animationTarget_.setTextureRect(lastFrame.left, lastFrame.top, lastFrame.width, lastFrame.height);
             auto animationName = currentAnimation_->getName();

@@ -26,6 +26,7 @@
 #define IME_TIMER_H
 
 #include "IME/Config.h"
+#include "IME/core/time/Time.h"
 #include "IME/core/event/EventEmitter.h"
 
 namespace ime {
@@ -63,7 +64,7 @@ namespace ime {
          *
          * @see start and setRepeat
          */
-        static Timer create(Callback<> callback, float interval, bool repeat = false);
+        static Timer create(Callback<> callback, Time interval, bool repeat = false);
 
         /**
          * @brief Set the countdown starting point
@@ -77,19 +78,19 @@ namespace ime {
          *
          * @see restart
          */
-        void setInterval(float interval);
+        void setInterval(Time interval);
 
         /**
          * @brief Get the countdown starting point
          * @return The countdown starting point
          */
-        float getInterval() const;
+        Time getInterval() const;
 
         /**
          * @brief Get time remaining before the timer reaches zero
          * @return The time remaining before the timer reaches zero
          */
-        float getRemainingDuration() const;
+        Time getRemainingDuration() const;
 
         /**
          * @brief Set whether or not the timer restarts after reaching zero
@@ -190,7 +191,7 @@ namespace ime {
          * @brief Update the time
          * @param deltaTime Time passed since last update
          */
-        void update(float deltaTime);
+        void update(Time deltaTime);
 
         /**
          * @brief Check if the timer can be started when calling start()
@@ -212,8 +213,8 @@ namespace ime {
     private:
         Status status_;           //!< The current state of the timer
         bool isRepeating_;        //!< Flags whether or not the timer restarts after reaching zero
-        float interval_;          //!< Countdown starting point
-        float remainingDuration_; //!< The time remaining before the timer reaches zero
+        Time interval_;          //!< Countdown starting point
+        Time remainingDuration_; //!< The time remaining before the timer reaches zero
         Callback<> callback_;     //!< Function executed when the timer reaches zero
     };
 }

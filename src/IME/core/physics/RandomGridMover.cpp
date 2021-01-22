@@ -164,7 +164,7 @@ namespace ime {
         targetGridMover_.setDestination(newDestination);
     }
 
-    void RandomGridMover::update(float deltaTime) {
+    void RandomGridMover::update(Time deltaTime) {
         if (isAdvance_)
             targetGridMover_.update(deltaTime);
         else

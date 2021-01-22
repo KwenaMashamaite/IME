@@ -57,6 +57,6 @@ namespace ime::audio {
     }
 
     void Audio::restart() {
-        seek(0.0f);
+        seek(Time::Zero);
     }
 }
