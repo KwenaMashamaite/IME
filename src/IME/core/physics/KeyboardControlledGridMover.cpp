@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/KeyboardControlledGridMover.h"
+#include "IME/core/event/Event.h"
 
 namespace ime {
     KeyboardControlledGridMover::KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
@@ -79,8 +80,8 @@ namespace ime {
 
     void KeyboardControlledGridMover::removeInputEventListeners() {
         if (onTriggerHandlerId_ != -1) {
-            if (!keyboard_.removeEventListener(input::Keyboard::Event::KeyDown, onTriggerHandlerId_))
-                keyboard_.removeEventListener(input::Keyboard::Event::KeyUp, onTriggerHandlerId_);
+            if (!keyboard_.removeEventListener(KeyEvent::KeyDown, onTriggerHandlerId_))
+                keyboard_.removeEventListener(KeyEvent::KeyUp, onTriggerHandlerId_);
 
             onTriggerHandlerId_ = -1;
         }
@@ -106,7 +107,7 @@ namespace ime {
             requestDirectionChange(targetDirection);
     }
 
-    void KeyboardControlledGridMover::handleEvent(sf::Event event) {
+    void KeyboardControlledGridMover::handleEvent(Event event) {
         keyboard_.handleEvent(event);
     }
 }

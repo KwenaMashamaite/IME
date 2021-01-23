@@ -27,9 +27,18 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
-#include <SFML/Window/Event.hpp>
 
 namespace ime {
+    class Event; //!< Event class forward declaration
+
+    /**
+     * @brief Mouse events
+     */
+    enum class MouseEvent {
+        MouseDown, //!< Fired when mouse is depressed
+        MouseUp    //!< Fired when depressed mouse is released
+    };
+
     namespace input {
         /**
          * @brief Class for capturing mouse inputs
@@ -37,20 +46,22 @@ namespace ime {
         class IME_API Mouse {
         public:
             /**
-             * @brief Mouse events
-             */
-            enum class Event {
-                MouseDown, //!< Fired when mouse is depressed
-                MouseUp    //!< Fired when depressed mouse is released
-            };
-
-            /**
              * @brief Mouse buttons
              */
             enum class Button {
-                Left,  //!< Left mouse button
-                Right, //!< Right mouse button
-                Middle //!< Middle mouse button
+                Left,      //!< The left mouse button
+                Right,     //!< The right mouse button
+                Middle,    //!< The middle (wheel) mouse button
+                XButton1,  //!< The first extra mouse button
+                XButton2,  //!< The second extra mouse button
+            };
+
+            /**
+             * @brief Mouse wheels
+             */
+            enum class Wheel {
+                VerticalWheel,  //!< The vertical mouse wheel
+                HorizontalWheel //!< The horizontal mouse wheel
             };
 
             /**
@@ -111,7 +122,7 @@ namespace ime {
             * order to determine the current frame state of a the mouse
             * (pressed, released, moved or no input)
             */
-            void handleEvent(sf::Event event);
+            void handleEvent(Event event);
 
             /**
               * @brief  Remove an event listener from an event
@@ -122,7 +133,7 @@ namespace ime {
               *         or false if the specified event does not have an event
               *         listener with the specified id
               */
-            bool removeEventListener(Event event, Button button, int id);
+            bool removeEventListener(MouseEvent event, Button button, int id);
 
             /**
              * @brief Remove a mouse moved event listener

@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"
+#include "IME/core/event/Event.h"
 
 namespace ime {
     namespace input {
@@ -50,7 +51,7 @@ namespace ime {
              * @param callback Function to execute when the key event is raised
              * @return The event listeners identification number
              */
-            int addKeyListener(Keyboard::Event event, Keyboard::Key key, Callback<> callback);
+            int addKeyListener(KeyEvent event, Keyboard::Key key, Callback<> callback);
 
             /**
              * @brief Add a key listener to any key pressed event
@@ -79,7 +80,7 @@ namespace ime {
               *        specified event does not have a key listener with the
               *        specified id
              */
-            bool removeKeyListener(Keyboard::Event event, Keyboard::Key key, int id);
+            bool removeKeyListener(KeyEvent event, Keyboard::Key key, int id);
 
             /**
              * @brief Remove an event listener from a key down or key up event
@@ -88,7 +89,7 @@ namespace ime {
              * @return True if a listener was removed from an event, false if the
               *        specified event does not have a listener with the specified id
              */
-            bool removeKeyListener(Keyboard::Event event, int id);
+            bool removeKeyListener(KeyEvent event, int id);
 
             /**
              * @brief Check if a mouse button is currently pressed or not
@@ -108,7 +109,7 @@ namespace ime {
              * event took place. That is, the coordinates of where the mouse was
              * depressed or released
              */
-            int addMouseButtonListener(Mouse::Event event, Mouse::Button button,
+            int addMouseButtonListener(MouseEvent event, Mouse::Button button,
                 Callback<int, int> callback);
 
             /**
@@ -129,7 +130,7 @@ namespace ime {
              * @return True if a listener was removed from an event, false if the
               *        specified event does not have a listener with the specified id
              */
-            bool removeMouseListener(Mouse::Event event, Mouse::Button button, int id);
+            bool removeMouseListener(MouseEvent event, Mouse::Button button, int id);
 
             /**
              * @brief Remove an event listener from a mouse moved event listener
@@ -149,7 +150,7 @@ namespace ime {
              * that event listeners are notified. Failure to call this function
              * will result in key event listeners not being called
              */
-            void handleEvent(sf::Event event);
+            void handleEvent(Event event);
 
         private:
             Keyboard keyboard_; //!< Managed keyboard

@@ -25,11 +25,11 @@
 #include "IME/core/states/State.h"
 
 namespace ime {
-    State::State(Engine &app) :
-        app_(app)
+    State::State(Engine &engine) :
+        engine_{engine}
     {}
 
     Engine &State::engine() const {
-        return app_;
+        return engine_;
     }
 }

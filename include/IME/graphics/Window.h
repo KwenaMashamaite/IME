@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
+#include "IME/core/event/Event.h"
 #include "IDrawable.h"
 #include "Colour.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -131,7 +132,7 @@ namespace ime {
          * @param event Event queue to be checked
          * @return true if event queue is not empty, false if it is empty
          */
-        bool pollEvent(sf::Event &event);
+        bool pollEvent(Event &event);
 
         /**
          * @brief Close the window

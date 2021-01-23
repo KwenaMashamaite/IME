@@ -23,14 +23,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/input/Keyboard.h"
+#include "IME/core/event/Event.h"
 #include <SFML/Window/Keyboard.hpp>
 
 namespace ime::input {
-    void Keyboard::handleEvent(sf::Event event) {
-        if (event.type == sf::Event::KeyPressed) {
+    void Keyboard::handleEvent(Event event) {
+        if (event.type == Event::KeyPressed) {
             eventEmitter_.emit("anyKeyDown", static_cast<Key>(event.key.code));
             eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Down");
-        } else if (event.type == sf::Event::KeyReleased) {
+        } else if (event.type == Event::KeyReleased) {
             eventEmitter_.emit("anyKeyPressed", static_cast<Key>(event.key.code));
             eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Up");
         }
@@ -50,21 +51,21 @@ namespace ime::input {
             std::to_string(static_cast<int>(key)) + "Down", std::move(callback));
     }
 
-    bool Keyboard::removeEventListener(Event event, Key key, int id){
-        if (event == Event::KeyUp)
+    bool Keyboard::removeEventListener(KeyEvent event, Key key, int id){
+        if (event == KeyEvent::KeyUp)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(key)) + "Up", id);
-        else if (event == Event::KeyDown)
+        else if (event == KeyEvent::KeyDown)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(key)) + "Down", id);
         return false;
     }
 
-    bool Keyboard::removeEventListener(Keyboard::Event event, int id) {
+    bool Keyboard::removeEventListener(KeyEvent event, int id) {
         switch (event) {
-            case Event::KeyDown:
+            case KeyEvent::KeyDown:
                 return eventEmitter_.removeEventListener("anyKeyDown", id);
-            case Event::KeyUp:
+            case KeyEvent::KeyUp:
                 return eventEmitter_.removeEventListener("anyKeyPressed", id);
             default:
                 return false;

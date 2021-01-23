@@ -66,8 +66,8 @@ namespace ime::ui {
         };
     }
 
-    void GuiContainer::handleEvent(sf::Event event) {
-        sfmlGui_.handleEvent(event);
+    void GuiContainer::handleEvent(Event event) {
+        sfmlGui_.handleEvent(utility::convertToSFMLEvent(event));
     }
 
     void GuiContainer::setTabKeyUsageEnabled(bool enabled) {

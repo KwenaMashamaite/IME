@@ -91,7 +91,7 @@ namespace ime {
          * @brief Handle an event
          * @param event Event to handle
          */
-        void handleEvent(sf::Event event);
+        void handleEvent(Event event);
 
     private:
         /**

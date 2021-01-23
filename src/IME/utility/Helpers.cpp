@@ -26,8 +26,202 @@
 #include "IME/core/managers/ResourceManager.h"
 #include "IME/ui/widgets/IContainer.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
+#include "IME/core/input/Keyboard.h"
 
 namespace ime::utility {
+    Event convertToOwnEvent(const sf::Event &SFML_Event) {
+        auto IME_Event = Event();
+        switch (SFML_Event.type) {
+            case sf::Event::Closed:
+                IME_Event.type = Event::Type::Closed;
+                return IME_Event;
+            case sf::Event::Resized:
+                IME_Event.type = Event::Type::Resized;
+                IME_Event.size.width = SFML_Event.size.width;
+                IME_Event.size.height = SFML_Event.size.height;
+                return IME_Event;
+            case sf::Event::LostFocus:
+                IME_Event.type = Event::Type::LostFocus;
+                return IME_Event;
+            case sf::Event::GainedFocus:
+                IME_Event.type = Event::Type::GainedFocus;
+                return IME_Event;
+            case sf::Event::TextEntered:
+                IME_Event.type = Event::Type::TextEntered;
+                IME_Event.text.unicode = SFML_Event.text.unicode;
+                return IME_Event;
+            case sf::Event::KeyReleased:
+            case sf::Event::KeyPressed:
+                if (SFML_Event.type == sf::Event::KeyPressed)
+                    IME_Event.type = Event::Type::KeyPressed;
+                else
+                    IME_Event.type = Event::Type::KeyReleased;
+
+                IME_Event.key.code = static_cast<input::Keyboard::Key>(SFML_Event.key.code);
+                IME_Event.key.alt = SFML_Event.key.alt;
+                IME_Event.key.control = SFML_Event.key.control;
+                IME_Event.key.shift = SFML_Event.key.shift;
+                IME_Event.key.system = SFML_Event.key.system;
+                return IME_Event;
+            case sf::Event::MouseWheelScrolled:
+                IME_Event.type = Event::Type::MouseWheelScrolled;
+                if (SFML_Event.mouseWheelScroll.wheel == sf::Mouse::Wheel::VerticalWheel)
+                    IME_Event.mouseWheelScroll.wheel = input::Mouse::Wheel::VerticalWheel;
+                else
+                    IME_Event.mouseWheelScroll.wheel = input::Mouse::Wheel::HorizontalWheel;
+
+                IME_Event.mouseWheelScroll.delta = SFML_Event.mouseWheelScroll.delta;
+                IME_Event.mouseWheelScroll.x = SFML_Event.mouseWheelScroll.x;
+                IME_Event.mouseWheelScroll.y = SFML_Event.mouseWheelScroll.y;
+                return IME_Event;
+            case sf::Event::MouseButtonPressed:
+            case sf::Event::MouseButtonReleased:
+                if (SFML_Event.type == sf::Event::MouseButtonPressed)
+                    IME_Event.type = Event::Type::MouseButtonPressed;
+                else
+                    IME_Event.type = Event::Type::MouseButtonReleased;
+
+                IME_Event.mouseButton.button = static_cast<input::Mouse::Button>(SFML_Event.mouseButton.button);
+                IME_Event.mouseButton.x = SFML_Event.mouseButton.x;
+                IME_Event.mouseButton.y = SFML_Event.mouseButton.y;
+                return IME_Event;
+            case sf::Event::MouseMoved:
+                IME_Event.type = Event::Type::MouseMoved;
+                IME_Event.mouseMove.x = SFML_Event.mouseMove.x;
+                IME_Event.mouseMove.y = SFML_Event.mouseMove.y;
+                return IME_Event;
+            case sf::Event::MouseEntered:
+                IME_Event.type = Event::MouseEntered;
+                return IME_Event;
+            case sf::Event::MouseLeft:
+                IME_Event.type = Event::MouseLeft;
+                return IME_Event;
+            default:
+            {
+                IME_Event.type = Event::Unknown;
+                switch (SFML_Event.type) {
+                    case sf::Event::JoystickButtonPressed:
+                    case sf::Event::JoystickButtonReleased:
+                    case sf::Event::JoystickMoved:
+                    case sf::Event::JoystickConnected:
+                    case sf::Event::JoystickDisconnected:
+                        IME_PRINT_WARNING(
+                            "Joysticks are not supported in IME v"
+                            + std::to_string(IME_VERSION_MAJOR) + "."
+                            + std::to_string(IME_VERSION_MINOR) + + "."
+                            + std::to_string(IME_VERSION_PATCH));
+                        break;
+                    case sf::Event::TouchBegan:
+                    case sf::Event::TouchEnded:
+                        if (SFML_Event.touch.finger != 0) // Multi-touch not supported
+                            return IME_Event;
+
+                        // Treat touch events as mouse events
+                        if (SFML_Event.type == sf::Event::TouchBegan)
+                            IME_Event.type = Event::Type::MouseButtonPressed;
+                        else
+                            IME_Event.type = Event::Type::MouseButtonReleased;
+
+                        IME_Event.mouseButton.button = input::Mouse::Button::Left;
+                        IME_Event.mouseButton.x = SFML_Event.touch.x;
+                        IME_Event.mouseButton.y = SFML_Event.touch.y;
+                        return IME_Event;
+                    case sf::Event::TouchMoved:
+                        if (SFML_Event.touch.finger != 0) // Multi-touch not supported
+                            return IME_Event;
+
+                        // Treat moving touch as moving mouse cursor
+                        IME_Event.type = Event::Type::MouseMoved;
+                        IME_Event.mouseMove.x = SFML_Event.touch.x;
+                        IME_Event.mouseMove.y = SFML_Event.touch.y;
+                        return IME_Event;
+                    case sf::Event::SensorChanged:
+                        IME_PRINT_WARNING(
+                            "Sensors are not supported in IME v"
+                            + std::to_string(IME_VERSION_MAJOR) + "."
+                            + std::to_string(IME_VERSION_MINOR) + + "."
+                            + std::to_string(IME_VERSION_PATCH));
+                        break;
+                    default:
+                        break;
+                }
+                return IME_Event;
+            }
+        }
+    }
+
+    sf::Event convertToSFMLEvent(const Event &IME_Event) {
+        auto SFML_Event = sf::Event();
+        switch (IME_Event.type) {
+            case Event::Closed:
+                SFML_Event.type = sf::Event::EventType::Closed;
+                return SFML_Event;
+            case Event::Resized:
+                SFML_Event.type = sf::Event::EventType::Resized;
+                SFML_Event.size.width = IME_Event.size.width;
+                SFML_Event.size.height = IME_Event.size.height;
+                return SFML_Event;
+            case Event::LostFocus:
+                SFML_Event.type = sf::Event::EventType::LostFocus;
+                return SFML_Event;
+            case Event::GainedFocus:
+                SFML_Event.type = sf::Event::EventType::GainedFocus;
+                return SFML_Event;
+            case Event::TextEntered:
+                SFML_Event.type = sf::Event::EventType::TextEntered;
+                SFML_Event.text.unicode = IME_Event.text.unicode;
+                return SFML_Event;
+            case Event::KeyReleased:
+            case Event::KeyPressed:
+                if (IME_Event.type == Event::KeyPressed)
+                    SFML_Event.type = sf::Event::EventType::KeyPressed;
+                else
+                    SFML_Event.type = sf::Event::EventType::KeyReleased;
+
+                SFML_Event.key.code = static_cast<sf::Keyboard::Key>(IME_Event.key.code);
+                SFML_Event.key.alt = IME_Event.key.alt;
+                SFML_Event.key.control = IME_Event.key.control;
+                SFML_Event.key.shift = IME_Event.key.shift;
+                SFML_Event.key.system = IME_Event.key.system;
+                return SFML_Event;
+            case Event::MouseWheelScrolled:
+                SFML_Event.type = sf::Event::EventType::MouseWheelScrolled;
+                if (IME_Event.mouseWheelScroll.wheel == input::Mouse::Wheel::VerticalWheel)
+                    SFML_Event.mouseWheelScroll.wheel = sf::Mouse::Wheel::VerticalWheel;
+                else
+                    SFML_Event.mouseWheelScroll.wheel = sf::Mouse::Wheel::HorizontalWheel;
+
+                SFML_Event.mouseWheelScroll.delta = IME_Event.mouseWheelScroll.delta;
+                SFML_Event.mouseWheelScroll.x = IME_Event.mouseWheelScroll.x;
+                SFML_Event.mouseWheelScroll.y = IME_Event.mouseWheelScroll.y;
+                return SFML_Event;
+            case Event::MouseButtonPressed:
+            case Event::MouseButtonReleased:
+                if (IME_Event.type == Event::MouseButtonPressed)
+                    SFML_Event.type = sf::Event::EventType::MouseButtonPressed;
+                else
+                    SFML_Event.type = sf::Event::EventType::MouseButtonReleased;
+
+                SFML_Event.mouseButton.button = static_cast<sf::Mouse::Button>(IME_Event.mouseButton.button);
+                SFML_Event.mouseButton.x = IME_Event.mouseButton.x;
+                SFML_Event.mouseButton.y = IME_Event.mouseButton.y;
+                return SFML_Event;
+            case Event::MouseMoved:
+                SFML_Event.type = sf::Event::EventType::MouseMoved;
+                SFML_Event.mouseMove.x = IME_Event.mouseMove.x;
+                SFML_Event.mouseMove.y = IME_Event.mouseMove.y;
+                return SFML_Event;
+            case Event::MouseEntered:
+                SFML_Event.type = sf::Event::EventType::MouseEntered;
+                return SFML_Event;
+            case Event::MouseLeft:
+                SFML_Event.type = sf::Event::EventType::MouseLeft;
+                return SFML_Event;
+            default:
+                return SFML_Event;
+        }
+    }
+
     sf::Color convertToSFMLColour(Colour colour) {
         return {static_cast<sf::Uint8>(colour.red),
                 static_cast<sf::Uint8>(colour.green),

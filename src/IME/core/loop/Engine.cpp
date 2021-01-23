@@ -25,6 +25,7 @@
 #include "IME/core/loop/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
+#include "IME/core/event/Event.h"
 
 namespace ime {
     namespace {
@@ -137,9 +138,9 @@ namespace ime {
     }
 
     void Engine::processEvents() {
-        sf::Event event;
+        Event event;
         while (window_.pollEvent(event)) {
-            if (event.type == sf::Event::Closed && onWindowClose_) {
+            if (event.type == Event::Closed && onWindowClose_) {
                 onWindowClose_();
                 return;
             }

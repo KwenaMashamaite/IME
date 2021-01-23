@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/input/Mouse.h"
+#include "IME/core/event/Event.h"
 #include <SFML/Window/Mouse.hpp>
 
 namespace ime::input {
@@ -30,16 +31,16 @@ namespace ime::input {
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
     }
 
-    void Mouse::handleEvent(sf::Event event) {
-        if (event.type == sf::Event::MouseButtonPressed) {
+    void Mouse::handleEvent(Event event) {
+        if (event.type == Event::MouseButtonPressed) {
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down");
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down",
                 event.mouseButton.x, event.mouseButton.y);
-        } else if (event.type == sf::Event::MouseButtonReleased) {
+        } else if (event.type == Event::MouseButtonReleased) {
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up");
             eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up",
                 event.mouseButton.x, event.mouseButton.y);
-        } else if (event.type == sf::Event::MouseMoved)
+        } else if (event.type == Event::MouseMoved)
             eventEmitter_.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
     }
 
@@ -67,11 +68,11 @@ namespace ime::input {
         return eventEmitter_.addEventListener("mouseMoved", std::move(callback));
     }
 
-    bool Mouse::removeEventListener(Event event, Button button,int id) {
-        if (event == Event::MouseDown)
+    bool Mouse::removeEventListener(MouseEvent event, Button button,int id) {
+        if (event == MouseEvent::MouseDown)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(button)) + "Down", id);
-        else if (event == Event::MouseUp)
+        else if (event == MouseEvent::MouseUp)
             return eventEmitter_.removeEventListener(
                 std::to_string(static_cast<int>(button)) + "Up", id);
         return false;

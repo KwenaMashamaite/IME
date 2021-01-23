@@ -22,26 +22,45 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-// All of the Functions in this file are meant for internal use and should
-// never be called externally
+/////////////////////////////////////////////////////////////////
+// All of the functions in this file are meant for internal use
+// and should never be called externally (i.e You should never
+// include this header if your externally linking to IME)
+////////////////////////////////////////////////////////////////
 
 #ifndef IME_UTILITY_H
 #define IME_UTILITY_H
 
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
+#include "IME/core/event/Event.h"
+#include "IME/ui/widgets/IWidget.h"
 #include <SFML/Graphics/Color.hpp>
 #include <TGUI/Color.hpp>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
 #include <SFML/Window/Keyboard.hpp>
-#include <TGUI/Event.hpp>
 #include <SFML/Window/Event.hpp>
 #include <TGUI/Font.hpp>
-#include "IME/ui/widgets/IWidget.h"
 
 namespace ime::utility {
+    /**
+     * @internal
+     * @brief Convert SFML system event to own system Event
+     * @param SFML_Event SFML event to convert to own event
+     * @return Own event initialized with the corresponding system event if
+     *         it is supported otherwise initialized with Event::Type::Unknown
+     */
+    extern Event convertToOwnEvent(const sf::Event& SFML_Event);
+
+    /**
+     * @brief Convert own system event to SFML system event
+     * @param IME_Event Event to be converted
+     * @return SFML system event
+     */
+    extern sf::Event convertToSFMLEvent(const Event& IME_Event);
+
     /**
      * @internal
      * @brief Convert own Colour object to SFML colour object
@@ -73,6 +92,8 @@ namespace ime::utility {
      * the same as the one before the conversion
      */
     extern Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
+
+
 
     /**
      * @internal

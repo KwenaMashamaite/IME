@@ -26,11 +26,12 @@
 #define IME_GUI_H
 
 #include "IME/Config.h"
-#include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/ui/widgets/IWidget.h"
 #include "IME/graphics/Window.h"
+#include "IME/core/event/Event.h"
+#include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
 
 namespace ime {
@@ -190,7 +191,7 @@ namespace ime {
              * This function will pass the event to all the contained widgets
              * such that each widget is given a chance to handle the event
              */
-            void handleEvent(sf::Event event);
+            void handleEvent(Event event);
 
             /**
              * @brief Enable tab usage

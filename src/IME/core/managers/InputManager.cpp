@@ -25,13 +25,13 @@
 #include "IME/core/managers/InputManager.h"
 
 namespace ime::input {
-    int InputManager::addKeyListener(Keyboard::Event event, Keyboard::Key key,
+    int InputManager::addKeyListener(KeyEvent event, Keyboard::Key key,
         Callback<> callback)
     {
         switch (event) {
-            case Keyboard::Event::KeyDown:
+            case KeyEvent::KeyDown:
                 return keyboard_.onKeyDown(key, std::move(callback));
-            case Keyboard::Event::KeyUp:
+            case KeyEvent::KeyUp:
                 return keyboard_.onKeyUp(key, std::move(callback));
             default:
                 return -1;
@@ -46,24 +46,24 @@ namespace ime::input {
         return keyboard_.onKeyDown(std::move(callback));
     }
 
-    int InputManager::addMouseButtonListener(Mouse::Event event, Mouse::Button button,
+    int InputManager::addMouseButtonListener(MouseEvent event, Mouse::Button button,
         Callback<int, int> callback)
     {
         switch(event) {
-            case Mouse::Event::MouseDown:
+            case MouseEvent::MouseDown:
                 return mouse_.onButtonDown(button, std::move(callback));
-            case Mouse::Event::MouseUp:
+            case MouseEvent::MouseUp:
                 return mouse_.onButtonUp(button, std::move(callback));
             default:
                 return -1;
         }
     }
 
-    bool InputManager::removeKeyListener(Keyboard::Event event, Keyboard::Key key, int id) {
+    bool InputManager::removeKeyListener(KeyEvent event, Keyboard::Key key, int id) {
         return keyboard_.removeEventListener(event, key, id);
     }
 
-    bool InputManager::removeKeyListener(Keyboard::Event event, int id) {
+    bool InputManager::removeKeyListener(KeyEvent event, int id) {
         return keyboard_.removeEventListener(event, id);
     }
 
@@ -79,13 +79,13 @@ namespace ime::input {
         return mouse_.isButtonPressed(button);
     }
 
-    bool InputManager::removeMouseListener(Mouse::Event event,
+    bool InputManager::removeMouseListener(MouseEvent event,
         Mouse::Button button, int id)
     {
         return mouse_.removeEventListener(event, button, id);
     }
 
-    void InputManager::handleEvent(sf::Event event) {
+    void InputManager::handleEvent(Event event) {
         keyboard_.handleEvent(event);
         mouse_.handleEvent(event);
     }

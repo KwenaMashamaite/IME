@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/time/Time.h"
-#include <SFML/Window/Event.hpp>
+#include "IME/core/event/Event.h"
 #include <string>
 
 namespace ime {
@@ -41,7 +41,7 @@ namespace ime {
     public:
         /**
          * @brief Constructor
-         * @param engine Reference to the game
+         * @param engine Reference to the game engine
          */
         explicit State(Engine &engine);
 
@@ -143,13 +143,13 @@ namespace ime {
         virtual void onExit() = 0;
 
         /**
-         * @brief Handle an event
-         * @param event Event to handle
+         * @brief Handle a system event
+         * @param event System event to handle
          *
          * This function wil be called by the engine at the start of
          * the current frame
          */
-        virtual void handleEvent(sf::Event event) = 0;
+        virtual void handleEvent(Event event) = 0;
 
         /**
          * @brief Destructor
@@ -164,7 +164,7 @@ namespace ime {
         Engine &engine() const;
 
     private:
-        Engine &app_; //!< Reference to the game engine
+        Engine &engine_; //!< Reference to the game engine
     };
 }
 

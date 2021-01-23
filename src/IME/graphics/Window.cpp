@@ -67,8 +67,12 @@ namespace ime {
         return window_.isOpen();
     }
 
-    bool Window::pollEvent(sf::Event& event){
-        return window_.pollEvent(event);
+    bool Window::pollEvent(Event& event) {
+        sf::Event sfmlEvent;
+        auto eventPopped = window_.pollEvent(sfmlEvent);
+        if (eventPopped)
+            event = utility::convertToOwnEvent(sfmlEvent);
+        return eventPopped;
     }
 
     void Window::close() {

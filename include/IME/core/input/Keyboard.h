@@ -27,23 +27,24 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
-#include <SFML/Window/Event.hpp>
 
 namespace ime {
+    class Event; //!< Event class forward declaration
+
+    /**
+     * @brief Keyboard events
+     */
+    enum class KeyEvent {
+        KeyDown, //!< Fired when key is depressed
+        KeyUp    //!< Fired when depressed key is released
+    };
+
     namespace input {
         /**
          * @brief Class for capturing keyboard inputs
          */
         class IME_API Keyboard {
         public:
-            /**
-             * @brief Keyboard events
-             */
-            enum class Event {
-                KeyDown, //!< Fired when key is depressed
-                KeyUp    //!< Fired when depressed key is released
-            };
-
             /**
              * @brief keyboard keys
              */
@@ -142,7 +143,7 @@ namespace ime {
              * order to determine the current frame state of a key
              * (pressed, released or neither)
              */
-            void handleEvent(sf::Event event);
+            void handleEvent(Event event);
 
             /**
               * @brief  Remove an event listener from a specific key event
@@ -153,7 +154,7 @@ namespace ime {
               *         or false if the specified event does not have an event
               *         listener with the specified id
               */
-            bool removeEventListener(Event event, Key key, int id);
+            bool removeEventListener(KeyEvent event, Key key, int id);
 
             /**
              * @brief Remove an event listener from a key down or key up event
@@ -163,7 +164,7 @@ namespace ime {
               *        or false if the specified event does not have an event
               *        listener with the specified id
              */
-            bool removeEventListener(Event event, int id);
+            bool removeEventListener(KeyEvent event, int id);
 
         private:
             EventEmitter eventEmitter_; //!< Event publisher
