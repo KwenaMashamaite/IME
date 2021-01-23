@@ -45,7 +45,7 @@ namespace ime {
         }
 
         Timer createTimer(Time delay, Callback<> callback, bool isRepeating) {
-            auto timer = Timer::create(std::move(callback), delay, isRepeating);
+            auto timer = Timer::create(delay, std::move(callback), isRepeating);
             timer.start();
             return timer;
         }
@@ -157,17 +157,15 @@ namespace ime {
         isRunning_ = true;
         statesManager_.getActiveState()->onEnter();
         auto const frameTime = seconds( 1.0f / settings_.getValueFor<int>("FPS_LIMIT"));
-        auto deltaTime = Time::Zero, now = Time::Zero, accumulator = Time::Zero;
-        auto clock = Clock();
-        auto prevTime = now = clock.restart();
+        auto deltaTime = Time::Zero, accumulator = Time::Zero;
+        auto gameClock = Clock();
         while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
+            deltaTime = gameClock.restart();
             if (onFrameStart_)
                 onFrameStart_();
-            now = clock.getElapsedTime();
-            deltaTime = now - prevTime;
-            prevTime = now;
-            accumulator += deltaTime;
+
             processEvents();
+            accumulator += deltaTime;
             while (accumulator >= frameTime) {
                 statesManager_.getActiveState()->fixedUpdate(frameTime);
                 accumulator -= frameTime;
@@ -178,9 +176,9 @@ namespace ime {
             render();
             display();
             postFrameUpdate();
-            elapsedTime_ += deltaTime;
             if (onFrameEnd_)
                 onFrameEnd_();
+            elapsedTime_ += deltaTime;
         }
         shutdown();
     }

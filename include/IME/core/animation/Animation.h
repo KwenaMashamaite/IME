@@ -31,6 +31,7 @@
 #include "IME/core/time/Time.h"
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace ime {
     /**
@@ -49,12 +50,22 @@ namespace ime {
         /**
          * @brief Create a new animation
          * @param name Name of the animation
-         * @param spriteSheet Filename of the texture/image file with the 
-         *        animation frames
-         * @param duration How long the animation plays before it stops/loops 
-         *        around
+         * @param spriteSheet Filename of the image file with the animation frames
+         * @param duration How long the animation plays before it stops or
+         *        loops around
          */
         Animation(const std::string &name, const std::string &spriteSheet, Time duration);
+
+        /**
+         * @brief Create a new animation object
+         * @param name Name of the animation
+         * @param spriteSheet Filename of the image file with the animation frames
+         * @param duration How long the animation plays before it stops or
+         *        loops around
+         * @return The new animation object
+         */
+        static std::shared_ptr<Animation> create(const std::string &name,
+              const std::string &spriteSheet, Time duration);
 
         /**
          * @brief Get the filename of the spritesheet used to create animation

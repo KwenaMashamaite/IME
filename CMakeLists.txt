@@ -99,7 +99,7 @@ if(NOT DEFINED SFML_STATIC_LIBRARIES)
     endif()
 endif()
 
-# Link TGUI in the same way as IME, unless IME_STATIC_LIBRARIES is manually specified
+# Link TGUI in the same way as IME, unless TGUI_STATIC_LIBRARIES is manually specified
 if(NOT DEFINED TGUI_STATIC_LIBRARIES)
     if(IME_SHARED_LIBS)
         set(TGUI_STATIC_LIBRARIES FALSE)

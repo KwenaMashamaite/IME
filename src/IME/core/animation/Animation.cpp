@@ -32,6 +32,12 @@ namespace ime {
          duration_{duration}
     {}
 
+    std::shared_ptr<Animation> Animation::create(const std::string &name,
+        const std::string &spriteSheet, Time duration)
+    {
+        return std::make_shared<Animation>(name, spriteSheet, duration);
+    }
+
     std::string Animation::getSpriteSheet() const {
         return spriteSheet_;
     }

@@ -485,7 +485,6 @@ namespace ime {
     }
 
     Tile& TileMap::getTileOccupiedByChild(std::shared_ptr<Entity> child) {
-        return getTile(Vector2f{child->getPosition().x + child->getSize().x / 2.0f,
-            child->getPosition().y + child->getSize().y / 2.0f});
+        return getTile(child->getPosition());
     }
 }

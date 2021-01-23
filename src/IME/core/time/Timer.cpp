@@ -30,7 +30,7 @@ namespace ime {
         isRepeating_{false}
     {}
 
-    Timer Timer::create(Callback<> callback, Time interval, bool repeat) {
+    Timer Timer::create(Time interval, Callback<> callback, bool repeat) {
         auto timer = Timer();
         timer.setInterval(interval);
         timer.setRepeat(repeat);

@@ -49,7 +49,7 @@ TEST_CASE("A timer has an interval of zero by default") {
 }
 
 TEST_CASE("A timer cannot be started if the interval is zero") {
-    auto timer = ime::Timer::create([]{}, ime::seconds(0.0f));
+    auto timer = ime::Timer::create(ime::seconds(0.0f), []{});
     REQUIRE_EQ(timer.getStatus(), ime::Timer::Status::Stopped);
     REQUIRE_EQ(timer.getInterval(), ime::Time::Zero);
     CHECK_FALSE(timer.canStart());
@@ -143,7 +143,7 @@ SCENARIO("The interval of the timer needs to be changed") {
 }
 
 SCENARIO("A timer is running and its member functions are invoked") {
-    auto timer = ime::Timer::create([]{}, ime::seconds(5.0f));
+    auto timer = ime::Timer::create(ime::seconds(5.0f), []{});
     timer.start();
     timer.update(ime::seconds(1.0f));
 
@@ -236,7 +236,7 @@ SCENARIO("A timer is running and its member functions are invoked") {
 }
 
 SCENARIO("A timer is stopped and its member functions are invoked") {
-    auto timer = ime::Timer::create([]{}, ime::seconds(1.0f));
+    auto timer = ime::Timer::create(ime::seconds(1.0f), []{});
     REQUIRE(timer.canStart()); //The timer has been properly initialized such that calling start will make it run
 
     WHEN("start() is called") {
@@ -266,7 +266,7 @@ SCENARIO("A timer is stopped and its member functions are invoked") {
 }
 
 SCENARIO("The time is updates under different states (running, paused and stopped") {
-    auto timer = ime::Timer::create([]{}, ime::seconds(5.0f));
+    auto timer = ime::Timer::create(ime::seconds(5.0f), []{});
     REQUIRE(timer.canStart());
 
     WHEN("the timer is running") {
