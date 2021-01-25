@@ -39,6 +39,8 @@ int EventEmitter::addOnceEventListener(const std::string &event, Callback<Args..
 
 template<typename...Args>
 int EventEmitter::addListener(const std::string &event, Callback<Args...> callback, bool isCalledOnce) {
+    IME_ASSERT(callback, "Cannot add nullptr as an event listener");
+
     std::scoped_lock lock(mutex_);
     static auto previousListenerId = 0u;
     auto listenerId = ++previousListenerId;
