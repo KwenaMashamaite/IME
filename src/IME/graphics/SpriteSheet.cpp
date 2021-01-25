@@ -23,13 +23,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/SpriteSheet.h"
+#include "IME/graphics/Sprite.h"
 #include "IME/core/managers/ResourceManager.h"
 
 namespace ime {
     SpriteSheet::SpriteSheet(const std::string &texture, Vector2u frameSize, Vector2u spacing) :
         filename_{texture},
         frameSize_{frameSize},
-        spacing_{spacing}
+        spacing_{spacing},
+        isReady_{false}
     {}
 
     void SpriteSheet::computeDimensions(UIntRect area) {
@@ -68,12 +70,14 @@ namespace ime {
         auto currentPos = spacing_;
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
             for (auto j = 0u; j < sizeInFrames_.x; ++j) {
-                frames_.insert({{static_cast<int>(i), static_cast<int>(j)}, {currentPos.x, currentPos.y, frameSize_.x, frameSize_.y}});
+                frames_.insert({{static_cast<int>(i), static_cast<int>(j)},
+                    {currentPos.x, currentPos.y, frameSize_.x, frameSize_.y}});
                 currentPos.x += frameSize_.x + spacing_.x;
             }
             currentPos.x = spacing_.x;
             currentPos.y += frameSize_.y + spacing_.y;
         }
+        isReady_ = true;
     }
 
     Vector2u SpriteSheet::getFrameSize() const {
@@ -94,6 +98,30 @@ namespace ime {
         if (hasFrame(alias))
             return frames_.at(aliases_.at(alias));
         return std::nullopt;
+    }
+
+    std::vector<SpriteSheet::Frame> SpriteSheet::getFramesOnRow(unsigned int row) const {
+        return getFramesInRange({static_cast<int>(row), 0},
+             {static_cast<int>(row), static_cast<int>(getSizeInFrames().x - 1)});
+    }
+
+    std::vector<SpriteSheet::Frame> SpriteSheet::getFramesOnColumn(unsigned int column) const {
+        return getFramesInRange({0, static_cast<int>(column)},
+             {static_cast<int>(getSizeInFrames().y - 1), static_cast<int>(column)});
+    }
+
+    std::vector<SpriteSheet::Frame> SpriteSheet::getFramesInRange(Index start, Index end) const {
+        auto frames = std::vector<SpriteSheet::Frame>{};
+        if (hasFrame(start) && hasFrame(end)) {
+            if (start.row == end.row) {
+                for (auto colm = start.colm; colm <= end.colm; ++colm)
+                    frames.push_back(frames_.at({ start.row, colm}));
+            } else if (start.colm == end.colm) {
+                for (auto row = start.row; row <= end.row; ++row)
+                    frames.push_back(frames_.at({row, start.colm}));
+            }
+        }
+        return frames;
     }
 
     Vector2u SpriteSheet::getSize() const {
@@ -120,21 +148,49 @@ namespace ime {
         return sizeInFrames_.x;
     }
 
-    Sprite SpriteSheet::getSprite(Index index) {
-        if (hasFrame(index)) {
-            auto frame = frames_.at(index);
-            auto sprite = Sprite();
-            sprite.setTexture(filename_);
-            sprite.setTextureRect(frame.left + offset_.x, frame.top + offset_.y, frame.width, frame.height);
-            return sprite;
-        }
+    Sprite SpriteSheet::getSprite(Index index) const {
+        if (hasFrame(index))
+            return createSprite(frames_.at(index));
         return Sprite();
     }
 
-    Sprite SpriteSheet::getSprite(const std::string &alias) {
+    Sprite SpriteSheet::getSprite(const std::string &alias) const {
         if (hasFrame(alias))
-            return getSprite(aliases_[alias]);
+            return createSprite(frames_.at(aliases_.at(alias)));
         return Sprite();
+    }
+
+    std::vector<Sprite> SpriteSheet::getSpritesOnRow(unsigned int row) const {
+        return getSpritesInRange({static_cast<int>(row), 0},
+            {static_cast<int>(row), static_cast<int>(getSizeInFrames().x - 1)});
+    }
+
+    std::vector<Sprite> SpriteSheet::getSpritesOnColumn(unsigned int column) const {
+        return getSpritesInRange({0, static_cast<int>(column)},
+            {static_cast<int>(getSizeInFrames().y - 1), static_cast<int>(column)});
+    }
+
+    std::vector<Sprite> SpriteSheet::getSpritesInRange(Index start, Index end) const {
+        auto sprites = std::vector<Sprite>{};
+        if (hasFrame(start) && hasFrame(end)) {
+            if (start.row == end.row) {
+                for (auto colm = start.colm; colm <= end.colm; ++colm)
+                    sprites.push_back(createSprite(frames_.at({ start.row, colm})));
+            } else if (start.colm == end.colm) {
+                for (auto row = start.row; row <= end.row; ++row)
+                    sprites.push_back(createSprite(frames_.at({row, start.colm})));
+            }
+        }
+        return sprites;
+    }
+
+    std::vector<Sprite> SpriteSheet::getAllSprites() const {
+        auto sprites = std::vector<Sprite>{};
+        for (auto row = 0u; row < sizeInFrames_.x; ++row) {
+            auto spritesOnRow = getSpritesOnRow(row);
+            std::move(spritesOnRow.begin(), spritesOnRow.end(), std::back_inserter(sprites));
+        }
+        return sprites;
     }
 
     const std::string &SpriteSheet::getTextureFilename() const {
@@ -153,5 +209,25 @@ namespace ime {
         if (hasFrame(index))
             return aliases_.insert({alias, index}).second;
         return false;
+    }
+
+    bool SpriteSheet::isReady() const {
+        return isReady_;
+    }
+
+    Sprite SpriteSheet::createSprite(SpriteSheet::Frame frame) const {
+        auto sprite = Sprite();
+        sprite.setTexture(filename_);
+        sprite.setTextureRect(frame.left + offset_.x, frame.top + offset_.y, frame.width, frame.height);
+        return sprite;
+    }
+
+    std::vector<Sprite> SpriteSheet::createSprites(const std::vector<Frame> &frames) const {
+        auto sprites = std::vector<Sprite>{};
+        if (!frames.empty()) {
+            for (const auto& frame : frames)
+                sprites.push_back(createSprite(frame));
+        }
+        return sprites;
     }
 }
