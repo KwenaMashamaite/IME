@@ -71,6 +71,7 @@ set(IME_SRC
     graphics/Colour.cpp
     graphics/Tile.cpp
     graphics/Window.cpp
+    graphics/SpriteSheet.cpp
     utility/ConfigFileParser.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp
