@@ -29,12 +29,25 @@ namespace ime {
     SpriteSheet::SpriteSheet(const std::string &texture, Vector2u frameSize, Vector2u spacing) :
         filename_{texture},
         frameSize_{frameSize},
-        spacing_{spacing},
-        invalidFrame_{0, 0, 0, 0}
+        spacing_{spacing}
     {}
 
-    void SpriteSheet::computeDimensions() {
+    void SpriteSheet::computeDimensions(UIntRect area) {
+        offset_ = {0, 0};
         auto texture = ResourceManager::getInstance()->getTexture(filename_);
+        if (area.width != 0 && area.height != 0) { // Create spritesheet from sub-rectangle of the spritesheet image
+            auto image = ResourceManager::getInstance()->getImage(filename_);
+            auto sfArea = sf::IntRect {
+                static_cast<int>(area.left), static_cast<int>(area.top),
+                static_cast<int>(area.width),static_cast<int>(area.height)
+            };
+
+            if(texture.loadFromImage(image, sfArea)) {
+                offset_.x = area.left;
+                offset_.y = area.top;
+            }
+        }
+
         sizeInPixels_ = Vector2u{texture.getSize().x, texture.getSize().y};
 
         //At this point, the size in frames includes the spacing between frames which may
@@ -49,8 +62,8 @@ namespace ime {
         sizeInFrames_ = {sizeInPixelsWithoutSpacing.x / frameSize_.x, sizeInPixelsWithoutSpacing.y / frameSize_.y};
     }
 
-    void SpriteSheet::create() {
-        computeDimensions();
+    void SpriteSheet::create(UIntRect area) {
+        computeDimensions(area);
 
         auto currentPos = spacing_;
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
@@ -67,20 +80,20 @@ namespace ime {
         return frameSize_;
     }
 
-    std::size_t SpriteSheet::getNumberOfFrames() const {
+    std::size_t SpriteSheet::getFramesCount() const {
         return frames_.size();
     }
 
-    SpriteSheet::Frame SpriteSheet::getFrame(Index index) const {
+    std::optional<SpriteSheet::Frame> SpriteSheet::getFrame(Index index) const {
         if (hasFrame(index))
             return frames_.at(index);
-        return invalidFrame_;
+        return std::nullopt;
     }
 
-    SpriteSheet::Frame SpriteSheet::getFrame(const std::string &alias) const {
+    std::optional<SpriteSheet::Frame> SpriteSheet::getFrame(const std::string &alias) const {
         if (hasFrame(alias))
             return frames_.at(aliases_.at(alias));
-        return invalidFrame_;
+        return std::nullopt;
     }
 
     Vector2u SpriteSheet::getSize() const {
@@ -100,7 +113,7 @@ namespace ime {
     }
 
     unsigned int SpriteSheet::getNumberOfRows() const {
-        return sizeInPixels_.y;
+        return sizeInFrames_.y;
     }
 
     unsigned int SpriteSheet::getNumberOfColumns() const {
@@ -112,7 +125,7 @@ namespace ime {
             auto frame = frames_.at(index);
             auto sprite = Sprite();
             sprite.setTexture(filename_);
-            sprite.setTextureRect(frame.left, frame.top, frame.width, frame.height);
+            sprite.setTextureRect(frame.left + offset_.x, frame.top + offset_.y, frame.width, frame.height);
             return sprite;
         }
         return Sprite();

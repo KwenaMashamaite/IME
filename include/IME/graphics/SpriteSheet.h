@@ -31,6 +31,7 @@
 #include "IME/graphics/Sprite.h"
 #include "IME/core/tilemap/Index.h"
 #include <string>
+#include <optional>
 #include <unordered_map>
 
 namespace ime {
@@ -47,7 +48,7 @@ namespace ime {
 
         /**
          * @brief Create the spritesheet
-         * @param texture Filename of the texture used by this spritesheet
+         * @param texture Filename of the image used by this spritesheet
          * @param frameSize The size of each frame in the spritesheet
          * @param spacing The space between frames on the spritesheet texture
          */
@@ -55,12 +56,19 @@ namespace ime {
 
         /**
          * @brief Create the spritesheet
+         * @param area Sub-rectangle to construct spritesheet from
+         *
+         * The @a area can be used to construct the spritesheet from a
+         * sub-rectangle of the whole spritesheet image. To construct
+         * the spritesheet from the whole image (default), leave the
+         * @a area argument unspecified. If the @a area rectangle crosses
+         * the bounds of the image, it is adjusted to fit the image size
          */
-        void create();
+        void create(UIntRect area = {});
 
         /**
          * @brief Get the size of each frame in the spritesheet
-         * @return The size of each frame
+         * @return The size of each frame in the spritesheet
          */
         Vector2u getFrameSize() const;
 
@@ -68,27 +76,23 @@ namespace ime {
          * @brief Get the number of frames constructed from the spritesheet
          * @return The total number of frames in the spritesheet
          */
-        std::size_t getNumberOfFrames() const;
+        std::size_t getFramesCount() const;
 
         /**
          * @brief Get the frame at a given index
          * @param index The index to get the frame of
          * @return The frame at the specified index if it is within
-         *         bounds otherwise an invalid frame
-         *
-         * An invalid frame has the width and height properties set to 0
+         *         bounds otherwise returns no value
          */
-        Frame getFrame(Index index) const;
+        std::optional<Frame> getFrame(Index index) const;
 
         /**
          * @brief Get the frame by its assigned alias
          * @param alias The alias assigned to a frame
-         * @return The frame with the given alias if found otherwise
-         *         an invalid frame
-         *
-         * An invalid frame has the width and height properties set to 0
+         * @return he frame at the specified index if it is within
+         *         bounds otherwise returns no value
          */
-        Frame getFrame(const std::string& alias) const;
+        std::optional<Frame> getFrame(const std::string& alias) const;
 
         /**
          * @brief Get the size of the spritesheet in pixels
@@ -121,36 +125,38 @@ namespace ime {
         Vector2u getSizeInFrames() const;
 
         /**
-         * @brief Get the number of rows
-         * @return The number of rows
+         * @brief Get the number of rows in the spritesheet
+         * @return The number of rows in the spritesheet
          */
         unsigned int getNumberOfRows() const;
 
         /**
-         * @brief Get the number of columns
-         * @return The number of columns
+         * @brief Get the number of columns in the spritesheet
+         * @return The number of columns in the spritesheet
          */
         unsigned int getNumberOfColumns() const;
 
         /**
-         * @brief Get the filename of the texture this spritesheet uses
-         * @return The filename of the texture this spritesheet uses
+         * @brief Get the filename of the image used by the spritesheet
+         * @return The filename of the images used by the spritesheet
          */
         const std::string& getTextureFilename() const;
 
         /**
-         * @brief Create a sprite from a frame in the spritesheet
-         * @param index Index of the frame to construct a sprite from
-         * @return The created sprite or an empty sprite if the index
-         *         is not within bounds
+         * @brief Get a sprite from an index
+         * @param index Index to get the sprite from
+         * @return The sprite at the given index, or an empty sprite if
+         *         the index is out of bounds
          */
         Sprite getSprite(Index index);
 
         /**
-         * @brief Create a sprite from a frame with the specified alias
+         * @brief Get a sprite from the index with a given alias
          * @param alias The name given to a frame in the spritesheet
-         * @return The created sprite or an empty sprite if there is no
-         *          frame with the given alias
+         * @return The sprite at the aliased index or an empty sprite if
+         *         there is no frame with the specified alias
+         *
+         * @see assignAlias
          */
         Sprite getSprite(const std::string& alias);
 
@@ -167,6 +173,8 @@ namespace ime {
          * @param alias Name of the alias given to a frame
          * @return True if a frame with the specified alias exist or false
          *         if there is no frame with the given alias
+         *
+         * @see assignAlias
          */
         bool hasFrame(const std::string& alias) const;
 
@@ -176,8 +184,14 @@ namespace ime {
          * @param alias The alias to be assigned to the frame
          * @return True if the frame was assigned an alias
          *
-         * This function allows a frame to be accessed by name instead of
-         * its index
+         * This function allows a frame to be accessed by its name
+         * instead of its index
+         *
+         * @code
+         * spritesheet.assignAlias("blank_frame", Index{4, 0});
+         * spritesheet.getFrame("blank_frame"); //Returns frame at index 4, 0
+         * spritesheet.getFrame(Index{4, 0});   //Returns frame at index 4, 0
+         * @endcode
          *
          * @see getFrame(const std::string&)
          */
@@ -185,18 +199,22 @@ namespace ime {
 
     private:
         /**
-         * @brief Calculate the size of the spritesheet, the number of
-         *        rows and the number of columns
+         * @brief Calculate the dimensions of interest from spritesheet image
+         * @param area Sub-rectangle to load
+         *
+         * This function loads the spritesheet image and  calculates the
+         * size of the spritesheet, the number of rows and columns based
+         * on the given frame size
          */
-        void computeDimensions();
+        void computeDimensions(UIntRect area);
 
     private:
-        std::string filename_;      //!< Filename of the texture the spritesheet uses
-        Vector2u frameSize_;        //!< The size of each frame in the spritesheet
-        Vector2u spacing_;          //!< The space between frames on the spritesheet
-        Vector2u sizeInPixels_;     //!< The size of the spritesheet in pixels
-        Vector2u sizeInFrames_;     //!< The size of the spritesheet in frames
-        const Frame invalidFrame_;  //!< A frame that doesn't exist in the spritesheet
+        std::string filename_;  //!< Filename of the texture the spritesheet uses
+        Vector2u frameSize_;    //!< The size of each frame in the spritesheet
+        Vector2u spacing_;      //!< The space between frames on the spritesheet
+        Vector2u sizeInPixels_; //!< The size of the spritesheet in pixels
+        Vector2u sizeInFrames_; //!< The size of the spritesheet in frames
+        Vector2u offset_;       //!< Offset of the sub-rectangle from the top-left of the original spritesheet image
 
         std::unordered_map<Index, Frame> frames_;        //!< Stores the frames
         std::unordered_map<std::string, Index> aliases_; //!< Saves the index of frames with aliases
