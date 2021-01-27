@@ -27,7 +27,9 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace ime {
-    SpriteSheet::SpriteSheet(const std::string &texture, Vector2u frameSize, Vector2u spacing) :
+    SpriteSheet::SpriteSheet(const std::string& name, const std::string &texture,
+            Vector2u frameSize, Vector2u spacing) :
+        name_{name},
         filename_{texture},
         frameSize_{frameSize},
         spacing_{spacing},
@@ -78,6 +80,14 @@ namespace ime {
             currentPos.y += frameSize_.y + spacing_.y;
         }
         isReady_ = true;
+    }
+
+    void SpriteSheet::setName(const std::string &name) {
+        name_ = name;
+    }
+
+    const std::string &SpriteSheet::getName() const {
+        return name_;
     }
 
     Vector2u SpriteSheet::getFrameSize() const {

@@ -51,11 +51,13 @@ namespace ime {
 
         /**
          * @brief Create the spritesheet
+         * @param name Name of the spritesheet
          * @param texture Filename of the image used by this spritesheet
          * @param frameSize The size of each frame in the spritesheet
          * @param spacing The space between frames on the spritesheet texture
          */
-        SpriteSheet(const std::string& texture, Vector2u frameSize, Vector2u spacing);
+        SpriteSheet(const std::string& name, const std::string& texture,
+            Vector2u frameSize, Vector2u spacing);
 
         /**
          * @brief Create the spritesheet
@@ -68,6 +70,18 @@ namespace ime {
          * the bounds of the image, it is adjusted to fit the image size
          */
         void create(UIntRect area = {});
+
+        /**
+         * @brief Set the name of the spritesheet
+         * @param name The name to set
+         */
+        void setName(const std::string& name);
+
+        /**
+         * @brief Get the name of the spritesheet
+         * @return The name of the spritesheet
+         */
+        const std::string& getName() const;
 
         /**
          * @brief Get the size of each frame in the spritesheet
@@ -354,6 +368,7 @@ namespace ime {
         std::vector<Sprite> createSprites(const std::vector<Frame>& frames) const;
 
     private:
+        std::string name_;      //!< The name of the spritesheet
         std::string filename_;  //!< Filename of the texture the spritesheet uses
         Vector2u frameSize_;    //!< The size of each frame in the spritesheet
         Vector2u spacing_;      //!< The space between frames on the spritesheet
