@@ -2,6 +2,8 @@
     <img src="logo.png" alt="IME Logo">
 </p>
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # IME — Infinite Motion Engine
 
 IME is an open source state-based 2D game engine. It is written in C++17 and 
