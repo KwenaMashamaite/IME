@@ -89,21 +89,28 @@ namespace ime {
         renderTarget.draw(sprite_);
     }
 
-    void Tile::hide() {
-        sprite_.hide();
-        tile_.setOutlineColor(sf::Color::Transparent);
-        prevFillColour_ = tile_.getFillColor();
-        tile_.setFillColor(sf::Color::Transparent);
+    void Tile::setVisible(bool visible) {
+        if (isVisible() == visible)
+            return;
+
+        if (visible) {
+            sprite_.setVisible(true);
+            tile_.setFillColor(prevFillColour_);
+            tile_.setOutlineColor(sf::Color::White);
+        } else {
+            sprite_.setVisible(false);
+            tile_.setOutlineColor(sf::Color::Transparent);
+            prevFillColour_ = tile_.getFillColor();
+            tile_.setFillColor(sf::Color::Transparent);
+        }
     }
 
-    void Tile::show() {
-        sprite_.show();
-        tile_.setFillColor(prevFillColour_);
-        tile_.setOutlineColor(sf::Color::White);
+    bool Tile::isVisible() const {
+        return sprite_.isVisible();
     }
 
-    bool Tile::isHidden() const {
-        return sprite_.isHidden();
+    void Tile::toggleVisibility() {
+        sprite_.toggleVisibility();
     }
 
     void Tile::addSprite(Sprite sprite) {

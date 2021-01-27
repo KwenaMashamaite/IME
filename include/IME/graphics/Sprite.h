@@ -108,6 +108,30 @@ namespace ime {
         Colour getColour() const;
 
         /**
+         * @brief Show or hide the sprite
+         * @param visible True to show or false to hide
+         *
+         * When hidden the sprite will not be shown on the render target
+         *
+         * By default, the sprite is visible
+         */
+        void setVisible(bool visible);
+
+        /**
+         * @brief Check whether or not the sprite is visible
+         * @return True if visible, otherwise false
+         */
+        bool isVisible() const;
+
+        /**
+         * @brief Toggle the visibility of the sprite
+         *
+         * This function will hide the sprite if its currently
+         * visible or show it if it is currently hidden
+         */
+        void toggleVisibility();
+
+        /**
          * @brief Get the local bounding rectangle of the sprite
          * @return Local bounding rectangle of the sprite
          *
@@ -313,26 +337,10 @@ namespace ime {
          */
         void draw(Window &renderTarget) const override;
 
-        /**
-         * @brief Hide object
-         */
-        void hide() override;
-
-        /**
-         * @brief Reveal object
-         */
-        void show() override;
-
-        /**
-         * @brief Check if object is hidden or not
-         * @return True if object is hidden, otherwise false
-         */
-        bool isHidden() const override;
-
     private:
         sf::Sprite sprite_;           //!< Third party sprite
         std::string textureFileName_; //!< Filename of the texture used by the object
-        bool isHidden_;               //!< Hidden state
+        bool isVisible_;              //!< Flags whether or not the sprite is visible
         Colour prevSpriteColour;      //!< Sprite colour before it was hidden
     };
 }

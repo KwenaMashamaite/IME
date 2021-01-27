@@ -29,8 +29,7 @@
 
 namespace ime {
     Sprite::Sprite() :
-        textureFileName_(""),
-        isHidden_(false)
+        isVisible_{true}
     {}
 
     void Sprite::setPosition(float x, float y) {
@@ -104,25 +103,6 @@ namespace ime {
         renderTarget.draw(sprite_);
     }
 
-    void Sprite::hide() {
-        if (!isHidden_) {
-            isHidden_ = true;
-            prevSpriteColour = getColour();
-            sprite_.setColor(sf::Color::Transparent);
-        }
-    }
-
-    void Sprite::show() {
-        if (isHidden_) {
-            isHidden_ = false;
-            setColour(prevSpriteColour);
-        }
-    }
-
-    bool Sprite::isHidden() const {
-        return isHidden_;
-    }
-
     void Sprite::rotate(float angle) {
         sprite_.rotate(angle);
     }
@@ -133,6 +113,28 @@ namespace ime {
 
     Colour Sprite::getColour() const {
         return utility::convertFrom3rdPartyColour(sprite_.getColor());
+    }
+
+    void Sprite::setVisible(bool visible) {
+        if (isVisible_ == visible)
+            return;
+
+        if (visible) {
+            isVisible_ = true;
+            setColour(prevSpriteColour);
+        } else {
+            isVisible_ = false;
+            prevSpriteColour = getColour();
+            sprite_.setColor(sf::Color::Transparent);
+        }
+    }
+
+    bool Sprite::isVisible() const {
+        return isVisible_;
+    }
+
+    void Sprite::toggleVisibility() {
+        setVisible(!isVisible());
     }
 
     void Sprite::setOrigin(float x, float y) {

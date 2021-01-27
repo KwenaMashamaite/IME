@@ -191,20 +191,28 @@ namespace ime {
         void draw(Window &renderTarget) const override;
 
         /**
-         * @brief Hide tile content
+         * @brief Show or hide the tile
+         * @param visible True to show or false to hide
+         *
+         * When hidden the tile will not be shown on the render target
+         *
+         * By default, the tile is visible
          */
-        void hide() override;
+        void setVisible(bool visible);
 
         /**
-         * @brief Show tile
+         * @brief Check whether or not the tile is visible
+         * @return True if visible, otherwise false
          */
-        void show() override;
+        bool isVisible() const;
 
         /**
-         * @brief Check if tile is hidden or not
-         * @return True if tile is hidden or not
+         * @brief Toggle the visibility of the tile
+         *
+         * This function will hide the tile if its currently
+         * visible or show it if it is currently hidden
          */
-        bool isHidden() const override;
+        void toggleVisibility();
 
         /**
          * @brief Check if tile is collidable on all sides or not

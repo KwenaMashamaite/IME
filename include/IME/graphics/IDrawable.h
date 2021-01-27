@@ -42,29 +42,6 @@ namespace ime {
         virtual void draw(Window &renderTarget) const = 0;
 
         /**
-         * @brief Hide object from a render target
-         *
-         * A hidden object will not be drawn on a render target when
-         * calling draw function
-         */
-        virtual void hide() = 0;
-
-        /**
-         * @brief Show a hidden object
-         *
-         * This function will reveal an object that was hidden prior
-         * to function call. Calling this function on an object that
-         * is not hidden has no effect
-         */
-        virtual void show() = 0;
-
-        /**
-         * @brief Check is object is hidden or not
-         * @return True if object is hidden, false if object is not hidden
-         */
-        virtual bool isHidden() const = 0;
-
-        /**
          * @brief Destructor
          */
         virtual ~IDrawable() = default;
