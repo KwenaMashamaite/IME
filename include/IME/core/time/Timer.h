@@ -53,18 +53,18 @@ namespace ime {
          * @brief Create a timer
          * @param interval Countdown starting point
          * @param callback Function to execute when the timer reaches zero
-         * @param repeat True to restart the timer after it reaches zero,
-         *          otherwise false
+         * @param repeatCounter The number of timer the timer should repeat
          * @return The new timer
          *
-         * The timer is not repeated be default, this means that the timer
-         * will stop after calling the callback
+         * The timer is not repeated be default (@a repeatCounter = 0), this
+         * means that the timer will stop after invoking the callback
          *
-         * @note The timer is not started after creation
+         * @note The timer is not started after creation, start function must
+         * be called on the returned timer when it is ready to be started
          *
          * @see start and setRepeat
          */
-        static Timer create(Time interval, Callback<> callback, bool repeat = false);
+        static Timer create(Time interval, Callback<> callback, int repeatCounter = 0);
 
         /**
          * @brief Set the countdown starting point
@@ -94,19 +94,36 @@ namespace ime {
 
         /**
          * @brief Set whether or not the timer restarts after reaching zero
-         * @param repeat True to restart the timer after it reaches zero,
-         *               otherwise false
+         * @param repeatCount The number of times the timer repeats
          *
-         * By default, the timer does not restart, it stops after executing
-         * the callback. That is, the callback is called once. To execute
-         * the callback every interval, enable repeat
+         * Pass -1 to repeat the timer indefinitely or 0 to stop the
+         * repetition if the timer is currently repeating
+         *
+         * By default, the repeat counter is 0, this means that the timer
+         * stops after invoking the callback for the first time
+         *
+         * @note If the repetition is cancelled while the timer is running,
+         * the timer will continue execution and stop immediately after
+         * executing the callback
          *
          * @see stop and setInterval
          */
-        void setRepeat(bool repeat);
+        void setRepeat(int repeatCount);
 
         /**
-         * @brief Check if the timer restarts after reaching zero or not
+         * @brief Get the number of times the timer restarts before coming
+         *        to a stop
+         * @return The number of times the timer is restarts after counting
+         *          down
+         *
+         * -1 = The timer repeats forever
+         *  0 = The timer does not repeat after invoking the callback (default)
+         *  x = The timer repeats x times before stopping
+         */
+        int getRepeatCount() const;
+
+        /**
+         * @brief Check whether or not the timer restarts after reaching zero
          * @return True if the timer restarts, otherwise false
          *
          * @see setRepeat
@@ -230,7 +247,7 @@ namespace ime {
     private:
         Status status_;          //!< The current state of the timer
         bool isDispatched_;      //!< A flag indicating whether or not the callback has been invoked
-        bool isRepeating_;       //!< A flag indicating  whether or not the timer restarts after reaching zero
+        int repeatCount_;       //!< The number of times the timer repeats
         int dispatchCount_;      //!< Indicates how many times the callback has been invoked
         Time interval_;          //!< Countdown starting point
         Time remainingDuration_; //!< The time remaining before the timer reaches zero

@@ -244,11 +244,14 @@ namespace ime {
          * @brief Schedule a callback to be executed every interval
          * @param delay Time to wait before executing the callback
          * @param callback Function to be executed
+         * @param repeatCount The number of times to repeat the interval
          *
          * Unlike setTimeout, this function will execute a callback
-         * every @a delay seconds while the engine is running. The
-         * repetition can be cancelled by calling setRepeat(false)
-         * on the returned timer
+         * every @a delay seconds for a specified number of times while
+         * the engine is running. By default the repeat counter is -1,
+         * this means that the callback will repeat forever. The repetition
+         * can be also be cancelled by calling setRepeat(0) on the returned
+         * timer
          *
          * @warning The timer will be destroyed if the timer is externally
          * stopped/paused or the repetition is cancelled, therefore caution
@@ -256,7 +259,7 @@ namespace ime {
          *
          * @see setTimeout
          */
-        Timer& setInterval(Time delay, ime::Callback<> callback);
+        Timer& setInterval(Time delay, ime::Callback<> callback, int repeatCount = -1);
 
         /**
          * @brief Add an event lister to a window close event

@@ -44,8 +44,8 @@ namespace ime {
             }
         }
 
-        Timer createTimer(Time delay, Callback<> callback, bool isRepeating) {
-            auto timer = Timer::create(delay, std::move(callback), isRepeating);
+        Timer createTimer(Time delay, Callback<> callback, int repeatCount) {
+            auto timer = Timer::create(delay, std::move(callback), repeatCount);
             timer.start();
             return timer;
         }
@@ -330,12 +330,12 @@ namespace ime {
     }
 
     Timer& Engine::setTimeout(Time delay, ime::Callback<> callback) {
-        activeTimers_.push_back(createTimer(delay, std::move(callback),false));
+        activeTimers_.push_back(createTimer(delay, std::move(callback),0));
         return activeTimers_.back();
     }
 
-    Timer& Engine::setInterval(Time delay, ime::Callback<> callback) {
-        activeTimers_.push_back(createTimer(delay, std::move(callback), true));
+    Timer& Engine::setInterval(Time delay, ime::Callback<> callback, int repeatCount) {
+        activeTimers_.push_back(createTimer(delay, std::move(callback), repeatCount));
         return activeTimers_.back();
     }
 

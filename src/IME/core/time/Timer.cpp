@@ -28,14 +28,14 @@ namespace ime {
     Timer::Timer() :
         status_{Status::Stopped},
         isDispatched_{false},
-        isRepeating_{false},
+        repeatCount_{0},
         dispatchCount_{0}
     {}
 
-    Timer Timer::create(Time interval, Callback<> callback, bool repeat) {
+    Timer Timer::create(Time interval, Callback<> callback, int repeatCount) {
         auto timer = Timer();
         timer.setInterval(interval);
-        timer.setRepeat(repeat);
+        timer.setRepeat(repeatCount);
         timer.setTimeoutCallback(std::move(callback));
         return timer;
     }
@@ -63,12 +63,19 @@ namespace ime {
         return remainingDuration_;
     }
 
-    void Timer::setRepeat(bool repeat) {
-        isRepeating_ = repeat;
+    void Timer::setRepeat(int repeatCount) {
+        if (repeatCount < 0)
+            repeatCount_ = -1;
+        else
+            repeatCount_ = repeatCount;
+    }
+
+    int Timer::getRepeatCount() const {
+        return repeatCount_;
     }
 
     bool Timer::isRepeating() const {
-        return isRepeating_;
+        return repeatCount_ > 0;
     }
 
     void Timer::setTimeoutCallback(Callback<> callback) {
@@ -81,6 +88,7 @@ namespace ime {
     void Timer::start() {
         if (status_ != Status::Running && canStart()) {
             status_ = Status::Running;
+            dispatchCount_ = 0;
         } else if (status_ == Status::Running)
             restart();
     }
@@ -100,7 +108,11 @@ namespace ime {
             start();
         else {
             stop();
+            // The dispatch counter is reset when the timer starts, however we
+            // must preserve it if its a restart instead of normal start()
+            auto dispatchCount = dispatchCount_;
             start();
+            dispatchCount_ = dispatchCount;
         }
     }
 
@@ -117,7 +129,7 @@ namespace ime {
             callback_();
             isDispatched_ = true;
             dispatchCount_++;
-            if (isRepeating_)
+            if (repeatCount_ < 0 || (repeatCount_ > 0 && (dispatchCount_ <= repeatCount_)))
                 restart();
             else
                 stop();
