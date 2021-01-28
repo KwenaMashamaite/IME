@@ -67,6 +67,23 @@ namespace ime {
         static Timer create(Time interval, Callback<> callback, int repeatCounter = 0);
 
         /**
+         * @brief Create a timer
+         * @param interval Countdown starting point
+         * @param callback Function to execute when the timer reaches zero
+         * @param repeatCounter The number of timer the timer should repeat
+         * @return The new timer
+         *
+         * The timer is not repeated be default (@a repeatCounter = 0), this
+         * means that the timer will stop after invoking the callback
+         *
+         * @note The timer is not started after creation, start function must
+         * be called on the returned timer when it is ready to be started
+         *
+         * @see start and setRepeat
+         */
+        static Timer create(Time interval, Callback<Timer&> callback, int repeatCounter = 0);
+
+        /**
          * @brief Set the countdown starting point
          * @param interval Countdown starting point
          *
@@ -134,16 +151,31 @@ namespace ime {
          * @brief Set the function that is executed when the timer reaches zero
          * @param callback Function to execute
          *
-         * The timer will stop immediately if the callback is a nullptr.
-         * The timer will not start the countdown if the start function
-         * is called and there is no callback set for when the timer reaches
-         * zero.
+         * @note The timer will not start the countdown if the start
+         * function is called and there is no callback set for when
+         * the timer reaches zero.
          *
          * Note that setting a new callback resets the dispatch count
          *
          * @see start
          */
         void setTimeoutCallback(Callback<> callback);
+
+        /**
+         * @brief Set the function that is executed when the timer reaches zero
+         * @param callback Function to be executed
+         *
+         * @note The timer will not start the countdown if the start
+         * function is called and there is no callback set for when
+         * the timer reaches zero.
+         *
+         * Note that setting a new callback resets the dispatch count
+         *
+         * The callback is passed the Timer on invocation
+         *
+         * @see start
+         */
+        void setTimeoutCallback(Callback<Timer&> callback);
 
         /**
          * @brief Start the countdown

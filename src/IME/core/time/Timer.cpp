@@ -40,6 +40,12 @@ namespace ime {
         return timer;
     }
 
+    Timer Timer::create(Time interval, Callback<Timer &> callback, int repeatCounter) {
+        auto timer = create(interval, []{}, repeatCounter);
+        timer.setTimeoutCallback(std::move(callback));
+        return timer;
+    }
+
     void Timer::setInterval(Time interval) {
         if (interval_ == interval)
             return;
@@ -81,8 +87,12 @@ namespace ime {
     void Timer::setTimeoutCallback(Callback<> callback) {
         callback_ = std::move(callback);
         dispatchCount_ = 0;
-        if (!callback_ && status_ == Status::Running)
-            stop();
+    }
+
+    void Timer::setTimeoutCallback(Callback<Timer&> callback) {
+        setTimeoutCallback([this, callback = std::move(callback)] {
+            callback(*this);
+        });
     }
 
     void Timer::start() {
