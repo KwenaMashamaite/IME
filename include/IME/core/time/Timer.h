@@ -120,7 +120,9 @@ namespace ime {
          * The timer will stop immediately if the callback is a nullptr.
          * The timer will not start the countdown if the start function
          * is called and there is no callback set for when the timer reaches
-         * zero
+         * zero.
+         *
+         * Note that setting a new callback resets the dispatch count
          *
          * @see start
          */
@@ -194,6 +196,21 @@ namespace ime {
         void update(Time deltaTime);
 
         /**
+         * @brief Get the number of times the callback has been invoked
+         * @return The number of times the callback has been invoked
+         *
+         * This function will return 0 if the callback is not yet invoked,
+         * and 1 if the callback is invoked but not repeating
+         */
+        int getDispatchCount() const;
+
+        /**
+         * @brief Check whether or not the callback is invoked
+         * @return True if the callback was called, otherwise false
+         */
+        bool isDispatched() const;
+
+        /**
          * @brief Check if the timer can be started when calling start()
          * @return True if the timer can be started, otherwise false
          *
@@ -211,11 +228,13 @@ namespace ime {
         bool canStart() const;
 
     private:
-        Status status_;           //!< The current state of the timer
-        bool isRepeating_;        //!< Flags whether or not the timer restarts after reaching zero
+        Status status_;          //!< The current state of the timer
+        bool isDispatched_;      //!< A flag indicating whether or not the callback has been invoked
+        bool isRepeating_;       //!< A flag indicating  whether or not the timer restarts after reaching zero
+        int dispatchCount_;      //!< Indicates how many times the callback has been invoked
         Time interval_;          //!< Countdown starting point
         Time remainingDuration_; //!< The time remaining before the timer reaches zero
-        Callback<> callback_;     //!< Function executed when the timer reaches zero
+        Callback<> callback_;    //!< Function executed when the timer reaches zero
     };
 }
 

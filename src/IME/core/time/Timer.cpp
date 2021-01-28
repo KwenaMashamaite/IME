@@ -27,7 +27,9 @@
 namespace ime {
     Timer::Timer() :
         status_{Status::Stopped},
-        isRepeating_{false}
+        isDispatched_{false},
+        isRepeating_{false},
+        dispatchCount_{0}
     {}
 
     Timer Timer::create(Time interval, Callback<> callback, bool repeat) {
@@ -71,6 +73,7 @@ namespace ime {
 
     void Timer::setTimeoutCallback(Callback<> callback) {
         callback_ = std::move(callback);
+        dispatchCount_ = 0;
         if (!callback_ && status_ == Status::Running)
             stop();
     }
@@ -112,11 +115,21 @@ namespace ime {
         remainingDuration_ -= deltaTime;
         if (remainingDuration_ <= Time::Zero && callback_) {
             callback_();
+            isDispatched_ = true;
+            dispatchCount_++;
             if (isRepeating_)
                 restart();
             else
                 stop();
         }
+    }
+
+    int Timer::getDispatchCount() const {
+        return dispatchCount_;
+    }
+
+    bool Timer::isDispatched() const {
+        return isDispatched_;
     }
 
     bool Timer::canStart() const {
