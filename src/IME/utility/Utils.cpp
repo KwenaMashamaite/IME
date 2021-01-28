@@ -27,6 +27,10 @@
 
 namespace ime { 
     namespace utility {
+        float lerp(float min, float max, float ratio) {
+            return (max - min) * ratio + min;
+        }
+
         int generateRandomNum(int min, int max) {
             return createRandomNumGenerator(min, max)();
         }

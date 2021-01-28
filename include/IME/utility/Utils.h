@@ -36,6 +36,54 @@
 namespace ime {
     namespace utility {
         /**
+         * @brief Get a value between two other values on a linear scale
+         * @param min The value to interpolate from
+         * @param max The value to interpolate to
+         * @param ratio The interpolation point between 0 and 1 (inclusive)
+         * @return The lerp value
+         *
+         * This function is usually used to smoothen a value over time.
+         * For example it can be used to change the colour of something
+         * gradually over time or smoothly move an object to a new
+         * position (look up "linear interpolation" for more info).
+         *
+         * The interpolation ratio is used to determine the point to be
+         * returned on the scale. It acts like a percentage between
+         * @a min and @a max:
+         *
+         * @code
+         * auto value = lerp(0, 100.0f, 0.0f); Returns the minimum value
+         * auto value = lerp(0, 100.0f, 1.0f); Returns the maximum value
+         * auto value = lerp(0, 100.0f, 0.5f); Returns the 50.0f
+         * auto value = lerp(0, 100.0f, 0.85f); Returns the 85.0f
+         * // and so on ...
+         * @endcode
+         *
+         * To make the interpolation frame rate independent, multiply
+         * the lerp ration by the frame time
+         *
+         * @note This function does not account for situations where the
+         * interpolation point is less than 0 or greater than 1 or when
+         * the minimum value is greater than the maximum value. This means
+         * that the program will continue as normal, you may experience an
+         * unexpected behavior
+         *
+         * @code
+         * void update(Time deltaTime) {
+         *     // Move the sprite from its current x position to 50.0f by a ratio
+         *     // of 0.3f per update
+         *     sprite.setPosition(lerp(sprite.getX(), 50.0f, 0.3f), sprite.getY());
+         *
+         *     // Move the sprite from its current x position to 50.0f by a ratio
+         *     // of 0.3f per frame
+         *     sprite.setPosition(lerp(sprite.getX(), 50.0f, 0.3f * deltaTime.asMilliseconds()),
+         *          sprite.getY());
+         * }
+         * @endcode
+         */
+        IME_API extern float lerp(float min, float max, float ratio);
+
+        /**
          * @brief Generate a random number in a range
          * @param min The start of the range
          * @param max The end of the range
