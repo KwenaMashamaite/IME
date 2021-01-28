@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Picture.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime::ui {
     Picture::Picture() :

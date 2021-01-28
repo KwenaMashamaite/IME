@@ -16,9 +16,9 @@ set(IME_SRC
     core/input/Keyboard.cpp
     core/input/Mouse.cpp
     core/loop/Engine.cpp
-    core/managers/AudioManager.cpp
-    core/managers/InputManager.cpp
-    core/managers/ResourceManager.cpp
+    core/audio/AudioManager.cpp
+    core/input/InputManager.cpp
+    core/resources/ResourceManager.cpp
     core/path/AdjacencyList.cpp
     core/path/BFS.cpp
     core/path/DFS.cpp

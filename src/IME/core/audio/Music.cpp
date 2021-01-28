@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/audio/Music.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime::audio {
     void Music::setSource(const std::string &source) {

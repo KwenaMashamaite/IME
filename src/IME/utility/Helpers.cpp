@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/utility/Helpers.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include "IME/ui/widgets/IContainer.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/core/input/Keyboard.h"

@@ -24,7 +24,7 @@
 
 #include "IME/graphics/SpriteSheet.h"
 #include "IME/graphics/Sprite.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime {
     SpriteSheet::SpriteSheet(const std::string& name, const std::string &texture,

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/BoxLayoutRenderer.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime::ui {
     void BoxLayoutRenderer::setPadding(const Padding &padding) {

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/audio/SoundEffect.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime::audio {
     void SoundEffect::setSource(const std::string &filename){

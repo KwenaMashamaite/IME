@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/GuiContainer.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include "IME/ui/widgets/IContainer.h"
 #include "IME/utility/Helpers.h"
 

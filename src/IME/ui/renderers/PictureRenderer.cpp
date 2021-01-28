@@ -24,7 +24,7 @@
 
 #include "IME/utility/Helpers.h"
 #include "IME/ui/renderers/PictureRenderer.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime::ui {
     void PictureRenderer::setTexture(const std::string &filename) {

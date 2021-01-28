@@ -24,7 +24,7 @@
 
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/tilemap/TileMapParser.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
 
 namespace ime {

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/RadioButtonRenderer.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include <IME/utility/Helpers.h>
 
 namespace ime::ui {

@@ -27,9 +27,9 @@
 
 #include "IME/Config.h"
 #include "IME/graphics/Window.h"
-#include "IME/core/managers/ResourceManager.h"
-#include "IME/core/managers/AudioManager.h"
-#include "IME/core/managers/InputManager.h"
+#include "IME/core/resources/ResourceManager.h"
+#include "IME/core/audio/AudioManager.h"
+#include "IME/core/input/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/states/StateManager.h"

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/managers/InputManager.h"
+#include "IME/core/input/InputManager.h"
 
 namespace ime::input {
     int InputManager::addKeyListener(KeyEvent event, Keyboard::Key key,

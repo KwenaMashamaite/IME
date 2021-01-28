@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/managers/AudioManager.h"
+#include "IME/core/audio/AudioManager.h"
 #include "IME/utility/Helpers.h"
 
 namespace ime::audio {

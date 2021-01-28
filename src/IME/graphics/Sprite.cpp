@@ -25,7 +25,7 @@
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/Window.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 namespace ime {
     Sprite::Sprite() :

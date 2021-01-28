@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <IME/core/managers/ResourceManager.h>
+#include <IME/core/resources/ResourceManager.h>
 #include "IME/ui/renderers/LabelRenderer.h"
 #include "IME/utility/Helpers.h"
 

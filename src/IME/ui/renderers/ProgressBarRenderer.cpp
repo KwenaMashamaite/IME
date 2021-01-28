@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/ProgressBarRenderer.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/utility/Helpers.h"
 

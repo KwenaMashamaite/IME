@@ -24,7 +24,7 @@
 
 #include "IME/graphics/Window.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/managers/ResourceManager.h"
+#include "IME/core/resources/ResourceManager.h"
 
 bool ime::Window::isInstantiated_{false};
 
