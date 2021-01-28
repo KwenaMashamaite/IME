@@ -67,7 +67,6 @@ set(IME_SRC
     ui/widgets/Separator.cpp
     ui/GuiContainer.cpp
     graphics/Sprite.cpp
-    graphics/AnimatableSprite.cpp
     graphics/Colour.cpp
     graphics/Tile.cpp
     graphics/Window.cpp

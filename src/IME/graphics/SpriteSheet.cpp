@@ -37,7 +37,7 @@ namespace ime {
     {}
 
     void SpriteSheet::computeDimensions(UIntRect area) {
-        offset_ = {0, 0};
+        relativePos_ = {0, 0};
         auto texture = ResourceManager::getInstance()->getTexture(filename_);
         if (area.width != 0 && area.height != 0) { // Create spritesheet from sub-rectangle of the spritesheet image
             auto image = ResourceManager::getInstance()->getImage(filename_);
@@ -46,10 +46,8 @@ namespace ime {
                 static_cast<int>(area.width),static_cast<int>(area.height)
             };
 
-            if(texture.loadFromImage(image, sfArea)) {
-                offset_.x = area.left;
-                offset_.y = area.top;
-            }
+            if(texture.loadFromImage(image, sfArea))
+                relativePos_ = {area.left, area.top};
         }
 
         sizeInPixels_ = Vector2u{texture.getSize().x, texture.getSize().y};
@@ -134,6 +132,15 @@ namespace ime {
         return frames;
     }
 
+    std::vector<SpriteSheet::Frame> SpriteSheet::getAllFrames() const {
+        auto frames = std::vector<Frame>{};
+        for (auto row = 0u; row < sizeInFrames_.x; ++row) {
+            auto framesOnRow = getFramesOnRow(row);
+            std::move(framesOnRow.begin(), framesOnRow.end(), std::back_inserter(frames));
+        }
+        return frames;
+    }
+
     Vector2u SpriteSheet::getSize() const {
         return sizeInPixels_;
     }
@@ -207,6 +214,10 @@ namespace ime {
         return filename_;
     }
 
+    Vector2u SpriteSheet::getRelativePosition() const {
+        return relativePos_;
+    }
+
     bool SpriteSheet::hasFrame(Index index) const {
         return frames_.find(index) != frames_.end();
     }
@@ -228,7 +239,7 @@ namespace ime {
     Sprite SpriteSheet::createSprite(SpriteSheet::Frame frame) const {
         auto sprite = Sprite();
         sprite.setTexture(filename_);
-        sprite.setTextureRect(frame.left + offset_.x, frame.top + offset_.y, frame.width, frame.height);
+        sprite.setTextureRect(relativePos_.x + frame.left, relativePos_.y + frame.top, frame.width, frame.height);
         return sprite;
     }
 

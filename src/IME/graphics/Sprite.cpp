@@ -29,8 +29,25 @@
 
 namespace ime {
     Sprite::Sprite() :
-        isVisible_{true}
+        isVisible_{true},
+        animator_{*this}
     {}
+
+    Sprite::Sprite(const Sprite & other) : animator_{*this} {
+        sprite_ = other.sprite_;
+        textureFileName_ = other.textureFileName_;
+        isVisible_ = other.isVisible_;
+        prevSpriteColour = other.prevSpriteColour;
+    }
+
+    Sprite &Sprite::operator=(const Sprite & other) {
+        if (this != &other) {
+            auto temp(other);
+            std::swap(*this, temp);
+        }
+
+        return *this;
+    }
 
     void Sprite::setPosition(float x, float y) {
         sprite_.setPosition(x, y);
@@ -160,5 +177,13 @@ namespace ime {
     IntRect Sprite::getTextureRect() const {
         return {sprite_.getTextureRect().left, sprite_.getTextureRect().top,
                 sprite_.getTextureRect().width, sprite_.getTextureRect().height};
+    }
+
+    Animator &Sprite::getAnimator() {
+        return animator_;
+    }
+
+    void Sprite::updateAnimation(Time deltaTime) {
+        animator_.update(deltaTime);
     }
 }

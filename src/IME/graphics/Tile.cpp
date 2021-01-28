@@ -28,7 +28,7 @@
 #include "IME/core/managers/ResourceManager.h"
 
 namespace ime {
-    Tile::Tile(const Vector2u &size, const Vector2f &position) :
+    Tile::Tile(Vector2u size, Vector2f position) :
         isSolid_{false},
         id_{'\0'},
         index_{-1, -1}

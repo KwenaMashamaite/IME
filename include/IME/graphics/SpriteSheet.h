@@ -163,6 +163,12 @@ namespace ime {
         std::vector<Frame> getFramesInRange(Index start, Index end) const;
 
         /**
+         * @brief Get all the frames in the spritesheet
+         * @return All the frames in the spritesheet
+         */
+        std::vector<Frame> getAllFrames() const;
+
+        /**
          * @brief Get the size of the spritesheet in pixels
          * @return The size of the spritesheet in pixels
          *
@@ -290,6 +296,20 @@ namespace ime {
         std::vector<Sprite> getAllSprites() const;
 
         /**
+         * @brief Get the top-left position of the spritesheet relative to
+         *        the original spritesheet image
+         * @return The relative top-left position
+         *
+         * This function returns the top-left position of the spritesheet
+         * on the original spritesheet image if it was constructed from a
+         * sub-rectangle. If the spritesheet was created from the whole
+         * image, the function returns {0, 0}
+         *
+         * @see create
+         */
+        Vector2u getRelativePosition() const;
+
+        /**
          * @brief Check if an index has a frame or not
          * @param index Index to be checked
          * @return True if there is a frame at the specified index of false
@@ -374,8 +394,8 @@ namespace ime {
         Vector2u spacing_;      //!< The space between frames on the spritesheet
         Vector2u sizeInPixels_; //!< The size of the spritesheet in pixels
         Vector2u sizeInFrames_; //!< The size of the spritesheet in frames
-        Vector2u offset_;       //!< Offset of the sub-rectangle from the top-left of the original spritesheet image
-        bool isReady_;          //!< Flags whether or not the spritesheet is created
+        Vector2u relativePos_;  //!< The top-left position of the spritesheet relative to the top-left position of the original spritesheet image
+        bool isReady_;          //!< A flag indicating whether or not the spritesheet is created
 
         std::unordered_map<Index, Frame> frames_;        //!< Stores the frames
         std::unordered_map<std::string, Index> aliases_; //!< Saves the index of frames with aliases

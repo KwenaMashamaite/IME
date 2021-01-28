@@ -29,9 +29,9 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
-#include "Index.h"
+#include "IME/core/tilemap/Index.h"
 #include "IME/core/entity/Entity.h"
-#include "IME/graphics/AnimatableSprite.h"
+#include "IME/graphics/Sprite.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -227,7 +227,7 @@ namespace ime {
          *
          * @see showLayer
          */
-        AnimatableSprite& getBackground();
+        Sprite& getBackground();
 
         /**
          * @brief Get a tile at a certain index
@@ -637,23 +637,23 @@ namespace ime {
         Tile& getTileRightOf(const Index& index);
 
     private:
-        unsigned int tileSpacing_;     //!< Spacing between tiles in all directions
-        Vector2u tileSize_;            //!< The Size of each tile
-        Vector2u mapSizeInPixels_;     //!< The Size of the tilemap in pixels
-        Vector2f mapPos_;              //!< The Position of the tilemap in pixels
-        unsigned int numOfRows_;       //!< The width of the tilemap in tiles
-        unsigned int numOfColms_;      //!< The height of the tilemap in tiles
-        Map mapData_;                  //!< Map data used to identify different tiles
-        std::string tileSet_;          //!< Tileset the visual grid is constructed from
-        bool isGridVisible_;           //!< Visibility state of the grid
-        bool isBackgroundDrawable_;    //!< First layer render state
-        bool isTilesDrawable_;         //!< Second layer render state
-        Tile invalidTile_;   //!< Tile returned when an invalid index is provided
-        AnimatableSprite background_;  //!< Background image (first layer)
+        unsigned int tileSpacing_;   //!< Spacing between tiles in all directions
+        Vector2u tileSize_;          //!< The Size of each tile
+        Vector2u mapSizeInPixels_;   //!< The Size of the tilemap in pixels
+        Vector2f mapPos_;            //!< The Position of the tilemap in pixels
+        unsigned int numOfRows_;     //!< The width of the tilemap in tiles
+        unsigned int numOfColms_;    //!< The height of the tilemap in tiles
+        Map mapData_;                //!< Map data used to identify different tiles
+        std::string tileSet_;        //!< Tileset the visual grid is constructed from
+        bool isGridVisible_;         //!< Visibility state of the grid
+        bool isBackgroundDrawable_;  //!< First layer render state
+        bool isTilesDrawable_;       //!< Second layer render state
+        Tile invalidTile_;           //!< Tile returned when an invalid index is provided
+        Sprite background_;          //!< Background image (first layer)
 
         std::unordered_map<Index, std::vector<std::shared_ptr<Entity>>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;                    //!< Tilesets container
-        std::vector<std::vector<Tile>> tiledMap_;                        //!< Tiles container
+        std::vector<std::vector<Tile>> tiledMap_;                                  //!< Tiles container
     };
 }
 

@@ -30,8 +30,8 @@ namespace ime {
         tileMap_(tileMap),
         target_(target),
         targetDirection_(Direction::Unknown),
-        targetTile_{tileMap.getTileSize(), {0, 0}},
-        prevTile_({tileMap.getTileSize(), {}})
+        targetTile_{tileMap.getTileSize(), Vector2f{0, 0}},
+        prevTile_{tileMap.getTileSize(), Vector2f{0, 0}}
     {
         if (target) {
             IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot instantiate grid mover with an unmovable entity (not derived from ime::IMovable)");

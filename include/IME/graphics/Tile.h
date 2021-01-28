@@ -45,27 +45,7 @@ namespace ime {
          * @param size Size of the tile
          * @param position Position of the tile
          */
-        Tile(const Vector2u &size, const Vector2f &position);
-
-        /**
-         * @brief Copy constructor
-         */
-        Tile(const Tile &) = default;
-
-        /**
-         * @brief Assignment operator
-         */
-        Tile &operator=(const Tile &) = default;
-
-        /**
-         * @brief Move constructor
-         */
-        Tile(Tile &&) = default;
-
-        /**
-         * @brief Move assignment operator
-         */
-        Tile &operator=(Tile &&) = default;
+        explicit Tile(Vector2u size = {32, 32}, Vector2f position = {0, 0});
 
         /**
          * @brief Add a sprite to the tile
@@ -228,11 +208,6 @@ namespace ime {
          *         false
          */
         bool contains(float x, float y) const;
-
-        /**
-         * @brief Destructor
-         */
-        ~Tile() = default;
 
     private:
         bool isSolid_;             //!< Stores whether tile is a solid or an empty tile

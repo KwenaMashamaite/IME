@@ -26,10 +26,12 @@
 #define IME_SPRITE_H
 
 #include "IME/common/Vector2.h"
+#include "IME/common/Rect.h"
 #include "IME/common/ITransformable.h"
-#include "IDrawable.h"
-#include "Colour.h"
-#include "IME/core/animation/Animation.h"
+#include "IME/core/time/Time.h"
+#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Colour.h"
+#include "IME/core/animation/Animator.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <string>
 #include <memory>
@@ -37,6 +39,9 @@
 namespace ime {
     /**
      * @brief Drawable representation of a texture
+     *
+     * The sprite can be static (display a single non changing texture)
+     * or animated via its animator (see the getAnimator function)
      */
     class IME_API Sprite : public ITransformable, public IDrawable {
     public:
@@ -44,6 +49,16 @@ namespace ime {
          * @brief Default constructor
          */
         Sprite();
+
+        /**
+         * @brief Copy constructor
+         */
+        Sprite(const Sprite&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Sprite& operator=(const Sprite&);
 
         /**
          * @brief Set the texture of the object
@@ -337,11 +352,31 @@ namespace ime {
          */
         void draw(Window &renderTarget) const override;
 
+        /**
+         * @brief Get the sprites animator
+         * @return The sprites animator
+         *
+         * This function enables the sprite to be animated
+         *
+         * checkout the Animator class
+         */
+        Animator& getAnimator();
+
+        /**
+         * @brief Update the current animation
+         * @param deltaTime Time passed since last animation update
+         *
+         * This function need only be called if the sprite is animatable
+         * and not just displaying a single static image
+         */
+        void updateAnimation(Time deltaTime);
+
     private:
         sf::Sprite sprite_;           //!< Third party sprite
         std::string textureFileName_; //!< Filename of the texture used by the object
         bool isVisible_;              //!< Flags whether or not the sprite is visible
         Colour prevSpriteColour;      //!< Sprite colour before it was hidden
+        Animator animator_;           //!< Sprite animator
     };
 }
 
