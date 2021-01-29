@@ -35,6 +35,7 @@ set(IME_SRC
     core/tilemap/TileMapParser.cpp
     core/time/Clock.cpp
     core/time/Timer.cpp
+    core/time/TimerManager.cpp
     core/time/Time.cpp
     ui/renderers/BoxLayoutRenderer.cpp
     ui/renderers/ButtonRenderer.cpp
@@ -106,7 +107,7 @@ if(IME_OPTIMIZE_SINGLE_BUILD)
             endforeach()
         endforeach()
 
-        set(IME_SRC ${NEW_IME_SRC})
+        set(IME_SRC ${NEW_IME_SRC} core/time/TimerManager.cpp)
     endif()
 endif()
 

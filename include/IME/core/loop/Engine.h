@@ -31,6 +31,7 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/input/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
+#include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/states/StateManager.h"
 #include "IME/core/time/Timer.h"
@@ -231,14 +232,14 @@ namespace ime {
          * @a delay seconds. To execute a callback repeatedly every
          * interval, checkout the setInterval function
          *
+         * @note The callback is executed by a global timer
+         *
          * @warning The timer will be destroyed after the callback is invoked
-         * or if it is externally stopped/paused before the callback is invoked,
-         * therefore caution is advised when the returned reference is kept
-         * alive
+         * or if it is externally stopped before the callback is invoked
          *
          * @see setInterval
          */
-        Timer& setTimeout(Time delay, ime::Callback<> callback);
+        void setTimeout(Time delay, ime::Callback<Timer&> callback);
 
         /**
          * @brief Schedule a callback to be executed every interval
@@ -253,13 +254,16 @@ namespace ime {
          * can be also be cancelled by calling setRepeat(0) on the returned
          * timer
          *
+         * @note The callback is executed by a global timer, therefore the
+         * interval will continue to execute until the engine is shutdown
+         * or the interval is stopped via the argument passed to the callback
+         *
          * @warning The timer will be destroyed if the timer is externally
-         * stopped/paused or the repetition is cancelled, therefore caution
-         * is advised when the returned reference is kept alive
+         * stopped or the repetition is cancelled
          *
          * @see setTimeout
          */
-        Timer& setInterval(Time delay, ime::Callback<> callback, int repeatCount = -1);
+        void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
          * @brief Add an event lister to a window close event
@@ -382,7 +386,7 @@ namespace ime {
         Callback<> onWindowClose_;                              //!< Function executed when a request to close the window is received
         Callback<> onFrameStart_;                               //!< Function called at the start of a frame
         Callback<> onFrameEnd_;                                 //!< Function called at the end of a frame
-        std::vector<Timer> activeTimers_;                       //!< Timers that are counting down
+        TimerManager timerManager_;                             //!< Manages global timers
         std::queue<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_; //!< Holds states to be pushed to the engine at the end of the current frame
     };
 }

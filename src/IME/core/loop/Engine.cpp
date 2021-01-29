@@ -43,12 +43,6 @@ namespace ime {
                 IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)");
             }
         }
-
-        Timer createTimer(Time delay, Callback<> callback, int repeatCount) {
-            auto timer = Timer::create(delay, std::move(callback), repeatCount);
-            timer.start();
-            return timer;
-        }
     }
 
     Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
@@ -188,8 +182,7 @@ namespace ime {
     }
 
     void Engine::update(Time deltaTime) {
-        for (auto& timer : activeTimers_)
-            timer.update(deltaTime);
+        timerManager_.update(deltaTime);
 
         statesManager_.getActiveState()->update(deltaTime);
     }
@@ -225,11 +218,7 @@ namespace ime {
 
     void Engine::postFrameUpdate() {
         audioManager_->removePlayedAudio();
-
-        //Remove timers that have completed countdown
-        activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer& timer) {
-            return timer.getStatus() != Timer::Status::Running;
-        }), activeTimers_.end());
+        timerManager_.preUpdate();
 
         // Always pop first
         if (shouldPop_) {
@@ -271,7 +260,7 @@ namespace ime {
         settingFile_.clear();
         settings_.clear();
         statesManager_.clear();
-        activeTimers_.clear();
+        timerManager_.clear();
         dataSaver_.clear();
         resourceManager_.reset();
         inputManager_ = input::InputManager();
@@ -329,14 +318,12 @@ namespace ime {
         return window_;
     }
 
-    Timer& Engine::setTimeout(Time delay, ime::Callback<> callback) {
-        activeTimers_.push_back(createTimer(delay, std::move(callback),0));
-        return activeTimers_.back();
+    void Engine::setTimeout(Time delay, ime::Callback<Timer&> callback) {
+        timerManager_.setTimeout(delay, std::move(callback));
     }
 
-    Timer& Engine::setInterval(Time delay, ime::Callback<> callback, int repeatCount) {
-        activeTimers_.push_back(createTimer(delay, std::move(callback), repeatCount));
-        return activeTimers_.back();
+    void Engine::setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount) {
+        timerManager_.setInterval(delay, std::move(callback), repeatCount);
     }
 
     void Engine::onWindowClose(Callback<> callback) {
