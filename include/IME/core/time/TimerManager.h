@@ -47,7 +47,8 @@ namespace ime {
          * duration, stop the schedule and so on...
          *
          * @warning Do not call the update(ime::Time) function of the given
-         * Timer as it is called internally by IME
+         * Timer as it is called internally by IME. The callback must not be
+         * a nullptr
          */
         void setTimeout(Time delay, Callback<Timer&> callback);
 
@@ -55,6 +56,8 @@ namespace ime {
          * @brief Schedule a one time callback
          * @param delay The time to wait before executing the callback
          * @param callback The function to be executed
+         *
+         * @warning The callback must not be a nullptr
          */
         void setTimeout(Time delay, Callback<> callback);
 
@@ -74,7 +77,8 @@ namespace ime {
          * callback will be executed forever every @a delay
          *
          * @warning Do not call the update(ime::Time) function of the given
-         * Timer as it is called internally by IME
+         * Timer as it is called internally by IME. The callback must not be
+         * a nullptr
          */
         void setInterval(Time delay, Callback<Timer&> callback, int repeatCount = -1);
 
@@ -85,7 +89,8 @@ namespace ime {
          * @param repeatCount The number of times to repeat the callback
          *
          * By default, if @a repeatCounter is left unspecified then the
-         * callback will be executed forever every @a delay
+         * callback will be executed forever every @a delay. The callback
+         * must not be a nullptr
          */
         void setInterval(Time delay, Callback<> callback, int repeatCount = -1);
 
@@ -118,6 +123,13 @@ namespace ime {
          * call it directly
          */
         void preUpdate();
+
+    private:
+        /**
+         * @brief Add a timer to active timers
+         * @param timer The timer to be added
+         */
+        void addTimer(Timer timer);
 
     private:
         std::vector<Timer> activeTimers_; //!< Timers that are counting down

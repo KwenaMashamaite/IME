@@ -25,28 +25,27 @@
 #include "IME/core/time/TimerManager.h"
 
 namespace ime {
-    //TODO - Add a function to create the timers and start them since
-    //       code is similar in all functions. Its 2AM, I'm tired :(
-    //       and I think the solution is a function template (note for when I wake)
+    void TimerManager::addTimer(Timer timer) {
+        if (timer.canStart()) {
+            timer.start();
+            activeTimers_.push_back(std::move(timer));
+        }
+    }
 
     void TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
-        activeTimers_.push_back(Timer::create(delay, std::move(callback)));
-        activeTimers_.back().start();
+        addTimer(Timer::create(delay, std::move(callback)));
     }
 
     void TimerManager::setTimeout(Time delay, Callback<> callback) {
-        activeTimers_.push_back(Timer::create(delay, std::move(callback)));
-        activeTimers_.back().start();
+        addTimer(Timer::create(delay, std::move(callback)));
     }
 
     void TimerManager::setInterval(Time delay, Callback<Timer&> callback, int repeatCount) {
-        activeTimers_.push_back(Timer::create(delay, std::move(callback), repeatCount));
-        activeTimers_.back().start();
+        addTimer(Timer::create(delay, std::move(callback), repeatCount));
     }
 
     void TimerManager::setInterval(Time delay, Callback<> callback, int repeatCount) {
-        activeTimers_.push_back(Timer::create(delay, std::move(callback), repeatCount));
-        activeTimers_.back().start();
+        addTimer(Timer::create(delay, std::move(callback), repeatCount));
     }
 
     void TimerManager::update(Time deltaTime) {
