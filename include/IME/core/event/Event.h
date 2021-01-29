@@ -34,7 +34,8 @@ namespace ime {
      *
      * This class is based on sf::Event from SFML (www.sfml-dev.org)
      */
-    struct Event {
+    class Event {
+    public:
         /**
          * @brief Size events parameters (Resized)
          */

@@ -28,8 +28,8 @@ set(IME_SRC
     core/physics/KeyboardControlledGridMover.cpp
     core/physics/RandomGridMover.cpp
     core/physics/TargetGridMover.cpp
-    core/states/State.cpp
-    core/states/StateManager.cpp
+    core/scene/Scene.cpp
+    core/scene/SceneManager.cpp
     core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp

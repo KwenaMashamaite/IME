@@ -59,7 +59,7 @@ namespace ime {
         isSettingsLoadedFromFile_(!settingsFile.empty()),
         isInitialized_{false},
         isRunning_{false},
-        shouldPop_{false}
+        pendingPop_{false}
     {}
 
     void Engine::initialize() {
@@ -70,9 +70,7 @@ namespace ime {
         initResourceManager();
         initRenderTarget();
 
-        audioManager_ = std::make_unique<audio::AudioManager>();
         eventDispatcher_ = EventDispatcher::instance();
-
         onWindowClose_ = [this]{quit();};
         isInitialized_ = true;
     }
@@ -134,45 +132,43 @@ namespace ime {
     void Engine::processEvents() {
         Event event;
         while (window_.pollEvent(event)) {
-            if (event.type == Event::Closed && onWindowClose_) {
+            if (event.type == Event::Closed && onWindowClose_)
                 onWindowClose_();
-                return;
-            }
-            statesManager_.getActiveState()->handleEvent(event);
-            globalInputManager_.handleEvent(event);
+
             inputManager_.handleEvent(event);
+            sceneManager_.handleEvent(event);
         }
     }
 
     void Engine::run() {
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
-        IME_ASSERT(!statesManager_.isEmpty(), "Failed to start engine because it has no states");
+        IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states");
 
         isRunning_ = true;
-        statesManager_.getActiveState()->onEnter();
+        sceneManager_.enterTopScene();
         auto const frameTime = seconds( 1.0f / settings_.getValueFor<int>("FPS_LIMIT"));
-        auto deltaTime = Time::Zero, accumulator = Time::Zero;
+        auto accumulator = Time::Zero;
         auto gameClock = Clock();
-        while (window_.isOpen() && isRunning_ && !statesManager_.isEmpty()) {
-            deltaTime = gameClock.restart();
+        while (window_.isOpen() && isRunning_ && !sceneManager_.isEmpty()) {
+            deltaTime_ = gameClock.restart();
             if (onFrameStart_)
                 onFrameStart_();
 
+            sceneManager_.preUpdate(deltaTime_);
             processEvents();
-            accumulator += deltaTime;
+
+            accumulator += deltaTime_;
             while (accumulator >= frameTime) {
-                statesManager_.getActiveState()->fixedUpdate(frameTime);
+                sceneManager_.fixedUpdate(frameTime);
                 accumulator -= frameTime;
             }
 
-            update(deltaTime);
+            update(deltaTime_);
             clear();
             render();
             display();
             postFrameUpdate();
-            if (onFrameEnd_)
-                onFrameEnd_();
-            elapsedTime_ += deltaTime;
+            elapsedTime_ += deltaTime_;
         }
         shutdown();
     }
@@ -183,8 +179,7 @@ namespace ime {
 
     void Engine::update(Time deltaTime) {
         timerManager_.update(deltaTime);
-
-        statesManager_.getActiveState()->update(deltaTime);
+        sceneManager_.update(deltaTime);
     }
 
     void Engine::clear() {
@@ -192,88 +187,79 @@ namespace ime {
     }
 
     void Engine::render() {
-        statesManager_.getActiveState()->render(window_);
+        sceneManager_.render(window_);
     }
 
     void Engine::display() {
         window_.display();
     }
 
-    void Engine::pushState(std::shared_ptr<State> state, Callback<> callback) {
-        if (!isRunning_) {
-            prevStateInputManager_.push(input::InputManager());
-            statesManager_.pushState(std::move(state));
-        } else
-            statesToPush_.push({std::move(state), callback});
+    void Engine::pushScene(std::shared_ptr<Scene> state, Callback<> callback) {
+        if (!isRunning_)
+            sceneManager_.pushScene(std::move(state));
+        else
+            scenesPendingPush_.push({std::move(state), callback});
     }
 
-    void Engine::popState() {
-        if (!isRunning_ && !statesManager_.isEmpty()) {
-            statesManager_.popState();
-            inputManager_ = prevStateInputManager_.top();
-            prevStateInputManager_.pop();
-        } else
-            shouldPop_ = true;
+    void Engine::popScene() {
+        if (!isRunning_)
+            sceneManager_.popScene();
+        else
+            pendingPop_ = true;
     }
 
     void Engine::postFrameUpdate() {
-        audioManager_->removePlayedAudio();
+        audioManager_.removePlayedAudio();
         timerManager_.preUpdate();
 
-        // Always pop first
-        if (shouldPop_) {
-            shouldPop_ = false;
-            statesManager_.popState();
-            if (!statesManager_.isEmpty()) {
-                //Restore input manager
-                inputManager_ = prevStateInputManager_.top();
-                prevStateInputManager_.pop();
-                if (!statesManager_.getActiveState()->isEntered())
-                    statesManager_.getActiveState()->onEnter();
+        // Note: Always check pending pop first before pending pushes
+        if (pendingPop_) {
+            pendingPop_ = false;
+            sceneManager_.popScene();
+        }
+
+        while (!scenesPendingPush_.empty()) {
+            if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
+                sceneManager_.pushScene(scenesPendingPush_.front().first, true);
+                if (auto& callback = scenesPendingPush_.front().second; callback)
+                    callback();
+                scenesPendingPush_.pop();
+                break;
+            } else {
+                sceneManager_.pushScene(scenesPendingPush_.front().first);
+                scenesPendingPush_.pop();
             }
         }
 
-        while (!statesToPush_.empty()) {
-            prevStateInputManager_.push(inputManager_);
-            inputManager_ = input::InputManager(); //Clear prev state input handlers
-            auto [state, callback] = statesToPush_.front();
-            statesManager_.pushState(std::move(state));
-            statesToPush_.pop();
-            if (statesToPush_.empty()) {
-                statesManager_.getActiveState()->onEnter();
-                if (callback)
-                    callback();
-            }
-        }
+        // Execute frame end listener
+        if (onFrameEnd_)
+            onFrameEnd_();
     }
 
     void Engine::shutdown() {
-        audioManager_->stopAllAudio();
-        audioManager_.reset();
+        audioManager_.stopAllAudio();
+        audioManager_.removePlayedAudio();
         window_.close();
         isInitialized_ = false;
         isRunning_ = false;
-        shouldPop_ = false;
+        pendingPop_ = false;
         isSettingsLoadedFromFile_ = false;
         elapsedTime_ = Time::Zero;
         gameTitle_.clear();
         settingFile_.clear();
         settings_.clear();
-        statesManager_.clear();
+        sceneManager_.clear();
         timerManager_.clear();
         dataSaver_.clear();
         resourceManager_.reset();
         inputManager_ = input::InputManager();
-        globalInputManager_ = input::InputManager();
         eventDispatcher_.reset();
         onWindowClose_ = nullptr;
         onFrameEnd_ = nullptr;
         onFrameStart_ = nullptr;
 
-        while (!prevStateInputManager_.empty())
-            prevStateInputManager_.pop();
-        while (!statesToPush_.empty())
-            statesToPush_.pop();
+        while (!scenesPendingPush_.empty())
+            scenesPendingPush_.pop();
     }
 
     bool Engine::isRunning() const {
@@ -303,15 +289,11 @@ namespace ime {
     }
 
     audio::AudioManager &Engine::getAudioManager() {
-        return *audioManager_;
+        return audioManager_;
     }
 
     input::InputManager &Engine::getInputManager() {
         return inputManager_;
-    }
-
-    input::InputManager &Engine::getGlobalInputManager() {
-        return globalInputManager_;
     }
 
     Window &Engine::getRenderTarget() {

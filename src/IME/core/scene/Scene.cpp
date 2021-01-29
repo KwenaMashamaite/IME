@@ -22,40 +22,53 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/states/StateManager.h"
+#include "IME/core/scene/Scene.h"
 
 namespace ime {
-    void StateManager::pushState(std::shared_ptr<State> state) {
-        IME_ASSERT(state, "Cannot add nullptr as a state");
-        if (!states_.empty() && states_.top()->isEntered())
-            states_.top()->onPause();
-        states_.push(std::move(state));
+    Scene::Scene(Engine &engine) :
+        engine_{engine},
+        isManaged_{false},
+        isEntered_{false},
+        isVisibleWhenPaused_{false}
+    {}
+
+    void Scene::setName(const std::string &name) {
+        name_ = name;
     }
 
-    void StateManager::popState() {
-        IME_ASSERT(!states_.empty(), "Cannot pop a state from an empty state manager");
-        if (states_.top()->isEntered())
-            states_.top()->onExit();
-        states_.pop();
-        if (!states_.empty() && states_.top()->isEntered())
-            states_.top()->onResume();
+    const std::string &Scene::getName() const {
+        return name_;
     }
 
-    int StateManager::getSize() const {
-        return states_.size();
+    void Scene::setVisibleOnPause(bool show) {
+        isVisibleWhenPaused_ = show;
     }
 
-    void StateManager::clear() {
-        while (!isEmpty())
-            popState();
+    bool Scene::isVisibleOnPause() const {
+        return isVisibleWhenPaused_;
     }
 
-    std::shared_ptr<State> StateManager::getActiveState() const {
-        IME_ASSERT(!states_.empty(), "Cannot retrieve a state from an empty state manager");
-        return states_.top();
+    bool Scene::isEntered() const {
+        return isEntered_;
     }
 
-    bool StateManager::isEmpty() const {
-        return states_.empty();
+    Engine &Scene::engine() const {
+        return engine_;
+    }
+
+    input::InputManager &Scene::input() {
+        return inputManager_;
+    }
+
+    audio::AudioManager &Scene::audio() {
+        return audioManager_;
+    }
+
+    TimerManager &Scene::timer() {
+        return timerManager_;
+    }
+
+    EventEmitter &Scene::eventEmitter() {
+        return eventEmitter_;
     }
 }

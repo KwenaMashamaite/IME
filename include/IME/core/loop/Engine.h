@@ -33,7 +33,7 @@
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/states/StateManager.h"
+#include "IME/core/scene/SceneManager.h"
 #include "IME/core/time/Timer.h"
 #include <queue>
 
@@ -66,6 +66,16 @@ namespace ime {
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
+         * @brief Copy constructor
+         */
+        Engine(const Engine&) = delete;
+
+        /**
+         * @brief Assignment operator
+         */
+        Engine& operator=(const Engine&) = delete;
+
+        /**
          * @brief Initialize the engine
          *
          * This function will perform all the necessary initialization and
@@ -80,18 +90,18 @@ namespace ime {
          * @brief Start the main loop
          *
          * @warning The engine must be initialized before it is run. In
-         * addition, there must be at least one state added for the engine
+         * addition, there must be at least one scene added for the engine
          * to run
          *
          * @see initialize
-         * @see pushState
+         * @see pushScene
          */
         void run();
 
         /**
          * @brief Stop the engine
          *
-         * This function will remove all states that have been added to the
+         * This function will remove all scenes that have been added to the
          * engine and reset it's initialization state. Therefore, the engine
          * must be reinitialized before it is re-run
          */
@@ -115,12 +125,12 @@ namespace ime {
          * @brief Get persistent data
          * @return Persistent data
          *
-         * Data stored in the this object persists from state to state.
-         * This means that the data is preserved during a state push or
-         * pop. This is useful if you want share data between states. For
-         * example, a state may save data before its destroyed/paused and
-         * the next state can access the data and update for the next state
-         * or for the previous state when it is resumed
+         * Data stored in the this object persists from scene to scene.
+         * This means that the data is preserved during a scene push or
+         * pop. This is useful if you want share data between scenes. For
+         * example, a scene may save data before its destroyed/paused and
+         * the next scene can access the data and update for the next scene
+         * or for the previous scene when it is resumed
          *
          * @warning The data is destroyed when the engine is shutdown
          *
@@ -137,75 +147,60 @@ namespace ime {
         const std::string& getGameName() const;
 
         /**
-         * @brief Add a state to the engine
-         * @param state State to add
-         * @param callback Optional function to be executed after the state
+         * @brief Add a scene to the engine
+         * @param scene Scene to be added
+         * @param callback Optional function to be executed after the scene
          *                 is added
          *
-         * The state will NOT be pushed immediately but rather at the end of
+         * The scene will NOT be pushed immediately but rather at the end of
          * the current frame. Any operation performed on the engine before
-         * the end of the current frame will reflect on the current state and
-         * not the state to be pushed. A callback must be provided if the
-         * need to perform an operation immediately after a state is pushed
+         * the end of the current frame will reflect on the current scene and
+         * not the scene to be pushed. A callback must be provided if the
+         * need to perform an operation immediately after a scene is pushed
          * arises
          *
-         * @warning If multiple states are pushed to the engine in the same
-         * frame, the last state to be received before the frame end will be
-         * the active state. All the other states will be pushed without
+         * @warning If multiple scenes are pushed to the engine in the same
+         * frame, the last scene to be received before the frame end will be
+         * the active scene. All the other scenes will be pushed without
          * initialization. This means that only the optional callback attached
-         * to the last state will be invoked
+         * to the last scene will be invoked
          */
-        void pushState(std::shared_ptr<State> state, Callback<> callback = nullptr);
+        void pushScene(std::shared_ptr<Scene> scene, Callback<> callback = nullptr);
 
         /**
-         * @brief Remove a state from the engine
+         * @brief Remove the current scene from the engine
          *
-         * The state will not be removed immediately but rather at the end of
-         * the current frame
+         * The scene will not be removed immediately but rather at the end
+         * of the current frame
          */
-        void popState();
+        void popScene();
 
         /**
          * @brief Get the time passed since the engine was started
          * @return The time passed since the engine was started
          *
-         * @note The elapsed time will reset to zero when the engine is stopped
+         * @note The elapsed time will reset to zero when the engine is
+         * shutdown
          */
         Time getElapsedTime() const;
 
         /**
-         * @brief Get access to the engines resource manager
-         * @return The engines resource manager
+         * @brief Get the global resource manager
+         * @return The global resource manager
          */
         ResourceManager& getResourceManager();
 
         /**
-         * @brief Get access to the engines audio manager
-         * @return The engines audio manager
+         * @brief Get the global audio manager
+         * @return The global audio manager
          */
         audio::AudioManager& getAudioManager();
 
         /**
-         * @brief Get access to the engines local input manager
-         * @return The engines local input manager
-         *
-         * This input manager is local to the current state. This means that
-         * input listeners attached to it will only be notified during the
-         * current state only. The input manager is cleared on a state change
-         * (push or pop). For a push operation, input event listeners are
-         * remembered and restored when the state is resumed
+         * @brief Get the global input manager
+         * @return The global input manager
          */
         input::InputManager& getInputManager();
-
-        /**
-         * @brief Get access to the engines global input manager
-         * @return Engines global input manager
-         *
-         * Input event listeners attached to this input manager will be
-         * notified when the corresponding event is fired regardless of
-         * state. That is, they persist from state to state
-         */
-        input::InputManager& getGlobalInputManager();
 
         /**
          * @brief Get access to the engines render target
@@ -214,7 +209,7 @@ namespace ime {
          * @warning Don't call pollEvent(), on the instance as it will empty
          * the event queue and prevent the engine from properly dispatching
          * events. Also avoid drawing directly on the window because it will
-         * be cleared by the engine before rendering a state.
+         * be cleared by the engine before rendering the current scene.
          *
          * @warning This function must only be called after the engine has
          *          been initialized
@@ -292,15 +287,12 @@ namespace ime {
 
         /**
          * @brief Execute a function at the end of the current frame
-         * @param callback Function to execute
-         *
-         * The callback is invoked before the start of the next frame (When
-         * event processing, state updates, rendering, state push and state
-         * pop operations are complete)
+         * @param callback Function to be executed
          *
          * @note Only one callback may be registered at a time. Pass nullptr
-         * to stop the callback from being invoked. By default no callback is
-         * registered
+         * to stop the callback from being invoked.
+         *
+         * By default, no callback is registered
          */
         void onFrameEnd(Callback<> callback);
 
@@ -366,28 +358,28 @@ namespace ime {
         void shutdown();
 
     private:
-        Window window_;                                         //!< Render target
-        std::string gameTitle_;                                 //!< Game name
-        std::string settingFile_;                               //!< Engine settings filename
-        PropertyContainer settings_;                            //!< Engine settings container
-        bool isSettingsLoadedFromFile_;                         //!< Flags whether settings are provided or loaded from file
-        bool isInitialized_;                                    //!< Engine's initialization state
-        bool isRunning_;                                        //!< Engine's running state
-        Time elapsedTime_;                                     //!< How long the engine has been running
-        StateManager statesManager_;                            //!< Engine states manager
-        std::unique_ptr<audio::AudioManager> audioManager_;     //!< Engines audio manager
-        std::shared_ptr<ResourceManager> resourceManager_;      //!< Engines resource manager
-        input::InputManager inputManager_;                      //!< Engines local input manager
-        input::InputManager globalInputManager_;                //!< Engines global input manager
-        std::stack<input::InputManager> prevStateInputManager_; //!< Previous states local input handlers
-        std::shared_ptr<EventDispatcher> eventDispatcher_;      //!< Engines Event dispatcher
-        PropertyContainer dataSaver_;                           //!< Data that persists across states
-        bool shouldPop_;                                        //!< Flags whether o not current state should be popped
-        Callback<> onWindowClose_;                              //!< Function executed when a request to close the window is received
-        Callback<> onFrameStart_;                               //!< Function called at the start of a frame
-        Callback<> onFrameEnd_;                                 //!< Function called at the end of a frame
-        TimerManager timerManager_;                             //!< Manages global timers
-        std::queue<std::pair<std::shared_ptr<State>, Callback<>>> statesToPush_; //!< Holds states to be pushed to the engine at the end of the current frame
+        Window window_;                                     //!< The engines render target
+        std::string gameTitle_;                             //!< The name of the game run by the engine
+        std::string settingFile_;                           //!< The filename of the file that contains the engines config entries
+        PropertyContainer settings_;                        //!< The engines settings
+        bool isSettingsLoadedFromFile_;                     //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
+        bool isInitialized_;                                //!< A flag indicating whether or not the engine has been initialized
+        bool isRunning_;                                    //!< A flag indicating whether or not the engine is running
+        Time deltaTime_;                                    //!< The time taken for each game frame to complete
+        Time elapsedTime_;                                  //!< The time passed since the engine started running
+        SceneManager sceneManager_;                         //!< The games scene manager
+        audio::AudioManager audioManager_;                  //!< The games global audio manager
+        input::InputManager inputManager_;                  //!< The games global input manager
+        std::shared_ptr<ResourceManager> resourceManager_;  //!< The games global resource manager
+        std::shared_ptr<EventDispatcher> eventDispatcher_;  //!< Engines Event dispatcher
+        PropertyContainer dataSaver_;                       //!< Holds Data that persists across scenes
+        bool pendingPop_;                                   //!< A flag indicting whether or not the current scene should be popped
+        Callback<> onWindowClose_;                          //!< A Function executed when a request to close the window is received
+        Callback<> onFrameStart_;                           //!< A Function called at the start of the current frame
+        Callback<> onFrameEnd_;                             //!< A Function called at the end of the current frame
+        TimerManager timerManager_;                         //!< Manages global timers
+
+        std::queue<std::pair<std::shared_ptr<Scene>, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
 }
 
