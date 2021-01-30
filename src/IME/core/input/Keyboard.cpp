@@ -27,56 +27,39 @@
 #include <SFML/Window/Keyboard.hpp>
 
 namespace ime::input {
-    void Keyboard::handleEvent(Event event) {
-        if (event.type == Event::KeyPressed) {
-            eventEmitter_.emit("anyKeyDown", static_cast<Key>(event.key.code));
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Down");
-        } else if (event.type == Event::KeyReleased) {
-            eventEmitter_.emit("anyKeyPressed", static_cast<Key>(event.key.code));
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.key.code)) + "Up");
-        }
-    }
-
     bool Keyboard::isKeyPressed(Key keyId) {
         return sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(keyId));
     }
 
-    int Keyboard::onKeyUp(Key key, Callback<> callback) {
-        return eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(key)) + "Up", std::move(callback));
+    int Keyboard::onKeyUp(Callback<Key> callback) {
+        return eventEmitter_.on("keyUp", std::move(callback));
     }
 
-    int Keyboard::onKeyDown(Key key, Callback<> callback) {
-        return eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(key)) + "Down", std::move(callback));
+    int Keyboard::onKeyDown(Callback<Keyboard::Key> callback) {
+        return eventEmitter_.on("keyDown", std::move(callback));
     }
 
-    bool Keyboard::removeEventListener(KeyEvent event, Key key, int id){
-        if (event == KeyEvent::KeyUp)
-            return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(key)) + "Up", id);
-        else if (event == KeyEvent::KeyDown)
-            return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(key)) + "Down", id);
-        return false;
-    }
-
-    bool Keyboard::removeEventListener(KeyEvent event, int id) {
+    bool Keyboard::unsubscribe(KeyboardEvent event, int id) {
         switch (event) {
-            case KeyEvent::KeyDown:
-                return eventEmitter_.removeEventListener("anyKeyDown", id);
-            case KeyEvent::KeyUp:
-                return eventEmitter_.removeEventListener("anyKeyPressed", id);
+            case KeyboardEvent::KeyDown:
+                return eventEmitter_.removeEventListener("keyDown", id);
+            case KeyboardEvent::KeyUp:
+                return eventEmitter_.removeEventListener("keyPressed", id);
             default:
                 return false;
         }
     }
 
-    int Keyboard::onKeyUp(Callback<Key> callback) {
-        return eventEmitter_.addEventListener("anyKeyPressed", std::move(callback));
-    }
-
-    int Keyboard::onKeyDown(Callback<Keyboard::Key> callback) {
-        return eventEmitter_.addEventListener("anyKeyDown", std::move(callback));
+    void Keyboard::handleEvent(Event event) {
+        switch (event.type) {
+            case Event::KeyPressed:
+                eventEmitter_.emit("keyDown", event.key.code);
+                break;
+            case Event::KeyReleased:
+                eventEmitter_.emit("keyUp", event.key.code);
+                break;
+            default:
+                break;
+        }
     }
 }

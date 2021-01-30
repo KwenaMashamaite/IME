@@ -34,14 +34,18 @@ namespace ime {
     /**
      * @brief Keyboard events
      */
-    enum class KeyEvent {
+    enum class KeyboardEvent {
         KeyDown, //!< Fired when key is depressed
         KeyUp    //!< Fired when depressed key is released
     };
 
     namespace input {
         /**
-         * @brief Class for capturing keyboard inputs
+         * @brief Captures keyboard inputs from the user
+         *
+         * You usually don't instantiate this class directly, you either use
+         * the input manager that is local to a Scene or the global input
+         * manager that from the Engine class
          */
         class IME_API Keyboard {
         public:
@@ -79,9 +83,9 @@ namespace ime {
             };
 
             /**
-             * @brief Check if key is pressed or not
-             * @param key Key to check
-             * @return True if key is pressed, false if it not pressed
+             * @brief Check if a key is pressed or not
+             * @param key Key to be checked
+             * @return True if the key is pressed or false if it not pressed
              *
              * This function checks the state of a key in real time, unlike
              * all the other function which are event-based
@@ -89,72 +93,27 @@ namespace ime {
             static bool isKeyPressed(Key key);
 
             /**
-             * @brief Add an event listener to any key up event
-             * @param callback Function to execute when the key is released
+             * @brief Add an event listener to a key up event
+             * @param callback Function to be executed when a key is released
              * @return The event listeners identification number
              *
-             * This event is triggered only when a depressed key is released
+             * This event is triggered only when a depressed key is released.
+             * The callback is passed the key that was released
              *
              * @see onKeyDown
              */
             int onKeyUp(Callback<Key> callback);
 
             /**
-              * @brief Add an event listener to a specific key up event
-              * @param key Key to listen for
-              * @param callback Function to execute when the key is released
-              * @return The event listener's identification number
-              *
-              * This event is triggered only when a depressed key is released
-              *
-              * @see onKeyDown
-              */
-            int onKeyUp(Key key, Callback<> callback);
-
-            /**
-             * @brief Add an event listener to any key down event
-             * @param callback Function to execute when the key is down
+             * @brief Add an event listener to a key down event
+             * @param callback Function to be executed when the key is down
              * @return The event listeners identification number
              *
-             * This event will continue to fire while any key is held down
+             * This event will continue to fire while a key is held down
              *
              * @see onKeyUp
              */
             int onKeyDown(Callback<Key> callback);
-
-            /**
-              * @brief Add an event listener to a specific key down event
-              * @param key Key to listen for
-              * @param callback Function to execute when the key is down
-              * @return Event listener's identification number
-              *
-              * This event will continue to fire while specified key is
-              * held down
-              *
-              * @see onKeyUp
-              */
-            int onKeyDown(Key key, Callback<> callback);
-
-            /**
-             * @brief Handle an event
-             * @param event Event to be handled
-             *
-             * This function must be called at least once per frame in
-             * order to determine the current frame state of a key
-             * (pressed, released or neither)
-             */
-            void handleEvent(Event event);
-
-            /**
-              * @brief  Remove an event listener from a specific key event
-              * @param  event Event to remove listener from
-              * @param  key Key to remove event listener from
-              * @param  id Identification number of the listener to be removed
-              * @return True if the event listener was removed from the event,
-              *         or false if the specified event does not have an event
-              *         listener with the specified id
-              */
-            bool removeEventListener(KeyEvent event, Key key, int id);
 
             /**
              * @brief Remove an event listener from a key down or key up event
@@ -164,7 +123,13 @@ namespace ime {
               *        or false if the specified event does not have an event
               *        listener with the specified id
              */
-            bool removeEventListener(KeyEvent event, int id);
+            bool unsubscribe(KeyboardEvent event, int id);
+
+            /**
+             * @brief Handle a system event
+             * @param event Event to be handled
+             */
+            void handleEvent(Event event);
 
         private:
             EventEmitter eventEmitter_; //!< Event publisher

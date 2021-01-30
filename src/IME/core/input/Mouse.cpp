@@ -31,55 +31,66 @@ namespace ime::input {
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
     }
 
-    void Mouse::handleEvent(Event event) {
-        if (event.type == Event::MouseButtonPressed) {
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down");
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Down",
-                event.mouseButton.x, event.mouseButton.y);
-        } else if (event.type == Event::MouseButtonReleased) {
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up");
-            eventEmitter_.emit(std::to_string(static_cast<int>(event.mouseButton.button)) + "Up",
-                event.mouseButton.x, event.mouseButton.y);
-        } else if (event.type == Event::MouseMoved)
-            eventEmitter_.emit("mouseMoved", event.mouseMove.x, event.mouseMove.y);
+    int Mouse::onButtonUp(Callback<Mouse::Button, int, int> callback) {
+        return eventEmitter_.on("mouseUp", std::move(callback));
     }
 
-    int Mouse::onButtonUp(Button button, Callback<int, int> callback) {
-        return  eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(button)) + "Up", std::move(callback));
+    int Mouse::onButtonUp(Callback<Mouse::Button> callback) {
+        return eventEmitter_.on("mouseUp", std::move(callback));
     }
 
-    int Mouse::onButtonUp(Mouse::Button button, Callback<> callback) {
-        return  eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(button)) + "Up", std::move(callback));
+    int Mouse::onButtonDown(Callback<Mouse::Button, int, int> callback) {
+        return eventEmitter_.on("mouseDown", std::move(callback));
     }
 
-    int Mouse::onButtonDown(Button button, Callback<int, int> callback) {
-        return eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
-    }
-
-    int Mouse::onButtonDown(Mouse::Button button, Callback<> callback) {
-        return eventEmitter_.addEventListener(
-            std::to_string(static_cast<int>(button)) + "Down", std::move(callback));
+    int Mouse::onButtonDown(Callback<Mouse::Button> callback) {
+        return eventEmitter_.on("mouseDown", std::move(callback));
     }
 
     int Mouse::onMouseMove(Callback<int, int> callback) {
-        return eventEmitter_.addEventListener("mouseMoved", std::move(callback));
+        return eventEmitter_.on("mouseMove", std::move(callback));
     }
 
-    bool Mouse::removeEventListener(MouseEvent event, Button button,int id) {
-        if (event == MouseEvent::MouseDown)
-            return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(button)) + "Down", id);
-        else if (event == MouseEvent::MouseUp)
-            return eventEmitter_.removeEventListener(
-                std::to_string(static_cast<int>(button)) + "Up", id);
-        return false;
+    int Mouse::onWheelScroll(Callback<Mouse::Wheel, float, int, int> callback) {
+        return eventEmitter_.on("mouseWheelScroll", std::move(callback));
     }
 
+    bool Mouse::unsubscribe(MouseEvent event, int id) {
+        switch (event) {
+            case MouseEvent::MouseDown:
+                return eventEmitter_.removeEventListener("mouseDown", id);
+            case MouseEvent::MouseUp:
+                return eventEmitter_.removeEventListener("mouseUp", id);
+            case MouseEvent::MouseMove:
+                return eventEmitter_.removeEventListener("mouseMove", id);
+            case MouseEvent::MouseWheelScroll:
+                return eventEmitter_.removeEventListener("mouseWheelScroll", id);
+            default:
+                return false;
+        }
+    }
 
-    bool Mouse::removeMouseMovedListener(int id) {
-        return eventEmitter_.removeEventListener("mouseMoved", id);
+    void Mouse::handleEvent(Event event) {
+        switch (event.type) {
+            case Event::MouseWheelScrolled:
+                eventEmitter_.emit("mouseWheelScroll", event.mouseWheelScroll.wheel,
+                    event.mouseWheelScroll.delta, event.mouseWheelScroll.x, event.mouseWheelScroll.y);
+                break;
+            case Event::MouseButtonPressed:
+                eventEmitter_.emit("mouseDown", event.mouseButton.button);
+                eventEmitter_.emit("mouseDown", event.mouseButton.button,
+                    event.mouseButton.x, event.mouseButton.y);
+                break;
+            case Event::MouseButtonReleased:
+                eventEmitter_.emit("mouseUp", event.mouseButton.button);
+                eventEmitter_.emit("mouseUp", event.mouseButton.button,
+                    event.mouseButton.x, event.mouseButton.y);
+                break;
+            case Event::MouseMoved:
+                eventEmitter_.emit("mouseMove", event.mouseMove.x, event.mouseMove.y);
+                break;
+            default:
+                break;
+        }
     }
 }

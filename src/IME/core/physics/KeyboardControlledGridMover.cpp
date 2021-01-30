@@ -80,8 +80,8 @@ namespace ime {
 
     void KeyboardControlledGridMover::removeInputEventListeners() {
         if (onTriggerHandlerId_ != -1) {
-            if (!keyboard_.removeEventListener(KeyEvent::KeyDown, onTriggerHandlerId_))
-                keyboard_.removeEventListener(KeyEvent::KeyUp, onTriggerHandlerId_);
+            if (!keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_))
+                keyboard_.unsubscribe(KeyboardEvent::KeyUp, onTriggerHandlerId_);
 
             onTriggerHandlerId_ = -1;
         }
