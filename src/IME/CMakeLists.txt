@@ -72,6 +72,7 @@ set(IME_SRC
     graphics/Tile.cpp
     graphics/Window.cpp
     graphics/SpriteSheet.cpp
+    graphics/SpriteSheetContainer.cpp
     utility/ConfigFileParser.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp
@@ -107,7 +108,7 @@ if(IME_OPTIMIZE_SINGLE_BUILD)
             endforeach()
         endforeach()
 
-        set(IME_SRC ${NEW_IME_SRC} core/time/TimerManager.cpp)
+        set(IME_SRC ${NEW_IME_SRC})
     endif()
 endif()
 
