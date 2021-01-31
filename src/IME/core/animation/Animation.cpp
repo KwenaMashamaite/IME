@@ -148,9 +148,9 @@ namespace ime {
     {
         auto newFrames = std::vector<Frame>{};
         if (arrangement == FrameArrangement::Horizontal)
-            newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, static_cast<int>(numOfFrames) - 1});
+            newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, (startPos.colm + static_cast<int>(numOfFrames)) - 1});
         else
-            newFrames = spriteSheet_.getFramesInRange(startPos, {static_cast<int>(numOfFrames) - 1, startPos.colm});
+            newFrames = spriteSheet_.getFramesInRange(startPos, {(startPos.row + static_cast<int>(numOfFrames)) - 1, startPos.colm});
 
         if (newFrames.empty())
             return;
