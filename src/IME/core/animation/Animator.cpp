@@ -29,19 +29,42 @@
 
 namespace ime {
     Animator::Animator(Sprite& target) :
-        target_{target},
         timescale_{1.0f},
         isPlaying_{false},
         isPaused_{false},
-        hasStarted_{false}
+        hasStarted_{false},
+        target_{std::make_unique<std::reference_wrapper<Sprite>>(target)}
     {}
 
-    Animator &Animator::operator=(Animator && other) {
-        //Can't use default one because of reference member
-        if (this != &other)
-            *this = std::move(other);
+    Animator::Animator(const Animator& other) :
+        currentFrameIndex_{other.currentFrameIndex_},
+        totalTime_{other.totalTime_},
+        timescale_{other.timescale_},
+        isPlaying_{other.isPlaying_},
+        isPaused_{other.isPaused_},
+        hasStarted_{other.hasStarted_},
+        eventEmitter_{other.eventEmitter_},
+        currentAnimation_{other.currentAnimation_},
+        chains_{other.chains_},
+        animations_{other.animations_}
+    {}
 
+    Animator &Animator::operator=(Animator other) {
+        swap(other);
         return *this;
+    }
+
+    void Animator::swap(Animator &other) {
+        std::swap(currentFrameIndex_, other.currentFrameIndex_);
+        std::swap(totalTime_, other.totalTime_);
+        std::swap(timescale_, other.timescale_);
+        std::swap(isPlaying_, other.isPlaying_);
+        std::swap(isPaused_, other.isPaused_);
+        std::swap(hasStarted_, other.hasStarted_);
+        std::swap(eventEmitter_, other.eventEmitter_);
+        std::swap(currentAnimation_, other.currentAnimation_);
+        std::swap(chains_, other.chains_);
+        std::swap(animations_, other.animations_);
     }
 
     Animation::sharedPtr Animator::createAnimation(const std::string &name,
@@ -52,6 +75,10 @@ namespace ime {
             return animation;
         else
             return nullptr;
+    }
+
+    void Animator::setTarget(Sprite &target) {
+        target_ = std::make_unique<std::reference_wrapper<Sprite>>(target);
     }
 
     void Animator::setTimescale(float timescale) {
@@ -247,6 +274,7 @@ namespace ime {
     }
 
     void Animator::update(Time deltaTime) {
+        IME_ASSERT(target_, "Cannot start Animator without a target to animate");
         if (!currentAnimation_ || !isPlaying_ || isPaused_)
             return;
 
@@ -325,7 +353,7 @@ namespace ime {
     void Animator::onStart() {
         hasStarted_ = true;
         if (currentAnimation_->isTargetShownOnStart())
-            target_.setVisible(true);
+            (*target_).get().setVisible(true);
 
         resetCurrentFrame();
         fireEvent(Event::AnimationStart, currentAnimation_);
@@ -333,7 +361,7 @@ namespace ime {
 
     void Animator::onComplete() {
         if (currentAnimation_->isTargetHiddenOnCompletion())
-            target_.setVisible(false);
+            (*target_).get().setVisible(false);
 
         isPlaying_ = isPaused_ = hasStarted_ = false;
         totalTime_ = Time::Zero;
@@ -384,7 +412,7 @@ namespace ime {
     }
 
     void Animator::setCurrentFrame(Animation::Frame frame) {
-        target_.setTexture(currentAnimation_->getSpriteSheet().getTextureFilename());
+        (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTextureFilename());
 
         /**
          * When the texture is set on the sprite, it uses the original image
@@ -397,7 +425,7 @@ namespace ime {
          * on the sprite are the same
          */
         auto offset = currentAnimation_->getSpriteSheet().getRelativePosition();
-        target_.setTextureRect(offset.x + frame.left, offset.y + frame.top, frame.width, frame.height);
+        (*target_).get().setTextureRect(offset.x + frame.left, offset.y + frame.top, frame.width, frame.height);
     }
 
     void Animator::resetCurrentFrame() {

@@ -58,7 +58,7 @@ namespace ime {
         /**
          * @brief Copy assignment operator
          */
-        Sprite& operator=(const Sprite&);
+        Sprite& operator=(Sprite);
 
         /**
          * @brief Set the texture of the object
@@ -371,11 +371,17 @@ namespace ime {
          */
         void updateAnimation(Time deltaTime);
 
+        /**
+         * @brief Swap this sprite with another sprite
+         * @param other The sprite to be swapped with this sprite
+         */
+        void swap(Sprite& other);
+
     private:
         sf::Sprite sprite_;           //!< Third party sprite
         std::string textureFileName_; //!< Filename of the texture used by the object
         bool isVisible_;              //!< Flags whether or not the sprite is visible
-        Colour prevSpriteColour;      //!< Sprite colour before it was hidden
+        Colour prevSpriteColour_;     //!< Sprite colour before it was hidden
         Animator animator_;           //!< Sprite animator
     };
 }

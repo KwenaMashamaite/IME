@@ -33,20 +33,28 @@ namespace ime {
         animator_{*this}
     {}
 
-    Sprite::Sprite(const Sprite & other) : animator_{*this} {
-        sprite_ = other.sprite_;
-        textureFileName_ = other.textureFileName_;
-        isVisible_ = other.isVisible_;
-        prevSpriteColour = other.prevSpriteColour;
+    Sprite::Sprite(const Sprite & other) :
+        sprite_{other.sprite_},
+        textureFileName_{other.textureFileName_},
+        isVisible_{other.isVisible_},
+        prevSpriteColour_{other.prevSpriteColour_},
+        animator_{other.animator_}
+    {
+        animator_.setTarget(*this); // The reason why we don't use the default copy constructor
     }
 
-    Sprite &Sprite::operator=(const Sprite & other) {
-        if (this != &other) {
-            auto temp(other);
-            std::swap(*this, temp);
-        }
-
+    Sprite &Sprite::operator=(Sprite other) {
+        swap(other);
+        animator_.setTarget(*this);
         return *this;
+    }
+
+    void Sprite::swap(Sprite &other) {
+        std::swap(sprite_, other.sprite_);
+        std::swap(textureFileName_, other.textureFileName_);
+        std::swap(isVisible_, other.isVisible_);
+        std::swap(prevSpriteColour_, other.prevSpriteColour_);
+        std::swap(animator_, other.animator_);
     }
 
     void Sprite::setPosition(float x, float y) {
@@ -138,10 +146,10 @@ namespace ime {
 
         if (visible) {
             isVisible_ = true;
-            setColour(prevSpriteColour);
+            setColour(prevSpriteColour_);
         } else {
             isVisible_ = false;
-            prevSpriteColour = getColour();
+            prevSpriteColour_ = getColour();
             sprite_.setColor(sf::Color::Transparent);
         }
     }

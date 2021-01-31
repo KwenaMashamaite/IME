@@ -45,7 +45,8 @@ namespace ime {
      * This class takes an Animation object and animates a sprite
      * with the properties of the animation object. The animator
      * can store multiple animations but only one can be played at
-     * a time
+     * a time. This class is usually not instantiated directly, all
+     * animatable entities internally have an animator
      */
     class IME_API Animator {
     public:
@@ -73,24 +74,31 @@ namespace ime {
         explicit Animator(Sprite& target);
 
         /**
-         * @brief Copy constructor
+         * @brief Construct animator from an existing animator
+         * @param other The animator to construct this animator from
+         *
+         * @warning The target of @a other will not be copied because an
+         * animation target can only be owned by one animator. Therefore,
+         * the target will be empty after construction. This means that
+         * you have to initialize the target yourself by calling setTarget
+         * after this constructor finishes
+         *
+         * @see setTarget
          */
-        Animator(const Animator&) = delete;
+        Animator(const Animator& other);
 
         /**
-         * @brief Copy assignment operator
+         * @brief Assign this animator to another animator
+         * @param other The animator to be assigned
+         *
+         * @warning The target of @a other will not be copied to this
+         * animators target because an animation target can only be owned
+         * by one animator. This means that all the properties of this
+         * animator will be assigned the properties of @a other but the
+         * target property will be the same as before the assignment. In
+         * other words, the animators will not share a target
          */
-        Animator& operator=(const Animator&) = delete;
-
-        /**
-         * @brief Move constructor
-         */
-        Animator(Animator&&) = default;
-
-        /**
-         * @brief Move assignment operator
-         */
-        Animator& operator=(Animator&&);
+        Animator& operator=(Animator);
 
         /**
          * @brief Create an animation in the animator
@@ -116,6 +124,18 @@ namespace ime {
          */
         Animation::sharedPtr createAnimation(const std::string &name,
             const SpriteSheet& spriteSheet, Time duration = Time::Zero);
+
+        /**
+         * @brief Set the target to be animated
+         * @param target The target for the animations
+         *
+         * @warning This function does not enforce the one animator per
+         * target rule. This means that if you call this function on
+         * multiple animator instances with the same argument, then @a target
+         * will be animated by multiple animators at once and the result may
+         * not be what you expect
+         */
+        void setTarget(Sprite& target);
 
         /**
          * @brief Set the timescale factor
@@ -332,7 +352,7 @@ namespace ime {
         /**
          * @brief Restart the current animation from the beginning
          *
-         * This function will dispatch an Event::AnmationRestart event
+         * This function will dispatch an Event::AnimationRestart event
          */
         void restart();
 
@@ -509,8 +529,13 @@ namespace ime {
           */
         void fireEvent(Event event, Animation::sharedPtr animation);
 
+        /**
+         * @brief Swap another animator with this animator
+         * @param other Object to be swapped with this object
+         */
+        void swap(Animator& other);
+
     private:
-        Sprite& target_;                          //!< Sprite to be animated
         unsigned int currentFrameIndex_;          //!< The index of the animation frame that is currently displayed
         Time totalTime_;                          //!< Time passed since animation was started
         float timescale_;                         //!< Timescale factor for the current animation
@@ -521,6 +546,7 @@ namespace ime {
         Animation::sharedPtr currentAnimation_;   //!< Pointer to the current animation
         std::queue<Animation::sharedPtr> chains_; //!< Animations that play immediately after the current animation finishes
 
+        std::unique_ptr<std::reference_wrapper<Sprite>> target_;          //!< Sprite to be animated
         std::unordered_map<std::string, Animation::sharedPtr> animations_; //!< Animations container
     };
 }
