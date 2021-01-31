@@ -27,6 +27,11 @@
 #include <SFML/Window/Keyboard.hpp>
 
 namespace ime::input {
+    Keyboard::Keyboard() {
+        for (auto i = 0; i < static_cast<int>(Key::KeyCount) - 1; ++i)
+            wasDown_[i] = false;
+    }
+
     bool Keyboard::isKeyPressed(Key keyId) {
         return sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(keyId));
     }
@@ -37,6 +42,10 @@ namespace ime::input {
 
     int Keyboard::onKeyDown(Callback<Keyboard::Key> callback) {
         return eventEmitter_.on("keyDown", std::move(callback));
+    }
+
+    int Keyboard::onKeyHeld(Callback<Keyboard::Key> callback) {
+        return eventEmitter_.on("keyHeld", std::move(callback));
     }
 
     bool Keyboard::unsubscribe(KeyboardEvent event, int id) {
@@ -53,9 +62,15 @@ namespace ime::input {
     void Keyboard::handleEvent(Event event) {
         switch (event.type) {
             case Event::KeyPressed:
-                eventEmitter_.emit("keyDown", event.key.code);
+                if (wasDown_[static_cast<int>(event.key.code)])
+                    eventEmitter_.emit("keyHeld", event.key.code);
+                else {
+                    wasDown_[static_cast<int>(event.key.code)] = true;
+                    eventEmitter_.emit("keyDown", event.key.code);
+                }
                 break;
             case Event::KeyReleased:
+                wasDown_[static_cast<int>(event.key.code)] = false;
                 eventEmitter_.emit("keyUp", event.key.code);
                 break;
             default:

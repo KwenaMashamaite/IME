@@ -55,10 +55,10 @@ namespace ime {
              * @param callback Function to be executed when the key is released
              * @return The event listeners identification number
              *
-             * This event is triggered only when a depressed key is
+             * This event is triggered only when a depressed/held key is
              * released. The callback is passed the key that was released
              *
-             * @see onKeyDown
+             * @see onKeyDown and onKeyHeld
              */
             int onKeyUp(Callback<Keyboard::Key> callback);
 
@@ -67,12 +67,28 @@ namespace ime {
              * @param callback Function to be executed when a key is down
              * @return The event listeners identification number
              *
-             * @note This event will continue to fire while the key is
-             * held down
+             * The key down event fires once when a key is depressed. If the
+             * key remains depressed a key held event fires. In other words,
+             * if you press and hold a key on the keyboard, the key down event
+             * will fire once and wil not fire again until the key is released
+             * and pressed again
              *
-             * @see onKeyUp
+             * @see onKeyUp and onKeyHeld
              */
             int onKeyDown(Callback<Keyboard::Key> callback);
+
+            /**
+             * @brief Add an event listener to a key held event
+             * @param callback Function to be executed when a key is held
+             * @return The event listeners identification number
+             *
+             * The key held event will continue to fire while a key is held
+             * down. The event always fires after a key down event. The
+             * callback is passed the key that is held down
+             *
+             * @see onKeyDown
+             */
+            int onKeyHeld(Callback<Keyboard::Key> callback);
 
             /**
              * @brief Remove an event listener from a key down or key up event

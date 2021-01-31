@@ -37,6 +37,10 @@ namespace ime::input {
         return keyboard_.onKeyDown(std::move(callback));
     }
 
+    int InputManager::onKeyHeld(Callback<Keyboard::Key> callback) {
+        return keyboard_.onKeyHeld(std::move(callback));
+    }
+
     bool InputManager::unsubscribe(KeyboardEvent event, int id) {
         return keyboard_.unsubscribe(event, id);
     }

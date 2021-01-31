@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
+#include <unordered_map>
 
 namespace ime {
     class Event; //!< Event class forward declaration
@@ -35,8 +36,9 @@ namespace ime {
      * @brief Keyboard events
      */
     enum class KeyboardEvent {
-        KeyDown, //!< Fired when key is depressed
-        KeyUp    //!< Fired when depressed key is released
+        KeyUp,   //!< Fired when depressed/held key is released
+        KeyDown, //!< Fired when key is depressed for the first time
+        KeyHeld  //!< Fired when a depressed key remains held
     };
 
     namespace input {
@@ -160,6 +162,11 @@ namespace ime {
             };
 
             /**
+             * @brief Default constructor
+             */
+            Keyboard();
+
+            /**
              * @brief Check if a key is pressed or not
              * @param key Key to be checked
              * @return True if the key is pressed or false if it not pressed
@@ -174,10 +181,10 @@ namespace ime {
              * @param callback Function to be executed when a key is released
              * @return The event listeners identification number
              *
-             * This event is triggered only when a depressed key is released.
-             * The callback is passed the key that was released
+             * This event is triggered only when a depressed/held key is
+             * released. The callback is passed the key that was released
              *
-             * @see onKeyDown
+             * @see onKeyDown and onKeyHeld
              */
             int onKeyUp(Callback<Key> callback);
 
@@ -186,11 +193,28 @@ namespace ime {
              * @param callback Function to be executed when the key is down
              * @return The event listeners identification number
              *
-             * This event will continue to fire while a key is held down
+             * The key down event fires once when a key is depressed. If the
+             * key remains depressed a key held event fires. In other words,
+             * if you press and hold a key on the keyboard, the key down event
+             * will fire once and wil not fire again until the key is released
+             * and pressed again
              *
-             * @see onKeyUp
+             * @see onKeyUp and onKeyHeld
              */
             int onKeyDown(Callback<Key> callback);
+
+            /**
+             * @brief Add an event listener to a key held event
+             * @param callback Function to be executed when a key is held
+             * @return The event listeners identification number
+             *
+             * The key held event will continue to fire while a key is held
+             * down. The event always fires after a key down event. The
+             * callback is passed the key that is held down
+             *
+             * @see onKeyDown
+             */
+            int onKeyHeld(Callback<Key> callback);
 
             /**
              * @brief Remove an event listener from a key down or key up event
@@ -210,6 +234,7 @@ namespace ime {
 
         private:
             EventEmitter eventEmitter_; //!< Event publisher
+            std::unordered_map<int, bool> wasDown_; //!< The state of a key in the previous frame
         };
     }
 }
