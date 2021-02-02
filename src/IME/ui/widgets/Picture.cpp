@@ -36,7 +36,7 @@ namespace ime::ui {
 
     Picture::Picture(const std::string &filename, bool transparentTexture) :
         picture_{tgui::Picture::create(
-            ime::ResourceManager::getInstance()->getTexture(filename), transparentTexture)},
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture(), transparentTexture)},
         renderer_{std::make_shared<PictureRenderer>()}
     {
         renderer_->setInternalPtr(picture_->getRenderer());
@@ -46,7 +46,7 @@ namespace ime::ui {
     Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture) :
         renderer_{std::make_shared<PictureRenderer>()}
     {
-        ime::ResourceManager::getInstance()->getTexture(filename); //Load the image in the engine first
+        ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture(); //Load the image in the engine first
         auto path = ime::ResourceManager::getInstance()->getPathFor(ResourceType::Texture);
         picture_ = tgui::Picture::create(
             {path + filename, {frame.left, frame.top, frame.width, frame.height}},

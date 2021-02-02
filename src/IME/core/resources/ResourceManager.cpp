@@ -65,7 +65,7 @@ namespace ime {
         return *(fonts_.get(fileName));
     }
 
-    const sf::Texture &ResourceManager::getTexture(const std::string &fileName) {
+    const Texture &ResourceManager::getTexture(const std::string &fileName) {
         return *(textures_.get(fileName));
     }
 

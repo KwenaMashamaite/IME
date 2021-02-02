@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/core/tilemap/Index.h"
+#include "Texture.h"
 #include <vector>
 #include <string>
 #include <optional>
@@ -62,6 +63,8 @@ namespace ime {
         /**
          * @brief Create the spritesheet
          * @param area Sub-rectangle to construct spritesheet from
+         * @throws FileNotFount if the the source image cannot be found on the
+         *         disk (Filename given during construction)
          *
          * The @a area can be used to construct the spritesheet from a
          * sub-rectangle of the whole spritesheet image. To construct
@@ -296,6 +299,19 @@ namespace ime {
         std::vector<Sprite> getAllSprites() const;
 
         /**
+         * @brief Get the texture used to create the spritesheet
+         * @return The spritesheet texture
+         *
+         * @warning Don't call this function when the spritesheet is not yet
+         * created. Also, the texture is destroyed when the spritesheet is
+         * destroyed, exercise caution when there are Sprite objects referencing
+         * the spritesheet texture
+         *
+         * @see create
+         */
+        const Texture& getTexture() const;
+
+        /**
          * @brief Get the top-left position of the spritesheet relative to
          *        the original spritesheet image
          * @return The relative top-left position
@@ -364,28 +380,12 @@ namespace ime {
     private:
         /**
          * @brief Calculate the dimensions of interest from spritesheet image
-         * @param area Sub-rectangle to load
          *
-         * This function loads the spritesheet image and  calculates the
+         * This function loads the spritesheet image and calculates the
          * size of the spritesheet, the number of rows and columns based
          * on the given frame size
          */
-        void computeDimensions(UIntRect area);
-
-        /**
-         * @brief Create a sprite from a frame
-         * @param frame The frame to construct the sprite from
-         * @return The created sprite
-         */
-        Sprite createSprite(Frame frame) const;
-
-        /**
-         * @brief Create a group of sprites from a group of frames
-         * @param frames The frames to construct the sprites from
-         * @return The created sprites or an empty vector if the frames
-         *         vector is empty
-         */
-        std::vector<Sprite> createSprites(const std::vector<Frame>& frames) const;
+        void computeDimensions();
 
     private:
         std::string name_;      //!< The name of the spritesheet
@@ -397,6 +397,7 @@ namespace ime {
         Vector2u relativePos_;  //!< The top-left position of the spritesheet relative to the top-left position of the original spritesheet image
         bool isReady_;          //!< A flag indicating whether or not the spritesheet is created
 
+        std::shared_ptr<Texture> texture_;               //!< Spritesheet texture
         std::unordered_map<Index, Frame> frames_;        //!< Stores the frames
         std::unordered_map<std::string, Index> aliases_; //!< Saves the index of frames with aliases
     };

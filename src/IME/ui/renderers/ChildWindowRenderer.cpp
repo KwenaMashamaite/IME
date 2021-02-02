@@ -133,12 +133,12 @@ namespace ime::ui {
 
     void ChildWindowRenderer::setTextureTitleBar(const std::string &filename) {
         windowRenderer_->setTextureTitleBar(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void ChildWindowRenderer::setTextureBackground(const std::string &filename) {
         windowRenderer_->setTextureBackground(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void ChildWindowRenderer::setOpacity(float opacity) {

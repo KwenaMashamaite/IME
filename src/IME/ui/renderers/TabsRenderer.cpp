@@ -166,27 +166,27 @@ namespace ime::ui {
 
     void TabsRenderer::setTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureTab(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void TabsRenderer::setTabHoverTexture(const std::string &filename) {
         tabsRenderer_->setTextureTabHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void TabsRenderer::setSelectedTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureSelectedTab(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void TabsRenderer::setSelectedTabHoverTexture(const std::string &filename) {
         tabsRenderer_->setTextureSelectedTabHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void TabsRenderer::setDisabledTabTexture(const std::string &filename) {
         tabsRenderer_->setTextureDisabledTab(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void TabsRenderer::setDistanceToSide(float distanceToSide) {

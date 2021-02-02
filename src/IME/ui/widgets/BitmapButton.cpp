@@ -62,7 +62,7 @@ namespace ime::ui {
     }
     
     void BitmapButton::setImage(const std::string &filename) {
-        button_->setImage(ime::ResourceManager::getInstance()->getTexture(filename));
+        button_->setImage(ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void BitmapButton::setImageScaling(float relativeHeight) {

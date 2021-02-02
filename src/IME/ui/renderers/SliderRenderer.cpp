@@ -95,22 +95,22 @@ namespace ime::ui {
 
     void SliderRenderer::setTrackTexture(const std::string &filename) {
         sliderRenderer_->setTextureTrack(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void SliderRenderer::setTrackHoverTexture(const std::string &filename) {
         sliderRenderer_->setTextureTrackHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void SliderRenderer::setThumbTexture(const std::string &filename) {
         sliderRenderer_->setTextureThumb(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void SliderRenderer::setThumbHoverTexture(const std::string &filename) {
         sliderRenderer_->setTextureThumbHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void SliderRenderer::setThumbWithinTrack(bool keepThumbInside) {

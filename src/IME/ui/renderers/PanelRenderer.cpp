@@ -57,7 +57,7 @@ namespace ime::ui {
 
     void PanelRenderer::setBackgroundTexture(const std::string &texture) {
         panelRenderer_->setTextureBackground(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void PanelRenderer::setOpacity(float opacity) {

@@ -247,22 +247,22 @@ namespace ime::ui {
 
     void EditBoxRenderer::setTexture(const std::string &filename) {
         editBoxRenderer_->setTexture(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void EditBoxRenderer::setHoverTexture(const std::string &filename) {
         editBoxRenderer_->setTextureHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void EditBoxRenderer::setDisabledTexture(const std::string &filename) {
         editBoxRenderer_->setTextureDisabled(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void EditBoxRenderer::setFocusedTexture(const std::string &filename) {
         editBoxRenderer_->setTextureFocused(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void EditBoxRenderer::setOpacity(float opacity) {

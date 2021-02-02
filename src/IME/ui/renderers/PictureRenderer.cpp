@@ -28,7 +28,7 @@
 
 namespace ime::ui {
     void PictureRenderer::setTexture(const std::string &filename) {
-        pictureRenderer_->setTexture(ResourceManager::getInstance()->getTexture(filename));
+        pictureRenderer_->setTexture(ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void PictureRenderer::setOpacity(float opacity) {

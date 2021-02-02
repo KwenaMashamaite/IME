@@ -102,7 +102,7 @@ namespace ime::ui {
 
     void LabelRenderer::setBackgroundTexture(const std::string &filename) {
         labelRenderer_->setTextureBackground(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void LabelRenderer::setScrollbarWidth(float scrollbarWidth) {

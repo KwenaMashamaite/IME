@@ -123,7 +123,7 @@ namespace ime {
          * @throws FileNotFound If the texture cannot be found on the disk
          * @return The requested texture
          */
-        const sf::Texture &getTexture(const std::string &fileName);
+        const Texture &getTexture(const std::string &fileName);
 
         /**
          * @brief Get a sound buffer

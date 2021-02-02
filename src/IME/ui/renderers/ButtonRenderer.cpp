@@ -173,27 +173,27 @@ namespace ime::ui {
 
     void ButtonRenderer::setTexture(const std::string &texture) {
         buttonRenderer_->setTexture(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ButtonRenderer::setTextureHover(const std::string &texture) {
         buttonRenderer_->setTextureHover(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ButtonRenderer::setMouseDownTexture(const std::string &texture) {
         buttonRenderer_->setTextureDown(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ButtonRenderer::setDisabledTexture(const std::string &texture) {
         buttonRenderer_->setTextureDisabled(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ButtonRenderer::setFocusedTextureFocused(const std::string& texture) {
         buttonRenderer_->setTextureDisabled(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ButtonRenderer::setTextStyle(TextStyle style) {

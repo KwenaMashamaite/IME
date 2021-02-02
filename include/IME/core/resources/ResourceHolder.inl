@@ -52,6 +52,13 @@ inline bool ResourceHolder<sf::Music>::loadFromFile(const std::string &filename)
     return resourceHolder_.insert({filename, std::move(music)}).second;
 }
 
+template<>
+inline bool ResourceHolder<Texture>::loadFromFile(const std::string& filename) {
+    if (hasResource(filename))
+        return true;
+    return resourceHolder_.insert({filename, std::make_shared<Texture>(filename)}).second;
+}
+
 template<class T>
 bool ResourceHolder<T>::unload(const std::string &filename) {
     return resourceHolder_.erase(filename);

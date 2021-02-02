@@ -36,21 +36,8 @@ namespace ime {
         isReady_{false}
     {}
 
-    void SpriteSheet::computeDimensions(UIntRect area) {
-        relativePos_ = {0, 0};
-        auto texture = ResourceManager::getInstance()->getTexture(filename_);
-        if (area.width != 0 && area.height != 0) { // Create spritesheet from sub-rectangle of the spritesheet image
-            auto image = ResourceManager::getInstance()->getImage(filename_);
-            auto sfArea = sf::IntRect {
-                static_cast<int>(area.left), static_cast<int>(area.top),
-                static_cast<int>(area.width),static_cast<int>(area.height)
-            };
-
-            if(texture.loadFromImage(image, sfArea))
-                relativePos_ = {area.left, area.top};
-        }
-
-        sizeInPixels_ = Vector2u{texture.getSize().x, texture.getSize().y};
+    void SpriteSheet::computeDimensions() {
+        sizeInPixels_ = Vector2u{texture_->getSize().x, texture_->getSize().y};
 
         //At this point, the size in frames includes the spacing between frames which may
         //result in the wrong number of rows and columns. We assign it here so that we can
@@ -65,7 +52,10 @@ namespace ime {
     }
 
     void SpriteSheet::create(UIntRect area) {
-        computeDimensions(area);
+        relativePos_ = {0, 0};
+        relativePos_ = {area.left, area.top};
+        texture_ = std::make_shared<Texture>(filename_, area);
+        computeDimensions();
 
         auto currentPos = spacing_;
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
@@ -167,13 +157,13 @@ namespace ime {
 
     Sprite SpriteSheet::getSprite(Index index) const {
         if (hasFrame(index))
-            return createSprite(frames_.at(index));
+            return Sprite(*texture_, frames_.at(index));
         return Sprite();
     }
 
     Sprite SpriteSheet::getSprite(const std::string &alias) const {
         if (hasFrame(alias))
-            return createSprite(frames_.at(aliases_.at(alias)));
+            return Sprite(*texture_, frames_.at(aliases_.at(alias)));
         return Sprite();
     }
 
@@ -192,10 +182,10 @@ namespace ime {
         if (hasFrame(start) && hasFrame(end)) {
             if (start.row == end.row) {
                 for (auto colm = start.colm; colm <= end.colm; ++colm)
-                    sprites.push_back(createSprite(frames_.at({ start.row, colm})));
+                    sprites.push_back(Sprite(*texture_, frames_.at({ start.row, colm})));
             } else if (start.colm == end.colm) {
                 for (auto row = start.row; row <= end.row; ++row)
-                    sprites.push_back(createSprite(frames_.at({row, start.colm})));
+                    sprites.push_back(Sprite(*texture_, frames_.at({row, start.colm})));
             }
         }
         return sprites;
@@ -208,6 +198,11 @@ namespace ime {
             std::move(spritesOnRow.begin(), spritesOnRow.end(), std::back_inserter(sprites));
         }
         return sprites;
+    }
+
+    const Texture &SpriteSheet::getTexture() const {
+        IME_ASSERT(isReady_, "SpriteSheet::getTexture() called on a spritesheet without a texture");
+        return *texture_;
     }
 
     const std::string &SpriteSheet::getTextureFilename() const {
@@ -234,21 +229,5 @@ namespace ime {
 
     bool SpriteSheet::isReady() const {
         return isReady_;
-    }
-
-    Sprite SpriteSheet::createSprite(SpriteSheet::Frame frame) const {
-        auto sprite = Sprite();
-        sprite.setTexture(filename_);
-        sprite.setTextureRect(relativePos_.x + frame.left, relativePos_.y + frame.top, frame.width, frame.height);
-        return sprite;
-    }
-
-    std::vector<Sprite> SpriteSheet::createSprites(const std::vector<Frame> &frames) const {
-        auto sprites = std::vector<Sprite>{};
-        if (!frames.empty()) {
-            for (const auto& frame : frames)
-                sprites.push_back(createSprite(frame));
-        }
-        return sprites;
     }
 }

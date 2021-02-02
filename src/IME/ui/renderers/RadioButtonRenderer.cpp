@@ -272,42 +272,42 @@ namespace ime::ui {
 
     void RadioButtonRenderer::setUncheckedTexture(const std::string &filename) {
         buttonRenderer_->setTextureUnchecked(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setCheckedTexture(const std::string &filename) {
         buttonRenderer_->setTextureChecked(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setUncheckedHoverTexture(const std::string &filename) {
         buttonRenderer_->setTextureUncheckedHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setCheckedHoverTexture(const std::string &filename) {
         buttonRenderer_->setTextureCheckedHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setUncheckedDisabledTexture(const std::string &filename) {
         buttonRenderer_->setTextureUncheckedDisabled(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setCheckedDisabledTexture(const std::string &filename) {
         buttonRenderer_->setTextureCheckedDisabled(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setUncheckedFocusedTexture(const std::string &filename) {
         buttonRenderer_->setTextureUncheckedFocused(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setCheckedFocusedTexture(const std::string &filename) {
         buttonRenderer_->setTextureCheckedFocused(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void RadioButtonRenderer::setTextStyle(TextStyle style) {

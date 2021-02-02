@@ -31,6 +31,7 @@
 #include "IME/core/time/Time.h"
 #include "IME/graphics/IDrawable.h"
 #include "IME/graphics/Colour.h"
+#include "IME/graphics/Texture.h"
 #include "IME/core/animation/Animator.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <string>
@@ -46,9 +47,44 @@ namespace ime {
     class IME_API Sprite : public ITransformable, public IDrawable {
     public:
         /**
-         * @brief Default constructor
+         * @brief Construct an empty sprite
+         *
+         * @see setTexture and setTextureRect
          */
         Sprite();
+
+        /**
+         * @brief Construct a sprite from a texture
+         * @param texture Filename of the texture to construct the sprite from
+         *
+         * @see setTextureRect
+         */
+        Sprite(const std::string& texture);
+
+        /**
+         * @brief Construct a sprite from a texture
+         * @param texture Texture to construct sprite from
+         *
+         * @see setTextureRect
+         */
+        Sprite(const Texture& texture);
+
+        /**
+         * @brief Construct the sprite from a sub-rectangle of a source texture
+         * @param texture The source texture
+         * @param rectangle Sub-rectangle of the texture to assign to the sprite
+         *
+         * This function is a shortcut for:
+         *
+         * @code
+         * auto sprite = Sprite();
+         * sprite.setTexture(texture);
+         * sprite.setTextureRect(rectangle);
+         * @endcode
+         *
+         * @see setTexture and setTextureRect
+         */
+        Sprite(const Texture& texture, const UIntRect& rectangle);
 
         /**
          * @brief Copy constructor
@@ -65,14 +101,28 @@ namespace ime {
          * @param filename Filename of the texture to set
          * @throws FileNotFound if the specified texture cannot be found
          *         in the images path
+         *
+         * This function will set the texture to the whole image
          */
         void setTexture(const std::string &filename);
+
+        /**
+         * @brief Set the texture of the sprite from a source texture
+         * @param texture The source texture
+         *
+         * The @a texture argument refers to a texture that must exist as
+         * long as the sprite uses it. Indeed, the sprite doesn't store its
+         * own copy of the texture, but rather keeps a pointer to the one
+         * that you passed to this function. If the source texture is destroyed
+         * and the sprite tries to use it, the behavior is undefined
+         */
+        void setTexture(const Texture& texture);
 
         /**
          * @brief Get the name of the texture used by the sprite
          * @return Name of the texture used by the sprite
          */
-        const std::string& getTexture() const;
+        const Texture& getTexture() const;
 
         /**
          * @brief Set the sub-rectangle of the texture that the sprite
@@ -88,7 +138,8 @@ namespace ime {
          *
          * By default, the sprite displays the entire texture
          */
-        void setTextureRect(int left, int top, int width, int height);
+        void setTextureRect(unsigned int left, unsigned int top, unsigned int width,
+            unsigned int height);
 
         /**
          * @brief Set the sub-rectangle of the texture that the
@@ -100,7 +151,7 @@ namespace ime {
          *
          * By default, the sprite displays the entire texture
          */
-        void setTextureRect(IntRect rect);
+        void setTextureRect(const UIntRect& rect);
 
         /**
          * @brief Get the sub-rectangle of the texture displayed
@@ -108,7 +159,7 @@ namespace ime {
          * @return The sub-rectangle of the texture displayed by the
          *         sprite
          */
-        IntRect getTextureRect() const;
+        UIntRect getTextureRect() const;
 
         /**
          * @brief Set the colour of the sprite
@@ -377,12 +428,17 @@ namespace ime {
          */
         void swap(Sprite& other);
 
+        /**
+         * @brief Destructor
+         */
+        virtual ~Sprite();
+
     private:
         sf::Sprite sprite_;           //!< Third party sprite
-        std::string textureFileName_; //!< Filename of the texture used by the object
         bool isVisible_;              //!< Flags whether or not the sprite is visible
         Colour prevSpriteColour_;     //!< Sprite colour before it was hidden
         Animator animator_;           //!< Sprite animator
+        const Texture* texture_;      //!< Sprite texture
     };
 }
 

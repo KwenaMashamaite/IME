@@ -30,17 +30,31 @@
 namespace ime {
     Sprite::Sprite() :
         isVisible_{true},
-        animator_{*this}
+        animator_{*this},
+        texture_{nullptr}
     {}
 
-    Sprite::Sprite(const Sprite & other) :
+    Sprite::Sprite(const std::string &texture) : Sprite() {
+        setTexture(texture);
+    }
+
+    Sprite::Sprite(const Texture &texture) : Sprite() {
+        setTexture(texture);
+    }
+
+    Sprite::Sprite(const Texture &texture, const UIntRect &rectangle) : Sprite() {
+        setTexture(texture);
+        setTextureRect(rectangle);
+    }
+
+    Sprite::Sprite(const Sprite& other) :
         sprite_{other.sprite_},
-        textureFileName_{other.textureFileName_},
         isVisible_{other.isVisible_},
         prevSpriteColour_{other.prevSpriteColour_},
-        animator_{other.animator_}
+        animator_{other.animator_},
+        texture_{other.texture_}
     {
-        animator_.setTarget(*this); // The reason why we don't use the default copy constructor
+        animator_.setTarget(*this);
     }
 
     Sprite &Sprite::operator=(Sprite other) {
@@ -51,10 +65,40 @@ namespace ime {
 
     void Sprite::swap(Sprite &other) {
         std::swap(sprite_, other.sprite_);
-        std::swap(textureFileName_, other.textureFileName_);
         std::swap(isVisible_, other.isVisible_);
         std::swap(prevSpriteColour_, other.prevSpriteColour_);
         std::swap(animator_, other.animator_);
+        std::swap(texture_, other.texture_);
+    }
+
+    void Sprite::setTexture(const Texture &texture) {
+        texture_ = &texture;
+        sprite_.setTexture(texture_->getInternalTexture(), true);
+    }
+
+    void Sprite::setTexture(const std::string &filename) {
+        texture_ = &ResourceManager::getInstance()->getTexture(filename);
+        sprite_.setTexture(texture_->getInternalTexture(), true);
+    }
+
+    void Sprite::setTextureRect(const UIntRect& rect) {
+        setTextureRect(rect.left, rect.top, rect.width, rect.height);
+    }
+
+    void Sprite::setTextureRect(unsigned int left, unsigned int top, unsigned int width,
+        unsigned int height)
+    {
+        sprite_.setTextureRect({static_cast<int>(left),
+            static_cast<int>(top),
+            static_cast<int>(width),
+            static_cast<int>(height)});
+    }
+
+    UIntRect Sprite::getTextureRect() const {
+        return {static_cast<unsigned int>(sprite_.getTextureRect().left),
+                static_cast<unsigned int>(sprite_.getTextureRect().top),
+                static_cast<unsigned int>(sprite_.getTextureRect().width),
+                static_cast<unsigned int>(sprite_.getTextureRect().height)};
     }
 
     void Sprite::setPosition(float x, float y) {
@@ -93,17 +137,12 @@ namespace ime {
         sprite_.scale({offset.x, offset.y});
     }
 
-    void Sprite::setTexture(const std::string &filename) {
-        sprite_.setTexture(ResourceManager::getInstance()->getTexture(filename));
-        textureFileName_ = filename;
-    }
-
     Vector2f Sprite::getPosition() const {
         return {sprite_.getPosition().x, sprite_.getPosition().y};
     }
 
-    const std::string &Sprite::getTexture() const {
-        return textureFileName_;
+    const Texture &Sprite::getTexture() const {
+        return *texture_;
     }
 
     FloatRect Sprite::getLocalBounds() const {
@@ -114,14 +153,6 @@ namespace ime {
     FloatRect Sprite::getGlobalBounds() const {
         return {sprite_.getGlobalBounds().left, sprite_.getGlobalBounds().top,
                 sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
-    }
-
-    void Sprite::setTextureRect(int left, int top, int width, int height) {
-        sprite_.setTextureRect({left, top, width, height});
-    }
-
-    void Sprite::setTextureRect(IntRect rect) {
-        setTextureRect(rect.left, rect.top, rect.width, rect.height);
     }
 
     void Sprite::draw(Window &renderTarget) const {
@@ -182,16 +213,17 @@ namespace ime {
         return {sprite_.getScale().x, sprite_.getScale().y};
     }
 
-    IntRect Sprite::getTextureRect() const {
-        return {sprite_.getTextureRect().left, sprite_.getTextureRect().top,
-                sprite_.getTextureRect().width, sprite_.getTextureRect().height};
-    }
-
     Animator &Sprite::getAnimator() {
         return animator_;
     }
 
     void Sprite::updateAnimation(Time deltaTime) {
         animator_.update(deltaTime);
+    }
+
+    Sprite::~Sprite() {
+        // We don't call delete because the memory will be deallocated by
+        // the resource manager
+        texture_ = nullptr;
     }
 }

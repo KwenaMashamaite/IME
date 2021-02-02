@@ -273,42 +273,42 @@ namespace ime::ui {
 
     void CheckBoxRenderer::setUncheckedTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureUnchecked(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setCheckedTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureChecked(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setUncheckedHoverTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureUncheckedHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setCheckedHoverTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureCheckedHover(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setUncheckedDisabledTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureUncheckedDisabled(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setCheckedDisabledTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureCheckedDisabled(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setUncheckedFocusedTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureUncheckedFocused(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setCheckedFocusedTexture(const std::string &filename) {
         checkBoxRenderer_->setTextureCheckedFocused(
-            ime::ResourceManager::getInstance()->getTexture(filename));
+            ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture());
     }
 
     void CheckBoxRenderer::setTextStyle(TextStyle style) {

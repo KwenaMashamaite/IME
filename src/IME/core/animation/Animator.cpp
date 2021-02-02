@@ -412,20 +412,8 @@ namespace ime {
     }
 
     void Animator::setCurrentFrame(Animation::Frame frame) {
-        (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTextureFilename());
-
-        /**
-         * When the texture is set on the sprite, it uses the original image
-         * that was used to construct the spritesheet. However if the
-         * spritesheet was constructed from a sub-rectangle then the top-left
-         * coordinates of a frame from the spritesheet are relative to the
-         * sub-rectangle and not the original image. Therefore we offset the
-         * top-left arguments to the sprites sub-rectangle so that the
-         * image referred to by the spritesheet frame and the image displayed
-         * on the sprite are the same
-         */
-        auto offset = currentAnimation_->getSpriteSheet().getRelativePosition();
-        (*target_).get().setTextureRect(offset.x + frame.left, offset.y + frame.top, frame.width, frame.height);
+        (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
+        (*target_).get().setTextureRect(frame.left, frame.top, frame.width, frame.height);
     }
 
     void Animator::resetCurrentFrame() {

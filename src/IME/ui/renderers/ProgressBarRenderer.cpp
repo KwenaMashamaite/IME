@@ -82,12 +82,12 @@ namespace ime::ui {
 
     void ProgressBarRenderer::setBackgroundTexture(const std::string &texture) {
         progressBarRenderer_->setTextureBackground(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ProgressBarRenderer::setFillTexture(const std::string &texture) {
         progressBarRenderer_->setTextureFill(
-            ime::ResourceManager::getInstance()->getTexture(texture));
+            ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
     }
 
     void ProgressBarRenderer::setTextStyle(TextStyle style) {
