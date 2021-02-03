@@ -39,7 +39,7 @@ namespace ime {
                 settings.addProperty({setting, type, std::forward<T>(defaultValue)});
                 IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)");
             } else {
-                settings.setValueFor<T>(setting, std::forward<T>(defaultValue));
+                settings.setValue<T>(setting, std::forward<T>(defaultValue));
                 IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)");
             }
         }
@@ -82,8 +82,8 @@ namespace ime {
     void Engine::processSettings() {
         setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", "STRING", std::string("Untitled"));
         setDefaultValueIfNotSet(settings_, "WINDOW_ICON", "STRING", std::string(""));
-        if (settings_.getValueFor<std::string>("WINDOW_ICON").empty())
-            settings_.setValueFor<std::string>("WINDOW_ICON", "OS"); //Operating System icon
+        if (settings_.getValue<std::string>("WINDOW_ICON").empty())
+            settings_.setValue<std::string>("WINDOW_ICON", "OS"); //Operating System icon
 
         setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH", "INT",  600);
         setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", "INT", 600);
@@ -100,10 +100,10 @@ namespace ime {
     void Engine::initRenderTarget() {
         auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
         auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-        auto title = settings_.getValueFor<std::string>("WINDOW_TITLE");
-        auto width = settings_.getValueFor<int>("WINDOW_WIDTH");
-        auto height = settings_.getValueFor<int>("WINDOW_HEIGHT");
-        auto isFullscreen = settings_.getValueFor<bool>("FULLSCREEN");
+        auto title = settings_.getValue<std::string>("WINDOW_TITLE");
+        auto width = settings_.getValue<int>("WINDOW_WIDTH");
+        auto height = settings_.getValue<int>("WINDOW_HEIGHT");
+        auto isFullscreen = settings_.getValue<bool>("FULLSCREEN");
         if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
             window_.create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
         } else {
@@ -114,19 +114,19 @@ namespace ime {
             window_.create(title, width, height, Window::Style::Close);
         }
 
-        window_.setFramerateLimit(settings_.getValueFor<int>("FPS_LIMIT"));
-        window_.setVsyncEnabled(settings_.getValueFor<bool>("V_SYNC"));
-        if (settings_.getValueFor<std::string>("WINDOW_ICON") != "OS")
-            window_.setIcon(settings_.getValueFor<std::string>("WINDOW_ICON"));
+        window_.setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
+        window_.setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
+        if (settings_.getValue<std::string>("WINDOW_ICON") != "OS")
+            window_.setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
     }
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
-        resourceManager_->setPathFor(ResourceType::Font, settings_.getValueFor<std::string>("FONTS_DIR"));
-        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValueFor<std::string>("TEXTURES_DIR"));
-        resourceManager_->setPathFor(ResourceType::Image, settings_.getValueFor<std::string>("IMAGES_DIR"));
-        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValueFor<std::string>("SOUND_EFFECTS_DIR"));
-        resourceManager_->setPathFor(ResourceType::Music, settings_.getValueFor<std::string>("MUSIC_DIR"));
+        resourceManager_->setPathFor(ResourceType::Font, settings_.getValue<std::string>("FONTS_DIR"));
+        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValue<std::string>("TEXTURES_DIR"));
+        resourceManager_->setPathFor(ResourceType::Image, settings_.getValue<std::string>("IMAGES_DIR"));
+        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValue<std::string>("SOUND_EFFECTS_DIR"));
+        resourceManager_->setPathFor(ResourceType::Music, settings_.getValue<std::string>("MUSIC_DIR"));
     }
 
     void Engine::processEvents() {
@@ -146,7 +146,7 @@ namespace ime {
 
         isRunning_ = true;
         sceneManager_.enterTopScene();
-        auto const frameTime = seconds( 1.0f / settings_.getValueFor<int>("FPS_LIMIT"));
+        auto const frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
         auto accumulator = Time::Zero;
         auto gameClock = Clock();
         while (window_.isOpen() && isRunning_ && !sceneManager_.isEmpty()) {

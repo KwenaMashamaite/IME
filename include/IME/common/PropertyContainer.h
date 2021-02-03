@@ -53,10 +53,10 @@ namespace ime {
          * The type of @tparam T must be remembered in order to retrieve
          * the value later
          *
-         * @see getValueFor
+         * @see getValue
          */
         template<typename T>
-        void setValueFor(const std::string &name, T&& value);
+        void setValue(const std::string &name, T&& value);
 
         /**
          * @brief Get the value of a property
@@ -71,10 +71,10 @@ namespace ime {
          * this function
          *
          * @see propertyHasValue
-         * @see setValueFor
+         * @see setValue
          */
         template<typename T>
-        T getValueFor(const std::string name) const;
+        T getValue(const std::string name) const;
 
         /**
          * @brief Get the type of a property
@@ -82,7 +82,7 @@ namespace ime {
          * @return The type of the property if such a property exists,
          *         otherwise an empty string
          */
-        std::string getTypeFor(const std::string &name) const;
+        std::string getType(const std::string &name) const;
 
         /**
          * @brief Remove a property

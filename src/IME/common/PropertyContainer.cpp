@@ -34,7 +34,7 @@ namespace ime {
         return properties_.insert({property.getName(), std::move(property)}).second;
     }
 
-    std::string PropertyContainer::getTypeFor(const std::string &name) const {
+    std::string PropertyContainer::getType(const std::string &name) const {
         if (hasProperty(name))
             return properties_.at(name).getType();
         return "";
