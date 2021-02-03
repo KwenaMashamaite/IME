@@ -31,6 +31,7 @@
 #include "IME/core/input/InputManager.h"
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
+#include "IME/common/PropertyContainer.h"
 #include <string>
 
 namespace ime {
@@ -298,8 +299,24 @@ namespace ime {
          */
         TimerManager& timer();
 
+        /**
+         * @brief Get the global cache
+         * @return The global cache
+         *
+         * Data stored in the cache persists from scene to scene. This means
+         * that another scene can access or modify data stored by another scene.
+         * The data can also be accessed using the engine instance
+         *
+         * @note The cache only stores data, while the engine is running. When
+         * the engine is shutdown, the data in the cache is destroyed
+         *
+         * @see engine
+         */
+        PropertyContainer& cache();
+
     private:
         Engine &engine_;                   //!< A reference to the game engine
+        PropertyContainer& cache_;         //!< The global cache
         std::string name_;                 //!< The name of the scene (optional)
         input::InputManager inputManager_; //!< The local input manager for this scene
         audio::AudioManager audioManager_; //!< The local audio manager for this scene

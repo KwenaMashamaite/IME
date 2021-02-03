@@ -23,10 +23,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/Scene.h"
+#include "IME/core/loop/Engine.h"
 
 namespace ime {
     Scene::Scene(Engine &engine) :
         engine_{engine},
+        cache_{engine.getPersistentData()},
         isManaged_{false},
         isEntered_{false},
         isVisibleWhenPaused_{false}
@@ -70,5 +72,9 @@ namespace ime {
 
     EventEmitter &Scene::eventEmitter() {
         return eventEmitter_;
+    }
+
+    PropertyContainer &Scene::cache() {
+        return cache_;
     }
 }
