@@ -28,7 +28,9 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Direction.h"
+#include "IME/common/Transform.h"
 #include "IME/core/event/EventEmitter.h"
+#include "IME/graphics/Sprite.h"
 #include <stack>
 #include <string>
 #include <memory>
@@ -101,23 +103,37 @@ namespace ime {
         Type getType() const;
 
         /**
-         * @brief Set the position of the entity
-         * @param x X coordinate of the entity
-         * @param y Y coordinate of the entity
+         * @brief Set current state
+         * @param state The current state
+         *
+         * The state is number that should be associated with something
+         * (maybe an enum) in your game.
+         *
+         * Be default, the state is -1, which is supposed to indicate
+         * that there is no state. The state property is optional and
+         * may be used if needs be. It is not used internally
          */
-        void setPosition(float x, float y);
+        void setState(int state);
 
         /**
-         * @brief Set the position of the entity
-         * @param position New position
+         * @brief Get the current state of the entity
+         * @return The current state of the entity
          */
-        void setPosition(Vector2f position);
+        int getState() const;
 
         /**
-         * @brief Get the position of the entity
-         * @return The position of the entity
+         * @brief Set the name of the entity (optional)
+         * @param name The name to set
+         *
+         * By default, the name is an empty string
          */
-        Vector2f getPosition() const;
+        void setName(const std::string& name);
+
+        /**
+         * @brief Get the name of the entity
+         * @return The name of the entity
+         */
+        const std::string& getName() const;
 
         /**
          * @brief Set the direction of the entity
@@ -212,6 +228,23 @@ namespace ime {
         std::size_t getObjectId() const;
 
         /**
+         * @brief Get the entity's transform
+         * @return The entity's transform
+         *
+         * The transform can be used to query or modify the entity's
+         * position, scale, rotation and origin
+         */
+        Transform& getTransform();
+
+        /**
+         * @brief Get the entity's graphical representation
+         * @return The entities graphical representation
+         *
+         * By default, the sprite is empty
+         */
+        Sprite& getSprite();
+
+        /**
          * @brief Add an event listener to an entity event
          * @param event Event to add event listener to
          * @param callback Function to execute when the event is published
@@ -265,14 +298,20 @@ namespace ime {
          */
         virtual ~Entity() = default;
 
+    private:
+        /**
+         * @brief Subscribe interested parties to a transform property change
+         */
+        void initTransformEvents();
+
     protected:
         /**
-         * @brief Publish an entity event
+         * @brief Dispatch an entity event
          * @param event Event to publish
          * @param args Arguments passed to event listeners
          */
         template<typename...Args>
-        void publishEvent(const std::string& event, Args&&...args) {
+        void dispatchEvent(const std::string& event, Args&&...args) {
             eventEmitter_.emit(event, std::forward<Args>(args)...);
         }
 
@@ -280,13 +319,16 @@ namespace ime {
         static std::size_t prevEntityId_; //!< Object id counter
         Type type_;                       //!< The type of the entity
         std::size_t id_;                  //!< Unique identifier
+        int state_;                       //!< The current state of the entity
+        std::string name_;                //!< The name of the entity
         Vector2u boundingRect_;           //!< Bounding box size
         bool isVulnerable_;               //!< Vulnerability state
         bool isActive_;                   //!< Active state
         bool isCollidable_;               //!< Collidable state
         Direction direction_;             //!< Current direction
-        Vector2f position_;               //!< Current position
         EventEmitter eventEmitter_;       //!< Event publisher
+        Transform transform_;             //!< The objects transform
+        Sprite sprite_;                   //!< The objects visual representation
     };
 }
 

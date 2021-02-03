@@ -36,7 +36,7 @@ namespace ime {
         if (target) {
             IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot instantiate grid mover with an unmovable entity (not derived from ime::IMovable)");
             IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before instantiation a grid mover");
-            targetTile_ = tileMap.getTile(target->getPosition());
+            targetTile_ = tileMap.getTile(target->getTransform().getPosition());
         }
     }
 
@@ -48,7 +48,7 @@ namespace ime {
             IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before calling setTarget(std::shared_ptr<ime::Entity>)");
             if (target_)
                 teleportTargetToDestination();
-            targetTile_ = tileMap_.getTile(target->getPosition());
+            targetTile_ = tileMap_.getTile(target->getTransform().getPosition());
             target_ = std::move(target);
         } else
             target_ = target;
@@ -124,7 +124,7 @@ namespace ime {
     }
 
     void GridMover::snapTargetToTargetTile() {
-        if (target_ && target_->getPosition() != targetTile_.getPosition()) {
+        if (target_ && target_->getTransform().getPosition() != targetTile_.getPosition()) {
             std::dynamic_pointer_cast<IMovable>(target_)->stop();
             targetDirection_ = Direction::Unknown;
             tileMap_.removeChildFromTile(prevTile_, target_);
@@ -178,11 +178,11 @@ namespace ime {
     bool GridMover::isTargetTileReached(Time deltaTime) {
         auto movable = std::dynamic_pointer_cast<IMovable>(target_);
         if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
-            auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getPosition().x);
+            auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getTransform().getPosition().x);
             if (movable->getSpeed() * deltaTime.asSeconds() >= horizontalDistToTarget)
                 return true;
         } else if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
-            auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getPosition().y);
+            auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getTransform().getPosition().y);
             if (movable->getSpeed() * deltaTime.asSeconds() >= verticalDistToTarget)
                 return true;
         }

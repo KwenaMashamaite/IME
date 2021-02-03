@@ -24,82 +24,87 @@
 
 #include "IME/core/entity/Entity.h"
 
-/* @TODO - Remove this if copy constructor and assignment operator
- *         implementation changes
- *
- * @warning Update copy constructor and assignment operator if a new member
- * variable is added, why? look at their respective implementations
- */
-
 std::size_t ime::Entity::prevEntityId_{0};
 
 namespace ime {
     Entity::Entity() :
-        Entity({8, 8})
+        Entity({0, 0})
     {}
 
-    Entity::Entity(const Entity &other) {
-        // Assign everything but create new id (Both must have unique id's)
-        // We are using manual assignment because we can't use std::swap()
-        // due to a pure virtual method in the class
-        type_ = other.type_;
-        id_ = prevEntityId_++; //Default copy constructor assigns same Id
-        boundingRect_ = other.boundingRect_;
-        isVulnerable_ = other.isVulnerable_;
-        isActive_ = other.isActive_;
-        isCollidable_ = other.isCollidable_;
-        direction_ = other.direction_;
-        position_ = other.position_;
-        eventEmitter_ = other.eventEmitter_;
+    Entity::Entity(const Vector2u &boundingBoxSize, Type type) :
+        type_{type},
+        id_{prevEntityId_++},
+        state_{-1},
+        boundingRect_{boundingBoxSize},
+        isVulnerable_{true},
+        isActive_{true},
+        isCollidable_{false},
+        direction_{Direction::Unknown}
+    {
+        initTransformEvents();
+    }
+
+    Entity::Entity(const Entity &other) :
+        type_{other.type_},
+        id_{prevEntityId_++},
+        state_{other.state_},
+        name_{other.name_},
+        boundingRect_{other.boundingRect_},
+        isVulnerable_{other.isVulnerable_},
+        isActive_{other.isActive_},
+        isCollidable_{other.isCollidable_},
+        direction_{other.direction_},
+        eventEmitter_{other.eventEmitter_},
+        transform_{other.transform_}
+    {
+        initTransformEvents();
     }
 
     Entity &Entity::operator=(const Entity &other) {
-        // Assign everything but the id (Both must have unique id's)
-        // We are using manual assignment because we can't use std::swap()
-        // due to a pure virtual method in the class
-        type_ = other.type_;
-        boundingRect_ = other.boundingRect_;
-        isVulnerable_ = other.isVulnerable_;
-        isActive_ = other.isActive_;
-        isCollidable_ = other.isCollidable_;
-        direction_ = other.direction_;
-        position_ = other.position_;
-        eventEmitter_ = other.eventEmitter_;
+        if (this != &other) { // Copy swap not applicable - class is polymorphic
+            type_ = other.type_;
+            state_ = other.state_;
+            name_ = other.name_;
+            boundingRect_ = other.boundingRect_;
+            isVulnerable_ = other.isVulnerable_;
+            isActive_ = other.isActive_;
+            isCollidable_ = other.isCollidable_;
+            direction_ = other.direction_;
+            transform_ = other.transform_;
+            eventEmitter_ = other.eventEmitter_;
+            initTransformEvents();
+        }
+
         return *this;
     }
 
-    Entity::Entity(const Vector2u &boundingBoxSize, Type type) :
-        type_(type),
-        id_{prevEntityId_++},
-        boundingRect_(boundingBoxSize),
-        isVulnerable_(true),
-        isActive_(true),
-        isCollidable_(false),
-        direction_(Direction::Unknown),
-        position_({0, 0})
-    {}
-
-    void Entity::setPosition(float x, float y) {
-        if (position_.x == x && position_.y == y)
+    void Entity::setState(int state) {
+        if (state_ == state)
             return;
-        position_.x = x;
-        position_.y = y;
-        publishEvent("positionChange", position_.x, position_.y);
-        publishEvent("positionChange", position_);
+        state_ = state;
+        dispatchEvent("stateChange", sprite_);
     }
 
-    void Entity::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
+    int Entity::getState() const {
+        return state_;
     }
 
-    Vector2f Entity::getPosition() const {
-        return position_;
+    void Entity::setName(const std::string &name) {
+        if (name_ == name)
+            return;
+
+        name_ = name;
+        dispatchEvent("nameChange", name_);
+    }
+
+    const std::string &Entity::getName() const {
+        return name_;
     }
 
     void Entity::setDirection(Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
-            publishEvent("directionChange", direction_);
+            dispatchEvent("directionChange", direction_);
         }
     }
 
@@ -123,19 +128,16 @@ namespace ime {
             return;
         isActive_ = isActive;
 
-        if (!isActive_)
-            publishEvent("inactive");
-        else
-            publishEvent("active");
+        dispatchEvent("statusChange", isActive_);
     }
 
     void Entity::setVulnerable(bool isVulnerable) {
         if (isVulnerable_ != isVulnerable) {
             isVulnerable_ = isVulnerable;
             if (isVulnerable_)
-                publishEvent("vulnerable");
+                dispatchEvent("vulnerable");
             else
-                publishEvent("inVulnerable");
+                dispatchEvent("inVulnerable");
         }
     }
 
@@ -143,9 +145,9 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (isCollidable_)
-                publishEvent("collisionEnable");
+                dispatchEvent("collisionEnable");
             else
-                publishEvent("collisionDisable");
+                dispatchEvent("collisionDisable");
         }
     }
 
@@ -173,6 +175,14 @@ namespace ime {
         return id_;
     }
 
+    Transform &Entity::getTransform() {
+        return transform_;
+    }
+
+    Sprite &Entity::getSprite() {
+        return sprite_;
+    }
+
     bool Entity::unsubscribe(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }
@@ -183,5 +193,23 @@ namespace ime {
 
     bool Entity::operator!=(const Entity &rhs) {
         return !(*this == rhs);
+    }
+
+    void Entity::initTransformEvents() {
+        transform_.onPropertyChange([this](std::string property, std::any) {
+            if (property == "position") {
+                sprite_.setPosition(transform_.getPosition());
+                dispatchEvent("positionChange", transform_.getPosition());
+            } else if (property == "origin") {
+                sprite_.setOrigin(transform_.getOrigin());
+                dispatchEvent("originChange", transform_.getOrigin());
+            } else if (property == "scale") {
+                sprite_.setScale(transform_.getScale());
+                dispatchEvent("scaleChange", transform_.getScale());
+            } else if (property == "rotation") {
+                sprite_.setRotation(transform_.getRotation());
+                dispatchEvent("rotationChange", transform_.getRotation());
+            }
+        });
     }
 }

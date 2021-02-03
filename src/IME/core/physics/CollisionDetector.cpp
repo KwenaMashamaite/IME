@@ -25,16 +25,6 @@
 #include "IME/core/physics/CollisionDetector.h"
 
 namespace ime {
-    void CollisionDetector::entityVsEntityCollision(Entity &entityOne,Entity &entityTwo,
-        Callback<Entity &, Entity &> callback)
-    {
-        if (entityOne.isCollidable() && entityTwo.isCollidable()
-            && isCollideAABB(entityOne, entityTwo))
-        {
-            callback(entityOne, entityTwo);
-        }
-    }
-
     void CollisionDetector::tileVSTileCollision(Tile &tileOne, Tile &tileTwo,
         Callback<Tile &, Tile &> callback)
     {

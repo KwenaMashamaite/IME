@@ -256,7 +256,7 @@ namespace ime {
     bool TileMap::addChild(std::shared_ptr<Entity> child, Index index) {
         IME_ASSERT(child, "Cannot add nullptr to a tilemap");
         if (isIndexValid(index) && !hasChild(child)) {
-            child->setPosition(getTile(index).getPosition().x, getTile(index).getPosition().y);
+            child->getTransform().setPosition(getTile(index).getPosition().x, getTile(index).getPosition().y);
             children_[index].push_back(std::move(child));
             return true;
         }
@@ -485,6 +485,6 @@ namespace ime {
     }
 
     Tile& TileMap::getTileOccupiedByChild(std::shared_ptr<Entity> child) {
-        return getTile(child->getPosition());
+        return getTile(child->getTransform().getPosition());
     }
 }

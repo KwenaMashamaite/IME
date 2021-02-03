@@ -80,7 +80,7 @@ set(IME_SRC
     utility/DiskFileReader.cpp
     utility/Helpers.cpp
     utility/Utils.cpp
-)
+    common/Transform.cpp)
 
 # Optimize single build
 if(IME_OPTIMIZE_SINGLE_BUILD)

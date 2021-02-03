@@ -38,19 +38,6 @@ namespace ime {
     class IME_API CollisionDetector {
     public:
         /**
-         * @brief Check for a collision between two entities
-         * @param entityOne The first tile
-         * @param entityTwo The second tile
-         * @param callback Function to execute when a collision is detected
-         *
-         * When a collision is taking place, the colliding objects will
-         * be passed as arguments to the callback in the same order in which
-         * they are provided to this function
-         */
-        void entityVsEntityCollision(Entity& entityOne, Entity& entityTwo,
-            Callback<Entity&, Entity&> callback);
-
-        /**
          * @brief Check for a collision between two tiles
          * @param tileOne The first tile
          * @param tileTwo The second tile
