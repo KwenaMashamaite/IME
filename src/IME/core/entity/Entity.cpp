@@ -23,19 +23,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/entity/Entity.h"
+#include "IME/core/scene/Scene.h"
 
 std::size_t ime::Entity::prevEntityId_{0};
 
 namespace ime {
-    Entity::Entity() :
-        Entity({0, 0})
-    {}
-
-    Entity::Entity(const Vector2u &boundingBoxSize, Type type) :
+    Entity::Entity(Scene& scene, Type type) :
+        scene_{scene},
         type_{type},
         id_{prevEntityId_++},
         state_{-1},
-        boundingRect_{boundingBoxSize},
         isVulnerable_{true},
         isActive_{true},
         isCollidable_{false},
@@ -45,33 +42,35 @@ namespace ime {
     }
 
     Entity::Entity(const Entity &other) :
+        scene_{other.scene_},
         type_{other.type_},
         id_{prevEntityId_++},
         state_{other.state_},
         name_{other.name_},
-        boundingRect_{other.boundingRect_},
         isVulnerable_{other.isVulnerable_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
         direction_{other.direction_},
         eventEmitter_{other.eventEmitter_},
         transform_{other.transform_}
+        //body_{other.body_->clone()}
     {
         initTransformEvents();
     }
 
     Entity &Entity::operator=(const Entity &other) {
         if (this != &other) { // Copy swap not applicable - class is polymorphic
+            scene_ = other.scene_;
             type_ = other.type_;
             state_ = other.state_;
             name_ = other.name_;
-            boundingRect_ = other.boundingRect_;
             isVulnerable_ = other.isVulnerable_;
             isActive_ = other.isActive_;
             isCollidable_ = other.isCollidable_;
             direction_ = other.direction_;
             transform_ = other.transform_;
             eventEmitter_ = other.eventEmitter_;
+            //body_ = other.body_->clone();
             initTransformEvents();
         }
 
@@ -112,22 +111,13 @@ namespace ime {
         return direction_;
     }
 
-    void Entity::setSize(Vector2u size) {
-        if (boundingRect_ != size) {
-            boundingRect_ = size;
-            eventEmitter_.emit("sizeChange", boundingRect_);
-        }
-    }
-
-    Vector2u Entity::getSize() const {
-        return boundingRect_;
-    }
-
     void Entity::setActive(bool isActive) {
         if (isActive_ == isActive || (isActive_ && !isVulnerable_))
             return;
         isActive_ = isActive;
 
+        if (body_)
+            body_->setEnabled(isActive_);
         dispatchEvent("statusChange", isActive_);
     }
 
@@ -144,6 +134,9 @@ namespace ime {
     void Entity::setCollidable(bool isCollidable) {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
+            if (body_)
+                body_->setAwake(isCollidable_);
+
             if (isCollidable_)
                 dispatchEvent("collisionEnable");
             else
@@ -175,7 +168,28 @@ namespace ime {
         return id_;
     }
 
+    void Entity::attachBody(std::shared_ptr<Body> body) {
+        if (!body_ && body) {
+            //@TODO Remove body from world
+        }
+        body_ = std::move(body);
+        body_->setTransform(transform_);
+    }
+
+    std::shared_ptr<Body> &Entity::getBody() {
+        return body_;
+    }
+
+    const std::shared_ptr<Body> &Entity::getBody() const {
+        return body_;
+    }
+
     Transform &Entity::getTransform() {
+        // @TODO - Add scale and origin properties to a physics body
+        // Body transform does not have origin and scale properties
+        auto bodyTransform = body_->getTransform();
+        transform_.setPosition(bodyTransform.getPosition());
+        transform_.setRotation(bodyTransform.getRotation());
         return transform_;
     }
 

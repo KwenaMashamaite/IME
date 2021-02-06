@@ -5,6 +5,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 set(IME_SRC
     common/Property.cpp
     common/PropertyContainer.cpp
+    common/Transform.cpp
     core/animation/Animation.cpp
     core/animation/Animator.cpp
     core/audio/Audio.cpp
@@ -23,7 +24,15 @@ set(IME_SRC
     core/path/BFS.cpp
     core/path/DFS.cpp
     core/path/IGridPathFinder.cpp
-    core/physics/CollisionDetector.cpp
+    core/physics/BodyDefinition.cpp
+    core/physics/Body.cpp
+    core/physics/FixtureDefinition.cpp
+    core/physics/Fixture.cpp
+    core/physics/Shape.cpp
+    core/physics/World.cpp
+    core/physics/CircleShape.cpp
+    core/physics/PolygonShape.cpp
+    core/physics/RectangleShape.cpp
     core/physics/GridMover.cpp
     core/physics/KeyboardControlledGridMover.cpp
     core/physics/RandomGridMover.cpp
@@ -79,8 +88,7 @@ set(IME_SRC
     utility/DiskFileLogger.cpp
     utility/DiskFileReader.cpp
     utility/Helpers.cpp
-    utility/Utils.cpp
-    common/Transform.cpp)
+    utility/Utils.cpp)
 
 # Optimize single build
 if(IME_OPTIMIZE_SINGLE_BUILD)
@@ -156,7 +164,7 @@ target_include_directories(ime PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/in
 target_include_directories(ime INTERFACE $<INSTALL_INTERFACE:include>)
 
 # Link TGUI and SFML
-target_link_libraries(ime PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio)
+target_link_libraries(ime PRIVATE box2d::box2d tgui sfml-graphics sfml-window sfml-system sfml-audio)
 
 # For Visual Studio on Windows, export debug symbols (PDB files) to lib directory
 if(IME_GENERATE_PDB)

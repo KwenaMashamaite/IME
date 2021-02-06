@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/SceneManager.h"
+#include "IME/core/physics/World.h"
 
 namespace ime {
     void SceneManager::pushScene(std::shared_ptr<Scene> scene, bool enterScene) {
@@ -107,8 +108,7 @@ namespace ime {
     }
 
     void SceneManager::update(Time deltaTime) {
-        if (!scenes_.empty() && scenes_.top()->isEntered())
-            scenes_.top()->update(deltaTime);
+        updateScene(deltaTime, false);
     }
 
     void SceneManager::handleEvent(Event event) {
@@ -123,8 +123,7 @@ namespace ime {
     }
 
     void SceneManager::fixedUpdate(Time deltaTime) {
-        if (!scenes_.empty() && scenes_.top()->isEntered())
-            scenes_.top()->fixedUpdate(deltaTime);
+        updateScene(deltaTime, true);
     }
 
     void SceneManager::preUpdate(Time deltaTime) {
@@ -136,7 +135,28 @@ namespace ime {
 
         auto scene = scenes_.top();
         scene->timerManager_.preUpdate();
-        scene->timerManager_.update(deltaTime);
+        scene->timerManager_.update(deltaTime * scene->getTimescale());
         scene->audioManager_.removePlayedAudio();
+    }
+
+    void SceneManager::updateScene(Time deltaTime, bool fixedUpdate) {
+        if (!(!scenes_.empty() && scenes_.top()->isEntered()))
+            return;
+
+        auto& scene = scenes_.top();
+
+        // Update physics simulation
+        if (scene->hasPhysicsSim_) {
+            if (fixedUpdate && scene->world_->isFixedStep()) {
+                scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
+            } else if (!fixedUpdate && !scene->world_->isFixedStep())
+                scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
+        }
+
+        // Update scene
+        if (fixedUpdate)
+            scene->fixedUpdate(deltaTime * scene->getTimescale());
+        else
+            scene->update(deltaTime * scene->getTimescale());
     }
 }

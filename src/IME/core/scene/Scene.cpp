@@ -29,9 +29,11 @@ namespace ime {
     Scene::Scene(Engine &engine) :
         engine_{engine},
         cache_{engine.getPersistentData()},
+        timescale_{1.0f},
         isManaged_{false},
         isEntered_{false},
-        isVisibleWhenPaused_{false}
+        isVisibleWhenPaused_{false},
+        hasPhysicsSim_{false}
     {}
 
     void Scene::setName(const std::string &name) {
@@ -54,8 +56,23 @@ namespace ime {
         return isEntered_;
     }
 
+    void Scene::setTimescale(float timescale) {
+        if (timescale < 0)
+            timescale_ = 0.0f;
+        else
+            timescale_ = timescale;
+    }
+
+    float Scene::getTimescale() const {
+        return timescale_;
+    }
+
     Engine &Scene::engine() const {
         return engine_;
+    }
+
+    World& Scene::world() {
+        return *world_;
     }
 
     input::InputManager &Scene::input() {
@@ -76,5 +93,10 @@ namespace ime {
 
     PropertyContainer &Scene::cache() {
         return cache_;
+    }
+
+    void Scene::createWorld(Vector2f gravity) {
+        world_ = std::make_unique<World>(*this, gravity);
+        hasPhysicsSim_ = true;
     }
 }

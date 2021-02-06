@@ -25,8 +25,16 @@
 #include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/ui/widgets/IContainer.h"
-#include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include "IME/core/input/Keyboard.h"
+#include <TGUI/Backends/SFML/BackendFontSFML.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <TGUI/Font.hpp>
+#include <TGUI/Color.hpp>
+
+auto constexpr PIXELS_PER_METRE = 32.0f;
+auto constexpr PI = 3.14159265358979323846f;
 
 namespace ime::utility {
     Event convertToOwnEvent(const sf::Event &SFML_Event) {
@@ -238,6 +246,22 @@ namespace ime::utility {
 
     Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
         return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
+    }
+
+    float pixelsToMetres(float pixels) {
+        return pixels / PIXELS_PER_METRE;
+    }
+
+    float metresToPixels(float metres) {
+        return metres * PIXELS_PER_METRE;
+    }
+
+    float radToDeg(float rad) {
+        return (180.0f * rad) / PI;
+    }
+
+    float degToRad(float deg) {
+        return (PI * deg) / 180.0f;
     }
 
     tgui::Font get_TGUI_Font(const std::string &filename) {

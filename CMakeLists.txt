@@ -118,6 +118,10 @@ if (NOT TARGET tgui)
     find_package(TGUI 0.9.0 REQUIRED)
 endif()
 
+if (NOT TARGET box2d::box2d)
+    find_package(box2d REQUIRED)
+endif()
+
 # Set the path for the libraries
 set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 

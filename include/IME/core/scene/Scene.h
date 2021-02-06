@@ -32,7 +32,9 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/core/physics/World.h"
 #include <string>
+#include <memory>
 
 namespace ime {
     class Engine; //!< Engine class forward declaration
@@ -123,7 +125,7 @@ namespace ime {
          *
          * @see update
          */
-        virtual void fixedUpdate(Time deltaTime) {};
+        virtual void fixedUpdate(__attribute__((unused)) Time deltaTime) {};
 
         /**
          * @brief Render the scene
@@ -175,28 +177,6 @@ namespace ime {
         virtual void onExit() {};
 
         /**
-         * @brief Set the name of the scene
-         * @param name The name of the scene
-         *
-         * The scene name is optional. By default it is empty
-         *
-         * This function may be useful if you want to distinguish scenes
-         * by name in your own code:
-         *
-         * @code
-         * using Keyboard = ime::input::Keyboard;
-         *
-         * input().onKeyUp([](Keyboard::Key key) {
-         *     if (key == Keyboard::Key::Escape)
-         *          engine().pushScene(scenes.get("quit");
-         *     else if (key == Keyboard::Key::P)
-         *          engine().pushScene(scenes.get("pause");
-         * });
-         * @endcode
-         */
-        void setName(const std::string& name);
-
-        /**
          * @brief Get the name of the scene
          * @return The name of the scene
          */
@@ -242,10 +222,72 @@ namespace ime {
 
     protected:
         /**
+         * @brief Set the name of the scene
+         * @param name The name of the scene
+         *
+         * The scene name is optional. By default it is empty
+         *
+         * This function may be useful if you want to distinguish scenes
+         * by name in your own code:
+         *
+         * @code
+         * using Keyboard = ime::input::Keyboard;
+         *
+         * input().onKeyUp([](Keyboard::Key key) {
+         *     if (key == Keyboard::Key::Escape)
+         *          engine().pushScene(scenes.get("quit");
+         *     else if (key == Keyboard::Key::P)
+         *          engine().pushScene(scenes.get("pause");
+         * });
+         * @endcode
+         */
+        void setName(const std::string& name);
+
+        /**
+         * @brief Set the simulation timescale
+         * @param timescale The new timescale
+         *
+         * The timescale can be used to speed up or slow down the scene
+         * without changing the FPS limit. Values above 1.0f speed up the
+         * scene whilst values below 1.0f slow it down  A timescale of
+         * zero freezes the scene.
+         *
+         * @note A scenes timescale affects everything that requires a time
+         * update. This includes timers, animations, dynamic bodies etc...
+         * For example, if the timescale is set to 2.0f, then scene timers
+         * will count twice as fast, animations will play twice as fast,
+         * dynamic bodies will move twice as fast etc..
+         *
+         * By default the timescale is 1.0f (real-time)
+         */
+        void setTimescale(float timescale);
+
+        /**
+         * @brief Get the scenes timescale
+         * @return The scenes timescale
+         */
+        float getTimescale() const;
+
+        /**
          * @brief Get a reference to the game engine
          * @return A reference to the game engine
          */
         Engine &engine() const;
+
+        /**
+         * @brief Get the physics simulation
+         * @return The physics simulation
+         *
+         * The physics simulation is responsible for creating, managing,
+         * colliding and updating all of the bodies within it.
+         *
+         * @warning The physics simulation must be created first before
+         * calling this function. Calling it before creating the
+         * simulation is undefined behaviour
+         *
+         * @see createWorld
+         */
+        World& world();
 
         /**
          * @brief Get the scenes event event emitter
@@ -314,17 +356,31 @@ namespace ime {
          */
         PropertyContainer& cache();
 
+        /**
+         * @brief Create a physics simulation
+         * @param gravity Acceleration of bodies in the simulation due to gravity
+         *
+         * This function should be called by scenes that require a physics
+         * simulation
+         *
+         * @see world
+         */
+        void createWorld(Vector2f gravity);
+
     private:
         Engine &engine_;                   //!< A reference to the game engine
         PropertyContainer& cache_;         //!< The global cache
+        std::unique_ptr<World> world_;     //!< Physics simulation
         std::string name_;                 //!< The name of the scene (optional)
         input::InputManager inputManager_; //!< The local input manager for this scene
         audio::AudioManager audioManager_; //!< The local audio manager for this scene
         EventEmitter eventEmitter_;        //!< The local event dispatcher for this scene
         TimerManager timerManager_;        //!< The local timer manager for this scene
+        float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;         //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
+        bool hasPhysicsSim_;               //!< A flag indicating whether or not the scene has a physics simulation
         friend class SceneManager;         //!< Pre updates the scene
     };
 }

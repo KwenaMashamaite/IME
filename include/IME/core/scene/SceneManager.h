@@ -167,6 +167,14 @@ namespace ime {
         void handleEvent(Event event);
 
     private:
+        /**
+         * @brief Update the active scene
+         * @param deltaTime Time passed since last update
+         * @param fixedUpdate True if it's a fixed update, otherwise false
+         */
+        void updateScene(Time deltaTime, bool fixedUpdate);
+
+    private:
         std::stack<std::shared_ptr<Scene>> scenes_; //!< Scenes container
         std::shared_ptr<Scene> prevScene_;          //!< Pointer to the active scene before a push operation
     };

@@ -55,6 +55,7 @@ namespace ime::utility {
     extern Event convertToOwnEvent(const sf::Event& SFML_Event);
 
     /**
+     * @internal
      * @brief Convert own system event to SFML system event
      * @param IME_Event Event to be converted
      * @return SFML system event
@@ -93,7 +94,43 @@ namespace ime::utility {
      */
     extern Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
 
+    /**
+     * @internal
+     * @brief Convert pixels to metres
+     * @param pixels The pixel value to be converted to metres
+     * @return @a pixels in metres
+     *
+     * The conversion ratio is as follows:
+     *  1 m = 32 pixels
+     */
+    extern float pixelsToMetres(float pixels);
 
+    /**
+     * @internal
+     * @brief Convert metres to pixels
+     * @param metres The metre value to be converted to pixels
+     * @return @a metres in pixels
+     *
+     * The conversion ratio is as follows:
+     *  1 m = 32 pixels
+     */
+    extern float metresToPixels(float metres);
+
+    /**
+     * @internal
+     * @brief Convert radians to degrees
+     * @param rad The radian value to be converted to degrees
+     * @return @a rad in degrees
+     */
+    extern float radToDeg(float rad);
+
+    /**
+     * @internal
+     * @brief Convert degrees to radians
+     * @param deg The degrees value to be converted to radians
+     * @return @a deg in radians
+     */
+    extern float degToRad(float deg);
 
     /**
      * @internal

@@ -575,6 +575,12 @@ namespace ime {
          */
         std::size_t getNumOfOccupants(const Tile& tile) const;
 
+        void update(Time deltaTime) {
+            forEachTile([deltaTime](Tile& tile) {
+                tile.getSprite().updateAnimation(deltaTime);
+            });
+        }
+
     private:
         /**
          * @brief Create the visual gird

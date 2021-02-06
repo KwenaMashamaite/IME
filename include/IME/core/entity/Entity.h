@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_IENTITY_H
-#define IME_IENTITY_H
+#ifndef IME_ENTITY_H
+#define IME_ENTITY_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
@@ -36,6 +36,9 @@
 #include <memory>
 
 namespace ime {
+    class Body;  //!< Rigid body class forward declaration
+    class Scene; //!< Scene class forward declaration
+
     /**
      * @brief Abstract base class for all game entities (players, enemies etc...)
      */
@@ -51,14 +54,6 @@ namespace ime {
             Collectable,  //!< Collectable object
             Obstacle,     //!< Obstacle object
         };
-
-        /**
-         * @brief Construct entity
-         *
-         * The entity has a bounding box size of {0, 0} and Type::Unknown
-         * by default
-         */
-        Entity();
 
         /**
          * @brief Copy constructor
@@ -83,10 +78,10 @@ namespace ime {
 
         /**
          * @brief Construct entity
-         * @param boundingBoxSize Size of the entity's bounding box
+         * @param scene The scene this entity belongs to
          * @param type Type of the entity
          */
-        explicit Entity(const Vector2u &boundingBoxSize, Type type = Type::Unknown);
+        explicit Entity(Scene& scene, Type type = Type::Unknown);
 
         /**
          * @brief Set the type of the entity
@@ -146,18 +141,6 @@ namespace ime {
          * @return The direction of the entity
          */
         Direction getDirection() const;
-
-        /**
-         * @brief Set the size of the entities bounding box
-         * @param size New bounding box size
-         */
-        void setSize(Vector2u size);
-
-        /**
-         * @brief Get the dimensions of the entity's bounding box
-         * @return The dimensions of the entity's bounding box
-         */
-        Vector2u getSize() const;
 
         /**
          * @brief Set whether entity is active or inactive
@@ -226,6 +209,23 @@ namespace ime {
          * Each entity instance has it's own unique identification number
          */
         std::size_t getObjectId() const;
+
+        /**
+         * @brief Attach a physics Body to the entity
+         * @param body Physics body to be attached
+         *
+         * This function will replace any body that was attached prior. The
+         * body will be removed from the entity and the from the physics
+         * simulation
+         */
+        void attachBody(std::shared_ptr<Body> body);
+
+        /**
+         * @brief Get the entity's physics body
+         * @return The entity's physics body if any, otherwise a nullptr
+         */
+        std::shared_ptr<Body>& getBody();
+        const std::shared_ptr<Body>& getBody() const;
 
         /**
          * @brief Get the entity's transform
@@ -316,19 +316,20 @@ namespace ime {
         }
 
     private:
-        static std::size_t prevEntityId_; //!< Object id counter
-        Type type_;                       //!< The type of the entity
-        std::size_t id_;                  //!< Unique identifier
-        int state_;                       //!< The current state of the entity
-        std::string name_;                //!< The name of the entity
-        Vector2u boundingRect_;           //!< Bounding box size
-        bool isVulnerable_;               //!< Vulnerability state
-        bool isActive_;                   //!< Active state
-        bool isCollidable_;               //!< Collidable state
-        Direction direction_;             //!< Current direction
-        EventEmitter eventEmitter_;       //!< Event publisher
-        Transform transform_;             //!< The objects transform
-        Sprite sprite_;                   //!< The objects visual representation
+        std::reference_wrapper<Scene> scene_; //!< The scene this entity belongs to
+        static std::size_t prevEntityId_;     //!< Object id counter
+        Type type_;                           //!< The type of the entity
+        std::size_t id_;                      //!< Unique identifier
+        int state_;                           //!< The current state of the entity
+        std::string name_;                    //!< The name of the entity
+        bool isVulnerable_;                   //!< Vulnerability state
+        bool isActive_;                       //!< Active state
+        bool isCollidable_;                   //!< Collidable state
+        Direction direction_;                 //!< Current direction
+        EventEmitter eventEmitter_;           //!< Event publisher
+        Transform transform_;                 //!< The objects transform
+        Sprite sprite_;                       //!< The objects visual representation
+        std::shared_ptr<Body> body_;          //!< The entity's rigid body
     };
 }
 

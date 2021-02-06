@@ -31,8 +31,11 @@
 #include "IME/ui/widgets/IWidget.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/event/Event.h"
-#include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
+
+namespace tgui {
+    class GuiSFML; //TGUI forward declaration
+}
 
 namespace ime {
     namespace ui {
@@ -49,7 +52,7 @@ namespace ime {
              *
              * @see setTarget
              */
-            GuiContainer() = default;
+            GuiContainer();
 
             /**
              * @brief Construct the gui and set the target on which the gui
@@ -72,6 +75,16 @@ namespace ime {
              * @brief Assignment operator
              */
             GuiContainer& operator=(const GuiContainer&) = delete;
+
+            /**
+             * @brief Move constructor
+             */
+            GuiContainer(GuiContainer&&) = default;
+
+            /**
+             * @brief Move assignment operator
+             */
+            GuiContainer& operator=(GuiContainer&&) = default;
 
             /**
              * @brief Set the part of the window the gui will render on
@@ -432,7 +445,7 @@ namespace ime {
             size_t moveWidgetBackward(std::shared_ptr<IWidget> widget);
 
         private:
-            tgui::GuiSFML sfmlGui_; //!< Gui controller and renderer
+            std::unique_ptr<tgui::GuiSFML> sfmlGui_; //!< Gui controller and renderer
             std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
         };
     }
