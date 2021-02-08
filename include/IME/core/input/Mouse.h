@@ -26,10 +26,12 @@
 #define IME_MOUSE_H
 
 #include "IME/Config.h"
+#include "IME/common/Vector2.h"
 #include "IME/core/event/EventEmitter.h"
 
 namespace ime {
-    class Event; //!< Event class forward declaration
+    class Event;  //!< Event class forward declaration
+    class Window; //!< Window class forward declaration
 
     /**
      * @brief Mouse events
@@ -79,6 +81,44 @@ namespace ime {
              * time, unlike all the other function which are event-based
             */
             static bool isButtonPressed(Button button);
+
+            /**
+             * @brief Set the current position of the mouse in desktop coordinates
+             * @param position New position of the mouse
+             *
+             * This function sets the global position of the mouse
+             * cursor on the desktop
+             */
+            static void setPosition(const Vector2i& position);
+
+            /**
+             * @brief Get the current position of the mouse in desktop coordinates
+             * @return The current position of the mouse
+             *
+             * This function returns the global position of the mouse
+             * cursor on the desktop.
+             */
+            static Vector2i getPosition();
+
+            /**
+             * @brief Set the current position of the mouse in window coordinates
+             * @param position New position of the mouse
+             * @param window Reference window
+             *
+             * This function sets the current position of the mouse
+             * cursor, relative to the given window
+             */
+            static void setPosition(const Vector2i& position, const Window& window);
+
+            /**
+             * @brief Get the current position of the mouse in window coordinates
+             * @param window Reference window
+             * @return The current position of the mouse
+             *
+             * This function returns the current position of the mouse
+             * cursor, relative to the given window
+             */
+            static Vector2i getPosition(const Window& window);
 
             /**
              * @brief Add an event listener to a mouse button up event

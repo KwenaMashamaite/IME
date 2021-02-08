@@ -24,11 +24,28 @@
 
 #include "IME/core/input/Mouse.h"
 #include "IME/core/event/Event.h"
+#include "IME/graphics/Window.h"
 #include <SFML/Window/Mouse.hpp>
 
 namespace ime::input {
     bool Mouse::isButtonPressed(Button button){
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
+    }
+
+    void Mouse::setPosition(const Vector2i &position) {
+        sf::Mouse::setPosition({position.x, position.y});
+    }
+
+    Vector2i Mouse::getPosition() {
+        return {sf::Mouse::getPosition().x, sf::Mouse::getPosition().y};
+    }
+
+    void Mouse::setPosition(const Vector2i &position, const Window &window) {
+        sf::Mouse::setPosition({position.x, position.y}, window.window_);
+    }
+
+    Vector2i Mouse::getPosition(const Window &window) {
+        return {sf::Mouse::getPosition(window.window_).x, sf::Mouse::getPosition(window.window_).y};
     }
 
     int Mouse::onButtonUp(Callback<Mouse::Button, int, int> callback) {

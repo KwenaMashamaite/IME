@@ -39,6 +39,10 @@ namespace ime {
         class GuiContainer; //!< GuiContainer class forward declaration
     }
 
+    namespace input {
+        class Mouse;
+    }
+
     /**
      * @brief Window that can serve as a target for 2D drawing
      */
@@ -177,6 +181,8 @@ namespace ime {
 
         //Needs access to the sf::RenderWindow
         friend class ui::GuiContainer;
+        friend void input::Mouse::setPosition(const Vector2i &position,const Window &relativeTo);
+        friend Vector2i input::Mouse::getPosition(const Window &window);
     };
 }
 
