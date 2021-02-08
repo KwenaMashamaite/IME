@@ -22,35 +22,23 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_FIXTUREDEFINITION_H
-#define IME_FIXTUREDEFINITION_H
-
-#include "IME/Config.h"
-#include "IME/core/physics/Shape.h"
+#include "IME/core/physics/rigid_body/BodyDefinition.h"
 
 namespace ime {
-    /**
-     * @brief Define the properties of a fixture
-     *
-     * A fixture definition is used to create a Fixture
-     */
-    struct IME_API FixtureDefinition {
-        /**
-         * @brief Set the default values
-         */
-        FixtureDefinition();
-
-        ////////////////////////////////////////////////////////////////////////
-        // Member data
-        ////////////////////////////////////////////////////////////////////////
-
-        const Shape* shape;         //!< The shape of the fixture
-        float friction;             //!< The friction coefficient, usually in the range [0,1].
-        float restitution;          //!< The restitution (elasticity) in the range [0,1].
-        float density;              //!< The density of the fixture in in kg/m^2
-        bool isSensor;              //!< A flag indicating whether o not the fixture is a sensor
-        float restitutionThreshold; //!< Restitution velocity threshold in in m/s
-    };
+    BodyDefinition::BodyDefinition() :
+        bodyType{BodyType::Static},
+        position{0.0f, 0.0f},
+        angle{0.0f},
+        linearVelocity{0.0f, 0.0f},
+        angularVelocity{0.0f},
+        linearDamping{0.0f},
+        angularDamping{0.0f},
+        canSleep{true},
+        isAwake{true},
+        isFixedRotation{false},
+        isFastBody{false},
+        isEnabled{true},
+        gravityScale{1.0f}
+    {}
 }
 
-#endif //IME_FIXTUREDEFINITION_H

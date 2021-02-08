@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/RandomGridMover.h"
+#include "IME/core/physics/tilemap/RandomGridMover.h"
 #include "IME/utility/Utils.h"
 
 namespace ime {

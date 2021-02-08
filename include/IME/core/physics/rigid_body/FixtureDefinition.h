@@ -22,44 +22,35 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/CircleShape.h"
-#include "IME/utility/Helpers.h"
-#include <box2d/b2_circle_shape.h>
+#ifndef IME_FIXTUREDEFINITION_H
+#define IME_FIXTUREDEFINITION_H
+
+#include "IME/Config.h"
+#include "IME/core/physics/rigid_body/Shape.h"
 
 namespace ime {
-    CircleShape::CircleShape() :
-        Shape(Shape::Type::Circle),
-        circle_{new b2CircleShape()}
-    {}
+    /**
+     * @brief Define the properties of a fixture
+     *
+     * A fixture definition is used to create a Fixture
+     */
+    struct IME_API FixtureDefinition {
+        /**
+         * @brief Set the default values
+         */
+        FixtureDefinition();
 
-    void CircleShape::setPosition(Vector2f position) {
-        circle_->m_p.x = utility::pixelsToMetres(position.x);
-        circle_->m_p.y = utility::pixelsToMetres(position.y);
-    }
+        ////////////////////////////////////////////////////////////////////////
+        // Member data
+        ////////////////////////////////////////////////////////////////////////
 
-    Vector2f CircleShape::getPosition() const {
-        return {utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
-    }
-
-    void CircleShape::setRadius(float radius) {
-        circle_->m_radius = utility::degToRad(radius);
-    }
-
-    float CircleShape::getRadius() const {
-        return utility::radToDeg(circle_->m_radius);
-    }
-
-    b2Shape *CircleShape::getInternalShape() {
-        return circle_;
-    }
-
-    const b2Shape *CircleShape::getInternalShape() const {
-        return circle_;
-    }
-
-    CircleShape::~CircleShape() {
-        delete circle_;
-        circle_ = nullptr;
-    }
+        const Shape* shape;         //!< The shape of the fixture
+        float friction;             //!< The friction coefficient, usually in the range [0,1].
+        float restitution;          //!< The restitution (elasticity) in the range [0,1].
+        float density;              //!< The density of the fixture in in kg/m^2
+        bool isSensor;              //!< A flag indicating whether o not the fixture is a sensor
+        float restitutionThreshold; //!< Restitution velocity threshold in in m/s
+    };
 }
 
+#endif //IME_FIXTUREDEFINITION_H

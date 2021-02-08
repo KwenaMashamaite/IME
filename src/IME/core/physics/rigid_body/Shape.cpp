@@ -22,43 +22,14 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/RectangleShape.h"
-#include <box2d/b2_polygon_shape.h>
-#include "IME/utility/Helpers.h"
+#include "IME/core/physics/rigid_body/Shape.h"
 
 namespace ime {
-    RectangleShape::RectangleShape(Vector2f size) :
-        Shape(Shape::Type::Rectangle),
-        rectangle_{new b2PolygonShape()}
-    {
-        setSize(size.x, size.y);
-    }
+    Shape::Shape(Shape::Type type) :
+        type_{type}
+    {}
 
-    void RectangleShape::setSize(float width, float height) {
-        size_ = {width, height};
-        rectangle_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
-            utility::pixelsToMetres(height / 2.0f));
-    }
-
-    void RectangleShape::setSize(Vector2f size) {
-        setSize(size.x, size.y);
-    }
-
-    Vector2f RectangleShape::getSize() const {
-        return size_;
-    }
-
-    b2Shape *RectangleShape::getInternalShape() {
-        return rectangle_;
-    }
-
-    const b2Shape *RectangleShape::getInternalShape() const {
-        return rectangle_;
-    }
-
-    RectangleShape::~RectangleShape() {
-        delete rectangle_;
-        rectangle_ = nullptr;
+    Shape::Type Shape::getType() const {
+        return type_;
     }
 }
-

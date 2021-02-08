@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/PolygonShape.h"
+#include "IME/core/physics/rigid_body/PolygonShape.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 

@@ -24,19 +24,19 @@ set(IME_SRC
     core/path/BFS.cpp
     core/path/DFS.cpp
     core/path/IGridPathFinder.cpp
-    core/physics/BodyDefinition.cpp
-    core/physics/Body.cpp
-    core/physics/FixtureDefinition.cpp
-    core/physics/Fixture.cpp
-    core/physics/Shape.cpp
+    core/physics/rigid_body/BodyDefinition.cpp
+    core/physics/rigid_body/Body.cpp
+    core/physics/rigid_body/FixtureDefinition.cpp
+    core/physics/rigid_body/Fixture.cpp
+    core/physics/rigid_body/Shape.cpp
+    core/physics/rigid_body/CircleShape.cpp
+    core/physics/rigid_body/PolygonShape.cpp
+    core/physics/rigid_body/RectangleShape.cpp
+    core/physics/tilemap/GridMover.cpp
+    core/physics/tilemap/TargetGridMover.cpp
+    core/physics/tilemap/KeyboardControlledGridMover.cpp
+    core/physics/tilemap/RandomGridMover.cpp
     core/physics/World.cpp
-    core/physics/CircleShape.cpp
-    core/physics/PolygonShape.cpp
-    core/physics/RectangleShape.cpp
-    core/physics/GridMover.cpp
-    core/physics/KeyboardControlledGridMover.cpp
-    core/physics/RandomGridMover.cpp
-    core/physics/TargetGridMover.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
     core/tilemap/Index.cpp

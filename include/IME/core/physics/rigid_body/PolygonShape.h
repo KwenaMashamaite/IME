@@ -22,49 +22,52 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_CIRCLESHAPE_H
-#define IME_CIRCLESHAPE_H
+#ifndef IME_POLYGONSHAPE_H
+#define IME_POLYGONSHAPE_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "IME/core/physics/Shape.h"
+#include "IME/core/physics/rigid_body/Shape.h"
+#include <vector>
 
-class b2CircleShape;
+class b2PolygonShape;
 
 namespace ime {
-    /**
-     * @brief Specialized shape representing a circle
-     */
-    class IME_API CircleShape final : public Shape {
+    class IME_API PolygonShape final : public Shape {
     public:
         /**
          * @brief Default constructor
          */
-        CircleShape();
+        PolygonShape();
 
         /**
-         * @brief Set the position of the circle
-         * @param position The position of the circle
+         * @brief Create a convex hull from the an array of local points
+         * @param vertices The vertices to create the convex hull from
+         *
+         * @warning The maximum number of vertices allowed is 8
+         *
+         * @warning The points may be reordered, even if they form a convex
+         * polygon. Collinear points are handled but not removed. Collinear
+         * points may lead to poor stacking behaviour
          */
-        void setPosition(Vector2f position);
+        void set(const std::vector<Vector2f>& vertices);
 
         /**
-         * @brief Get the position of the circle
-         * @return The position of the circle
+         * @brief Build vertices to represent an axis-aligned box centred on
+         *        the local origin
+         * @param halfWidth The width of the box
+         * @param halfHeight The height of the box
          */
-        Vector2f getPosition() const;
+        void setAsBox(float width, float height);
 
         /**
-         * @brief Set the radius of the circle
-         * @param radius The radius of the circle
+         * @brief Build vertices to represent an oriented box
+         * @param halfWidth The width of the box
+         * @param halfHeight The height of the box
+         * @param center The center of the box in local coordinates
+         * @param angle The rotation of the box in local coordinates
          */
-        void setRadius(float radius);
-
-        /**
-         * @brief Get the radius of the circle
-         * @return The radius of the circle
-         */
-        float getRadius() const;
+        void setAsBox(float width, float height, Vector2f center, float angle);
 
         /**
          * @internal
@@ -80,11 +83,11 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~CircleShape();
+        ~PolygonShape();
 
     private:
-        b2CircleShape* circle_;  //!< Internal collision circle
+        b2PolygonShape* polygon_; //!< Internal polygon shape
     };
 }
 
-#endif //IME_CIRCLESHAPE_H
+#endif //IME_POLYGONSHAPE_H

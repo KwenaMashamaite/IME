@@ -28,9 +28,9 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
-#include "IME/core/physics/BodyDefinition.h"
-#include "IME/core/physics/FixtureDefinition.h"
-#include "IME/core/physics/Fixture.h"
+#include "IME/core/physics/rigid_body/BodyDefinition.h"
+#include "IME/core/physics/rigid_body/FixtureDefinition.h"
+#include "IME/core/physics/rigid_body/Fixture.h"
 #include <memory>
 #include <vector>
 

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/TargetGridMover.h"
+#include "IME/core/physics/tilemap/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
 
 namespace ime {

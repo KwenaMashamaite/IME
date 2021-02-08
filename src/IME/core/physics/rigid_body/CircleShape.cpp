@@ -22,16 +22,44 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/FixtureDefinition.h"
-#include <box2d/b2_settings.h>
+#include "IME/core/physics/rigid_body/CircleShape.h"
+#include "IME/utility/Helpers.h"
+#include <box2d/b2_circle_shape.h>
 
 namespace ime {
-    FixtureDefinition::FixtureDefinition() :
-        shape{nullptr},
-        friction{0.2f},
-        restitution{0.0f},
-        density{0.0f},
-        isSensor{false},
-        restitutionThreshold{1.0f * b2_lengthUnitsPerMeter}
+    CircleShape::CircleShape() :
+        Shape(Shape::Type::Circle),
+        circle_{new b2CircleShape()}
     {}
+
+    void CircleShape::setPosition(Vector2f position) {
+        circle_->m_p.x = utility::pixelsToMetres(position.x);
+        circle_->m_p.y = utility::pixelsToMetres(position.y);
+    }
+
+    Vector2f CircleShape::getPosition() const {
+        return {utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
+    }
+
+    void CircleShape::setRadius(float radius) {
+        circle_->m_radius = utility::degToRad(radius);
+    }
+
+    float CircleShape::getRadius() const {
+        return utility::radToDeg(circle_->m_radius);
+    }
+
+    b2Shape *CircleShape::getInternalShape() {
+        return circle_;
+    }
+
+    const b2Shape *CircleShape::getInternalShape() const {
+        return circle_;
+    }
+
+    CircleShape::~CircleShape() {
+        delete circle_;
+        circle_ = nullptr;
+    }
 }
+

@@ -25,10 +25,10 @@
 #ifndef IME_WORLD_H
 #define IME_WORLD_H
 
-#include <IME/core/time/Time.h>
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "IME/core/physics/Body.h"
+#include "IME/core/time/Time.h"
+#include "IME/core/physics/rigid_body/Body.h"
 #include <memory>
 #include <vector>
 

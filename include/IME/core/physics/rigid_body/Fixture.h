@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "IME/core/physics/FixtureDefinition.h"
+#include "IME/core/physics/rigid_body/FixtureDefinition.h"
 #include <memory>
 
 class b2Fixture;

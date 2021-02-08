@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/Body.h"
+#include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>

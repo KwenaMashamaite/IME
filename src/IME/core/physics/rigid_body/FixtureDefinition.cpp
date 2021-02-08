@@ -22,23 +22,16 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/BodyDefinition.h"
+#include "IME/core/physics/rigid_body/FixtureDefinition.h"
+#include <box2d/b2_settings.h>
 
 namespace ime {
-    BodyDefinition::BodyDefinition() :
-        bodyType{BodyType::Static},
-        position{0.0f, 0.0f},
-        angle{0.0f},
-        linearVelocity{0.0f, 0.0f},
-        angularVelocity{0.0f},
-        linearDamping{0.0f},
-        angularDamping{0.0f},
-        canSleep{true},
-        isAwake{true},
-        isFixedRotation{false},
-        isFastBody{false},
-        isEnabled{true},
-        gravityScale{1.0f}
+    FixtureDefinition::FixtureDefinition() :
+        shape{nullptr},
+        friction{0.2f},
+        restitution{0.0f},
+        density{0.0f},
+        isSensor{false},
+        restitutionThreshold{1.0f * b2_lengthUnitsPerMeter}
     {}
 }
-

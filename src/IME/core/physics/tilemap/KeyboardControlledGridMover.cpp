@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/KeyboardControlledGridMover.h"
+#include "IME/core/physics/tilemap/KeyboardControlledGridMover.h"
 #include "IME/core/event/Event.h"
 
 namespace ime {

@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/Fixture.h"
-#include "IME/core/physics/Body.h"
+#include "IME/core/physics/rigid_body/Fixture.h"
+#include "IME/core/physics/rigid_body/Body.h"
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
 

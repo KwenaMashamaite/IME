@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/GridMover.h"
+#include "IME/core/physics/tilemap/GridMover.h"
 #include "IME/core/entity/IMovable.h"
 
 namespace ime {

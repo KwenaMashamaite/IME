@@ -26,7 +26,7 @@
 #define IME_KEYBOARDCONTROLLED_H
 
 #include "IME/core/input/Keyboard.h"
-#include "GridMover.h"
+#include "IME/core/physics/tilemap/GridMover.h"
 
 namespace ime {
     /**
