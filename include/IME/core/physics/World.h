@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/core/time/Time.h"
 #include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/AABB.h"
 #include <memory>
 #include <vector>
 
@@ -43,6 +44,16 @@ namespace ime {
      */
     class IME_API World {
     public:
+        /**
+         * Callback function passed to queryAABB function
+         *
+         * The callback is called for every fixture that overlaps the query
+         * AABB. The callback must return false to terminate the query early
+         * or true to continue with the query until all fixtures have been
+         * processed
+         */
+        using AABBCallback = std::function<bool(std::shared_ptr<Fixture>)>;
+
         /**
          * @brief Construct the world object
          * @param scene The scene this world belongs to
@@ -178,6 +189,44 @@ namespace ime {
         void update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations);
 
         /**
+         * @brief Enable or disable automatic force buffer clearance after an
+         *        update
+         * @param autoClear True to enable or false to disable
+         *
+         * By default, the force buffer on all bodies is cleared after each
+         * call to update. You can disable automatic force buffer clearance
+         * if you want to use subStepping
+         *
+         * @see enableSubStepping and clearForces
+         */
+        void autoClearForceBuffer(bool autoClear);
+
+        /**
+         * @brief Check whether or not the force buffer on all bodies is
+         *        cleared after each update
+         * @return True if the force buffer is automatically cleared, otherwise
+         *          false
+         *
+         * @see autoClearForceBuffer
+         */
+        bool isForceBufferAutoCleared() const;
+
+        /**
+         * @brief Manually clear the force buffer on all bodies
+         *
+         * By default, forces are cleared automatically after each update.
+         * The default behavior is modified by calling autoClearForces. The
+         * purpose of this function is to support sub-stepping. Sub-stepping
+         * is often used to maintain a fixed sized time step under a variable
+         * frame-rate. When you perform sub-stepping you will disable auto
+         * clearing of forces and instead call clearForces after all sub-steps
+         * are complete in one pass of your game loop.
+         *
+         * @see enableSubStepping and autoClearForceBuffer
+         */
+        void clearForces();
+
+        /**
          * @brief Set whether or not the world sleeps
          * @param sleep True to enable sleeping or false to disable
          */
@@ -225,6 +274,20 @@ namespace ime {
          * This means that any request to execute them will be denied
          */
         bool isLocked() const;
+
+        /**
+         * @brief Query the world for all fixtures that overlap the given AABB
+         * @param callback The function to be executed for every Fixture that
+         *        overlaps the given AABB
+         * @param aabb The AABB to query
+         *
+         * The callback is executed for every fixture that overlaps @a aabb.
+         * The callback must, on every invocation return true to continue with
+         * the query or false to terminate the query. When true is returned,
+         * the query will continue until all overlapping fixtures are
+         * processed
+         */
+        void queryAABB(const AABBCallback& callback, const AABB& aabb) const;
 
         /**
          * @internal

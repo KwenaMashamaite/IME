@@ -32,6 +32,7 @@ set(IME_SRC
     core/physics/rigid_body/CircleShape.cpp
     core/physics/rigid_body/PolygonShape.cpp
     core/physics/rigid_body/RectangleShape.cpp
+    core/physics/rigid_body/AABB.cpp
     core/physics/tilemap/GridMover.cpp
     core/physics/tilemap/TargetGridMover.cpp
     core/physics/tilemap/KeyboardControlledGridMover.cpp

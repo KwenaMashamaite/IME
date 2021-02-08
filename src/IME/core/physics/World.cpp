@@ -26,8 +26,42 @@
 #include "IME/utility/Helpers.h"
 #include "IME/core/entity/Entity.h"
 #include <box2d/b2_world.h>
+#include <box2d/b2_fixture.h>
 
 namespace ime {
+    namespace {
+        /**
+         * @brief World::AABBCallback wrapper
+         */
+        class B2QueryCallback : public b2QueryCallback {
+        public:
+            explicit B2QueryCallback(const World::AABBCallback* callback) {
+                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
+                callback_ = callback;
+            }
+
+            bool ReportFixture(b2Fixture *b2_fixture) override {
+                // The syntax below is little bit nasty, so here's an explanation to
+                // narrow down whats happening:
+                //
+                // Every Fixture object object has an instance of b2Fixture.
+                // When a b2Fixture is created, a pointer to the Fixture that
+                // contains it is passed as user data so that we can retrieve it later.
+                // We do this because the World::AABBCallback takes a shared pointer
+                // to our Fixture (abstraction), so there must be a way to convert
+                // from b2Fixture to our Fixture
+                return (*callback_)(std::shared_ptr<Fixture>(reinterpret_cast<Fixture*>(b2_fixture->GetUserData().pointer)));
+            }
+
+            ~B2QueryCallback() {
+                callback_ = nullptr;
+            }
+
+        private:
+            const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
+        };
+    }
+
     World::World(Scene& scene, Vector2f gravity) :
         scene_{scene},
         world_{new b2World(b2Vec2{gravity.x, gravity.y})},
@@ -104,6 +138,18 @@ namespace ime {
         world_->Step(timeStep.asSeconds() * timescale_, velocityIterations, positionIterations);
     }
 
+    void World::autoClearForceBuffer(bool autoClear) {
+        world_->SetAutoClearForces(autoClear);
+    }
+
+    bool World::isForceBufferAutoCleared() const {
+        return world_->GetAutoClearForces();
+    }
+
+    void World::clearForces() {
+        world_->ClearForces();
+    }
+
     void World::allowSleep(bool sleep) {
         world_->SetAllowSleeping(sleep);
     }
@@ -130,6 +176,11 @@ namespace ime {
 
     bool World::isLocked() const {
         return world_->IsLocked();
+    }
+
+    void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) const {
+        auto queryCallback = B2QueryCallback(&callback);
+        world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
     b2World *World::getInternalWorld() {

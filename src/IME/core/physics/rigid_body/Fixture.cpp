@@ -37,6 +37,7 @@ namespace ime {
         b2FixtureDef->density = definition.density;
         b2FixtureDef->isSensor = definition.isSensor;
         b2FixtureDef->shape = definition.shape->getInternalShape();
+        b2FixtureDef->userData.pointer = reinterpret_cast<uintptr_t>(this);
 
         fixture_ = body->body_->CreateFixture(b2FixtureDef);
         userData_ = definition.userData;
