@@ -33,6 +33,13 @@
 class b2PolygonShape;
 
 namespace ime {
+    /**
+     * @brief Solid convex polygons
+     *
+     * A polygon is convex when all line segments connecting two points in t
+     * he interior do not cross any edge of the polygon. Polygons are solid
+     * and never hollow. A polygon must have 3 or more vertices
+     */
     class IME_API PolygonShape final : public Shape {
     public:
         /**

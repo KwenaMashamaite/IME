@@ -34,6 +34,9 @@ class b2CircleShape;
 namespace ime {
     /**
      * @brief Specialized shape representing a circle
+     *
+     * Circle shapes have a position and radius. Circles are solid. You
+     * cannot make a hollow circle using the circle shape
      */
     class IME_API CircleShape final : public Shape {
     public:
