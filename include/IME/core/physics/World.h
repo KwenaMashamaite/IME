@@ -57,6 +57,43 @@ namespace ime {
         using AABBCallback = std::function<bool(Fixture::sharedPtr)>;
 
         /**
+         *  Callback function passed to rayCast Function
+         *
+         *  The callback is called for every fixture that the ray collides
+         *  with. The callback controls how the ray proceeds by the value
+         *  it returns:
+         *
+         *  i)  -1: Ignore the current fixture and continue with the ray casting.
+         *          The fixture will be filtered. That is, the ray cast will
+         *          proceed as if the fixture does not exist
+         *
+         *  ii)  0: Terminate the ray cast immediately
+         *
+         *  iii) 1: Don't clip the ray and continue. By default the ray is
+         *          clipped if it collides with a fixture. When 1 is returned
+         *          the ray will continue as if it did not hit anything
+         *
+         *  iv) fraction : The fraction is provided to the callback when it is
+         *                 called. If it is returned, then the ray will be
+         *                 clipped to the current point of intersection.
+         *
+         * The value returned by the callback function allow you to ray cast
+         * any shape, ray cast all shapes, or ray cast the closest shape.
+         *
+         * The argument list of the callback is as follows:
+         *
+         * first arg:  The fixture that is currently colliding with the ray
+         * second arg: The point of initial intersection (There may be more
+         *             than one intersection depending on the value returned
+         *             by the callback)
+         * third arg:  The normal vector (rotation) at the point of intersection
+         * forth arg:  The distance from the rays starting point to the current
+         *              point of intersection (fraction)
+         */
+        using RayCastCallback = std::function<float(Fixture::sharedPtr,
+                Vector2f, Vector2f, float)>;
+
+        /**
          * @brief Construct the world object
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity
@@ -276,6 +313,31 @@ namespace ime {
          * This means that any request to execute them will be denied
          */
         bool isLocked() const;
+
+        /**
+         * @brief Ray-cast the world for all the fixtures in the path of the ray
+         * @param callback The function to be executed when the ray collides
+         *                 with a fixture
+         * @param startPoint The starting point of the ray
+         * @param endPoint The ending point of the ray
+         *
+         * You can use ray casts to do line-of-sight checks, fire guns, etc.
+         * The callback will be called for every fixture hit by the ray and
+         * the value it returns determines how the ray proceeds. Returning a
+         * value of zero indicates the ray cast should be terminated. A value
+         * of one indicates the ray cast should continue as if no hit occurred.
+         * A value of -1 filters the fixture (The the ray cast will proceed as
+         * if the fixture does not exist). If you return the fraction from the
+         * argument list, the ray will be clipped to the current intersection
+         * point. So you can ray cast any shape, ray cast all shapes, or ray
+         * cast the closest shape by returning the appropriate value.
+         *
+         * @warning Due to round-off errors, ray casts can sneak through small
+         * cracks between polygons in your static environment. If this is not
+         * acceptable in your game, trying slightly overlapping your polygons
+         */
+        void rayCast(const RayCastCallback& callback, Vector2f startPoint,
+            Vector2f endPoint) const;
 
         /**
          * @brief Query the world for all fixtures that overlap the given AABB

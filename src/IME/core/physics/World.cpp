@@ -40,6 +40,7 @@ namespace ime {
                 callback_ = callback;
             }
 
+            // Called by box2d when a fixture overlaps the querry AABB
             bool ReportFixture(b2Fixture *b2_fixture) override {
                 // The syntax below is little bit nasty, so here's an explanation to
                 // narrow down whats happening:
@@ -59,6 +60,34 @@ namespace ime {
 
         private:
             const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
+        };
+
+        /**
+         * @brief World::RayCastCallback wrapper
+         */
+        class B2RayCastCallback : public b2RayCastCallback {
+        public:
+            explicit B2RayCastCallback(const World::RayCastCallback* callback) {
+                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
+                callback_ = callback;
+            }
+
+            // Called by box2d when a ray cast collides with a fixture
+            float ReportFixture(b2Fixture *b2_fixture, const b2Vec2 &point,
+                const b2Vec2 &normal, float fraction) override
+            {
+                using namespace utility;
+                auto fixture = std::shared_ptr<Fixture>(reinterpret_cast<Fixture*>(b2_fixture->GetUserData().pointer));
+                return (*callback_)(std::move(fixture), {metresToPixels(point.x), metresToPixels(point.y)},
+                        {metresToPixels(normal.x), metresToPixels(normal.y)}, fraction);
+            }
+
+            ~B2RayCastCallback() {
+                callback_ = nullptr;
+            }
+
+        private:
+            const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
     }
 
@@ -176,6 +205,15 @@ namespace ime {
 
     bool World::isLocked() const {
         return world_->IsLocked();
+    }
+
+    void World::rayCast(const World::RayCastCallback &callback, Vector2f startPoint,
+        Vector2f endPoint) const
+    {
+        auto queryCallback = B2RayCastCallback(&callback);
+        world_->RayCast(&queryCallback,
+            {utility::pixelsToMetres(startPoint.x), utility::pixelsToMetres(startPoint.y)},
+            {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
     void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) const {
