@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
+#include "IME/common/PropertyContainer.h"
 
 namespace ime {
     /**
@@ -67,6 +68,8 @@ namespace ime {
         bool isFastBody;         //!< A flag indicating if this is a fast body or not (Used for tunneling prevention)
         bool isEnabled;          //!< A flag indicating whether or not the body is initially enabled or disabled
         float gravityScale;      //!< Gravity scale of this body (1 by default)
+
+        PropertyContainer userData; //!< May be used to store application specific body data (e.g size)
     };
 }
 

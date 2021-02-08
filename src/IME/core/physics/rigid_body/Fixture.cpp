@@ -39,6 +39,7 @@ namespace ime {
         b2FixtureDef->shape = definition.shape->getInternalShape();
 
         fixture_ = body->body_->CreateFixture(b2FixtureDef);
+        userData_ = definition.userData;
         body_ = body;
         delete b2FixtureDef;
         b2FixtureDef = nullptr;
@@ -95,6 +96,10 @@ namespace ime {
 
     float Fixture::getRestitutionThreshold() const {
         return fixture_->GetRestitutionThreshold();
+    }
+
+    PropertyContainer &Fixture::getUserData() {
+        return userData_;
     }
 
     Fixture::~Fixture() {

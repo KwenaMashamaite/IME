@@ -156,6 +156,12 @@ namespace ime {
         float getRestitutionThreshold() const;
 
         /**
+         * @brief Get the user data extracted from the fixture definition
+         * @return The user data
+         */
+        PropertyContainer& getUserData();
+
+        /**
          * @brief Destructor
          */
         ~Fixture();
@@ -172,6 +178,7 @@ namespace ime {
         b2Fixture* fixture_; //!< Internal fixture
         Body* body_;         //!< The body this fixture is attached to
         friend class Body;   //!< Needs access to constructor
+        PropertyContainer userData_; //!< Application specific fixture data
     };
 }
 

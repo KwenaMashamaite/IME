@@ -447,6 +447,12 @@ namespace ime {
         bool isFixedRotation() const;
 
         /**
+         * @brief Get the user data extracted from the body definition
+         * @return The user data
+         */
+        PropertyContainer& getUserData();
+
+        /**
          * @brief Destructor
          */
         ~Body();
@@ -465,6 +471,7 @@ namespace ime {
         friend class World;   //!< Needs access to constructor
         friend class Fixture; //!< Needs access to internal body
 
+        PropertyContainer userData_;                       //!< Application specific body data
         std::vector<std::shared_ptr<Fixture>> fixtures_;  //!< Fixtures attached to this body
     };
 }

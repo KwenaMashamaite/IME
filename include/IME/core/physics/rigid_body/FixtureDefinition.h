@@ -26,6 +26,7 @@
 #define IME_FIXTUREDEFINITION_H
 
 #include "IME/Config.h"
+#include "IME/common/PropertyContainer.h"
 #include "IME/core/physics/rigid_body/Shape.h"
 
 namespace ime {
@@ -50,6 +51,7 @@ namespace ime {
         float density;              //!< The density of the fixture in in kg/m^2
         bool isSensor;              //!< A flag indicating whether o not the fixture is a sensor
         float restitutionThreshold; //!< Restitution velocity threshold in in m/s
+        PropertyContainer userData; //!< May be used to store application specific fixture data
     };
 }
 

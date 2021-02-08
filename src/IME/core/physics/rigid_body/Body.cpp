@@ -46,6 +46,7 @@ namespace ime {
         b2Definition->gravityScale = definition.gravityScale;
 
         world_ = world;
+        userData_ = definition.userData;
         body_ = world_->getInternalWorld()->CreateBody(b2Definition);
         delete b2Definition;
         b2Definition = nullptr;
@@ -292,6 +293,10 @@ namespace ime {
 
     bool Body::isFixedRotation() const {
         return body_->IsFixedRotation();
+    }
+
+    PropertyContainer &Body::getUserData() {
+        return userData_;
     }
 
     Body::~Body() {
