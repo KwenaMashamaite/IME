@@ -47,41 +47,7 @@ namespace ime {
      */
     class IME_API Fixture {
     public:
-        /**
-         * @brief Set if the fixture is a sensor or not
-         * @param sensor True to set as sensor, otherwise false
-         *
-         * A sensor detects a collision but does not generate a collision
-         * response. This is useful if you only want to know when two
-         * fixtures overlap. You can flag any fixture as being a sensor.
-         * Sensors may be static, kinematic, or dynamic. Remember that you
-         * may have multiple fixtures per body and you can have any mix of
-         * sensors and solid fixtures. Also, sensors only form contacts when
-         * at least one body is dynamic, so you will not get a contact for
-         * kinematic versus kinematic, kinematic versus static, or static
-         * versus static.
-         */
-        void setSensor(bool sensor);
-
-        /**
-         * @brief Check whether or not the fixture is  a sensor
-         * @return True if the fixture is a sensor, otherwise false
-         */
-        bool isSensor() const;
-
-        /**
-         * @brief Get the body the fixture is attached to
-         * @return The body attached to this fixture if any, otherwise a nullptr
-         */
-        Body* getBody();
-        const Body* getBody() const;
-
-        /**
-         * @brief Check if the fixture contains a point or not
-         * @param point The point to be checked in world coordinates
-         * @return True if the fixture contains the point, otherwise false
-         */
-        bool containsPoint(Vector2f point) const;
+        using sharedPtr = std::shared_ptr<Fixture>; //!< Shared pointer to a fixture
 
         /**
          * @brief Set the density of the fixture
@@ -156,6 +122,53 @@ namespace ime {
         float getRestitutionThreshold() const;
 
         /**
+         * @brief Set if the fixture is a sensor or not
+         * @param sensor True to set as sensor, otherwise false
+         *
+         * A sensor detects a collision but does not generate a collision
+         * response. This is useful if you only want to know when two
+         * fixtures overlap. You can flag any fixture as being a sensor.
+         * Sensors may be static, kinematic, or dynamic. Remember that you
+         * may have multiple fixtures per body and you can have any mix of
+         * sensors and solid fixtures. Also, sensors only form contacts when
+         * at least one body is dynamic, so you will not get a contact for
+         * kinematic versus kinematic, kinematic versus static, or static
+         * versus static.
+         */
+        void setSensor(bool sensor);
+
+        /**
+         * @brief Check whether or not the fixture is  a sensor
+         * @return True if the fixture is a sensor, otherwise false
+         */
+        bool isSensor() const;
+
+        /**
+         * @brief Get the body the fixture is attached to
+         * @return The body attached to this fixture if any, otherwise a nullptr
+         */
+        Body* getBody();
+        const Body* getBody() const;
+
+        /**
+         * @brief Get the child shape
+         * @return The child shape
+         *
+         * @warning Manipulating the shape may lead to non-physical behaviour.
+         * Don't change the number of vertices because this will crash some
+         * collision caching mechanisms
+         */
+        Shape* getShape();
+        const Shape* getShape() const;
+
+        /**
+         * @brief Check if the fixture contains a point or not
+         * @param point The point to be checked in world coordinates
+         * @return True if the fixture contains the point, otherwise false
+         */
+        bool containsPoint(Vector2f point) const;
+
+        /**
          * @brief Get the user data extracted from the fixture definition
          * @return The user data
          */
@@ -177,6 +190,7 @@ namespace ime {
     private:
         b2Fixture* fixture_; //!< Internal fixture
         Body* body_;         //!< The body this fixture is attached to
+        Shape* shape_;
         friend class Body;   //!< Needs access to constructor
         PropertyContainer userData_; //!< Application specific fixture data
     };

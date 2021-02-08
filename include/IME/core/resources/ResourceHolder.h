@@ -46,6 +46,8 @@ namespace ime {
     template <class T>
     class ResourceHolder : public utility::NonCopyable {
     public:
+        using sharedPtr = std::shared_ptr<T>; //!< Shared T pointer
+
         /**
          * @brief Construct a resource holder
          * @param filePath Path to the resource to store
@@ -108,7 +110,7 @@ namespace ime {
          * from the disk, a "FileNotFound" exception will be raised. This means
          * that the returned pointer can never be a nullptr
          */
-        [[nodiscard]] std::shared_ptr<T> get(const std::string& filename);
+        [[nodiscard]] sharedPtr get(const std::string& filename);
 
         /**
          * @brief Get the number of resources in the resource holder
@@ -124,8 +126,8 @@ namespace ime {
         bool hasResource(const std::string& filename) const;
 
     private:
-        std::unordered_map<std::string, std::shared_ptr<T>> resourceHolder_; //!< Resources container
-        std::string filePath_;                                               //!< File path to resources
+        std::unordered_map<std::string, sharedPtr> resourceHolder_; //!< Resources container
+        std::string filePath_;                                      //!< File path to resources
     };
 
     #include "IME/core/resources/ResourceHolder.inl"

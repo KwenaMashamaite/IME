@@ -40,6 +40,8 @@ namespace ime {
          */
         class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:
+            using sharedPtr = std::shared_ptr<EditBoxRenderer>; //!< Shared renderer pointer
+
             /**
              * @brief Set the text style
              * @param style Style to set

@@ -39,6 +39,8 @@ namespace ime {
          */
         class IME_API ButtonRenderer : public IWidgetRenderer {
         public:
+            using sharedPtr = std::shared_ptr<ButtonRenderer>; //!< Shared renderer pointer
+
             /**
              * @brief Change the ize of the widget borders
              * @param borders The size of the borders

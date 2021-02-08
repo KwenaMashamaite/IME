@@ -100,7 +100,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<ProgressBarRenderer> renderer);
+            void setRenderer(ProgressBarRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the progress bars renderer
@@ -112,7 +112,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<ProgressBarRenderer> getRenderer();
+            ProgressBarRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set a minimum value
@@ -681,7 +681,7 @@ namespace ime {
 
         private:
             std::shared_ptr<tgui::ProgressBar> progressBar_; //!< Pointer to third party library
-            std::shared_ptr<ProgressBarRenderer> renderer_;  //!< Renderer for this progress bar
+            ProgressBarRenderer::sharedPtr renderer_;        //!< Renderer for this progress bar
         };
     }
 }

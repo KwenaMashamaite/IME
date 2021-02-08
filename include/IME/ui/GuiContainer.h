@@ -304,7 +304,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(std::shared_ptr<IWidget> widget,
+            bool addWidget(IWidget::sharedPtr widget,
                 const std::string& widgetName);
 
             /**
@@ -317,7 +317,7 @@ namespace ime {
              * of it, but when none of the child widgets match the given name,
              * a recursive search will be performed
              */
-            std::shared_ptr<IWidget> getWidget(const std::string& name) const;
+            IWidget::sharedPtr getWidget(const std::string& name) const;
 
             /**
              * @brief Get a pointer to a widget in the gui
@@ -359,7 +359,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<IWidget> getFocusedWidget() const;
+            IWidget::sharedPtr getFocusedWidget() const;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -374,7 +374,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<IWidget> getFocusedLeaf() const;
+            IWidget::sharedPtr getFocusedLeaf() const;
 
             /**
              * @brief Get a widget at a given position
@@ -382,7 +382,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const;
+            IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const;
 
             /**
              * @brief Get the widget below the mouse cursor
@@ -391,7 +391,7 @@ namespace ime {
              * @return Widget below the mouse or a nullptr if the mouse isn't
              *         on top of any widgets
              */
-            std::shared_ptr<IWidget> getWidgetBelowMouseCursor(Vector2f mousePos) const;
+            IWidget::sharedPtr getWidgetBelowMouseCursor(Vector2f mousePos) const;
 
             /**
              * @brief Focus the next widget in the gui
@@ -420,13 +420,13 @@ namespace ime {
              * @brief Place a widget before all other widgets to the front
              * @param widget The widget to be moved to the front
              */
-            void moveWidgetToFront(const std::shared_ptr<IWidget> &widget);
+            void moveWidgetToFront(const IWidget::sharedPtr &widget);
 
             /**
              * @brief Place a widget behind all other widgets
              * @param widget The widget to be moved to the back
              */
-            void moveWidgetToBack(const std::shared_ptr<IWidget> &widget);
+            void moveWidgetToBack(const IWidget::sharedPtr &widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -434,7 +434,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(std::shared_ptr<IWidget> widget);
+            size_t moveWidgetForward(IWidget::sharedPtr widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -442,11 +442,11 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget);
+            size_t moveWidgetBackward(IWidget::sharedPtr widget);
 
         private:
             std::unique_ptr<tgui::GuiSFML> sfmlGui_; //!< Gui controller and renderer
-            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
+            std::unordered_map<std::string, IWidget::sharedPtr> widgets_; //!< Widgets container
         };
     }
 }

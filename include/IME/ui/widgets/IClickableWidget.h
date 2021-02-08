@@ -36,6 +36,8 @@ namespace ime {
          */
         class IME_API IClickableWidget : public IWidget {
         public:
+            using sharedPtr = std::shared_ptr<IClickableWidget>; //!< Shared widget pointer
+
             /**
              * @brief Enable or disable the widget
              * @param isEnable Set true to enable the widget, false to

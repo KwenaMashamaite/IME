@@ -35,14 +35,19 @@
 #include "IME/graphics/Colour.h"
 #include "IME/core/event/Event.h"
 #include "IME/ui/widgets/IWidget.h"
-#include <SFML/Graphics/Color.hpp>
-#include <TGUI/Color.hpp>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Window/Event.hpp>
-#include <TGUI/Font.hpp>
+
+namespace tgui {
+    class Font;
+    class Color;
+}
+
+namespace sf {
+    class Event;
+    class Color;
+}
 
 namespace ime::utility {
     /**
@@ -192,8 +197,8 @@ namespace ime::utility {
      * @param widgetName Name of the widget to search for
      * @return Pointer to the widget if found, otherwise a nullptr
      */
-    extern std::shared_ptr<ui::IWidget> findRecursively(
-        const std::unordered_map<std::string, std::shared_ptr<ui::IWidget>>& container,
+    extern ui::IWidget::sharedPtr findRecursively(
+        const std::unordered_map<std::string, ui::IWidget::sharedPtr>& container,
         const std::string& widgetName);
 
     #include "IME/utility/Helpers.inl"

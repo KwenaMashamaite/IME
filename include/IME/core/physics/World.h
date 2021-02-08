@@ -44,6 +44,8 @@ namespace ime {
      */
     class IME_API World {
     public:
+        using EntityPtr = std::shared_ptr<Entity>; //!< Shared Entity pointer
+
         /**
          * Callback function passed to queryAABB function
          *
@@ -52,7 +54,7 @@ namespace ime {
          * or true to continue with the query until all fixtures have been
          * processed
          */
-        using AABBCallback = std::function<bool(std::shared_ptr<Fixture>)>;
+        using AABBCallback = std::function<bool(Fixture::sharedPtr)>;
 
         /**
          * @brief Construct the world object
@@ -139,14 +141,14 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        std::shared_ptr<Body> createBody(const BodyDefinition& definition);
+        Body::sharedPtr createBody(const BodyDefinition& definition);
 
         /**
          * @brief Create a body and attach it to an entity
          * @param entity The entity to attach the body to
          * @param definition The definition to construct the rigid body from
          */
-        void createBody(std::shared_ptr<Entity> entity, const BodyDefinition& definition);
+        void createBody(EntityPtr entity, const BodyDefinition& definition);
 
         /**
          * @brief Destroy a rigid body
@@ -156,7 +158,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        void destroyBody(std::shared_ptr<Body> body);
+        void destroyBody(Body::sharedPtr body);
 
         /**
          * @brief Destroy all the bodies in the world
@@ -257,7 +259,7 @@ namespace ime {
          * The callback is passed a reference to a pointer to the body
          * on invocation
          */
-        void forEachBody(Callback<std::shared_ptr<Body>&> callback);
+        void forEachBody(Callback<Body::sharedPtr&> callback);
 
         /**
          * @brief Get the number of bodies in the world
@@ -308,11 +310,11 @@ namespace ime {
         ~World();
 
     private:
-        Scene& scene_;                              //!< The scene this world belongs to
-        b2World* world_;                            //!< The physics world simulation
-        std::vector<std::shared_ptr<Body>> bodies_; //!< All bodies in this simulation
-        bool fixedTimeStep_;                        //!< A flag indicating whether updates are fixed or variable
-        float timescale_;                           //!< Controls the speed of the simulation without affecting the render fps
+        Scene& scene_;                        //!< The scene this world belongs to
+        b2World* world_;                      //!< The physics world simulation
+        std::vector<Body::sharedPtr> bodies_; //!< All bodies in this simulation
+        bool fixedTimeStep_;                  //!< A flag indicating whether updates are fixed or variable
+        float timescale_;                     //!< Controls the speed of the simulation without affecting the render fps
     };
 }
 

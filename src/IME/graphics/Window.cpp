@@ -25,6 +25,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
+#include <SFML/Window/Event.hpp>
 
 bool ime::Window::isInstantiated_{false};
 

@@ -89,7 +89,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<EditBoxRenderer> renderer);
+            void setRenderer(EditBoxRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the labels renderer
@@ -99,7 +99,7 @@ namespace ime {
              * widget is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
              */
-            std::shared_ptr<EditBoxRenderer> getRenderer();
+            EditBoxRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the default text of the editbox
@@ -270,10 +270,10 @@ namespace ime {
             /**
              * @brief Set the width of the edit box
              * @param width New width of the edit box
-             * 
+             *
              * This function sets the width while keeping the height
              * the same
-             * 
+             *
              * @see setSize
              */
             void setWidth(float width) override;
@@ -281,16 +281,16 @@ namespace ime {
             /**
              * @brief Set the width of the edit box relative to its parent
              * @param width New width
-             * 
+             *
              * The relative width is given in percentages as shown:
-             * 
+             *
              * @code
              * edit box->setWidth("10%");
              * @endcode
-             * 
+             *
              * This function sets the width of the edit box while keeping the
              * height the same
-             * 
+             *
              * @see setSize
              */
             void setWidth(const std::string& width) override;
@@ -298,10 +298,10 @@ namespace ime {
             /**
              * @brief Set the height of the edit box
              * @param height New height of the edit box
-             * 
-             * This function sets the height while keeping the width 
+             *
+             * This function sets the height while keeping the width
              * the same
-             * 
+             *
              * @see setSize
              */
             void setHeight(float height) override;
@@ -309,16 +309,16 @@ namespace ime {
             /**
              * @brief Set the height of the edit box relative to its parent
              * @param height New height
-             * 
+             *
              * The relative height is given in percentages as shown:
-             * 
+             *
              * @code
              * edit box->setHeight("10%");
              * @endcode
-             * 
+             *
              * This function sets the height of the edit box while keeping the
              * width the same
-             * 
+             *
              * @see setSize
              */
             void setHeight(const std::string& height) override;
@@ -412,7 +412,7 @@ namespace ime {
              *
              * This function will hide the editbox if its currently
              * visible and vice versa
-             * 
+             *
              * @see setVisible
              */
             void toggleVisibility() override;
@@ -447,10 +447,10 @@ namespace ime {
              *
              * This function completely overwrites the previous position.
              * Use the move function to apply an offset based on the previous
-             * position instead. 
-             * 
+             * position instead.
+             *
              * The default position of the edit box is (0, 0)
-             * 
+             *
              * @see move
              */
             void setPosition(Vector2f position) override;
@@ -460,13 +460,13 @@ namespace ime {
              *        size of its parent
              * @param x New x coordinate of the edit box
              * @param y New y coordinate of the edit box
-             * 
+             *
              * The position is specified in percentages as shown below:
-             * 
+             *
              * @code
              * editbox->setPosition({"5%", "10%"});
              * @endcode
-             * 
+             *
              * This function completely overwrites the previous position.
              * Use the move function to apply an offset based on the previous
              * position instead.
@@ -486,11 +486,11 @@ namespace ime {
             /**
              * @brief Get the absolute position of the editbox
              * @return The absolute position of the editbox
-             * 
-             * Unlike getPosition, this function returns the absolute 
-             * position of the top-left point of the editbox instead 
+             *
+             * Unlike getPosition, this function returns the absolute
+             * position of the top-left point of the editbox instead
              * of the relative position to its parent
-             * 
+             *
              * @see setPosition
              */
             Vector2f getAbsolutePosition() const override;
@@ -501,8 +501,8 @@ namespace ime {
              *
              * This function completely overwrites the previous rotation.
              * See the rotate function to add an angle based on the previous
-             * rotation instead. 
-             * 
+             * rotation instead.
+             *
              * The default rotation of the edit box is 0
              *
              * @see rotate
@@ -515,7 +515,7 @@ namespace ime {
              *
              * This function adds to the current rotation of the edit box,
              * unlike setRotation which overwrites it
-             * 
+             *
              * @see setRotation
              */
             void rotate(float angle) override;
@@ -556,7 +556,7 @@ namespace ime {
              *
              * This function multiplies the current scale of the edit box,
              * unlike setScale which overwrites it
-             * 
+             *
              * @see setScale
              */
             void scale(float factorX, float factorY) override;
@@ -567,7 +567,7 @@ namespace ime {
              *
              * This function multiplies the current scale of the edit box,
              * unlike setScale which overwrites it
-             * 
+             *
              * @see setScale
              */
             void scale(Vector2f offset) override;
@@ -602,7 +602,7 @@ namespace ime {
              * The coordinates of this point must be relative to the
              * top-left corner of the edit box, and ignore all
              * transformations (position, scale, rotation).
-             * 
+             *
              * The default origin of the edit box is (0, 0)
              */
             void setOrigin(Vector2f origin) override;
@@ -620,7 +620,7 @@ namespace ime {
              *
              * This function adds to the current position of the edit box,
              * unlike setPosition which overwrites it
-             * 
+             *
              * @see setPosition
              */
             void move(float offsetX, float offsetY) override;
@@ -631,7 +631,7 @@ namespace ime {
              *
              * This function adds to the current position of the edit box,
              * unlike setPosition which overwrites it
-             * 
+             *
              * @see setPosition
              */
             void move(Vector2f offset) override;
@@ -690,8 +690,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::EditBox> editBox_;    //!< Pointer to third party library
-            std::shared_ptr<EditBoxRenderer> renderer_; //!< Renderer for this edit box
+            std::shared_ptr<tgui::EditBox> editBox_; //!< Pointer to third party library
+            EditBoxRenderer::sharedPtr renderer_;    //!< Renderer for this edit box
         };
     }
 }

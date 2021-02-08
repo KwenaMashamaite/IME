@@ -39,7 +39,7 @@ namespace ime {
          * @param tileMap Grid to move target in
          * @param target Entity to be moved in the grid
          */
-        explicit RandomGridMover(TileMap &tileMap, EntityPtr target = nullptr);
+        explicit RandomGridMover(TileMap &tileMap, Entity::sharedPtr target = nullptr);
 
         /**
          * @brief Start moving the target in the grid

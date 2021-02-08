@@ -42,7 +42,6 @@ namespace ime {
      */
     class IME_API GridMover {
     public:
-        using EntityPtr = std::shared_ptr<Entity>; //!< Shared pointer to Entity alias
         /**
          * @brief Create a grid mover
          * @param tileMap Grid to move a target entity in
@@ -51,7 +50,7 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must be placed
          * in the grid prior to instantiation of this class
          */
-        GridMover(TileMap &tileMap, EntityPtr target);
+        GridMover(TileMap &tileMap, Entity::sharedPtr target);
 
         /**
          * @brief Change the direction of the target entity
@@ -78,14 +77,14 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must exist in
          * the grid prior to function call
          */
-        void setTarget(EntityPtr target);
+        void setTarget(Entity::sharedPtr target);
 
         /**
          * @brief Get access to the controlled entity
          * @return The controlled entity, or a nullptr if there is no entity to
          *         control
          */
-        EntityPtr getTarget() const;
+        Entity::sharedPtr getTarget() const;
 
         /**
          * @brief Get access to the grid in which the target is moved in
@@ -136,7 +135,7 @@ namespace ime {
          * @param callback Function to execute when the target changes
          * @return The event listeners identification number
          */
-        int onTargetChanged(Callback<EntityPtr> callback);
+        int onTargetChanged(Callback<Entity::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
@@ -198,7 +197,7 @@ namespace ime {
          * The callback is passed the target as the first argument and the
          * obstacle it collided with as the second argument
          */
-        int onObstacleCollision(Callback<EntityPtr, EntityPtr> callback);
+        int onObstacleCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to a collectable collision event
@@ -209,7 +208,7 @@ namespace ime {
          * in the grid. The callback is passed the target as the first argument
          * and the collectable it collided with as the second argument
          */
-        int onCollectableCollision(Callback<EntityPtr, EntityPtr> callback);
+        int onCollectableCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to an enemy collision event
@@ -220,7 +219,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the enemy it collided with as the second argument
          */
-        int onEnemyCollision(Callback<EntityPtr, EntityPtr> callback);
+        int onEnemyCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to a player collision event
@@ -231,7 +230,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the player it collided with as the second argument
          */
-        int onPlayerCollision(Callback<EntityPtr, EntityPtr> callback);
+        int onPlayerCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback);
 
         /**
          * @brief Remove a collision handler
@@ -333,7 +332,7 @@ namespace ime {
          *         and the second is a pointer to the first encountered obstacle
          *         in the target tile or a nullptr if the first element is false
          */
-        std::pair<bool, EntityPtr> targetTileHasObstacle();
+        std::pair<bool, Entity::sharedPtr> targetTileHasObstacle();
 
         /**
          * @brief Perfectly align target with the target destination
@@ -342,7 +341,7 @@ namespace ime {
 
     private:
         TileMap& tileMap_;          //!< Grid to move entity in
-        EntityPtr target_;          //!< Target to be moved in the grid
+        Entity::sharedPtr target_;          //!< Target to be moved in the grid
         Direction targetDirection_; //!< Stores the direction in which the target wishes to go
         Tile targetTile_;           //!< The grid tile the target wishes to reach
         Tile prevTile_;             //!< Tile target was in before moving to adjacent tile

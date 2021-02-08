@@ -26,7 +26,7 @@
 #include "IME/core/path/BFS.h"
 
 namespace ime {
-    TargetGridMover::TargetGridMover(TileMap &tileMap, TargetGridMover::EntityPtr target) :
+    TargetGridMover::TargetGridMover(TileMap &tileMap, Entity::sharedPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
@@ -42,7 +42,7 @@ namespace ime {
             targetTileIndex_ = tile.getIndex();
         });
 
-        onTargetChanged([this](EntityPtr newTarget) {
+        onTargetChanged([this](Entity::sharedPtr newTarget) {
             if (newTarget && movementStarted_) {
                 generatePath();
                 moveTarget();
@@ -61,7 +61,7 @@ namespace ime {
             }
         });
 
-        onObstacleCollision([this](EntityPtr , EntityPtr) {
+        onObstacleCollision([this](Entity::sharedPtr , Entity::sharedPtr) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();

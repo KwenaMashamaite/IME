@@ -55,6 +55,8 @@ namespace ime {
      */
     class IME_API ResourceManager final {
     public:
+        using sharedPtr = std::shared_ptr<ResourceManager>; //!< Shared ResourceManager pointer
+
         /**
          * @brief Load a resource from the disk
          * @param type Type of the resource to be loaded
@@ -153,7 +155,7 @@ namespace ime {
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
-        static std::shared_ptr<ResourceManager> getInstance();
+        static sharedPtr getInstance();
 
         /**
          * @brief Destructor

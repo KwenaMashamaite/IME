@@ -44,6 +44,9 @@ namespace ime {
      */
     class IME_API Entity {
     public:
+        using sharedPtr = std::shared_ptr<Entity>; //!< Shared Entity pointer
+        using BodyPtr = std::shared_ptr<Body>;     //!< Shared Body pointer
+
         /**
          * @brief The type of an entity
          */
@@ -218,14 +221,14 @@ namespace ime {
          * body will be removed from the entity and the from the physics
          * simulation
          */
-        void attachBody(std::shared_ptr<Body> body);
+        void attachBody(BodyPtr body);
 
         /**
          * @brief Get the entity's physics body
          * @return The entity's physics body if any, otherwise a nullptr
          */
-        std::shared_ptr<Body>& getBody();
-        const std::shared_ptr<Body>& getBody() const;
+        BodyPtr & getBody();
+        const BodyPtr & getBody() const;
 
         /**
          * @brief Get the entity's transform
@@ -329,7 +332,7 @@ namespace ime {
         EventEmitter eventEmitter_;           //!< Event publisher
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
-        std::shared_ptr<Body> body_;          //!< The entity's rigid body
+        BodyPtr body_;                        //!< The entity's rigid body
     };
 }
 

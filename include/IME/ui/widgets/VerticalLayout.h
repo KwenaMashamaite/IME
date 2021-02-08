@@ -113,7 +113,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<BoxLayoutRenderer> renderer);
+            void setRenderer(BoxLayoutRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the layout renderer
@@ -125,7 +125,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<BoxLayoutRenderer> getRenderer();
+             BoxLayoutRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the character size of the text
@@ -563,7 +563,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            void insertWidget(std::size_t index, std::shared_ptr<IWidget> widget,
+            void insertWidget(std::size_t index, IWidget::sharedPtr widget,
                 const std::string &name) override;
 
             /**
@@ -580,7 +580,7 @@ namespace ime {
              * @return Widget at the given position or nullptr if the index is
              *         invalid
              */
-            std::shared_ptr<IWidget> getWidgetAt(std::size_t index) const override;
+            IWidget::sharedPtr getWidgetAt(std::size_t index) const override;
 
             /**
              * @brief Add an extra space after the last widget
@@ -609,7 +609,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            bool setRatio(std::shared_ptr<IWidget> widget, float ratio) override;
+            bool setRatio(IWidget::sharedPtr widget, float ratio) override;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -627,7 +627,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            float getRatio(std::shared_ptr<IWidget> widget) const override;
+            float getRatio(IWidget::sharedPtr widget) const override;
 
             /**
              * @brief Get the ratio of a widget at a certain index
@@ -648,7 +648,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(std::shared_ptr<IWidget> widget,
+            bool addWidget(IWidget::sharedPtr widget,
                 const std::string &name) override;
 
             /**
@@ -662,7 +662,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the
              * given name, a recursive search will be performed.
              */
-            std::shared_ptr<IWidget> getWidget(const std::string &name) const override;
+            IWidget::sharedPtr getWidget(const std::string &name) const override;
             using IContainer::getWidget;
 
             /**
@@ -683,14 +683,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToFront(std::shared_ptr<IWidget> widget) override;
+            void moveWidgetToFront(IWidget::sharedPtr widget) override;
 
             /**
             * @brief Place a widget behind all other widgets, to the back
             *        of the z-order
             * @param widget The widget that should be moved to the front
             */
-            void moveWidgetToBack(std::shared_ptr<IWidget> widget) override;
+            void moveWidgetToBack(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -698,7 +698,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetForward(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -706,7 +706,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetBackward(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -719,7 +719,7 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            std::shared_ptr<IWidget> getFocusedWidget() const override;
+            IWidget::sharedPtr getFocusedWidget() const override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -734,7 +734,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<IWidget> getFocusedLeaf() const override;
+            IWidget::sharedPtr getFocusedLeaf() const override;
 
             /**
              * @brief Get a widget at a given position
@@ -743,7 +743,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const override;
+            IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const override;
 
             /**
              * @brief Focus the next widget in the container
@@ -783,9 +783,9 @@ namespace ime {
             void initEvents();
 
         private:
-            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
-            std::shared_ptr<tgui::VerticalLayout> layout_;                      //!< Pointer to third party library
-            std::shared_ptr<BoxLayoutRenderer> renderer_;                       //!< Renderer for this layout
+            std::unordered_map<std::string, IWidget::sharedPtr> widgets_; //!< Widgets container
+            std::shared_ptr<tgui::VerticalLayout> layout_;                //!< Pointer to third party library
+            BoxLayoutRenderer::sharedPtr renderer_;                       //!< Renderer for this layout
         };
     }
 }

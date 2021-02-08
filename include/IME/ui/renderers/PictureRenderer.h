@@ -39,6 +39,8 @@ namespace ime {
          */
         class IME_API PictureRenderer : public IWidgetRenderer {
         public:
+            using sharedPtr = std::shared_ptr<PictureRenderer>; //!< Shared renderer pointer
+
             /**
              * @brief Change the image that is displayed
              * @param filename Filename of the new texture

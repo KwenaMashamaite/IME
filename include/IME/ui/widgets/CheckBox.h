@@ -89,7 +89,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<CheckBoxRenderer> renderer);
+            void setRenderer(CheckBoxRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the checkboxes renderer
@@ -101,7 +101,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<CheckBoxRenderer> getRenderer();
+            CheckBoxRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Allow or disallow the checkbox to be checked by clicking
@@ -623,8 +623,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::CheckBox> checkBox_;   //!< Pointer to third party library
-            std::shared_ptr<CheckBoxRenderer> renderer_; //!< Renderer for this checkbox
+            std::shared_ptr<tgui::CheckBox> checkBox_; //!< Pointer to third party library
+            CheckBoxRenderer::sharedPtr renderer_;     //!< Renderer for this checkbox
         };
     }
 }

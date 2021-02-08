@@ -44,6 +44,8 @@ namespace ime {
      */
     class IME_API EventDispatcher {
     public:
+        using sharedPtr = std::shared_ptr<EventDispatcher>; //!< Shared EventDispatcher pointer
+
         /**
          * @brief Copy constructor
          */
@@ -88,7 +90,7 @@ namespace ime {
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
-        static std::shared_ptr<EventDispatcher> instance();
+        static sharedPtr instance();
 
     private:
         /**
@@ -97,9 +99,9 @@ namespace ime {
         EventDispatcher() = default;
 
     private:
-        std::shared_ptr<EventDispatcher> instance_; //!< The only class instance
-        EventEmitter eventEmitter_;                 //!< Event publisher
-        inline static std::mutex mutex_;            //!< Synchronization primitive
+        sharedPtr instance_;             //!< The only class instance
+        EventEmitter eventEmitter_;      //!< Event publisher
+        inline static std::mutex mutex_; //!< Synchronization primitive
     };
 
     #include "IME/core/event/EventDispatcher.inl"

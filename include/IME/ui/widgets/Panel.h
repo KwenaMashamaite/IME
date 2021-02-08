@@ -114,7 +114,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<PanelRenderer> renderer);
+            void setRenderer(PanelRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the panels renderer
@@ -126,7 +126,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<PanelRenderer> getRenderer();
+            PanelRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the character size of the text
@@ -562,8 +562,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(std::shared_ptr<IWidget> widget,
-                const std::string &name) override;
+            bool addWidget(IWidget::sharedPtr widget, const std::string &name) override;
 
             /**
              * @brief Get a widget in the container
@@ -576,7 +575,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the
              * given name, a recursive search will be performed.
              */
-            std::shared_ptr<IWidget> getWidget(const std::string &name) const override;
+            IWidget::sharedPtr getWidget(const std::string &name) const override;
             using IContainer::getWidget;
 
             /**
@@ -597,14 +596,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToFront(std::shared_ptr<IWidget> widget) override;
+            void moveWidgetToFront(IWidget::sharedPtr widget) override;
 
             /**
             * @brief Place a widget behind all other widgets, to the back
             *        of the z-order
             * @param widget The widget that should be moved to the front
             */
-            void moveWidgetToBack(std::shared_ptr<IWidget> widget) override;
+            void moveWidgetToBack(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -612,7 +611,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetForward(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -620,7 +619,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(std::shared_ptr<IWidget> widget) override;
+            size_t moveWidgetBackward(IWidget::sharedPtr widget) override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -633,7 +632,7 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            std::shared_ptr<IWidget> getFocusedWidget() const override;
+            IWidget::sharedPtr getFocusedWidget() const override;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -648,7 +647,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            std::shared_ptr<IWidget> getFocusedLeaf() const override;
+            IWidget::sharedPtr getFocusedLeaf() const override;
 
             /**
              * @brief Get a widget at a given position
@@ -657,7 +656,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const override;
+            IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const override;
 
             /**
              * @brief Focus the next widget in the container
@@ -697,9 +696,9 @@ namespace ime {
             void initEvents();
 
         private:
-            std::unordered_map<std::string, std::shared_ptr<IWidget>> widgets_; //!< Widgets container
-            std::shared_ptr<tgui::Panel> panel_;                                //!< Pointer to third party panel
-            std::shared_ptr<PanelRenderer> renderer_;                           //!< Renderer
+            std::unordered_map<std::string, IWidget::sharedPtr> widgets_; //!< Widgets container
+            std::shared_ptr<tgui::Panel> panel_;                           //!< Pointer to third party panel
+            PanelRenderer::sharedPtr renderer_;                            //!< Renderer
         };
     }
 }

@@ -52,16 +52,16 @@ namespace ime {
         b2Definition = nullptr;
     }
 
-    std::shared_ptr<Fixture> Body::createFixture(const FixtureDefinition& definition) {
+    Fixture::sharedPtr Body::createFixture(const FixtureDefinition& definition) {
         if (world_ && !world_->isLocked()) {
-            auto fixture = std::shared_ptr<Fixture>(new Fixture(definition, this));
+            auto fixture = Fixture::sharedPtr(new Fixture(definition, this));
             fixtures_.push_back(fixture);
             return fixture;
         }
         return nullptr;
     }
 
-    std::shared_ptr<Fixture> Body::createFixture(const Shape *shape, float density) {
+    Fixture::sharedPtr Body::createFixture(const Shape *shape, float density) {
         if (world_ && !world_->isLocked()) {
             auto fixtureDef = FixtureDefinition();
             fixtureDef.shape = shape;
@@ -71,7 +71,7 @@ namespace ime {
         return nullptr;
     }
 
-    void Body::destroyFixture(std::shared_ptr<Fixture> fixture) {
+    void Body::destroyFixture(Fixture::sharedPtr fixture) {
         if (world_ && !world_->isLocked()) {
             if (auto [found, index] = utility::findIn(fixtures_, fixture); found) {
                 body_->DestroyFixture(fixtures_[index]->fixture_);

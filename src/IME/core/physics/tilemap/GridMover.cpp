@@ -26,7 +26,7 @@
 #include "IME/core/entity/IMovable.h"
 
 namespace ime {
-    GridMover::GridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
+    GridMover::GridMover(TileMap &tileMap, Entity::sharedPtr target) :
         tileMap_(tileMap),
         target_(target),
         targetDirection_(Direction::Unknown),
@@ -40,7 +40,7 @@ namespace ime {
         }
     }
 
-    void GridMover::setTarget(GridMover::EntityPtr target) {
+    void GridMover::setTarget(Entity::sharedPtr target) {
         if (target_ == target)
             return;
         else if (target) {
@@ -56,7 +56,7 @@ namespace ime {
         eventEmitter_.emit("targetChange", target_);
     }
 
-    GridMover::EntityPtr GridMover::getTarget() const {
+    Entity::sharedPtr GridMover::getTarget() const {
         return target_;
     }
 
@@ -153,9 +153,9 @@ namespace ime {
         return false;
     }
 
-    std::pair<bool, std::shared_ptr<Entity>> GridMover::targetTileHasObstacle() {
-        EntityPtr obstacle;
-        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](EntityPtr child) {
+    std::pair<bool, Entity::sharedPtr> GridMover::targetTileHasObstacle() {
+        Entity::sharedPtr obstacle;
+        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](Entity::sharedPtr child) {
             if (child->getType() == Entity::Type::Obstacle && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
@@ -190,7 +190,7 @@ namespace ime {
     }
 
     void GridMover::onDestinationReached() {
-        tileMap_.forEachChildInTile(targetTile_, [this](EntityPtr entity) {
+        tileMap_.forEachChildInTile(targetTile_, [this](Entity::sharedPtr entity) {
             if (target_->isCollidable() && entity->isCollidable()) {
                 switch (entity->getType()) {
                     case Entity::Type::Player:
@@ -230,7 +230,7 @@ namespace ime {
         }
     }
 
-    int GridMover::onTargetChanged(Callback<GridMover::EntityPtr> callback) {
+    int GridMover::onTargetChanged(Callback<Entity::sharedPtr> callback) {
         return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
@@ -246,19 +246,19 @@ namespace ime {
         return eventEmitter_.addEventListener("adjacentTileReached", std::move(callback));
     }
 
-    int GridMover::onObstacleCollision(Callback<EntityPtr, EntityPtr> callback) {
+    int GridMover::onObstacleCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback) {
         return eventEmitter_.addEventListener("obstacleCollision", std::move(callback));
     }
 
-    int GridMover::onCollectableCollision(Callback<EntityPtr, EntityPtr> callback) {
+    int GridMover::onCollectableCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback) {
         return eventEmitter_.addEventListener("collectableCollision", std::move(callback));
     }
 
-    int GridMover::onEnemyCollision(Callback<EntityPtr, EntityPtr> callback) {
+    int GridMover::onEnemyCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback) {
         return eventEmitter_.addEventListener("enemyCollision", std::move(callback));
     }
 
-    int GridMover::onPlayerCollision(Callback<GridMover::EntityPtr, GridMover::EntityPtr> callback) {
+    int GridMover::onPlayerCollision(Callback<Entity::sharedPtr, Entity::sharedPtr> callback) {
         return eventEmitter_.addEventListener("playerCollision", std::move(callback));
     }
 

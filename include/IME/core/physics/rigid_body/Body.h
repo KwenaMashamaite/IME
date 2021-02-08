@@ -60,6 +60,8 @@ namespace ime {
      */
     class IME_API Body {
     public:
+        using sharedPtr = std::shared_ptr<Body>; //!< Shared Body pointer
+
         /**
          * @brief Create a fixture and attach it to this body
          * @param definition The fixture definition to contract fixture from
@@ -73,7 +75,7 @@ namespace ime {
          *
          * @warning This function is locked during world callbacks
          */
-        std::shared_ptr<Fixture> createFixture(const FixtureDefinition& definition);
+        Fixture::sharedPtr createFixture(const FixtureDefinition& definition);
 
         /**
          * @brief Create a fixture from a shape and attach it to this body
@@ -90,7 +92,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        std::shared_ptr<Fixture> createFixture(const Shape* shape, float density);
+        Fixture::sharedPtr createFixture(const Shape* shape, float density);
 
         /**
          * @brief Destroy a fixture
@@ -104,7 +106,7 @@ namespace ime {
          *
          * @warning This function is locked during world callbacks
          */
-        void destroyFixture(std::shared_ptr<Fixture> fixture);
+        void destroyFixture(Fixture::sharedPtr fixture);
 
         /**
          * @brief Set the position of the bodies origin and rotation
@@ -472,7 +474,7 @@ namespace ime {
         friend class Fixture; //!< Needs access to internal body
 
         PropertyContainer userData_;                       //!< Application specific body data
-        std::vector<std::shared_ptr<Fixture>> fixtures_;  //!< Fixtures attached to this body
+        std::vector<Fixture::sharedPtr> fixtures_;  //!< Fixtures attached to this body
     };
 }
 

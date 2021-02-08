@@ -90,7 +90,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<TabsRenderer> renderer);
+            void setRenderer(TabsRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the tabs renderer
@@ -102,7 +102,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<TabsRenderer> getRenderer();
+            TabsRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set whether or not the tabs auto-size
@@ -782,8 +782,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::Tabs> tabs_;        //!< Pointer to to third party tabs
-            std::shared_ptr<TabsRenderer> renderer_; //!< Tab renderer
+            std::shared_ptr<tgui::Tabs> tabs_; //!< Pointer to to third party tabs
+            TabsRenderer::sharedPtr renderer_; //!< Tab renderer
         };
     }
 }

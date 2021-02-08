@@ -74,6 +74,8 @@ namespace ime {
          */
         class IME_API IWidget : public ITransformable {
         public:
+            using sharedPtr = std::shared_ptr<IWidget>; //!< Shared widget pointer
+
             /**
              * @brief Set the position of the widget relative to the
              *        size of its parent

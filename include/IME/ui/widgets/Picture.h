@@ -153,7 +153,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<PictureRenderer> renderer);
+            void setRenderer(PictureRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the pictures renderer
@@ -165,7 +165,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            std::shared_ptr<PictureRenderer> getRenderer();
+            PictureRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set whether or not the picture ignores mouse events
@@ -664,8 +664,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::Picture> picture_;     //!< Pointer to third party picture
-            std::shared_ptr<PictureRenderer> renderer_;  //!< Renderer
+            std::shared_ptr<tgui::Picture> picture_; //!< Pointer to third party picture
+            PictureRenderer::sharedPtr renderer_;    //!< Renderer
         };
     }
 }

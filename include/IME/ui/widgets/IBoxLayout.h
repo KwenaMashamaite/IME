@@ -35,6 +35,8 @@ namespace ime {
          */
         class IME_API IBoxLayout : public IContainer {
         public:
+            using sharedPtr = std::shared_ptr<IBoxLayout>; //!< Shared widget pointer
+
             /**
              * @brief Insert a widget to the container
              * @param index Where the widget should be inserted

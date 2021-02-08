@@ -41,6 +41,8 @@ namespace ime {
          */
         class IME_API TabsRenderer : public IWidgetRenderer {
         public:
+            using sharedPtr = std::shared_ptr<TabsRenderer>; //!< Shared renderer pointer
+
             /**
              * @brief Change the size of the widget borders
              * @param borders The size of the borders

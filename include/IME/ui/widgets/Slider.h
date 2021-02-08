@@ -91,7 +91,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<SliderRenderer> renderer);
+            void setRenderer(SliderRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the sliders renderer
@@ -103,7 +103,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<SliderRenderer> getRenderer();
+            SliderRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set a minimum value for the slider
@@ -706,8 +706,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::Slider> slider_;     //!< Pointer to third party library
-            std::shared_ptr<SliderRenderer> renderer_; //!< Renderer for this slider
+            std::shared_ptr<tgui::Slider> slider_; //!< Pointer to third party library
+            SliderRenderer::sharedPtr renderer_;   //!< Renderer for this slider
         };
     }
 }

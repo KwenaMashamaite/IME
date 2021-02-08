@@ -34,6 +34,7 @@
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/scene/SceneManager.h"
+#include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
 #include <queue>
 
@@ -165,7 +166,7 @@ namespace ime {
          * initialization. This means that only the optional callback attached
          * to the last scene will be invoked
          */
-        void pushScene(std::shared_ptr<Scene> scene, Callback<> callback = nullptr);
+        void pushScene(Scene::sharedPtr scene, Callback<> callback = nullptr);
 
         /**
          * @brief Remove the current scene from the engine
@@ -358,28 +359,28 @@ namespace ime {
         void shutdown();
 
     private:
-        Window window_;                                     //!< The engines render target
-        std::string gameTitle_;                             //!< The name of the game run by the engine
-        std::string settingFile_;                           //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                        //!< The engines settings
-        bool isSettingsLoadedFromFile_;                     //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
-        bool isInitialized_;                                //!< A flag indicating whether or not the engine has been initialized
-        bool isRunning_;                                    //!< A flag indicating whether or not the engine is running
-        Time deltaTime_;                                    //!< The time taken for each game frame to complete
-        Time elapsedTime_;                                  //!< The time passed since the engine started running
-        SceneManager sceneManager_;                         //!< The games scene manager
-        audio::AudioManager audioManager_;                  //!< The games global audio manager
-        input::InputManager inputManager_;                  //!< The games global input manager
-        std::shared_ptr<ResourceManager> resourceManager_;  //!< The games global resource manager
-        std::shared_ptr<EventDispatcher> eventDispatcher_;  //!< Engines Event dispatcher
-        PropertyContainer dataSaver_;                       //!< Holds Data that persists across scenes
-        bool pendingPop_;                                   //!< A flag indicting whether or not the current scene should be popped
-        Callback<> onWindowClose_;                          //!< A Function executed when a request to close the window is received
-        Callback<> onFrameStart_;                           //!< A Function called at the start of the current frame
-        Callback<> onFrameEnd_;                             //!< A Function called at the end of the current frame
-        TimerManager timerManager_;                         //!< Manages global timers
+        Window window_;                              //!< The engines render target
+        std::string gameTitle_;                      //!< The name of the game run by the engine
+        std::string settingFile_;                    //!< The filename of the file that contains the engines config entries
+        PropertyContainer settings_;                 //!< The engines settings
+        bool isSettingsLoadedFromFile_;              //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
+        bool isInitialized_;                         //!< A flag indicating whether or not the engine has been initialized
+        bool isRunning_;                             //!< A flag indicating whether or not the engine is running
+        Time deltaTime_;                             //!< The time taken for each game frame to complete
+        Time elapsedTime_;                           //!< The time passed since the engine started running
+        SceneManager sceneManager_;                  //!< The games scene manager
+        audio::AudioManager audioManager_;           //!< The games global audio manager
+        input::InputManager inputManager_;           //!< The games global input manager
+        ResourceManager::sharedPtr resourceManager_; //!< The games global resource manager
+        EventDispatcher::sharedPtr eventDispatcher_; //!< Engines Event dispatcher
+        PropertyContainer dataSaver_;                //!< Holds Data that persists across scenes
+        bool pendingPop_;                            //!< A flag indicting whether or not the current scene should be popped
+        Callback<> onWindowClose_;                   //!< A Function executed when a request to close the window is received
+        Callback<> onFrameStart_;                    //!< A Function called at the start of the current frame
+        Callback<> onFrameEnd_;                      //!< A Function called at the end of the current frame
+        TimerManager timerManager_;                  //!< Manages global timers
 
-        std::queue<std::pair<std::shared_ptr<Scene>, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
+        std::queue<std::pair<Scene::sharedPtr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
 }
 

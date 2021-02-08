@@ -67,6 +67,8 @@ namespace ime {
      */
     class IME_API Scene {
     public:
+        using sharedPtr = std::shared_ptr<Scene>; //!< Shared Scene pointer
+
         /**
          * @brief Constructor
          * @param engine A reference to the game engine

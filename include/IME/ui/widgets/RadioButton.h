@@ -89,7 +89,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<RadioButtonRenderer> renderer);
+            void setRenderer(RadioButtonRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the buttons renderer
@@ -99,7 +99,7 @@ namespace ime {
              * button is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
              */
-            std::shared_ptr<RadioButtonRenderer> getRenderer();
+            RadioButtonRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Allow or disallow the button to be checked by clicking
@@ -621,8 +621,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::RadioButton> button_;     //!< Pointer to third party button
-            std::shared_ptr<RadioButtonRenderer> renderer_; //!< Renderer
+            std::shared_ptr<tgui::RadioButton> button_; //!< Pointer to third party button
+            RadioButtonRenderer::sharedPtr renderer_;   //!< Renderer
         };
     }
 }

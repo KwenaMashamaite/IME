@@ -39,7 +39,7 @@ namespace ime {
          * @param tileMap Grid to move target in
          * @param target Entity to be moved in the grid
          */
-        explicit TargetGridMover(TileMap &tileMap, EntityPtr target = nullptr);
+        explicit TargetGridMover(TileMap &tileMap, Entity::sharedPtr target = nullptr);
 
         /**
          * @brief Set the path finder

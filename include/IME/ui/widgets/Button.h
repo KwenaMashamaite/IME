@@ -90,7 +90,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<ButtonRenderer> renderer);
+            void setRenderer(ButtonRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the buttons renderer
@@ -102,7 +102,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<ButtonRenderer> getRenderer();
+            ButtonRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the text displayed on the button
@@ -597,8 +597,8 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::Button> button_;     //!< Pointer to third party api
-            std::shared_ptr<ButtonRenderer> renderer_; //!< Renderer
+            std::shared_ptr<tgui::Button> button_; //!< Pointer to third party api
+            ButtonRenderer::sharedPtr renderer_;   //!< Renderer
         };
     }
 }

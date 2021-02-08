@@ -90,7 +90,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<SeparatorRenderer> renderer);
+            void setRenderer(SeparatorRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the separators renderer
@@ -102,7 +102,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<SeparatorRenderer> getRenderer();
+            SeparatorRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the character size of the text
@@ -586,7 +586,7 @@ namespace ime {
 
         private:
             std::shared_ptr<tgui::SeparatorLine> separator_; //!< Pointer to third party widget
-            std::shared_ptr<SeparatorRenderer> renderer_;    //!< Separator renderer
+            SeparatorRenderer::sharedPtr renderer_;          //!< Separator renderer
         };
     }
 }

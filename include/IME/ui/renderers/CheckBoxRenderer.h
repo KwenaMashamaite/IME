@@ -40,6 +40,8 @@ namespace ime {
          */
         class IME_API CheckBoxRenderer : public IWidgetRenderer {
         public:
+            using sharedPtr = std::shared_ptr<CheckBoxRenderer>; //!< Shared renderer pointer
+
             /**
              * @brief Change the ize of the widget borders
              * @param borders The size of the borders

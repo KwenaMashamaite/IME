@@ -36,6 +36,8 @@ namespace ime {
          */
         class IME_API IContainer : public IWidget {
         public:
+            using sharedPtr = std::shared_ptr<IContainer>; //!< Shared IContainer pointer
+            
             /**
              * @brief Add a widget to the container
              * @param widget Widget to be added
@@ -46,7 +48,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            virtual bool addWidget(std::shared_ptr<IWidget> widget,
+            virtual bool addWidget(IWidget::sharedPtr widget,
                 const std::string& name) = 0;
             
             /**
@@ -60,7 +62,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the 
              * given name, a recursive search will be performed.
              */
-            virtual std::shared_ptr<IWidget> getWidget(const std::string& name) const = 0;
+            virtual IWidget::sharedPtr getWidget(const std::string& name) const = 0;
 
             /**
              * @brief Get access to a widget in the container
@@ -101,14 +103,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            virtual void moveWidgetToFront(std::shared_ptr<IWidget> widget) = 0;
+            virtual void moveWidgetToFront(IWidget::sharedPtr widget) = 0;
 
             /**
              * @brief Place a widget behind all other widgets, to the back
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            virtual void moveWidgetToBack(std::shared_ptr<IWidget> widget) = 0;
+            virtual void moveWidgetToBack(IWidget::sharedPtr widget) = 0;
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -116,7 +118,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            virtual std::size_t moveWidgetForward(std::shared_ptr<IWidget> widget) = 0;
+            virtual std::size_t moveWidgetForward(IWidget::sharedPtr widget) = 0;
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -124,7 +126,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            virtual std::size_t moveWidgetBackward(std::shared_ptr<IWidget> widget) = 0;
+            virtual std::size_t moveWidgetBackward(IWidget::sharedPtr widget) = 0;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -137,7 +139,7 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            virtual std::shared_ptr<IWidget> getFocusedWidget() const = 0;
+            virtual IWidget::sharedPtr getFocusedWidget() const = 0;
             
             /**
              * @brief Get the currently focused widget inside the container
@@ -152,7 +154,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            virtual std::shared_ptr<IWidget> getFocusedLeaf() const = 0;
+            virtual IWidget::sharedPtr getFocusedLeaf() const = 0;
 
             /**
              * @brief Get a widget at a given position
@@ -161,7 +163,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            virtual std::shared_ptr<IWidget> getWidgetAtPosition(Vector2f pos) const = 0;
+            virtual IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const = 0;
 
             /**
              * @brief Focus the next widget in the container

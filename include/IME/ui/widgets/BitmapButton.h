@@ -90,7 +90,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<ButtonRenderer> renderer);
+            void setRenderer(ButtonRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the buttons renderer
@@ -102,7 +102,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<ButtonRenderer> getRenderer();
+            ButtonRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the image that should be displayed next to the text
@@ -625,7 +625,7 @@ namespace ime {
 
         private:
             std::shared_ptr<tgui::BitmapButton> button_; //!< Pointer to third party library
-            std::shared_ptr<ButtonRenderer> renderer_;   //!< Renderer for this button
+            ButtonRenderer::sharedPtr renderer_;         //!< Renderer for this button
         };
     }
 }

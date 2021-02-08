@@ -121,7 +121,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<TabsRenderer> renderer);
+            void setRenderer(TabsRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the tabs renderer
@@ -133,7 +133,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<TabsRenderer> getRenderer();
+            TabsRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the height of the tabs part of the widget
@@ -153,7 +153,7 @@ namespace ime {
              *
              * By default, the panel is selected after being added
              */
-            void addPanel(std::shared_ptr<Panel> panel, const std::string& text, bool select = true);
+            void addPanel(Panel::sharedPtr panel, const std::string& text, bool select = true);
 
             /**
              * @brief Insert a panel between other panels
@@ -169,14 +169,14 @@ namespace ime {
              * 
              * @warning This function os experimental
              */
-            bool insertPanel(std::shared_ptr<Panel> panel, const std::string& text,
+            bool insertPanel(Panel::sharedPtr panel, const std::string& text,
                 std::size_t index, bool select = true);
 
             /**
              * @brief Remove a panel from the container
              * @param panel Panel to remove
              */
-            void removePanel(std::shared_ptr<Panel> panel);
+            void removePanel(Panel::sharedPtr panel);
 
             /**
              * @brief Select a panel
@@ -196,14 +196,14 @@ namespace ime {
              * @return The index of the panel or -1 if the panel does not
              *         exist in the container
              */
-            int getIndex(std::shared_ptr<Panel> panel);
+            int getIndex(Panel::sharedPtr panel);
 
             /**
              * @brief Get the currently selected panel
              * @return The panel that is selected or a nullptr if no panel
              *         is selected
              */
-            std::shared_ptr<Panel> getSelected();
+            Panel::sharedPtr getSelected();
 
             /**
              * @brief Get the index of the currently selected panel
@@ -218,7 +218,7 @@ namespace ime {
              * @return Panel with the given index or a nullptr if the index
              *         is out of bounds
              */
-            std::shared_ptr<Panel> getPanel(int index);
+            Panel::sharedPtr getPanel(int index);
 
             /**
              * @brief Get the text of a container
@@ -688,9 +688,9 @@ namespace ime {
             void initEvents();
 
         private:
-            std::shared_ptr<tgui::TabContainer> tabContainer_; //!< Pointer to third party container
-            std::unordered_map<std::size_t, std::shared_ptr<Panel>> panels_;
-            std::shared_ptr<TabsRenderer> renderer_; //!< Tabs renderer
+            std::shared_ptr<tgui::TabContainer> tabContainer_;         //!< Pointer to third party container
+            std::unordered_map<std::size_t, Panel::sharedPtr> panels_; //!< Panels container
+            TabsRenderer::sharedPtr renderer_;                         //!< Tabs renderer
         };
     }
 }

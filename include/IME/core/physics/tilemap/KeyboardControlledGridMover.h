@@ -51,7 +51,7 @@ namespace ime {
          * @param tileMap Grid to move target in
          * @param target Target to be moved in the grid
          */
-        explicit KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<Entity> target = nullptr);
+        explicit KeyboardControlledGridMover(TileMap &tileMap, Entity::sharedPtr target = nullptr);
 
         /**
          * @brief Set the key event that triggers the targets movement

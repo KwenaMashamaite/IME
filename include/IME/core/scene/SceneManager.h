@@ -103,7 +103,7 @@ namespace ime {
          *
          * @see enterTopScene
          */
-        void pushScene(std::shared_ptr<Scene> scene, bool enterScene = false);
+        void pushScene(Scene::sharedPtr scene, bool enterScene = false);
 
         /**
          * @brief Remove the current active scene
@@ -175,8 +175,8 @@ namespace ime {
         void updateScene(Time deltaTime, bool fixedUpdate);
 
     private:
-        std::stack<std::shared_ptr<Scene>> scenes_; //!< Scenes container
-        std::shared_ptr<Scene> prevScene_;          //!< Pointer to the active scene before a push operation
+        std::stack<Scene::sharedPtr> scenes_; //!< Scenes container
+        Scene::sharedPtr prevScene_;          //!< Pointer to the active scene before a push operation
     };
 }
 

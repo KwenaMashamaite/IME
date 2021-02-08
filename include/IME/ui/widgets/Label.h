@@ -108,7 +108,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(std::shared_ptr<LabelRenderer> renderer);
+            void setRenderer(LabelRenderer::sharedPtr renderer);
 
             /**
              * @brief Get the labels renderer
@@ -120,7 +120,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            std::shared_ptr<LabelRenderer> getRenderer();
+            LabelRenderer::sharedPtr getRenderer();
 
             /**
              * @brief Set the horizontal text alignment
@@ -650,8 +650,8 @@ namespace ime {
             std::shared_ptr<tgui::Widget> getInternalPtr() override;
 
         private:
-            std::shared_ptr<tgui::Label> label_;      //!< Pointer to third party library
-            std::shared_ptr<LabelRenderer> renderer_; //!< Renderer for this label
+            std::shared_ptr<tgui::Label> label_; //!< Pointer to third party library
+            LabelRenderer::sharedPtr renderer_;  //!< Renderer for this label
         };
     }
 } 
