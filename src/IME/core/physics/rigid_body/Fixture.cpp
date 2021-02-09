@@ -28,7 +28,7 @@
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
-    Fixture::Fixture(const FixtureDefinition& definition, Body *body) {
+    Fixture::Fixture(const FixtureDefinition& definition, Body::sharedPtr body) {
         IME_ASSERT(definition.shape, "Fixture definition does not have a shape set");
         auto b2FixtureDef = new struct b2FixtureDef();
         b2FixtureDef->restitution = definition.restitution;
@@ -57,11 +57,11 @@ namespace ime {
         return fixture_->IsSensor();
     }
 
-    Body *Fixture::getBody() {
+    Body::sharedPtr Fixture::getBody() {
         return body_;
     }
 
-    const Body *Fixture::getBody() const {
+    const Body::sharedPtr& Fixture::getBody() const {
         return body_;
     }
 

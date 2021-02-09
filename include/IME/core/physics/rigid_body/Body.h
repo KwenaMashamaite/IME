@@ -58,7 +58,7 @@ namespace ime {
      * A body is not constructed directly, use the World::createBody function
      * to construct a rigid body
      */
-    class IME_API Body {
+    class IME_API Body : public std::enable_shared_from_this<Body> {
     public:
         using sharedPtr = std::shared_ptr<Body>; //!< Shared Body pointer
 

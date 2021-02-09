@@ -54,7 +54,7 @@ namespace ime {
 
     Fixture::sharedPtr Body::createFixture(const FixtureDefinition& definition) {
         if (world_ && !world_->isLocked()) {
-            auto fixture = Fixture::sharedPtr(new Fixture(definition, this));
+            auto fixture = Fixture::sharedPtr(new Fixture(definition, shared_from_this()));
             fixtures_.push_back(fixture);
             return fixture;
         }
@@ -300,7 +300,8 @@ namespace ime {
     }
 
     Body::~Body() {
-        // We don't call delete because memory is deallocated by Box2d
+        // We don't call delete because memory is deallocated by World
+        // instance when it goes ot of scope
         body_ = nullptr;
         world_ = nullptr;
     }

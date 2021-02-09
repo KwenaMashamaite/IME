@@ -48,6 +48,7 @@ namespace ime {
     class IME_API Fixture {
     public:
         using sharedPtr = std::shared_ptr<Fixture>; //!< Shared pointer to a fixture
+        using BodyPtr = std::shared_ptr<Body>;      //!< Shared Body pointer
 
         /**
          * @brief Set the density of the fixture
@@ -147,8 +148,8 @@ namespace ime {
          * @brief Get the body the fixture is attached to
          * @return The body attached to this fixture if any, otherwise a nullptr
          */
-        Body* getBody();
-        const Body* getBody() const;
+        BodyPtr getBody();
+        const BodyPtr& getBody() const;
 
         /**
          * @brief Get the child shape
@@ -185,12 +186,12 @@ namespace ime {
          * @param definition The definition to construct fixture from
          * @param body The body this fixture will be attached to
          */
-        Fixture(const FixtureDefinition& definition, Body* body);
+        Fixture(const FixtureDefinition& definition, BodyPtr body);
 
     private:
         b2Fixture* fixture_; //!< Internal fixture
-        Body* body_;         //!< The body this fixture is attached to
-        Shape* shape_;
+        BodyPtr body_;       //!< The body this fixture is attached to
+        Shape* shape_;       //!< Shape of the fixture
         friend class Body;   //!< Needs access to constructor
         PropertyContainer userData_; //!< Application specific fixture data
     };
