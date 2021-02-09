@@ -29,7 +29,7 @@
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(const BodyDefinition &definition, World* world) {
+    Body::Body(const BodyDefinition &definition, World::sharedPtr world) {
         auto b2Definition = new b2BodyDef();
         b2Definition->type = static_cast<b2BodyType>(definition.bodyType);
         b2Definition->position = {utility::pixelsToMetres(definition.position.x), utility::pixelsToMetres(definition.position.y)};
@@ -295,6 +295,14 @@ namespace ime {
         return body_->IsFixedRotation();
     }
 
+    Body::WorldPtr Body::getWorld() {
+        return world_;
+    }
+
+    const Body::WorldPtr &Body::getWorld() const {
+        return world_;
+    }
+
     PropertyContainer &Body::getUserData() {
         return userData_;
     }
@@ -303,6 +311,5 @@ namespace ime {
         // We don't call delete because memory is deallocated by World
         // instance when it goes ot of scope
         body_ = nullptr;
-        world_ = nullptr;
     }
 }

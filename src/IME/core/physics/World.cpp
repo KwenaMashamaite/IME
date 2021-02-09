@@ -133,19 +133,19 @@ namespace ime {
         return fixedTimeStep_;
     }
 
-    std::shared_ptr<Body> World::createBody(const BodyDefinition &definition) {
-        auto body = std::shared_ptr<Body>(new Body(definition, this));
+    Body::sharedPtr World::createBody(const BodyDefinition &definition) {
+        auto body = Body::sharedPtr(new Body(definition, shared_from_this()));
         bodies_.push_back(body);
         return body;
     }
 
-    void World::createBody(std::shared_ptr<Entity> entity, const BodyDefinition &definition) {
+    void World::createBody(Entity::sharedPtr entity, const BodyDefinition &definition) {
         if (entity) {
             entity->attachBody(createBody(definition));
         }
     }
 
-    void World::destroyBody(std::shared_ptr<Body> body) {
+    void World::destroyBody(Body::sharedPtr body) {
         if (world_ && !world_->IsLocked()) {
             if (auto [found, index] = utility::findIn(bodies_, body); found) {
                 world_->DestroyBody(bodies_[index]->body_);
@@ -195,7 +195,7 @@ namespace ime {
         return world_->GetSubStepping();
     }
 
-    void World::forEachBody(Callback<std::shared_ptr<Body> &> callback) {
+    void World::forEachBody(Callback<Body::sharedPtr&> callback) {
         std::for_each(bodies_.begin(), bodies_.end(), callback);
     }
 

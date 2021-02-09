@@ -32,13 +32,13 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/physics/World.h"
 #include <string>
 #include <memory>
 
 namespace ime {
     class Engine; //!< Engine class forward declaration
     class Window; //!< Window class forward declaration
+    class World;  //!< World class forward declaration
 
     /**
      * @brief Abstract base class for game scenes
@@ -372,7 +372,7 @@ namespace ime {
     private:
         Engine &engine_;                   //!< A reference to the game engine
         PropertyContainer& cache_;         //!< The global cache
-        std::unique_ptr<World> world_;     //!< Physics simulation
+        std::shared_ptr<World> world_;     //!< Physics simulation
         std::string name_;                 //!< The name of the scene (optional)
         input::InputManager inputManager_; //!< The local input manager for this scene
         audio::AudioManager audioManager_; //!< The local audio manager for this scene

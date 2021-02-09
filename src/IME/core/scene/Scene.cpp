@@ -24,6 +24,7 @@
 
 #include "IME/core/scene/Scene.h"
 #include "IME/core/loop/Engine.h"
+#include "IME/core/physics/World.h"
 
 namespace ime {
     Scene::Scene(Engine &engine) :
@@ -96,7 +97,7 @@ namespace ime {
     }
 
     void Scene::createWorld(Vector2f gravity) {
-        world_ = std::make_unique<World>(*this, gravity);
+        world_ = std::make_shared<World>(*this, gravity);
         hasPhysicsSim_ = true;
     }
 }

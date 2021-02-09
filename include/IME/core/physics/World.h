@@ -42,8 +42,9 @@ namespace ime {
      * @brief The World is responsible for creating, managing, colliding and
      *        updating all of the bodies within it
      */
-    class IME_API World {
+    class IME_API World : public std::enable_shared_from_this<World> {
     public:
+        using sharedPtr = std::shared_ptr<World>;  //!< Shared World pointer
         using EntityPtr = std::shared_ptr<Entity>; //!< Shared Entity pointer
 
         /**

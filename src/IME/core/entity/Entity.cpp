@@ -24,6 +24,7 @@
 
 #include "IME/core/entity/Entity.h"
 #include "IME/core/scene/Scene.h"
+#include "IME/core/physics/rigid_body/Body.h"
 
 std::size_t ime::Entity::prevEntityId_{0};
 

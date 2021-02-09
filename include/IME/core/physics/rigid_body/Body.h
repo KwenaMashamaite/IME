@@ -61,6 +61,7 @@ namespace ime {
     class IME_API Body : public std::enable_shared_from_this<Body> {
     public:
         using sharedPtr = std::shared_ptr<Body>; //!< Shared Body pointer
+        using WorldPtr = std::shared_ptr<World>; //!< Shared World pointer
 
         /**
          * @brief Create a fixture and attach it to this body
@@ -449,6 +450,13 @@ namespace ime {
         bool isFixedRotation() const;
 
         /**
+         * @brief Get the world the body is in
+         * @return The world the body belong sto
+         */
+        WorldPtr getWorld();
+        const WorldPtr& getWorld() const;
+
+        /**
          * @brief Get the user data extracted from the body definition
          * @return The user data
          */
@@ -465,11 +473,11 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        Body(const BodyDefinition& definition, World* world);
+        Body(const BodyDefinition& definition, WorldPtr world);
 
     private:
         b2Body* body_;        //!< Internal rigid body
-        World* world_;        //!< The world the body is in
+        WorldPtr world_;      //!< The world the body is in
         friend class World;   //!< Needs access to constructor
         friend class Fixture; //!< Needs access to internal body
 
