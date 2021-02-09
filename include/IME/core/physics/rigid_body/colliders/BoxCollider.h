@@ -22,43 +22,50 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_RECTANGLESHAPE_H
-#define IME_RECTANGLESHAPE_H
+#ifndef IME_BOXCOLLIDER_H
+#define IME_BOXCOLLIDER_H
 
 #include "IME/Config.h"
-#include "Shape.h"
+#include "Collider.h"
 #include "IME/common/Vector2.h"
 
 class b2PolygonShape;
 
 namespace ime {
     /**
-     * @brief Specialized shape representing a rectangle
+     * @brief A box collider
+     *
+     * The box is axis-aligned (Its edges are parallel to the X or Y
+     * axis of the local space
      */
-    class IME_API RectangleShape : public Shape {
+    class IME_API BoxCollider final : public Collider {
     public:
         /**
          * @brief Default constructor
-         * @param size The sie of the rectangle
+         * @param size The size of the box
+         *
+         * By default the size is 0
          */
-        explicit RectangleShape(Vector2f size = {0.0f, 0.0f});
+        explicit BoxCollider(Vector2f size = {0.0f, 0.0f});
 
         /**
-         * @brief Set the size of the rectangle
-         * @param width The width of the rectangle
-         * @param height The height of the rectangle
+         * @brief Set the size of the box
+         * @param width The width of the box
+         * @param height The height of the box
+         *
+         * The box is centred at the local origin
          */
         void setSize(float width, float height);
 
         /**
-         * @brief Set the size of the rectangle
-         * @param size The size of the rectangle
+         * @brief Set the size of the box
+         * @param size The size of the box
          */
         void setSize(Vector2f size);
 
         /**
-         * @brief Get the size of the rectangle
-         * @return The size of the rectangle
+         * @brief Get the size of the box
+         * @return The size of the box
          */
         Vector2f getSize() const;
 
@@ -67,8 +74,8 @@ namespace ime {
          * @brief Get the internal shape
          * @return The internal shape
          *
-         * @warning This function is intended for internal use and should never
-         * be called outside of IME
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
          */
         b2Shape *getInternalShape() override;
         const b2Shape *getInternalShape() const override;
@@ -76,12 +83,12 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~RectangleShape();
+        ~BoxCollider();
 
     private:
-        Vector2f size_;             //!< The size of the rectangle
-        b2PolygonShape* rectangle_; //!< Internal rectangle
+        Vector2f size_;       //!< The size of the box
+        b2PolygonShape* box_; //!< Internal box
     };
 }
 
-#endif //IME_RECTANGLESHAPE_H
+#endif //IME_BOXCOLLIDER_H

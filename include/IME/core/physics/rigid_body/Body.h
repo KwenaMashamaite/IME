@@ -79,21 +79,21 @@ namespace ime {
         Fixture::sharedPtr createFixture(const FixtureDefinition& definition);
 
         /**
-         * @brief Create a fixture from a shape and attach it to this body
-         * @param shape The shape to construct the fixture from
-         * @param density The density of the shape (set zero for static bodies)
+         * @brief Create a fixture from a collider and attach it to this body
+         * @param collider The collider to construct the fixture from
+         * @param density The density of the collider (set zero for static bodies)
          * @return The created fixture or nullptr if the callbacks are being
          *         dispatched
          *
          * The body will be created from default FixtureDefinition properties.
          * The mass of the body is automatically updated
          *
-         * @note This function does not keep a reference to the shape, it is
+         * @note This function does not keep a reference to the collider, it is
          * cloned
          *
          * @warning This function is locked during callbacks
          */
-        Fixture::sharedPtr createFixture(const Shape* shape, float density);
+        Fixture::sharedPtr createFixture(const Collider* collider, float density);
 
         /**
          * @brief Destroy a fixture

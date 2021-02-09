@@ -22,42 +22,44 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/shapes/CircleShape.h"
+#include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_circle_shape.h>
 
 namespace ime {
-    CircleShape::CircleShape() :
-        Shape(Shape::Type::Circle),
+    CircleCollider::CircleCollider(float radius) :
+        Collider(Collider::Type::Circle),
         circle_{new b2CircleShape()}
-    {}
+    {
+        setRadius(radius);
+    }
 
-    void CircleShape::setPosition(Vector2f position) {
+    void CircleCollider::setPosition(Vector2f position) {
         circle_->m_p.x = utility::pixelsToMetres(position.x);
         circle_->m_p.y = utility::pixelsToMetres(position.y);
     }
 
-    Vector2f CircleShape::getPosition() const {
+    Vector2f CircleCollider::getPosition() const {
         return {utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
     }
 
-    void CircleShape::setRadius(float radius) {
+    void CircleCollider::setRadius(float radius) {
         circle_->m_radius = utility::degToRad(radius);
     }
 
-    float CircleShape::getRadius() const {
+    float CircleCollider::getRadius() const {
         return utility::radToDeg(circle_->m_radius);
     }
 
-    b2Shape *CircleShape::getInternalShape() {
+    b2Shape *CircleCollider::getInternalShape() {
         return circle_;
     }
 
-    const b2Shape *CircleShape::getInternalShape() const {
+    const b2Shape *CircleCollider::getInternalShape() const {
         return circle_;
     }
 
-    CircleShape::~CircleShape() {
+    CircleCollider::~CircleCollider() {
         delete circle_;
         circle_ = nullptr;
     }

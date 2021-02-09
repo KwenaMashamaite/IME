@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/physics/rigid_body/shapes/Shape.h"
+#include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include <stdint.h>
 
 namespace ime {
@@ -87,7 +87,7 @@ namespace ime {
         // Member data
         ////////////////////////////////////////////////////////////////////////
 
-        const Shape* shape;             //!< The shape of the fixture
+        const Collider* collider;       //!< The collider to be attached to a rigid body
         float friction;                 //!< The friction coefficient, usually in the range [0,1].
         float restitution;              //!< The restitution (elasticity) in the range [0,1].
         float density;                  //!< The density of the fixture in in kg/m^2

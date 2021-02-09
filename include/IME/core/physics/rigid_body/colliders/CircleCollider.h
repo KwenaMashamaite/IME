@@ -22,28 +22,31 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_CIRCLESHAPE_H
-#define IME_CIRCLESHAPE_H
+#ifndef IME_CIRCLECOLLIDER_H
+#define IME_CIRCLECOLLIDER_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "Shape.h"
+#include "Collider.h"
 
 class b2CircleShape;
 
 namespace ime {
     /**
-     * @brief Specialized shape representing a circle
+     * @brief A circle circle
      *
-     * Circle shapes have a position and radius. Circles are solid. You
-     * cannot make a hollow circle using the circle shape
+     * Circle colliders have a position and radius. Circles are solid.
+     * You cannot make a hollow circle using the circle collider. The
+     * origin of a circle collider is always at the local centre of
+     * the circle
      */
-    class IME_API CircleShape final : public Shape {
+    class IME_API CircleCollider final : public Collider {
     public:
         /**
          * @brief Default constructor
+         * @param radius The radius of the circle
          */
-        CircleShape();
+        CircleCollider(float radius = 0.0f);
 
         /**
          * @brief Set the position of the circle
@@ -71,8 +74,8 @@ namespace ime {
 
         /**
          * @internal
-         * @brief Get the internal shape
-         * @return The internal shape
+         * @brief Get the internal collider
+         * @return The internal collider
          *
          * @warning This function is intended for internal use and should never
          * be called outside of IME
@@ -83,11 +86,11 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~CircleShape();
+        ~CircleCollider();
 
     private:
         b2CircleShape* circle_;  //!< Internal collision circle
     };
 }
 
-#endif //IME_CIRCLESHAPE_H
+#endif //IME_CIRCLECOLLIDER_H

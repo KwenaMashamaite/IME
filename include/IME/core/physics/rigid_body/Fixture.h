@@ -35,12 +35,18 @@ class b2Fixture;
 namespace ime {
     class Body;
     /**
-     * @brief Attaches a body to a shape for collision detection
+     * @brief Attaches a body to a collider for collision detection
      *
-     * Bodies and shapes have no knowledge of each other and a Shape may be
-     * used independently of the physics simulation. A fixture acts like a
-     * middle man between a body and a shape. It allows a shape to be attached
-     * to a body. A Body may have zero or multiple fixtures (compound body)
+     * Bodies and colliders have no knowledge of each other and a Collider
+     * may be used independently of the physics simulation. A fixture acts
+     * like a middle man between a body and a collider. It allows a collider
+     * to be attached to a body. Without a Collider a rigid body will be
+     * affected by physics (gravity, friction etc) but cannot collide with
+     * other rigid bodies. However, disabling collisions in such a manner is
+     * disallowed. All rigid bodies must have a collider attached to them.
+     * Use the filter data in the FixtureDefinition to control collisions
+     * between rigid bodies. A Body may have zero or multiple fixtures
+     * (compound body)
      *
      * A Fixture cannot be instantiated directly, use the createFixture
      * function on a Body instance to construct a fixture object
@@ -152,17 +158,6 @@ namespace ime {
         const BodyPtr& getBody() const;
 
         /**
-         * @brief Get the child shape
-         * @return The child shape
-         *
-         * @warning Manipulating the shape may lead to non-physical behaviour.
-         * Don't change the number of vertices because this will crash some
-         * collision caching mechanisms
-         */
-        Shape* getShape();
-        const Shape* getShape() const;
-
-        /**
          * @brief Check if the fixture contains a point or not
          * @param point The point to be checked in world coordinates
          * @return True if the fixture contains the point, otherwise false
@@ -191,7 +186,6 @@ namespace ime {
     private:
         b2Fixture* fixture_; //!< Internal fixture
         BodyPtr body_;       //!< The body this fixture is attached to
-        Shape* shape_;       //!< Shape of the fixture
         friend class Body;   //!< Needs access to constructor
         PropertyContainer userData_; //!< Application specific fixture data
     };

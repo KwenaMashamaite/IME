@@ -22,47 +22,43 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/shapes/PolygonShape.h"
+#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
-    PolygonShape::PolygonShape() :
-        Shape{Shape::Type::Polygon},
-        polygon_{new b2PolygonShape()}
-    {}
-
-    void PolygonShape::set(const std::vector<Vector2f>& vertices) {
-        IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed");
-        b2Vec2 points[8]; // 8 is the maximum allowed and std::vector.size() is not a constexpr
-        for (auto i = 0u; i < vertices.size(); i++)
-            points[i].Set(utility::pixelsToMetres(vertices[i].x), utility::pixelsToMetres(vertices[i].y));
-
-        polygon_->Set(points, vertices.size());
+    BoxCollider::BoxCollider(Vector2f size) :
+        Collider(Collider::Type::Box),
+        box_{new b2PolygonShape()}
+    {
+        setSize(size.x, size.y);
     }
 
-    void PolygonShape::setAsBox(float width, float height) {
-        polygon_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
+    void BoxCollider::setSize(float width, float height) {
+        size_ = {width, height};
+        box_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
             utility::pixelsToMetres(height / 2.0f));
     }
 
-    void PolygonShape::setAsBox(float width, float height, Vector2f center, float angle) {
-        polygon_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
-            utility::pixelsToMetres(height / 2.0f),
-            {utility::pixelsToMetres(center.x), utility::pixelsToMetres(center.y)},
-            utility::degToRad(angle));
+    void BoxCollider::setSize(Vector2f size) {
+        setSize(size.x, size.y);
     }
 
-    b2Shape *PolygonShape::getInternalShape() {
-        return polygon_;
+    Vector2f BoxCollider::getSize() const {
+        return size_;
     }
 
-    const b2Shape *PolygonShape::getInternalShape() const {
-        return polygon_;
+    b2Shape *BoxCollider::getInternalShape() {
+        return box_;
     }
 
-    PolygonShape::~PolygonShape() {
-        delete polygon_;
-        polygon_ = nullptr;
+    const b2Shape *BoxCollider::getInternalShape() const {
+        return box_;
+    }
+
+    BoxCollider::~BoxCollider() {
+        delete box_;
+        box_ = nullptr;
     }
 }
+

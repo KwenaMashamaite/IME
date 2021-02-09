@@ -22,34 +22,36 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_POLYGONSHAPE_H
-#define IME_POLYGONSHAPE_H
+#ifndef IME_POLYGONCOLLIDER_H
+#define IME_POLYGONCOLLIDER_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "Shape.h"
+#include "Collider.h"
 #include <vector>
 
 class b2PolygonShape;
 
 namespace ime {
     /**
-     * @brief Solid convex polygons
+     * @brief Solid convex polygon collider
      *
      * A polygon is convex when all line segments connecting two points in t
      * he interior do not cross any edge of the polygon. Polygons are solid
      * and never hollow. A polygon must have 3 or more vertices
      */
-    class IME_API PolygonShape final : public Shape {
+    class IME_API PolygonCollider final : public Collider {
     public:
         /**
          * @brief Default constructor
          */
-        PolygonShape();
+        PolygonCollider();
 
         /**
          * @brief Create a convex hull from the an array of local points
          * @param vertices The vertices to create the convex hull from
+         *
+         * The origin of the polygon is at the local coordinate (0, 0)
          *
          * @warning The maximum number of vertices allowed is 8
          *
@@ -60,26 +62,9 @@ namespace ime {
         void set(const std::vector<Vector2f>& vertices);
 
         /**
-         * @brief Build vertices to represent an axis-aligned box centred on
-         *        the local origin
-         * @param halfWidth The width of the box
-         * @param halfHeight The height of the box
-         */
-        void setAsBox(float width, float height);
-
-        /**
-         * @brief Build vertices to represent an oriented box
-         * @param halfWidth The width of the box
-         * @param halfHeight The height of the box
-         * @param center The center of the box in local coordinates
-         * @param angle The rotation of the box in local coordinates
-         */
-        void setAsBox(float width, float height, Vector2f center, float angle);
-
-        /**
          * @internal
-         * @brief Get the internal shape
-         * @return The internal shape
+         * @brief Get the internal collider
+         * @return The internal collider
          *
          * @warning This function is intended for internal use and should never
          * be called outside of IME
@@ -90,11 +75,11 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~PolygonShape();
+        ~PolygonCollider();
 
     private:
-        b2PolygonShape* polygon_; //!< Internal polygon shape
+        b2PolygonShape* polygon_; //!< Internal polygon collider
     };
 }
 
-#endif //IME_POLYGONSHAPE_H
+#endif //IME_POLYGONCOLLIDER_H

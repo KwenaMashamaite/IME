@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_SHAPE_H
-#define IME_SHAPE_H
+#ifndef IME_COLLIDER_H
+#define IME_COLLIDER_H
 
 #include "IME/Config.h"
 
@@ -31,43 +31,48 @@ class b2Shape;
 
 namespace ime {
     /**
-     * @brief Abstract Base class for all shapes
+     * @brief Abstract Base class for all colliders
      *
-     * The shape is a physical shape of a rigid Body. It is used for collision
-     * detection and cannot be rendered directly.
+     * A collider enables collisions between entities. A collider may
+     * be attached directly to an Entity without a rigid Body but usually
+     * the collider is attached to a rigid Body which is then attached to
+     * an Entity. This allows the entity to collide with other entities and
+     * also be affected by physics (impulses, gravity, friction etc). Without
+     * the rigid body, the Entity cannot react/respond to a collision because
+     * colliders only allow Entities to collide with each other
      */
-    class IME_API Shape {
+    class IME_API Collider {
     public:
         /**
-         * @brief The type of the shape
+         * @brief The type of the collider
          */
         enum class Type {
-            Circle,    //!< Circle shape shape
-            Rectangle, //!< Specialized polygon shape
-            Edge,      //!<
-            Polygon,   //!<
-            Chain      //!<
+            Circle,  //!< Circle collider
+            Box,     //!< Box collider
+            Polygon, //!< Polygon collider
+            Edge,    //!< Edge collider
+            Chain    //!< Chain collider
         };
 
         /**
-         * @brief Construct a shape
-         * @param type Type of the shape
+         * @brief Construct a collider
+         * @param type Type of the collider
          */
-        explicit Shape(Type type);
+        explicit Collider(Type type);
 
         /**
-         * @brief Get the type of the shape
-         * @return The type of the shape
+         * @brief Get the type of the collider
+         * @return The type of the collider
          */
         Type getType() const;
 
         /**
          * @internal
-         * @brief Get the internal shape
-         * @return The internal shape
+         * @brief Get the internal collider
+         * @return The internal collider
          *
-         * @warning This function is intended for internal use and should never
-         * be called outside of IME
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
          */
         virtual b2Shape* getInternalShape() = 0;
         virtual const b2Shape* getInternalShape() const = 0;
@@ -75,11 +80,11 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Shape() = default;
+        virtual ~Collider() = default;
 
     private:
-        Type type_; //!< The type of the shape
+        Type type_; //!< The type of the collider
     };
 }
 
-#endif //IME_SHAPE_H
+#endif //IME_COLLIDER_H

@@ -33,7 +33,7 @@ namespace ime {
     {}
 
     FixtureDefinition::FixtureDefinition() :
-        shape{nullptr},
+        collider{nullptr},
         friction{0.2f},
         restitution{0.0f},
         density{0.0f},

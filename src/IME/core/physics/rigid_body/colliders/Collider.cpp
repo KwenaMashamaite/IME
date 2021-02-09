@@ -22,14 +22,14 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/shapes/Shape.h"
+#include "IME/core/physics/rigid_body/colliders/Collider.h"
 
 namespace ime {
-    Shape::Shape(Shape::Type type) :
+    Collider::Collider(Collider::Type type) :
         type_{type}
     {}
 
-    Shape::Type Shape::getType() const {
+    Collider::Type Collider::getType() const {
         return type_;
     }
 }

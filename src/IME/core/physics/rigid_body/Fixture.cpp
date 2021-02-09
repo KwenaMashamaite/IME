@@ -29,14 +29,14 @@
 
 namespace ime {
     Fixture::Fixture(const FixtureDefinition& definition, Body::sharedPtr body) {
-        IME_ASSERT(definition.shape, "Fixture definition does not have a shape set");
+        IME_ASSERT(definition.collider, "Fixture definition does not have a collider");
         auto b2FixtureDef = new struct b2FixtureDef();
         b2FixtureDef->restitution = definition.restitution;
         b2FixtureDef->restitutionThreshold = definition.restitutionThreshold;
         b2FixtureDef->friction = definition.friction;
         b2FixtureDef->density = definition.density;
         b2FixtureDef->isSensor = definition.isSensor;
-        b2FixtureDef->shape = definition.shape->getInternalShape();
+        b2FixtureDef->shape = definition.collider->getInternalShape();
         b2FixtureDef->userData.pointer = reinterpret_cast<uintptr_t>(this);
         b2FixtureDef->filter.categoryBits = definition.filterData.categoryBitMask;
         b2FixtureDef->filter.maskBits = definition.filterData.collisionBitMask;

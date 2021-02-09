@@ -61,10 +61,10 @@ namespace ime {
         return nullptr;
     }
 
-    Fixture::sharedPtr Body::createFixture(const Shape *shape, float density) {
+    Fixture::sharedPtr Body::createFixture(const Collider* collider, float density) {
         if (world_ && !world_->isLocked()) {
             auto fixtureDef = FixtureDefinition();
-            fixtureDef.shape = shape;
+            fixtureDef.collider = collider;
             fixtureDef.density = density;
             return createFixture(fixtureDef);
         }

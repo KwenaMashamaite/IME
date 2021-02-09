@@ -34,10 +34,10 @@
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/rigid_body/FixtureDefinition.h"
 #include "IME/core/physics/rigid_body/Fixture.h"
-#include "IME/core/physics/rigid_body/shapes/Shape.h"
-#include "IME/core/physics/rigid_body/shapes/RectangleShape.h"
-#include "IME/core/physics/rigid_body/shapes/CircleShape.h"
-#include "IME/core/physics/rigid_body/shapes/PolygonShape.h"
+#include "IME/core/physics/rigid_body/colliders/Collider.h"
+#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
+#include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
+#include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
 #include "IME/core/physics/World.h"
 
 #endif //IME_RIGIDBODYPHYSICS_H
