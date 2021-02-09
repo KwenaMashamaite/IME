@@ -23,9 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-Property::Property(const std::string& name, const std::string& type, T&& value) :
+Property::Property(const std::string& name, T&& value) :
     name_(name),
-    type_(type),
     value_{std::forward<T>(value)}
 {}
 

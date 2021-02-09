@@ -25,17 +25,12 @@
 #include "IME/common/Property.h"
 
 namespace ime {
-    Property::Property(const std::string &name, const std::string &type) :
-        name_(name),
-        type_(type)
+    Property::Property(const std::string &name) :
+        name_(name)
     {}
 
     const std::string &Property::getName() const {
         return name_;
-    }
-
-    const std::string &Property::getType() const {
-        return type_;
     }
 
     bool Property::hasValue() const {

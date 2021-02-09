@@ -38,29 +38,27 @@ namespace ime {
         /**
          * @brief Constructor
          * @param name Name of the property
-         * @param type Type of the property
          *
          * The property will be created without a value
          *
          * @see setValue
          */
-        Property(const std::string& name, const std::string& type);
+        Property(const std::string& name);
 
         /**
          * @brief Constructor
          * @param name Name of the property
-         * @param type Type of the property
          * @param value Value of the property
          *
          * The value can be of any type (Primitive or custom).
          *
-         * @warning the type of @tparam T must be remembered in order to
-         * retrieve the value later
+         * @warning the type of T must be remembered in order to retrieve
+         * the value later
          *
          * @see getValue
          */
         template<typename T>
-        Property(const std::string& name, const std::string& type, T&& value);
+        Property(const std::string& name, T&& value);
 
         /**
          * @brief Get the name of the property
@@ -69,18 +67,12 @@ namespace ime {
         const std::string& getName() const;
 
         /**
-         * @brief Get the type of the property
-         * @return Type of the property
-         */
-        const std::string& getType() const;
-
-        /**
          * @brief Set the value of the property
          * @param value New value of the property
          *
          * This function will overwrite the previous value. The new value
          * need not be the same type as the previous value and it can be
-         * of any type (Primitive or custom). However, the type of @tparam T
+         * of any type (Primitive or custom). However, the type of T
          * must be remembered in order to retrieve the value later
          *
          * @see getValue
@@ -95,8 +87,8 @@ namespace ime {
          *
          * @warning Don't call this function if the property does not have
          * a value, otherwise it will throw an exception. In addition, always
-         * make sure that the template argument @tparam T matches the type
-         * of the stored value when calling this function
+         * make sure that the template argument T matches the type of the
+         * stored value when calling this function
          */
         template<typename T>
         T getValue() const;
@@ -110,7 +102,6 @@ namespace ime {
 
     private:
         std::string name_; //!< Name of the property
-        std::string type_; //!< Type of the property
         std::any value_;   //!< Value of the property
     };
 

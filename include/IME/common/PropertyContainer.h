@@ -62,27 +62,18 @@ namespace ime {
          * @brief Get the value of a property
          * @param name Name of the property to get value for
          * @throws std::bad_any_cast if the value stored by the property is
-         *         not of type @tparam T
+         *         not of type T
          * @return Value of a property
          *
          * This function will throw an exception if the template argument
-         * @tparam T and the type of the stored value don't match. This
-         * means that the property must always have a value before calling
-         * this function
+         * T and the type of the stored value don't match. This means that
+         * the property must always have a value before calling this function
          *
          * @see propertyHasValue
          * @see setValue
          */
         template<typename T>
         T getValue(const std::string name) const;
-
-        /**
-         * @brief Get the type of a property
-         * @param name Name of the property to get type for
-         * @return The type of the property if such a property exists,
-         *         otherwise an empty string
-         */
-        std::string getType(const std::string &name) const;
 
         /**
          * @brief Remove a property

@@ -40,7 +40,7 @@ namespace ime::utility {
     }
 
     bool addProperty(PropertyContainer& container, std::string key, std::string type, std::string value) {
-        auto property = Property(key, type);
+        auto property = Property(key);
         if (type == "STRING")
             property.setValue(value);
         else if (type == "INT")

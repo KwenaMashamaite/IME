@@ -31,12 +31,12 @@ namespace ime {
     namespace {
         template <class T>
         void setDefaultValueIfNotSet(PropertyContainer& settings,
-            const std::string& setting, const std::string& type, T&& defaultValue)
+            const std::string& setting, T&& defaultValue)
         {
             if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
                 return;
             else if (!settings.hasProperty(setting)) {
-                settings.addProperty({setting, type, std::forward<T>(defaultValue)});
+                settings.addProperty({setting, std::forward<T>(defaultValue)});
                 IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)");
             } else {
                 settings.setValue<T>(setting, std::forward<T>(defaultValue));
@@ -80,21 +80,21 @@ namespace ime {
     }
 
     void Engine::processSettings() {
-        setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", "STRING", std::string("Untitled"));
-        setDefaultValueIfNotSet(settings_, "WINDOW_ICON", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", std::string("Untitled"));
+        setDefaultValueIfNotSet(settings_, "WINDOW_ICON", std::string(""));
         if (settings_.getValue<std::string>("WINDOW_ICON").empty())
             settings_.setValue<std::string>("WINDOW_ICON", "OS"); //Operating System icon
 
-        setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH", "INT",  600);
-        setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", "INT", 600);
-        setDefaultValueIfNotSet(settings_, "FPS_LIMIT", "INT", 60);
-        setDefaultValueIfNotSet(settings_, "FULLSCREEN", "BOOL", false);
-        setDefaultValueIfNotSet(settings_, "V_SYNC", "BOOL",  false);
-        setDefaultValueIfNotSet(settings_, "FONTS_DIR", "STRING", std::string("")); // Same directory as the executable
-        setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "IMAGES_DIR", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "SOUND_EFFECTS_DIR", "STRING", std::string(""));
-        setDefaultValueIfNotSet(settings_, "MUSIC_DIR", "STRING", std::string(""));
+        setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH",  600);
+        setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", 600);
+        setDefaultValueIfNotSet(settings_, "FPS_LIMIT", 60);
+        setDefaultValueIfNotSet(settings_, "FULLSCREEN", false);
+        setDefaultValueIfNotSet(settings_, "V_SYNC",  false);
+        setDefaultValueIfNotSet(settings_, "FONTS_DIR", std::string("")); // Same directory as the executable
+        setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", std::string(""));
+        setDefaultValueIfNotSet(settings_, "IMAGES_DIR", std::string(""));
+        setDefaultValueIfNotSet(settings_, "SOUND_EFFECTS_DIR", std::string(""));
+        setDefaultValueIfNotSet(settings_, "MUSIC_DIR", std::string(""));
     }
 
     void Engine::initRenderTarget() {
