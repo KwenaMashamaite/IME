@@ -38,5 +38,6 @@
 #include "IME/core/physics/rigid_body/shapes/RectangleShape.h"
 #include "IME/core/physics/rigid_body/shapes/CircleShape.h"
 #include "IME/core/physics/rigid_body/shapes/PolygonShape.h"
+#include "IME/core/physics/World.h"
 
 #endif //IME_RIGIDBODYPHYSICS_H
