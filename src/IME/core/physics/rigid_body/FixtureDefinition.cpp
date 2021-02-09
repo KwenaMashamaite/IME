@@ -26,6 +26,12 @@
 #include <box2d/b2_settings.h>
 
 namespace ime {
+    CollisionFilterData::CollisionFilterData() :
+        categoryBitMask{0x0001},
+        collisionBitMask{0xFFFF},
+        groupIndex{0}
+    {}
+
     FixtureDefinition::FixtureDefinition() :
         shape{nullptr},
         friction{0.2f},

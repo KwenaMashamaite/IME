@@ -28,8 +28,50 @@
 #include "IME/Config.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/physics/rigid_body/Shape.h"
+#include <stdint.h>
 
 namespace ime {
+    /**
+     * @brief Holds collision filtering data for teh fixture
+     */
+    struct IME_API CollisionFilterData {
+        using UInt16 = std::uint16_t; //!< unsigned signed short
+        using Int16 = std::int16_t;   //!< singed short
+
+        /**
+         * @brief Constrictor
+         */
+        CollisionFilterData();
+
+        ////////////////////////////////////////////////////////////////////////
+        // Member data
+        ////////////////////////////////////////////////////////////////////////
+
+        /**
+         * Specifies the categories the rigid body defined by this filter
+         * data belongs to. The default value is 0x0001
+         */
+        UInt16 categoryBitMask;
+
+        /**
+         * Defines which categories of rigid bodies can collide with
+         * the rigid body defined by this filter data. The default
+         * value is 0xFFFF
+         */
+        UInt16 collisionBitMask;
+
+        /**
+         * Collision group index
+         *
+         * Collision groups allow some a certain group of bodies to never
+         * collide or always collide. A value of zero (default) means no
+         * collision group, a negative value means the group never collides
+         * and a positive value means the group always collide. Note that
+         * non-zero group filtering always wins against the mask bits
+         */
+        Int16 groupIndex;
+    };
+
     /**
      * @brief Define the properties of a fixture
      *
@@ -45,13 +87,14 @@ namespace ime {
         // Member data
         ////////////////////////////////////////////////////////////////////////
 
-        const Shape* shape;         //!< The shape of the fixture
-        float friction;             //!< The friction coefficient, usually in the range [0,1].
-        float restitution;          //!< The restitution (elasticity) in the range [0,1].
-        float density;              //!< The density of the fixture in in kg/m^2
-        bool isSensor;              //!< A flag indicating whether o not the fixture is a sensor
-        float restitutionThreshold; //!< Restitution velocity threshold in in m/s
-        PropertyContainer userData; //!< May be used to store application specific fixture data
+        const Shape* shape;             //!< The shape of the fixture
+        float friction;                 //!< The friction coefficient, usually in the range [0,1].
+        float restitution;              //!< The restitution (elasticity) in the range [0,1].
+        float density;                  //!< The density of the fixture in in kg/m^2
+        bool isSensor;                  //!< A flag indicating whether o not the fixture is a sensor
+        float restitutionThreshold;     //!< Restitution velocity threshold in in m/s
+        PropertyContainer userData;     //!< May be used to store application specific fixture data
+        CollisionFilterData filterData; //!< Collision filtering data
     };
 }
 

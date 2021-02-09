@@ -38,6 +38,9 @@ namespace ime {
         b2FixtureDef->isSensor = definition.isSensor;
         b2FixtureDef->shape = definition.shape->getInternalShape();
         b2FixtureDef->userData.pointer = reinterpret_cast<uintptr_t>(this);
+        b2FixtureDef->filter.categoryBits = definition.filterData.categoryBitMask;
+        b2FixtureDef->filter.maskBits = definition.filterData.collisionBitMask;
+        b2FixtureDef->filter.groupIndex = definition.filterData.groupIndex;
 
         fixture_ = body->body_->CreateFixture(b2FixtureDef);
         userData_ = definition.userData;
