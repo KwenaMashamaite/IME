@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/Shape.h"
+#include "IME/core/physics/rigid_body/shapes/Shape.h"
 
 namespace ime {
     Shape::Shape(Shape::Type type) :

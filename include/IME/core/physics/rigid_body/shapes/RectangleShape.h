@@ -26,7 +26,7 @@
 #define IME_RECTANGLESHAPE_H
 
 #include "IME/Config.h"
-#include "IME/core/physics/rigid_body/Shape.h"
+#include "Shape.h"
 #include "IME/common/Vector2.h"
 
 class b2PolygonShape;

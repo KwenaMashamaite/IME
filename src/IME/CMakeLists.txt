@@ -28,10 +28,10 @@ set(IME_SRC
     core/physics/rigid_body/Body.cpp
     core/physics/rigid_body/FixtureDefinition.cpp
     core/physics/rigid_body/Fixture.cpp
-    core/physics/rigid_body/Shape.cpp
-    core/physics/rigid_body/CircleShape.cpp
-    core/physics/rigid_body/PolygonShape.cpp
-    core/physics/rigid_body/RectangleShape.cpp
+    core/physics/rigid_body/shapes/Shape.cpp
+    core/physics/rigid_body/shapes/CircleShape.cpp
+    core/physics/rigid_body/shapes/PolygonShape.cpp
+    core/physics/rigid_body/shapes/RectangleShape.cpp
     core/physics/rigid_body/AABB.cpp
     core/physics/tilemap/GridMover.cpp
     core/physics/tilemap/TargetGridMover.cpp

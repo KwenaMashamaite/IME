@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/physics/rigid_body/Shape.h"
+#include "IME/core/physics/rigid_body/shapes/Shape.h"
 #include <stdint.h>
 
 namespace ime {

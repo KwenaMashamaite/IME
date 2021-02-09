@@ -22,43 +22,47 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/RectangleShape.h"
+#include "IME/core/physics/rigid_body/shapes/PolygonShape.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
-    RectangleShape::RectangleShape(Vector2f size) :
-        Shape(Shape::Type::Rectangle),
-        rectangle_{new b2PolygonShape()}
-    {
-        setSize(size.x, size.y);
+    PolygonShape::PolygonShape() :
+        Shape{Shape::Type::Polygon},
+        polygon_{new b2PolygonShape()}
+    {}
+
+    void PolygonShape::set(const std::vector<Vector2f>& vertices) {
+        IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed");
+        b2Vec2 points[8]; // 8 is the maximum allowed and std::vector.size() is not a constexpr
+        for (auto i = 0u; i < vertices.size(); i++)
+            points[i].Set(utility::pixelsToMetres(vertices[i].x), utility::pixelsToMetres(vertices[i].y));
+
+        polygon_->Set(points, vertices.size());
     }
 
-    void RectangleShape::setSize(float width, float height) {
-        size_ = {width, height};
-        rectangle_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
+    void PolygonShape::setAsBox(float width, float height) {
+        polygon_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
             utility::pixelsToMetres(height / 2.0f));
     }
 
-    void RectangleShape::setSize(Vector2f size) {
-        setSize(size.x, size.y);
+    void PolygonShape::setAsBox(float width, float height, Vector2f center, float angle) {
+        polygon_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
+            utility::pixelsToMetres(height / 2.0f),
+            {utility::pixelsToMetres(center.x), utility::pixelsToMetres(center.y)},
+            utility::degToRad(angle));
     }
 
-    Vector2f RectangleShape::getSize() const {
-        return size_;
+    b2Shape *PolygonShape::getInternalShape() {
+        return polygon_;
     }
 
-    b2Shape *RectangleShape::getInternalShape() {
-        return rectangle_;
+    const b2Shape *PolygonShape::getInternalShape() const {
+        return polygon_;
     }
 
-    const b2Shape *RectangleShape::getInternalShape() const {
-        return rectangle_;
-    }
-
-    RectangleShape::~RectangleShape() {
-        delete rectangle_;
-        rectangle_ = nullptr;
+    PolygonShape::~PolygonShape() {
+        delete polygon_;
+        polygon_ = nullptr;
     }
 }
-

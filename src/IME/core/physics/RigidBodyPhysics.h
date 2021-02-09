@@ -22,44 +22,21 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/CircleShape.h"
-#include "IME/utility/Helpers.h"
-#include <box2d/b2_circle_shape.h>
+#ifndef IME_RIGIDBODYPHYSICS_H
+#define IME_RIGIDBODYPHYSICS_H
 
-namespace ime {
-    CircleShape::CircleShape() :
-        Shape(Shape::Type::Circle),
-        circle_{new b2CircleShape()}
-    {}
+////////////////////////////////////////////////////////////////////////////////
+// Includes all the rigid body physics headers
+////////////////////////////////////////////////////////////////////////////////
 
-    void CircleShape::setPosition(Vector2f position) {
-        circle_->m_p.x = utility::pixelsToMetres(position.x);
-        circle_->m_p.y = utility::pixelsToMetres(position.y);
-    }
+#include "IME/core/physics/rigid_body/AABB.h"
+#include "IME/core/physics/rigid_body/BodyDefinition.h"
+#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/FixtureDefinition.h"
+#include "IME/core/physics/rigid_body/Fixture.h"
+#include "IME/core/physics/rigid_body/shapes/Shape.h"
+#include "IME/core/physics/rigid_body/shapes/RectangleShape.h"
+#include "IME/core/physics/rigid_body/shapes/CircleShape.h"
+#include "IME/core/physics/rigid_body/shapes/PolygonShape.h"
 
-    Vector2f CircleShape::getPosition() const {
-        return {utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
-    }
-
-    void CircleShape::setRadius(float radius) {
-        circle_->m_radius = utility::degToRad(radius);
-    }
-
-    float CircleShape::getRadius() const {
-        return utility::radToDeg(circle_->m_radius);
-    }
-
-    b2Shape *CircleShape::getInternalShape() {
-        return circle_;
-    }
-
-    const b2Shape *CircleShape::getInternalShape() const {
-        return circle_;
-    }
-
-    CircleShape::~CircleShape() {
-        delete circle_;
-        circle_ = nullptr;
-    }
-}
-
+#endif //IME_RIGIDBODYPHYSICS_H
