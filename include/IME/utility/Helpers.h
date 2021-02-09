@@ -31,10 +31,10 @@
 #ifndef IME_UTILITY_H
 #define IME_UTILITY_H
 
-#include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include "IME/core/event/Event.h"
 #include "IME/ui/widgets/IWidget.h"
+#include "IME/common/Vector2.h"
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
@@ -112,6 +112,17 @@ namespace ime::utility {
 
     /**
      * @internal
+     * @brief Convert pixels to metres
+     * @param pixels The pixel value to be converted to metres
+     * @return @a pixels in metres
+     *
+     * The conversion ratio is as follows:
+     *  1 m = 32 pixels
+     */
+    extern Vector2f pixelsToMetres(Vector2f pixels);
+
+    /**
+     * @internal
      * @brief Convert metres to pixels
      * @param metres The metre value to be converted to pixels
      * @return @a metres in pixels
@@ -120,6 +131,17 @@ namespace ime::utility {
      *  1 m = 32 pixels
      */
     extern float metresToPixels(float metres);
+
+    /**
+     * @internal
+     * @brief Convert metres to pixels
+     * @param metres The metre value to be converted to pixels
+     * @return @a metres in pixels
+     *
+     * The conversion ratio is as follows:
+     *  1 m = 32 pixels
+     */
+    extern Vector2f metresToPixels(Vector2f metres);
 
     /**
      * @internal

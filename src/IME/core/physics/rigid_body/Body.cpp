@@ -103,8 +103,7 @@ namespace ime {
     }
 
     Vector2f Body::getPosition() const {
-        return {utility::metresToPixels(body_->GetPosition().x),
-                utility::metresToPixels(body_->GetPosition().y)};
+        return utility::metresToPixels({body_->GetPosition().x, body_->GetPosition().y});
     }
 
     void Body::setRotation(float angle) {
@@ -116,8 +115,7 @@ namespace ime {
     }
 
     Vector2f Body::getWorldCenter() const {
-        return {utility::metresToPixels(body_->GetWorldCenter().x),
-                utility::metresToPixels(body_->GetWorldCenter().y)};
+        return utility::metresToPixels({body_->GetWorldCenter().x, body_->GetWorldCenter().y});
     }
 
     Vector2f Body::getLocalCenter() const {

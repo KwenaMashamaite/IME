@@ -252,8 +252,16 @@ namespace ime::utility {
         return pixels / PIXELS_PER_METRE;
     }
 
+    Vector2f pixelsToMetres(Vector2f pixels) {
+        return {pixelsToMetres(pixels.x), pixelsToMetres(pixels.y)};
+    }
+
     float metresToPixels(float metres) {
         return metres * PIXELS_PER_METRE;
+    }
+
+    Vector2f metresToPixels(Vector2f metres) {
+        return {metresToPixels(metres.x), metresToPixels(metres.y)};
     }
 
     float radToDeg(float rad) {
