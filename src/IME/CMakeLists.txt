@@ -62,6 +62,7 @@ set(IME_SRC
     ui/renderers/SeparatorRenderer.cpp
     ui/widgets/BitmapButton.cpp
     ui/widgets/Button.cpp
+    ui/widgets/ToggleButton.cpp
     ui/widgets/CheckBox.cpp
     ui/widgets/EditBox.cpp
     ui/widgets/Label.cpp

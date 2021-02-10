@@ -22,9 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////
-// Includes all widgets
-////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Includes all UI widgets
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef IME_ALLWIDGETS_H
 #define IME_ALLWIDGETS_H
@@ -32,6 +32,7 @@
 #include "IME/ui/widgets/Label.h"
 #include "IME/ui/widgets/Button.h"
 #include "IME/ui/widgets/BitmapButton.h"
+#include "IME/ui/widgets/ToggleButton.h"
 #include "IME/ui/widgets/Slider.h"
 #include "IME/ui/widgets/CheckBox.h"
 #include "IME/ui/widgets/EditBox.h"
@@ -43,5 +44,6 @@
 #include "IME/ui/widgets/Tabs.h"
 #include "IME/ui/widgets/TabsContainer.h"
 #include "IME/ui/widgets/Picture.h"
+#include "IME/ui/widgets/Panel.h"
 
 #endif // IME_ALLWIDGETS_H
