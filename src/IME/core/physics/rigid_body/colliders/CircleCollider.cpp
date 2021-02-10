@@ -44,11 +44,11 @@ namespace ime {
     }
 
     void CircleCollider::setRadius(float radius) {
-        circle_->m_radius = utility::degToRad(radius);
+        circle_->m_radius = utility::pixelsToMetres(radius);
     }
 
     float CircleCollider::getRadius() const {
-        return utility::radToDeg(circle_->m_radius);
+        return utility::metresToPixels(circle_->m_radius);
     }
 
     b2Shape *CircleCollider::getInternalShape() {
