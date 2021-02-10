@@ -38,6 +38,7 @@
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
 #include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
+#include "IME/core/physics/rigid_body/colliders/EdgeCollider.h"
 #include "IME/core/physics/World.h"
 
 #endif //IME_RIGIDBODYPHYSICS_H

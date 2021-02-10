@@ -32,6 +32,7 @@ set(IME_SRC
     core/physics/rigid_body/colliders/CircleCollider.cpp
     core/physics/rigid_body/colliders/PolygonCollider.cpp
     core/physics/rigid_body/colliders/BoxCollider.cpp
+    core/physics/rigid_body/colliders/EdgeCollider.cpp
     core/physics/rigid_body/AABB.cpp
     core/physics/tilemap/GridMover.cpp
     core/physics/tilemap/TargetGridMover.cpp

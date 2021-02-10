@@ -50,8 +50,7 @@ namespace ime {
             Circle,  //!< Circle collider
             Box,     //!< Box collider
             Polygon, //!< Polygon collider
-            Edge,    //!< Edge collider
-            Chain    //!< Chain collider
+            Edge     //!< Edge collider
         };
 
         /**
