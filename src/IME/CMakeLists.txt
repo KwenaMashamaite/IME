@@ -57,6 +57,7 @@ set(IME_SRC
     ui/renderers/SliderRenderer.cpp
     ui/renderers/RadioButtonRenderer.cpp
     ui/renderers/PanelRenderer.cpp
+    ui/renderers/ScrollablePanelRenderer.cpp
     ui/renderers/TabsRenderer.cpp
     ui/renderers/PictureRenderer.cpp
     ui/renderers/SeparatorRenderer.cpp
@@ -71,6 +72,7 @@ set(IME_SRC
     ui/widgets/Slider.cpp
     ui/widgets/RadioButton.cpp
     ui/widgets/Panel.cpp
+    ui/widgets/ScrollablePanel.cpp
     ui/widgets/ChildWindow.cpp
     ui/widgets/VerticalLayout.cpp
     ui/widgets/HorizontalLayout.cpp
