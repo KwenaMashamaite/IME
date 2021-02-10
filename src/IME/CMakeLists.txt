@@ -60,6 +60,7 @@ set(IME_SRC
     ui/renderers/TabsRenderer.cpp
     ui/renderers/PictureRenderer.cpp
     ui/renderers/SeparatorRenderer.cpp
+    ui/renderers/SpinButtonRenderer.cpp
     ui/widgets/BitmapButton.cpp
     ui/widgets/Button.cpp
     ui/widgets/ToggleButton.cpp
@@ -77,6 +78,7 @@ set(IME_SRC
     ui/widgets/TabsContainer.cpp
     ui/widgets/Picture.cpp
     ui/widgets/Separator.cpp
+    ui/widgets/SpinControl.cpp
     ui/GuiContainer.cpp
     graphics/Texture.cpp
     graphics/Sprite.cpp
