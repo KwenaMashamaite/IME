@@ -255,7 +255,15 @@ namespace ime::ui {
     }
 
     float ButtonRenderer::getTextOutlineThickness() const {
-        return 0;
+        return buttonRenderer_->getTextOutlineThickness();
+    }
+
+    void ButtonRenderer::setRoundedBorderRadius(float radius) {
+        buttonRenderer_->setRoundedBorderRadius(radius);
+    }
+
+    float ButtonRenderer::getRoundedBorderRadius() const {
+        return buttonRenderer_->getRoundedBorderRadius();
     }
 
     void ButtonRenderer::setOpacity(float opacity) {

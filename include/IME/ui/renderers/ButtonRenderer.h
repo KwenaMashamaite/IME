@@ -410,6 +410,29 @@ namespace ime {
              * @return The thickness of the text outline
              */
             float getTextOutlineThickness() const;
+
+            /**
+             * @brief Set the radius for the rounded corners
+             * @param radius Radius of the corners
+             *
+             * This function will round the corners of the button, @a radius
+             * controls how much rounding is applied to the borders of the
+             * button.
+             *
+             * By default the radius is 0, meaning the button is not rounded
+             *
+             * @warning This property is ignored when textures are used as
+             * background
+             */
+            void setRoundedBorderRadius(float radius);
+
+            /**
+             * @brief Get the radius of the rounded corners
+             * @return The radius of the rounded corners
+             *
+             * @see setRoundedBorderRadius
+             */
+            float getRoundedBorderRadius() const;
             
             /**
              * @brief Set the opacity of the widget
