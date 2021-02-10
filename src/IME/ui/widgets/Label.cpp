@@ -216,7 +216,7 @@ namespace ime::ui {
     }
 
     std::string Label::getText() const {
-        return label_->getText().toAnsiString();
+        return label_->getText().toStdString();
     }
 
     unsigned int Label::getTextSize() const {

@@ -82,7 +82,7 @@ namespace ime::ui {
     }
 
     std::string RadioButton::getText() const {
-        return button_->getText().toAnsiString();
+        return button_->getText().toStdString();
     }
 
     void RadioButton::setTextSize(unsigned int charSize) {

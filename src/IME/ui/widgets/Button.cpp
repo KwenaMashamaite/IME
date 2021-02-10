@@ -145,7 +145,7 @@ namespace ime::ui {
     }
 
     std::string Button::getText() const {
-        return button_->getText().toAnsiString();
+        return button_->getText().toStdString();
     }
 
     Vector2f Button::getAbsoluteSize() {

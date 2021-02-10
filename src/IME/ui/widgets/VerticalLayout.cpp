@@ -286,21 +286,21 @@ namespace ime::ui {
     std::shared_ptr<IWidget> VerticalLayout::getFocusedWidget() const {
         auto widget = layout_->getFocusedChild();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> VerticalLayout::getFocusedLeaf() const {
         auto widget = layout_->getFocusedLeaf();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> VerticalLayout::getWidgetAtPosition(Vector2f pos) const {
         auto widget = layout_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 

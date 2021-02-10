@@ -164,7 +164,7 @@ namespace ime::ui {
     }
 
     std::string BitmapButton::getText() const {
-        return button_->getText().toAnsiString();
+        return button_->getText().toStdString();
     }
 
     unsigned int BitmapButton::getTextSize() const {

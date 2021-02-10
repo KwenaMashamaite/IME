@@ -263,21 +263,21 @@ namespace ime::ui {
     std::shared_ptr<IWidget> Panel::getFocusedWidget() const {
         auto widget =panel_->getFocusedChild();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> Panel::getFocusedLeaf() const {
         auto widget = panel_->getFocusedLeaf();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> Panel::getWidgetAtPosition(Vector2f pos) const {
         auto widget = panel_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 

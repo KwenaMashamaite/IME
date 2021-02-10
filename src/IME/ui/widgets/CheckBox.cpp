@@ -163,7 +163,7 @@ namespace ime::ui {
     }
 
     std::string CheckBox::getText() const {
-        return checkBox_->getText().toAnsiString();
+        return checkBox_->getText().toStdString();
     }
 
     unsigned int CheckBox::getTextSize() const {

@@ -134,7 +134,7 @@ namespace ime::ui {
     }
 
     std::string TabsContainer::getTabText(std::size_t index) const {
-        return tabContainer_->getTabText(index).toAnsiString();
+        return tabContainer_->getTabText(index).toStdString();
     }
 
     bool TabsContainer::changeTabText(std::size_t index, const tgui::String &text) {

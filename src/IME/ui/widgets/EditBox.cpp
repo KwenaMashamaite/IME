@@ -64,7 +64,7 @@ namespace ime::ui {
     }
 
     std::string EditBox::getDefaultText() const {
-        return editBox_->getDefaultText().toAnsiString();
+        return editBox_->getDefaultText().toStdString();
     }
 
     void EditBox::setMaximumCharacters(unsigned int maxChars) {
@@ -104,7 +104,7 @@ namespace ime::ui {
     }
 
     std::string EditBox::getSuffix() const {
-        return editBox_->getSuffix().toAnsiString();
+        return editBox_->getSuffix().toStdString();
     }
 
     void EditBox::setPosition(float x, float y) {
@@ -194,7 +194,7 @@ namespace ime::ui {
     }
 
     std::string EditBox::getText() const {
-        return editBox_->getText().toAnsiString();
+        return editBox_->getText().toStdString();
     }
 
     unsigned int EditBox::getTextSize() const {
@@ -295,11 +295,11 @@ namespace ime::ui {
         editBox_->onFocus([this]{emit("focus");});
         editBox_->onUnfocus([this]{emit("unfocus");});
         editBox_->onTextChange([this](const tgui::String& text) {
-            emit("textEnter", text.toAnsiString());
+            emit("textEnter", text.toStdString());
         });
 
         editBox_->onReturnKeyPress([this](const tgui::String& text) {
-            emit("enterKeyPress", text.toAnsiString());
+            emit("enterKeyPress", text.toStdString());
         });
 
         editBox_->onAnimationFinish([this]{emit("animationFinish");});

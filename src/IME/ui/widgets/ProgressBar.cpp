@@ -185,7 +185,7 @@ namespace ime::ui {
     }
 
     std::string ProgressBar::getText() const {
-        return progressBar_->getText().toAnsiString();
+        return progressBar_->getText().toStdString();
     }
 
     unsigned int ProgressBar::getTextSize() const {

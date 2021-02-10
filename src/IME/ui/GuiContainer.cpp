@@ -104,7 +104,7 @@ namespace ime::ui {
     GuiContainer::getWidgetBelowMouseCursor(Vector2f mousePos) const {
         auto widget = sfmlGui_->getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
@@ -161,21 +161,21 @@ namespace ime::ui {
     std::shared_ptr<IWidget> GuiContainer::getFocusedWidget() const {
         auto widget = sfmlGui_->getFocusedChild();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> GuiContainer::getFocusedLeaf() const {
         auto widget = sfmlGui_->getFocusedLeaf();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> GuiContainer::getWidgetAtPosition(Vector2f pos) const {
         auto widget = sfmlGui_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 

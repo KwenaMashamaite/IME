@@ -75,7 +75,7 @@ namespace ime::ui {
     }
 
     std::string Tabs::getText(std::size_t index) const {
-        return tabs_->getText(index).toAnsiString();
+        return tabs_->getText(index).toStdString();
     }
 
     bool Tabs::changeText(std::size_t index, const std::string &text) {
@@ -107,7 +107,7 @@ namespace ime::ui {
     }
 
     std::string Tabs::getSelected() const {
-        return tabs_->getSelected().toAnsiString();
+        return tabs_->getSelected().toStdString();
     }
 
     int Tabs::getSelectedIndex() const {
@@ -326,7 +326,7 @@ namespace ime::ui {
         });
 
         tabs_->onTabSelect([this](const tgui::String& item){
-            emit("select", item.toAnsiString());
+            emit("select", item.toStdString());
         });
     }
 }

@@ -44,42 +44,42 @@ namespace ime {
     }
 
     std::string bindLeft(std::shared_ptr<ui::IWidget> widget){
-        return tgui::bindLeft(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindLeft(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindTop(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindTop(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindTop(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindWidth(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindWidth(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindWidth(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindHeight(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindHeight(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindHeight(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindRight(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindRight(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindRight(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindBottom(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindBottom(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindBottom(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindPosition(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindPosition(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindPosition(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindSize(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindSize(widget->getInternalPtr()).toString().toAnsiString();
+        return tgui::bindSize(widget->getInternalPtr()).toString().toStdString();
     }
 
     std::string bindMin(const std::string& value1, const std::string& value2) {
-        return tgui::bindMin(value1.c_str(), value2.c_str()).toString().toAnsiString();
+        return tgui::bindMin(value1.c_str(), value2.c_str()).toString().toStdString();
     }
 
     std::string bindMax(const std::string& value1, const std::string& value2) {
-        return tgui::bindMax(value1.c_str(), value2.c_str()).toString().toAnsiString();
+        return tgui::bindMax(value1.c_str(), value2.c_str()).toString().toStdString();
     }
 }

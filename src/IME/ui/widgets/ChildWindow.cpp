@@ -93,7 +93,7 @@ namespace ime::ui {
     }
 
     std::string ChildWindow::getTitle() const {
-        return window_->getTitle().toAnsiString();
+        return window_->getTitle().toStdString();
     }
 
     void ChildWindow::setTitleTextSize(unsigned int size) {
@@ -332,21 +332,21 @@ namespace ime::ui {
     std::shared_ptr<IWidget> ChildWindow::getFocusedWidget() const {
         auto widget = window_->getFocusedChild();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> ChildWindow::getFocusedLeaf() const {
         auto widget = window_->getFocusedLeaf();
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
     std::shared_ptr<IWidget> ChildWindow::getWidgetAtPosition(Vector2f pos) const {
         auto widget = window_->getWidgetAtPosition({pos.x, pos.y});
         if (widget)
-            return widgets_.at(widget->getWidgetName().toAnsiString());
+            return widgets_.at(widget->getWidgetName().toStdString());
         return nullptr;
     }
 
