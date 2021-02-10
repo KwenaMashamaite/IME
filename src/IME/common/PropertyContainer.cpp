@@ -24,6 +24,7 @@
 
 #include "IME/common/PropertyContainer.h"
 #include "IME/utility/Helpers.h"
+#include <algorithm>
 
 namespace ime {
     bool PropertyContainer::addProperty(const Property &property) {
@@ -52,6 +53,12 @@ namespace ime {
 
     bool PropertyContainer::hasProperty(const std::string &name) const {
         return properties_.find(name) != properties_.end();
+    }
+
+    void PropertyContainer::forEachProperty(const Callback<Property&>& callback) {
+        std::for_each(properties_.begin(), properties_.end(), [&callback](auto property) {
+            callback(property.second);
+        });
     }
 
     bool PropertyContainer::propertyHasValue(const std::string &name) const {

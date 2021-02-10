@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Property.h"
+#include "IME/core/event/EventEmitter.h"
 #include <string>
 #include <unordered_map>
 
@@ -105,6 +106,14 @@ namespace ime {
          * @return The number of properties in the container
          */
         std::size_t getSize() const;
+
+        /**
+         * @brief Execute a callback for each property in the container
+         * @param callback The function to be executed
+         *
+         * The callback is passed the property on each invocation
+         */
+        void forEachProperty(const Callback<Property&>& callback);
 
         /**
          * @brief Remove all the stored properties from the container
