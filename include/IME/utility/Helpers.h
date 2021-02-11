@@ -106,7 +106,7 @@ namespace ime::utility {
      * @return @a pixels in metres
      *
      * The conversion ratio is as follows:
-     *  1 m = 32 pixels
+     *  1 m = 30 pixels
      */
     extern float pixelsToMetres(float pixels);
 
@@ -117,7 +117,7 @@ namespace ime::utility {
      * @return @a pixels in metres
      *
      * The conversion ratio is as follows:
-     *  1 m = 32 pixels
+     *  1 m = 30 pixels
      */
     extern Vector2f pixelsToMetres(Vector2f pixels);
 
@@ -128,7 +128,7 @@ namespace ime::utility {
      * @return @a metres in pixels
      *
      * The conversion ratio is as follows:
-     *  1 m = 32 pixels
+     *  1 m = 30 pixels
      */
     extern float metresToPixels(float metres);
 
@@ -139,7 +139,7 @@ namespace ime::utility {
      * @return @a metres in pixels
      *
      * The conversion ratio is as follows:
-     *  1 m = 32 pixels
+     *  1 m = 30 pixels
      */
     extern Vector2f metresToPixels(Vector2f metres);
 

@@ -33,7 +33,7 @@
 #include <TGUI/Font.hpp>
 #include <TGUI/Color.hpp>
 
-auto constexpr PIXELS_PER_METRE = 32.0f;
+auto constexpr PIXELS_PER_METRE = 30.0f;
 auto constexpr PI = 3.14159265358979323846f;
 
 namespace ime::utility {
