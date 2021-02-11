@@ -32,10 +32,28 @@
 
 namespace ime {
     /**
-     * @brief Holds collision filtering data for teh fixture
+     * @brief Holds collision filtering data for a fixture
+     *
+     * Collision filtering allows you to prevent collisions between fixtures.
+     * Collision filtering is achieved through categories and groups. For each
+     * fixture you can specify which category it belongs to. You also specify
+     * what other categories this fixture can collide with. For example, you
+     * could specify in a multiplayer game that all players don't collide with
+     * each other and monsters don't collide with each other, but players and
+     * monsters should collide. This is done with masking bits. Note that there
+     * are 16 collision categories and group filtering has higher precedence
+     * than category filtering.
+     *
+     * Additional collision filtering occurs implicitly:
+     *
+     * 1. A fixture on a static body can only collide with a dynamic body.
+     * 2. A fixture on a kinematic body can only collide with a dynamic body.
+     * 3. Fixtures on the same body never collide with each other.
+     * 4. You can optionally enable/disable collision between fixtures on
+     *    bodies connected by a joint.
      */
     struct IME_API CollisionFilterData {
-        using UInt16 = std::uint16_t; //!< unsigned signed short
+        using UInt16 = std::uint16_t; //!< unsigned short
         using Int16 = std::int16_t;   //!< singed short
 
         /**
@@ -82,6 +100,11 @@ namespace ime {
          * @brief Set the default values
          */
         FixtureDefinition();
+
+        /**
+         * @brief Destructor
+         */
+        ~FixtureDefinition();
 
         ////////////////////////////////////////////////////////////////////////
         // Member data
