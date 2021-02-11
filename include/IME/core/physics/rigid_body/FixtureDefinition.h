@@ -74,7 +74,7 @@ namespace ime {
         /**
          * Defines which categories of rigid bodies can collide with
          * the rigid body defined by this filter data. The default
-         * value is 0xFFFF
+         * value is 0xFFFF, a value of 0 disables all collisions
          */
         UInt16 collisionBitMask;
 

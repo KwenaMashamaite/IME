@@ -25,6 +25,7 @@
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/entity/Entity.h"
+#include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_fixture.h>
 
@@ -145,22 +146,63 @@ namespace ime {
         }
     }
 
-    void World::destroyBody(Body::sharedPtr body) {
+    bool World::destroyBody(Body::sharedPtr body) {
         if (world_ && !world_->IsLocked()) {
             if (auto [found, index] = utility::findIn(bodies_, body); found) {
-                world_->DestroyBody(bodies_[index]->body_);
+                world_->DestroyBody(bodies_[index]->getInternalBody());
                 bodies_.erase(bodies_.begin() + index);
+                return true;
             }
         }
+
+        return false;
+    }
+
+    Joint::sharedPtr World::createJoint(const JointDefinition& definition) {
+        if (world_ && !world_->IsLocked()) {
+            Joint::sharedPtr joint;
+            switch (definition.type) {
+                case JointType::Distance:
+                    joint = Joint::sharedPtr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
+                    break;
+                default:
+                    return nullptr;
+            }
+
+            joints_.push_back(joint);
+            return joint;
+        }
+        return nullptr;
+    }
+
+    bool World::destroyJoint(Joint::sharedPtr joint) {
+        if (world_ && !world_->IsLocked()) {
+            if (auto [found, index] = utility::findIn(joints_, joint); found) {
+                world_->DestroyJoint(joints_[index]->getInternalJoint());
+                joints_.erase(joints_.begin() + index);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void World::destroyAllBodies() {
         // Destroy all bodies in box2D first
-        std::for_each(bodies_.begin(), bodies_.end(), [this] (auto body) {
-            world_->DestroyBody(body->body_);
+        std::for_each(bodies_.begin(), bodies_.end(), [this] (Body::sharedPtr body) {
+            world_->DestroyBody(body->getInternalBody());
         });
 
         bodies_.clear();
+    }
+
+    void World::destroyAllJoints() {
+        // Destroy all joints in box2D first
+        std::for_each(joints_.begin(), joints_.end(), [this] (Joint::sharedPtr joint) {
+            world_->DestroyJoint(joint->getInternalJoint());
+        });
+
+        joints_.clear();
     }
 
     void World::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
@@ -197,6 +239,10 @@ namespace ime {
 
     void World::forEachBody(Callback<Body::sharedPtr&> callback) {
         std::for_each(bodies_.begin(), bodies_.end(), callback);
+    }
+
+    void World::forEachJoint(Callback<Joint::sharedPtr &> callback) {
+        std::for_each(joints_.begin(), joints_.end(), callback);
     }
 
     std::size_t World::getBodyCount() const {

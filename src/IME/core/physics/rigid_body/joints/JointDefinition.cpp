@@ -22,26 +22,11 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_RIGIDBODYPHYSICS_H
-#define IME_RIGIDBODYPHYSICS_H
-
-////////////////////////////////////////////////////////////////////////////////
-// Includes all the rigid body physics headers
-////////////////////////////////////////////////////////////////////////////////
-
-#include "IME/core/physics/rigid_body/AABB.h"
-#include "IME/core/physics/rigid_body/BodyDefinition.h"
-#include "IME/core/physics/rigid_body/Body.h"
-#include "IME/core/physics/rigid_body/FixtureDefinition.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
-#include "IME/core/physics/rigid_body/colliders/Collider.h"
-#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
-#include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
-#include "IME/core/physics/rigid_body/colliders/EdgeCollider.h"
-#include "IME/core/physics/rigid_body/joints/Joint.h"
 #include "IME/core/physics/rigid_body/joints/JointDefinition.h"
-#include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "IME/core/physics/World.h"
 
-#endif //IME_RIGIDBODYPHYSICS_H
+namespace ime {
+    JointDefinition::JointDefinition() :
+        areBodiesCollidable{false}
+    {}
+}
+

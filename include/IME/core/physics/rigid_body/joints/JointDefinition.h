@@ -22,26 +22,44 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_RIGIDBODYPHYSICS_H
-#define IME_RIGIDBODYPHYSICS_H
+#ifndef IME_JOINTDEFINITION_H
+#define IME_JOINTDEFINITION_H
 
-////////////////////////////////////////////////////////////////////////////////
-// Includes all the rigid body physics headers
-////////////////////////////////////////////////////////////////////////////////
+#include "IME/Config.h"
+#include "IME/common/PropertyContainer.h"
+#include <memory>
 
-#include "IME/core/physics/rigid_body/AABB.h"
-#include "IME/core/physics/rigid_body/BodyDefinition.h"
-#include "IME/core/physics/rigid_body/Body.h"
-#include "IME/core/physics/rigid_body/FixtureDefinition.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
-#include "IME/core/physics/rigid_body/colliders/Collider.h"
-#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
-#include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
-#include "IME/core/physics/rigid_body/colliders/EdgeCollider.h"
-#include "IME/core/physics/rigid_body/joints/Joint.h"
-#include "IME/core/physics/rigid_body/joints/JointDefinition.h"
-#include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "IME/core/physics/World.h"
+namespace ime {
+    class Body;
 
-#endif //IME_RIGIDBODYPHYSICS_H
+    /**
+     * @brief The types of joints
+     */
+    enum class JointType {
+        Distance //!< Distance joint
+    };
+
+    /**
+     * @brief Define the properties of a Joint
+     *
+     * A joint definition is used to create a Joint
+     */
+    struct IME_API JointDefinition {
+        /**
+         * @brief Constructor
+         */
+        JointDefinition();
+
+        ////////////////////////////////////////////////////////////////////////
+        // Member data
+        ////////////////////////////////////////////////////////////////////////
+
+        JointType type;              //!< The type of the joint defined by this definition (set automatically)
+        std::shared_ptr<Body> bodyA; //!< The first attached body
+        std::shared_ptr<Body> bodyB; //!< The second attached body
+        bool areBodiesCollidable;    //!< A flag indicating whether or not the joined bodies can collide with each other
+        PropertyContainer userData;  //!< May be used to store application specific Joint data
+    };
+}
+
+#endif //IME_JOINTDEFINITION_H

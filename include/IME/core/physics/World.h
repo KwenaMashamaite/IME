@@ -30,6 +30,7 @@
 #include "IME/core/time/Time.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/rigid_body/AABB.h"
+#include "IME/core/physics/rigid_body/joints/Joint.h"
 #include <memory>
 #include <vector>
 
@@ -177,7 +178,9 @@ namespace ime {
          * @return The created body or a nullptr if callbacks are being
          *         dispatched
          *
-         * @warning This function is locked during callbacks
+         * @warning This function is locked during callbacks. This usually
+         * means you should not attempt to create a body inside a callback
+         * dispatched by the world (Callbacks are dispatched during a step)
          */
         Body::sharedPtr createBody(const BodyDefinition& definition);
 
@@ -185,23 +188,71 @@ namespace ime {
          * @brief Create a body and attach it to an entity
          * @param entity The entity to attach the body to
          * @param definition The definition to construct the rigid body from
+         *
+         * @note If the world is in the middle of a step, the body will not
+         * be created. This usually means you should not attempt to create a
+         * body inside a callback dispatched by the world (Callbacks are
+         * dispatched during a step)
          */
         void createBody(EntityPtr entity, const BodyDefinition& definition);
 
         /**
          * @brief Destroy a rigid body
          * @param body The rigid body to be destroyed
+         * @return True if the body was destroyed or false if the world is
+         *         in the middle of a step or the body does not exist
          *
          * This function destroys all associated shapes and joints
          *
          * @warning This function is locked during callbacks
+         *
+         * @see createBody(const BodyDefinition&)
          */
-        void destroyBody(Body::sharedPtr body);
+        bool destroyBody(Body::sharedPtr body);
+
+        /**
+         * @brief Create a joint
+         * @param definition Definition to create a joint from
+         * @return The created joint or a nullptr if the world is in the
+         *         middle of a step
+         *
+         * @note If the joined bodies are set to not collide, they will stop
+         * colliding after the joint is created
+         *
+         * @warning This function is locked during callbacks. This usually
+         * means you should not attempt to create a joint inside a callback
+         * dispatched by the world (Callbacks are dispatched during a step)
+         */
+        Joint::sharedPtr createJoint(const JointDefinition& definition);
+
+        /**
+         * @brief Destroy a joint
+         * @param joint Joint to be destroyed
+         * @return True if the joint was destroyed or false if the world is
+         *         in the middle of a step or the joint does not exist
+         *
+         * @note If the joined bodies were set to not collide, they may start
+         * colliding after the joint is destroyed
+         *
+         * @warning This function is locked during callbacks
+         *
+         * @see createJoint
+         */
+        bool destroyJoint(Joint::sharedPtr joint);
 
         /**
          * @brief Destroy all the bodies in the world
+         *
+         * @warning This function is locked during callbacks
          */
         void destroyAllBodies();
+
+        /**
+         * @brief Destroy all the joints in the world
+         *
+         * @warning This function is locked during callbacks
+         */
+        void destroyAllJoints();
 
         /**
          * @brief Update the physics world
@@ -226,7 +277,8 @@ namespace ime {
          * @note This function is called automatically by the scene and does
          * not need to be invoked directly
          */
-        void update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations);
+        void update(Time timeStep, unsigned int velocityIterations,
+            unsigned int positionIterations);
 
         /**
          * @brief Enable or disable automatic force buffer clearance after an
@@ -298,6 +350,15 @@ namespace ime {
          * on invocation
          */
         void forEachBody(Callback<Body::sharedPtr&> callback);
+
+        /**
+         * @brief Execute a callback for each joint in the world
+         * @param callback The function to be executed on each joint
+         *
+         * The callback is passed a reference to a pointer to the joint
+         * on invocation
+         */
+        void forEachJoint(Callback<Joint::sharedPtr&> callback);
 
         /**
          * @brief Get the number of bodies in the world
@@ -373,11 +434,12 @@ namespace ime {
         ~World();
 
     private:
-        Scene& scene_;                        //!< The scene this world belongs to
-        b2World* world_;                      //!< The physics world simulation
-        std::vector<Body::sharedPtr> bodies_; //!< All bodies in this simulation
-        bool fixedTimeStep_;                  //!< A flag indicating whether updates are fixed or variable
-        float timescale_;                     //!< Controls the speed of the simulation without affecting the render fps
+        Scene& scene_;                         //!< The scene this world belongs to
+        b2World* world_;                       //!< The physics world simulation
+        std::vector<Body::sharedPtr> bodies_;  //!< All bodies in this simulation
+        std::vector<Joint::sharedPtr> joints_; //!< All joints in this simulation
+        bool fixedTimeStep_;                   //!< A flag indicating whether updates are fixed or variable
+        float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
     };
 }
 

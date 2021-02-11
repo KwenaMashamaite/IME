@@ -24,6 +24,7 @@
 
 #include "IME/core/physics/rigid_body/Fixture.h"
 #include "IME/core/physics/rigid_body/Body.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
 
@@ -42,7 +43,7 @@ namespace ime {
         b2FixtureDef->filter.maskBits = definition.filterData.collisionBitMask;
         b2FixtureDef->filter.groupIndex = definition.filterData.groupIndex;
 
-        fixture_ = body->body_->CreateFixture(b2FixtureDef);
+        fixture_ = body->getInternalBody()->CreateFixture(b2FixtureDef);
         userData_ = definition.userData;
         body_ = body;
         delete b2FixtureDef;
@@ -66,12 +67,13 @@ namespace ime {
     }
 
     bool Fixture::containsPoint(Vector2f point) const {
-        return fixture_->TestPoint({point.x, point.y});
+        return fixture_->TestPoint({utility::pixelsToMetres(point.x),
+                                    utility::pixelsToMetres(point.y)});
     }
 
     void Fixture::setDensity(float density) {
         fixture_->SetDensity(density);
-        body_->body_->ResetMassData();
+        body_->getInternalBody()->ResetMassData();
     }
 
     float Fixture::getDensity() const {

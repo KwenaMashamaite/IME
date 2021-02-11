@@ -463,6 +463,17 @@ namespace ime {
         PropertyContainer& getUserData();
 
         /**
+         * @internal
+         * @brief Get the internal body
+         * @return The internal body
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        b2Body* getInternalBody();
+        const b2Body* getInternalBody() const;
+
+        /**
          * @brief Destructor
          */
         ~Body();
@@ -479,9 +490,8 @@ namespace ime {
         b2Body* body_;        //!< Internal rigid body
         WorldPtr world_;      //!< The world the body is in
         friend class World;   //!< Needs access to constructor
-        friend class Fixture; //!< Needs access to internal body
 
-        PropertyContainer userData_;                       //!< Application specific body data
+        PropertyContainer userData_;                //!< Application specific body data
         std::vector<Fixture::sharedPtr> fixtures_;  //!< Fixtures attached to this body
     };
 }

@@ -305,6 +305,14 @@ namespace ime {
         return userData_;
     }
 
+    b2Body *Body::getInternalBody() {
+        return body_;
+    }
+
+    const b2Body *Body::getInternalBody() const {
+        return body_;
+    }
+
     Body::~Body() {
         // We don't call delete because memory is deallocated by World
         // instance when it goes ot of scope
