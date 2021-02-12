@@ -27,10 +27,28 @@
 #include "IME/core/entity/Entity.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include <box2d/b2_world.h>
+#include <box2d/b2_contact.h>
 #include <box2d/b2_fixture.h>
 
 namespace ime {
-    namespace {
+    namespace
+    {
+        /**
+         * @brief Convert Box2d fixture pointer to own fixture pointer
+         * @param fixture Box2d fixture pointer to be converted
+         * @return Own Fixture pointer
+         */
+        Fixture::sharedPtr getOwnFixture(b2Fixture* fixture) {
+            // Every IME Fixture object has an instance of b2Fixture.
+            // When the b2Fixture is instantiated, a pointer to the Fixture that
+            // contains it is passed as user data so that we can retrieve it later.
+            return Fixture::sharedPtr(reinterpret_cast<Fixture*>(fixture->GetUserData().pointer));
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // Own callback wrappers so that they can be sent to Box2d
+        ////////////////////////////////////////////////////////////////////////
+
         /**
          * @brief World::AABBCallback wrapper
          */
@@ -41,18 +59,9 @@ namespace ime {
                 callback_ = callback;
             }
 
-            // Called by box2d when a fixture overlaps the querry AABB
+            // Called by box2d when a fixture overlaps the query AABB
             bool ReportFixture(b2Fixture *b2_fixture) override {
-                // The syntax below is little bit nasty, so here's an explanation to
-                // narrow down whats happening:
-                //
-                // Every Fixture object object has an instance of b2Fixture.
-                // When a b2Fixture is created, a pointer to the Fixture that
-                // contains it is passed as user data so that we can retrieve it later.
-                // We do this because the World::AABBCallback takes a shared pointer
-                // to our Fixture (abstraction), so there must be a way to convert
-                // from b2Fixture to our Fixture
-                return (*callback_)(std::shared_ptr<Fixture>(reinterpret_cast<Fixture*>(b2_fixture->GetUserData().pointer)));
+                return (*callback_)(getOwnFixture(b2_fixture));
             }
 
             ~B2QueryCallback() {
@@ -62,6 +71,10 @@ namespace ime {
         private:
             const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
         };
+
+        ////////////////////////////////////////////////////////////////////////
+        // RayCast callback wrapper
+        ////////////////////////////////////////////////////////////////////////
 
         /**
          * @brief World::RayCastCallback wrapper
@@ -73,14 +86,15 @@ namespace ime {
                 callback_ = callback;
             }
 
-            // Called by box2d when a ray cast collides with a fixture
+            // Called by Box2d when a ray cast collides with a fixture
             float ReportFixture(b2Fixture *b2_fixture, const b2Vec2 &point,
                 const b2Vec2 &normal, float fraction) override
             {
                 using namespace utility;
-                auto fixture = std::shared_ptr<Fixture>(reinterpret_cast<Fixture*>(b2_fixture->GetUserData().pointer));
-                return (*callback_)(std::move(fixture), {metresToPixels(point.x), metresToPixels(point.y)},
-                        {metresToPixels(normal.x), metresToPixels(normal.y)}, fraction);
+                return (*callback_)(getOwnFixture(b2_fixture),
+                        {metresToPixels(point.x), metresToPixels(point.y)},
+                        {metresToPixels(normal.x), metresToPixels(normal.y)},
+                        fraction);
             }
 
             ~B2RayCastCallback() {
@@ -90,14 +104,62 @@ namespace ime {
         private:
             const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
-    }
+
+    } // anonymous namespace
+
+    /////////////////////////////////////////////////////////////////////////////
+    // World class implementation
+    ////////////////////////////////////////////////////////////////////////////
+
+    // ContactListener wrapper
+    class World::B2ContactListener : public b2ContactListener {
+    public:
+        explicit B2ContactListener() : contactListener_{nullptr}
+        {}
+
+        void setContactListener(ContactListener& contactListener) {
+            contactListener_ = &contactListener;
+        }
+
+        // Called by box2s when two fixtures begin to overlap
+        void BeginContact(b2Contact *contact) override {
+            (*contactListener_).eventEmitter_.emit("contactBegin",
+                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+        }
+
+        // Called by box 2d when two fixtures stop overlapping
+        void EndContact(b2Contact *contact) override {
+            (*contactListener_).eventEmitter_.emit("contactEnd",
+                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+        }
+
+        // Called by box2d after collision detection, but before collision resolution
+        // may be called multiple times per time step per contact due to continuous collision detection
+        void PreSolve(b2Contact *contact, __attribute__((unused)) const b2Manifold *oldManifold) override {
+            (*contactListener_).eventEmitter_.emit("preSolve",
+                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+        }
+
+        // Called by box2d after collision resolution
+        void PostSolve(b2Contact *contact, __attribute__((unused)) const b2ContactImpulse *impulse) override {
+            (*contactListener_).eventEmitter_.emit("postSolve",
+                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+        }
+
+        ~B2ContactListener() {contactListener_ = nullptr;}
+
+    private:
+        ContactListener* contactListener_;
+    };
 
     World::World(Scene& scene, Vector2f gravity) :
         scene_{scene},
         world_{new b2World(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
         timescale_{1.0f}
-    {}
+    {
+        initContactListener();
+    }
 
     void World::setGravity(Vector2f gravity) {
         world_->SetGravity({gravity.x, gravity.y});
@@ -267,8 +329,18 @@ namespace ime {
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
+    ContactListener &World::getContactListener() {
+        return contactListener_;
+    }
+
     b2World *World::getInternalWorld() {
         return world_;
+    }
+
+    void World::initContactListener() {
+        static auto box2dContactListener = std::make_unique<B2ContactListener>();
+        box2dContactListener->setContactListener(contactListener_);
+        world_->SetContactListener(box2dContactListener.get());
     }
 
     World::~World() {

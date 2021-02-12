@@ -31,6 +31,7 @@
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/rigid_body/AABB.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
+#include "IME/core/physics/ContactListener.h"
 #include <memory>
 #include <vector>
 
@@ -416,6 +417,12 @@ namespace ime {
         void queryAABB(const AABBCallback& callback, const AABB& aabb) const;
 
         /**
+         * @brief Get the contact listener
+         * @return The contact listener
+         */
+        ContactListener& getContactListener();
+
+        /**
          * @internal
          * @brief Get the internal physics world
          * @return The internal physics world
@@ -434,12 +441,21 @@ namespace ime {
         ~World();
 
     private:
+        /**
+         * @brief Initialize the fixture contact listener
+         */
+        void initContactListener();
+
+    private:
         Scene& scene_;                         //!< The scene this world belongs to
         b2World* world_;                       //!< The physics world simulation
         std::vector<Body::sharedPtr> bodies_;  //!< All bodies in this simulation
         std::vector<Joint::sharedPtr> joints_; //!< All joints in this simulation
         bool fixedTimeStep_;                   //!< A flag indicating whether updates are fixed or variable
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
+        ContactListener contactListener_;      //!< Listens for contact between fixtures and alerts interested parties
+
+        class B2ContactListener;
     };
 }
 
