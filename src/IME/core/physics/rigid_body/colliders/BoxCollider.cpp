@@ -38,6 +38,17 @@ namespace ime {
         return BoxCollider::sharedPtr(new BoxCollider(size));
     }
 
+    Collider::sharedPtr BoxCollider::copy() {
+        return std::as_const(*this).copy();
+    }
+
+    const Collider::sharedPtr BoxCollider::copy() const {
+        auto collider = create();
+        collider->size_ = this->size_;
+        collider->box_.reset(new b2PolygonShape(*(this->box_.get())));
+        return collider;
+    }
+
     void BoxCollider::setSize(float width, float height) {
         size_ = {width, height};
         box_->SetAsBox(utility::pixelsToMetres(width / 2.0f),

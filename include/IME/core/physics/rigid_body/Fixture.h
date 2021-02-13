@@ -158,6 +158,15 @@ namespace ime {
         const BodyPtr& getBody() const;
 
         /**
+         * @brief Get the fixtures collider
+         * @return The fixtures collider
+         *
+         * @note Modifying the collider has no effect
+         */
+         std::shared_ptr<Collider> getCollider();
+         const std::shared_ptr<Collider> getCollider() const;
+
+        /**
          * @brief Check if the fixture contains a point or not
          * @param point The point to be checked in world coordinates
          * @return True if the fixture contains the point, otherwise false
@@ -186,11 +195,11 @@ namespace ime {
 
     private:
         std::unique_ptr<b2Fixture> fixture_; //!< Internal fixture
-
-        unsigned int id_;            //!< Id of this fixture
-        BodyPtr body_;               //!< The body this fixture is attached to
-        friend class Body;           //!< Needs access to constructor
-        PropertyContainer userData_; //!< Application specific fixture data
+        Collider::sharedPtr collider_; //!< The fixtures collider
+        unsigned int id_;              //!< Id of this fixture
+        BodyPtr body_;                 //!< The body this fixture is attached to
+        friend class Body;             //!< Needs access to constructor
+        PropertyContainer userData_;   //!< Application specific fixture data
     };
 }
 

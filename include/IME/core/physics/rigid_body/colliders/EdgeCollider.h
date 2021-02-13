@@ -44,10 +44,28 @@ namespace ime {
         using sharedPtr = std::shared_ptr<EdgeCollider>; //!< Shared collider pointer
 
         /**
+         * @brief Move constructor
+         */
+        EdgeCollider(EdgeCollider&&) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        EdgeCollider& operator=(EdgeCollider&&) = default;
+
+        /**
          * @brief Create a new edge collider
          * @return The created edge collider
          */
         static sharedPtr create();
+
+        /**
+         * @brief Create a new edge collider from an existing edge collider
+         * @param other The edge collider to contract the new one from
+         * @return The new edge collider instance
+         */
+        Collider::sharedPtr copy() override;
+        const Collider::sharedPtr copy() const override;
 
         /**
          * @brief Create a one sided collision edge

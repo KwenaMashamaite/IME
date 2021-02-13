@@ -46,6 +46,16 @@ namespace ime {
         using sharedPtr = std::shared_ptr<CircleCollider>; //!< Shared collider pointer
 
         /**
+         * @brief Move constructor
+         */
+        CircleCollider(CircleCollider&&) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        CircleCollider& operator=(CircleCollider&&) = default;
+
+        /**
          * @brief Create a new circle collider
          * @param radius The radius of the circle
          * @return The created circle collider
@@ -53,6 +63,14 @@ namespace ime {
          * By default, the circle radius is 0.0f
          */
         static sharedPtr create(float radius = 0.0f);
+
+        /**
+         * @brief Create a new circle collider from an existing circle collider
+         * @param other The circle collider to contract the new one from
+         * @return The new circle collider instance
+         */
+        Collider::sharedPtr copy() override;
+        const Collider::sharedPtr copy() const override;
 
         /**
          * @brief Set the position of the circle

@@ -38,6 +38,16 @@ namespace ime {
         return CircleCollider::sharedPtr(new CircleCollider(radius));
     }
 
+    Collider::sharedPtr CircleCollider::copy() {
+        return std::as_const(*this).copy();
+    }
+
+    const Collider::sharedPtr CircleCollider::copy() const {
+        auto collider = create();
+        collider->circle_.reset(new b2CircleShape(*(this->circle_.get())));
+        return collider;
+    }
+
     void CircleCollider::setPosition(Vector2f position) {
         circle_->m_p.x = utility::pixelsToMetres(position.x);
         circle_->m_p.y = utility::pixelsToMetres(position.y);

@@ -36,6 +36,16 @@ namespace ime {
         return EdgeCollider::sharedPtr(new EdgeCollider());
     }
 
+    Collider::sharedPtr EdgeCollider::copy() {
+        return std::as_const(*this).copy();
+    }
+
+    const Collider::sharedPtr EdgeCollider::copy() const {
+        auto collider = create();
+        collider->edgeShape_.reset(new b2EdgeShape(*(this->edgeShape_.get())));
+        return collider;
+    }
+
     void EdgeCollider::setOneSided(Vector2f v0, Vector2f v1, Vector2f v2, Vector2f v3)
     {
         edgeShape_->SetOneSided(

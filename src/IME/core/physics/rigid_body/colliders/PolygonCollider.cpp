@@ -36,6 +36,16 @@ namespace ime {
         return PolygonCollider::sharedPtr(new PolygonCollider);
     }
 
+    Collider::sharedPtr PolygonCollider::copy() {
+        return std::as_const(*this).copy();
+    }
+
+    const Collider::sharedPtr PolygonCollider::copy() const {
+        auto collider = create();
+        collider->polygon_.reset(new b2PolygonShape(*(this->polygon_.get())));
+        return collider;
+    }
+
     void PolygonCollider::set(const std::vector<Vector2f>& vertices) {
         IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed");
         b2Vec2 points[8]; // 8 is the maximum allowed and std::vector.size() is not a constexpr

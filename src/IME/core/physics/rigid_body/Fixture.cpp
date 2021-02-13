@@ -51,6 +51,7 @@ namespace ime {
 
         fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
         userData_ = definition.userData;
+        collider_ = definition.collider->copy();
         body_ = body;
     }
 
@@ -68,6 +69,14 @@ namespace ime {
 
     const Body::sharedPtr& Fixture::getBody() const {
         return body_;
+    }
+
+    std::shared_ptr<Collider> Fixture::getCollider() {
+        return collider_;
+    }
+
+    const std::shared_ptr<Collider> Fixture::getCollider() const {
+        return collider_;
     }
 
     bool Fixture::containsPoint(Vector2f point) const {

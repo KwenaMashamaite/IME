@@ -45,6 +45,16 @@ namespace ime {
         using constSharedPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider instance
 
         /**
+         * @brief Move constructor
+         */
+        BoxCollider(BoxCollider&&) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        BoxCollider& operator=(BoxCollider&&) = default;
+
+        /**
          * @brief Create a box collider object
          * @param size The size of the box
          * @return The new box collider instance
@@ -52,6 +62,14 @@ namespace ime {
          * By default the size is 0
          */
         static sharedPtr create(Vector2f size = {0.0f, 0.0f});
+
+        /**
+         * @brief Create a new box collider from an existing box collider
+         * @param other The box collider to contract the new one from
+         * @return The new box collider instance
+         */
+        Collider::sharedPtr copy() override;
+        const Collider::sharedPtr copy() const override;
 
         /**
          * @brief Set the size of the box

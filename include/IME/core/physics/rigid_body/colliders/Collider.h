@@ -63,6 +63,33 @@ namespace ime {
         explicit Collider(Type type);
 
         /**
+         * @brief Copy constructor
+         */
+        Collider(const Collider&) = delete;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Collider& operator=(const Collider&) = delete;
+
+        /**
+         * @brief Move constructor
+         */
+        Collider(Collider&&) = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Collider& operator=(Collider&&) = default;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return The new collider copied from this collider
+         */
+        virtual sharedPtr copy() = 0;
+        virtual const sharedPtr copy() const = 0;
+
+        /**
          * @brief Get the type of the collider
          * @return The type of the collider
          */
