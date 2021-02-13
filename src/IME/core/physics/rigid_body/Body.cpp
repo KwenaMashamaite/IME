@@ -332,6 +332,12 @@ namespace ime {
         return id_;
     }
 
+    void Body::forEachFixture(Callback<Fixture::sharedPtr> callback) {
+        std::for_each(fixtures_.begin(), fixtures_.end(), [&callback](auto pair) {
+            callback(pair.second);
+        });
+    }
+
     std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() {
         return body_;
     }

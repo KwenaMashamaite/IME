@@ -479,6 +479,14 @@ namespace ime {
         unsigned int getId() const;
 
         /**
+         * @brief Execute a function for each fixture on the body
+         * @param callback The function to be executed
+         *
+         * The callback is passed a fixture on invocation
+         */
+        void forEachFixture(Callback<Fixture::sharedPtr> callback);
+
+        /**
          * @internal
          * @brief Get the internal body
          * @return The internal body
