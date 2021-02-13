@@ -29,8 +29,12 @@
 namespace ime {
     EdgeCollider::EdgeCollider() :
         Collider(Type::Edge),
-        edgeShape_{new b2EdgeShape()}
+        edgeShape_{std::make_unique<b2EdgeShape>()}
     {}
+
+    EdgeCollider::sharedPtr EdgeCollider::create() {
+        return EdgeCollider::sharedPtr(new EdgeCollider());
+    }
 
     void EdgeCollider::setOneSided(Vector2f v0, Vector2f v1, Vector2f v2, Vector2f v3)
     {
@@ -67,16 +71,11 @@ namespace ime {
         return edgeShape_->m_oneSided;
     }
 
-    b2Shape *EdgeCollider::getInternalShape() {
-        return edgeShape_;
+    b2Shape& EdgeCollider::getInternalShape() {
+        return *edgeShape_;
     }
 
-    const b2Shape *EdgeCollider::getInternalShape() const {
-        return edgeShape_;
-    }
-
-    EdgeCollider::~EdgeCollider() {
-        delete edgeShape_;
-        edgeShape_ = nullptr;
+    const b2Shape& EdgeCollider::getInternalShape() const {
+        return *edgeShape_;
     }
 }

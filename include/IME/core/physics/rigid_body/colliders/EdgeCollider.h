@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "Collider.h"
 #include "IME/common/Vector2.h"
+#include <memory>
 
 class b2EdgeShape;
 
@@ -40,10 +41,13 @@ namespace ime {
      */
     class IME_API EdgeCollider : public Collider {
     public:
+        using sharedPtr = std::shared_ptr<EdgeCollider>; //!< Shared collider pointer
+
         /**
-         * @brief Default constructor
+         * @brief Create a new edge collider
+         * @return The created edge collider
          */
-        EdgeCollider();
+        static sharedPtr create();
 
         /**
          * @brief Create a one sided collision edge
@@ -135,16 +139,17 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        b2Shape *getInternalShape() override;
-        const b2Shape *getInternalShape() const override;
-
-        /**
-         * @brief Destructor
-         */
-        ~EdgeCollider();
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
-        b2EdgeShape* edgeShape_; //!< Internal shape
+        /**
+         * @brief Default constructor
+         */
+        EdgeCollider();
+
+    private:
+        std::unique_ptr<b2EdgeShape> edgeShape_; //!< Internal shape
     };
 }
 

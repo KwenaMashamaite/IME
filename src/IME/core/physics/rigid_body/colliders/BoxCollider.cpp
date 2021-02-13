@@ -29,9 +29,13 @@
 namespace ime {
     BoxCollider::BoxCollider(Vector2f size) :
         Collider(Collider::Type::Box),
-        box_{new b2PolygonShape()}
+        box_{std::make_unique<b2PolygonShape>()}
     {
         setSize(size.x, size.y);
+    }
+
+    BoxCollider::sharedPtr BoxCollider::create(Vector2f size) {
+        return BoxCollider::sharedPtr(new BoxCollider(size));
     }
 
     void BoxCollider::setSize(float width, float height) {
@@ -48,17 +52,12 @@ namespace ime {
         return size_;
     }
 
-    b2Shape *BoxCollider::getInternalShape() {
-        return box_;
+    b2Shape& BoxCollider::getInternalShape() {
+        return *box_;
     }
 
-    const b2Shape *BoxCollider::getInternalShape() const {
-        return box_;
-    }
-
-    BoxCollider::~BoxCollider() {
-        delete box_;
-        box_ = nullptr;
+    const b2Shape& BoxCollider::getInternalShape() const {
+        return *box_;
     }
 }
 

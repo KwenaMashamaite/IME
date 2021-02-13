@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "Collider.h"
 #include "IME/common/Vector2.h"
+#include <memory>
 
 class b2PolygonShape;
 
@@ -40,13 +41,17 @@ namespace ime {
      */
     class IME_API BoxCollider final : public Collider {
     public:
+        using sharedPtr = std::shared_ptr<BoxCollider>; //!< shred collider pointer
+        using constSharedPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider instance
+
         /**
-         * @brief Default constructor
+         * @brief Create a box collider object
          * @param size The size of the box
+         * @return The new box collider instance
          *
          * By default the size is 0
          */
-        explicit BoxCollider(Vector2f size = {0.0f, 0.0f});
+        static sharedPtr create(Vector2f size = {0.0f, 0.0f});
 
         /**
          * @brief Set the size of the box
@@ -77,17 +82,21 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        b2Shape *getInternalShape() override;
-        const b2Shape *getInternalShape() const override;
-
-        /**
-         * @brief Destructor
-         */
-        ~BoxCollider();
+        b2Shape &getInternalShape() override;
+        const b2Shape &getInternalShape() const override;
 
     private:
-        Vector2f size_;       //!< The size of the box
-        b2PolygonShape* box_; //!< Internal box
+        /**
+         * @brief Default constructor
+         * @param size The size of the box
+         *
+         * By default the size is 0
+         */
+        explicit BoxCollider(Vector2f size = {0.0f, 0.0f});
+
+    private:
+        Vector2f size_;                       //!< The size of the box
+        std::unique_ptr<b2PolygonShape> box_; //!< Internal box
     };
 }
 

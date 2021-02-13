@@ -101,16 +101,11 @@ namespace ime {
          */
         FixtureDefinition();
 
-        /**
-         * @brief Destructor
-         */
-        ~FixtureDefinition();
-
         ////////////////////////////////////////////////////////////////////////
         // Member data
         ////////////////////////////////////////////////////////////////////////
 
-        const Collider* collider;       //!< The collider to be attached to a rigid body
+        std::shared_ptr<const Collider> collider; //!< The collider to be attached to a rigid body
         float friction;                 //!< The friction coefficient, usually in the range [0,1].
         float restitution;              //!< The restitution (elasticity) in the range [0,1].
         float density;                  //!< The density of the fixture in in kg/m^2

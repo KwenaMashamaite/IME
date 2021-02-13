@@ -29,8 +29,12 @@
 namespace ime {
     PolygonCollider::PolygonCollider() :
         Collider{Collider::Type::Polygon},
-        polygon_{new b2PolygonShape()}
+        polygon_{std::make_unique<b2PolygonShape>()}
     {}
+
+    PolygonCollider::sharedPtr PolygonCollider::create() {
+        return PolygonCollider::sharedPtr(new PolygonCollider);
+    }
 
     void PolygonCollider::set(const std::vector<Vector2f>& vertices) {
         IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed");
@@ -41,16 +45,11 @@ namespace ime {
         polygon_->Set(points, vertices.size());
     }
 
-    b2Shape *PolygonCollider::getInternalShape() {
-        return polygon_;
+    b2Shape& PolygonCollider::getInternalShape() {
+        return *polygon_;
     }
 
-    const b2Shape *PolygonCollider::getInternalShape() const {
-        return polygon_;
-    }
-
-    PolygonCollider::~PolygonCollider() {
-        delete polygon_;
-        polygon_ = nullptr;
+    const b2Shape& PolygonCollider::getInternalShape() const {
+        return *polygon_;
     }
 }

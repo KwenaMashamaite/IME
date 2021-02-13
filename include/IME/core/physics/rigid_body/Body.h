@@ -95,7 +95,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        Fixture::sharedPtr createFixture(const Collider* collider, float density);
+        Fixture::sharedPtr createFixture(Collider::sharedPtr collider, float density);
 
         /**
          * @brief Get a fixture by its id

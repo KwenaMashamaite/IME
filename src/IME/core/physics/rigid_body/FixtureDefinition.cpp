@@ -40,8 +40,4 @@ namespace ime {
         isSensor{false},
         restitutionThreshold{1.0f * b2_lengthUnitsPerMeter}
     {}
-
-    FixtureDefinition::~FixtureDefinition() {
-        collider = nullptr;
-    }
 }

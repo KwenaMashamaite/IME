@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "Collider.h"
 #include <vector>
+#include <memory>
 
 class b2PolygonShape;
 
@@ -42,10 +43,13 @@ namespace ime {
      */
     class IME_API PolygonCollider final : public Collider {
     public:
+        using sharedPtr = std::shared_ptr<PolygonCollider>; //!< Shared polygon collider
+
         /**
-         * @brief Default constructor
+         * @brief Create a new polygon collider
+         * @return The created polygon collider
          */
-        PolygonCollider();
+        static sharedPtr create();
 
         /**
          * @brief Create a convex hull from the an array of local points
@@ -69,16 +73,17 @@ namespace ime {
          * @warning This function is intended for internal use and should never
          * be called outside of IME
          */
-        b2Shape* getInternalShape() override;
-        const b2Shape* getInternalShape() const override;
-
-        /**
-         * @brief Destructor
-         */
-        ~PolygonCollider();
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
-        b2PolygonShape* polygon_; //!< Internal polygon collider
+        /**
+         * @brief Default constructor
+         */
+        PolygonCollider();
+
+    private:
+        std::unique_ptr<b2PolygonShape> polygon_; //!< Internal polygon collider
     };
 }
 

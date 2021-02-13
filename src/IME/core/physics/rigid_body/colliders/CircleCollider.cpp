@@ -29,9 +29,13 @@
 namespace ime {
     CircleCollider::CircleCollider(float radius) :
         Collider(Collider::Type::Circle),
-        circle_{new b2CircleShape()}
+        circle_{std::make_unique<b2CircleShape>()}
     {
         setRadius(radius);
+    }
+
+    CircleCollider::sharedPtr CircleCollider::create(float radius) {
+        return CircleCollider::sharedPtr(new CircleCollider(radius));
     }
 
     void CircleCollider::setPosition(Vector2f position) {
@@ -51,17 +55,12 @@ namespace ime {
         return utility::metresToPixels(circle_->m_radius);
     }
 
-    b2Shape *CircleCollider::getInternalShape() {
-        return circle_;
+    b2Shape& CircleCollider::getInternalShape() {
+        return *circle_;
     }
 
-    const b2Shape *CircleCollider::getInternalShape() const {
-        return circle_;
-    }
-
-    CircleCollider::~CircleCollider() {
-        delete circle_;
-        circle_ = nullptr;
+    const b2Shape& CircleCollider::getInternalShape() const {
+        return *circle_;
     }
 }
 

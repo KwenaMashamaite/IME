@@ -26,6 +26,7 @@
 #define IME_COLLIDER_H
 
 #include "IME/Config.h"
+#include <memory>
 
 class b2Shape;
 
@@ -43,6 +44,8 @@ namespace ime {
      */
     class IME_API Collider {
     public:
+        using sharedPtr = std::shared_ptr<Collider>; //!< Shared collider pointer
+
         /**
          * @brief The type of the collider
          */
@@ -73,8 +76,8 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        virtual b2Shape* getInternalShape() = 0;
-        virtual const b2Shape* getInternalShape() const = 0;
+        virtual b2Shape& getInternalShape() = 0;
+        virtual const b2Shape& getInternalShape() const = 0;
 
         /**
          * @brief Destructor

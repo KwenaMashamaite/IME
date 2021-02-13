@@ -43,7 +43,7 @@ namespace ime {
         b2FixtureDefinition->friction = definition.friction;
         b2FixtureDefinition->density = definition.density;
         b2FixtureDefinition->isSensor = definition.isSensor;
-        b2FixtureDefinition->shape = definition.collider->getInternalShape();
+        b2FixtureDefinition->shape = &(definition.collider->getInternalShape());
         b2FixtureDefinition->filter.categoryBits = definition.filterData.categoryBitMask;
         b2FixtureDefinition->filter.maskBits = definition.filterData.collisionBitMask;
         b2FixtureDefinition->filter.groupIndex = definition.filterData.groupIndex;

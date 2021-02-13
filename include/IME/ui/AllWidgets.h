@@ -47,5 +47,6 @@
 #include "IME/ui/widgets/Panel.h"
 #include "IME/ui/widgets/ScrollablePanel.h"
 #include "IME/ui/widgets/SpinControl.h"
+#include "IME/ui/widgets/Separator.h"
 
 #endif // IME_ALLWIDGETS_H

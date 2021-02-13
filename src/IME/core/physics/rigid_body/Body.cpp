@@ -77,7 +77,7 @@ namespace ime {
         return nullptr;
     }
 
-    Fixture::sharedPtr Body::createFixture(const Collider* collider, float density) {
+    Fixture::sharedPtr Body::createFixture(Collider::sharedPtr collider, float density) {
         if (!world_->isLocked()) {
             auto fixtureDef = FixtureDefinition();
             fixtureDef.collider = collider;

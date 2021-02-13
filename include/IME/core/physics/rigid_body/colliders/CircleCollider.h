@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "Collider.h"
+#include <memory>
 
 class b2CircleShape;
 
@@ -42,11 +43,16 @@ namespace ime {
      */
     class IME_API CircleCollider final : public Collider {
     public:
+        using sharedPtr = std::shared_ptr<CircleCollider>; //!< Shared collider pointer
+
         /**
-         * @brief Default constructor
+         * @brief Create a new circle collider
          * @param radius The radius of the circle
+         * @return The created circle collider
+         *
+         * By default, the circle radius is 0.0f
          */
-        CircleCollider(float radius = 0.0f);
+        static sharedPtr create(float radius = 0.0f);
 
         /**
          * @brief Set the position of the circle
@@ -80,16 +86,18 @@ namespace ime {
          * @warning This function is intended for internal use and should never
          * be called outside of IME
          */
-        b2Shape* getInternalShape() override;
-        const b2Shape* getInternalShape() const override;
-
-        /**
-         * @brief Destructor
-         */
-        ~CircleCollider();
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
-        b2CircleShape* circle_;  //!< Internal collision circle
+        /**
+         * @brief Default constructor
+         * @param radius The radius of the circle
+         */
+        CircleCollider(float radius = 0.0f);
+
+    private:
+        std::unique_ptr<b2CircleShape> circle_;  //!< Internal collision circle
     };
 }
 
