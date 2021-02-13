@@ -171,9 +171,10 @@ namespace ime {
         PropertyContainer& getUserData();
 
         /**
-         * @brief Destructor
+         * @brief Get the unique identifier of this fixture
+         * @return The id of this fixture
          */
-        ~Fixture();
+        unsigned int getId() const;
 
     private:
         /**
@@ -184,9 +185,11 @@ namespace ime {
         Fixture(const FixtureDefinition& definition, BodyPtr body);
 
     private:
-        b2Fixture* fixture_; //!< Internal fixture
-        BodyPtr body_;       //!< The body this fixture is attached to
-        friend class Body;   //!< Needs access to constructor
+        std::unique_ptr<b2Fixture> fixture_; //!< Internal fixture
+
+        unsigned int id_;            //!< Id of this fixture
+        BodyPtr body_;               //!< The body this fixture is attached to
+        friend class Body;           //!< Needs access to constructor
         PropertyContainer userData_; //!< Application specific fixture data
     };
 }

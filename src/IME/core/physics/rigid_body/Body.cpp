@@ -26,11 +26,18 @@
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>
+#include <box2d/b2_fixture.h>
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(const BodyDefinition &definition, World::sharedPtr world) {
-        auto b2Definition = new b2BodyDef();
+    namespace {
+        static auto idCounter{0u};
+    }
+
+    Body::Body(const BodyDefinition &definition, World::sharedPtr world) :
+        id_{idCounter++}
+    {
+        auto b2Definition = std::make_unique<b2BodyDef>();
         b2Definition->type = static_cast<b2BodyType>(definition.bodyType);
         b2Definition->position = {utility::pixelsToMetres(definition.position.x), utility::pixelsToMetres(definition.position.y)};
         b2Definition->angle = utility::degToRad(definition.angle);
@@ -44,25 +51,34 @@ namespace ime {
         b2Definition->bullet = definition.isFastBody;
         b2Definition->enabled = definition.isEnabled;
         b2Definition->gravityScale = definition.gravityScale;
+        b2Definition->userData.pointer = id_;
 
         world_ = world;
         userData_ = definition.userData;
-        body_ = world_->getInternalWorld()->CreateBody(b2Definition);
-        delete b2Definition;
-        b2Definition = nullptr;
+
+        auto b2BodyDeleter = [this](b2Body* body) {
+            if (body != nullptr) {
+                body->GetWorld()->DestroyBody(body);
+                getWorld()->removeBodyById(body->GetUserData().pointer);
+                body = nullptr;
+            }
+        };
+
+        body_ = std::unique_ptr<b2Body, std::function<void(b2Body*)>>(
+            world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
     Fixture::sharedPtr Body::createFixture(const FixtureDefinition& definition) {
         if (world_ && !world_->isLocked()) {
             auto fixture = Fixture::sharedPtr(new Fixture(definition, shared_from_this()));
-            fixtures_.push_back(fixture);
+            fixtures_.insert({fixture->id_, fixture});
             return fixture;
         }
         return nullptr;
     }
 
     Fixture::sharedPtr Body::createFixture(const Collider* collider, float density) {
-        if (world_ && !world_->isLocked()) {
+        if (!world_->isLocked()) {
             auto fixtureDef = FixtureDefinition();
             fixtureDef.collider = collider;
             fixtureDef.density = density;
@@ -71,11 +87,18 @@ namespace ime {
         return nullptr;
     }
 
+    Fixture::sharedPtr Body::getFixtureById(unsigned int id) {
+        if (utility::findIn(fixtures_, id))
+            return fixtures_.at(id);
+
+        return nullptr;
+    }
+
     void Body::destroyFixture(Fixture::sharedPtr fixture) {
         if (world_ && !world_->isLocked()) {
-            if (auto [found, index] = utility::findIn(fixtures_, fixture); found) {
-                body_->DestroyFixture(fixtures_[index]->fixture_);
-                fixtures_.erase(fixtures_.begin() + index);
+            if (utility::findIn(fixtures_, fixture->getId())) {
+                body_->DestroyFixture(fixtures_[fixture->getId()]->fixture_.get());
+                fixtures_.erase(fixture->getId());
             }
         }
     }
@@ -305,17 +328,15 @@ namespace ime {
         return userData_;
     }
 
-    b2Body *Body::getInternalBody() {
+    unsigned int Body::getId() const {
+        return id_;
+    }
+
+    std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() {
         return body_;
     }
 
-    const b2Body *Body::getInternalBody() const {
+    const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() const {
         return body_;
-    }
-
-    Body::~Body() {
-        // We don't call delete because memory is deallocated by World
-        // instance when it goes ot of scope
-        body_ = nullptr;
     }
 }

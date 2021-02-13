@@ -33,6 +33,8 @@
 #include "IME/core/physics/rigid_body/Fixture.h"
 #include <memory>
 #include <vector>
+#include <functional>
+#include <unordered_map>
 
 class b2Body;
 
@@ -94,6 +96,14 @@ namespace ime {
          * @warning This function is locked during callbacks
          */
         Fixture::sharedPtr createFixture(const Collider* collider, float density);
+
+        /**
+         * @brief Get a fixture by its id
+         * @param id The unique identifier of the fixture
+         * @return The fixture with the given id or a nullptr if the body
+         *         does not have a fixture with the given id
+         */
+        Fixture::sharedPtr getFixtureById(unsigned int id);
 
         /**
          * @brief Destroy a fixture
@@ -463,6 +473,12 @@ namespace ime {
         PropertyContainer& getUserData();
 
         /**
+         * @brief Get the unique identifier of the body
+         * @return The unique identifier of the body
+         */
+        unsigned int getId() const;
+
+        /**
          * @internal
          * @brief Get the internal body
          * @return The internal body
@@ -470,13 +486,8 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        b2Body* getInternalBody();
-        const b2Body* getInternalBody() const;
-
-        /**
-         * @brief Destructor
-         */
-        ~Body();
+        std::unique_ptr<b2Body, std::function<void(b2Body*)>>& getInternalBody();
+        const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& getInternalBody() const;
 
     private:
         /**
@@ -487,12 +498,13 @@ namespace ime {
         Body(const BodyDefinition& definition, WorldPtr world);
 
     private:
-        b2Body* body_;        //!< Internal rigid body
-        WorldPtr world_;      //!< The world the body is in
-        friend class World;   //!< Needs access to constructor
-
+        std::unique_ptr<b2Body, std::function<void(b2Body*)>> body_;  //!< Internal rigid body
+        unsigned int id_;                           //!< The id of this body
+        WorldPtr world_;                            //!< The world the body is in
         PropertyContainer userData_;                //!< Application specific body data
-        std::vector<Fixture::sharedPtr> fixtures_;  //!< Fixtures attached to this body
+        friend class World;                         //!< Needs access to constructor
+
+        std::unordered_map<int, Fixture::sharedPtr> fixtures_;  //!< Fixtures attached to this body
     };
 }
 

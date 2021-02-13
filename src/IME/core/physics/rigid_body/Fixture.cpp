@@ -29,25 +29,29 @@
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
-    Fixture::Fixture(const FixtureDefinition& definition, Body::sharedPtr body) {
-        IME_ASSERT(definition.collider, "Fixture definition does not have a collider");
-        auto b2FixtureDef = new struct b2FixtureDef();
-        b2FixtureDef->restitution = definition.restitution;
-        b2FixtureDef->restitutionThreshold = definition.restitutionThreshold;
-        b2FixtureDef->friction = definition.friction;
-        b2FixtureDef->density = definition.density;
-        b2FixtureDef->isSensor = definition.isSensor;
-        b2FixtureDef->shape = definition.collider->getInternalShape();
-        b2FixtureDef->userData.pointer = reinterpret_cast<uintptr_t>(this);
-        b2FixtureDef->filter.categoryBits = definition.filterData.categoryBitMask;
-        b2FixtureDef->filter.maskBits = definition.filterData.collisionBitMask;
-        b2FixtureDef->filter.groupIndex = definition.filterData.groupIndex;
+    namespace {
+        auto static idCounter{0u};
+    }
 
-        fixture_ = body->getInternalBody()->CreateFixture(b2FixtureDef);
+    Fixture::Fixture(const FixtureDefinition& definition, Body::sharedPtr body) :
+        id_{idCounter++}
+    {
+        IME_ASSERT(definition.collider, "Fixture definition does not have a collider");
+        auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
+        b2FixtureDefinition->restitution = definition.restitution;
+        b2FixtureDefinition->restitutionThreshold = definition.restitutionThreshold;
+        b2FixtureDefinition->friction = definition.friction;
+        b2FixtureDefinition->density = definition.density;
+        b2FixtureDefinition->isSensor = definition.isSensor;
+        b2FixtureDefinition->shape = definition.collider->getInternalShape();
+        b2FixtureDefinition->filter.categoryBits = definition.filterData.categoryBitMask;
+        b2FixtureDefinition->filter.maskBits = definition.filterData.collisionBitMask;
+        b2FixtureDefinition->filter.groupIndex = definition.filterData.groupIndex;
+        b2FixtureDefinition->userData.pointer = id_;
+
+        fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
         userData_ = definition.userData;
         body_ = body;
-        delete b2FixtureDef;
-        b2FixtureDef = nullptr;
     }
 
     void Fixture::setSensor(bool sensor) {
@@ -108,8 +112,7 @@ namespace ime {
         return userData_;
     }
 
-    Fixture::~Fixture() {
-        fixture_ = nullptr;
-        body_ = nullptr;
+    unsigned int Fixture::getId() const {
+        return id_;
     }
 }

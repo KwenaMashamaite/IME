@@ -78,8 +78,9 @@ namespace ime {
         b2Definition->length = utility::pixelsToMetres(definition.length);
         b2Definition->minLength = utility::pixelsToMetres(definition.minLength);
         b2Definition->maxLength = utility::pixelsToMetres(definition.maxLength);
-        b2Definition->bodyA = definition.bodyA->getInternalBody();
-        b2Definition->bodyB = definition.bodyB->getInternalBody();
+        b2Definition->bodyA = definition.bodyA->getInternalBody().get();
+        b2Definition->bodyB = definition.bodyB->getInternalBody().get();
+        b2Definition->userData.pointer = getId();
 
         b2Definition->localAnchorA = {utility::pixelsToMetres(definition.bodyALocalAnchorPoint.x),
                                       utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};

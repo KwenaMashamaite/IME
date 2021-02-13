@@ -29,6 +29,7 @@
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_fixture.h>
+#include <box2d/b2_world_callbacks.h>
 
 namespace ime {
     namespace
@@ -38,11 +39,12 @@ namespace ime {
          * @param fixture Box2d fixture pointer to be converted
          * @return Own Fixture pointer
          */
-        Fixture::sharedPtr getOwnFixture(b2Fixture* fixture) {
+        Fixture::sharedPtr getOwnFixture(b2Fixture* fixture, World& world) {
             // Every IME Fixture object has an instance of b2Fixture.
-            // When the b2Fixture is instantiated, a pointer to the Fixture that
+            // When the b2Fixture is instantiated, the id of Fixture that
             // contains it is passed as user data so that we can retrieve it later.
-            return Fixture::sharedPtr(reinterpret_cast<Fixture*>(fixture->GetUserData().pointer));
+            return world.getBodyById(fixture->GetBody()->GetUserData().pointer)
+                     ->getFixtureById(fixture->GetUserData().pointer);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -54,14 +56,16 @@ namespace ime {
          */
         class B2QueryCallback : public b2QueryCallback {
         public:
-            explicit B2QueryCallback(const World::AABBCallback* callback) {
+            B2QueryCallback(const World::AABBCallback* callback, World& world) :
+                world_{world}
+            {
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
                 callback_ = callback;
             }
 
             // Called by box2d when a fixture overlaps the query AABB
             bool ReportFixture(b2Fixture *b2_fixture) override {
-                return (*callback_)(getOwnFixture(b2_fixture));
+                return (*callback_)(getOwnFixture(b2_fixture, world_));
             }
 
             ~B2QueryCallback() {
@@ -69,6 +73,7 @@ namespace ime {
             }
 
         private:
+            World& world_;
             const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
         };
 
@@ -81,7 +86,9 @@ namespace ime {
          */
         class B2RayCastCallback : public b2RayCastCallback {
         public:
-            explicit B2RayCastCallback(const World::RayCastCallback* callback) {
+            B2RayCastCallback(const World::RayCastCallback* callback, World& world) :
+                world_{world}
+            {
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
                 callback_ = callback;
             }
@@ -91,7 +98,7 @@ namespace ime {
                 const b2Vec2 &normal, float fraction) override
             {
                 using namespace utility;
-                return (*callback_)(getOwnFixture(b2_fixture),
+                return (*callback_)(getOwnFixture(b2_fixture, world_),
                         {metresToPixels(point.x), metresToPixels(point.y)},
                         {metresToPixels(normal.x), metresToPixels(normal.y)},
                         fraction);
@@ -102,6 +109,7 @@ namespace ime {
             }
 
         private:
+            World& world_;
             const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
 
@@ -114,51 +122,55 @@ namespace ime {
     // ContactListener wrapper
     class World::B2ContactListener : public b2ContactListener {
     public:
-        explicit B2ContactListener() : contactListener_{nullptr}
+        explicit B2ContactListener(ContactListener& contactListener, World& world) :
+            world_{world},
+            contactListener_{contactListener}
         {}
 
-        void setContactListener(ContactListener& contactListener) {
-            contactListener_ = &contactListener;
-        }
-
-        // Called by box2s when two fixtures begin to overlap
+        // Called by Box2d when two fixtures begin to overlap
         void BeginContact(b2Contact *contact) override {
-            (*contactListener_).eventEmitter_.emit("contactBegin",
-                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+            emit("contactBegin", contact);
         }
 
-        // Called by box 2d when two fixtures stop overlapping
+        // Called by Box2d when two fixtures stop overlapping
         void EndContact(b2Contact *contact) override {
-            (*contactListener_).eventEmitter_.emit("contactEnd",
-                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+            emit("contactEnd", contact);
         }
 
-        // Called by box2d after collision detection, but before collision resolution
+        // Called by Box2d after collision detection, but before collision resolution
         // may be called multiple times per time step per contact due to continuous collision detection
         void PreSolve(b2Contact *contact, __attribute__((unused)) const b2Manifold *oldManifold) override {
-            (*contactListener_).eventEmitter_.emit("preSolve",
-                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+            emit("preSolve", contact);
         }
 
         // Called by box2d after collision resolution
         void PostSolve(b2Contact *contact, __attribute__((unused)) const b2ContactImpulse *impulse) override {
-            (*contactListener_).eventEmitter_.emit("postSolve",
-                getOwnFixture(contact->GetFixtureA()), getOwnFixture(contact->GetFixtureB()));
+            emit("postSolve", contact);
         }
 
-        ~B2ContactListener() {contactListener_ = nullptr;}
-
     private:
-        ContactListener* contactListener_;
+        World& world_;
+        ContactListener& contactListener_;
+
+        void emit(const std::string& event, b2Contact *contact) {
+            contactListener_.eventEmitter_.emit(event,
+                getOwnFixture(contact->GetFixtureA(), world_),
+                getOwnFixture(contact->GetFixtureB(), world_));
+        }
     };
 
     World::World(Scene& scene, Vector2f gravity) :
         scene_{scene},
-        world_{new b2World(b2Vec2{gravity.x, gravity.y})},
+        world_{std::make_unique<b2World>(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
         timescale_{1.0f}
     {
-        initContactListener();
+        b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
+        world_->SetContactListener(b2ContactListener_.get());
+    }
+
+    World::sharedPtr World::create(Scene &scene, Vector2f gravity) {
+        return World::sharedPtr(new World(scene, gravity));
     }
 
     void World::setGravity(Vector2f gravity) {
@@ -198,7 +210,7 @@ namespace ime {
 
     Body::sharedPtr World::createBody(const BodyDefinition &definition) {
         auto body = Body::sharedPtr(new Body(definition, shared_from_this()));
-        bodies_.push_back(body);
+        bodies_.insert({body->id_, body});
         return body;
     }
 
@@ -208,11 +220,18 @@ namespace ime {
         }
     }
 
+    Body::sharedPtr World::getBodyById(unsigned int id) {
+        if (utility::findIn(bodies_, id))
+            return bodies_.at(id);
+
+        return nullptr;
+    }
+
     bool World::destroyBody(Body::sharedPtr body) {
-        if (world_ && !world_->IsLocked()) {
-            if (auto [found, index] = utility::findIn(bodies_, body); found) {
-                world_->DestroyBody(bodies_[index]->getInternalBody());
-                bodies_.erase(bodies_.begin() + index);
+        if (!world_->IsLocked()) {
+            if (utility::findIn(bodies_, body->getId())) {
+                world_->DestroyBody(bodies_[body->getId()]->getInternalBody().get());
+                bodies_.erase(body->getId());
                 return true;
             }
         }
@@ -231,7 +250,7 @@ namespace ime {
                     return nullptr;
             }
 
-            joints_.push_back(joint);
+            joints_.insert({joint->getId(), joint});
             return joint;
         }
         return nullptr;
@@ -239,9 +258,9 @@ namespace ime {
 
     bool World::destroyJoint(Joint::sharedPtr joint) {
         if (world_ && !world_->IsLocked()) {
-            if (auto [found, index] = utility::findIn(joints_, joint); found) {
-                world_->DestroyJoint(joints_[index]->getInternalJoint());
-                joints_.erase(joints_.begin() + index);
+            if (utility::findIn(joints_, joint->getId())) {
+                world_->DestroyJoint(joints_[joint->getId()]->getInternalJoint());
+                joints_.erase(joint->getId());
                 return true;
             }
         }
@@ -251,8 +270,8 @@ namespace ime {
 
     void World::destroyAllBodies() {
         // Destroy all bodies in box2D first
-        std::for_each(bodies_.begin(), bodies_.end(), [this] (Body::sharedPtr body) {
-            world_->DestroyBody(body->getInternalBody());
+        std::for_each(bodies_.begin(), bodies_.end(), [this] (auto pair) {
+            world_->DestroyBody(pair.second->getInternalBody().get());
         });
 
         bodies_.clear();
@@ -260,8 +279,8 @@ namespace ime {
 
     void World::destroyAllJoints() {
         // Destroy all joints in box2D first
-        std::for_each(joints_.begin(), joints_.end(), [this] (Joint::sharedPtr joint) {
-            world_->DestroyJoint(joint->getInternalJoint());
+        std::for_each(joints_.begin(), joints_.end(), [this] (auto pair) {
+            world_->DestroyJoint(pair.second->getInternalJoint());
         });
 
         joints_.clear();
@@ -300,11 +319,15 @@ namespace ime {
     }
 
     void World::forEachBody(Callback<Body::sharedPtr&> callback) {
-        std::for_each(bodies_.begin(), bodies_.end(), callback);
+        std::for_each(bodies_.begin(), bodies_.end(), [&callback](auto pair) {
+            callback(pair.second);
+        });
     }
 
     void World::forEachJoint(Callback<Joint::sharedPtr &> callback) {
-        std::for_each(joints_.begin(), joints_.end(), callback);
+        std::for_each(joints_.begin(), joints_.end(), [&callback](auto pair) {
+            callback(pair.second);
+        });
     }
 
     std::size_t World::getBodyCount() const {
@@ -316,16 +339,16 @@ namespace ime {
     }
 
     void World::rayCast(const World::RayCastCallback &callback, Vector2f startPoint,
-        Vector2f endPoint) const
+        Vector2f endPoint)
     {
-        auto queryCallback = B2RayCastCallback(&callback);
+        auto queryCallback = B2RayCastCallback(&callback, *this);
         world_->RayCast(&queryCallback,
             {utility::pixelsToMetres(startPoint.x), utility::pixelsToMetres(startPoint.y)},
             {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
-    void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) const {
-        auto queryCallback = B2QueryCallback(&callback);
+    void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) {
+        auto queryCallback = B2QueryCallback(&callback, *this);
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
@@ -333,18 +356,13 @@ namespace ime {
         return contactListener_;
     }
 
-    b2World *World::getInternalWorld() {
+    std::unique_ptr<b2World>& World::getInternalWorld() {
         return world_;
     }
 
-    void World::initContactListener() {
-        static auto box2dContactListener = std::make_unique<B2ContactListener>();
-        box2dContactListener->setContactListener(contactListener_);
-        world_->SetContactListener(box2dContactListener.get());
-    }
-
-    World::~World() {
-        delete world_;
-        world_ = nullptr;
+    bool World::removeBodyById(unsigned int id) {
+        // This function  does not remove the internal body because
+        // it is called by the custom deleter of the internal body
+        return utility::eraseIn(bodies_, id);
     }
 }

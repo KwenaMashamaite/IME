@@ -97,7 +97,7 @@ namespace ime {
     }
 
     void Scene::createWorld(Vector2f gravity) {
-        world_ = std::make_shared<World>(*this, gravity);
+        world_ = World::create(*this, gravity);
         hasPhysicsSim_ = true;
     }
 }

@@ -47,6 +47,14 @@ namespace ime {
         using BodyPtr = std::shared_ptr<Body>; //!< Shared body pointer
 
         /**
+         * @brief Constructor
+         */
+        Joint() {
+            auto static counter = 0u;
+            id_ = counter++;
+        }
+
+        /**
          * @brief Get the type of the joint
          * @return The type of the joint
          */
@@ -119,9 +127,18 @@ namespace ime {
         virtual const b2Joint* getInternalJoint() const = 0;
 
         /**
+         * @brief Get the unique identifier for this entity
+         * @return The unique identifier
+         */
+        unsigned int getId() const {return id_;}
+
+        /**
          * @brief Destructor
          */
         virtual ~Joint() = default;
+
+    private:
+        unsigned int id_; //!< unique identifier for this joint
     };
 }
 

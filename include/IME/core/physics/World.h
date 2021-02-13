@@ -32,6 +32,7 @@
 #include "IME/core/physics/rigid_body/AABB.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
 #include "IME/core/physics/ContactListener.h"
+#include <unordered_map>
 #include <memory>
 #include <vector>
 
@@ -97,11 +98,14 @@ namespace ime {
                 Vector2f, Vector2f, float)>;
 
         /**
-         * @brief Construct the world object
+         * @brief Create the physics simulation
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity
+         * @return The created physics world
+         *
+         * @note This class does not keep a reference to the created object
          */
-        World(Scene& scene, Vector2f gravity);
+        static sharedPtr create(Scene& scene, Vector2f gravity);
 
         /**
          * @brief Set the gravity of the world
@@ -196,6 +200,14 @@ namespace ime {
          * dispatched during a step)
          */
         void createBody(EntityPtr entity, const BodyDefinition& definition);
+
+        /**
+         * @brief Get the body by its unique identifier
+         * @param id The id of the body to retrieve
+         * @return The body with the given id or a nullptr if there is no
+         *         body with the given id in the world
+         */
+        Body::sharedPtr getBodyById(unsigned int id);
 
         /**
          * @brief Destroy a rigid body
@@ -400,7 +412,7 @@ namespace ime {
          * acceptable in your game, trying slightly overlapping your polygons
          */
         void rayCast(const RayCastCallback& callback, Vector2f startPoint,
-            Vector2f endPoint) const;
+            Vector2f endPoint);
 
         /**
          * @brief Query the world for all fixtures that overlap the given AABB
@@ -414,7 +426,7 @@ namespace ime {
          * the query will continue until all overlapping fixtures are
          * processed
          */
-        void queryAABB(const AABBCallback& callback, const AABB& aabb) const;
+        void queryAABB(const AABBCallback& callback, const AABB& aabb);
 
         /**
          * @brief Get the contact listener
@@ -433,29 +445,39 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        b2World* getInternalWorld();
+        std::unique_ptr<b2World>& getInternalWorld();
 
         /**
-         * @brief Destructor
+         * @internal
+         * @brief Remove the body with a specific id
+         * @param id The id of the body to remove
+         * @return True if the body was removed, otherwise false
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
          */
-        ~World();
+        bool removeBodyById(unsigned int id);
 
     private:
         /**
-         * @brief Initialize the fixture contact listener
+         * @brief Construct the world object
+         * @param scene The scene this world belongs to
+         * @param gravity The acceleration of bodies due to gravity
          */
-        void initContactListener();
+        World(Scene& scene, Vector2f gravity);
 
     private:
         Scene& scene_;                         //!< The scene this world belongs to
-        b2World* world_;                       //!< The physics world simulation
-        std::vector<Body::sharedPtr> bodies_;  //!< All bodies in this simulation
-        std::vector<Joint::sharedPtr> joints_; //!< All joints in this simulation
+        std::unique_ptr<b2World> world_;       //!< The physics world simulation
         bool fixedTimeStep_;                   //!< A flag indicating whether updates are fixed or variable
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
         ContactListener contactListener_;      //!< Listens for contact between fixtures and alerts interested parties
 
+        std::unordered_map<int, Body::sharedPtr> bodies_;  //!< All bodies in this simulation
+        std::unordered_map<int, Joint::sharedPtr> joints_; //!< All joints in this simulation
+
         class B2ContactListener;
+        std::unique_ptr<B2ContactListener> b2ContactListener_;
     };
 }
 
