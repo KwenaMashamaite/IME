@@ -35,6 +35,8 @@ namespace ime {
      */
     class IME_API ConvexShape : public Shape {
     public:
+        using sharedPtr = std::shared_ptr<ConvexShape>; //!< Shared shape pointer
+
         /**
          * @brief Default constructor
          * @param pointCount The number of points of the polygon
@@ -62,6 +64,13 @@ namespace ime {
         ConvexShape& operator=(ConvexShape&&) = default;
 
         /**
+         * @brief Create a new convex shape
+         * @param pointCount The number of points of the polygon
+         * @return The created convex shape shape
+         */
+        static sharedPtr create(std::size_t pointCount = 0);
+
+        /**
          * @brief Set the number of points of the polygon
          * @param count The new number of points of the polygon
          * 
@@ -73,7 +82,7 @@ namespace ime {
          * @brief Get the number of points of the polygon
          * @return The number of points of the polygon
          */
-        virtual std::size_t getPointCount() const;
+        std::size_t getPointCount() const;
         
         /**
          * @brief Set the position of a point
@@ -102,7 +111,7 @@ namespace ime {
          *
          * @see setPointCount
          */
-        virtual Vector2f getPoint(std::size_t index) const;
+        Vector2f getPoint(std::size_t index) const;
 
         /**
          * @brief Set the fill colour of the polygon

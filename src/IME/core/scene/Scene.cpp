@@ -35,7 +35,18 @@ namespace ime {
         isEntered_{false},
         isVisibleWhenPaused_{false},
         hasPhysicsSim_{false}
-    {}
+    {
+        // "postStep" event is dispatched by the scene manager immediately after a physics step
+        eventEmitter_.on("postStep", Callback<>([this] {
+            shapeContainer_.forEachShape([](Shape::sharedPtr shape) {
+                if (shape->hasRigidBody()) {
+                    auto body = shape->getRigidBody();
+                    shape->setPosition(body->getPosition());
+                    shape->setRotation(body->getRotation());
+                }
+            });
+        }));
+    }
 
     void Scene::setName(const std::string &name) {
         name_ = name;
@@ -94,6 +105,10 @@ namespace ime {
 
     PropertyContainer &Scene::cache() {
         return cache_;
+    }
+
+    ShapeContainer &Scene::shapes() {
+        return shapeContainer_;
     }
 
     void Scene::createWorld(Vector2f gravity) {

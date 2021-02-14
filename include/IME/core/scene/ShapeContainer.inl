@@ -22,45 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/shapes/Shape.h"
-#include "IME/core/scene/Scene.h"
-#include "IME/core/physics/World.h"
-
-namespace ime {
-    Shape::Shape(Type type) :
-        type_{type}
-    {}
-
-    Shape::Type Shape::getShapeType() const {
-        return type_;
-    }
-
-    void Shape::attachRigidBody(Body::sharedPtr body) {
-        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to a shape");
-        IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one");
-        body_ = body;
-        setOrigin(getGlobalBounds().width / 2.0f, getGlobalBounds().height / 2.0f);
-        setPosition(body->getPosition());
-        setRotation(body->getRotation());
-    }
-
-    void Shape::removeRigidBody() {
-        if (body_) {
-            body_->getWorld()->destroyBody(body_);
-            body_.reset();
-        }
-    }
-
-    Body::sharedPtr Shape::getRigidBody() {
-        return body_;
-    }
-
-    const Body::sharedPtr Shape::getRigidBody() const {
-        return body_;
-    }
-
-    bool Shape::hasRigidBody() const {
-        return body_ != nullptr;
-    }
+template <class T>
+std::shared_ptr<T> ShapeContainer::createShape(Shape::Type type) {
+    return std::dynamic_pointer_cast<T>(createShape(type));
 }
-

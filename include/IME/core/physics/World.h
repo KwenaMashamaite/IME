@@ -435,6 +435,12 @@ namespace ime {
         ContactListener& getContactListener();
 
         /**
+         * @brief Get the scene the simulation belongs to
+         * @return The scene this simulation belongs to
+         */
+        Scene& getScene();
+
+        /**
          * @internal
          * @brief Get the internal physics world
          * @return The internal physics world

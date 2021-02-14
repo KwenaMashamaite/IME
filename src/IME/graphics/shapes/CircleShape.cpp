@@ -59,6 +59,10 @@ namespace ime {
         return *this;
     }
 
+    CircleShape::sharedPtr CircleShape::create(float radius) {
+        return CircleShape::sharedPtr(new CircleShape(radius));
+    }
+
     void CircleShape::setRadius(float radius) {
         impl_->circle_.setRadius(radius);
     }

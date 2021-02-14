@@ -29,15 +29,19 @@
 #include "IME/graphics/IDrawable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/common/Rect.h"
+#include "IME/core/physics/rigid_body/Body.h"
+#include <memory>
 
 namespace ime {
     /**
-     * @brief Abstract base class for all geometric figures
+     * @brief Abstract base class for geometric figures
      *
      * Some common geometric figures are squares, rectangles and triangles
      */
     class IME_API Shape : public IDrawable, public ITransformable {
     public:
+        using sharedPtr = std::shared_ptr<Shape>; //!< Shared shape pointer
+
         /**
          * @brief The types of shapes
          */
@@ -49,7 +53,6 @@ namespace ime {
 
         /**
          * @brief Constructor
-         * @param scene The scene the shape belongs to
          * @param type The type of this shape
          */
         explicit Shape(Type type);
@@ -59,6 +62,51 @@ namespace ime {
          * @return The type of the shape
          */
         Type getShapeType() const;
+
+        /**
+         * @brief Attach a rigid body to a shape
+         * @param body The body to be attached
+         *
+         * Attaching a rigid Body to a shape enables physics for that shape.
+         * This means that you should refrain from calling functions that
+         * MODIFY the shapes transform (position, rotation and origin).
+         * Note that the physics simulation does not account for scaling,
+         * that should be handles by you
+         *
+         * @note Attaching a rigid body will alter the origin of the shape to
+         * match the centre of mass of the body
+         *
+         * @warning The pointer must not be a nullptr. Also, you cannot attach
+         * a rigid body to a shape that already has a rigid body attached, the
+         * previous body must be removed first
+         *
+         * @see removeRigidBody
+         */
+        void attachRigidBody(Body::sharedPtr body);
+
+        /**
+         * @brief Remove a rigid body from the shape
+         *
+         * Removing a rigid Body from a shape disables all physics applied to
+         * the shape. This means that the shape will not respond to forces
+         * ans must be moved and rotated manually if need be
+         */
+        void removeRigidBody();
+
+        /**
+         * @brief Get the rigid body attached to the shape
+         * @return The rigid body attached to the shape or a nullptr if the
+         *         shape does not have a rigid body attached to it
+         */
+        Body::sharedPtr getRigidBody();
+        const Body::sharedPtr getRigidBody() const;
+
+        /**
+         * @brief Check if the the shape has a rigid body attached to it or not
+         * @return True if the shape has a rigid body attached to it, otherwise
+         *         false
+         */
+        bool hasRigidBody() const;
 
         /**
          * @brief Set the fill colour of the shape
@@ -134,7 +182,8 @@ namespace ime {
         virtual ~Shape() = default;
 
     private:
-        Type type_;    //!< The type of this shape
+        Type type_;            //!< The type of this shape
+        Body::sharedPtr body_; //!< The shapes rigid body
     };
 }
 

@@ -59,6 +59,10 @@ namespace ime {
         return *this;
     }
 
+    ConvexShape::sharedPtr ConvexShape::create(std::size_t pointCount) {
+        return ConvexShape::sharedPtr(new ConvexShape(pointCount));
+    }
+
     void ConvexShape::setPointCount(std::size_t count) {
         impl_->polygon_.setPointCount(count);
     }

@@ -44,6 +44,7 @@ set(IME_SRC
     core/physics/World.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
+    core/scene/ShapeContainer.cpp
     core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp

@@ -32,6 +32,7 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/core/scene/ShapeContainer.h"
 #include <string>
 #include <memory>
 
@@ -359,6 +360,16 @@ namespace ime {
         PropertyContainer& cache();
 
         /**
+         * @brief Get the geometry shape container
+         * @return The geometry shape container
+         *
+         * You may use this class to create geometry shape instead of using
+         * their respective constructors. Consult the ShapeContainer class
+         * definition for more info
+         */
+        ShapeContainer& shapes();
+
+        /**
          * @brief Create a physics simulation
          * @param gravity Acceleration of bodies in the simulation due to gravity
          *
@@ -378,6 +389,7 @@ namespace ime {
         audio::AudioManager audioManager_; //!< The local audio manager for this scene
         EventEmitter eventEmitter_;        //!< The local event dispatcher for this scene
         TimerManager timerManager_;        //!< The local timer manager for this scene
+        ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene
         float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered

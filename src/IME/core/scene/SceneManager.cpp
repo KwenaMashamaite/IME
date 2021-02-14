@@ -151,6 +151,8 @@ namespace ime {
                 scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
             } else if (!fixedUpdate && !scene->world_->isFixedStep())
                 scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
+            scene->eventEmitter_.emit("postStep");
+            scene->eventEmitter_.emit("postStep", deltaTime);
         }
 
         // Update scene

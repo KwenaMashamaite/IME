@@ -356,6 +356,10 @@ namespace ime {
         return contactListener_;
     }
 
+    Scene &World::getScene() {
+        return scene_;
+    }
+
     std::unique_ptr<b2World>& World::getInternalWorld() {
         return world_;
     }

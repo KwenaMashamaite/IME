@@ -59,6 +59,10 @@ namespace ime {
         return *this;
     }
 
+    RectangleShape::sharedPtr RectangleShape::create(const Vector2f &size) {
+        return sharedPtr(new RectangleShape(size));
+    }
+
     void RectangleShape::setSize(const Vector2f &size) {
         impl_->rectangle_.setSize({size.x, size.y});
     }

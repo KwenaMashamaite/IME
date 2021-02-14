@@ -35,13 +35,15 @@ namespace ime {
      */
     class IME_API CircleShape : public Shape {
     public:
+        using sharedPtr = std::shared_ptr<CircleShape>; //!< Shared shape pointer
+
         /**
          * @brief Default constructor
          * @param radius The radius of the circle
          * 
          * By default the radius is zero
          */
-        CircleShape(float radius = 0.0f);
+        explicit CircleShape(float radius = 0.0f);
 
         /**
          * @brief Copy constructor
@@ -62,6 +64,13 @@ namespace ime {
          * @brief Move assignment operator
          */
         CircleShape& operator=(CircleShape&&) = default;
+
+        /**
+         * @brief Create a new circle shape
+         * @param radius The radius of the circle
+         * @return The created circle shape
+         */
+        static sharedPtr create(float radius = 0.0f);
         
         /**
          * @brief Set the radius of the circle
