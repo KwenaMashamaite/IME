@@ -93,6 +93,10 @@ set(IME_SRC
     graphics/Window.cpp
     graphics/SpriteSheet.cpp
     graphics/SpriteSheetContainer.cpp
+    graphics/shapes/Shape.cpp
+    graphics/shapes/RectangleShape.cpp
+    graphics/shapes/CircleShape.cpp
+    graphics/shapes/ConvexShape.cpp
     utility/ConfigFileParser.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp
