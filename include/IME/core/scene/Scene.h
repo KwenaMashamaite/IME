@@ -289,7 +289,7 @@ namespace ime {
          *
          * @see createWorld
          */
-        World& world();
+        World& physics();
 
         /**
          * @brief Get the scenes event event emitter
@@ -365,7 +365,7 @@ namespace ime {
          * This function should be called by scenes that require a physics
          * simulation
          *
-         * @see world
+         * @see physics
          */
         void createWorld(Vector2f gravity);
 

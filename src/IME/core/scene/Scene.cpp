@@ -72,7 +72,7 @@ namespace ime {
         return engine_;
     }
 
-    World& Scene::world() {
+    World& Scene::physics() {
         return *world_;
     }
 
