@@ -59,6 +59,13 @@ namespace ime {
         };
 
         /**
+         * @brief Construct entity
+         * @param scene The scene this entity belongs to
+         * @param type Type of the entity
+         */
+        explicit Entity(Scene& scene, Type type = Type::Unknown);
+
+        /**
          * @brief Copy constructor
          * @param other Object to be copied
          */
@@ -80,11 +87,28 @@ namespace ime {
         Entity& operator=(Entity&&) = default;
 
         /**
-         * @brief Construct entity
-         * @param scene The scene this entity belongs to
-         * @param type Type of the entity
+         * @brief Check if two entity objects are the same object or not
+         * @param rhs Object to compare against this object
+         * @return True if the two entities are the same object
+         *
+         * Two entity objects are the same object if they have the same
+         * object id
+         *
+         * @see getObjectId
          */
-        explicit Entity(Scene& scene, Type type = Type::Unknown);
+        bool operator==(const Entity& rhs);
+
+        /**
+         * @brief Check if this entity is not the same object as another object
+         * @param rhs Object to compare against this object
+         * @return True if the two objects are not the same object
+         *
+         * Two entity objects are not the same object if they don't have the
+         * same object id
+         *
+         * @see getObjectId
+         */
+        bool operator!=(const Entity& rhs);
 
         /**
          * @brief Set the type of the entity
@@ -217,18 +241,47 @@ namespace ime {
          * @brief Attach a physics Body to the entity
          * @param body Physics body to be attached
          *
-         * This function will replace any body that was attached prior. The
-         * body will be removed from the entity and the from the physics
-         * simulation
+         * Attaching a rigid Body to an entity enables physics for that entity.
+         * This means that you should refrain from calling functions that
+         * MODIFY the entity's transform (position, rotation and origin).
+         * Note that the physics simulation does not account for scaling,
+         * that should be handles by you
+         *
+         * @note Attaching a rigid body will alter the origin of the entity's
+         * sprite to match the centre of mass of the body. In addition, the
+         * transform of the entity will be reset to that of the rigid body
+         *
+         * @warning The pointer must not be a nullptr. Also, you cannot attach
+         * a rigid body to an entity that already has a rigid body attached, the
+         * previous body must be removed first
+         *
+         * @see removeRigidBody
          */
-        void attachBody(BodyPtr body);
+        void attachRigidBody(BodyPtr body);
 
         /**
          * @brief Get the entity's physics body
          * @return The entity's physics body if any, otherwise a nullptr
          */
-        BodyPtr & getBody();
-        const BodyPtr & getBody() const;
+        BodyPtr & getRigidBody();
+        const BodyPtr & getRigidBody() const;
+
+        /**
+         * @brief Remove a rigid body from the entity
+         *
+         * Removing a rigid Body from an entity disables all physics
+         * applied to it
+         *
+         * @see attachRigidBody
+         */
+        void removeRigidBody();
+
+        /**
+         * @brief Check if the the entity has a rigid body attached to it
+         * @return True if the entity has a rigid body attached to it,
+         *         otherwise false
+         */
+        bool hasRigidBody() const;
 
         /**
          * @brief Get the entity's transform
@@ -238,6 +291,17 @@ namespace ime {
          * position, scale, rotation and origin
          */
         Transform& getTransform();
+        const Transform& getTransform() const;
+
+        /**
+         * @brief Reset the origin of the sprite
+         *
+         * The origin is reset to the local centre of the sprite
+         *
+         * @note This function must be called everytime the sprites texture,
+         * texture rectangle size or scale is changed
+         */
+        void resetSpriteOrigin();
 
         /**
          * @brief Get the entity's graphical representation
@@ -246,6 +310,13 @@ namespace ime {
          * By default, the sprite is empty
          */
         Sprite& getSprite();
+        const Sprite& getSprite() const;
+
+        /**
+         * @brief Update entity
+         * @param deltaTime Time past since last update
+         */
+        virtual void update(Time deltaTime);
 
         /**
          * @brief Add an event listener to an entity event
@@ -271,30 +342,6 @@ namespace ime {
          * @see onEvent
          */
         bool unsubscribe(const std::string& event, int id);
-
-        /**
-         * @brief Check if two entity objects are the same object or not
-         * @param rhs Object to compare against this object
-         * @return True if the two entities are the same object
-         *
-         * Two entity objects are the same object if they have the same
-         * object id
-         *
-         * @see getObjectId
-         */
-        bool operator==(const Entity& rhs);
-
-        /**
-         * @brief Check if this entity is not the same object as another object
-         * @param rhs Object to compare against this object
-         * @return True if the two objects are not the same object
-         *
-         * Two entity objects are not the same object if they don't have the
-         * same object id
-         *
-         * @see getObjectId
-         */
-        bool operator!=(const Entity& rhs);
 
         /**
          * @brief Destructor

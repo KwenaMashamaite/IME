@@ -25,47 +25,22 @@
 #include "IME/core/scene/ShapeContainer.h"
 #include "IME/utility/Helpers.h"
 #include "IME/graphics/Window.h"
-#include <algorithm>
 
 namespace ime {
     Shape::sharedPtr ShapeContainer::createShape(Shape::Type type) {
         switch (type) {
             case Shape::Type::Rectangle:
-                shapes_.push_back(RectangleShape::create());
+                add(RectangleShape::create());
                 break;
             case Shape::Type::Circle:
-                shapes_.push_back(CircleShape::create());
+                add(CircleShape::create());
                 break;
             case Shape::Type::Convex:
-                shapes_.push_back(ConvexShape::create());
+                add(ConvexShape::create());
                 break;
             default:
                 IME_ASSERT(false, "Invalid shape type given");
         }
-        return shapes_.back();
-    }
-
-    bool ShapeContainer::removeShape(Shape::sharedPtr shape) {
-        return utility::eraseIn(shapes_, shape);
-    }
-
-    void ShapeContainer::removeAll() {
-        shapes_.clear();
-    }
-
-    std::size_t ShapeContainer::getShapesCount() const {
-        return shapes_.size();
-    }
-
-    void ShapeContainer::render(Window &window, Callback<Shape::sharedPtr> preRenderCallback) {
-        forEachShape([&window, &preRenderCallback](Shape::sharedPtr shape) {
-            if (preRenderCallback)
-                preRenderCallback(shape);
-            shape->draw(window);
-        });
-    }
-
-    void ShapeContainer::forEachShape(Callback<Shape::sharedPtr> callback) {
-        std::for_each(shapes_.begin(), shapes_.end(), callback);
+        return *(cend() - 1);
     }
 }

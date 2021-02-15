@@ -32,14 +32,18 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/scene/ShapeContainer.h"
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace ime {
-    class Engine; //!< Engine class forward declaration
-    class Window; //!< Window class forward declaration
-    class World;  //!< World class forward declaration
+    // Forward declarations
+    class Engine;
+    class Window;
+    class World;
+    class Entity;
+    class ShapeContainer;
+    class EntityContainer;
 
     /**
      * @brief Abstract base class for game scenes
@@ -274,6 +278,8 @@ namespace ime {
         /**
          * @brief Get a reference to the game engine
          * @return A reference to the game engine
+         *
+         * @warning Do not keep th returned reference
          */
         Engine &engine() const;
 
@@ -288,6 +294,8 @@ namespace ime {
          * calling this function. Calling it before creating the
          * simulation is undefined behaviour
          *
+         * @warning Do not keep the returned reference
+         *
          * @see createWorld
          */
         World& physics();
@@ -301,6 +309,8 @@ namespace ime {
          * scene is active and de-registered when the scene is destroyed.
          * For global events use the global event event emitter in the
          * Engine class or the EventDispatcher
+         *
+         * @warning Do not keep the returned reference
          */
         EventEmitter& eventEmitter();
 
@@ -314,6 +324,8 @@ namespace ime {
          * To register global inputs, use the global input manager in the
          * Engine class
          *
+         * @warning Do not keep the returned reference
+         *
          * @warning Do not try to update the input manager, it will be
          * updated internally
          */
@@ -326,6 +338,7 @@ namespace ime {
          * The audio manager is local the scene instance. For global audio,
          * use the global audio manager in the Engine class
          *
+         * @warning Do not keep the returned reference
          * @warning Do not try to update the audio manager, it will be
          * updated internally
          */
@@ -338,6 +351,8 @@ namespace ime {
          * The timer manager is local to the scene instance. This means that
          * callbacks scheduled on it will only be dispatched when the scene
          * is active
+         *
+         * @warning Do not keep the returned reference
          *
          * @warning Do not try to update the timer manager, it will be
          * updated internally
@@ -355,19 +370,33 @@ namespace ime {
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
+         * @warning Do not keep the returned reference
+         *
          * @see engine
          */
         PropertyContainer& cache();
 
         /**
-         * @brief Get the geometry shape container
+         * @brief Get the scene geometry shape container
          * @return The geometry shape container
          *
          * You may use this class to create geometry shape instead of using
          * their respective constructors. Consult the ShapeContainer class
          * definition for more info
+         *
+         * @warning Do not keep the returned reference
          */
         ShapeContainer& shapes();
+
+        /**
+         * @brief Get the scene entity container
+         * @return The scene entity container
+         *
+         * This class stores entities that belong to this scene
+         *
+         * @warning Do not keep the returned reference
+         */
+        EntityContainer& entities();
 
         /**
          * @brief Create a physics simulation
@@ -389,13 +418,15 @@ namespace ime {
         audio::AudioManager audioManager_; //!< The local audio manager for this scene
         EventEmitter eventEmitter_;        //!< The local event dispatcher for this scene
         TimerManager timerManager_;        //!< The local timer manager for this scene
-        ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene
         float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;         //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool hasPhysicsSim_;               //!< A flag indicating whether or not the scene has a physics simulation
         friend class SceneManager;         //!< Pre updates the scene
+
+        std::unique_ptr<ShapeContainer> shapeContainer_;   //!< Stores shapes that belong to the scene
+        std::unique_ptr<EntityContainer> entityContainer_; //!< Stores entities that belong to the scene
     };
 }
 

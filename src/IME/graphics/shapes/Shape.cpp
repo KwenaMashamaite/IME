@@ -39,7 +39,7 @@ namespace ime {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to a shape");
         IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one");
         body_ = body;
-        setOrigin(getGlobalBounds().width / 2.0f, getGlobalBounds().height / 2.0f);
+        setOrigin(getLocalBounds().width / 2.0f, getLocalBounds().height / 2.0f);
         setPosition(body->getPosition());
         setRotation(body->getRotation());
     }

@@ -22,7 +22,21 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-template <class T>
-inline std::shared_ptr<T> ShapeContainer::createShape(Shape::Type type) {
-    return std::dynamic_pointer_cast<T>(createShape(type));
+#ifndef IME_ENTITYCONTAINER_H
+#define IME_ENTITYCONTAINER_H
+
+#include "IME/Config.h"
+#include "Container.h"
+#include "IME/core/entity/Entity.h"
+#include <vector>
+
+namespace ime {
+    /**
+     * @brief Entity container
+     */
+    class IME_API EntityContainer : public Container<Entity> {
+
+    };
 }
+
+#endif //IME_ENTITYCONTAINER_H

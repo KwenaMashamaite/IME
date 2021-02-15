@@ -25,6 +25,7 @@
 #include "IME/core/entity/Entity.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/World.h"
 
 std::size_t ime::Entity::prevEntityId_{0};
 
@@ -135,8 +136,11 @@ namespace ime {
     void Entity::setCollidable(bool isCollidable) {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
-            if (body_)
-                body_->setAwake(isCollidable_);
+            if (body_) {
+                body_->forEachFixture([isCollidable](Fixture::sharedPtr fixture) {
+                    fixture->setCollidable(isCollidable);
+                });
+            }
 
             if (isCollidable_)
                 dispatchEvent("collisionEnable");
@@ -169,33 +173,56 @@ namespace ime {
         return id_;
     }
 
-    void Entity::attachBody(std::shared_ptr<Body> body) {
-        if (!body_ && body) {
-            //@TODO Remove body from world
+    void Entity::attachRigidBody(Body::sharedPtr body) {
+        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity");
+        IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one");
+        body_ = body;
+        resetSpriteOrigin();
+        transform_.setPosition(body->getPosition());
+        transform_.setRotation(body->getRotation());
+    }
+
+    Body::sharedPtr &Entity::getRigidBody() {
+        return body_;
+    }
+
+    const Body::sharedPtr &Entity::getRigidBody() const {
+        return body_;
+    }
+
+    void Entity::removeRigidBody() {
+        if (body_) {
+            body_->getWorld()->destroyBody(body_);
+            body_.reset();
         }
-        body_ = std::move(body);
-        body_->setTransform(transform_);
     }
 
-    std::shared_ptr<Body> &Entity::getBody() {
-        return body_;
-    }
-
-    const std::shared_ptr<Body> &Entity::getBody() const {
-        return body_;
+    bool Entity::hasRigidBody() const {
+        return body_ != nullptr;
     }
 
     Transform &Entity::getTransform() {
-        // @TODO - Add scale and origin properties to a physics body
-        // Body transform does not have origin and scale properties
-        auto bodyTransform = body_->getTransform();
-        transform_.setPosition(bodyTransform.getPosition());
-        transform_.setRotation(bodyTransform.getRotation());
         return transform_;
+    }
+
+    const Transform &Entity::getTransform() const {
+        return transform_;
+    }
+
+    void Entity::resetSpriteOrigin() {
+        transform_.setOrigin(sprite_.getLocalBounds().width / 2.0f, sprite_.getLocalBounds().height / 2.0f);
     }
 
     Sprite &Entity::getSprite() {
         return sprite_;
+    }
+
+    const Sprite &Entity::getSprite() const {
+        return sprite_;
+    }
+
+    void Entity::update(Time deltaTime) {
+        sprite_.updateAnimation(deltaTime);
     }
 
     bool Entity::unsubscribe(const std::string &event, int id) {

@@ -216,7 +216,7 @@ namespace ime {
 
     void World::createBody(Entity::sharedPtr entity, const BodyDefinition &definition) {
         if (entity) {
-            entity->attachBody(createBody(definition));
+            entity->attachRigidBody(createBody(definition));
         }
     }
 

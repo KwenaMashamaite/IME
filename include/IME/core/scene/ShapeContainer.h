@@ -29,6 +29,7 @@
 #include "IME/graphics/shapes/CircleShape.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/graphics/shapes/ConvexShape.h"
+#include "IME/core/scene/Container.h"
 #include <memory>
 #include <vector>
 
@@ -64,7 +65,7 @@ namespace ime {
      * @note This class is not meant to be instantiated directly as it will
      * be instantiated by the Scene
      */
-    class IME_API ShapeContainer {
+    class IME_API ShapeContainer final : public Container<Shape> {
     public:
         /**
          * @brief Create a shape
@@ -93,46 +94,6 @@ namespace ime {
          */
         template<class T>
         std::shared_ptr<T> createShape(Shape::Type type);
-
-        /**
-         * @brief Remove a shape form the container
-         * @param shape The shape to be removed
-         * @return True of the shape was removed or the shape does not exist
-         *          in the container
-         */
-        bool removeShape(Shape::sharedPtr shape);
-
-        /**
-         * @brief Remove all shapes from the container
-         */
-        void removeAll();
-
-        /**
-         * @brief Get the number of shapes in the container
-         * @return The number of shapes in the container
-         */
-        std::size_t getShapesCount() const;
-
-        /**
-         * @brief Render all the shapes on a render target
-         * @param window The window to render the shapes on
-         * @param preRenderCallback Optional callback that is called before
-         *        a shape is rendered to the given render target
-         *
-         * You'll have to call this function yourself because we don't
-         * know if the shapes should be rendered to the background or
-         * foreground of the scene
-         */
-        void render(Window& window, Callback<Shape::sharedPtr> preRenderCallback = nullptr);
-
-        /**
-         * @brief Execute a callback function for each shape in the container
-         * @param callback The function to be executed
-         */
-        void forEachShape(Callback<Shape::sharedPtr> callback);
-
-    private:
-        std::vector<Shape::sharedPtr> shapes_;
     };
 
     #include "IME/core/scene/ShapeContainer.inl"
