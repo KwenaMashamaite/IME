@@ -51,6 +51,7 @@ namespace ime {
 
         fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
         userData_ = definition.userData;
+        filterData_ = definition.filterData;
         collider_ = definition.collider->copy();
         body_ = body;
     }
@@ -61,6 +62,34 @@ namespace ime {
 
     bool Fixture::isSensor() const {
         return fixture_->IsSensor();
+    }
+
+    void Fixture::setCollisionFilter(const CollisionFilterData& filterData) {
+        filterData_ = filterData;
+        updateCollisionFilter();
+    }
+
+    const CollisionFilterData& Fixture::getCollisionFilterData() const {
+        return filterData_;
+    }
+
+    void Fixture::resetCollisionFilterData() {
+        filterData_ = CollisionFilterData();
+        updateCollisionFilter();
+    }
+
+    void Fixture::setCollidable(bool collidable) {
+        // collisionBitMask == 0 implies not collidable and != 0 implies collidable
+        if ((!collidable && filterData_.collisionBitMask == 0) || (collidable && filterData_.collisionBitMask != 0))
+            return;
+
+        if (!collidable) {
+            prevCollisionBitMask_ = filterData_.collisionBitMask;
+            filterData_.collisionBitMask = 0;
+        } else {
+            filterData_.collisionBitMask = prevCollisionBitMask_;
+        }
+        updateCollisionFilter();
     }
 
     Body::sharedPtr Fixture::getBody() {
@@ -123,5 +152,13 @@ namespace ime {
 
     unsigned int Fixture::getId() const {
         return id_;
+    }
+
+    void Fixture::updateCollisionFilter() {
+        auto b2FilterData = b2Filter();
+        b2FilterData.categoryBits = filterData_.categoryBitMask;
+        b2FilterData.maskBits = filterData_.collisionBitMask;
+        b2FilterData.groupIndex = filterData_.groupIndex;
+        fixture_->SetFilterData(b2FilterData);
     }
 }

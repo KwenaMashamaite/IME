@@ -151,6 +151,57 @@ namespace ime {
         bool isSensor() const;
 
         /**
+         * @brief Set the collision filter data of the fixture
+         * @param filterData The new collision filter data
+         *
+         * This function will not update contacts until the next time
+	     * step when either parent body is active or awake
+         */
+        void setCollisionFilter(const CollisionFilterData& filterData);
+
+        /**
+         * @brief Get the collision filter data for this fixture
+         * @return The collision filter data
+         */
+        const CollisionFilterData& getCollisionFilterData() const;
+
+        /**
+         * @brief Reset the collision filtering data to default
+         *
+         * By default, the fixture does not belong to any collision group
+         * and the rigid body the fixture is attached to will collide with
+         * any rigid body (that is also collidable) it comes into contact
+         * with
+         */
+        void resetCollisionFilterData();
+
+        /**
+         * @brief Set whether or not the fixture is collidable
+         * @param collidable True to make collidable, otherwise false
+         *
+         * This function will only modify the collision bitmask and leave the
+         * category bit and group index as is. When @a collidable is set to
+         * false, the collision bitmask will be set to 0 causing the fixture
+         * to not collide with any other fixture and when @a collidable is set
+         * to true, the collision bitmask will be set to the value it was
+         * before it was set to zero.
+         *
+         * This function is a just a shortcut for:
+         *
+         * @code
+         * // When set this way, you will also have to save/remember the previous
+         * // collision bitmask value if you wish to restore it and not set a new
+         * // one
+         * auto filterData = fixture.getCollisionFilterData();
+         * filterData.collisionBitMask = 0;
+         * fixture.setCollisionFilter(filterData);
+         * @endcode
+         *
+         * @see setCollisionFilter
+         */
+        void setCollidable(bool collidable);
+
+        /**
          * @brief Get the body the fixture is attached to
          * @return The body attached to this fixture if any, otherwise a nullptr
          */
@@ -193,13 +244,20 @@ namespace ime {
          */
         Fixture(const FixtureDefinition& definition, BodyPtr body);
 
+        /**
+         * @brief Update the fixtures collision filter
+         */
+        void updateCollisionFilter();
+
     private:
         std::unique_ptr<b2Fixture> fixture_; //!< Internal fixture
-        Collider::sharedPtr collider_; //!< The fixtures collider
-        unsigned int id_;              //!< Id of this fixture
-        BodyPtr body_;                 //!< The body this fixture is attached to
-        friend class Body;             //!< Needs access to constructor
-        PropertyContainer userData_;   //!< Application specific fixture data
+        Collider::sharedPtr collider_;       //!< The fixtures collider
+        unsigned int id_;                    //!< Id of this fixture
+        BodyPtr body_;                       //!< The body this fixture is attached to
+        friend class Body;                   //!< Needs access to constructor
+        PropertyContainer userData_;         //!< Application specific fixture data
+        CollisionFilterData filterData_;     //!< Stores the collision filter data for the fixture
+        std::uint16_t prevCollisionBitMask_; //!< Previous collision bitmask before setCollidable(false)
     };
 }
 
