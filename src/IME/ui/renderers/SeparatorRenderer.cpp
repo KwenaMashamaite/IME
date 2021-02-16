@@ -23,7 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/SeparatorRenderer.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/SeparatorLineRenderer.hpp>
 
 namespace ime::ui {
     void SeparatorRenderer::setColour(Colour colour) {

@@ -26,10 +26,8 @@
 #define IME_SHAPECONTAINER_H
 
 #include "IME/Config.h"
-#include "IME/graphics/shapes/CircleShape.h"
-#include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/shapes/ConvexShape.h"
 #include "IME/core/scene/Container.h"
+#include "IME/graphics/shapes/Shape.h"
 #include <memory>
 #include <vector>
 

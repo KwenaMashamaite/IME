@@ -28,8 +28,11 @@
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include "IWidgetRenderer.h"
-#include <TGUI/Renderers/LabelRenderer.hpp>
 #include <string>
+
+namespace tgui {
+    class LabelRenderer;
+}
 
 namespace ime {
     namespace ui {

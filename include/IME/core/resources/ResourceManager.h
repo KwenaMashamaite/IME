@@ -27,14 +27,17 @@
 
 #include "IME/Config.h"
 #include "IME/core/resources/ResourceHolder.h"
-#include "IME/core/event/EventEmitter.h"
-#include <SFML/Audio/Music.hpp>
-#include <SFML/Audio/SoundBuffer.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/Font.hpp>
 #include <string>
 #include <initializer_list>
+#include <functional>
+
+namespace sf {
+    class Music;
+    class SoundBuffer;
+    class Texture;
+    class Image;
+    class Font;
+}
 
 namespace ime {
     /**
@@ -56,6 +59,9 @@ namespace ime {
     class IME_API ResourceManager final {
     public:
         using sharedPtr = std::shared_ptr<ResourceManager>; //!< Shared ResourceManager pointer
+
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
 
         /**
          * @brief Load a resource from the disk
@@ -109,7 +115,7 @@ namespace ime {
          * @return The path where resources are located on the disk for the
          *          specified resource type
          */
-        const std::string& getPathFor(ResourceType type) const;
+        std::string getPathFor(ResourceType type) const;
 
         /**
          * @brief Get a font
@@ -144,14 +150,6 @@ namespace ime {
         const sf::Image &getImage(const std::string &fileName);
 
         /**
-         * @brief Get music
-         * @param fileName Filename of the music
-         * @throws FileNotFound If the music cannot be found on the disk
-         * @return Pointer to the requested music
-         */
-        std::shared_ptr<sf::Music> getMusic(const std::string &fileName);
-
-        /**
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
@@ -179,12 +177,10 @@ namespace ime {
         ResourceManager& operator=(const ResourceManager&) = delete;
 
     private:
-        FontHolder fonts_;               //!< Fonts container
-        ImageHolder images_;             //!< Images container
-        TextureHolder textures_;         //!< Textures container
-        SoundBufferHolder soundBuffers_; //!< Sound buffers container
-        MusicHolder music_;              //!< Music container
-        std::string emptyStr_;           //!< Dummy string
+        ResourceHolder<sf::Font> fonts_;   //!< Fonts container
+        ResourceHolder<sf::Image> images_; //!< Images container
+        TextureHolder textures_;           //!< Textures container
+        ResourceHolder<sf::SoundBuffer> soundBuffers_; //!< Sound buffers container
     };
 }
 

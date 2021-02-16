@@ -27,8 +27,6 @@
 
 #include "IME/Config.h"
 #include "Audio.h"
-#include <SFML/Audio.hpp>
-#include <string>
 #include <memory>
 
 namespace ime {
@@ -45,6 +43,11 @@ namespace ime {
          */
         class IME_API Music final : public Audio {
         public:
+            /**
+             * @brief Default constructor
+             */
+            Music();
+
             /**
              * @brief Set the music file to be played
              * @param source Filename of an audio file
@@ -180,9 +183,14 @@ namespace ime {
              */
             std::string getType() override;
 
+            /**
+             * @brief Destructor
+             */
+            ~Music();
+
         private:
-            std::shared_ptr<sf::Music> song_; //!< Music to be played
-            std::string sourceFilename_;      //!< Filename of the music file being played
+            struct Impl;
+            std::unique_ptr<Impl> pImpl_;
         };
     }
 }

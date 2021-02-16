@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/ButtonRenderer.hpp>
+
+namespace tgui {
+    class ButtonRenderer;
+}
 
 namespace ime {
     namespace ui {

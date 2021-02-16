@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/SliderRenderer.hpp>
+
+namespace tgui {
+    class SliderRenderer;
+}
 
 namespace ime {
     namespace ui {

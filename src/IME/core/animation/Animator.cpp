@@ -29,6 +29,7 @@
 
 namespace ime {
     Animator::Animator(Sprite& target) :
+        currentFrameIndex_{0},
         timescale_{1.0f},
         isPlaying_{false},
         isPaused_{false},
@@ -78,7 +79,7 @@ namespace ime {
     }
 
     void Animator::setTarget(Sprite &target) {
-        target_ = std::make_unique<std::reference_wrapper<Sprite>>(target);
+        target_.reset(new std::reference_wrapper<Sprite>(target));
     }
 
     void Animator::setTimescale(float timescale) {

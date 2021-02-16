@@ -24,6 +24,8 @@
 
 #include "IME/ui/renderers/BoxLayoutRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/BoxLayoutRenderer.hpp>
 
 namespace ime::ui {
     void BoxLayoutRenderer::setPadding(const Padding &padding) {

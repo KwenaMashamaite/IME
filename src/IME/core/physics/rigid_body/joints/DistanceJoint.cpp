@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "IME/utility/Helpers.h"
+#include "../../../../utility/Helpers.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 #include <box2d/b2_distance_joint.h>

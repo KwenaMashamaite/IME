@@ -26,9 +26,7 @@
 #define IME_CONTAINER_H
 
 #include "IME/graphics/Window.h"
-#include "IME/core/event/EventEmitter.h"
 #include "IME/core/entity/Entity.h"
-#include "IME/utility/Helpers.h"
 #include <memory>
 #include <vector>
 
@@ -41,6 +39,9 @@ namespace ime {
     public:
         using Item = std::shared_ptr<T>; //!< Shared item pointer
         using constIterator = typename std::vector<Item>::const_iterator;
+
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
         
         /**
          * @brief Add an item to the container

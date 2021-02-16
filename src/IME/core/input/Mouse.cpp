@@ -25,6 +25,7 @@
 #include "IME/core/input/Mouse.h"
 #include "IME/core/event/Event.h"
 #include "IME/graphics/Window.h"
+#include "../../graphics/WindowImpl.h"
 #include <SFML/Window/Mouse.hpp>
 
 namespace ime::input {
@@ -41,11 +42,11 @@ namespace ime::input {
     }
 
     void Mouse::setPosition(const Vector2i &position, const Window &window) {
-        sf::Mouse::setPosition({position.x, position.y}, window.window_);
+        sf::Mouse::setPosition({position.x, position.y}, window.getImpl()->getSFMLWindow());
     }
 
     Vector2i Mouse::getPosition(const Window &window) {
-        return {sf::Mouse::getPosition(window.window_).x, sf::Mouse::getPosition(window.window_).y};
+        return {sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).x, sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).y};
     }
 
     int Mouse::onButtonUp(Callback<Mouse::Button, int, int> callback) {

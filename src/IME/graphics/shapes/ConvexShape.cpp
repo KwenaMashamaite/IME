@@ -24,7 +24,8 @@
 
 #include "IME/graphics/shapes/ConvexShape.h"
 #include "IME/graphics/Window.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include "../WindowImpl.h"
 #include <SFML/Graphics/ConvexShape.hpp>
 
 namespace ime {
@@ -52,12 +53,15 @@ namespace ime {
 
     ConvexShape &ConvexShape::operator=(const ConvexShape& other) {
         if (this != &other) {
-            auto temp{other};
-            std::swap(impl_, temp.impl_);
+            *impl_ = *other.impl_;
         }
 
         return *this;
     }
+
+    ConvexShape::ConvexShape(ConvexShape &&) noexcept = default;
+
+    ConvexShape &ConvexShape::operator=(ConvexShape &&) noexcept = default;
 
     ConvexShape::sharedPtr ConvexShape::create(std::size_t pointCount) {
         return ConvexShape::sharedPtr(new ConvexShape(pointCount));
@@ -179,7 +183,7 @@ namespace ime {
     }
 
     void ConvexShape::draw(Window &renderTarget) const {
-        renderTarget.draw(impl_->polygon_);
+        renderTarget.getImpl()->getSFMLWindow().draw(impl_->polygon_);
     }
 
     ConvexShape::~ConvexShape() = default;

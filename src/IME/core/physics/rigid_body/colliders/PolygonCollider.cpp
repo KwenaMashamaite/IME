@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
-#include "IME/utility/Helpers.h"
+#include "../../../../utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {

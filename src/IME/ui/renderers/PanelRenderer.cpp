@@ -24,7 +24,8 @@
 
 #include <IME/core/resources/ResourceManager.h>
 #include "IME/ui/renderers/PanelRenderer.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/PanelRenderer.hpp>
 
 namespace ime::ui {
     void PanelRenderer::setBorders(const Borders &borders) {

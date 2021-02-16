@@ -56,12 +56,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        RectangleShape(RectangleShape&&) = default;
+        RectangleShape(RectangleShape&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        RectangleShape& operator=(RectangleShape&&) = default;
+        RectangleShape& operator=(RectangleShape&&) noexcept;
 
         /**
          * @brief Create a new rectangle shape

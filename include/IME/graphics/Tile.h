@@ -25,12 +25,11 @@
 #ifndef IME_TILE_H
 #define IME_TILE_H
 
-#include "IME/core/event/EventEmitter.h"
 #include "IME/core/tilemap/Index.h"
 #include "IME/common/Vector2.h"
-#include "IDrawable.h"
-#include "Sprite.h"
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "IME/graphics/Sprite.h"
+#include "IME/graphics/shapes/RectangleShape.h"
+#include "IME/graphics/IDrawable.h"
 #include <unordered_map>
 #include <memory>
 
@@ -210,12 +209,12 @@ namespace ime {
         bool contains(float x, float y) const;
 
     private:
-        bool isSolid_;             //!< Stores whether tile is a solid or an empty tile
-        char id_;                  //!< Tile id
-        Index index_;              //!< Position of the tile in the tilemap
-        Sprite sprite_;            //!< Tile texture representation
-        sf::RectangleShape tile_;  //!< Tile
-        sf::Color prevFillColour_; //!< Tiles fill colour before it was hidden
+        bool isSolid_;          //!< Stores whether tile is a solid or an empty tile
+        char id_;               //!< Tile id
+        Index index_;           //!< Position of the tile in the tilemap
+        Sprite sprite_;         //!< Tile texture representation
+        RectangleShape tile_;   //!< Tile
+        Colour prevFillColour_; //!< Tiles fill colour before it was hidden
     };
 }
 

@@ -23,8 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/utility/Helpers.h"
 #include "IME/graphics/Window.h"
+#include "../../utility/Helpers.h"
+#include "../WindowImpl.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
 namespace ime {
@@ -52,12 +53,15 @@ namespace ime {
 
     RectangleShape &RectangleShape::operator=(const RectangleShape& other) {
         if (this != &other) {
-            auto temp{other};
-            std::swap(impl_, temp.impl_);
+            *impl_ = *other.impl_;
         }
 
         return *this;
     }
+
+    RectangleShape::RectangleShape(RectangleShape &&) noexcept = default;
+
+    RectangleShape &RectangleShape::operator=(RectangleShape &&) noexcept = default;
 
     RectangleShape::sharedPtr RectangleShape::create(const Vector2f &size) {
         return sharedPtr(new RectangleShape(size));
@@ -171,7 +175,7 @@ namespace ime {
     }
 
     void RectangleShape::draw(Window &renderTarget) const {
-        renderTarget.draw(impl_->rectangle_);
+        renderTarget.getImpl()->getSFMLWindow().draw(impl_->rectangle_);
     }
 
     RectangleShape::~RectangleShape() = default;

@@ -32,6 +32,7 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include <functional>
 
 namespace ime {
     namespace utility {

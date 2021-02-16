@@ -22,18 +22,24 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_IWIDGET_H
-#define IME_IWIDGET_H
+#ifndef IME_WIDGET_H
+#define IME_WIDGET_H
 
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/common/ITransformable.h"
 #include "IME/common/Vector2.h"
-#include <TGUI/Widget.hpp>
+#include "IME/core/time/Time.h"
+#include "IME/ui/renderers/IWidgetRenderer.h"
 #include <string>
+#include <memory>
 
 namespace ime {
+    namespace priv {
+        class IWidgetImpl;
+    }
+
     /**
      * @brief Mouse cursor types
      */
@@ -72,9 +78,71 @@ namespace ime {
         /**
          * @brief Abstract base class for Graphical User Interface (GUI) elements
          */
-        class IME_API IWidget : public ITransformable {
+        class IME_API Widget : public ITransformable {
         public:
-            using sharedPtr = std::shared_ptr<IWidget>; //!< Shared widget pointer
+            using sharedPtr = std::shared_ptr<Widget>; //!< Shared widget pointer
+
+            /**
+             * @brief Move constructor
+             */
+            Widget(Widget&&);
+
+            /**
+             * @brief Move assignment operator
+             */
+            Widget& operator=(Widget&&);
+
+            /**
+             * @brief Set the widgets renderer
+             * @param renderer The new renderer
+             *
+             * The renderer determines how the widget is displayed.
+             *
+             * @see getRenderer
+             */
+            void setRenderer(IWidgetRenderer::sharedPtr renderer);
+
+            /**
+             * @brief Get the widgets renderer
+             * @return The widgets renderer
+             *
+             * The renderer gives access to functions that determine how the
+             * widget is displayed. It allows you to manipulate things such
+             * as the background colour, border colour etc...
+             *
+             * @see setRenderer
+             */
+            ui::IWidgetRenderer::sharedPtr getRenderer();
+            const ui::IWidgetRenderer::sharedPtr getRenderer() const;
+
+            /**
+             * @brief Set the position of the widget
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
+             *
+             * This function completely overwrites the previous position.
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the widget is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(float x, float y) override;
+
+            /**
+             * @brief Set the position of the widget
+             * @param position New position
+             *
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the widget is (0, 0)
+             *
+             * @see move
+             */
+            void setPosition(Vector2f position) override;
 
             /**
              * @brief Set the position of the widget relative to the
@@ -82,14 +150,27 @@ namespace ime {
              * @param x New x coordinate of the widget
              * @param y New y coordinate of the widget
              *
-             * The position is specified using percentages as shown below:
+             * The position is specified in percentages as shown below:
              *
              * @code
-             * widget->setPosition({"5%", "10%"});
+             * widget->setPosition("5%", "10%");
              * @endcode
+             *
+             * This function completely overwrites the previous position.
+             * Use the move function to apply an offset based on the previous
+             * position instead.
+             *
+             * The default position of the widget is (0, 0)
+             *
+             * @see move
              */
-            virtual void setPosition(const std::string& x, const std::string& y) = 0;
-            using ITransformable::setPosition;
+            void setPosition(const std::string& x, const std::string& y);
+
+            /**
+             * @brief Get the position of the widget
+             * @return Current position of the widget
+             */
+            Vector2f getPosition() const override;
 
             /**
              * @brief Get the absolute position of the widget
@@ -101,26 +182,167 @@ namespace ime {
              *
              * @see setPosition
              */
-            virtual Vector2f getAbsolutePosition() const = 0;
+            Vector2f getAbsolutePosition() const;
+
+            /**
+             * @brief Set the orientation of the widget
+             * @param angle New rotation, in degrees
+             *
+             * This function completely overwrites the previous rotation.
+             * See the rotate function to add an angle based on the previous
+             * rotation instead.
+             *
+             * The default rotation of the widget is 0
+             *
+             * @see rotate
+             */
+            void setRotation(float angle) override;
+
+            /**
+             * @brief Rotate the widget
+             * @param angle Angle of rotation, in degrees
+             *
+             * This function adds to the current rotation of the widget,
+             * unlike setRotation which overwrites it
+             *
+             * @see setRotation
+             */
+            void rotate(float angle) override;
+
+            /**
+             * @brief Get the orientation of the widget
+             * @return Current rotation, in degrees
+             *
+             * The rotation is always in the range [0, 360]
+             */
+            float getRotation() const override;
+
+            /**
+             * @brief Set the scale factors of the widget
+             * @param factorX New horizontal scale factor
+             * @param factorY New vertical scale factor
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            void setScale(float factorX, float factorY) override;
+
+            /**
+             * @brief Set the scale factor of the widget
+             * @param scale New scale
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            void setScale(Vector2f scale) override;
+
+            /**
+             * @brief Scale the widget by an offset
+             * @param factorX Horizontal scale factor
+             * @param factorY Vertical scale factor
+             *
+             * This function multiplies the current scale of the widget,
+             * unlike setScale which overwrites it
+             *
+             * @see setScale
+             */
+            void scale(float factorX, float factorY) override;
+
+            /**
+             * @brief Scale the widget by an offset
+             * @param factor Offset to apply
+             *
+             * This function multiplies the current scale of the widget,
+             * unlike setScale which overwrites it
+             *
+             * @see setScale
+             */
+            void scale(Vector2f factor) override;
+
+            /**
+             * @brief Get the current scale of the widget
+             * @return Current scale of the widget
+             */
+            Vector2f getScale() const override;
+
+            /**
+             * @brief Set the local origin of the widget
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
+             *
+             * The origin of the widget defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the widget, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the widget is (0, 0)
+             */
+            void setOrigin(float x, float y) override;
+
+            /**
+             * @brief Set the local origin of the widget
+             * @param origin New origin
+             *
+             * The origin of the widget defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the widget, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the widget is (0, 0)
+             */
+            void setOrigin(Vector2f origin) override;
+
+            /**
+             * @brief Get the local origin of the widget
+             * @return Local origin of the widget
+             */
+            Vector2f getOrigin() const override;
+
+            /**
+             * @brief Move the widget by a given offset
+             * @param offsetX Horizontal offset
+             * @param offsetY Vertical offset
+             *
+             * This function adds to the current position of the widget,
+             * unlike setPosition which overwrites it
+             *
+             * @see setPosition
+             */
+            void move(float offsetX, float offsetY) override;
+
+            /**
+             * @brief Move the widget by a given offset
+             * @param offset Offset to apply
+             *
+             * This function adds to the current position of the widget,
+             * unlike setPosition which overwrites it
+             *
+             * @see setPosition
+             */
+            void move(Vector2f offset) override;
 
             /**
              * @brief Set the character size of the text
-             * @param charSize New character size
+             * @param size New character size
              */
-            virtual void setTextSize(unsigned int charSize) = 0;
+            void setTextSize(unsigned int size);
 
             /**
              * @brief Get the character size of the text
              * @return The character size of the text
              */
-            virtual unsigned int getTextSize() const = 0;
+            unsigned int getTextSize() const;
 
             /**
              * @brief Set the size of the widget
              * @param width The width of the widget
              * @param height The height of the widget
              */
-            virtual void setSize(float width, float height) = 0;
+            void setSize(float width, float height);
 
             /**
              * @brief Set the size of the widget relative to the size of
@@ -128,14 +350,13 @@ namespace ime {
              * @param width The new width of the widget
              * @param height The new height of the widget
              *
-             * The size is specified in percentages as shown below
+             * The size is specified in percentages as shown below:
              *
              * @code
-             * widget->setSize({"20%", "5%"});
+             * widget->setSize("20%", "5%");
              * @endcode
              */
-            virtual void setSize(const std::string& width,
-                 const std::string& height) = 0;
+            void setSize(const std::string& width, const std::string& height);
 
             /**
              * @brief Get the size of the widget
@@ -146,7 +367,7 @@ namespace ime {
              *
              * @see getAbsoluteSize
              */
-            virtual Vector2f getSize() const = 0;
+            Vector2f getSize() const;
 
             /**
              * @brief Get the absolute size of the widget
@@ -157,7 +378,7 @@ namespace ime {
              *
              * @see getSize
              */
-            virtual Vector2f getAbsoluteSize() = 0;
+            Vector2f getAbsoluteSize();
 
             /**
              * @brief Set the width of the widget
@@ -168,7 +389,7 @@ namespace ime {
              *
              * @see setSize
              */
-            virtual void setWidth(float width) = 0;
+            void setWidth(float width);
 
             /**
              * @brief Set the width of the widget relative to its parent
@@ -185,7 +406,7 @@ namespace ime {
              *
              * @see setSize
              */
-            virtual void setWidth(const std::string& width) = 0;
+            void setWidth(const std::string& width);
 
             /**
              * @brief Set the height of the widget
@@ -196,7 +417,7 @@ namespace ime {
              *
              * @see setSize
              */
-            virtual void setHeight(float height) = 0;
+            void setHeight(float height);
 
             /**
              * @brief Set the height of the widget relative to its parent
@@ -213,7 +434,7 @@ namespace ime {
              *
              * @see setSize
              */
-            virtual void setHeight(const std::string& height) = 0;
+            void setHeight(const std::string& height);
 
             /**
              * @brief Set the mouse cursor that is displayed when the mouse
@@ -222,14 +443,14 @@ namespace ime {
              *
              * By default, the arrow cursor is shown
              */
-            virtual void setMouseCursor(CursorType cursor) = 0;
+            void setMouseCursor(CursorType cursor);
 
             /**
              * @brief Get the mouse cursor that is displayed when the mouse
              *        is on top of the widget
              * @return The cursor shown when hovering above the widget
              */
-            virtual CursorType getMouseCursor() const = 0;
+            CursorType getMouseCursor() const;
 
             /**
              * @brief Get the type of the widget
@@ -240,7 +461,7 @@ namespace ime {
             /**
              * @brief Show the widget with an animation
              * @param type Type of the animation
-             * @param duration Duration of the animation in milliseconds
+             * @param duration Duration of the animation
              *
              * The animation will be played if the widget currently
              * visible
@@ -253,12 +474,12 @@ namespace ime {
              * @see hideWithEffect
              * @see isAnimationPlaying
              */
-            virtual void showWithEffect(ShowAnimationType type, int duration) = 0;
+            void showWithEffect(ShowAnimationType type, Time duration);
 
             /**
              * @brief Hide the widget with an animation
              * @param type Type of the animation
-             * @param duration Duration of the animation in milliseconds
+             * @param duration Duration of the animation
              *
              * The animation will also be played if the widget currently
              * hidden but it will not be seen
@@ -271,7 +492,7 @@ namespace ime {
              * @see showWithEffect
              * @see isAnimationPlaying
              */
-            virtual void hideWithEffect(ShowAnimationType type, int duration) = 0;
+            void hideWithEffect(ShowAnimationType type, Time duration);
 
             /**
              * @brief Check whether or not an animation is currently playing
@@ -280,7 +501,7 @@ namespace ime {
              * @see showWithEffect
              * @see hideWithEffect
              */
-            virtual bool isAnimationPlaying() const = 0;
+            bool isAnimationPlaying() const;
 
             /**
              * @brief Show or hide a widget
@@ -291,13 +512,13 @@ namespace ime {
              *
              * The widget is visible by default.
              */
-            virtual void setVisible(bool visible) = 0;
+            void setVisible(bool visible);
 
             /**
              * @brief Check if the widget is visible or not
              * @return True if the widget is visible or false if hidden
              */
-            virtual bool isVisible() const = 0;
+            bool isVisible() const;
 
             /**
              * @brief Toggle the visibility of the widget
@@ -307,7 +528,7 @@ namespace ime {
              *
              * @see setVisible
              */
-            virtual void toggleVisibility() = 0;
+            void toggleVisibility();
 
             /**
              * @brief Check if the widget is a container or not
@@ -316,7 +537,7 @@ namespace ime {
              * A container widget is a widget that can store other widgets
              * inside it. Such widgets inherit from IWidget class
              */
-            bool isContainer() const { return isContainer_;}
+            bool isContainer() const;
 
             /**
              * @brief Check if coordinates lie inside the widget
@@ -325,7 +546,7 @@ namespace ime {
              * @return true if coordinates lie inside the widget, false if
              *         coordinates do not lie inside the widget
              */
-            virtual bool contains(float x, float y) const = 0;
+            bool contains(float x, float y) const;
 
             /**
              * @brief Add an event listener to a widget event
@@ -355,26 +576,30 @@ namespace ime {
              *
              * @see on
              */
-            bool unsubscribe(const std::string& event, int id) {
-                return eventEmitter_.removeEventListener(event, id);
-            }
+            bool unsubscribe(const std::string& event, int id);
 
             /**
              * @internal
-             * @brief Get the internal pointer to a third party widget object
-             * @return The internal pointer to a third party widget object
+             * @brief Get the internal widget pointer
+             * @return The internal widget pointer
              *
              * @warning This function is intended for internal use only and
-             * should never be called
+             * should never be called outside of IME
              */
-            virtual std::shared_ptr<tgui::Widget> getInternalPtr() = 0;
+            const std::shared_ptr<void> getInternalPtr() const;
 
             /**
              * @brief Destructor
              */
-            virtual ~IWidget() = default;
+            ~Widget();
 
         protected:
+            /**
+             * @brief Constructor
+             * @param impl The widgets implementation
+             */
+            explicit Widget(std::unique_ptr<priv::IWidgetImpl> impl);
+
             /**
              * @brief Emit a widget event
              * @param event Name of the event to be emitted
@@ -397,69 +622,71 @@ namespace ime {
              *
              * All widgets are not containers by default
              */
-            void setAsContainer(bool container) {isContainer_ = container;}
+            void setAsContainer(bool container);
 
         private:
+            std::unique_ptr<priv::IWidgetImpl> pimpl_;
             EventEmitter eventEmitter_; //!< Widgets event publisher
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
+            std::shared_ptr<IWidgetRenderer> renderer_;
         };
-    }
+    } // namespace ui
 
     /**
      * @brief Bind to the x position of a widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindLeft(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindLeft(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the y position of the widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindTop(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindTop(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the width of a widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindWidth(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindWidth(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the height of a widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindHeight(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindHeight(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the right position of a widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindRight(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindRight(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the bottom position of a widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindBottom(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindBottom(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the position of the widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindPosition(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindPosition(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the size of the widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindSize(std::shared_ptr<ui::IWidget> widget);
+    extern IME_API std::string bindSize(std::shared_ptr<ui::Widget> widget);
 
     /**
      * @brief Bind to the minimum value of two values
@@ -498,4 +725,4 @@ namespace ime {
     extern IME_API std::string bindMax(const std::string& value1, const std::string& value2);
 }
 
-#endif // IME_IWIDGET_H
+#endif // IME_WIDGET_H

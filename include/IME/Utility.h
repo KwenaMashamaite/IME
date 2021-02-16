@@ -22,23 +22,18 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_GRAPHICS_H
-#define IME_GRAPHICS_H
+#ifndef IME_UTILITY_H
+#define IME_UTILITY_H
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes all the headers in the graphics directory
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Includes all the utility headers
+////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/shapes/CircleShape.h"
-#include "IME/graphics/shapes/ConvexShape.h"
-#include "IME/graphics/shapes/Shape.h"
-#include "IME/graphics/Colour.h"
-#include "IME/graphics/Sprite.h"
-#include "IME/graphics/SpriteSheet.h"
-#include "IME/graphics/SpriteSheetContainer.h"
-#include "IME/graphics/Texture.h"
-#include "IME/graphics/Window.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/utility/Utils.h"
+#include "IME/utility/DiskFileReader.h"
+#include "IME/utility/DiskFileLogger.h"
+#include "IME/utility/ConsoleLogger.h"
+#include "IME/utility/NonCopyable.h"
+#include "IME/utility/ConfigFileParser.h"
 
-#endif //IME_GRAPHICS_H
+#endif //IME_UTILITY_H

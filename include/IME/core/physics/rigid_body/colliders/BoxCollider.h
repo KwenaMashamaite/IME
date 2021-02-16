@@ -59,9 +59,11 @@ namespace ime {
          * @param size The size of the box
          * @return The new box collider instance
          *
-         * By default the size is 0
+         * By default the size is 0.1f (width) x 0.1f (height)
+         *
+         * @warning The minimum size of the rectangle is 0.1f x 0.1f
          */
-        static sharedPtr create(Vector2f size = {0.0f, 0.0f});
+        static sharedPtr create(Vector2f size = {0.1f, 0.1f});
 
         /**
          * @brief Create a new box collider from an existing box collider
@@ -107,10 +109,8 @@ namespace ime {
         /**
          * @brief Default constructor
          * @param size The size of the box
-         *
-         * By default the size is 0
          */
-        explicit BoxCollider(Vector2f size = {0.0f, 0.0f});
+        explicit BoxCollider(Vector2f size);
 
     private:
         Vector2f size_;                       //!< The size of the box

@@ -26,7 +26,7 @@
 #define IME_INDEX_H
 
 #include "IME/Config.h"
-#include <unordered_map>
+#include <functional>
 
 namespace ime {
     /**

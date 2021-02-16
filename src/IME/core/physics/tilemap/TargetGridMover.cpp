@@ -24,6 +24,7 @@
 
 #include "IME/core/physics/tilemap/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
+#include "IME/graphics/Sprite.h"
 
 namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, Entity::sharedPtr target) :

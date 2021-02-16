@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/path/BFS.h"
+#include "IME/core/tilemap/TileMap.h"
 #include <algorithm>
 
 namespace ime {

@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/time/Time.h"
-#include "IME/core/event/EventEmitter.h"
+#include <functional>
 
 namespace ime {
     /**
@@ -35,6 +35,9 @@ namespace ime {
      */
     class IME_API Timer {
     public:
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
+
         /**
          * @brief States the timer can be in
          */

@@ -27,8 +27,8 @@
 
 #include "IME/Config.h"
 #include "IME/core/time/Timer.h"
-#include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
+#include <functional>
 #include <vector>
 
 namespace ime {
@@ -37,6 +37,9 @@ namespace ime {
      */
     class IME_API TimerManager {
     public:
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
+
         /**
          * @brief Schedule a one time callback
          * @param delay The time to wait before executing the callback

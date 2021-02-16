@@ -25,7 +25,8 @@
 #ifndef IME_TILEMAPPARSER_H
 #define IME_TILEMAPPARSER_H
 
-#include "IME/core/tilemap/TileMap.h"
+#include <vector>
+#include <string>
 
 namespace ime {
     /**
@@ -33,6 +34,8 @@ namespace ime {
      */
     class TileMapParser {
     public:
+        using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
+
         /**
          * @brief Parse a map file
          * @param filename Name of the map file

@@ -20,6 +20,7 @@ set(IME_SRC
     core/audio/AudioManager.cpp
     core/input/InputManager.cpp
     core/resources/ResourceManager.cpp
+    core/resources/ResourceHolder.cpp
     core/path/AdjacencyList.cpp
     core/path/BFS.cpp
     core/path/DFS.cpp
@@ -67,6 +68,9 @@ set(IME_SRC
     ui/renderers/PictureRenderer.cpp
     ui/renderers/SeparatorRenderer.cpp
     ui/renderers/SpinButtonRenderer.cpp
+    ui/widgets/Widget.cpp
+    ui/widgets/WidgetContainer.cpp
+    ui/widgets/ClickableWidget.cpp
     ui/widgets/BitmapButton.cpp
     ui/widgets/Button.cpp
     ui/widgets/ToggleButton.cpp
@@ -79,6 +83,7 @@ set(IME_SRC
     ui/widgets/Panel.cpp
     ui/widgets/ScrollablePanel.cpp
     ui/widgets/ChildWindow.cpp
+    ui/widgets/IBoxLayout.cpp
     ui/widgets/VerticalLayout.cpp
     ui/widgets/HorizontalLayout.cpp
     ui/widgets/Tabs.cpp
@@ -92,6 +97,7 @@ set(IME_SRC
     graphics/Colour.cpp
     graphics/Tile.cpp
     graphics/Window.cpp
+    graphics/WindowImpl.cpp
     graphics/SpriteSheet.cpp
     graphics/SpriteSheetContainer.cpp
     graphics/shapes/Shape.cpp

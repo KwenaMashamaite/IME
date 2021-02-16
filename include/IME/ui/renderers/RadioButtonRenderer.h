@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/RadioButtonRenderer.hpp>
+
+namespace tgui {
+    class RadioButtonRenderer;
+}
 
 namespace ime {
     namespace ui {

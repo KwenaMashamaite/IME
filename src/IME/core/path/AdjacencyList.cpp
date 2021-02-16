@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/path/AdjacencyList.h"
+#include "IME/core/tilemap/TileMap.h"
 
 bool tileHasObstacle(ime::TileMap& grid, ime::Index index) {
     auto hasObstacle = false;

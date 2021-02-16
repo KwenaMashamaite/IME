@@ -27,7 +27,7 @@
 #include <sstream>
 
 namespace ime {
-    Map TileMapParser::parse(const std::string &filename, char separator) {
+    TileMapParser::Map TileMapParser::parse(const std::string &filename, char separator) {
         auto map = Map();
         auto mapData = std::stringstream();
         utility::DiskFileReader().readFileInto(filename, mapData);

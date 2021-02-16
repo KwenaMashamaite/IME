@@ -26,11 +26,16 @@
 #define IME_SCENEMANAGER_H
 
 #include "IME/Config.h"
-#include "Scene.h"
+#include "IME/core/time/Time.h"
+#include "IME/core/event/Event.h"
 #include <stack>
 #include <memory>
 
 namespace ime {
+    // Forward declarations
+    class Scene;
+    class Window;
+
     /**
      * @brief Manages game scenes
      *
@@ -60,6 +65,8 @@ namespace ime {
      */
     class IME_API SceneManager final {
     public:
+        using ScenePtr = std::shared_ptr<Scene>;
+
         /**
          * @brief Add a Scene
          * @param scene Scene to be added
@@ -103,7 +110,7 @@ namespace ime {
          *
          * @see enterTopScene
          */
-        void pushScene(Scene::sharedPtr scene, bool enterScene = false);
+        void pushScene(ScenePtr scene, bool enterScene = false);
 
         /**
          * @brief Remove the current active scene
@@ -175,8 +182,8 @@ namespace ime {
         void updateScene(Time deltaTime, bool fixedUpdate);
 
     private:
-        std::stack<Scene::sharedPtr> scenes_; //!< Scenes container
-        Scene::sharedPtr prevScene_;          //!< Pointer to the active scene before a push operation
+        std::stack<ScenePtr> scenes_; //!< Scenes container
+        ScenePtr prevScene_;          //!< Pointer to the active scene before a push operation
     };
 }
 

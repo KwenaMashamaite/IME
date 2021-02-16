@@ -24,7 +24,7 @@
 
 #include "IME/ui/renderers/ScrollablePanelRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
 #include <TGUI/Renderers/ScrollablePanelRenderer.hpp>
 
 namespace ime::ui {

@@ -23,6 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/resources/ResourceManager.h"
+#include <SFML/Audio/Music.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <algorithm>
 
 namespace ime {
@@ -30,8 +35,7 @@ namespace ime {
         fonts_(""),
         images_(""),
         textures_(""),
-        soundBuffers_(""),
-        music_("")
+        soundBuffers_("")
     {}
 
     bool ResourceManager::loadFromFile(ResourceType type, const std::string &filename){
@@ -44,10 +48,9 @@ namespace ime {
                 return images_.loadFromFile(filename);
             case ResourceType::Font:
                 return fonts_.loadFromFile(filename);
-            case ResourceType::Music:
-                return music_.loadFromFile(filename);
+            default:
+                return false;
         }
-        return false;
     }
 
     void ResourceManager::loadFromFile(ResourceType type,
@@ -77,10 +80,6 @@ namespace ime {
         return *(soundBuffers_.get(fileName));
     }
 
-    std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string& filename) {
-        return music_.get(filename);
-    }
-
     bool ResourceManager::unload(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:
@@ -91,14 +90,12 @@ namespace ime {
                 return images_.unload(filename);
             case ResourceType::SoundBuffer:
                 return soundBuffers_.unload(filename);
-            case ResourceType::Music:
-                return music_.unload(filename);
             default:
                 return false;
         }
     }
 
-    const std::string &ResourceManager::getPathFor(ResourceType type) const {
+    std::string ResourceManager::getPathFor(ResourceType type) const {
         switch (type) {
             case ResourceType::Texture:
                 return textures_.getPath();
@@ -108,10 +105,8 @@ namespace ime {
                 return images_.getPath();
             case ResourceType::SoundBuffer:
                 return soundBuffers_.getPath();
-            case ResourceType::Music:
-                return music_.getPath();
             default:
-                return emptyStr_; //Avoid Returning reference to local temporary object warning
+                return "";
         }
     }
 
@@ -129,9 +124,8 @@ namespace ime {
             case ResourceType::SoundBuffer:
                 soundBuffers_.setPath(path);
                 break;
-            case ResourceType::Music:
-                music_.setPath(path);
-                break;
+            default:
+                return;
         }
     }
 

@@ -22,10 +22,11 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <IME/ui/widgets/IWidget.h>
 #include "IME/utility/Utils.h"
+#include "IME/ui/widgets/Widget.h"
+#include <TGUI/Widget.hpp>
 
-namespace ime { 
+namespace ime {
     namespace utility {
         float lerp(float min, float max, float ratio) {
             return (max - min) * ratio + min;
@@ -41,38 +42,38 @@ namespace ime {
                     static_cast<unsigned int>(gen_random_num_between_0_and_255()),
                     static_cast<unsigned int>(gen_random_num_between_0_and_255())};
         }
+    } // namespace utility
+
+    std::string bindLeft(std::shared_ptr<ui::Widget> widget){
+        return tgui::bindLeft(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindLeft(std::shared_ptr<ui::IWidget> widget){
-        return tgui::bindLeft(widget->getInternalPtr()).toString().toStdString();
+    std::string bindTop(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindTop(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindTop(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindTop(widget->getInternalPtr()).toString().toStdString();
+    std::string bindWidth(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindWidth(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindWidth(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindWidth(widget->getInternalPtr()).toString().toStdString();
+    std::string bindHeight(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindHeight(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindHeight(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindHeight(widget->getInternalPtr()).toString().toStdString();
+    std::string bindRight(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindRight(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindRight(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindRight(widget->getInternalPtr()).toString().toStdString();
+    std::string bindBottom(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindBottom(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindBottom(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindBottom(widget->getInternalPtr()).toString().toStdString();
+    std::string bindPosition(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindPosition(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindPosition(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindPosition(widget->getInternalPtr()).toString().toStdString();
-    }
-
-    std::string bindSize(std::shared_ptr<ui::IWidget> widget) {
-        return tgui::bindSize(widget->getInternalPtr()).toString().toStdString();
+    std::string bindSize(std::shared_ptr<ui::Widget> widget) {
+        return tgui::bindSize(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
     std::string bindMin(const std::string& value1, const std::string& value2) {

@@ -22,26 +22,32 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_RIGIDBODYPHYSICS_H
-#define IME_RIGIDBODYPHYSICS_H
+#ifndef IME_UI_H
+#define IME_UI_H
 
 ////////////////////////////////////////////////////////////////////////////////
-// Includes all the rigid body physics headers
+// Includes all the User Interface (UI) headers
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/AABB.h"
-#include "IME/core/physics/rigid_body/BodyDefinition.h"
-#include "IME/core/physics/rigid_body/Body.h"
-#include "IME/core/physics/rigid_body/FixtureDefinition.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
-#include "IME/core/physics/rigid_body/colliders/Collider.h"
-#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
-#include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
-#include "IME/core/physics/rigid_body/colliders/EdgeCollider.h"
-#include "IME/core/physics/rigid_body/joints/Joint.h"
-#include "IME/core/physics/rigid_body/joints/JointDefinition.h"
-#include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "IME/core/physics/World.h"
+#include "IME/ui/widgets/Label.h"
+#include "IME/ui/widgets/Button.h"
+#include "IME/ui/widgets/BitmapButton.h"
+#include "IME/ui/widgets/ToggleButton.h"
+#include "IME/ui/widgets/Slider.h"
+#include "IME/ui/widgets/CheckBox.h"
+#include "IME/ui/widgets/EditBox.h"
+#include "IME/ui/widgets/ProgressBar.h"
+#include "IME/ui/widgets/VerticalLayout.h"
+#include "IME/ui/widgets/HorizontalLayout.h"
+#include "IME/ui/widgets/ChildWindow.h"
+#include "IME/ui/widgets/RadioButton.h"
+#include "IME/ui/widgets/Tabs.h"
+#include "IME/ui/widgets/TabsContainer.h"
+#include "IME/ui/widgets/Picture.h"
+#include "IME/ui/widgets/Panel.h"
+#include "IME/ui/widgets/ScrollablePanel.h"
+#include "IME/ui/widgets/SpinControl.h"
+#include "IME/ui/widgets/Separator.h"
+#include "IME/ui/GuiContainer.h"
 
-#endif //IME_RIGIDBODYPHYSICS_H
+#endif //IME_UI_H

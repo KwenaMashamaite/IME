@@ -26,8 +26,12 @@
 #define IME_IWIDGETRENDERER_H
 
 #include "IME/Config.h"
-#include <TGUI/Renderers/WidgetRenderer.hpp>
+#include <memory>
 #include <string>
+
+namespace tgui {
+    class WidgetRenderer;
+}
 
 namespace ime {
     /**

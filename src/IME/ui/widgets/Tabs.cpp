@@ -23,310 +23,152 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Tabs.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/Tabs.hpp>
 
 namespace ime::ui {
+    class Tabs::TabsImpl {
+    public:
+        TabsImpl(std::shared_ptr<tgui::Widget> widget) :
+            tabs_{std::static_pointer_cast<tgui::Tabs>(widget)}
+        {}
+
+        std::shared_ptr<tgui::Tabs> tabs_;
+    }; // class TabsImpl
+
+    ////////////////////////////////////////////////////////////////////////////
+
     Tabs::Tabs() :
-        tabs_{tgui::Tabs::create()},
-        renderer_{std::make_shared<TabsRenderer>()}
+        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Tabs>>(tgui::Tabs::create())),
+        pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(tabs_->getRenderer());
-        initEvents();
+        setRenderer(std::make_shared<TabsRenderer>());
+
+        pimpl_->tabs_->onTabSelect([this](const tgui::String& item){
+            emit("select", item.toStdString());
+        });
     }
 
+    Tabs::Tabs(Tabs &&) = default;
+
+    Tabs &Tabs::operator=(Tabs &&) = default;
+
     Tabs::sharedPtr Tabs::create() {
-        return std::make_shared<Tabs>();
+        return sharedPtr(new Tabs());
     }
 
     Tabs::sharedPtr Tabs::copy(Tabs::constSharedPtr other, bool shareRenderer) {
         auto widget = create();
-        widget->tabs_ = widget->tabs_->copy(other->tabs_);
-
-        if (!shareRenderer)
-            widget->tabs_->setRenderer(other->tabs_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->tabs_->getRenderer());
-
         return widget;
     }
 
-    void Tabs::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        tabs_->setRenderer(renderer->getInternalPtr()->getData());
+    std::shared_ptr<TabsRenderer> Tabs::getRenderer() {
+        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
     }
 
-    std::shared_ptr<TabsRenderer> Tabs::getRenderer() {
-        return renderer_;
+    const std::shared_ptr<TabsRenderer> Tabs::getRenderer() const {
+        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
     }
 
     void Tabs::setAutoSize(bool autoSize) {
-        tabs_->setAutoSize(autoSize);
+        pimpl_->tabs_->setAutoSize(autoSize);
     }
 
     bool Tabs::getAutoSize() const {
-        return tabs_->getAutoSize();
+        return pimpl_->tabs_->getAutoSize();
     }
 
     std::size_t Tabs::add(const std::string &text, bool select) {
-        return tabs_->add(text, select);
+        return pimpl_->tabs_->add(text, select);
     }
 
     void Tabs::insert(std::size_t index, const std::string &text, bool select) {
-        tabs_->insert(index, text, select);
+        pimpl_->tabs_->insert(index, text, select);
     }
 
     std::string Tabs::getText(std::size_t index) const {
-        return tabs_->getText(index).toStdString();
+        return pimpl_->tabs_->getText(index).toStdString();
     }
 
     bool Tabs::changeText(std::size_t index, const std::string &text) {
-        return tabs_->changeText(index, text);
+        return pimpl_->tabs_->changeText(index, text);
     }
 
     bool Tabs::select(const std::string &text) {
-        return tabs_->select(text);
+        return pimpl_->tabs_->select(text);
     }
 
     bool Tabs::select(std::size_t index) {
-        return tabs_->select(index);
+        return pimpl_->tabs_->select(index);
     }
 
     void Tabs::deselect() {
-        tabs_->deselect();
+        pimpl_->tabs_->deselect();
     }
 
     bool Tabs::remove(const std::string &text) {
-        return tabs_->remove(text);
+        return pimpl_->tabs_->remove(text);
     }
 
     bool Tabs::remove(std::size_t index) {
-        return tabs_->remove(index);
+        return pimpl_->tabs_->remove(index);
     }
 
     void Tabs::removeAll() {
-        tabs_->removeAll();
+        pimpl_->tabs_->removeAll();
     }
 
     std::string Tabs::getSelected() const {
-        return tabs_->getSelected().toStdString();
+        return pimpl_->tabs_->getSelected().toStdString();
     }
 
     int Tabs::getSelectedIndex() const {
-        return tabs_->getSelectedIndex();
+        return pimpl_->tabs_->getSelectedIndex();
     }
 
     void Tabs::setTabVisible(std::size_t index, bool visible) {
-        tabs_->setTabVisible(index, visible);
+        pimpl_->tabs_->setTabVisible(index, visible);
     }
 
     bool Tabs::isTabVisible(std::size_t index) const {
-        return tabs_->getTabVisible(index);
+        return pimpl_->tabs_->getTabVisible(index);
     }
 
     void Tabs::setTabEnabled(std::size_t index, bool enabled) {
-        tabs_->setTabEnabled(index, enabled);
+        pimpl_->tabs_->setTabEnabled(index, enabled);
     }
 
     bool Tabs::isTabEnabled(std::size_t index) const {
-        return tabs_->getTabEnabled(index);
+        return pimpl_->tabs_->getTabEnabled(index);
     }
 
     void Tabs::setTabHeight(float height) {
-        tabs_->setTabHeight(height);
+        pimpl_->tabs_->setTabHeight(height);
     }
 
     void Tabs::setMaximumTabWidth(float maximumWidth) {
-        tabs_->setMaximumTabWidth(maximumWidth);
+        pimpl_->tabs_->setMaximumTabWidth(maximumWidth);
     }
 
     float Tabs::getMaximumTabWidth() const {
-        return tabs_->getMaximumTabWidth();
+        return pimpl_->tabs_->getMaximumTabWidth();
     }
 
     void Tabs::setMinimumTabWidth(float minimumWidth) {
-        tabs_->setMinimumTabWidth(minimumWidth);
+        pimpl_->tabs_->setMinimumTabWidth(minimumWidth);
     }
 
     float Tabs::getMinimumTabWidth() const {
-        return tabs_->getMinimumTabWidth();
+        return pimpl_->tabs_->getMinimumTabWidth();
     }
 
     std::size_t Tabs::getTabsCount() const {
-        return tabs_->getTabsCount();
-    }
-
-    void Tabs::setTextSize(unsigned int charSize) {
-        tabs_->setTextSize(charSize);
-    }
-
-    unsigned int Tabs::getTextSize() const {
-        return tabs_->getTextSize();
-    }
-
-    void Tabs::setSize(float width, float height) {
-        tabs_->setSize({width, height});
-    }
-
-    void Tabs::setSize(const std::string &width, const std::string &height) {
-        tabs_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f Tabs::getSize() const {
-        return {tabs_->getSize().x, tabs_->getSize().y};
-    }
-
-    Vector2f Tabs::getAbsoluteSize() {
-        return {tabs_->getFullSize().x, tabs_->getFullSize().y};
-    }
-
-    void Tabs::setWidth(float width) {
-        tabs_->setWidth(width);
-    }
-
-    void Tabs::setWidth(const std::string &width) {
-        tabs_->setWidth(width.c_str());
-    }
-
-    void Tabs::setHeight(float height) {
-        tabs_->setHeight(height);
-    }
-
-    void Tabs::setHeight(const std::string &height) {
-        tabs_->setHeight(height.c_str());
-    }
-
-    void Tabs::setMouseCursor(CursorType cursor) {
-        tabs_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType Tabs::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(tabs_->getMouseCursor()));
+        return pimpl_->tabs_->getTabsCount();
     }
 
     std::string Tabs::getWidgetType() const {
         return "Tabs";
     }
 
-    void Tabs::showWithEffect(ShowAnimationType type, int duration) {
-        tabs_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void Tabs::hideWithEffect(ShowAnimationType type, int duration) {
-        tabs_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool Tabs::isAnimationPlaying() const {
-        return tabs_->isAnimationPlaying();
-    }
-
-    void Tabs::setVisible(bool visible) {
-        tabs_->setVisible(visible);
-    }
-
-    bool Tabs::isVisible() const {
-        return tabs_->isVisible();
-    }
-
-    void Tabs::toggleVisibility() {
-        tabs_->setVisible(!tabs_->isVisible());
-    }
-
-    bool Tabs::contains(float x, float y) const {
-        return tabs_->isMouseOnWidget({x, y});
-    }
-
-    void Tabs::setPosition(float x, float y) {
-        tabs_->setPosition({x, y});
-    }
-
-    void Tabs::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void Tabs::setPosition(const std::string &x, const std::string &y) {
-        tabs_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    Vector2f Tabs::getPosition() const {
-        return {tabs_->getPosition().x, tabs_->getPosition().y};
-    }
-
-    Vector2f Tabs::getAbsolutePosition() const {
-        return {tabs_->getAbsolutePosition().x, tabs_->getAbsolutePosition().y};
-    }
-
-    void Tabs::setRotation(float angle) {
-        tabs_->setRotation(angle);
-    }
-
-    void Tabs::rotate(float angle) {
-        tabs_->setRotation(tabs_->getRotation() + angle);
-    }
-
-    float Tabs::getRotation() const {
-        return tabs_->getRotation();
-    }
-
-    void Tabs::setScale(float factorX, float factorY) {
-        tabs_->setScale({factorX, factorY});
-    }
-
-    void Tabs::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void Tabs::scale(float factorX, float factorY) {
-        tabs_->setScale({tabs_->getScale().x + factorX,
-                         tabs_->getScale().y + factorY});
-    }
-
-    void Tabs::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    Vector2f Tabs::getScale() const {
-        return {tabs_->getScale().x, tabs_->getScale().y};
-    }
-
-    void Tabs::setOrigin(float x, float y) {
-        tabs_->setOrigin({x, y});
-    }
-
-    void Tabs::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    Vector2f Tabs::getOrigin() const {
-        return {tabs_->getOrigin().x, tabs_->getOrigin().y};
-    }
-
-    void Tabs::move(float offsetX, float offsetY) {
-        tabs_->setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
-    }
-
-    void Tabs::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    std::shared_ptr<tgui::Widget> Tabs::getInternalPtr() {
-        return tabs_;
-    }
-
-    void Tabs::initEvents() {
-        tabs_->onMouseEnter([this]{emit("mouseEnter");});
-        tabs_->onMouseLeave([this]{emit("mouseLeave");});
-        tabs_->onFocus([this]{emit("focus");});
-        tabs_->onUnfocus([this]{emit("unfocus");});
-        tabs_->onAnimationFinish([this]{emit("animationFinish");});
-        tabs_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        tabs_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        tabs_->onTabSelect([this](const tgui::String& item){
-            emit("select", item.toStdString());
-        });
-    }
+    Tabs::~Tabs() = default;
 }

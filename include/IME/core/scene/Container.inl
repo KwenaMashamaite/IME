@@ -29,7 +29,12 @@ inline void Container<T>::add(Item item) {
 
 template <typename T>
 inline bool Container<T>::remove(Item item) {
-    return utility::eraseIn(items_, item);
+    if (auto found = std::find(items_.begin(), items_.end(), item); found != items_.end()) {
+        items_.erase(found);
+        return true;
+    }
+
+    return false;
 }
 
 template <typename T>

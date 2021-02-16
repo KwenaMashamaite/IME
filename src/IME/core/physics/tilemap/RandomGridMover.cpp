@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/tilemap/RandomGridMover.h"
+#include "IME/graphics/Tile.h"
 #include "IME/utility/Utils.h"
 
 namespace ime {

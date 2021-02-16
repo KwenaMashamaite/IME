@@ -22,10 +22,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <IME/utility/Helpers.h>
 #include "IME/ui/renderers/TabsRenderer.h"
+#include "../../utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
-#include <IME/utility/Helpers.h>
+#include <TGUI/Renderers/TabsRenderer.hpp>
 
 namespace ime::ui {
     void TabsRenderer::setBorders(const Borders &borders) {

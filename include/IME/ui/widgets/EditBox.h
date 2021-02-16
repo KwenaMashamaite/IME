@@ -26,9 +26,8 @@
 #define IME_EDITBOX_H
 
 #include "IME/Config.h"
-#include "IClickableWidget.h"
+#include "IME/ui/widgets/ClickableWidget.h"
 #include "IME/ui/renderers/EditBoxRenderer.h"
-#include <TGUI/Widgets/EditBox.hpp>
 #include <memory>
 
 namespace ime {
@@ -36,16 +35,20 @@ namespace ime {
         /**
          * @brief A single line input field
          */
-        class IME_API EditBox : public IClickableWidget {
+        class IME_API EditBox : public ClickableWidget {
         public:
             using sharedPtr = std::shared_ptr<EditBox>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
 
             /**
-             * @brief Construct an edit box
-             * @param defaultText Text is displayed when the edit box is empty
+             * @brief Move constructor
              */
-            explicit EditBox(const std::string& defaultText = "");
+            EditBox(EditBox&&);
+
+            /**
+             * @brief Move assignment operator
+             */
+            EditBox& operator=(EditBox&&);
 
             /**
              * @brief Create a new edit box widget
@@ -80,18 +83,6 @@ namespace ime {
             static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
 
             /**
-             * @brief Set the edit boxes renderer
-             * @param renderer The new renderer
-             *
-             * The renderer determines how the edit box is displayed. The edit
-             * box has a default renderer which can be manipulated using the
-             * getRenderer function
-             *
-             * @see getRenderer
-             */
-            void setRenderer(EditBoxRenderer::sharedPtr renderer);
-
-            /**
              * @brief Get the labels renderer
              * @return The labels renderer
              *
@@ -100,6 +91,28 @@ namespace ime {
              * as the background colour, text colour, border colour etc...
              */
             EditBoxRenderer::sharedPtr getRenderer();
+            const EditBoxRenderer::sharedPtr getRenderer() const;
+
+            /**
+             * @brief Set the text inside the edit box
+             * @param text Text inside the edit box
+             *
+             * The last characters of the text might be removed if:
+             * - There is a set a character limit and this text contains
+             *   too much characters.
+             * - The text width is limited and the text does not fit inside
+             *   the EditBox.
+             *
+             * @see setMaximumCharacters
+             * @see limitTextWidth
+             */
+            void setText(const std::string &text);
+
+            /**
+             * @brief Get the text inside the edit box
+             * @return The text inside the edit box
+             */
+            std::string getText() const;
 
             /**
              * @brief Set the default text of the editbox
@@ -192,506 +205,26 @@ namespace ime {
             std::string getSuffix() const;
 
             /**
-             * @brief Set the text inside the edit box
-             * @param text Text inside the edit box
-             *
-             * The last characters of the text might be removed if:
-             * - There is a set a character limit and this text contains
-             *   too much characters.
-             * - The text width is limited and the text does not fit inside
-             *   the EditBox.
-             *
-             * @see setMaximumCharacters
-             * @see limitTextWidth
-             */
-            void setText(const std::string &text);
-
-            /**
-             * @brief Get the text inside the edit box
-             * @return The text inside the edit box
-             */
-            std::string getText() const;
-
-            /**
-             * @brief Set the character size of the text
-             * @param charSize New character size
-             */
-            void setTextSize(unsigned int charSize) override;
-
-            /**
-             * @brief Get the character size of the text
-             * @return The character size of the text
-             */
-            unsigned int getTextSize() const override;
-
-            /**
-             * @brief Set the size of the edit box
-             * @param width The width of the edit box
-             * @param height The height of the edit box
-             */
-            void setSize(float width, float height) override;
-
-            /**
-             * @brief Set the size of the edit box relative to the size of
-             *        its parent
-             * @param width The new width of the edit box
-             * @param height The new height of the edit box
-             *
-             * The size is specified in percentages as shown below:
-             *
-             * @code
-             * editbox->setSize({"20%", "5%"});
-             * @endcode
-             */
-            void setSize(const std::string& width, const std::string& height) override;
-
-            /**
-             * @brief Get the size of the edit box
-             * @return Current size of the edit box
-             *
-             * This function only returns the size of the edit box (It does
-             * not accommodate margin, outline thickness etc ...)
-             *
-             * @see getAbsoluteSize
-             */
-            Vector2f getSize() const override;
-
-            /**
-             * @brief Get the absolute size of the edit box
-             * @return The absolute size of the edit box
-             *
-             * The absolute size includes the size of the edit box, the padding,
-             * margin and outline thickness
-             *
-             * @see getSize
-             */
-            Vector2f getAbsoluteSize() override;
-
-            /**
-             * @brief Set the width of the edit box
-             * @param width New width of the edit box
-             *
-             * This function sets the width while keeping the height
-             * the same
-             *
-             * @see setSize
-             */
-            void setWidth(float width) override;
-
-            /**
-             * @brief Set the width of the edit box relative to its parent
-             * @param width New width
-             *
-             * The relative width is given in percentages as shown:
-             *
-             * @code
-             * edit box->setWidth("10%");
-             * @endcode
-             *
-             * This function sets the width of the edit box while keeping the
-             * height the same
-             *
-             * @see setSize
-             */
-            void setWidth(const std::string& width) override;
-
-            /**
-             * @brief Set the height of the edit box
-             * @param height New height of the edit box
-             *
-             * This function sets the height while keeping the width
-             * the same
-             *
-             * @see setSize
-             */
-            void setHeight(float height) override;
-
-            /**
-             * @brief Set the height of the edit box relative to its parent
-             * @param height New height
-             *
-             * The relative height is given in percentages as shown:
-             *
-             * @code
-             * edit box->setHeight("10%");
-             * @endcode
-             *
-             * This function sets the height of the edit box while keeping the
-             * width the same
-             *
-             * @see setSize
-             */
-            void setHeight(const std::string& height) override;
-
-            /**
-             * @brief Set the mouse cursor that is displayed when the mouse
-             *        is on top of the edit box
-             * @param cursor The cursor to be shown
-             *
-             * By default, the arrow cursor is shown
-             */
-            void setMouseCursor(CursorType cursor) override;
-
-            /**
-             * @brief Get the mouse cursor that is displayed when the mouse
-             *        is on top of the edit box
-             * @return The cursor shown when hovering above the edit box
-             */
-            CursorType getMouseCursor() const override;
-
-            /**
              * @brief Get the type of the edit box
              * @return The type of the edit box
              */
             std::string getWidgetType() const override;
 
             /**
-             * @brief Show the editbox with an animation
-             * @param type Type of the animation
-             * @param duration Duration of the animation in milliseconds
-             *
-             * The animation will be played if the editbox currently
-             * visible
-             *
-             * @note During the animation the position, size and/or opacity
-             * opacity may change. Once the animation is done the editbox
-             * will be back in the state in which it was when this function
-             * was called
-             *
-             * @see hideWithEffect
-             * @see isAnimationPlaying
+             * @brief Destructor
              */
-            void showWithEffect(ShowAnimationType type, int duration) override;
-
-            /**
-             * @brief Hide the editbox with an animation
-             * @param type Type of the animation
-             * @param duration Duration of the animation in milliseconds
-             *
-             * The animation will also be played if the editbox currently
-             * hidden but it will not be seen
-             *
-             * @note During the animation the position, size and/or opacity
-             * opacity may change. Once the animation is done the editbox
-             * will be back in the state in which it was when this function
-             * was called
-             *
-             * @see showWithEffect
-             * @see isAnimationPlaying
-             */
-            void hideWithEffect(ShowAnimationType type, int duration) override;
-
-            /**
-             * @brief Check whether or not an animation is currently playing
-             * @return True if an animation is playing, otherwise false
-             *
-             * @see showWithEffect
-             * @see hideWithEffect
-             */
-            bool isAnimationPlaying() const override;
-
-            /**
-             * @brief Show or hide a editbox
-             * @param visible True to show or false to hide
-             *
-             * If the editbox is hidden, it won't receive events
-             * (and thus won't send callbacks) nor will it be drawn
-             *
-             * The editbox is visible by default.
-             */
-            void setVisible(bool visible) override;
-
-            /**
-             * @brief Check if the editbox is visible or not
-             * @return True if the editbox is visible or false if hidden
-             */
-            bool isVisible() const override;
-
-            /**
-             * @brief Toggle the visibility of the editbox
-             *
-             * This function will hide the editbox if its currently
-             * visible and vice versa
-             *
-             * @see setVisible
-             */
-            void toggleVisibility() override;
-
-            /**
-             * @brief Check if coordinates lie inside the edit box
-             * @param x X coordinate to be checked
-             * @param y Y coordinate to be checked
-             * @return true if coordinates lie inside the edit box, false if
-             *         coordinates do not lie inside the edit box
-             */
-            bool contains(float x, float y) const override;
-
-            /**
-             * @brief Set the position of the edit box
-             * @param x X coordinate of the new position
-             * @param y Y coordinate of the new position
-             *
-             * This function completely overwrites the previous position.
-             * use move function to apply an offset based on the previous
-             * position instead
-             *
-             * The default position of a the edit box is (0, 0)
-             *
-             * @see move
-             */
-            void setPosition(float x, float y) override;
-
-            /**
-             * @brief Set the position of the edit box
-             * @param position New position
-             *
-             * This function completely overwrites the previous position.
-             * Use the move function to apply an offset based on the previous
-             * position instead.
-             *
-             * The default position of the edit box is (0, 0)
-             *
-             * @see move
-             */
-            void setPosition(Vector2f position) override;
-
-            /**
-             * @brief Set the position of the edit box relative to the
-             *        size of its parent
-             * @param x New x coordinate of the edit box
-             * @param y New y coordinate of the edit box
-             *
-             * The position is specified in percentages as shown below:
-             *
-             * @code
-             * editbox->setPosition({"5%", "10%"});
-             * @endcode
-             *
-             * This function completely overwrites the previous position.
-             * Use the move function to apply an offset based on the previous
-             * position instead.
-             *
-             * The default position of the edit box is (0, 0)
-             *
-             * @see move
-             */
-            void setPosition(const std::string& x, const std::string& y) override;
-
-            /**
-             * @brief Get the position of the edit box
-             * @return Current position of the edit box
-             */
-            Vector2f getPosition() const override;
-
-            /**
-             * @brief Get the absolute position of the editbox
-             * @return The absolute position of the editbox
-             *
-             * Unlike getPosition, this function returns the absolute
-             * position of the top-left point of the editbox instead
-             * of the relative position to its parent
-             *
-             * @see setPosition
-             */
-            Vector2f getAbsolutePosition() const override;
-
-            /**
-             * @brief Set the orientation of the edit box
-             * @param angle New rotation, in degrees
-             *
-             * This function completely overwrites the previous rotation.
-             * See the rotate function to add an angle based on the previous
-             * rotation instead.
-             *
-             * The default rotation of the edit box is 0
-             *
-             * @see rotate
-             */
-            void setRotation(float angle) override;
-
-            /**
-             * @brief Rotate the edit box
-             * @param angle Angle of rotation, in degrees
-             *
-             * This function adds to the current rotation of the edit box,
-             * unlike setRotation which overwrites it
-             *
-             * @see setRotation
-             */
-            void rotate(float angle) override;
-
-            /**
-             * @brief Get the orientation of the edit box
-             * @return Current rotation, in degrees
-             *
-             * The rotation is always in the range [0, 360]
-             */
-            float getRotation() const override;
-
-            /**
-             * @brief Set the scale factors of the edit box
-             * @param factorX New horizontal scale factor
-             * @param factorY New vertical scale factor
-             *
-             * This function completely overwrites the previous scale
-             *
-             * @see scale
-             */
-            void setScale(float factorX, float factorY) override;
-
-            /**
-             * @brief Set the scale factor of the edit box
-             * @param scale New scale
-             *
-             * This function completely overwrites the previous scale
-             *
-             * @see scale
-             */
-            void setScale(Vector2f scale) override;
-
-            /**
-             * @brief Scale the edit box by an offset
-             * @param factorX Horizontal scale factor
-             * @param factorY Vertical scale factor
-             *
-             * This function multiplies the current scale of the edit box,
-             * unlike setScale which overwrites it
-             *
-             * @see setScale
-             */
-            void scale(float factorX, float factorY) override;
-
-            /**
-             * @brief Scale the edit box by an offset
-             * @param offset Offset to apply
-             *
-             * This function multiplies the current scale of the edit box,
-             * unlike setScale which overwrites it
-             *
-             * @see setScale
-             */
-            void scale(Vector2f offset) override;
-
-            /**
-             * @brief Get the current scale of the edit box
-             * @return Current scale of the edit box
-             */
-            Vector2f getScale() const override;
-
-            /**
-             * @brief Set the local origin of the edit box
-             * @param x X coordinate of the new origin
-             * @param y Y coordinate of the new origin
-             *
-             * The origin of the edit box defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the edit box, and ignore all
-             * transformations (position, scale, rotation).
-             *
-             * The default origin of the edit box is (0, 0)
-             */
-            void setOrigin(float x, float y) override;
-
-            /**
-             * @brief Set the local origin of the edit box
-             * @param origin New origin
-             *
-             * The origin of the edit box defines the center point for
-             * all transformations (position, scale, rotation).
-             * The coordinates of this point must be relative to the
-             * top-left corner of the edit box, and ignore all
-             * transformations (position, scale, rotation).
-             *
-             * The default origin of the edit box is (0, 0)
-             */
-            void setOrigin(Vector2f origin) override;
-
-            /**
-             * @brief Get the local origin of the edit box
-             * @return Local origin of the edit box
-             */
-            Vector2f getOrigin() const override;
-
-            /**
-             * @brief Move the edit box by a given offset
-             * @param offsetX Horizontal offset
-             * @param offsetY Vertical offset
-             *
-             * This function adds to the current position of the edit box,
-             * unlike setPosition which overwrites it
-             *
-             * @see setPosition
-             */
-            void move(float offsetX, float offsetY) override;
-
-            /**
-             * @brief Move the edit box by a given offset
-             * @param offset Offset to apply
-             *
-             * This function adds to the current position of the edit box,
-             * unlike setPosition which overwrites it
-             *
-             * @see setPosition
-             */
-            void move(Vector2f offset) override;
-
-            /**
-             * @brief Enable or disable the edit box
-             * @param isEnable Set true to enable the edit box, false to
-             *        disable the edit box
-             *
-             * The edit box is enabled by default
-             *
-             * @note Disabling the edit box cancels all the interaction events
-             */
-            void setEnabled(bool isEnable) override;
-
-            /**
-              * @brief Check if edit box is enabled or disabled
-              * @return True if edit box is enabled, false if edit box is disabled
-              */
-            bool isEnabled() const override;
-
-            /**
-             * @brief Disable edit box if its currently enabled and vice versa
-             */
-            void toggleEnabled() override;
-
-            /**
-             * @brief Focus or unfocus edit box
-             * @param isFocused True to focus or false to unfocus edit box
-             */
-            void setFocused(bool isFocused) override;
-
-            /**
-             * @brief Check if edit box is focused or not
-             * @return True if edit box is focused. Otherwise, false
-             */
-            bool isFocused() const override;
-
-            /**
-             * @internal
-             * @brief Get the internal pointer to a third party widget
-             * @return The internal pointer to a third party widget
-             *
-             * @warning This function is intended for internal use only and
-             * should never be called under any circumstance
-             */
-            std::shared_ptr<tgui::Widget> getInternalPtr() override;
+            ~EditBox();
 
         private:
             /**
-             * @brief Initialize events
-             *
-             * These events will notify event listeners about an internal state
-             * change of the object when that state changes
+             * @brief Construct an edit box
+             * @param defaultText Text is displayed when the edit box is empty
              */
-            void initEvents();
+            explicit EditBox(const std::string& defaultText = "");
 
         private:
-            std::shared_ptr<tgui::EditBox> editBox_; //!< Pointer to third party library
-            EditBoxRenderer::sharedPtr renderer_;    //!< Renderer for this edit box
+            class EditBoxImpl;
+            std::unique_ptr<EditBoxImpl> pimpl_;
         };
     }
 }

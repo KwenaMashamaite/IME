@@ -27,8 +27,7 @@
 
 #include "IME/Config.h"
 #include "Audio.h"
-#include <SFML/Audio.hpp>
-#include <string>
+#include <memory>
 
 namespace ime {
     namespace audio {
@@ -45,6 +44,11 @@ namespace ime {
          */
         class IME_API SoundEffect final : public Audio {
         public:
+            /**
+             * @brief Default constructor
+             */
+            SoundEffect();
+
             /**
              * @brief Set the sound effect file to be played
              * @param source Filename of an audio file
@@ -176,9 +180,14 @@ namespace ime {
              */
             std::string getType() override;
 
+            /**
+             * @brief Destructor
+             */
+            ~SoundEffect();
+
         private:
-            sf::Sound soundEffect_; //!< Sound to be played
-            std::string sfxName_;   //!< Filename of the audio source
+            struct Impl;
+            std::unique_ptr<Impl> pImpl_;
         };
     }
 }

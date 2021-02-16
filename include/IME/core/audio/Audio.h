@@ -28,7 +28,6 @@
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
-#include <initializer_list>
 #include <string>
 
 namespace ime {

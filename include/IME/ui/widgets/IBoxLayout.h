@@ -26,14 +26,15 @@
 #define IME_IBOXLAYOUT_H
 
 #include "IME/Config.h"
-#include "IContainer.h"
+#include "IME/ui/widgets/WidgetContainer.h"
+#include <memory>
 
 namespace ime {
     namespace ui {
         /**
          * @brief Interface for box layouts
          */
-        class IME_API IBoxLayout : public IContainer {
+        class IME_API IBoxLayout : public WidgetContainer {
         public:
             using sharedPtr = std::shared_ptr<IBoxLayout>; //!< Shared widget pointer
 
@@ -49,7 +50,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            virtual void insertWidget(std::size_t index, std::shared_ptr<IWidget> widget,
+            virtual void insertWidget(std::size_t index, std::shared_ptr<Widget> widget,
                 const std::string& widgetName) = 0;
 
             /**
@@ -59,14 +60,6 @@ namespace ime {
              *         invalid
              */
             virtual bool removeWidgetAt(std::size_t index) = 0;
-
-            /**
-             * @brief Get the widget at a certain position
-             * @param index Position of the widget to retrieve
-             * @return Widget at the given position or nullptr if the index is
-             *         invalid
-             */
-            virtual std::shared_ptr<IWidget> getWidgetAt(std::size_t index) const = 0;
 
             /**
              * @brief Add an extra space after the last widget
@@ -94,7 +87,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            virtual bool setRatio(std::shared_ptr<IWidget> widget, float ratio) = 0;
+            virtual bool setRatio(std::shared_ptr<Widget> widget, float ratio) = 0;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -112,7 +105,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            virtual float getRatio(std::shared_ptr<IWidget> widget) const = 0;
+            virtual float getRatio(std::shared_ptr<Widget> widget) const = 0;
 
             /**
              * @brief Get the ratio of a widget at a certain index
@@ -122,6 +115,13 @@ namespace ime {
              *         found
              */
             virtual float getRatio(std::size_t index) const = 0;
+
+        protected:
+            /**
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
         };
     }
 }

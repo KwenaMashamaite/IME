@@ -27,8 +27,8 @@
 
 #include "IME/Config.h"
 #include "IME/common/Property.h"
-#include "IME/core/event/EventEmitter.h"
 #include <string>
+#include <functional>
 #include <unordered_map>
 
 namespace ime {
@@ -37,6 +37,9 @@ namespace ime {
      */
     class IME_API PropertyContainer {
     public:
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
+
         /**
          * @brief Add a property
          * @param Property Property to add

@@ -22,31 +22,16 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef IME_IME_H
+#define IME_IME_H
+
 ////////////////////////////////////////////////////////////////////////////////
-// Includes all UI widgets
+// Includes all the IME API headers
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_ALLWIDGETS_H
-#define IME_ALLWIDGETS_H
+#include "Core.h"
+#include "Graphics.h"
+#include "UI.h"
+#include "Utility.h"
 
-#include "IME/ui/widgets/Label.h"
-#include "IME/ui/widgets/Button.h"
-#include "IME/ui/widgets/BitmapButton.h"
-#include "IME/ui/widgets/ToggleButton.h"
-#include "IME/ui/widgets/Slider.h"
-#include "IME/ui/widgets/CheckBox.h"
-#include "IME/ui/widgets/EditBox.h"
-#include "IME/ui/widgets/ProgressBar.h"
-#include "IME/ui/widgets/VerticalLayout.h"
-#include "IME/ui/widgets/HorizontalLayout.h"
-#include "IME/ui/widgets/ChildWindow.h"
-#include "IME/ui/widgets/RadioButton.h"
-#include "IME/ui/widgets/Tabs.h"
-#include "IME/ui/widgets/TabsContainer.h"
-#include "IME/ui/widgets/Picture.h"
-#include "IME/ui/widgets/Panel.h"
-#include "IME/ui/widgets/ScrollablePanel.h"
-#include "IME/ui/widgets/SpinControl.h"
-#include "IME/ui/widgets/Separator.h"
-
-#endif // IME_ALLWIDGETS_H
+#endif //IME_IME_H

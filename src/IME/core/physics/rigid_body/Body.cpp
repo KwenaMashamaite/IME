@@ -24,7 +24,7 @@
 
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
-#include "IME/utility/Helpers.h"
+#include "../../../utility/Helpers.h"
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_world.h>

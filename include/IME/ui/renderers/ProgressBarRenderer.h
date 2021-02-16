@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/ProgressBarRenderer.hpp>
+
+namespace tgui {
+    class ProgressBarRenderer;
+}
 
 namespace ime {
     namespace ui {

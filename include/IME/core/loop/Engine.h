@@ -52,9 +52,10 @@ namespace ime {
          *
          * @a settingsFile must have the filename preceded by the path
          * to the file. The path must be relative to the directory that
-         * contains the game executable
+         * contains the game executable. If @a settingsFile is left unspecified
+         * the engine will be constructed from default settings
          */
-        Engine(const std::string &gameTitle, const std::string &settingsFile);
+        explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
          * @brief Constructor

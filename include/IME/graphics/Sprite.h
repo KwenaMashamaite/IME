@@ -33,7 +33,6 @@
 #include "IME/graphics/Colour.h"
 #include "IME/graphics/Texture.h"
 #include "IME/core/animation/Animator.h"
-#include <SFML/Graphics/Sprite.hpp>
 #include <string>
 #include <memory>
 
@@ -94,7 +93,17 @@ namespace ime {
         /**
          * @brief Copy assignment operator
          */
-        Sprite& operator=(Sprite);
+        Sprite& operator=(const Sprite&);
+
+        /**
+         * @brief Move constructor
+         */
+        Sprite(Sprite&&) noexcept;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Sprite& operator=(Sprite&&) noexcept;
 
         /**
          * @brief Set the texture of the object
@@ -431,14 +440,11 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Sprite();
+        ~Sprite();
 
     private:
-        sf::Sprite sprite_;           //!< Third party sprite
-        bool isVisible_;              //!< Flags whether or not the sprite is visible
-        Colour prevSpriteColour_;     //!< Sprite colour before it was hidden
-        Animator animator_;           //!< Sprite animator
-        const Texture* texture_;      //!< Sprite texture
+        struct SpriteImpl;
+        std::unique_ptr<SpriteImpl> pImpl_;
     };
 }
 

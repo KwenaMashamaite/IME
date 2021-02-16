@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/common/PropertyContainer.h"
-#include "IME/utility/Helpers.h"
+#include "../utility/Helpers.h"
 #include <algorithm>
 
 namespace ime {

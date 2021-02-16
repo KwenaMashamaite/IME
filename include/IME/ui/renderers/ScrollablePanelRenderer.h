@@ -25,7 +25,6 @@
 #ifndef IME_SCROLLABLEPANELRENDERER_H
 #define IME_SCROLLABLEPANELRENDERER_H
 
-
 #include "IME/Config.h"
 #include "IME/ui/renderers/IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"

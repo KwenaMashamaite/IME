@@ -56,12 +56,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        ConvexShape(ConvexShape&&) = default;
+        ConvexShape(ConvexShape&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        ConvexShape& operator=(ConvexShape&&) = default;
+        ConvexShape& operator=(ConvexShape&&) noexcept;
 
         /**
          * @brief Create a new convex shape

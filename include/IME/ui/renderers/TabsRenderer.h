@@ -22,14 +22,16 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef IME_TABSRENDERER_H
 #define IME_TABSRENDERER_H
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/TabsRenderer.hpp>
+
+namespace tgui {
+    class TabsRenderer;
+}
 
 namespace ime {
     namespace ui {

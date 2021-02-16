@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/CheckBoxRenderer.hpp>
+
+namespace tgui {
+    class CheckBoxRenderer;
+}
 
 namespace ime {
     namespace ui {

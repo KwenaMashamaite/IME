@@ -22,21 +22,32 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_ICONTAINER_H
-#define IME_ICONTAINER_H
+#ifndef IME_WIDGETCONTAINER_H
+#define IME_WIDGETCONTAINER_H
 
 #include "IME/Config.h"
-#include "IWidget.h"
+#include "IME/ui/widgets/ClickableWidget.h"
 #include <memory>
 
 namespace ime {
     namespace ui {
         /**
-         * @brief Interface for widget containers
+         * @brief Abstract base class for widgets that can store other
+         *        widgets in them
          */
-        class IME_API IContainer : public IWidget {
+        class IME_API WidgetContainer : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<IContainer>; //!< Shared IContainer pointer
+            using sharedPtr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
+
+            /**
+             * @brief Move constructor
+             */
+            WidgetContainer(WidgetContainer&&);
+
+            /**
+             * @brief Move assignment operator
+             */
+            WidgetContainer& operator=(WidgetContainer&&);
             
             /**
              * @brief Add a widget to the container
@@ -48,8 +59,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            virtual bool addWidget(IWidget::sharedPtr widget,
-                const std::string& name) = 0;
+            bool addWidget(Widget::sharedPtr widget, const std::string& name);
             
             /**
              * @brief Get access to a widget in the container
@@ -62,7 +72,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the 
              * given name, a recursive search will be performed.
              */
-            virtual IWidget::sharedPtr getWidget(const std::string& name) const = 0;
+            Widget::sharedPtr getWidget(const std::string& name) const;
 
             /**
              * @brief Get access to a widget in the container
@@ -86,31 +96,40 @@ namespace ime {
             }
 
             /**
+             * @brief Get a widget at a given position
+             * @param pos The position of the widget relative to the container
+             *          view
+             * @return Pointer to the widget at the specified position or a
+             *         nullptr if there is no widget at that position
+             */
+            Widget::sharedPtr getWidgetAtPosition(Vector2f pos) const;
+
+            /**
              * @brief Remove a widget from the container
              * @param name Name of the widget to be removed from the container
              * @return True if the widget was removed or false if the widget
              *         does not exist in the container
              */
-            virtual bool removeWidget(const std::string &name) = 0;
+            bool removeWidget(const std::string &name);
 
             /**
              * @brief Remove all widgets from the container
              */
-            virtual void removeAllWidgets() = 0;
+            void removeAllWidgets();
 
             /**
              * @brief Place a widget before all other widgets, to the front
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            virtual void moveWidgetToFront(IWidget::sharedPtr widget) = 0;
+            void moveWidgetToFront(Widget::sharedPtr widget);
 
             /**
              * @brief Place a widget behind all other widgets, to the back
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            virtual void moveWidgetToBack(IWidget::sharedPtr widget) = 0;
+            void moveWidgetToBack(Widget::sharedPtr widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -118,7 +137,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            virtual std::size_t moveWidgetForward(IWidget::sharedPtr widget) = 0;
+            std::size_t moveWidgetForward(Widget::sharedPtr widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -126,7 +145,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            virtual std::size_t moveWidgetBackward(IWidget::sharedPtr widget) = 0;
+            std::size_t moveWidgetBackward(Widget::sharedPtr widget);
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -139,8 +158,8 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            virtual IWidget::sharedPtr getFocusedWidget() const = 0;
-            
+            Widget::sharedPtr getFocusedWidget() const;
+
             /**
              * @brief Get the currently focused widget inside the container
              * @return Pointer to the focused child widget or a nullptr if none
@@ -148,22 +167,13 @@ namespace ime {
              *
              * @note Unlike getFocusedWidget which returns a pointer to
              * a container when the focused widget is a child of another
-             * container within the container, this function will always return 
-             * the focused widget regardless of whether its a direct child of 
+             * container within the container, this function will always return
+             * the focused widget regardless of whether its a direct child of
              * the container or not
              *
              * @see getFocusedWidget
              */
-            virtual IWidget::sharedPtr getFocusedLeaf() const = 0;
-
-            /**
-             * @brief Get a widget at a given position
-             * @param pos The position of the widget relative to the container 
-             *          view
-             * @return Pointer to the widget at the specified position or a
-             *         nullptr if there is no widget at that position
-             */
-            virtual IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const = 0;
+            Widget::sharedPtr getFocusedLeaf() const;
 
             /**
              * @brief Focus the next widget in the container
@@ -172,7 +182,7 @@ namespace ime {
              *        of that container
              * @return True if the next widget was focused, otherwise false
              */
-            virtual bool focusNextWidget(bool recursive = true) = 0;
+            bool focusNextWidget(bool recursive = true);
 
             /**
              * @brief Focus the previous widget in the container
@@ -181,9 +191,25 @@ namespace ime {
              *        of that container
              * @return True if the next widget was focused, otherwise false
              */
-            virtual bool focusPreviousWidget(bool recursive = true) = 0;
+            bool focusPreviousWidget(bool recursive = true);
+
+            /**
+             * @brief Destructor
+             */
+            ~WidgetContainer();
+
+        protected:
+            /**
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+
+        private:
+            class Impl;
+            std::unique_ptr<Impl> pimpl_;
         };
     }
 }
 
-#endif // IME_ICONTAINER_H
+#endif // IME_WIDGETCONTAINER_H

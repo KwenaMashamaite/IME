@@ -23,7 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/SceneManager.h"
+#include "IME/core/scene/Scene.h"
 #include "IME/core/physics/World.h"
+#include "IME/graphics/Window.h"
 
 namespace ime {
     void SceneManager::pushScene(std::shared_ptr<Scene> scene, bool enterScene) {

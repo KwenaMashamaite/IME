@@ -28,7 +28,6 @@
 #include "IME/Config.h"
 #include "Container.h"
 #include "IME/core/entity/Entity.h"
-#include <vector>
 
 namespace ime {
     /**

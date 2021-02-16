@@ -23,271 +23,83 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Button.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/Button.hpp>
 
 namespace ime::ui {
+    //////////////////////////////////////////////////////////////////////////
+    // Button implementation
+    //////////////////////////////////////////////////////////////////////////
+    class Button::ButtonImpl {
+    public:
+        ButtonImpl(std::shared_ptr<tgui::Widget> widget) :
+            button_{std::static_pointer_cast<tgui::Button>(widget)}
+        {}
+
+        static Button::sharedPtr copy(Button::constSharedPtr other, bool shareRenderer) {
+            auto widget = create("");
+            /*pimpl_->button_ = tgui::Button::copy(other->pimpl_->button_);
+
+            if (!shareRenderer)
+                ->setRenderer(other->pimpl_->widget_->getRenderer()->clone());
+            widget->pimpl_->renderer_->setInternalPtr(other->pimpl_->widget_->getRenderer());*/
+
+            return widget;
+        }
+
+        void setText(const std::string &text) {
+            button_->setText(text);
+        }
+
+        std::string getText() const {
+            return button_->getText().toStdString();
+        }
+
+    private:
+        std::shared_ptr<tgui::Button> button_;
+    };
+
+    //////////////////////////////////////////////////////////////////////////
+    // Button delegation
+    //////////////////////////////////////////////////////////////////////////
     Button::Button(const std::string &buttonText) :
-        button_{tgui::Button::create(buttonText)},
-        renderer_{std::make_shared<ButtonRenderer>()}
+        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Button>>(tgui::Button::create(buttonText))),
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(button_->getRenderer());
-        initEvents();
+        setRenderer(std::make_shared<ButtonRenderer>());
     }
 
+    Button::Button(Button &&) = default;
+
+    Button &Button::operator=(Button &&) = default;
+
     Button::sharedPtr Button::create(const std::string &text) {
-        return std::make_shared<Button>(text);
+        return Button::sharedPtr(new Button(text));
     }
 
     Button::sharedPtr Button::copy(Button::constSharedPtr other, bool shareRenderer) {
-        auto widget = create();
-        widget->button_ = widget->button_->copy(other->button_);
-
-        if (!shareRenderer)
-            widget->button_->setRenderer(other->button_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->button_->getRenderer());
-
-        return widget;
-    }
-
-    void Button::setRenderer(std::shared_ptr<ButtonRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        button_->setRenderer(renderer->getInternalPtr()->getData());
+        return ButtonImpl::copy(other, shareRenderer);
     }
 
     std::shared_ptr<ButtonRenderer> Button::getRenderer() {
-        return renderer_;
+        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 
-    void Button::setPosition(float x, float y) {
-        button_->setPosition({x, y});
+    const ButtonRenderer::sharedPtr Button::getRenderer() const {
+        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 
-    void Button::setRotation(float angle) {
-        button_->setRotation(angle);
-    }
-
-    void Button::setScale(float factorX, float factorY) {
-        button_->setScale({factorX, factorY});
-    }
-
-    void Button::setOrigin(float x, float y) {
-        button_->setOrigin({x, y});
-    }
-
-    Vector2f Button::getPosition() const {
-        return {button_->getPosition().x, button_->getPosition().y};
-    }
-
-    Vector2f Button::getAbsolutePosition() const {
-        return {button_->getAbsolutePosition().x, button_->getAbsolutePosition().y};
-    }
-
-    Vector2f Button::getOrigin() const {
-        return {button_->getOrigin().x, button_->getOrigin().y};
-    }
-
-    float Button::getRotation() const {
-        return button_->getRotation();
-    }
-
-    void Button::move(float xOffset, float yOffset) {
-        button_->setPosition(getPosition().x + xOffset,
-                             getPosition().y + yOffset);
-    }
-
-    void Button::rotate(float offset) {
-        button_->setRotation(button_->getRotation() + offset);
-    }
-
-    void Button::scale(float factorX, float factorY) {
-        button_->setScale({button_->getScale().x + factorX,
-            button_->getScale().y + factorY});
-    }
-
-    void Button::setEnabled(bool isEnable) {
-        button_->setEnabled(isEnable);
-    }
-
-    bool Button::isEnabled() const {
-        return button_->isEnabled();
-    }
-
-    void Button::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
-    void Button::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void Button::setPosition(const std::string &x, const std::string &y) {
-        button_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    void Button::setTextSize(unsigned int charSize) {
-        button_->setTextSize(charSize);
-    }
-
-    void Button::setText(const std::string &content) {
-        button_->setText(content);
-    }
-
-    void Button::setSize(float width, float height) {
-        button_->setSize({width, height});
-    }
-
-    void Button::setSize(const std::string &width, const std::string &height) {
-        button_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f Button::getSize() const {
-        return {button_->getSize().x, button_->getSize().y};
+    void Button::setText(const std::string &text) {
+        pimpl_->setText(text);
     }
 
     std::string Button::getText() const {
-        return button_->getText().toStdString();
-    }
-
-    Vector2f Button::getAbsoluteSize() {
-        return {button_->getFullSize().x, button_->getFullSize().y};
-    }
-
-    void Button::setWidth(float width) {
-        button_->setWidth(width);
-    }
-
-    void Button::setWidth(const std::string &width) {
-        button_->setWidth(width.c_str());
-    }
-
-    void Button::setHeight(float height) {
-        button_->setHeight(height);
-    }
-
-    void Button::setHeight(const std::string &height) {
-        button_->setHeight(height.c_str());
-    }
-
-    void Button::setMouseCursor(CursorType cursor) {
-        button_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType Button::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(button_->getMouseCursor()));
-    }
-
-    unsigned int Button::getTextSize() const {
-        return button_->getTextSize();
+        return pimpl_->getText();
     }
 
     std::string Button::getWidgetType() const {
         return "Button";
     }
 
-    void Button::showWithEffect(ShowAnimationType type, int duration) {
-        button_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void Button::hideWithEffect(ShowAnimationType type, int duration) {
-        button_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool Button::isAnimationPlaying() const {
-        return button_->isAnimationPlaying();
-    }
-
-    void Button::setVisible(bool visible) {
-        button_->setVisible(visible);
-    }
-
-    bool Button::isVisible() const {
-        return button_->isVisible();
-    }
-
-    void Button::toggleVisibility() {
-        button_->setVisible(!button_->isVisible());
-    }
-
-    bool Button::contains(float x, float y) const {
-        return button_->isMouseOnWidget({x, y});
-    }
-
-    void Button::setFocused(bool isFocused) {
-        button_->setFocused(isFocused);
-    }
-
-    bool Button::isFocused() const {
-        return button_->isFocused();
-    }
-
-    std::shared_ptr<tgui::Widget> Button::getInternalPtr() {
-        return button_;
-    }
-
-    void Button::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void Button::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    void Button::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    void Button::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    void Button::initEvents() {
-        button_->onMouseEnter([this]{emit("mouseEnter");});
-        button_->onMouseLeave([this]{emit("mouseLeave");});
-        button_->onFocus([this]{emit("focus");});
-        button_->onUnfocus([this]{emit("unfocus");});
-        button_->onAnimationFinish([this]{emit("animationFinish");});
-        button_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        button_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        //Events triggered by left mouse button
-        button_->onClick([this](tgui::Vector2f mousePos){
-            emit("click");
-            emit("click", mousePos.x, mousePos.y);
-        });
-
-        button_->onMousePress([this](tgui::Vector2f mousePos) {
-            emit("leftMouseDown");
-            emit("leftMouseDown", mousePos.x, mousePos.y);
-        });
-
-        button_->onMouseRelease([this](tgui::Vector2f mousePos) {
-            emit("leftMouseUp");
-            emit("leftMouseUp", mousePos.x, mousePos.y);
-        });
-
-        //Events triggered by right mouse button
-        button_->onRightMousePress([this](tgui::Vector2f mousePos){
-            emit("rightMouseDown");
-            emit("rightMouseDown", mousePos.x, mousePos.y);
-        });
-
-        button_->onRightMouseRelease([this](tgui::Vector2f mousePos){
-            emit("rightMouseUp");
-            emit("rightMouseUp", mousePos.x, mousePos.y);
-        });
-
-        button_->onRightClick([this](tgui::Vector2f mousePos){
-            emit("rightClick");
-            emit("rightClick", mousePos.x, mousePos.y);
-        });
-    }
-
-    Vector2f Button::getScale() const {
-        return {button_->getScale().x, button_->getScale().y};
-    }
+    Button::~Button() = default;
 }

@@ -24,7 +24,8 @@
 
 #include "IME/ui/renderers/ChildWindowRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/ChildWindowRenderer.hpp>
 
 namespace ime::ui {
     void ChildWindowRenderer::setBorders(const Borders &borders) {

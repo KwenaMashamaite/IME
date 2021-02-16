@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/SeparatorLineRenderer.hpp>
+
+namespace tgui {
+    class SeparatorLineRenderer;
+}
 
 namespace ime {
     namespace ui {

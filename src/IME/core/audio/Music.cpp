@@ -24,114 +24,206 @@
 
 #include "IME/core/audio/Music.h"
 #include "IME/core/resources/ResourceManager.h"
+#include <SFML/Audio/Music.hpp>
 
 namespace ime::audio {
-    void Music::setSource(const std::string &source) {
-        if (sourceFilename_ != source) {
-            song_ = ResourceManager::getInstance()->getMusic(source);
-            sourceFilename_ = source;
+    //////////////////////////////////////////////////////////////////////////
+    // Music implementation
+    //////////////////////////////////////////////////////////////////////////
+    struct Music::Impl : public Audio {
+        Impl() :
+            song_{std::make_shared<sf::Music>()}
+        {}
+
+        void setSource(const std::string &source) override {
+
+            if (sourceFilename_ != source) {
+                if (!(*song_).openFromFile(source))
+                    throw FileNotFound(R"(cannot find file ")" + source + R"(")");
+                sourceFilename_ = source;
+            }
         }
+
+        const std::string &getSource() const override {
+            return sourceFilename_;
+        }
+
+        void setVolume(float volume) override {
+            if (song_ && song_->getVolume() != volume
+                && (volume >=0 && volume <= 100)) {
+                if (isMuted())
+                    setMute(false);
+                song_->setVolume(volume);
+                emit("volumeChanged", volume);
+            }
+        }
+
+        float getVolume() const override {
+            if (song_)
+                return song_->getVolume();
+            return 100.0f; //Default volume is maximum
+        }
+
+        void setPitch(float pitch) override {
+            if (song_)
+                song_->setPitch(pitch);
+        }
+
+        float getPitch() const override {
+            if (song_)
+                return song_->getPitch();
+            return 1;
+        }
+
+        void setLoop(bool isLooped) override {
+            if (song_ && song_->getLoop() != isLooped) {
+                song_->setLoop(isLooped);
+                emit("loopChanged", isLooped);
+            }
+        }
+
+        bool isLooped() const override {
+            if (song_)
+                return song_->getLoop();
+            return false;
+        }
+
+        void seek(Time position) override {
+            if (song_) {
+                song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
+                emit("playingPositionChanged", position);
+            }
+        }
+
+        Time getPlayingPosition() const override {
+            if (song_)
+                return microseconds(song_->getPlayingOffset().asMicroseconds());
+            return Time::Zero;
+        }
+
+        void play() override {
+            if (song_) {
+                song_->play();
+                emit("playing", sourceFilename_);
+            }
+        }
+
+        void pause() override {
+            if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
+                song_->pause();
+                emit("paused");
+            }
+        }
+
+        void stop() override {
+            if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
+                song_->stop();
+                emit("stopped");
+            }
+        }
+
+        Time getDuration() const override {
+            if (song_)
+                return microseconds(song_->getDuration().asMicroseconds());
+            return Time::Zero;
+        }
+
+        Status getStatus() const override {
+            if (song_) {
+                switch (song_->getStatus()) {
+                    case sf::Music::Status::Playing:
+                        return Status::Playing;
+                    case sf::Music::Status::Paused:
+                        return Status::Paused;
+                    case sf::Music::Status::Stopped:
+                        return Status::Stopped;
+                }
+            }
+            return Status::Stopped;
+        }
+
+        std::string getType() override {
+            return "Music";
+        }
+
+        ~Impl() override = default;
+
+    private:
+        std::shared_ptr<sf::Music> song_; //!< Music to be played
+        std::string sourceFilename_;      //!< Filename of the music file being played
+    }; // class Impl
+
+    //////////////////////////////////////////////////////////////////////////
+    // Delegation
+    //////////////////////////////////////////////////////////////////////////
+
+    Music::Music() :
+        pImpl_{std::make_unique<Impl>()}
+    {}
+
+    void Music::setSource(const std::string &source) {
+        pImpl_->setSource(source);
     }
 
     const std::string &Music::getSource() const {
-        return sourceFilename_;
-    }
-
-    void Music::setLoop(bool isLooped) {
-        if (song_ && song_->getLoop() != isLooped) {
-            song_->setLoop(isLooped);
-            emit("loopChanged", isLooped);
-        }
-    }
-
-    void Music::pause(){
-        if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
-            song_->pause();
-            emit("paused");
-        }
-    }
-
-    void Music::play() {
-        if (song_) {
-            song_->play();
-            emit("playing", sourceFilename_);
-        }
-    }
-
-    void Music::stop() {
-        if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
-            song_->stop();
-            emit("stopped");
-        }
+        return pImpl_->getSource();
     }
 
     void Music::setVolume(float volume) {
-        if (song_ && song_->getVolume() != volume
-            && (volume >=0 && volume <= 100)) {
-            if (isMuted())
-                setMute(false);
-            song_->setVolume(volume);
-            emit("volumeChanged", volume);
-        }
-    }
-
-    Status Music::getStatus() const {
-        if (song_) {
-            switch (song_->getStatus()) {
-                case sf::Sound::Status::Playing:
-                    return Status::Playing;
-                case sf::Sound::Status::Paused:
-                    return Status::Paused;
-                case sf::Sound::Status::Stopped:
-                    return Status::Stopped;
-            }
-        }
-        return Status::Stopped;
+        pImpl_->setVolume(volume);
     }
 
     float Music::getVolume() const {
-        if (song_)
-            return song_->getVolume();
-        return 100.0f; //Default volume is maximum
-    }
-
-    bool Music::isLooped() const {
-        if (song_)
-            return song_->getLoop();
-        return false;
-    }
-
-    Time Music::getDuration() const {
-        if (song_)
-            return microseconds(song_->getDuration().asMicroseconds());
-        return Time::Zero;
-    }
-
-    void Music::seek(Time position) {
-        if (song_) {
-            song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
-            emit("playingPositionChanged", position);
-        }
-    }
-
-    Time Music::getPlayingPosition() const {
-        if (song_)
-            return microseconds(song_->getPlayingOffset().asMicroseconds());
-        return Time::Zero;
-    }
-
-    std::string Music::getType() {
-        return "Music";
+        return pImpl_->getVolume();
     }
 
     void Music::setPitch(float pitch) {
-        if (song_)
-            song_->setPitch(pitch);
+        pImpl_->setPitch(pitch);
     }
 
     float Music::getPitch() const {
-        if (song_)
-            return song_->getPitch();
-        return 1;
+        return pImpl_->getPitch();
     }
+
+    void Music::setLoop(bool isLooped) {
+        pImpl_->setLoop(isLooped);
+    }
+
+    bool Music::isLooped() const {
+        return pImpl_->isLooped();
+    }
+
+    void Music::play() {
+        pImpl_->play();
+    }
+
+    void Music::pause(){
+        pImpl_->pause();
+    }
+
+    void Music::stop() {
+        pImpl_->stop();
+    }
+
+    Status Music::getStatus() const {
+        return pImpl_->getStatus();
+    }
+
+    Time Music::getDuration() const {
+        return pImpl_->getDuration();
+    }
+
+    void Music::seek(Time position) {
+        pImpl_->seek(position);
+    }
+
+    Time Music::getPlayingPosition() const {
+        return pImpl_->getPlayingPosition();
+    }
+
+    std::string Music::getType() {
+        return pImpl_->getType();
+    }
+
+    Music::~Music() = default;
 }

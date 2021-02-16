@@ -23,56 +23,71 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/TabsContainer.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/TabContainer.hpp>
+#include <unordered_map>
 
 namespace ime::ui {
+    class TabsContainer::Impl {
+    public:
+        Impl(std::shared_ptr<tgui::Widget> widget) :
+            tabContainer_{std::static_pointer_cast<tgui::TabContainer>(widget)}
+        {}
+
+        std::shared_ptr<tgui::TabContainer> tabContainer_;
+        std::unordered_map<std::size_t, Panel::sharedPtr> panel_;
+    }; // class Impl
+
+    ////////////////////////////////////////////////////////////////////////////
+    
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
-        tabContainer_{tgui::TabContainer::create({width.c_str(), height.c_str()})},
-        renderer_{std::make_shared<TabsRenderer>()}
+        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
+        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(tabContainer_->getTabsRenderer());
-        initEvents();
+        setRenderer(std::make_shared<TabsRenderer>());
+        
+        pimpl_->tabContainer_->onSelectionChanged([this](int index){
+            emit("selectionChange", index);
+        });
     }
+
+    TabsContainer::TabsContainer(TabsContainer &&) = default;
+
+    TabsContainer &TabsContainer::operator=(TabsContainer &&) = default;
 
     TabsContainer::sharedPtr TabsContainer::create(const std::string& width,
         const std::string& height)
     {
-        return std::make_shared<TabsContainer>(width, height);
+        return sharedPtr(new TabsContainer(width, height));
     }
 
-    TabsContainer::sharedPtr TabsContainer::copy(
-        TabsContainer::constSharedPtr other, bool shareRenderer)
+    TabsContainer::sharedPtr TabsContainer::copy(TabsContainer::constSharedPtr other,
+        bool shareRenderer)
     {
         auto widget = create();
-        widget->tabContainer_ = widget->tabContainer_->copy(other->tabContainer_);
-
-        if (!shareRenderer)
-            widget->tabContainer_->setRenderer(other->tabContainer_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->tabContainer_->getRenderer());
-
         return widget;
     }
 
-    void TabsContainer::setRenderer(std::shared_ptr<TabsRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        tabContainer_->setRenderer(renderer->getInternalPtr()->getData());
-    }
-
     std::shared_ptr<TabsRenderer> TabsContainer::getRenderer() {
-        return renderer_;
+        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
+    }
+    
+    const std::shared_ptr<TabsRenderer> TabsContainer::getRenderer() const {
+        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
     }
 
     void TabsContainer::setTabsHeight(float height) {
-        tabContainer_->setTabsHeight(height);
+        pimpl_->tabContainer_->setTabsHeight(height);
     }
 
     void TabsContainer::addPanel(std::shared_ptr<Panel> panel,
         const std::string &text, bool select)
     {
         IME_ASSERT(panel, "Cannot add nullptr to a TabsContainer");
-        panels_.insert({tabContainer_->getPanelCount() + 1, panel});
-        tabContainer_->addPanel(
-            std::dynamic_pointer_cast<tgui::Panel>(panel->getInternalPtr()), text, select);
+        pimpl_->panel_.insert({pimpl_->tabContainer_->getPanelCount() + 1, panel});
+        pimpl_->tabContainer_->addPanel(
+            std::static_pointer_cast<tgui::Panel>(std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())),
+            text, select);
     }
 
     bool TabsContainer::insertPanel(std::shared_ptr<Panel> panel,
@@ -82,10 +97,10 @@ namespace ime::ui {
         // If the index is not at end, then a widget already exists with
         // the given index and an our unordered_map will deny the insertion
         // event though insertion in the third party container succeeds
-        if (tabContainer_->insertPanel(std::dynamic_pointer_cast<tgui::Panel>(
-            panel->getInternalPtr()), text, index, select)) 
+        if (pimpl_->tabContainer_->insertPanel(std::static_pointer_cast<tgui::Panel>(
+            std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())), text, index, select))
         {
-            if (panels_.insert({getIndex(panel), panel}).second)
+            if (pimpl_->panel_.insert({getIndex(panel), panel}).second)
                 return true;
             else {
                 removePanel(panel);
@@ -96,225 +111,56 @@ namespace ime::ui {
     }
 
     void TabsContainer::removePanel(std::shared_ptr<Panel> panel) {
-        auto panelCount = tabContainer_->getPanelCount();
+        auto panelCount = pimpl_->tabContainer_->getPanelCount();
         auto panelIndex = getIndex(panel);
-        tabContainer_->removePanel(
-            std::dynamic_pointer_cast<tgui::Panel>(panel->getInternalPtr()));
-        if (tabContainer_->getPanelCount() == panelCount - 1)
-            panels_.erase(panelIndex);
+        pimpl_->tabContainer_->removePanel(std::static_pointer_cast<tgui::Panel>(
+            std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())));
+
+        if (pimpl_->tabContainer_->getPanelCount() == panelCount - 1)
+            pimpl_->panel_.erase(panelIndex);
     }
 
     void TabsContainer::select(std::size_t index) {
-        tabContainer_->select(index);
-    }
-
-    std::size_t TabsContainer::getPanelCount() const {
-        return tabContainer_->getPanelCount();
-    }
-
-    int TabsContainer::getIndex(std::shared_ptr<Panel> panel) {
-        return tabContainer_->getIndex(
-            std::dynamic_pointer_cast<tgui::Panel>(panel->getInternalPtr()));
+        pimpl_->tabContainer_->select(index);
     }
 
     std::shared_ptr<Panel> TabsContainer::getSelected() {
-        if (tabContainer_->getSelected())
-            return panels_[tabContainer_->getSelectedIndex()];
+        if (pimpl_->tabContainer_->getSelected())
+            return pimpl_->panel_[pimpl_->tabContainer_->getSelectedIndex()];
         return nullptr;
     }
 
+    std::size_t TabsContainer::getPanelCount() const {
+        return pimpl_->tabContainer_->getPanelCount();
+    }
+
+    int TabsContainer::getIndex(std::shared_ptr<Panel> panel) {
+        return pimpl_->tabContainer_->getIndex(std::static_pointer_cast<tgui::Panel>(
+            std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())));
+    }
+
     int TabsContainer::getSelectedIndex() const {
-        return tabContainer_->getSelectedIndex();
+        return pimpl_->tabContainer_->getSelectedIndex();
     }
 
     std::shared_ptr<Panel> TabsContainer::getPanel(int index) {
-        if (panels_.find(index) != panels_.end())
-            return panels_[index];
+        if (pimpl_->panel_.find(index) != pimpl_->panel_.end())
+            return pimpl_->panel_[index];
         return nullptr;
     }
 
     std::string TabsContainer::getTabText(std::size_t index) const {
-        return tabContainer_->getTabText(index).toStdString();
+        return pimpl_->tabContainer_->getTabText(index).toStdString();
     }
 
-    bool TabsContainer::changeTabText(std::size_t index, const tgui::String &text) {
-        return tabContainer_->changeTabText(index, text);
-    }
-
-    void TabsContainer::setTextSize(unsigned int charSize) {
-        tabContainer_->setTextSize(charSize);
-    }
-
-    unsigned int TabsContainer::getTextSize() const {
-        return tabContainer_->getTextSize();
-    }
-
-    void TabsContainer::setSize(float width, float height) {
-        tabContainer_->setSize({width, height});
-    }
-
-    void TabsContainer::setSize(const std::string &width, const std::string &height) {
-        tabContainer_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f TabsContainer::getSize() const {
-        return {tabContainer_->getSize().x, tabContainer_->getSize().y};
-    }
-
-    Vector2f TabsContainer::getAbsoluteSize() {
-        return {tabContainer_->getFullSize().x, tabContainer_->getFullSize().y};
-    }
-
-    void TabsContainer::setWidth(float width) {
-        tabContainer_->setWidth(width);
-    }
-
-    void TabsContainer::setWidth(const std::string &width) {
-        tabContainer_->setWidth(width.c_str());
-    }
-
-    void TabsContainer::setHeight(float height) {
-        tabContainer_->setHeight(height);
-    }
-
-    void TabsContainer::setHeight(const std::string &height) {
-        tabContainer_->setHeight(height.c_str());
-    }
-
-    void TabsContainer::setMouseCursor(CursorType cursor) {
-        tabContainer_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType TabsContainer::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(tabContainer_->getMouseCursor()));
+    bool TabsContainer::changeTabText(std::size_t index, const std::string &text) {
+        return pimpl_->tabContainer_->changeTabText(index, text);
     }
 
     std::string TabsContainer::getWidgetType() const {
         return "TabsContainer";
     }
 
-    void TabsContainer::showWithEffect(ShowAnimationType type, int duration) {
-        tabContainer_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void TabsContainer::hideWithEffect(ShowAnimationType type, int duration) {
-        tabContainer_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool TabsContainer::isAnimationPlaying() const {
-        return tabContainer_->isAnimationPlaying();
-    }
-
-    void TabsContainer::setVisible(bool visible) {
-        tabContainer_->setVisible(visible);
-    }
-
-    bool TabsContainer::isVisible() const {
-        return tabContainer_->isVisible();
-    }
-
-    void TabsContainer::toggleVisibility() {
-        tabContainer_->setVisible(!tabContainer_->isVisible());
-    }
-
-    bool TabsContainer::contains(float x, float y) const {
-        return tabContainer_->isMouseOnWidget({x, y});
-    }
-
-    void TabsContainer::setPosition(float x, float y) {
-        tabContainer_->setPosition({x, y});
-    }
-
-    void TabsContainer::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void TabsContainer::setPosition(const std::string &x, const std::string &y) {
-        tabContainer_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    Vector2f TabsContainer::getPosition() const {
-        return {tabContainer_->getPosition().x, tabContainer_->getPosition().y};
-    }
-
-    Vector2f TabsContainer::getAbsolutePosition() const {
-        return {tabContainer_->getAbsolutePosition().x, tabContainer_->getAbsolutePosition().y};
-    }
-
-    void TabsContainer::setRotation(float angle) {
-        tabContainer_->setRotation(angle);
-    }
-
-    void TabsContainer::rotate(float angle) {
-        tabContainer_->setRotation(tabContainer_->getRotation() + angle);
-    }
-
-    float TabsContainer::getRotation() const {
-        return tabContainer_->getRotation();
-    }
-
-    void TabsContainer::setScale(float factorX, float factorY) {
-        tabContainer_->setScale({factorX, factorY});
-    }
-
-    void TabsContainer::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void TabsContainer::scale(float factorX, float factorY) {
-        tabContainer_->setScale({tabContainer_->getScale().x + factorX,
-            tabContainer_->getScale().y + factorY});
-    }
-
-    void TabsContainer::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    Vector2f TabsContainer::getScale() const {
-        return {tabContainer_->getScale().x, tabContainer_->getScale().y};
-    }
-
-    void TabsContainer::setOrigin(float x, float y) {
-        tabContainer_->setOrigin({x, y});
-    }
-
-    void TabsContainer::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    Vector2f TabsContainer::getOrigin() const {
-        return {tabContainer_->getOrigin().x, tabContainer_->getOrigin().y};
-    }
-
-    void TabsContainer::move(float offsetX, float offsetY) {
-        tabContainer_->setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
-    }
-
-    void TabsContainer::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    std::shared_ptr<tgui::Widget> TabsContainer::getInternalPtr() {
-        return tabContainer_;
-    }
-
-    void TabsContainer::initEvents() {
-        tabContainer_->onMouseEnter([this]{emit("mouseEnter");});
-        tabContainer_->onMouseLeave([this]{emit("mouseLeave");});
-        tabContainer_->onFocus([this]{emit("focus");});
-        tabContainer_->onUnfocus([this]{emit("unfocus");});
-        tabContainer_->onAnimationFinish([this]{emit("animationFinish");});
-        tabContainer_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        tabContainer_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        tabContainer_->onSelectionChanged([this](int index){
-            emit("selectionChange", index);
-        });
-    }
+    TabsContainer::~TabsContainer() = default;
 }
 

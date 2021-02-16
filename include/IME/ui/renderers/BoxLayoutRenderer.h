@@ -27,7 +27,10 @@
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include <TGUI/Renderers/BoxLayoutRenderer.hpp>
+
+namespace tgui {
+    class BoxLayoutRenderer;
+}
 
 namespace ime {
     namespace ui {

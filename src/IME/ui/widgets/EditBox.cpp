@@ -23,328 +23,118 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/EditBox.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/EditBox.hpp>
 
 namespace ime::ui {
+    class EditBox::EditBoxImpl {
+    public:
+        EditBoxImpl(std::shared_ptr<tgui::Widget> widget) :
+            editbox_{std::static_pointer_cast<tgui::EditBox>(widget)}
+        {}
+        
+        std::shared_ptr<tgui::EditBox> editbox_;
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
+    
     EditBox::EditBox(const std::string& defaultText) :
-        editBox_{tgui::EditBox::create()},
-        renderer_{std::make_shared<EditBoxRenderer>()}
+        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::EditBox>>(tgui::EditBox::create())),
+        pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(editBox_->getRenderer());
-        editBox_->setDefaultText(defaultText);
-        initEvents();
+        setRenderer(std::make_shared<EditBoxRenderer>());
+        pimpl_->editbox_->setDefaultText(defaultText);
+
+        pimpl_->editbox_->onTextChange([this](const tgui::String& text) {
+            emit("textEnter", text.toStdString());
+        });
+
+        pimpl_->editbox_->onReturnKeyPress([this](const tgui::String& text) {
+            emit("enterKeyPress", text.toStdString());
+        });
     }
 
+    EditBox::EditBox(EditBox &&) = default;
+
+    EditBox &EditBox::operator=(EditBox &&) = default;
+
     EditBox::sharedPtr EditBox::create(const std::string& defaultText) {
-        return std::make_shared<EditBox>(defaultText);
+        return sharedPtr(new EditBox(defaultText));
     }
 
     EditBox::sharedPtr EditBox::copy(EditBox::constSharedPtr other, bool shareRenderer) {
         auto widget = create();
-        widget->editBox_ = widget->editBox_->copy(other->editBox_);
-
-        if (!shareRenderer)
-            widget->editBox_->setRenderer(other->editBox_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->editBox_->getRenderer());
 
         return widget;
     }
 
-    void EditBox::setRenderer(std::shared_ptr<EditBoxRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        editBox_->setRenderer(renderer->getInternalPtr()->getData());
-    }
-
     std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() {
-        return renderer_;
+        return std::static_pointer_cast<EditBoxRenderer>(Widget::getRenderer());
     }
 
-    void EditBox::setDefaultText(const std::string &text) {
-        editBox_->setDefaultText(text);
-    }
-
-    std::string EditBox::getDefaultText() const {
-        return editBox_->getDefaultText().toStdString();
-    }
-
-    void EditBox::setMaximumCharacters(unsigned int maxChars) {
-        editBox_->setMaximumCharacters(maxChars);
-    }
-
-    unsigned int EditBox::getMaximumCharacters() const {
-        return editBox_->getMaximumCharacters();
-    }
-
-    void EditBox::limitTextWidth(bool limitWidth) {
-        editBox_->limitTextWidth(limitWidth);
-    }
-
-    bool EditBox::isTextWidthLimited() const {
-        return editBox_->isTextWidthLimited();
-    }
-
-    void EditBox::setReadOnly(bool readOnly) {
-        editBox_->setReadOnly(readOnly);
-    }
-
-    bool EditBox::isReadOnly() const {
-        return editBox_->isReadOnly();
-    }
-
-    void EditBox::setCaretPosition(std::size_t charactersBeforeCaret) {
-        editBox_->setCaretPosition(charactersBeforeCaret);
-    }
-
-    std::size_t EditBox::getCaretPosition() const {
-        return editBox_->getCaretPosition();
-    }
-
-    void EditBox::setSuffix(const std::string &suffix) {
-        editBox_->setSuffix(suffix);
-    }
-
-    std::string EditBox::getSuffix() const {
-        return editBox_->getSuffix().toStdString();
-    }
-
-    void EditBox::setPosition(float x, float y) {
-        editBox_->setPosition({x, y});
-    }
-
-    void EditBox::setRotation(float angle) {
-        editBox_->setRotation(angle);
-    }
-
-    void EditBox::setScale(float factorX, float factorY) {
-        editBox_->setScale({factorX, factorY});
-    }
-
-    void EditBox::setOrigin(float x, float y) {
-        editBox_->setOrigin({x, y});
-    }
-
-    Vector2f EditBox::getPosition() const {
-        return {editBox_->getPosition().x, editBox_->getPosition().y};
-    }
-
-    Vector2f EditBox::getAbsolutePosition() const {
-        return {editBox_->getAbsolutePosition().x, editBox_->getAbsolutePosition().y};
-    }
-
-    Vector2f EditBox::getOrigin() const {
-        return {editBox_->getOrigin().x, editBox_->getOrigin().y};
-    }
-
-    float EditBox::getRotation() const {
-        return editBox_->getRotation();
-    }
-
-    void EditBox::move(float xOffset, float yOffset) {
-        editBox_->setPosition(getPosition().x + xOffset,
-            getPosition().y + yOffset);
-    }
-
-    void EditBox::rotate(float offset) {
-        editBox_->setRotation(editBox_->getRotation() + offset);
-    }
-
-    void EditBox::scale(float factorX, float factorY) {
-        editBox_->setScale({editBox_->getScale().x + factorX,
-            editBox_->getScale().y + factorY});
-    }
-
-    void EditBox::setEnabled(bool isEnable) {
-        editBox_->setEnabled(isEnable);
-    }
-
-    bool EditBox::isEnabled() const {
-        return editBox_->isEnabled();
-    }
-
-    void EditBox::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
-    void EditBox::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void EditBox::setPosition(const std::string &x, const std::string &y) {
-        editBox_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    void EditBox::setTextSize(unsigned int charSize) {
-        editBox_->setTextSize(charSize);
+    const std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() const {
+        return std::static_pointer_cast<EditBoxRenderer>(Widget::getRenderer());
     }
 
     void EditBox::setText(const std::string &content) {
-        editBox_->setText(content);
-    }
-
-    void EditBox::setSize(float width, float height) {
-        editBox_->setSize({width, height});
-    }
-
-    void EditBox::setSize(const std::string &width, const std::string &height) {
-        editBox_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f EditBox::getSize() const {
-        return {editBox_->getSize().x, editBox_->getSize().y};
+        pimpl_->editbox_->setText(content);
     }
 
     std::string EditBox::getText() const {
-        return editBox_->getText().toStdString();
+        return pimpl_->editbox_->getText().toStdString();
     }
 
-    unsigned int EditBox::getTextSize() const {
-        return editBox_->getTextSize();
+    void EditBox::setDefaultText(const std::string &text) {
+        pimpl_->editbox_->setDefaultText(text);
+    }
+
+    std::string EditBox::getDefaultText() const {
+        return pimpl_->editbox_->getDefaultText().toStdString();
+    }
+
+    void EditBox::setMaximumCharacters(unsigned int maxChars) {
+        pimpl_->editbox_->setMaximumCharacters(maxChars);
+    }
+
+    unsigned int EditBox::getMaximumCharacters() const {
+        return pimpl_->editbox_->getMaximumCharacters();
+    }
+
+    void EditBox::limitTextWidth(bool limitWidth) {
+        pimpl_->editbox_->limitTextWidth(limitWidth);
+    }
+
+    bool EditBox::isTextWidthLimited() const {
+        return pimpl_->editbox_->isTextWidthLimited();
+    }
+
+    void EditBox::setReadOnly(bool readOnly) {
+        pimpl_->editbox_->setReadOnly(readOnly);
+    }
+
+    bool EditBox::isReadOnly() const {
+        return pimpl_->editbox_->isReadOnly();
+    }
+
+    void EditBox::setCaretPosition(std::size_t charactersBeforeCaret) {
+        pimpl_->editbox_->setCaretPosition(charactersBeforeCaret);
+    }
+
+    std::size_t EditBox::getCaretPosition() const {
+        return pimpl_->editbox_->getCaretPosition();
+    }
+
+    void EditBox::setSuffix(const std::string &suffix) {
+        pimpl_->editbox_->setSuffix(suffix);
+    }
+
+    std::string EditBox::getSuffix() const {
+        return pimpl_->editbox_->getSuffix().toStdString();
     }
 
     std::string EditBox::getWidgetType() const {
         return "EditBox";
     }
 
-    void EditBox::showWithEffect(ShowAnimationType type, int duration) {
-        editBox_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void EditBox::hideWithEffect(ShowAnimationType type, int duration) {
-        editBox_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool EditBox::isAnimationPlaying() const {
-        return editBox_->isAnimationPlaying();
-    }
-
-    void EditBox::setVisible(bool visible) {
-        editBox_->setVisible(visible);
-    }
-
-    bool EditBox::isVisible() const {
-        return editBox_->isVisible();
-    }
-
-    void EditBox::toggleVisibility() {
-        editBox_->setVisible(!editBox_->isVisible());
-    }
-
-    bool EditBox::contains(float x, float y) const {
-        return editBox_->isMouseOnWidget({x, y});
-    }
-
-    void EditBox::setFocused(bool isFocused) {
-        editBox_->setFocused(isFocused);
-    }
-
-    bool EditBox::isFocused() const {
-        return editBox_->isFocused();
-    }
-
-    std::shared_ptr<tgui::Widget> EditBox::getInternalPtr() {
-        return editBox_;
-    }
-
-    Vector2f EditBox::getAbsoluteSize() {
-        return {editBox_->getFullSize().x, editBox_->getFullSize().y};
-    }
-
-    void EditBox::setWidth(float width) {
-        editBox_->setWidth(width);
-    }
-
-    void EditBox::setWidth(const std::string &width) {
-        editBox_->setWidth(width.c_str());
-    }
-
-    void EditBox::setHeight(float height) {
-        editBox_->setHeight(height);
-    }
-
-    void EditBox::setHeight(const std::string &height) {
-        editBox_->setHeight(height.c_str());
-    }
-
-    void EditBox::setMouseCursor(CursorType cursor) {
-        editBox_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType EditBox::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(editBox_->getMouseCursor()));
-    }
-
-    void EditBox::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void EditBox::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    void EditBox::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    void EditBox::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    void EditBox::initEvents() {
-        editBox_->onMouseEnter([this]{emit("mouseEnter");});
-        editBox_->onMouseLeave([this]{emit("mouseLeave");});
-        editBox_->onFocus([this]{emit("focus");});
-        editBox_->onUnfocus([this]{emit("unfocus");});
-        editBox_->onTextChange([this](const tgui::String& text) {
-            emit("textEnter", text.toStdString());
-        });
-
-        editBox_->onReturnKeyPress([this](const tgui::String& text) {
-            emit("enterKeyPress", text.toStdString());
-        });
-
-        editBox_->onAnimationFinish([this]{emit("animationFinish");});
-        editBox_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        editBox_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        //Events triggered by left mouse button
-        editBox_->onClick([this](tgui::Vector2f mousePos){
-            emit("click");
-            emit("click", mousePos.x, mousePos.y);
-        });
-
-        editBox_->onMousePress([this](tgui::Vector2f mousePos) {
-            emit("leftMouseDown");
-            emit("leftMouseDown", mousePos.x, mousePos.y);
-        });
-
-        editBox_->onMouseRelease([this](tgui::Vector2f mousePos) {
-            emit("leftMouseUp");
-            emit("leftMouseUp", mousePos.x, mousePos.y);
-        });
-
-        //Events triggered by right mouse button
-        editBox_->onRightMousePress([this](tgui::Vector2f mousePos){
-            emit("rightMouseDown");
-            emit("rightMouseDown", mousePos.x, mousePos.y);
-        });
-
-        editBox_->onRightMouseRelease([this](tgui::Vector2f mousePos){
-            emit("rightMouseUp");
-            emit("rightMouseUp", mousePos.x, mousePos.y);
-        });
-
-        editBox_->onRightClick([this](tgui::Vector2f mousePos){
-            emit("rightClick");
-            emit("rightClick", mousePos.x, mousePos.y);
-        });
-    }
-
-    Vector2f EditBox::getScale() const {
-        return {editBox_->getScale().x, editBox_->getScale().y};
-    }
+    EditBox::~EditBox() = default;
 }

@@ -23,235 +23,137 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Label.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/Label.hpp>
 
 namespace ime::ui {
+    //////////////////////////////////////////////////////////////////////////
+    // Label implementation
+    //////////////////////////////////////////////////////////////////////////
+    class Label::LabelImpl {
+    public:
+        LabelImpl(std::shared_ptr<tgui::Widget> widget) :
+            label_{std::static_pointer_cast<tgui::Label>(widget)}
+        {}
+
+        void setText(const std::string &text) {
+            label_->setText(text);
+        }
+
+        std::string getText() const {
+            return label_->getText().toStdString();
+        }
+
+        void setHorizontalAlignment(HorizontalAlignment alignment) {
+            label_->setHorizontalAlignment(static_cast<tgui::Label::HorizontalAlignment>(alignment));
+        }
+
+        HorizontalAlignment getHorizontalAlignment() const {
+            return static_cast<HorizontalAlignment>(label_->getHorizontalAlignment());
+        }
+
+        void setVerticalAlignment(VerticalAlignment alignment) {
+            label_->setVerticalAlignment(static_cast<tgui::Label::VerticalAlignment>(alignment));
+        }
+
+        VerticalAlignment getVerticalAlignment() const {
+            return static_cast<VerticalAlignment>(label_->getVerticalAlignment());
+        }
+
+        void setAutoSize(bool autoSize) {
+            label_->setAutoSize(autoSize);
+        }
+
+        bool getAutoSize() const {
+            return label_->getAutoSize();
+        }
+
+        void setMaximumTextWidth(float maximumWidth) {
+            label_->setMaximumTextWidth(maximumWidth);
+        }
+
+        float getMaximumTextWidth() const {
+            return label_->getMaximumTextWidth();
+        }
+
+    private:
+        std::shared_ptr<tgui::Label> label_;
+    }; // class LabelImpl
+
+    //////////////////////////////////////////////////////////////////////////
+    // Label delegation
+    //////////////////////////////////////////////////////////////////////////
     Label::Label(const std::string &text) :
-        label_{tgui::Label::create(text)},
-        renderer_{std::make_shared<LabelRenderer>()}
+        Widget(std::make_unique<priv::WidgetImpl<tgui::Label>>(tgui::Label::create(text))),
+        pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(label_->getRenderer());
+        setRenderer(std::make_shared<LabelRenderer>());
     }
 
     Label::sharedPtr Label::create(const std::string &text) {
-        return std::make_shared<Label>(text);
+        return Label::sharedPtr(new Label(text));
     }
 
     Label::sharedPtr Label::copy(Label::constSharedPtr other, bool shareRenderer) {
         auto widget = create();
-        widget->label_ = widget->label_->copy(other->label_);
+        /*widget->label_ = widget->label_->copy(other->label_);
 
         if (!shareRenderer)
             widget->label_->setRenderer(other->label_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->label_->getRenderer());
+        widget->renderer_->setInternalPtr(other->label_->getRenderer());*/
 
         return widget;
     }
 
     std::shared_ptr<LabelRenderer> Label::getRenderer() {
-        return renderer_;
+        return std::static_pointer_cast<LabelRenderer>(Widget::getRenderer());
     }
 
-    void Label::setRenderer(std::shared_ptr<LabelRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        label_->setRenderer(renderer->getInternalPtr()->getData());
+    const std::shared_ptr<LabelRenderer> Label::getRenderer() const {
+        return std::static_pointer_cast<LabelRenderer>(Widget::getRenderer());
+    }
+
+    void Label::setText(const std::string &text) {
+        pimpl_->setText(text);
+    }
+
+    std::string Label::getText() const {
+        return pimpl_->getText();
     }
 
     void Label::setHorizontalAlignment(HorizontalAlignment alignment) {
-        label_->setHorizontalAlignment(static_cast<tgui::Label::HorizontalAlignment>(alignment));
+        pimpl_->setHorizontalAlignment(alignment);
     }
 
     Label::HorizontalAlignment Label::getHorizontalAlignment() const {
-        return static_cast<HorizontalAlignment>(label_->getHorizontalAlignment());
+        return pimpl_->getHorizontalAlignment();
     }
 
     void Label::setVerticalAlignment(VerticalAlignment alignment) {
-        label_->setVerticalAlignment(static_cast<tgui::Label::VerticalAlignment>(alignment));
+        pimpl_->setVerticalAlignment(alignment);
     }
 
     Label::VerticalAlignment Label::getVerticalAlignment() const {
-        return static_cast<VerticalAlignment>(label_->getVerticalAlignment());
+        return pimpl_->getVerticalAlignment();
     }
 
     void Label::setAutoSize(bool autoSize) {
-        label_->setAutoSize(autoSize);
+        pimpl_->setAutoSize(autoSize);
     }
 
     bool Label::getAutoSize() const {
-        return label_->getAutoSize();
+        return pimpl_->getAutoSize();
     }
 
     void Label::setMaximumTextWidth(float maximumWidth) {
-        label_->setMaximumTextWidth(maximumWidth);
+        pimpl_->setMaximumTextWidth(maximumWidth);
     }
 
     float Label::getMaximumTextWidth() const {
-        return label_->getMaximumTextWidth();
+        return pimpl_->getMaximumTextWidth();
     }
 
     std::string Label::getWidgetType() const {
         return "Label";
-    }
-
-    void Label::showWithEffect(ShowAnimationType type, int duration) {
-        label_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void Label::hideWithEffect(ShowAnimationType type, int duration) {
-        label_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool Label::isAnimationPlaying() const {
-        return label_->isAnimationPlaying();
-    }
-
-    void Label::setVisible(bool visible) {
-        label_->setVisible(visible);
-    }
-
-    bool Label::isVisible() const {
-        return label_->isVisible();
-    }
-
-    void Label::setPosition(float x, float y) {
-        label_->setPosition({x, y});
-    }
-
-    void Label::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void Label::setPosition(const std::string &x, const std::string &y) {
-        label_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    void Label::setRotation(float angle) {
-        label_->setRotation(angle);
-    }
-
-    void Label::setScale(float factorX, float factorY) {
-        label_->setScale({factorX, factorY});
-    }
-
-    void Label::setOrigin(float x, float y) {
-        label_->setOrigin({x, y});
-    }
-
-    Vector2f Label::getPosition() const {
-        return {label_->getPosition().x, label_->getPosition().y};
-    }
-
-    Vector2f Label::getAbsolutePosition() const {
-        return {label_->getAbsolutePosition().x, label_->getAbsolutePosition().y};
-    }
-
-    Vector2f Label::getOrigin() const {
-        return {label_->getOrigin().x, label_->getOrigin().y};
-    }
-
-    float Label::getRotation() const {
-        return label_->getRotation();
-    }
-
-    void Label::move(float xOffset, float yOffset) {
-        label_->setPosition(getPosition().x + xOffset,
-            getPosition().y + yOffset);
-    }
-
-    void Label::rotate(float offset) {
-        label_->setRotation(label_->getRotation() + offset);
-    }
-
-    void Label::scale(float factorX, float factorY) {
-        label_->setScale({label_->getScale().x + factorX,
-            label_->getScale().y + factorY});
-    }
-
-    void Label::setTextSize(unsigned int charSize) {
-        label_->setTextSize(charSize);
-    }
-
-    void Label::setText(const std::string &content) {
-        label_->setText(content);
-    }
-
-    void Label::setSize(float width, float height) {
-        label_->setSize({width, height});
-    }
-
-    void Label::setSize(const std::string &width, const std::string &height) {
-        label_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f Label::getSize() const {
-        return {label_->getSize().x, label_->getSize().y};
-    }
-
-    Vector2f Label::getAbsoluteSize() {
-        return {label_->getFullSize().x, label_->getFullSize().y};;
-    }
-
-    void Label::setWidth(float width) {
-        label_->setWidth(width);
-    }
-
-    void Label::setWidth(const std::string &width) {
-        label_->setWidth(width.c_str());
-    }
-
-    void Label::setHeight(float height) {
-        label_->setHeight(height);
-    }
-
-    void Label::setHeight(const std::string &height) {
-        label_->setHeight(height.c_str());
-    }
-
-    void Label::setMouseCursor(CursorType cursor) {
-        label_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType Label::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(label_->getMouseCursor()));
-    }
-
-    std::string Label::getText() const {
-        return label_->getText().toStdString();
-    }
-
-    unsigned int Label::getTextSize() const {
-        return label_->getTextSize();
-    }
-
-    void Label::toggleVisibility() {
-        label_->setVisible(!label_->isVisible());
-    }
-
-    bool Label::contains(float x, float y) const {
-        return label_->isMouseOnWidget({x, y});;
-    }
-
-    void Label::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void Label::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    void Label::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    void Label::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    std::shared_ptr<tgui::Widget> Label::getInternalPtr() {
-        return label_;
-    }
-
-    Vector2f Label::getScale() const {
-        return {label_->getScale().x, label_->getScale().y};
     }
 }

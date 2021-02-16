@@ -22,9 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/utility/Helpers.h"
+#include "Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/ui/widgets/IContainer.h"
+#include "IME/ui/widgets/WidgetContainer.h"
 #include "IME/core/input/Keyboard.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -33,10 +33,12 @@
 #include <TGUI/Font.hpp>
 #include <TGUI/Color.hpp>
 
-auto constexpr PIXELS_PER_METRE = 30.0f;
-auto constexpr PI = 3.14159265358979323846f;
-
 namespace ime::utility {
+    namespace {
+        auto constexpr PIXELS_PER_METRE = 30.0f;
+        auto constexpr PI = 3.14159265358979323846f;
+    }
+
     Event convertToOwnEvent(const sf::Event &SFML_Event) {
         auto IME_Event = Event();
         switch (SFML_Event.type) {
@@ -279,13 +281,13 @@ namespace ime::utility {
         return tguiFont;
     }
 
-    std::shared_ptr<ui::IWidget> findRecursively(
-        const std::unordered_map<std::string, std::shared_ptr<ui::IWidget>>& widgets,
+    std::shared_ptr<ui::Widget> findRecursively(
+        const std::unordered_map<std::string, std::shared_ptr<ui::Widget>>& widgets,
         const std::string &widgetName)
     {
         for (const auto& widget : widgets) {
             if (widget.second->isContainer()) {
-                auto container = std::static_pointer_cast<ui::IContainer>(widget.second);
+                auto container = std::static_pointer_cast<ui::WidgetContainer>(widget.second);
                 if (container) {
                     auto widgetInContainer = container->getWidget(widgetName);
                     if (widgetInContainer)

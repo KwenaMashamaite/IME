@@ -22,21 +22,32 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_ICLICKABLEWIDGET_H
-#define IME_ICLICKABLEWIDGET_H
+#ifndef IME_CLICKABLEWIDGET_H
+#define IME_CLICKABLEWIDGET_H
 
 #include "IME/Config.h"
-#include "IWidget.h"
+#include "IME/ui/widgets/Widget.h"
 #include <string>
+#include <memory>
 
 namespace ime {
     namespace ui {
         /**
          * @brief Interface for clickable widgets
          */
-        class IME_API IClickableWidget : public IWidget {
+        class IME_API ClickableWidget : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<IClickableWidget>; //!< Shared widget pointer
+            using sharedPtr = std::shared_ptr<ClickableWidget>; //!< Shared widget pointer
+
+            /**
+             * @brief Move constructor
+             */
+            ClickableWidget(ClickableWidget&&);
+
+            /**
+             * @brief Move assignment operator
+             */
+            ClickableWidget& operator=(ClickableWidget&&);
 
             /**
              * @brief Enable or disable the widget
@@ -47,32 +58,48 @@ namespace ime {
              *
              * @note Disabling the widget cancels all the interaction events
              */
-            virtual void setEnabled(bool isEnable) = 0;
+            void setEnabled(bool isEnable);
 
             /**
               * @brief Check if widget is enabled or disabled
               * @return True if widget is enabled, false if widget is disabled
               */
-            virtual bool isEnabled() const = 0;
+            bool isEnabled() const;
 
             /**
              * @brief Disable widget if its currently enabled and vice versa
              */
-            virtual void toggleEnabled() = 0;
+            void toggleEnabled();
 
             /**
              * @brief Focus or unfocus widget
              * @param isFocused True to focus or false to unfocus widget
              */
-            virtual void setFocused(bool isFocused) = 0;
+            void setFocused(bool isFocused);
 
             /**
              * @brief Check if widget is focused or not
              * @return True if widget is focused. Otherwise, false
              */
-            virtual bool isFocused() const = 0;
+            bool isFocused() const;
+
+            /**
+             * @brief Destructor
+             */
+            ~ClickableWidget();
+
+        protected:
+            /**
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            ClickableWidget(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+
+        private:
+            struct Impl;
+            std::unique_ptr<Impl> pimpl_;
         };
     }
 }
 
-#endif // IME_ICLICKABLEWIDGET_H
+#endif // IME_CLICKABLEWIDGET_H

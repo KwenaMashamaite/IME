@@ -23,84 +23,64 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Window.h"
-#include "IME/utility/Helpers.h"
-#include "IME/core/resources/ResourceManager.h"
-#include <SFML/Window/Event.hpp>
-
-bool ime::Window::isInstantiated_{false};
+#include "../graphics/WindowImpl.h"
 
 namespace ime {
     Window::Window() :
-        frameRateLimit_(0)
-    {
-        IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated");
-        isInstantiated_ = true;
-    }
+        pImpl_{std::make_unique<priv::WindowImpl>()}
+    {}
 
     void Window::create(const std::string& title, unsigned int width, unsigned int height, Style style) {
-        window_.create(sf::VideoMode(width, height), title, static_cast<unsigned int>(style));
+        pImpl_->create(title, width, height, style);
     }
 
     void Window::setIcon(const std::string &filename) {
-        auto currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
-        ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
-        try {
-            auto icon = ResourceManager::getInstance()->getImage(filename);
-            window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-        } catch (...) {} // No rethrow, Use current icon if set otherwise use OS icon
-        ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
+        pImpl_->setIcon(filename);
     }
 
     void Window::setFramerateLimit(unsigned int framerateLimit) {
-        frameRateLimit_ = framerateLimit;
-        window_.setFramerateLimit(frameRateLimit_);
+        pImpl_->setFramerateLimit(framerateLimit);
     }
 
     void Window::setVsyncEnabled(bool isVsyncEnabled) {
-        window_.setVerticalSyncEnabled(isVsyncEnabled);
+        pImpl_->setVsyncEnabled(isVsyncEnabled);
     }
 
     unsigned int Window::getFramerateLimit() const {
-        return frameRateLimit_;
+        return pImpl_->getFramerateLimit();
+    }
+
+    Vector2u Window::getSize() {
+        return pImpl_->getSize();
     }
 
     bool Window::isOpen() const{
-        return window_.isOpen();
+        return pImpl_->isOpen();
     }
 
     bool Window::pollEvent(Event& event) {
-        sf::Event sfmlEvent;
-        auto eventPopped = window_.pollEvent(sfmlEvent);
-        if (eventPopped)
-            event = utility::convertToOwnEvent(sfmlEvent);
-        return eventPopped;
+        return pImpl_->pollEvent(event);
     }
 
     void Window::close() {
-        window_.close();
+        pImpl_->close();
     }
 
     void Window::display() {
-        window_.display();
+        pImpl_->display();
     }
 
     void Window::clear(Colour colour) {
-        window_.clear(utility::convertToSFMLColour(colour));
+        pImpl_->clear(colour);
     }
 
-    void Window::draw(const sf::Drawable &drawable) {
-        window_.draw(drawable);
+    const std::unique_ptr<priv::WindowImpl> &Window::getImpl() const {
+        return pImpl_;
     }
 
     void Window::draw(const IDrawable &drawable) {
         drawable.draw(*this);
     }
 
-    Window::~Window() {
-        isInstantiated_ = false;
-    }
-
-    Vector2u Window::getSize() {
-        return {window_.getSize().x, window_.getSize().y};
-    }
+    Window::~Window() = default;
 }

@@ -31,16 +31,11 @@
 #include "IME/core/event/Event.h"
 #include "IDrawable.h"
 #include "Colour.h"
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
 namespace ime {
-    namespace ui {
-        class GuiContainer; //!< GuiContainer class forward declaration
-    }
-
-    namespace input {
-        class Mouse;
+    namespace priv {
+        class WindowImpl;
     }
 
     /**
@@ -144,12 +139,6 @@ namespace ime {
         void close();
 
         /**
-         * @brief Draw drawable object on the window
-         * @param drawable Object to draw
-         */
-        void draw(const sf::Drawable& drawable);
-
-        /**
          * @brief Draw drawable on the window
          * @param drawable Object to be drawn
          */
@@ -167,6 +156,13 @@ namespace ime {
         void clear(Colour colour = Colour::Black);
 
         /**
+         * @internal
+         * @brief Get the window implementation
+         * @return The window implementation
+         */
+        const std::unique_ptr<priv::WindowImpl>& getImpl() const;
+
+        /**
          * @brief Destructor.
          *
          * Ensures a new Window instance can be created when an existing
@@ -175,14 +171,7 @@ namespace ime {
         ~Window();
 
     private:
-        sf::RenderWindow window_;      //!< Render window
-        unsigned int frameRateLimit_;  //!< Framerate limit
-        static bool isInstantiated_;   //!< Instantiation state
-
-        //Needs access to the sf::RenderWindow
-        friend class ui::GuiContainer;
-        friend void input::Mouse::setPosition(const Vector2i &position,const Window &relativeTo);
-        friend Vector2i input::Mouse::getPosition(const Window &window);
+        std::unique_ptr<priv::WindowImpl> pImpl_;
     };
 }
 

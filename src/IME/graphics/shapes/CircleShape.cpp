@@ -23,7 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/shapes/CircleShape.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include "../WindowImpl.h"
 #include "IME/graphics/Window.h"
 #include <SFML/Graphics/CircleShape.hpp>
 
@@ -52,12 +53,15 @@ namespace ime {
 
     CircleShape &CircleShape::operator=(const CircleShape& other) {
         if (this != &other) {
-            auto temp{other};
-            std::swap(impl_, temp.impl_);
+            *impl_ = *other.impl_;
         }
 
         return *this;
     }
+
+    CircleShape::CircleShape(CircleShape &&) noexcept = default;
+
+    CircleShape &CircleShape::operator=(CircleShape &&) noexcept = default;
 
     CircleShape::sharedPtr CircleShape::create(float radius) {
         return CircleShape::sharedPtr(new CircleShape(radius));
@@ -170,7 +174,7 @@ namespace ime {
     }
 
     void CircleShape::draw(Window &renderTarget) const {
-        renderTarget.draw(impl_->circle_);
+        renderTarget.getImpl()->getSFMLWindow().draw(impl_->circle_);
     }
 
     CircleShape::~CircleShape() = default;

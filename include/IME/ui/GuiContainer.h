@@ -22,25 +22,29 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_GUI_H
-#define IME_GUI_H
+#ifndef IME_GUICONTAINER_H
+#define IME_GUICONTAINER_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
-#include "IME/ui/widgets/IWidget.h"
-#include "IME/graphics/Window.h"
+#include "IME/ui/widgets/Widget.h"
 #include "IME/core/event/Event.h"
-#include <unordered_map>
-
-namespace tgui {
-    class GuiSFML; //TGUI forward declaration
-}
+#include <string>
+#include <memory>
 
 namespace ime {
+    class Window;
+
     namespace ui {
         /**
          * @brief Container for Graphical User Interface (GUI) widgets
+         *
+         * This class is a container for all UI widgets. In order for a
+         * widget to receive events, updates and be rendered, it must exist
+         * in the gui container either directly (explicit addition) or
+         * indirectly (added to a container widget which is then added to
+         * the gui container)
          */
         class IME_API GuiContainer {
         public:
@@ -57,14 +61,14 @@ namespace ime {
             /**
              * @brief Construct the gui and set the target on which the gui
              *        should be drawn
-             * @param target Render target that will be used by the gui
+             * @param window Render target that will be used by the gui
              *
              * This constructor will set the target therefore there is no need
              * to call setTarget
              *
              * @see setTarget
              */
-            explicit GuiContainer(Window& target);
+            explicit GuiContainer(Window& window);
 
             /**
              * @brief Copy constructor
@@ -79,12 +83,12 @@ namespace ime {
             /**
              * @brief Move constructor
              */
-            GuiContainer(GuiContainer&&) = default;
+            GuiContainer(GuiContainer&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            GuiContainer& operator=(GuiContainer&&) = default;
+            GuiContainer& operator=(GuiContainer&&) noexcept;
 
             /**
              * @brief Set the part of the window the gui will render on
@@ -186,9 +190,9 @@ namespace ime {
 
             /**
              * @brief Set the target on which the gui should be drawn
-             * @param target Render target that will be used by the gui
+             * @param window Render target that will be used by the gui
              */
-            void setTarget(Window& target);
+            void setTarget(Window& window);
 
             /**
              * @brief Check if the target on which the gui should be drawn is
@@ -304,7 +308,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(IWidget::sharedPtr widget,
+            bool addWidget(Widget::sharedPtr widget,
                 const std::string& widgetName);
 
             /**
@@ -317,7 +321,7 @@ namespace ime {
              * of it, but when none of the child widgets match the given name,
              * a recursive search will be performed
              */
-            IWidget::sharedPtr getWidget(const std::string& name) const;
+            Widget::sharedPtr getWidget(const std::string& name) const;
 
             /**
              * @brief Get a pointer to a widget in the gui
@@ -359,7 +363,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            IWidget::sharedPtr getFocusedWidget() const;
+            Widget::sharedPtr getFocusedWidget() const;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -374,7 +378,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            IWidget::sharedPtr getFocusedLeaf() const;
+            Widget::sharedPtr getFocusedLeaf() const;
 
             /**
              * @brief Get a widget at a given position
@@ -382,7 +386,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            IWidget::sharedPtr getWidgetAtPosition(Vector2f pos) const;
+            Widget::sharedPtr getWidgetAtPosition(Vector2f pos) const;
 
             /**
              * @brief Get the widget below the mouse cursor
@@ -391,7 +395,7 @@ namespace ime {
              * @return Widget below the mouse or a nullptr if the mouse isn't
              *         on top of any widgets
              */
-            IWidget::sharedPtr getWidgetBelowMouseCursor(Vector2f mousePos) const;
+            Widget::sharedPtr getWidgetBelowMouseCursor(Vector2f mousePos) const;
 
             /**
              * @brief Focus the next widget in the gui
@@ -420,13 +424,13 @@ namespace ime {
              * @brief Place a widget before all other widgets to the front
              * @param widget The widget to be moved to the front
              */
-            void moveWidgetToFront(const IWidget::sharedPtr &widget);
+            void moveWidgetToFront(const Widget::sharedPtr &widget);
 
             /**
              * @brief Place a widget behind all other widgets
              * @param widget The widget to be moved to the back
              */
-            void moveWidgetToBack(const IWidget::sharedPtr &widget);
+            void moveWidgetToBack(const Widget::sharedPtr &widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -434,7 +438,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(IWidget::sharedPtr widget);
+            size_t moveWidgetForward(Widget::sharedPtr widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -442,13 +446,18 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(IWidget::sharedPtr widget);
+            size_t moveWidgetBackward(Widget::sharedPtr widget);
+
+            /**
+             * @brief Destructor
+             */
+            ~GuiContainer();
 
         private:
-            std::unique_ptr<tgui::GuiSFML> sfmlGui_; //!< Gui controller and renderer
-            std::unordered_map<std::string, IWidget::sharedPtr> widgets_; //!< Widgets container
+            class GuiContainerImpl;
+            std::unique_ptr<GuiContainerImpl> pimpl_;
         };
     }
 }
 
-#endif // IME_GUI_H
+#endif // IME_GUICONTAINER_H

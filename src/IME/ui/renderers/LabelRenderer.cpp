@@ -24,7 +24,8 @@
 
 #include <IME/core/resources/ResourceManager.h>
 #include "IME/ui/renderers/LabelRenderer.h"
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/LabelRenderer.hpp>
 
 namespace ime::ui {
     void LabelRenderer::setBorders(const Borders &borders) {

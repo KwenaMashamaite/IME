@@ -27,13 +27,7 @@
 
 #include "IME/core/exceptions/Exceptions.h"
 #include "IME/utility/NonCopyable.h"
-#include "IME/utility/Helpers.h"
 #include "IME/graphics/Texture.h"
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Audio/Music.hpp>
-#include <SFML/Audio/SoundBuffer.hpp>
-#include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/Texture.hpp>
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -132,12 +126,7 @@ namespace ime {
 
     #include "IME/core/resources/ResourceHolder.inl"
 
-    //!< Common resource holders
-    using FontHolder = ResourceHolder<sf::Font>;               //!< sf::Font holder
-    using TextureHolder = ResourceHolder<Texture>;             //!< Texture holder
-    using ImageHolder = ResourceHolder<sf::Image>;             //!< sf::Image holder
-    using MusicHolder = ResourceHolder<sf::Music>;             //!< sf::Music holder
-    using SoundBufferHolder = ResourceHolder<sf::SoundBuffer>; //!< sf::SoundBuffer holder
+    using TextureHolder = ResourceHolder<Texture>; //!< Texture holder
 }
 
 #endif // IME_RESOURCEHOLDER_H

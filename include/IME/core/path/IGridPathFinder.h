@@ -26,10 +26,12 @@
 #define IME_GRIDPATHFINDER_H
 
 #include "IME/Config.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/tilemap/Index.h"
 #include <stack>
 
 namespace ime {
+    class TileMap;
+
     /**
      * @brief Interface for grid path finder algorithms
      */

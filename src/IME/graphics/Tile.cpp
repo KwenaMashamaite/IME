@@ -24,8 +24,6 @@
 
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Window.h"
-#include "IME/utility/Helpers.h"
-#include "IME/core/resources/ResourceManager.h"
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
@@ -34,10 +32,10 @@ namespace ime {
         index_{-1, -1}
     {
         setSize(size.x, size.y);
-        tile_.setOutlineColor(sf::Color::White);
+        tile_.setOutlineColour(Colour::White);
         tile_.setOutlineThickness(-1.0f);
-        tile_.setFillColor(sf::Color::Transparent);
-        prevFillColour_ = sf::Color::Transparent;
+        tile_.setFillColour(Colour::Transparent);
+        prevFillColour_ = Colour::Transparent;
         setPosition(position);
     }
 
@@ -60,8 +58,7 @@ namespace ime {
     }
 
     void Tile::setSize(unsigned int width, unsigned int height) {
-        tile_.setSize(sf::Vector2f{static_cast<float>(width),
-            static_cast<float>(height)});
+        tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
     }
 
     void Tile::setSize(Vector2u size) {
@@ -95,13 +92,13 @@ namespace ime {
 
         if (visible) {
             sprite_.setVisible(true);
-            tile_.setFillColor(prevFillColour_);
-            tile_.setOutlineColor(sf::Color::White);
+            tile_.setFillColour(prevFillColour_);
+            tile_.setOutlineColour(Colour::White);
         } else {
             sprite_.setVisible(false);
-            tile_.setOutlineColor(sf::Color::Transparent);
-            prevFillColour_ = tile_.getFillColor();
-            tile_.setFillColor(sf::Color::Transparent);
+            tile_.setOutlineColour(Colour::Transparent);
+            prevFillColour_ = tile_.getFillColour();
+            tile_.setFillColour(Colour::Transparent);
         }
     }
 
@@ -133,9 +130,9 @@ namespace ime {
 
     void Tile::setBorderVisible(bool isVisible) {
         if (isVisible)
-            tile_.setOutlineColor(sf::Color::White);
+            tile_.setOutlineColour(Colour::White);
         else
-            tile_.setOutlineColor(sf::Color::Transparent);
+            tile_.setOutlineColour(Colour::Transparent);
     }
 
     void Tile::setIndex(Index index) {
@@ -147,10 +144,10 @@ namespace ime {
     }
 
     void Tile::setFillColour(const Colour &colour) {
-        tile_.setFillColor(utility::convertToSFMLColour(colour));
+        tile_.setFillColour(colour);
     }
 
     Colour Tile::getFillColour() const {
-        return utility::convertFrom3rdPartyColour(tile_.getFillColor());
+        return tile_.getFillColour();
     }
 }

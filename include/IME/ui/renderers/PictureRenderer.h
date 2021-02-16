@@ -27,7 +27,10 @@
 
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
-#include <TGUI/Renderers/PictureRenderer.hpp>
+
+namespace tgui {
+    class PictureRenderer;
+}
 
 namespace ime {
     namespace ui {

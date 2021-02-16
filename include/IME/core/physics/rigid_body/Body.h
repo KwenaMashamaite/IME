@@ -65,6 +65,9 @@ namespace ime {
         using sharedPtr = std::shared_ptr<Body>; //!< Shared Body pointer
         using WorldPtr = std::shared_ptr<World>; //!< Shared World pointer
 
+        template <typename... Args>
+        using Callback = std::function<void(Args...)>; //!< Event listener
+
         /**
          * @brief Create a fixture and attach it to this body
          * @param definition The fixture definition to contract fixture from
@@ -494,8 +497,8 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        std::unique_ptr<b2Body, std::function<void(b2Body*)>>& getInternalBody();
-        const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& getInternalBody() const;
+        std::unique_ptr<b2Body, Callback<b2Body*>>& getInternalBody();
+        const std::unique_ptr<b2Body, Callback<b2Body*>>& getInternalBody() const;
 
     private:
         /**
@@ -506,7 +509,7 @@ namespace ime {
         Body(const BodyDefinition& definition, WorldPtr world);
 
     private:
-        std::unique_ptr<b2Body, std::function<void(b2Body*)>> body_;  //!< Internal rigid body
+        std::unique_ptr<b2Body, Callback<b2Body*>> body_; //!< Internal rigid body
         unsigned int id_;                           //!< The id of this body
         WorldPtr world_;                            //!< The world the body is in
         PropertyContainer userData_;                //!< Application specific body data

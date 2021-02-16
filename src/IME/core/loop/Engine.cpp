@@ -25,7 +25,7 @@
 #include "IME/core/loop/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
-#include "IME/core/event/Event.h"
+#include <SFML/Window/VideoMode.hpp>
 
 namespace ime {
     namespace {
@@ -56,7 +56,7 @@ namespace ime {
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
-        isSettingsLoadedFromFile_(!settingsFile.empty()),
+        isSettingsLoadedFromFile_(!settingsFile.empty() && settingsFile != "default"),
         isInitialized_{false},
         isRunning_{false},
         pendingPop_{false}

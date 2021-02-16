@@ -23,8 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/ShapeContainer.h"
-#include "IME/utility/Helpers.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/shapes/CircleShape.h"
+#include "IME/graphics/shapes/RectangleShape.h"
+#include "IME/graphics/shapes/ConvexShape.h"
 
 namespace ime {
     Shape::sharedPtr ShapeContainer::createShape(Shape::Type type) {

@@ -24,7 +24,8 @@
 
 #include "IME/ui/renderers/RadioButtonRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include <IME/utility/Helpers.h>
+#include "../../utility/Helpers.h"
+#include <TGUI/Renderers/RadioButtonRenderer.hpp>
 
 namespace ime::ui {
     void RadioButtonRenderer::setBorders(const Borders &borders) {

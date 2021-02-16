@@ -28,7 +28,10 @@
 #include "IME/Config.h"
 #include "IWidgetRenderer.h"
 #include "IME/graphics/Colour.h"
-#include <TGUI/Renderers/ChildWindowRenderer.hpp>
+
+namespace tgui {
+    class ChildWindowRenderer;
+}
 
 namespace ime {
     namespace ui {

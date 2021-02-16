@@ -23,293 +23,114 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Slider.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/Slider.hpp>
 
 namespace ime::ui {
+    class Slider::SliderImpl {
+    public:
+        SliderImpl(std::shared_ptr<tgui::Widget> widget) :
+            slider_{std::static_pointer_cast<tgui::Slider>(widget)}
+        {}
+
+        std::shared_ptr<tgui::Slider> slider_;
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
+
     Slider::Slider(float minValue, float maxValue) :
-        slider_{tgui::Slider::create(minValue, maxValue)},
-        renderer_{std::make_shared<SliderRenderer>()}
+        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Slider>>(tgui::Slider::create(minValue, maxValue))),
+        pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
-        renderer_->setInternalPtr(slider_->getRenderer());
-        initEvents();
+        setRenderer(std::make_shared<SliderRenderer>());
+
+        pimpl_->slider_->onValueChange([this](float newValue) {
+            emit("valueChange", newValue);
+        });
     }
 
+    Slider::Slider(Slider &&) = default;
+
+    Slider &Slider::operator=(Slider &&) = default;
+
     Slider::sharedPtr Slider::create(float minimum, float maximum) {
-        return std::make_shared<Slider>(minimum, maximum);
+        return sharedPtr(new Slider(minimum, maximum));
     }
 
     Slider::sharedPtr Slider::copy(Slider::constSharedPtr other,
         bool shareRenderer)
     {
         auto widget = create();
-        widget->slider_ = widget->slider_->copy(other->slider_);
-
-        if (!shareRenderer)
-            widget->slider_->setRenderer(other->slider_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->slider_->getRenderer());
-
         return widget;
     }
 
-    void Slider::setRenderer(std::shared_ptr<SliderRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        slider_->setRenderer(renderer->getInternalPtr()->getData());
+    std::shared_ptr<SliderRenderer> Slider::getRenderer() {
+        return std::static_pointer_cast<SliderRenderer>(Widget::getRenderer());
     }
 
-    std::shared_ptr<SliderRenderer> Slider::getRenderer() {
-        return renderer_;
+    const std::shared_ptr<SliderRenderer> Slider::getRenderer() const {
+        return std::static_pointer_cast<SliderRenderer>(Widget::getRenderer());
     }
 
     void Slider::setMinimumValue(float minValue) {
-        slider_->setMinimum(minValue);
+        pimpl_->slider_->setMinimum(minValue);
     }
 
     float Slider::getMinimumValue() const {
-        return slider_->getMinimum();
+        return pimpl_->slider_->getMinimum();
     }
 
     void Slider::setMaximumValue(float maxValue) {
-        slider_->setMaximum(maxValue);
+        pimpl_->slider_->setMaximum(maxValue);
     }
 
     float Slider::getMaximumValue() const {
-        return slider_->getMaximum();
+        return pimpl_->slider_->getMaximum();
     }
 
     void Slider::setValue(float value) {
-        slider_->setValue(value);
+        pimpl_->slider_->setValue(value);
     }
 
     float Slider::getValue() const {
-        return slider_->getValue();
+        return pimpl_->slider_->getValue();
     }
 
     void Slider::setStep(float step) {
-        slider_->setStep(step);
+        pimpl_->slider_->setStep(step);
     }
 
     float Slider::getStep() const {
-        return slider_->getStep();
+        return pimpl_->slider_->getStep();
     }
 
     void Slider::setVerticalScroll(bool isVertical) {
-        slider_->setVerticalScroll(isVertical);
+        pimpl_->slider_->setVerticalScroll(isVertical);
     }
 
     bool Slider::isVerticalScroll() const {
-        return slider_->getVerticalScroll();
+        return pimpl_->slider_->getVerticalScroll();
     }
 
     void Slider::invert(bool isInverted) {
-        slider_->setInvertedDirection(isInverted);
+        pimpl_->slider_->setInvertedDirection(isInverted);
     }
 
     bool Slider::isInverted() const {
-        return slider_->getInvertedDirection();
+        return pimpl_->slider_->getInvertedDirection();
     }
 
     void Slider::setChangeValueOnScroll(bool changeValueOnScroll) {
-        slider_->setChangeValueOnScroll(changeValueOnScroll);
+        pimpl_->slider_->setChangeValueOnScroll(changeValueOnScroll);
     }
 
     bool Slider::isValueChangedOnScroll() const {
-        return slider_->getChangeValueOnScroll();
-    }
-
-    void Slider::setPosition(float x, float y) {
-        slider_->setPosition({x, y});
-    }
-
-    void Slider::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void Slider::setPosition(const std::string &x, const std::string &y) {
-        slider_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    void Slider::setRotation(float angle) {
-        slider_->setRotation(angle);
-    }
-
-    void Slider::setScale(float factorX, float factorY) {
-        slider_->setScale({factorX, factorY});
-    }
-
-    void Slider::setOrigin(float x, float y) {
-        slider_->setOrigin({x, y});
-    }
-
-    Vector2f Slider::getPosition() const {
-        return {slider_->getPosition().x, slider_->getPosition().y};
-    }
-
-    Vector2f Slider::getAbsolutePosition() const {
-        return {slider_->getAbsolutePosition().x, slider_->getAbsolutePosition().y};
-    }
-
-    Vector2f Slider::getOrigin() const {
-        return {slider_->getOrigin().x, slider_->getOrigin().y};
-    }
-
-    float Slider::getRotation() const {
-        return slider_->getRotation();
-    }
-
-    void Slider::move(float xOffset, float yOffset) {
-        slider_->setPosition(getPosition().x + xOffset,
-            getPosition().y + yOffset);
-    }
-
-    void Slider::setTextSize(unsigned int charSize) {
-        slider_->setTextSize(charSize);
-    }
-
-    void Slider::rotate(float offset) {
-        slider_->setRotation(slider_->getRotation() + offset);
-    }
-
-    void Slider::scale(float factorX, float factorY) {
-        slider_->setScale({slider_->getScale().x + factorX,
-            slider_->getScale().y + factorY});
-    }
-
-    void Slider::setSize(float width, float height) {
-        slider_->setSize({width, height});
-    }
-
-    void Slider::setSize(const std::string &width, const std::string &height) {
-        slider_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f Slider::getSize() const {
-        return {slider_->getSize().x, slider_->getSize().y};
-    }
-
-    Vector2f Slider::getAbsoluteSize() {
-        return {slider_->getFullSize().x, slider_->getFullSize().y};;
-    }
-
-    void Slider::setWidth(float width) {
-        slider_->setWidth(width);
-    }
-
-    void Slider::setWidth(const std::string &width) {
-        slider_->setWidth(width.c_str());
-    }
-
-    void Slider::setHeight(float height) {
-        slider_->setHeight(height);
-    }
-
-    void Slider::setHeight(const std::string &height) {
-        slider_->setHeight(height.c_str());
-    }
-
-    void Slider::setMouseCursor(CursorType cursor) {
-        slider_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType Slider::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(slider_->getMouseCursor()));
-    }
-
-    unsigned int Slider::getTextSize() const {
-        return slider_->getTextSize();
-    }
-
-    void Slider::toggleVisibility() {
-        slider_->setVisible(!slider_->isVisible());
+        return pimpl_->slider_->getChangeValueOnScroll();
     }
 
     std::string Slider::getWidgetType() const {
         return "Slider";
     }
 
-    void Slider::showWithEffect(ShowAnimationType type, int duration) {
-        slider_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void Slider::hideWithEffect(ShowAnimationType type, int duration) {
-        slider_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool Slider::isAnimationPlaying() const {
-        return slider_->isAnimationPlaying();
-    }
-
-    void Slider::setVisible(bool visible) {
-        slider_->setVisible(visible);
-    }
-
-    bool Slider::isVisible() const {
-        return slider_->isVisible();
-    }
-
-    bool Slider::contains(float x, float y) const {
-        return slider_->isMouseOnWidget({x, y});;
-    }
-
-    std::shared_ptr<tgui::Widget> Slider::getInternalPtr() {
-        return slider_;
-    }
-
-    void Slider::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void Slider::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    void Slider::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    void Slider::setEnabled(bool isEnable) {
-        slider_->setEnabled(isEnable);
-    }
-
-    bool Slider::isEnabled() const {
-        return slider_->isEnabled();
-    }
-
-    void Slider::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
-    void Slider::setFocused(bool isFocused) {
-        slider_->setFocused(isFocused);
-    }
-
-    bool Slider::isFocused() const {
-        return slider_->isFocused();
-    }
-
-    void Slider::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    void Slider::initEvents() {
-        slider_->onMouseEnter([this]{emit("mouseEnter");});
-        slider_->onMouseLeave([this]{emit("mouseLeave");});
-        slider_->onFocus([this]{emit("focus");});
-        slider_->onUnfocus([this]{emit("unfocus");});
-        slider_->onAnimationFinish([this]{emit("animationFinish");});
-        slider_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        slider_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        slider_->onValueChange([this](float newValue) {
-            emit("valueChange", newValue);
-        });
-    }
-
-    Vector2f Slider::getScale() const {
-        return {slider_->getScale().x, slider_->getScale().y};
-    }
+    Slider::~Slider() = default;
 }

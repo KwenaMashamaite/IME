@@ -27,11 +27,8 @@
 
 #include "IME/Config.h"
 #include "IME/core/audio/Audio.h"
-#include "IME/core/audio/Music.h"
-#include "IME/core/audio/SoundEffect.h"
 #include "IME/core/event/EventEmitter.h"
-#include <unordered_map>
-#include <initializer_list>
+#include <vector>
 #include <memory>
 #include <string>
 

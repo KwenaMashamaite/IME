@@ -26,9 +26,12 @@
 #define IME_ADJACENCYLIST_H
 
 #include "IME/Config.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/tilemap/Index.h"
+#include <vector>
 
 namespace ime {
+    class TileMap;
+
     /**
      * @brief Construct a list of neighbours for each accessible node/cell
      *        in a grid

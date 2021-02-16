@@ -27,7 +27,9 @@
 
 #include "IGridPathFinder.h"
 #include "AdjacencyList.h"
+#include "IME/common/Vector2.h"
 #include <queue>
+#include <vector>
 
 namespace ime {
     /**

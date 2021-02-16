@@ -24,49 +24,95 @@
 
 #include "IME/graphics/Texture.h"
 #include "IME/core/resources/ResourceManager.h"
+#include <SFML/Graphics/Texture.hpp>
 
 namespace ime {
-    Texture::Texture(const std::string &filename, const UIntRect &area) :
-        filename_{filename},
-        image_{ResourceManager::getInstance()->getImage(filename)}
-    {
-        auto sfArea = sf::IntRect {
-            static_cast<int>(area.left), static_cast<int>(area.top),
-            static_cast<int>(area.width),static_cast<int>(area.height)
-        };
+    struct Texture::Impl {
+        Impl(const std::string &filename, const UIntRect &area) :
+            filename_{filename},
+            image_{ResourceManager::getInstance()->getImage(filename)}
+        {
+            auto sfArea = sf::IntRect {
+                static_cast<int>(area.left), static_cast<int>(area.top),
+                static_cast<int>(area.width),static_cast<int>(area.height)
+            };
 
-        texture_.loadFromImage(image_, sfArea);
-    }
+            texture_.loadFromImage(image_, sfArea);
+        }
+
+        Vector2u getSize() const {
+            return {texture_.getSize().x, texture_.getSize().y};
+        }
+
+        void setSmooth(bool smooth) {
+            texture_.setSmooth(smooth);
+        }
+
+        bool isSmooth() const {
+            return texture_.isSmooth();
+        }
+
+        void setRepeated(bool repeated) {
+            texture_.setRepeated(repeated);
+        }
+
+        bool isRepeated() const {
+            return texture_.isRepeated();
+        }
+
+        static unsigned int getMaximumSize() {
+            return sf::Texture::getMaximumSize();
+        }
+
+        const std::string& getFilename() const {
+            return filename_;
+        }
+
+        const sf::Texture& getSFMLTexture() const {
+            return texture_;
+        }
+
+    private:
+        std::string filename_;                          //!< Name of the image file on the disk
+        sf::Texture texture_;                           //!< Third party texture
+        std::reference_wrapper<const sf::Image> image_; //!< Constructs the texture
+    }; // class Impl
+
+    Texture::Texture(const std::string &filename, const UIntRect &area) :
+        pImpl_{std::make_unique<Impl>(filename, area)}
+    {}
 
     Vector2u Texture::getSize() const {
-        return {texture_.getSize().x, texture_.getSize().y};
+        return pImpl_->getSize();
     }
 
     void Texture::setSmooth(bool smooth) {
-        texture_.setSmooth(smooth);
+        pImpl_->setSmooth(smooth);
     }
 
     bool Texture::isSmooth() const {
-        return texture_.isSmooth();
+        return pImpl_->isSmooth();
     }
 
     void Texture::setRepeated(bool repeated) {
-        texture_.setRepeated(repeated);
+        pImpl_->setRepeated(repeated);
     }
 
     bool Texture::isRepeated() const {
-        return texture_.isRepeated();
+        return pImpl_->isRepeated();
     }
 
     unsigned int Texture::getMaximumSize() {
-        return sf::Texture::getMaximumSize();
+        return Impl::getMaximumSize();
     }
 
     const std::string &Texture::getFilename() const {
-        return filename_;
+        return pImpl_->getFilename();
     }
 
     const sf::Texture &Texture::getInternalTexture() const {
-        return texture_;
+        return pImpl_->getSFMLTexture();
     }
+
+    Texture::~Texture() = default;
 }

@@ -22,9 +22,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/utility/Helpers.h"
+#include "../../utility/Helpers.h"
 #include "IME/ui/renderers/PictureRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
+#include <TGUI/Renderers/PictureRenderer.hpp>
 
 namespace ime::ui {
     void PictureRenderer::setTexture(const std::string &filename) {

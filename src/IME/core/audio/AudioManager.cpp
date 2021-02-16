@@ -23,7 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/audio/AudioManager.h"
-#include "IME/utility/Helpers.h"
+#include "IME/core/audio/Music.h"
+#include "IME/core/audio/SoundEffect.h"
+#include "../../utility/Helpers.h"
 
 namespace ime::audio {
     AudioManager::AudioManager() :

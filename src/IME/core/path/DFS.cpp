@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/path/DFS.h"
+#include "IME/core/tilemap/TileMap.h"
 
 namespace ime {
     DFSPathFinder::DFSPathFinder(Vector2u gridSize) {

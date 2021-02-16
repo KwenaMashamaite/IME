@@ -58,12 +58,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        CircleShape(CircleShape&&) = default;
+        CircleShape(CircleShape&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        CircleShape& operator=(CircleShape&&) = default;
+        CircleShape& operator=(CircleShape&&) noexcept;
 
         /**
          * @brief Create a new circle shape

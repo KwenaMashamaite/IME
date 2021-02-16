@@ -23,264 +23,43 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Separator.h"
+#include "WidgetImpl.h"
+#include <TGUI/Widgets/SeparatorLine.hpp>
 
 namespace ime::ui {
     Separator::Separator() :
-        separator_{tgui::SeparatorLine::create()},
-        renderer_{std::make_shared<SeparatorRenderer>()}
+        Widget(std::make_unique<priv::WidgetImpl<tgui::SeparatorLine>>(tgui::SeparatorLine::create()))
     {
-        renderer_->setInternalPtr(separator_->getRenderer());
-        initEvents();
+        setRenderer(std::make_shared<SeparatorRenderer>());
     }
 
+    Separator::Separator(Separator &&) = default;
+
+    Separator &Separator::operator=(Separator &&) = default;
+
     Separator::sharedPtr Separator::create() {
-        return std::make_shared<Separator>();
+        return sharedPtr(new Separator());
     }
 
     Separator::sharedPtr Separator::copy(Separator::constSharedPtr other, 
         bool shareRenderer) 
     {
         auto widget = create();
-        widget->separator_ = widget->separator_->copy(other->separator_);
-
-        if (!shareRenderer)
-            widget->separator_->setRenderer(other->separator_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->separator_->getRenderer());
 
         return widget;
     }
 
-    void Separator::setRenderer(std::shared_ptr<SeparatorRenderer> renderer) {
-        IME_ASSERT(renderer, "Cannot set nullptr as renderer");
-        renderer_ = renderer;
-        separator_->setRenderer(renderer->getInternalPtr()->getData());
-    }
-
     std::shared_ptr<SeparatorRenderer> Separator::getRenderer() {
-        return renderer_;
+        return std::static_pointer_cast<SeparatorRenderer>(Widget::getRenderer());
     }
 
-    void Separator::setTextSize(unsigned int charSize) {
-        separator_->setTextSize(charSize);
-    }
-
-    unsigned int Separator::getTextSize() const {
-        return separator_->getTextSize();
-    }
-
-    void Separator::setSize(float width, float height) {
-        separator_->setSize({width, height});
-    }
-
-    void Separator::setSize(const std::string &width, const std::string &height) {
-        separator_->setSize({width.c_str(), height.c_str()});
-    }
-
-    Vector2f Separator::getSize() const {
-        return {separator_->getSize().x, separator_->getSize().y};
-    }
-
-    Vector2f Separator::getAbsoluteSize() {
-        return {separator_->getFullSize().x, separator_->getFullSize().y};
-    }
-
-    void Separator::setWidth(float width) {
-        separator_->setWidth(width);
-    }
-
-    void Separator::setWidth(const std::string &width) {
-        separator_->setWidth(width.c_str());
-    }
-
-    void Separator::setHeight(float height) {
-        separator_->setHeight(height);
-    }
-
-    void Separator::setHeight(const std::string &height) {
-        separator_->setHeight(height.c_str());
-    }
-
-    void Separator::setMouseCursor(CursorType cursor) {
-        separator_->setMouseCursor(static_cast<tgui::Cursor::Type>(static_cast<int>(cursor)));
-    }
-
-    CursorType Separator::getMouseCursor() const {
-        return static_cast<CursorType>(static_cast<int>(separator_->getMouseCursor()));
+    const std::shared_ptr<SeparatorRenderer> Separator::getRenderer() const {
+        return std::static_pointer_cast<SeparatorRenderer>(Widget::getRenderer());
     }
 
     std::string Separator::getWidgetType() const {
         return "Separator";
     }
 
-    void Separator::showWithEffect(ShowAnimationType type, int duration) {
-        separator_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    void Separator::hideWithEffect(ShowAnimationType type, int duration) {
-        separator_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration);
-    }
-
-    bool Separator::isAnimationPlaying() const {
-        return separator_->isAnimationPlaying();
-    }
-
-    void Separator::setVisible(bool visible) {
-        separator_->setVisible(visible);
-    }
-
-    bool Separator::isVisible() const {
-        return separator_->isVisible();
-    }
-
-    void Separator::toggleVisibility() {
-        separator_->setVisible(!separator_->isVisible());
-    }
-
-    bool Separator::contains(float x, float y) const {
-        return separator_->isMouseOnWidget({x, y});
-    }
-
-    void Separator::setPosition(float x, float y) {
-        separator_->setPosition({x, y});
-    }
-
-    void Separator::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    void Separator::setPosition(const std::string &x, const std::string &y) {
-        separator_->setPosition({x.c_str(), y.c_str()});
-    }
-
-    Vector2f Separator::getPosition() const {
-        return {separator_->getPosition().x, separator_->getPosition().y};
-    }
-
-    Vector2f Separator::getAbsolutePosition() const {
-        return {separator_->getAbsolutePosition().x, separator_->getAbsolutePosition().y};
-    }
-
-    void Separator::setRotation(float angle) {
-        separator_->setRotation(angle);
-    }
-
-    void Separator::rotate(float angle) {
-        separator_->setRotation(separator_->getRotation() + angle);
-    }
-
-    float Separator::getRotation() const {
-        return separator_->getRotation();
-    }
-
-    void Separator::setScale(float factorX, float factorY) {
-        separator_->setScale({factorX, factorY});
-    }
-
-    void Separator::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void Separator::scale(float factorX, float factorY) {
-        separator_->setScale({separator_->getScale().x + factorX,
-                           separator_->getScale().y + factorY});
-    }
-
-    void Separator::scale(Vector2f offset) {
-        scale(offset.x, offset.y);
-    }
-
-    Vector2f Separator::getScale() const {
-        return {separator_->getScale().x, separator_->getScale().y};
-    }
-
-    void Separator::setOrigin(float x, float y) {
-        separator_->setOrigin({x, y});
-    }
-
-    void Separator::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    Vector2f Separator::getOrigin() const {
-        return {separator_->getOrigin().x, separator_->getOrigin().y};
-    }
-
-    void Separator::move(float offsetX, float offsetY) {
-        separator_->setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
-    }
-
-    void Separator::move(Vector2f offset) {
-        move(offset.x, offset.y);
-    }
-
-    void Separator::setEnabled(bool isEnable) {
-        separator_->setEnabled(isEnable);
-    }
-
-    bool Separator::isEnabled() const {
-        return separator_->isEnabled();
-    }
-
-    void Separator::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
-    void Separator::setFocused(bool isFocused) {
-        separator_->setFocused(isFocused);
-    }
-
-    bool Separator::isFocused() const {
-        return separator_->isFocused();
-    }
-
-    std::shared_ptr<tgui::Widget> Separator::getInternalPtr() {
-        return separator_;
-    }
-
-    void Separator::initEvents() {
-        separator_->onMouseEnter([this]{emit("mouseEnter");});
-        separator_->onMouseLeave([this]{emit("mouseLeave");});
-        separator_->onFocus([this]{emit("focus");});
-        separator_->onUnfocus([this]{emit("unfocus");});
-        separator_->onAnimationFinish([this]{emit("animationFinish");});
-        separator_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        separator_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
-
-        //Events triggered by left mouse button
-        separator_->onClick([this](tgui::Vector2f mousePos){
-            emit("click");
-            emit("click", mousePos.x, mousePos.y);
-        });
-
-        separator_->onMousePress([this](tgui::Vector2f mousePos) {
-            emit("leftMouseDown");
-            emit("leftMouseDown", mousePos.x, mousePos.y);
-        });
-
-        separator_->onMouseRelease([this](tgui::Vector2f mousePos) {
-            emit("leftMouseUp");
-            emit("leftMouseUp", mousePos.x, mousePos.y);
-        });
-
-        //Events triggered by right mouse button
-        separator_->onRightMousePress([this](tgui::Vector2f mousePos){
-            emit("rightMouseDown");
-            emit("rightMouseDown", mousePos.x, mousePos.y);
-        });
-
-        separator_->onRightMouseRelease([this](tgui::Vector2f mousePos){
-            emit("rightMouseUp");
-            emit("rightMouseUp", mousePos.x, mousePos.y);
-        });
-
-        separator_->onRightClick([this](tgui::Vector2f mousePos){
-            emit("rightClick");
-            emit("rightClick", mousePos.x, mousePos.y);
-        });
-    }
+    Separator::~Separator() = default;
 }

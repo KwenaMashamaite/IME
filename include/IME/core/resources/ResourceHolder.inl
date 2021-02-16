@@ -41,17 +41,6 @@ bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
     return resourceHolder_.insert({filename, std::move(resource)}).second;
 }
 
-//sf::Music doesn't support "loadFromFile". The music is streamed directly from the disk
-template<>
-inline bool ResourceHolder<sf::Music>::loadFromFile(const std::string &filename) {
-    if (hasResource(filename))
-        return true;
-    auto music = std::make_shared<sf::Music>();
-    if (!(*music).openFromFile(filePath_ + filename))
-        throw FileNotFound(R"(cannot find file ")" + filePath_ + filename + R"(")");
-    return resourceHolder_.insert({filename, std::move(music)}).second;
-}
-
 template<>
 inline bool ResourceHolder<Texture>::loadFromFile(const std::string& filename) {
     if (hasResource(filename))
@@ -92,5 +81,5 @@ const std::string &ResourceHolder<T>::getPath() const {
 
 template<class T>
 bool ResourceHolder<T>::hasResource(const std::string &filename) const {
-    return utility::findIn(resourceHolder_, filename);
+    return resourceHolder_.find(filename) != resourceHolder_.end();
 }

@@ -27,8 +27,11 @@
 
 #include "IME/Config.h"
 #include "IME/common/Rect.h"
-#include "SFML/Graphics/Texture.hpp"
 #include <memory>
+
+namespace sf {
+    class Texture;
+}
 
 namespace ime {
     /**
@@ -137,10 +140,14 @@ namespace ime {
          */
         const sf::Texture& getInternalTexture() const;
 
+        /**
+         * @brief Destructor
+         */
+        ~Texture();
+
     private:
-        std::string filename_;                          //!< Name of the image file on the disk
-        sf::Texture texture_;                           //!< Third party texture
-        std::reference_wrapper<const sf::Image> image_; //!< Constructs the texture
+        struct Impl;
+        std::unique_ptr<Impl> pImpl_;
     };
 }
 
