@@ -108,11 +108,14 @@ namespace ime {
          * is frame rate dependent. This means that it depends on how long the
          * previous frame took to complete.
          *
-         * All updates that need a variable time step must be in this function
+         * All updates that should be synced with the render fps must be
+         * in this function. Note that implementing this function is optional
+         * and must be overridden if needed. IME will never put anything inside
+         * this function
          *
          * @see fixedUpdate
          */
-        virtual void update(Time deltaTime) = 0;
+        virtual void update(__attribute__((unused)) Time deltaTime) {}
 
         /**
          * @brief Update the scene in fixed time steps
@@ -126,13 +129,14 @@ namespace ime {
          * 1.0f / FPS_LIMIT,  where FPS_LIMIT is the games Frames Per Second
          * limit
          *
-         * Updates that are frame-rate independent must be in this function
-         *
-         * This update function is optional and may be overridden if required
+         * Updates that are frame-rate independent must be in this function.
+         * Note that implementing this function is optional and must be
+         * overridden if needed. IME will never put anything inside this
+         * function
          *
          * @see update
          */
-        virtual void fixedUpdate(__attribute__((unused)) Time deltaTime) {};
+        virtual void fixedUpdate(__attribute__((unused)) Time deltaTime) {}
 
         /**
          * @brief Render the scene
@@ -140,7 +144,12 @@ namespace ime {
          *
          * This function will be called by the game engine after the scene
          * has handled all events and been updated. The function will be
-         * called once per frame
+         * called once per frame.
+         *
+         * @note You should never render anything outside of this function
+         * because the contents of the render window will be cleared before
+         * this function is called meaning you won't be able to see what was
+         * rendered prior. Always render in this function
          */
         virtual void render(Window &renderTarget) = 0;
 
@@ -150,8 +159,9 @@ namespace ime {
          * This function will be called by the game engine if another scene
          * is pushed while this scene is active
          *
-         * The function is optional and may be overridden if you want to
-         * do something when the scene is paused
+         * Note that implementing this function is optional and must be
+         * overridden if you want to do something when the scene is paused.
+         * IME will never put anything inside this function
          *
          * @see onResume
          */
@@ -163,8 +173,9 @@ namespace ime {
          * This function will be called by the game engine when the
          * current active scene is removed and this scene was paused
          *
-         * The function is optional and may be overridden if you want to
-         * do something when the scene is resumed
+         * Note that implementing this function is optional and must
+         * be overridden if you want to do something when the scene is
+         * resumed. IME will never put anything inside this function
          *
          * @see onPause
          */
@@ -177,6 +188,10 @@ namespace ime {
          * scene is removed from the game. The function is optional and
          * may be overridden if you want to perform cleanup or something
          * before the scene is destroyed
+         *
+         * Note that implementing this function is optional and must be
+         * overridden if you want to do something when the scene is resumed.
+         * IME will never put anything inside this function
          *
          * @warning This function is not a replacement for the destructor,
          * it will be called first, then the destructor immediately after
@@ -251,8 +266,8 @@ namespace ime {
         void setName(const std::string& name);
 
         /**
-         * @brief Set the simulation timescale
-         * @param timescale The new timescale
+         * @brief Set the scene timescale
+         * @param timescale The new scene timescale
          *
          * The timescale can be used to speed up or slow down the scene
          * without changing the FPS limit. Values above 1.0f speed up the
@@ -279,7 +294,7 @@ namespace ime {
          * @brief Get a reference to the game engine
          * @return A reference to the game engine
          *
-         * @warning Do not keep th returned reference
+         * @warning Do not keep the returned reference
          */
         Engine &engine() const;
 
@@ -292,7 +307,9 @@ namespace ime {
          *
          * @warning The physics simulation must be created first before
          * calling this function. Calling it before creating the
-         * simulation is undefined behaviour
+         * simulation is undefined behaviour. In addition, do not attempt
+         * to update the simulation, it will be updated automatically by
+         * the scene
          *
          * @warning Do not keep the returned reference
          *
