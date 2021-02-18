@@ -28,10 +28,12 @@
 #include "IME/Config.h"
 #include "IME/core/time/Time.h"
 #include "IME/core/event/Event.h"
+#include "IME/core/event/EventDispatcher.h"
 #include "IME/core/input/InputManager.h"
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/ui/GuiContainer.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -332,6 +334,22 @@ namespace ime {
         EventEmitter& eventEmitter();
 
         /**
+         * @brief Get the global event emitter
+         * @return The global event emitter
+         *
+         * The global event emitter is available to anything that needs it
+         * (a class, function etc...). Events registered to it are always
+         * dispatched regardless of the active scene. As a result you must
+         * remove event listeners that are local to the scene when the
+         * scene is destroyed. For example, a lambda that captures "this"
+         * will result in undefined behavior if not removed after the scene
+         * is destroyed
+         *
+         * @warning Always remove local event listeners
+         */
+        EventDispatcher& globalEventEmitter();
+
+        /**
          * @brief Get the scenes input manager
          * @return The scenes input manager
          *
@@ -394,6 +412,20 @@ namespace ime {
         PropertyContainer& cache();
 
         /**
+         * @brief Get the scene gui container
+         * @return The scene gui container
+         *
+         * The gui container is provided here for convenience, you can
+         * manually instantiate as many gui containers as you desire.
+         * Note that you don't have to update the returned gui container
+         * or set the render target, it will done automatically by the
+         * scene. However, you have to call the gui containers draw
+         * function yourself because we don't know if the gui should
+         * be rendered to the background or foreground
+         */
+        ui::GuiContainer& gui();
+
+        /**
          * @brief Get the scene geometry shape container
          * @return The geometry shape container
          *
@@ -431,10 +463,11 @@ namespace ime {
         PropertyContainer& cache_;         //!< The global cache
         std::shared_ptr<World> world_;     //!< Physics simulation
         std::string name_;                 //!< The name of the scene (optional)
-        input::InputManager inputManager_; //!< The local input manager for this scene
-        audio::AudioManager audioManager_; //!< The local audio manager for this scene
-        EventEmitter eventEmitter_;        //!< The local event dispatcher for this scene
-        TimerManager timerManager_;        //!< The local timer manager for this scene
+        input::InputManager inputManager_; //!< Scene level input manager
+        audio::AudioManager audioManager_; //!< Scene level audio manager
+        EventEmitter eventEmitter_;        //!< scene level event dispatcher
+        TimerManager timerManager_;        //!< Scene level timer manager
+        ui::GuiContainer guiContainer_;    //!< Scene level gui container
         float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered

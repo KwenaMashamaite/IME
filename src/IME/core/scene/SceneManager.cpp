@@ -121,6 +121,7 @@ namespace ime {
             return;
 
         scenes_.top()->inputManager_.handleEvent(event);
+        scenes_.top()->guiContainer_.handleEvent(event);
         scenes_.top()->handleEvent(event);
     }
 

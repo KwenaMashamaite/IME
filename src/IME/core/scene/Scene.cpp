@@ -33,6 +33,7 @@ namespace ime {
     Scene::Scene(Engine &engine) :
         engine_{engine},
         cache_{engine.getPersistentData()},
+        guiContainer_{engine.getRenderTarget()},
         timescale_{1.0f},
         isManaged_{false},
         isEntered_{false},
@@ -114,8 +115,16 @@ namespace ime {
         return eventEmitter_;
     }
 
+    EventDispatcher &Scene::globalEventEmitter() {
+        return *EventDispatcher::instance();
+    }
+
     PropertyContainer &Scene::cache() {
         return cache_;
+    }
+
+    ui::GuiContainer &Scene::gui() {
+        return guiContainer_;
     }
 
     ShapeContainer &Scene::shapes() {
