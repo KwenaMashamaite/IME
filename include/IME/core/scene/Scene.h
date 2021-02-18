@@ -33,6 +33,8 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/core/scene/ShapeContainer.h"
+#include "IME/core/scene/EntityContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include <string>
 #include <memory>
@@ -43,9 +45,6 @@ namespace ime {
     class Engine;
     class Window;
     class World;
-    class Entity;
-    class ShapeContainer;
-    class EntityContainer;
 
     /**
      * @brief Abstract base class for game scenes
@@ -468,15 +467,14 @@ namespace ime {
         EventEmitter eventEmitter_;        //!< scene level event dispatcher
         TimerManager timerManager_;        //!< Scene level timer manager
         ui::GuiContainer guiContainer_;    //!< Scene level gui container
+        ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene
+        EntityContainer entityContainer_;  //!< Stores entities that belong to the scene
         float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;         //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool hasPhysicsSim_;               //!< A flag indicating whether or not the scene has a physics simulation
         friend class SceneManager;         //!< Pre updates the scene
-
-        std::unique_ptr<ShapeContainer> shapeContainer_;   //!< Stores shapes that belong to the scene
-        std::unique_ptr<EntityContainer> entityContainer_; //!< Stores entities that belong to the scene
     };
 }
 

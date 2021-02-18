@@ -26,8 +26,6 @@
 #include "IME/core/loop/Engine.h"
 #include "IME/core/physics/World.h"
 #include "IME/core/entity/Entity.h"
-#include "IME/core/scene/ShapeContainer.h"
-#include "IME/core/scene/EntityContainer.h"
 
 namespace ime {
     Scene::Scene(Engine &engine) :
@@ -38,13 +36,11 @@ namespace ime {
         isManaged_{false},
         isEntered_{false},
         isVisibleWhenPaused_{false},
-        hasPhysicsSim_{false},
-        shapeContainer_{std::make_unique<ShapeContainer>()},
-        entityContainer_{std::make_unique<EntityContainer>()}
+        hasPhysicsSim_{false}
     {
         // "postStep" event is dispatched by the scene manager immediately after a physics step
         eventEmitter_.on("postStep", Callback<>([this] {
-            shapeContainer_->forEach([](Shape::sharedPtr shape) {
+            shapeContainer_.forEach([](Shape::sharedPtr shape) {
                 if (shape->hasRigidBody()) {
                     auto body = shape->getRigidBody();
                     shape->setPosition(body->getPosition());
@@ -52,7 +48,7 @@ namespace ime {
                 }
             });
 
-            entityContainer_->forEach([](Entity::sharedPtr entity) {
+            entityContainer_.forEach([](Entity::sharedPtr entity) {
                 auto body = entity->getRigidBody();
                 entity->getTransform().setPosition(body->getPosition());
                 entity->getTransform().setRotation(body->getRotation());
@@ -128,11 +124,11 @@ namespace ime {
     }
 
     ShapeContainer &Scene::shapes() {
-        return *shapeContainer_;
+        return shapeContainer_;
     }
 
     EntityContainer &Scene::entities() {
-        return *entityContainer_;
+        return entityContainer_;
     }
 
     void Scene::createWorld(Vector2f gravity) {
