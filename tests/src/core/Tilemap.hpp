@@ -24,7 +24,7 @@
 
 #include "doctest.h"
 #include "IME/core/tilemap/TileMap.h"
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 
 //////////////////////////////////////////////////////
 // General tests

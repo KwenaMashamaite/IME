@@ -22,15 +22,15 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 
-std::size_t ime::Entity::prevEntityId_{0};
+std::size_t ime::GameObject::prevEntityId_{0};
 
 namespace ime {
-    Entity::Entity(Scene& scene, Type type) :
+    GameObject::GameObject(Scene& scene, Type type) :
         scene_{scene},
         type_{type},
         id_{prevEntityId_++},
@@ -43,7 +43,7 @@ namespace ime {
         initTransformEvents();
     }
 
-    Entity::Entity(const Entity &other) :
+    GameObject::GameObject(const GameObject &other) :
         scene_{other.scene_},
         type_{other.type_},
         id_{prevEntityId_++},
@@ -60,7 +60,7 @@ namespace ime {
         initTransformEvents();
     }
 
-    Entity &Entity::operator=(const Entity &other) {
+    GameObject &GameObject::operator=(const GameObject &other) {
         if (this != &other) { // Copy swap not applicable - class is polymorphic
             scene_ = other.scene_;
             type_ = other.type_;
@@ -79,18 +79,18 @@ namespace ime {
         return *this;
     }
 
-    void Entity::setState(int state) {
+    void GameObject::setState(int state) {
         if (state_ == state)
             return;
         state_ = state;
         dispatchEvent("stateChange", sprite_);
     }
 
-    int Entity::getState() const {
+    int GameObject::getState() const {
         return state_;
     }
 
-    void Entity::setName(const std::string &name) {
+    void GameObject::setName(const std::string &name) {
         if (name_ == name)
             return;
 
@@ -98,22 +98,22 @@ namespace ime {
         dispatchEvent("nameChange", name_);
     }
 
-    const std::string &Entity::getName() const {
+    const std::string &GameObject::getName() const {
         return name_;
     }
 
-    void Entity::setDirection(Direction dir) {
+    void GameObject::setDirection(Direction dir) {
         if (direction_ != dir) {
             direction_ = dir;
             dispatchEvent("directionChange", direction_);
         }
     }
 
-    Direction Entity::getDirection() const {
+    Direction GameObject::getDirection() const {
         return direction_;
     }
 
-    void Entity::setActive(bool isActive) {
+    void GameObject::setActive(bool isActive) {
         if (isActive_ == isActive || (isActive_ && !isVulnerable_))
             return;
         isActive_ = isActive;
@@ -123,7 +123,7 @@ namespace ime {
         dispatchEvent("statusChange", isActive_);
     }
 
-    void Entity::setVulnerable(bool isVulnerable) {
+    void GameObject::setVulnerable(bool isVulnerable) {
         if (isVulnerable_ != isVulnerable) {
             isVulnerable_ = isVulnerable;
             if (isVulnerable_)
@@ -133,7 +133,7 @@ namespace ime {
         }
     }
 
-    void Entity::setCollidable(bool isCollidable) {
+    void GameObject::setCollidable(bool isCollidable) {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
@@ -149,31 +149,31 @@ namespace ime {
         }
     }
 
-    bool Entity::isActive() const {
+    bool GameObject::isActive() const {
         return isActive_;
     }
 
-    bool Entity::isCollidable() const {
+    bool GameObject::isCollidable() const {
         return isCollidable_;
     }
 
-    void Entity::setType(Entity::Type type) {
+    void GameObject::setType(GameObject::Type type) {
         type_ = type;
     }
 
-    Entity::Type Entity::getType() const {
+    GameObject::Type GameObject::getType() const {
         return type_;
     }
 
-    bool Entity::isVulnerable() const {
+    bool GameObject::isVulnerable() const {
         return isVulnerable_;
     }
 
-    std::size_t Entity::getObjectId() const {
+    std::size_t GameObject::getObjectId() const {
         return id_;
     }
 
-    void Entity::attachRigidBody(Body::sharedPtr body) {
+    void GameObject::attachRigidBody(Body::sharedPtr body) {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity");
         IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one");
         body_ = body;
@@ -182,62 +182,62 @@ namespace ime {
         transform_.setRotation(body->getRotation());
     }
 
-    Body::sharedPtr &Entity::getRigidBody() {
+    Body::sharedPtr &GameObject::getRigidBody() {
         return body_;
     }
 
-    const Body::sharedPtr &Entity::getRigidBody() const {
+    const Body::sharedPtr &GameObject::getRigidBody() const {
         return body_;
     }
 
-    void Entity::removeRigidBody() {
+    void GameObject::removeRigidBody() {
         if (body_) {
             body_->getWorld()->destroyBody(body_);
             body_.reset();
         }
     }
 
-    bool Entity::hasRigidBody() const {
+    bool GameObject::hasRigidBody() const {
         return body_ != nullptr;
     }
 
-    Transform &Entity::getTransform() {
+    Transform &GameObject::getTransform() {
         return transform_;
     }
 
-    const Transform &Entity::getTransform() const {
+    const Transform &GameObject::getTransform() const {
         return transform_;
     }
 
-    void Entity::resetSpriteOrigin() {
+    void GameObject::resetSpriteOrigin() {
         transform_.setOrigin(sprite_.getLocalBounds().width / 2.0f, sprite_.getLocalBounds().height / 2.0f);
     }
 
-    Sprite &Entity::getSprite() {
+    Sprite &GameObject::getSprite() {
         return sprite_;
     }
 
-    const Sprite &Entity::getSprite() const {
+    const Sprite &GameObject::getSprite() const {
         return sprite_;
     }
 
-    void Entity::update(Time deltaTime) {
+    void GameObject::update(Time deltaTime) {
         sprite_.updateAnimation(deltaTime);
     }
 
-    bool Entity::unsubscribe(const std::string &event, int id) {
+    bool GameObject::unsubscribe(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }
 
-    bool Entity::operator==(const Entity &rhs) {
+    bool GameObject::operator==(const GameObject &rhs) {
         return id_ == rhs.id_;
     }
 
-    bool Entity::operator!=(const Entity &rhs) {
+    bool GameObject::operator!=(const GameObject &rhs) {
         return !(*this == rhs);
     }
 
-    void Entity::initTransformEvents() {
+    void GameObject::initTransformEvents() {
         transform_.onPropertyChange([this](std::string property, std::any) {
             if (property == "position") {
                 sprite_.setPosition(transform_.getPosition());

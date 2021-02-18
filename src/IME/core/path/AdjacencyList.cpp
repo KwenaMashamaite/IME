@@ -27,8 +27,8 @@
 
 bool tileHasObstacle(ime::TileMap& grid, ime::Index index) {
     auto hasObstacle = false;
-    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<ime::Entity> child) {
-        if (child->getType() == ime::Entity::Type::Obstacle && child->isCollidable()) {
+    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<ime::GameObject> child) {
+        if (child->getType() == ime::GameObject::Type::Obstacle && child->isCollidable()) {
             hasObstacle = true;
             return;
         }

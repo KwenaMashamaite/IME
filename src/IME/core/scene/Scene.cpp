@@ -25,7 +25,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/loop/Engine.h"
 #include "IME/core/physics/World.h"
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 
 namespace ime {
     Scene::Scene(Engine &engine) :
@@ -48,10 +48,10 @@ namespace ime {
                 }
             });
 
-            entityContainer_.forEach([](Entity::sharedPtr entity) {
-                auto body = entity->getRigidBody();
-                entity->getTransform().setPosition(body->getPosition());
-                entity->getTransform().setRotation(body->getRotation());
+            entityContainer_.forEach([](GameObject::sharedPtr gameObject) {
+                auto body = gameObject->getRigidBody();
+                gameObject->getTransform().setPosition(body->getPosition());
+                gameObject->getTransform().setRotation(body->getRotation());
             });
         }));
     }

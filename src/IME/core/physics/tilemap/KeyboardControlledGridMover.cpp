@@ -26,7 +26,7 @@
 #include "IME/core/event/Event.h"
 
 namespace ime {
-    KeyboardControlledGridMover::KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<Entity> target) :
+    KeyboardControlledGridMover::KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<GameObject> target) :
         GridMover(tileMap, target),
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {

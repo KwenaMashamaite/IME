@@ -26,7 +26,7 @@
 #define IME_CONTAINER_H
 
 #include "IME/graphics/Window.h"
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 #include <memory>
 #include <vector>
 

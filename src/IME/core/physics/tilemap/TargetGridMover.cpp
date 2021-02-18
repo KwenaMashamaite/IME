@@ -27,7 +27,7 @@
 #include "IME/graphics/Sprite.h"
 
 namespace ime {
-    TargetGridMover::TargetGridMover(TileMap &tileMap, Entity::sharedPtr target) :
+    TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject::sharedPtr target) :
         GridMover(tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
@@ -43,7 +43,7 @@ namespace ime {
             targetTileIndex_ = tile.getIndex();
         });
 
-        onTargetChanged([this](Entity::sharedPtr newTarget) {
+        onTargetChanged([this](GameObject::sharedPtr newTarget) {
             if (newTarget && movementStarted_) {
                 generatePath();
                 moveTarget();
@@ -62,7 +62,7 @@ namespace ime {
             }
         });
 
-        onObstacleCollision([this](Entity::sharedPtr , Entity::sharedPtr) {
+        onObstacleCollision([this](GameObject::sharedPtr , GameObject::sharedPtr) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();

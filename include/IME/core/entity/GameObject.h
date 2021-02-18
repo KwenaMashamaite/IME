@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_ENTITY_H
-#define IME_ENTITY_H
+#ifndef IME_GAMEOBJECT_H
+#define IME_GAMEOBJECT_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
@@ -40,15 +40,15 @@ namespace ime {
     class Scene; //!< Scene class forward declaration
 
     /**
-     * @brief Abstract base class for all game entities (players, enemies etc...)
+     * @brief Abstract base class for game objects (players, enemies etc...)
      */
-    class IME_API Entity {
+    class IME_API GameObject {
     public:
-        using sharedPtr = std::shared_ptr<Entity>; //!< Shared Entity pointer
+        using sharedPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
         using BodyPtr = std::shared_ptr<Body>;     //!< Shared Body pointer
 
         /**
-         * @brief The type of an entity
+         * @brief The type of the GameObject
          */
         enum class Type {
             Unknown = -1, //!< Unknown object
@@ -59,59 +59,59 @@ namespace ime {
         };
 
         /**
-         * @brief Construct entity
-         * @param scene The scene this entity belongs to
-         * @param type Type of the entity
+         * @brief Construct the game object
+         * @param scene The scene this game object belongs to
+         * @param type Type of the game object
          */
-        explicit Entity(Scene& scene, Type type = Type::Unknown);
+        explicit GameObject(Scene& scene, Type type = Type::Unknown);
 
         /**
          * @brief Copy constructor
          * @param other Object to be copied
          */
-        Entity(const Entity& other);
+        GameObject(const GameObject& other);
 
         /**
          * @brief Assignment operator
          */
-        Entity& operator=(const Entity&);
+        GameObject& operator=(const GameObject&);
 
         /**
          * @brief Move constructor
          */
-        Entity(Entity&&) = default;
+        GameObject(GameObject&&) = default;
 
         /**
          * @brief Move assignment operator
          */
-        Entity& operator=(Entity&&) = default;
+        GameObject& operator=(GameObject&&) = default;
 
         /**
-         * @brief Check if two entity objects are the same object or not
+         * @brief Check if two game objects are the same object or not
          * @param rhs Object to compare against this object
          * @return True if the two entities are the same object
          *
-         * Two entity objects are the same object if they have the same
+         * Two game objects are the same object if they have the same
          * object id
          *
          * @see getObjectId
          */
-        bool operator==(const Entity& rhs);
+        bool operator==(const GameObject& rhs);
 
         /**
-         * @brief Check if this entity is not the same object as another object
+         * @brief Check if this game object is not the same object as another object
          * @param rhs Object to compare against this object
          * @return True if the two objects are not the same object
          *
-         * Two entity objects are not the same object if they don't have the
+         * Two game objects are not the same object if they don't have the
          * same object id
          *
          * @see getObjectId
          */
-        bool operator!=(const Entity& rhs);
+        bool operator!=(const GameObject& rhs);
 
         /**
-         * @brief Set the type of the entity
+         * @brief Set the type of the game object
          * @param type Type to set
          *
          * The new type will overwrite the previous type
@@ -119,8 +119,8 @@ namespace ime {
         void setType(Type type);
 
         /**
-         * @brief Get the type of the entity
-         * @return The type of the entity
+         * @brief Get the type of the game object
+         * @return The type of the game object
          */
         Type getType() const;
 
@@ -138,13 +138,13 @@ namespace ime {
         void setState(int state);
 
         /**
-         * @brief Get the current state of the entity
-         * @return The current state of the entity
+         * @brief Get the current state of the game object
+         * @return The current state of the game object
          */
         int getState() const;
 
         /**
-         * @brief Set the name of the entity (optional)
+         * @brief Set the name of the game object (optional)
          * @param name The name to set
          *
          * By default, the name is an empty string
@@ -152,77 +152,77 @@ namespace ime {
         void setName(const std::string& name);
 
         /**
-         * @brief Get the name of the entity
-         * @return The name of the entity
+         * @brief Get the name of the game object
+         * @return The name of the game object
          */
         const std::string& getName() const;
 
         /**
-         * @brief Set the direction of the entity
-         * @param dir New direction of the entity
+         * @brief Set the direction of the game object
+         * @param dir New direction of the game object
          */
         void setDirection(Direction dir);
 
         /**
-         * @brief Get the direction of the entity
-         * @return The direction of the entity
+         * @brief Get the direction of the game object
+         * @return The direction of the game object
          */
         Direction getDirection() const;
 
         /**
-         * @brief Set whether entity is active or inactive
+         * @brief Set whether the game object is active or inactive
          * @param isActive True to set active or false to set inactive
          *
-         * An active entity in this context refers to an entity that is
+         * An active game object in this context refers to a game object that is
          * in a good state, not killed or completely destroyed, whilst
-         * an inactive entity refers to one that is killed or destroyed
+         * an inactive game object refers to one that is killed or destroyed
          */
         void setActive(bool isActive);
 
         /**
-         * @brief Check if entity is active or not
-         * @return True if entity is active, otherwise false
+         * @brief Check if the game object is active or not
+         * @return True if the game object is active, otherwise false
          */
         bool isActive() const;
 
         /**
-         * @brief Set whether entity is vulnerable or inVulnerable
+         * @brief Set whether the game object is vulnerable or inVulnerable
          * @param isVulnerable True to set vulnerable or false to set
          *                     invulnerable
          *
-         * A vulnerable entity can be deactivated whilst an invulnerable
-         * entity cannot be deactivated. That is, setActive(false) on an
-         * entity that is active and invulnerable will always fail.
+         * A vulnerable game object can be deactivated whilst an invulnerable
+         * game object cannot be deactivated. That is, setActive(false) on a
+         * game object that is active and invulnerable will always fail.
          *
-         * The entity is vulnerable by default
+         * The game object is vulnerable by default
          */
         void setVulnerable(bool isVulnerable);
 
         /**
-         * @brief Check if entity is vulnerable or not
-         * @return True if entity is vulnerable or false if inVulnerable
+         * @brief Check if the game object is vulnerable or not
+         * @return True if the game object is vulnerable or false if inVulnerable
          *
          * @see setVulnerable
          */
         bool isVulnerable() const;
 
         /**
-         * @brief Set whether entity is collidable or not
+         * @brief Set whether the game object is collidable or not
          * @param isCollidable True to make collidable, otherwise false
          *
-         * Entity is not collidable by default
+         * The game object is not collidable by default
          */
         void setCollidable(bool isCollidable);
 
         /**
-         * @brief Check if entity is collidable or not
-         * @return True if entity is collidable, otherwise false
+         * @brief Check if the game object is collidable or not
+         * @return True if the game object is collidable, otherwise false
          */
         bool isCollidable() const;
 
         /**
          * @brief Get concrete class type
-         * @return Name of the concrete class the entity is instantiated from
+         * @return Name of the concrete class the game object is instantiated from
          *
          * If a concrete class is derived further, this function must always
          * be overridden to reflect the new concrete class
@@ -230,46 +230,46 @@ namespace ime {
         virtual std::string getClassType() = 0;
 
         /**
-         * @brief Get the entity's unique identifier
-         * @return The entity's unique identifier
+         * @brief Get the game object's unique identifier
+         * @return The game object's unique identifier
          *
-         * Each entity instance has it's own unique identification number
+         * Each game object instance has it's own unique identification number
          */
         std::size_t getObjectId() const;
 
         /**
-         * @brief Attach a physics Body to the entity
+         * @brief Attach a physics Body to the game object
          * @param body Physics body to be attached
          *
-         * Attaching a rigid Body to an entity enables physics for that entity.
-         * This means that you should refrain from calling functions that
-         * MODIFY the entity's transform (position, rotation and origin).
-         * Note that the physics simulation does not account for scaling,
-         * that should be handles by you
+         * Attaching a rigid Body to a game object enables physics for that
+         * game object. This means that you should refrain from calling
+         * functions that MODIFY the game objects transform (position,
+         * rotation and origin). Note that the physics simulation does not
+         * account for scaling, that should be handles by you
          *
-         * @note Attaching a rigid body will alter the origin of the entity's
+         * @note Attaching a rigid body will alter the origin of the game objects
          * sprite to match the centre of mass of the body. In addition, the
-         * transform of the entity will be reset to that of the rigid body
+         * transform of the game object will be reset to that of the rigid body
          *
          * @warning The pointer must not be a nullptr. Also, you cannot attach
-         * a rigid body to an entity that already has a rigid body attached, the
-         * previous body must be removed first
+         * a rigid body to a game object that already has a rigid body attached
+         * to it, the current rigid body must be removed first
          *
          * @see removeRigidBody
          */
         void attachRigidBody(BodyPtr body);
 
         /**
-         * @brief Get the entity's physics body
-         * @return The entity's physics body if any, otherwise a nullptr
+         * @brief Get the game objects physics body
+         * @return The game objects physics body if any, otherwise a nullptr
          */
-        BodyPtr & getRigidBody();
-        const BodyPtr & getRigidBody() const;
+        BodyPtr& getRigidBody();
+        const BodyPtr& getRigidBody() const;
 
         /**
-         * @brief Remove a rigid body from the entity
+         * @brief Remove a rigid body from the game object
          *
-         * Removing a rigid Body from an entity disables all physics
+         * Removing a rigid Body from an game object disables all physics
          * applied to it
          *
          * @see attachRigidBody
@@ -277,17 +277,17 @@ namespace ime {
         void removeRigidBody();
 
         /**
-         * @brief Check if the the entity has a rigid body attached to it
-         * @return True if the entity has a rigid body attached to it,
+         * @brief Check if the the game object has a rigid body attached to it
+         * @return True if the game object has a rigid body attached to it,
          *         otherwise false
          */
         bool hasRigidBody() const;
 
         /**
-         * @brief Get the entity's transform
-         * @return The entity's transform
+         * @brief Get the game objects transform
+         * @return The game objects transform
          *
-         * The transform can be used to query or modify the entity's
+         * The transform can be used to query or modify the game object
          * position, scale, rotation and origin
          */
         Transform& getTransform();
@@ -304,8 +304,8 @@ namespace ime {
         void resetSpriteOrigin();
 
         /**
-         * @brief Get the entity's graphical representation
-         * @return The entities graphical representation
+         * @brief Get the game objects graphical representation
+         * @return The game objects graphical representation
          *
          * By default, the sprite is empty
          */
@@ -313,13 +313,16 @@ namespace ime {
         const Sprite& getSprite() const;
 
         /**
-         * @brief Update entity
+         * @brief Update the game object
          * @param deltaTime Time past since last update
+         *
+         * @warning When overriding this function make sure to call the base
+         * class version first in your implementation
          */
         virtual void update(Time deltaTime);
 
         /**
-         * @brief Add an event listener to an entity event
+         * @brief Add an event listener to a game object event
          * @param event Event to add event listener to
          * @param callback Function to execute when the event is published
          * @return The event listeners identification number
@@ -330,14 +333,14 @@ namespace ime {
         }
 
         /**
-         * @brief Remove an event listener form an entity event
+         * @brief Remove an event listener form a game object event
          * @param event Event to remove event listener from
          * @param id Identification number of the event listener
          * @return True if the event listener was removed or false if no such
          *         event listener exists for the specified event
          *
          * The identification number is the number issued when an event
-         * listener is added to an entity event
+         * listener is added to a game object event
          *
          * @see onEvent
          */
@@ -346,7 +349,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Entity() = default;
+        virtual ~GameObject() = default;
 
     private:
         /**
@@ -356,7 +359,7 @@ namespace ime {
 
     protected:
         /**
-         * @brief Dispatch an entity event
+         * @brief Dispatch a game object event
          * @param event Event to publish
          * @param args Arguments passed to event listeners
          */
@@ -366,12 +369,12 @@ namespace ime {
         }
 
     private:
-        std::reference_wrapper<Scene> scene_; //!< The scene this entity belongs to
+        std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
         static std::size_t prevEntityId_;     //!< Object id counter
-        Type type_;                           //!< The type of the entity
+        Type type_;                           //!< The type of the game object
         std::size_t id_;                      //!< Unique identifier
-        int state_;                           //!< The current state of the entity
-        std::string name_;                    //!< The name of the entity
+        int state_;                           //!< The current state of the game object
+        std::string name_;                    //!< The name of the game object
         bool isVulnerable_;                   //!< Vulnerability state
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state
@@ -379,7 +382,7 @@ namespace ime {
         EventEmitter eventEmitter_;           //!< Event publisher
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
-        BodyPtr body_;                        //!< The entity's rigid body
+        BodyPtr body_;                        //!< The rigid body attached to this game object
     };
 }
 

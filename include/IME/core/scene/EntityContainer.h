@@ -27,13 +27,13 @@
 
 #include "IME/Config.h"
 #include "Container.h"
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 
 namespace ime {
     /**
-     * @brief Entity container
+     * @brief GameObject container
      */
-    class IME_API EntityContainer : public Container<Entity> {
+    class IME_API EntityContainer : public Container<GameObject> {
 
     };
 }

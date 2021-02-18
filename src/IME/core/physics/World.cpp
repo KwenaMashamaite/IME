@@ -24,7 +24,7 @@
 
 #include "IME/core/physics/World.h"
 #include "../../utility/Helpers.h"
-#include "IME/core/entity/Entity.h"
+#include "IME/core/entity/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
@@ -214,9 +214,9 @@ namespace ime {
         return body;
     }
 
-    void World::createBody(Entity::sharedPtr entity, const BodyDefinition &definition) {
-        if (entity) {
-            entity->attachRigidBody(createBody(definition));
+    void World::createBody(GameObject::sharedPtr gameObject, const BodyDefinition &definition) {
+        if (gameObject) {
+            gameObject->attachRigidBody(createBody(definition));
         }
     }
 

@@ -39,7 +39,7 @@
 class b2World;
 
 namespace ime {
-    class Entity; //!< Entity class forward declaration
+    class GameObject; //!< GameObject class forward declaration
 
     /**
      * @brief The World is responsible for creating, managing, colliding and
@@ -48,7 +48,7 @@ namespace ime {
     class IME_API World : public std::enable_shared_from_this<World> {
     public:
         using sharedPtr = std::shared_ptr<World>;  //!< Shared World pointer
-        using EntityPtr = std::shared_ptr<Entity>; //!< Shared Entity pointer
+        using EntityPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
 
         /**
          * Callback function passed to queryAABB function
@@ -199,7 +199,7 @@ namespace ime {
          * body inside a callback dispatched by the world (Callbacks are
          * dispatched during a step)
          */
-        void createBody(EntityPtr entity, const BodyDefinition& definition);
+        void createBody(EntityPtr gameObject, const BodyDefinition& definition);
 
         /**
          * @brief Get the body by its unique identifier

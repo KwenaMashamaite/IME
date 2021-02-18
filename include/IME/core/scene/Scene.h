@@ -437,7 +437,7 @@ namespace ime {
         ShapeContainer& shapes();
 
         /**
-         * @brief Get the scene entity container
+         * @brief Get the scene game object container
          * @return The scene entity container
          *
          * This class stores entities that belong to this scene

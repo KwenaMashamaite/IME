@@ -27,7 +27,7 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    RandomGridMover::RandomGridMover(TileMap &tileMap, Entity::sharedPtr target) :
+    RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject::sharedPtr target) :
         GridMover(tileMap, target),
         prevDirection_(Direction::Unknown),
         movementStarted_{false},
@@ -36,7 +36,7 @@ namespace ime {
         switchToNormal_{false},
         targetGridMover_(tileMap, target)
     {
-        onTargetChanged([this](Entity::sharedPtr newTarget) {
+        onTargetChanged([this](GameObject::sharedPtr newTarget) {
             if (newTarget) {
                 prevDirection_ = newTarget->getDirection();
                 if (movementStarted_)
@@ -49,7 +49,7 @@ namespace ime {
             revertAndGenerateDirection();
         });
 
-        onObstacleCollision([this](Entity::sharedPtr , Entity::sharedPtr) {
+        onObstacleCollision([this](GameObject::sharedPtr , GameObject::sharedPtr) {
             revertAndGenerateDirection();
         });
 

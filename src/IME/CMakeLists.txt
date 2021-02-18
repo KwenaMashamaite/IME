@@ -11,7 +11,7 @@ set(IME_SRC
     core/audio/Audio.cpp
     core/audio/Music.cpp
     core/audio/SoundEffect.cpp
-    core/entity/Entity.cpp
+    core/entity/GameObject.cpp
     core/event/EventEmitter.cpp
     core/event/EventDispatcher.cpp
     core/input/Keyboard.cpp

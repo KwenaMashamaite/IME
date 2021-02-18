@@ -30,16 +30,16 @@
 
 namespace ime {
     /**
-     * @brief Class for moving an entity to a specific position in the grid
+     * @brief Class for moving a game object to a specific position in the grid
      */
     class IME_API TargetGridMover : public GridMover {
     public:
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
-         * @param target Entity to be moved in the grid
+         * @param target GameObject to be moved in the grid
          */
-        explicit TargetGridMover(TileMap &tileMap, Entity::sharedPtr target = nullptr);
+        explicit TargetGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
 
         /**
          * @brief Set the path finder
@@ -175,7 +175,7 @@ namespace ime {
 
     private:
         std::unique_ptr<IGridPathFinder> pathFinder_; //!< Finds the path from the source to the target
-        Index targetTileIndex_;                       //!< Index of the tile the entity wishes to go to
+        Index targetTileIndex_;                       //!< Index of the tile the game object wishes to go to
         std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
         bool movementStarted_;                        //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion

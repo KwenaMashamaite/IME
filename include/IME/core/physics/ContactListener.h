@@ -41,11 +41,11 @@ namespace ime {
      *
      * @warning You cannot create/destroy bodies, fixtures and joints inside
      * these callbacks. For example, you may have a collision that applies
-     * damage and try to destroy the associated entity and its rigid body.
+     * damage and try to destroy the associated game object and its rigid body.
      * However, it is not allowed to alter the physics world inside a callback
      * because you might destroy objects that are currently being processed,
      * leading to undefined behaviour. It is recommended to somehow flag the
-     * entity for destruction inside the callback and destroy them after the
+     * game object for destruction inside the callback and destroy them after the
      * time step
      */
     class IME_API ContactListener {

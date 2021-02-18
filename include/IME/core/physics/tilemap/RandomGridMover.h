@@ -30,16 +30,16 @@
 
 namespace ime {
     /**
-     * @brief Class for moving an entity randomly in a grid
+     * @brief Class for moving a game object randomly in a grid
      */
     class IME_API RandomGridMover : public GridMover {
     public:
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
-         * @param target Entity to be moved in the grid
+         * @param target GameObject to be moved in the grid
          */
-        explicit RandomGridMover(TileMap &tileMap, Entity::sharedPtr target = nullptr);
+        explicit RandomGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
 
         /**
          * @brief Start moving the target in the grid
@@ -63,7 +63,7 @@ namespace ime {
         void stopMovement();
 
         /**
-         * @brief Update entity movement in the grid
+         * @brief Update the game object movement in the grid
          * @param deltaTime Time passed since movement was last updated
          */
         void update(Time deltaTime) override;

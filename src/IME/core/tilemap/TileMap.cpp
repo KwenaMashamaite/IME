@@ -170,7 +170,7 @@ namespace ime {
 
     void TileMap::createObjectList() {
         forEachTile([this](Tile& tile) {
-            children_.emplace(tile.getIndex(), std::vector<std::shared_ptr<Entity>>{});
+            children_.emplace(tile.getIndex(), std::vector<std::shared_ptr<GameObject>>{});
         });
     }
 
@@ -253,7 +253,7 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::addChild(std::shared_ptr<Entity> child, Index index) {
+    bool TileMap::addChild(std::shared_ptr<GameObject> child, Index index) {
         IME_ASSERT(child, "Cannot add nullptr to a tilemap");
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getPosition().x, getTile(index).getPosition().y);
@@ -263,7 +263,7 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::hasChild(std::shared_ptr<Entity> child) {
+    bool TileMap::hasChild(std::shared_ptr<GameObject> child) {
         if (!child)
             return false;
 
@@ -275,7 +275,7 @@ namespace ime {
         return false;
     }
 
-    std::shared_ptr<Entity> TileMap::getChildWithId(std::size_t id) const {
+    std::shared_ptr<GameObject> TileMap::getChildWithId(std::size_t id) const {
         for (const auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id) {
@@ -293,13 +293,13 @@ namespace ime {
         return children_.at(tile.getIndex()).size() > 1;
     }
 
-    std::shared_ptr<Entity> TileMap::getOccupant(const Tile& tile) {
+    std::shared_ptr<GameObject> TileMap::getOccupant(const Tile& tile) {
         if (isTileOccupied(tile))
             return children_[tile.getIndex()].front();
         return nullptr;
     }
 
-    void TileMap::forEachChild(Callback<std::shared_ptr<Entity>> callback) {
+    void TileMap::forEachChild(Callback<std::shared_ptr<GameObject>> callback) {
         std::for_each(children_.begin(), children_.end(), [&callback](auto& childList) {
             std::for_each(childList.second.begin(), childList.second.end(), [&callback] (auto child) {
                 callback(child);
@@ -307,10 +307,10 @@ namespace ime {
         });
     }
 
-    void TileMap::forEachChildInTile(const Tile& tile, Callback<std::shared_ptr<Entity>> callback) {
+    void TileMap::forEachChildInTile(const Tile& tile, Callback<std::shared_ptr<GameObject>> callback) {
         if (isTileOccupied(tile)) {
             std::for_each(children_[tile.getIndex()].begin(), children_[tile.getIndex()].end(),
-                [&callback](std::shared_ptr<Entity> child) { callback(child);}
+                [&callback](std::shared_ptr<GameObject> child) { callback(child);}
             );
         }
     }
@@ -321,7 +321,7 @@ namespace ime {
         return 0;
     }
 
-    bool TileMap::removeChildFromTile(const Tile& tile, const std::shared_ptr<Entity> &child) {
+    bool TileMap::removeChildFromTile(const Tile& tile, const std::shared_ptr<GameObject> &child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
                 return removeOccupant(tile);
@@ -355,13 +355,13 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::removeChild(std::shared_ptr<Entity> child) {
+    bool TileMap::removeChild(std::shared_ptr<GameObject> child) {
         if (!child)
             return false;
         return removeChildWithId(child->getObjectId());
     }
 
-    void TileMap::removeChildrenIf(std::function<bool(std::shared_ptr<Entity>)> callback) {
+    void TileMap::removeChildrenIf(std::function<bool(std::shared_ptr<GameObject>)> callback) {
         for (auto& childList : children_)
             childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(), callback), childList.second.end());
     }
@@ -385,14 +385,14 @@ namespace ime {
         return false;
     }
 
-    void TileMap::moveChild(std::shared_ptr<Entity> child, Index index) {
+    void TileMap::moveChild(std::shared_ptr<GameObject> child, Index index) {
         if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
             removeChildFromTile(getTileOccupiedByChild(child), child);
             addChild(child, index);
         }
     }
 
-    void TileMap::moveChild(std::shared_ptr<Entity> child, const Tile &tile) {
+    void TileMap::moveChild(std::shared_ptr<GameObject> child, const Tile &tile) {
         moveChild(std::move(child), tile.getIndex());
     }
 
@@ -484,7 +484,7 @@ namespace ime {
         return {numOfColms_, numOfRows_};
     }
 
-    Tile& TileMap::getTileOccupiedByChild(std::shared_ptr<Entity> child) {
+    Tile& TileMap::getTileOccupiedByChild(std::shared_ptr<GameObject> child) {
         return getTile(child->getTransform().getPosition());
     }
 }
