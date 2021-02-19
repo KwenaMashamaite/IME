@@ -34,8 +34,9 @@ namespace ime {
      */
     enum class MovementTrigger {
         None,      //!< Does not trigger any movement
-        OnKeyDown, //!< Continues to trigger movement while key is held down
-        OnKeyUp    //!< Only triggers movement when a key is released
+        OnKeyDown, //!< Only triggers movement when a key goes down
+        OnKeyUp,   //!< Only triggers movement when a key is released
+        OnKeyHeld  //!< Continues to trigger movement while key is held down
     };
 
     /**

@@ -76,12 +76,17 @@ namespace ime {
             onTriggerHandlerId_ = keyboard_.onKeyDown(moveEntity);
         else if (trigger_ == MovementTrigger::OnKeyUp)
             onTriggerHandlerId_ = keyboard_.onKeyUp(moveEntity);
+        else if (trigger_ == MovementTrigger::OnKeyHeld)
+            onTriggerHandlerId_ = keyboard_.onKeyHeld(moveEntity);
     }
 
     void KeyboardControlledGridMover::removeInputEventListeners() {
         if (onTriggerHandlerId_ != -1) {
-            if (!keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_))
-                keyboard_.unsubscribe(KeyboardEvent::KeyUp, onTriggerHandlerId_);
+            if (!keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_)
+                && !keyboard_.unsubscribe(KeyboardEvent::KeyUp, onTriggerHandlerId_))
+            {
+                keyboard_.unsubscribe(KeyboardEvent::KeyHeld, onTriggerHandlerId_);
+            }
 
             onTriggerHandlerId_ = -1;
         }
