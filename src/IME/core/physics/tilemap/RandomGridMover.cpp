@@ -28,7 +28,7 @@
 
 namespace ime {
     RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject::sharedPtr target) :
-        GridMover(tileMap, target),
+        GridMover(Type::Random, tileMap, target),
         prevDirection_(Direction::Unknown),
         movementStarted_{false},
         isAdvance_{false},

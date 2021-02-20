@@ -23,31 +23,34 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/tilemap/GridMover.h"
-#include "IME/core/entity/IMovable.h"
 
 namespace ime {
-    GridMover::GridMover(TileMap &tileMap, GameObject::sharedPtr target) :
+    GridMover::GridMover(Type type, TileMap &tileMap, GameObject::sharedPtr target) :
+        type_{type},
         tileMap_(tileMap),
-        target_(target),
+        targetVelocity_{Vector2f {0, 0}},
         targetDirection_(Direction::Unknown),
         targetTile_{tileMap.getTileSize(), Vector2f{0, 0}},
-        prevTile_{tileMap.getTileSize(), Vector2f{0, 0}}
+        prevTile_{tileMap.getTileSize(), Vector2f{0, 0}},
+        isMoving_{false}
     {
-        if (target) {
-            IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot instantiate grid mover with an unmovable entity (not derived from ime::IMovable)");
-            IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before instantiation a grid mover");
-            targetTile_ = tileMap.getTile(target->getTransform().getPosition());
-        }
+        setTarget(target);
     }
 
     void GridMover::setTarget(GameObject::sharedPtr target) {
         if (target_ == target)
             return;
         else if (target) {
-            IME_ASSERT(std::dynamic_pointer_cast<IMovable>(target), "Cannot set an unmovable entity (not derived from ime::IMovable) as a target");
-            IME_ASSERT(tileMap_.hasChild(target), "Entity must be in the grid before calling setTarget(std::shared_ptr<ime::Entity>)");
+            IME_ASSERT(target->hasRigidBody(), "Game objects controlled by a grid mover must have a rigid body attached to them");
+            IME_ASSERT(target->getRigidBody()->getType() == BodyType::Kinematic, "A grid mover can only control game objects with a BodyType::Kinematic rigid body");
+            IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover");
+
             if (target_)
                 teleportTargetToDestination();
+
+            auto velocity = target->getRigidBody()->getLinearVelocity();
+            targetVelocity_ = {std::abs(velocity.x), std::abs(velocity.y)};
+            target->getRigidBody()->setLinearVelocity({0, 0});
             targetTile_ = tileMap_.getTile(target->getTransform().getPosition());
             target_ = std::move(target);
         } else
@@ -56,8 +59,20 @@ namespace ime {
         eventEmitter_.emit("targetChange", target_);
     }
 
+    GridMover::Type GridMover::getType() const {
+        return type_;
+    }
+
     GameObject::sharedPtr GridMover::getTarget() const {
         return target_;
+    }
+
+    void GridMover::setHorizontalVelocity(float velocity) {
+        targetVelocity_.x = std::abs(velocity);
+    }
+
+    void GridMover::setVerticalVelocity(float velocity) {
+        targetVelocity_.y = std::abs(velocity);
     }
 
     TileMap &GridMover::getGrid() {
@@ -65,16 +80,11 @@ namespace ime {
     }
 
     bool GridMover::isTargetMoving() const {
-        auto target = std::dynamic_pointer_cast<IMovable>(target_);
-        if (target)
-            return target->isMoving();
-        return false;
+        return isMoving_;
     }
 
     bool GridMover::requestDirectionChange(Direction newDir) {
-        auto movableObj = std::dynamic_pointer_cast<IMovable>(target_);
-        if (movableObj && !movableObj->isMoving() && targetDirection_ == Direction::Unknown
-            && targetTile_.getIndex() == tileMap_.getTileOccupiedByChild(target_).getIndex()) {
+        if (!isTargetMoving() && targetDirection_ == Direction::Unknown) {
             switch (newDir) {
                 case Direction::Unknown:
                     target_->setDirection(Direction::Unknown);
@@ -101,8 +111,10 @@ namespace ime {
     void GridMover::update(Time deltaTime) {
         if (target_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover");
-            auto movable = std::dynamic_pointer_cast<IMovable>(target_);
-            if (!movable->isMoving() && targetDirection_ != Direction::Unknown) {
+            IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover");
+            IME_ASSERT(target_->getRigidBody()->getType() == BodyType::Kinematic, "The targets rigid body was changed from BodyType::Kinematic, a grid mover can only move game objects with a Kinematic rigid body");
+
+            if (!isTargetMoving() && targetDirection_ != Direction::Unknown) {
                 setTargetTile();
 
                 // Prevent target from moving to a tile that results in a collision
@@ -111,8 +123,9 @@ namespace ime {
                 else if (target_->isCollidable() && (handleSolidTileCollision() || handleObstacleCollision()))
                     return;
 
-                movable->move();
-            } else if (movable->isMoving() && isTargetTileReached(deltaTime)) {
+                isMoving_ = true;
+                setTargetVelocity();
+            } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
                 onDestinationReached();
             }
@@ -124,11 +137,30 @@ namespace ime {
     }
 
     void GridMover::snapTargetToTargetTile() {
-        if (target_ && target_->getTransform().getPosition() != targetTile_.getPosition()) {
-            std::dynamic_pointer_cast<IMovable>(target_)->stop();
-            targetDirection_ = Direction::Unknown;
-            tileMap_.removeChildFromTile(prevTile_, target_);
-            tileMap_.addChild(target_, targetTile_.getIndex());
+        target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+        isMoving_ = false;
+        targetDirection_ = Direction::Unknown;
+        tileMap_.removeChildFromTile(prevTile_, target_);
+        tileMap_.addChild(target_, targetTile_.getIndex());
+    }
+
+    void GridMover::setTargetVelocity() {
+        switch (targetDirection_) {
+            case Direction::Unknown:
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+                break;
+            case Direction::Left:
+                target_->getRigidBody()->setLinearVelocity({-targetVelocity_.x, 0.0f});
+                break;
+            case Direction::Right:
+                target_->getRigidBody()->setLinearVelocity({targetVelocity_.x, 0.0f});
+                break;
+            case Direction::Up:
+                target_->getRigidBody()->setLinearVelocity({0.0f, -targetVelocity_.y});
+                break;
+            case Direction::Down:
+                target_->getRigidBody()->setLinearVelocity({0.0f, targetVelocity_.y});
+                break;
         }
     }
 
@@ -137,6 +169,7 @@ namespace ime {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Direction::Unknown;
+            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("solidTileCollision", hitTile);
             return true;
         }
@@ -147,6 +180,7 @@ namespace ime {
         if (auto [found, obstacle] = targetTileHasObstacle(); found) {
             targetTile_ = prevTile_;
             targetDirection_ = Direction::Unknown;
+            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("obstacleCollision", target_, obstacle);
             return true;
         }
@@ -169,6 +203,7 @@ namespace ime {
         if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
             targetTile_ = prevTile_;
             targetDirection_ = Direction::Unknown;
+            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("gridBorderCollision");
             return true;
         }
@@ -176,14 +211,13 @@ namespace ime {
     }
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
-        auto movable = std::dynamic_pointer_cast<IMovable>(target_);
         if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
             auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getTransform().getPosition().x);
-            if (movable->getSpeed() * deltaTime.asSeconds() >= horizontalDistToTarget)
+            if (targetVelocity_.x * deltaTime.asSeconds() >= horizontalDistToTarget)
                 return true;
         } else if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
             auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getTransform().getPosition().y);
-            if (movable->getSpeed() * deltaTime.asSeconds() >= verticalDistToTarget)
+            if (targetVelocity_.y * deltaTime.asSeconds() >= verticalDistToTarget)
                 return true;
         }
         return false;

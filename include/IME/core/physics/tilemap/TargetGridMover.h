@@ -38,6 +38,9 @@ namespace ime {
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
          * @param target GameObject to be moved in the grid
+         *
+         * @warning The tilemap must be loaded before constructing this
+         * grid mover
          */
         explicit TargetGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
 

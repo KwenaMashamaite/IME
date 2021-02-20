@@ -38,19 +38,21 @@ namespace ime {
      * This class monitors the movement of an entity in a grid and ensures that
      * it always moves from one cell to the next and never between grid cells.
      * The entities direction cannot be changed until it has completed it's
-     * current movement
+     * current movement.
+     *
+     * Note that the grid mover only supports orthogonal movement (left, right,
+     * up and down)
      */
     class IME_API GridMover {
     public:
         /**
-         * @brief Create a grid mover
-         * @param tileMap Grid to move a target entity in
-         * @param target GameObject to be moved in the grid
-         *
-         * @warning if the target is not a nullptr, then it must be placed
-         * in the grid prior to instantiation of this class
+         * @brief Types of grid movers
          */
-        GridMover(TileMap &tileMap, GameObject::sharedPtr target);
+        enum class Type {
+            Random,            //!< Moves a game object randomly in the grid
+            Target,            //!< Moves a game object to a specific tile within the grid
+            KeyboardControlled //!< Moves a game object within the grid using the keyboard as a trigger
+        };
 
         /**
          * @brief Change the direction of the target entity
@@ -85,6 +87,40 @@ namespace ime {
          *         control
          */
         GameObject::sharedPtr getTarget() const;
+
+        /**
+         * @brief Set the horizontal (x-axis) velocity of the target
+         * @param velocity The new vertical velocity
+         *
+         * If the target is currently moving, the speed will be set after it
+         * reaches its current destination tile
+         *
+         * @warning When using a grid mover the velocity of the target must
+         * not be set directly but rather through this function. Setting the
+         * velocity directly will transfer movement management of the game
+         * object from the grid mover to the physics engine
+         */
+        void setHorizontalVelocity(float velocity);
+
+        /**
+         * @brief Set the vertical (y-axis) velocity of the target
+         * @param velocity The new vertical velocity
+         *
+         * If the target is currently moving, the speed will be set after it
+         * reaches its current destination tile
+         *
+         * @warning When using a grid mover the velocity of the target must
+         * not be set directly but rather through this function. Setting the
+         * velocity directly will transfer movement management of the game
+         * object from the grid mover to the physics engine.
+         */
+        void setVerticalVelocity(float velocity);
+
+        /**
+         * @brief Get the type of the grid mover
+         * @return The type of the grid mover
+         */
+        Type getType() const;
 
         /**
          * @brief Get access to the grid in which the target is moved in
@@ -339,13 +375,34 @@ namespace ime {
          */
         void snapTargetToTargetTile();
 
+        /**
+         * @brief Set the velocity of the target based on its intended
+         *        direction of motion
+         */
+        void setTargetVelocity();
+
+    protected:
+        /**
+         * @brief Create a grid mover
+         * @param type The type of the grid mover
+         * @param tileMap Grid to move a target entity in
+         * @param target GameObject to be moved in the grid
+         *
+         * @warning if the target is not a nullptr, then it must be placed
+         * in the grid prior to instantiation of this class
+         */
+        GridMover(Type type, TileMap &tileMap, GameObject::sharedPtr target);
+
     private:
-        TileMap& tileMap_;          //!< Grid to move entity in
-        GameObject::sharedPtr target_;          //!< Target to be moved in the grid
-        Direction targetDirection_; //!< Stores the direction in which the target wishes to go
-        Tile targetTile_;           //!< The grid tile the target wishes to reach
-        Tile prevTile_;             //!< Tile target was in before moving to adjacent tile
-        EventEmitter eventEmitter_; //!< Collision event publisher
+        Type type_;                    //!< The type of the grid mover
+        TileMap& tileMap_;             //!< Grid to move entity in
+        GameObject::sharedPtr target_; //!< Target to be moved in the grid
+        Vector2f targetVelocity_;      //!< The targets linear velocity
+        Direction targetDirection_;    //!< Stores the direction in which the target wishes to go
+        Tile targetTile_;              //!< The grid tile the target wishes to reach
+        Tile prevTile_;                //!< Tile target was in before moving to adjacent tile
+        EventEmitter eventEmitter_;    //!< Collision event publisher
+        bool isMoving_;
     };
 }
 

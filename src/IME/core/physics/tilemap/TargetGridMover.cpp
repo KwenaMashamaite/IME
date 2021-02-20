@@ -28,12 +28,14 @@
 
 namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject::sharedPtr target) :
-        GridMover(tileMap, target),
+        GridMover(Type::Target, tileMap, target),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         movementStarted_{false},
         targetTileChangedWhileMoving_{false}
     {
+        IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap");
+
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 

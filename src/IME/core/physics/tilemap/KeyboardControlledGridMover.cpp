@@ -27,7 +27,7 @@
 
 namespace ime {
     KeyboardControlledGridMover::KeyboardControlledGridMover(TileMap &tileMap, std::shared_ptr<GameObject> target) :
-        GridMover(tileMap, target),
+        GridMover(Type::KeyboardControlled, tileMap, target),
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
         onAdjacentTileReached([this](Tile) {
