@@ -124,12 +124,6 @@ namespace ime {
         Vector2u getSize() const;
 
         /**
-         * @brief Set the visibility of the tile border
-         * @param isVisible True to set visible, otherwise false
-         */
-        void setBorderVisible(bool isVisible);
-
-        /**
          * @brief Set the index of the tile in the tilemap
          * @param index The index of the tile in the tilemap
          *

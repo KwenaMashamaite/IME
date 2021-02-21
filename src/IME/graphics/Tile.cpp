@@ -33,9 +33,8 @@ namespace ime {
     {
         setSize(size.x, size.y);
         tile_.setOutlineColour(Colour::White);
-        tile_.setOutlineThickness(-1.0f);
-        tile_.setFillColour(Colour::Transparent);
-        prevFillColour_ = Colour::Transparent;
+        tile_.setFillColour({36, 37, 38, 255});
+        prevFillColour_ = tile_.getFillColour();
         setPosition(position);
     }
 
@@ -135,13 +134,6 @@ namespace ime {
 
     Sprite &Tile::getSprite() {
         return sprite_;
-    }
-
-    void Tile::setBorderVisible(bool isVisible) {
-        if (isVisible)
-            tile_.setOutlineColour(Colour::White);
-        else
-            tile_.setOutlineColour(Colour::Transparent);
     }
 
     void Tile::setIndex(Index index) {

@@ -32,6 +32,7 @@
 #include "IME/core/tilemap/Index.h"
 #include "IME/core/entity/GameObject.h"
 #include "IME/graphics/Sprite.h"
+#include "IME/graphics/shapes/RectangleShape.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -57,18 +58,26 @@ namespace ime {
         explicit TileMap(unsigned int tileWidth = 8, unsigned int tileHeight = 8);
 
         /**
-         * @brief Show or hide the tilemap grid lines
-         * @param isVisible True to show or false to hide the grid lines
+         * @brief Show or hide the tilemap
+         * @param visible True to show or false to hide the tilemap
          *
-         * The grid lines are visible by default
+         * By default, the tilemap is visible
          */
-        void setGridVisible(bool isVisible);
+        void setVisible(bool visible);
 
         /**
-         * @brief Check if the grid is visible or not
-         * @return True if grid is visible, otherwise false
+         * @brief Check if the tilemap is visible or not
+         * @return True if the tilemap is visible, otherwise false
          */
-        bool isGridVisible() const;
+        bool isVisible() const;
+
+        /**
+         * @brief Toggle the visibility of the tilemap
+         *
+         * This function will show the tilemap if it is currently visible
+         * or hide it if its currently visible
+         */
+        void toggleVisibility();
 
         /**
          * @brief Set the position of the tile map
@@ -652,12 +661,13 @@ namespace ime {
         unsigned int numOfColms_;    //!< The height of the tilemap in tiles
         Map mapData_;                //!< Map data used to identify different tiles
         std::string tileSet_;        //!< Tileset the visual grid is constructed from
-        bool isGridVisible_;         //!< Visibility state of the grid
+        bool isVisible_;             //!< A flag indicating whether or not the tilemap is visible
         bool isBackgroundDrawable_;  //!< First layer render state
         bool isTilesDrawable_;       //!< Second layer render state
         Tile invalidTile_;           //!< Tile returned when an invalid index is provided
         Sprite background_;          //!< Background image (first layer)
 
+        RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
         std::unordered_map<Index, std::vector<GameObject::sharedPtr>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;                            //!< Tiles container

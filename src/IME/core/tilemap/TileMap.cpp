@@ -30,7 +30,7 @@
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight) :
         tileSpacing_{1u},
-        isGridVisible_(true),
+        isVisible_(true),
         isBackgroundDrawable_(false),
         isTilesDrawable_(true),
         invalidTile_({0, 0}, {-1, -1})
@@ -48,17 +48,31 @@ namespace ime {
 
         tileSize_ = Vector2u{tileWidth, tileHeight};
         background_.setPosition(0, 0);
+        backgroundTile_.setFillColour(Colour::Grey);
     }
 
-    void TileMap::setGridVisible(bool isVisible) {
-        if (isGridVisible_ == isVisible)
+    void TileMap::setVisible(bool visible) {
+        if (isVisible_ == visible)
             return;
 
+        isVisible_ = visible;
+
         forEachTile([=](Tile& tile) {
-            tile.setBorderVisible(isVisible);
+            tile.setVisible(visible);
         });
 
-        isGridVisible_ = isVisible;
+        if (isVisible_)
+            backgroundTile_.setFillColour(Colour::Grey);
+        else
+            backgroundTile_.setFillColour(ime::Colour::Transparent);
+    }
+
+    bool TileMap::isVisible() const {
+        return isVisible_;
+    }
+
+    void TileMap::toggleVisibility() {
+        setVisible(!isVisible_);
     }
 
     Tile& TileMap::getTile(const Vector2f &position) {
@@ -118,6 +132,7 @@ namespace ime {
     void TileMap::setPosition(int x, int y) {
         mapPos_.x = x;
         mapPos_.y = y;
+        backgroundTile_.setPosition(mapPos_);
 
         for (auto i = 0u; i < tiledMap_.size(); i++) {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
@@ -166,6 +181,7 @@ namespace ime {
         //Accommodate tile spacing in overall tilemap size
         mapSizeInPixels_.x += (numOfColms_ - 1) * tileSpacing_;
         mapSizeInPixels_.y += (numOfRows_ - 1) * tileSpacing_;
+        backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
     void TileMap::createObjectList() {
@@ -175,7 +191,10 @@ namespace ime {
     }
 
     void TileMap::draw(Window &renderTarget) {
-        //Draw background (first layer)
+        // Draw tile background
+        renderTarget.draw(backgroundTile_);
+
+        // Draw user background
         if (isBackgroundDrawable_)
             renderTarget.draw(background_);
 
@@ -466,10 +485,6 @@ namespace ime {
 
     Tile& TileMap::getTileRightOf(const Index &index) {
         return getTile(Index{index.row, index.colm + 1});
-    }
-
-    bool TileMap::isGridVisible() const {
-        return isGridVisible_;
     }
 
     Vector2u TileMap::getSize() const {
