@@ -391,7 +391,8 @@ namespace ime {
          *         invalid or the entity already exists in the tilemap
          *
          * If the specified tile is already occupied, the child will be added
-         * as a visitor of that tile
+         * as a visitor of that tile. Note that @a child will always be placed
+         * at the centre point of the tile
          */
         bool addChild(GameObject::sharedPtr child, Index index);
 

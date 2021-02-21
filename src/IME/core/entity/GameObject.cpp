@@ -178,7 +178,7 @@ namespace ime {
         IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one");
         body_ = body;
         resetSpriteOrigin();
-        transform_.setPosition(body->getPosition());
+        body_->setPosition(transform_.getPosition());
         transform_.setRotation(body->getRotation());
     }
 
@@ -242,6 +242,7 @@ namespace ime {
             if (property == "position") {
                 sprite_.setPosition(transform_.getPosition());
                 dispatchEvent("positionChange", transform_.getPosition());
+                dispatchEvent("positionChange", transform_.getPosition().x, transform_.getPosition().y);
             } else if (property == "origin") {
                 sprite_.setOrigin(transform_.getOrigin());
                 dispatchEvent("originChange", transform_.getOrigin());

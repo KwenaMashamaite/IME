@@ -137,11 +137,12 @@ namespace ime {
     }
 
     void GridMover::snapTargetToTargetTile() {
-        target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         isMoving_ = false;
         targetDirection_ = Direction::Unknown;
         tileMap_.removeChildFromTile(prevTile_, target_);
         tileMap_.addChild(target_, targetTile_.getIndex());
+        target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+        target_->getRigidBody()->setPosition(targetTile_.getWorldCentre());
     }
 
     void GridMover::setTargetVelocity() {
@@ -212,11 +213,11 @@ namespace ime {
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
         if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
-            auto horizontalDistToTarget = std::abs(targetTile_.getPosition().x - target_->getTransform().getPosition().x);
+            auto horizontalDistToTarget = std::abs(targetTile_.getWorldCentre().x - target_->getTransform().getPosition().x);
             if (targetVelocity_.x * deltaTime.asSeconds() >= horizontalDistToTarget)
                 return true;
         } else if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
-            auto verticalDistToTarget = std::abs(targetTile_.getPosition().y - target_->getTransform().getPosition().y);
+            auto verticalDistToTarget = std::abs(targetTile_.getWorldCentre().y - target_->getTransform().getPosition().y);
             if (targetVelocity_.y * deltaTime.asSeconds() >= verticalDistToTarget)
                 return true;
         }

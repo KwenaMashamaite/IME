@@ -93,6 +93,18 @@ namespace ime {
         Vector2f getPosition() const;
 
         /**
+         * @brief Get the tile's centre point in world coordinates
+         * @return The tiles centre point in world coordinates
+         */
+        Vector2f getWorldCentre() const;
+
+        /**
+         * @brief Get the tile's centre point in local coordinates
+         * @return The tiles centre point in local coordinates
+         */
+        Vector2f getLocalCentre() const;
+
+        /**
          * @brief Set the size of the tile
          * @param width The horizontal size
          * @param height The vertical size

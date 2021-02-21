@@ -44,10 +44,6 @@ namespace ime {
                 static_cast<unsigned int>(tile_.getGlobalBounds().height)};
     }
 
-    Vector2f Tile::getPosition() const {
-        return {tile_.getPosition().x, tile_.getPosition().y};
-    }
-
     void Tile::setPosition(float x, float y) {
         tile_.setPosition(x, y);
         sprite_.setPosition(getPosition().x, getPosition().y);
@@ -55,6 +51,19 @@ namespace ime {
 
     void Tile::setPosition(Vector2f position) {
         setPosition(position.x, position.y);
+    }
+
+    Vector2f Tile::getPosition() const {
+        return {tile_.getPosition().x, tile_.getPosition().y};
+    }
+
+    Vector2f Tile::getWorldCentre() const {
+        return {tile_.getPosition().x + tile_.getSize().x / 2.0f,
+                tile_.getPosition().y + tile_.getSize().y / 2.0f};
+    }
+
+    Vector2f Tile::getLocalCentre() const {
+        return tile_.getSize() / 2.0f;
     }
 
     void Tile::setSize(unsigned int width, unsigned int height) {
