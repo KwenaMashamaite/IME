@@ -75,6 +75,10 @@ namespace ime {
         targetVelocity_.y = std::abs(velocity);
     }
 
+    Vector2f GridMover::getTargetVelocity() const {
+        return targetVelocity_;
+    }
+
     TileMap &GridMover::getGrid() {
         return tileMap_;
     }

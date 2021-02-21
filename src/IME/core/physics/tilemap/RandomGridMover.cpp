@@ -41,8 +41,18 @@ namespace ime {
                 prevDirection_ = newTarget->getDirection();
                 if (movementStarted_)
                     generateNewDirection();
+                // A grid mover sets the velocity of the target to zero after receiving
+                // it so that it can be set when it is time to move the target.
+                //
+                // The RandomGrid mover will set the velocity of the target to zero
+                // (before emitting a "targetChange" event). So we need to set it back so that
+                // the TargetGridMover can also initialize properly, otherwise it will initialize
+                // with a move velocity of zero and the target will not move when advanced
+                // movement is enabled (Normal random movement uses this class while advanced
+                // random movement delegates to a TargetGridMover class).
+                newTarget->getRigidBody()->setLinearVelocity(getTargetVelocity());
+                targetGridMover_.setTarget(newTarget);
             }
-            targetGridMover_.setTarget(newTarget);
         });
 
         onSolidTileCollision([this](Tile) {
@@ -136,6 +146,7 @@ namespace ime {
 
     void RandomGridMover::enableAdvancedMovement(bool enable) {
         if (!isAdvance_ && enable) {
+            IME_ASSERT(targetGridMover_.getTarget(), "Cannot enable advanced movement without a target");
             if (isTargetMoving())
                 switchToAdvanced_ = true;
             else {
@@ -159,9 +170,11 @@ namespace ime {
         static auto generateRandomRow = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().y);
         static auto generateRandomColm = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().x);
 
-        auto newDestination = Index{generateRandomRow(), generateRandomColm()};
-        while(!targetGridMover_.isDestinationReachable(newDestination))
+        Index newDestination;
+        do {
             newDestination = Index{generateRandomRow(), generateRandomColm()};
+        } while(!targetGridMover_.isDestinationReachable(newDestination));
+
         targetGridMover_.setDestination(newDestination);
     }
 

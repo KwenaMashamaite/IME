@@ -91,11 +91,10 @@ namespace ime {
     }
 
     bool TargetGridMover::isDestinationReachable(Index index) {
-        if (getTarget())
-            return !(pathFinder_->findPath(getGrid(),
-                getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
-                index).empty());
-        return false;
+        IME_ASSERT(getTarget(), "Cannot check destination reachability without a target");
+        return !(pathFinder_->findPath(getGrid(),
+            getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
+            index).empty());
     }
 
     void TargetGridMover::setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder) {

@@ -117,6 +117,17 @@ namespace ime {
         void setVerticalVelocity(float velocity);
 
         /**
+         * @brief Get the velocity of the target when it is moving
+         * @return The velocity of the target when it is moving
+         *
+         * When a game object is controlled by a grid mover, its velocity
+         * will change between zero and its set velocity whereas when
+         * controlled by a physics simulation its set velocity is never
+         * modified
+         */
+        Vector2f getTargetVelocity() const;
+
+        /**
          * @brief Get the type of the grid mover
          * @return The type of the grid mover
          */
