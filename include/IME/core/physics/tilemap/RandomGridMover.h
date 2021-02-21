@@ -63,6 +63,16 @@ namespace ime {
         void stopMovement();
 
         /**
+         * @brief Get the index of the tile the target is trying to reach
+         * @return The index of the tile the target is trying to reach
+         *
+         * If the target it not moving towards any tiles, this function
+         * will return the index of the tile currently occupied by the
+         * target
+         */
+        Index getTargetTileIndex() const override;
+
+        /**
          * @brief Update the game object movement in the grid
          * @param deltaTime Time passed since movement was last updated
          */

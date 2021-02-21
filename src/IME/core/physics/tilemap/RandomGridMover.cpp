@@ -113,6 +113,13 @@ namespace ime {
             targetGridMover_.stopMovement();
     }
 
+    Index RandomGridMover::getTargetTileIndex() const {
+        if (isAdvance_)
+            return targetGridMover_.getTargetTileIndex();
+
+        return GridMover::getTargetTileIndex();
+    }
+
     void RandomGridMover::generateNewDirection() {
         if (!getTarget())
             return;

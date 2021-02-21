@@ -79,6 +79,10 @@ namespace ime {
         return targetVelocity_;
     }
 
+    Index GridMover::getTargetTileIndex() const {
+        return targetTile_.getIndex();
+    }
+
     TileMap &GridMover::getGrid() {
         return tileMap_;
     }

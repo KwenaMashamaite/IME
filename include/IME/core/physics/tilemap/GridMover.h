@@ -128,6 +128,16 @@ namespace ime {
         Vector2f getTargetVelocity() const;
 
         /**
+         * @brief Get the index of the adjacent tile the target is trying to reach
+         * @return The index of the adjacent tile the target is trying to reach
+         *
+         * If the target it not moving towards any tiles, this function
+         * will return the index of the tile currently occupied by the
+         * target
+         */
+        virtual Index getTargetTileIndex() const;
+
+        /**
          * @brief Get the type of the grid mover
          * @return The type of the grid mover
          */
