@@ -141,6 +141,11 @@ namespace ime {
     }
 
     void Engine::run() {
+        if (isRunning_) {
+            IME_PRINT_WARNING("Engine cannot be rerun while it is running, stop it first then call 'run' again");
+            return;
+        }
+
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
         IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states");
 
