@@ -123,18 +123,6 @@ namespace ime {
         void destroyFixture(Fixture::sharedPtr fixture);
 
         /**
-         * @brief Set the position of the bodies origin and rotation
-         * @param transform The transform to be set
-         */
-        void setTransform(const Transform& transform);
-
-        /**
-         * @brief Get the transform for the body's origin
-         * @return The world transform of the body
-         */
-        Transform getTransform() const;
-
-        /**
          * @brief Set the world position of the body's local origin
          * @param position The position to set
          */
@@ -184,13 +172,13 @@ namespace ime {
 
         /**
          * @brief Set the angular velocity
-         * @param omega The new angular velocity in radians/second
+         * @param degrees The new angular velocity
          */
-        void setAngularVelocity(float omega);
+        void setAngularVelocity(float degrees);
 
         /**
          * @brief Get the angular velocity
-         * @return The new angular velocity in radians/second
+         * @return The new angular velocity
          */
         float getAngularVelocity() const;
 
@@ -242,15 +230,19 @@ namespace ime {
          * @brief Apply an impulse at the centre of mass
          * @param impulse The impulse to be applied in N-s or kg-m/s
          * @param wake True to wake the body otherwise false
+         *
+         * By default, This function will wake the body if it is sleeping
          */
-        void applyLinearImpulseToCenter(Vector2f impulse, bool wake);
+        void applyLinearImpulseToCenter(Vector2f impulse, bool wake = true);
 
         /**
          * @brief Apply an angular impulse
          * @param impulse The impulse to be applied in kg*m*m/s
          * @param wake True to wake the body, otherwise false
+         *
+         * By default, This function will wake the body if it is sleeping
          */
-        void applyAngularImpulse(float impulse, bool wake);
+        void applyAngularImpulse(float impulse, bool wake = true);
 
         /**
          * @brief Get the total mass of the body

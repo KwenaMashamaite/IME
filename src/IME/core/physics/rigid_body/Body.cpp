@@ -41,8 +41,8 @@ namespace ime {
         b2Definition->type = static_cast<b2BodyType>(definition.bodyType);
         b2Definition->position = {utility::pixelsToMetres(definition.position.x), utility::pixelsToMetres(definition.position.y)};
         b2Definition->angle = utility::degToRad(definition.angle);
-        b2Definition->linearVelocity = {definition.linearVelocity.x, definition.linearVelocity.y};
-        b2Definition->angularVelocity = definition.angularVelocity;
+        b2Definition->linearVelocity = {utility::pixelsToMetres(definition.linearVelocity.x), utility::pixelsToMetres(definition.linearVelocity.y)};
+        b2Definition->angularVelocity = utility::degToRad(definition.angularVelocity);
         b2Definition->linearDamping = definition.linearDamping;
         b2Definition->angularDamping = definition.angularDamping;
         b2Definition->allowSleep = definition.canSleep;
@@ -103,22 +103,6 @@ namespace ime {
         }
     }
 
-    void Body::setTransform(const Transform& transform) {
-        body_->SetTransform({utility::pixelsToMetres(transform.getPosition().x),
-            utility::pixelsToMetres(transform.getPosition().y)},
-            utility::degToRad(transform.getRotation()));
-    }
-
-    Transform Body::getTransform() const {
-        auto transform = Transform();
-        transform.setPosition(getPosition());
-        transform.setRotation(getRotation());
-        transform.setOrigin(getLocalCenter());
-        transform.setScale(1.0f, 1.0f);
-
-        return transform;
-    }
-
     void Body::setPosition(Vector2f position) {
         body_->SetTransform(
             {utility::pixelsToMetres(position.x), utility::pixelsToMetres(position.y)},
@@ -147,19 +131,19 @@ namespace ime {
     }
 
     void Body::setLinearVelocity(Vector2f velocity) {
-        body_->SetLinearVelocity({velocity.x, velocity.y});
+        body_->SetLinearVelocity({utility::pixelsToMetres(velocity.x), utility::pixelsToMetres(velocity.y)});
     }
 
     Vector2f Body::getLinearVelocity() const {
-        return {body_->GetLinearVelocity().x, body_->GetLinearVelocity().y};
+        return {utility::metresToPixels(body_->GetLinearVelocity().x), utility::metresToPixels(body_->GetLinearVelocity().y)};
     }
 
-    void Body::setAngularVelocity(float omega) {
-        body_->SetAngularVelocity(omega);
+    void Body::setAngularVelocity(float degrees) {
+        body_->SetAngularVelocity(utility::degToRad(degrees));
     }
 
     float Body::getAngularVelocity() const {
-        return body_->GetAngularVelocity();
+        return utility::radToDeg(body_->GetAngularVelocity());
     }
 
     void Body::applyForce(Vector2f force, Vector2f point, bool wake) {
@@ -210,8 +194,8 @@ namespace ime {
         auto worldVector = body_->GetWorldVector({utility::pixelsToMetres(localVector.x),
             utility::pixelsToMetres(localVector.y)});
 
-        return {utility::metresToPixels(worldVector.x),
-                utility::metresToPixels(worldVector.y)};
+        return {utility::radToDeg(worldVector.x),
+                utility::radToDeg(worldVector.y)};
     }
 
     Vector2f Body::getLocalPoint(Vector2f worldPoint) const {
@@ -226,22 +210,22 @@ namespace ime {
         auto localVector = body_->GetLocalVector({utility::pixelsToMetres(worldVector.x),
             utility::pixelsToMetres(worldVector.y)});
 
-        return {utility::metresToPixels(localVector.x),
-                utility::metresToPixels(localVector.y)};
+        return {utility::radToDeg(localVector.x),
+                utility::radToDeg(localVector.y)};
     }
 
     Vector2f Body::getLinearVelocityFromWorldPoint(Vector2f worldPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(worldPoint.x),
             utility::pixelsToMetres(worldPoint.y)});
 
-        return {velocity.x, velocity.y};
+        return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
     Vector2f Body::getLinearVelocityFromLocalPoint(Vector2f localPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(localPoint.x),
             utility::pixelsToMetres(localPoint.y)});
 
-        return {velocity.x, velocity.y};
+        return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
     void Body::setLinearDamping(float damping) {
