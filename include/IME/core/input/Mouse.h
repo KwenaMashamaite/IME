@@ -218,6 +218,8 @@ namespace ime {
             EventEmitter eventEmitter_; //!< Event publisher
         };
     }
+
+    using Mouse = ime::input::Mouse;
 }
 
 #endif // IME_MOUSE_H

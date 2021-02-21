@@ -237,6 +237,9 @@ namespace ime {
             std::unordered_map<int, bool> wasDown_; //!< The state of a key in the previous frame
         };
     }
+
+    using Keyboard = ime::input::Keyboard;
+    using Key = ime::input::Keyboard::Key;
 }
 
 #endif // IME_KEYBOARD_H
