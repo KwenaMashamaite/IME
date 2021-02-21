@@ -133,6 +133,7 @@ namespace ime {
 
     void Scene::createWorld(Vector2f gravity) {
         world_ = World::create(*this, gravity);
+        world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
     }
 }

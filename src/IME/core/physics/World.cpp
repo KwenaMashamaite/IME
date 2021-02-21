@@ -26,6 +26,7 @@
 #include "../../utility/Helpers.h"
 #include "IME/core/entity/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
+#include "../../graphics/DebugDrawer.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_fixture.h>
@@ -163,6 +164,7 @@ namespace ime {
         scene_{scene},
         world_{std::make_unique<b2World>(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
+        isDebugDrawEnabled_{false},
         timescale_{1.0f}
     {
         b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
@@ -360,6 +362,40 @@ namespace ime {
         return scene_;
     }
 
+    void World::enableDebugDraw(bool enable) {
+#if !defined(NDEBUG)
+        isDebugDrawEnabled_ = enable;
+#endif
+    }
+
+    bool World::isDebugDrawEnabled() const {
+        return isDebugDrawEnabled_;
+    }
+
+    World::DebugDrawerFilter &World::getDebugDrawerFilter() {
+        return debugDrawerFilter_;
+    }
+
+    const World::DebugDrawerFilter &World::getDebugDrawerFilter() const {
+        return debugDrawerFilter_;
+    }
+
+    void World::debugDraw() {
+        if (isDebugDrawEnabled_) {
+            IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one");
+
+            // Reset the flags in case of a change since last step
+            uint32 flags = 0;
+            flags += debugDrawerFilter_.drawShapes * b2Draw::e_shapeBit;
+            flags += debugDrawerFilter_.drawJoints * b2Draw::e_jointBit;
+            flags += debugDrawerFilter_.drawAABB * b2Draw::e_aabbBit;
+            flags += debugDrawerFilter_.drawCentreOfMass * b2Draw::e_centerOfMassBit;
+            debugDrawer_->SetFlags(flags);
+
+            world_->DebugDraw();
+        }
+    }
+
     std::unique_ptr<b2World>& World::getInternalWorld() {
         return world_;
     }
@@ -369,4 +405,13 @@ namespace ime {
         // it is called by the custom deleter of the internal body
         return utility::eraseIn(bodies_, id);
     }
+
+    void World::createDebugDrawer(Window &renderWindow) {
+        if (!debugDrawer_) {
+            debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);
+            world_->SetDebugDraw(debugDrawer_.get());
+        }
+    }
+
+    World::~World() = default;
 }

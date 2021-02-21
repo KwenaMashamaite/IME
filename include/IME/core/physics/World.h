@@ -40,6 +40,11 @@ class b2World;
 
 namespace ime {
     class GameObject; //!< GameObject class forward declaration
+    class Window;     //!< Window class forward declaration
+
+    namespace priv {
+        class DebugDrawer;
+    }
 
     /**
      * @brief The World is responsible for creating, managing, colliding and
@@ -96,6 +101,32 @@ namespace ime {
          */
         using RayCastCallback = std::function<float(Fixture::sharedPtr,
                 Vector2f, Vector2f, float)>;
+
+        /**
+         * @brief Controls the filter flags of the debug drawer
+         *
+         * The flags determine what gets rendered by the debug drawer
+         */
+        struct DebugDrawerFilter {
+            /**
+             * @brief Constructor
+             */
+            DebugDrawerFilter() :
+                drawAABB{false},
+                drawShapes{true},
+                drawJoints{false},
+                drawCentreOfMass{false}
+            {}
+
+            //////////////////////////////////////////////////////////////////////
+            // Member data
+            //////////////////////////////////////////////////////////////////////
+
+            bool drawAABB;          //!< A flag indicating whether or not to draw rigid body AABB
+            bool drawShapes;        //!< A flag indicating whether or not to draw rigid body shapes/colliders
+            bool drawJoints;        //!< A flag indicating whether or not to draw joint
+            bool drawCentreOfMass;  //!< A flag indicating whether or not to draw rigid body centre of mass
+        };
 
         /**
          * @brief Create the physics simulation
@@ -441,6 +472,66 @@ namespace ime {
         Scene& getScene();
 
         /**
+         * @brief Enable or disable debug drawing
+         * @param enable True to enable debug draw or false to disable it
+         *
+         * Debug drawing allows you to see what the rigid bodies are doing and
+         * where they are in the world. When enabled, the physics simulation
+         * will render all the bodies it contains using geometric shapes such
+         * as circles and rectangles (Depending on the type of colliders on
+         * the bodies). By default, the simulation will only render the shapes
+         * of the rigid bodies, however you can use the getDebugDrawFilter
+         * to control what gets rendered by the debug drawer.
+         *
+         * Debug drawing is useful in many different ways. For instance say
+         * you have a rigid body attached to a game object and when the game
+         * object collides with a wall, the game object sprite always enters
+         * the wall by half of its size due to a origin mismatched between
+         * the sprite and the rigid body. In this case enabling debug draw
+         * and drawing the sprite will point out the problem immediately,
+         * saving you a lot of debugging time.
+         *
+         * Be default, debug drawing is disabled
+         *
+         * @warning Don't forget to call debugDraw function when rendering
+         * otherwise debug draw data will not be rendered and it will appear
+         * as if the debug draw is not working
+         *
+         * @note Debug drawing is only available in project debug mode
+         *
+         * @see debugDraw
+         */
+        void enableDebugDraw(bool enable);
+
+        /**
+         * @brief Check if debug draw is enabled or not
+         * @return True if debug draw is enabled, otherwise false
+         *
+         * @see enableDebugDraw
+         */
+        bool isDebugDrawEnabled() const;
+
+        /**
+         * @brief Get the debug drawer filter data
+         * @return A reference to the debug drawer filter data
+         *
+         * The returned data may be manipulated to set what is rendered by
+         * the debug drawer
+         *
+         * @see enableDebugDraw
+         */
+        DebugDrawerFilter& getDebugDrawerFilter();
+        const DebugDrawerFilter& getDebugDrawerFilter() const;
+
+        /**
+         * @brief Draw physics entities
+         * @param renderWindow Window to render physics entities on
+         *
+         * @see enableDebugDraw
+         */
+        void debugDraw();
+
+        /**
          * @internal
          * @brief Get the internal physics world
          * @return The internal physics world
@@ -464,6 +555,25 @@ namespace ime {
          */
         bool removeBodyById(unsigned int id);
 
+        /**
+         * @internal
+         * @brief Instantiate a debug drawer
+         * @param renderWindow The render target for debug drawing
+         *
+         * Note that only one debug drawer can be instantiated
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         *
+         * @see enableDebugDraw
+         */
+        void createDebugDrawer(Window& renderWindow);
+
+        /**
+         * @brief Destructor
+         */
+        ~World();
+
     private:
         /**
          * @brief Construct the world object
@@ -476,9 +586,12 @@ namespace ime {
         Scene& scene_;                         //!< The scene this world belongs to
         std::unique_ptr<b2World> world_;       //!< The physics world simulation
         bool fixedTimeStep_;                   //!< A flag indicating whether updates are fixed or variable
+        bool isDebugDrawEnabled_;              //!< A flag indicating whether or not debug drawing is enabled
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
         ContactListener contactListener_;      //!< Listens for contact between fixtures and alerts interested parties
+        DebugDrawerFilter debugDrawerFilter_;  //!< Control what gets renders by the debug drawer
 
+        std::unique_ptr<priv::DebugDrawer> debugDrawer_;   //!< Draws physics entities when debug draw is enabled
         std::unordered_map<int, Body::sharedPtr> bodies_;  //!< All bodies in this simulation
         std::unordered_map<int, Joint::sharedPtr> joints_; //!< All joints in this simulation
 
