@@ -37,24 +37,7 @@ namespace ime {
         isEntered_{false},
         isVisibleWhenPaused_{false},
         hasPhysicsSim_{false}
-    {
-        // "postStep" event is dispatched by the scene manager immediately after a physics step
-        eventEmitter_.on("postStep", Callback<>([this] {
-            shapeContainer_.forEach([](Shape::sharedPtr shape) {
-                if (shape->hasRigidBody()) {
-                    auto body = shape->getRigidBody();
-                    shape->setPosition(body->getPosition());
-                    shape->setRotation(body->getRotation());
-                }
-            });
-
-            entityContainer_.forEach([](GameObject::sharedPtr gameObject) {
-                auto body = gameObject->getRigidBody();
-                gameObject->getTransform().setPosition(body->getPosition());
-                gameObject->getTransform().setRotation(body->getRotation());
-            });
-        }));
-    }
+    {}
 
     Scene::Scene(Scene&& other) :
         engine_{other.engine_},
@@ -83,6 +66,10 @@ namespace ime {
         }
 
         return *this;
+    }
+
+    bool Scene::unsubscribe_(const std::string &event, int id) {
+        return internalEmitter_.removeEventListener(event, id);
     }
 
     void Scene::setName(const std::string &name) {

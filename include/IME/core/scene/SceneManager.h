@@ -152,6 +152,9 @@ namespace ime {
         /**
          * @brief Update the scene manager
          * @param deltaTime Time passed since last update
+         *
+         * This function is called by the engine before event/input handling
+         * and scene update takes place
          */
         void preUpdate(Time deltaTime);
 

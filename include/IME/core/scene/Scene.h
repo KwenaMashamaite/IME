@@ -217,23 +217,6 @@ namespace ime {
         const std::string& getName() const;
 
         /**
-         * @brief Set whether or not the scene is hidden or rendered
-         *        when it is paused
-         * @param True to show or false to hide
-         *
-         * When the scene is shown on pause, it is rendered behind the
-         * current active scene but it does not receive any events or
-         * updates. Note that the scene will only be rendered if it has
-         * been entered and it is the next scene (It is the scene that
-         * will run if the current one is popped)
-         *
-         * By default the scene is hidden when it is paused
-         *
-         * @see onPause
-         */
-        void setVisibleOnPause(bool show);
-
-        /**
          * @brief Check if the scene is visible when paused or not
          * @return True if visible, otherwise false
          *
@@ -250,11 +233,56 @@ namespace ime {
         bool isEntered() const;
 
         /**
+         * @internal
+         * @brief Add an event listener to a scene event
+         * @param event Event to add event listener to
+         * @param callback Function to be execute when the event is fired
+         * @return The callback id
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        template<typename ...Args>
+        int on_(const std::string& event, Callback<Args...> callback) {
+            return internalEmitter_.on(event, callback);
+        }
+
+        /**
+         * @internal
+         * @brief Unsubscribe from a scene event
+         * @param event The event to unsubscribe from
+         * @param id The event listeners id
+         * @return True if the event listener was unsubscribed or false if
+         *         @a event does not have a listener with the @a id
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        bool unsubscribe_(const std::string& event, int id);
+
+        /**
          * @brief Destructor
          */
         virtual ~Scene();
 
     protected:
+        /**
+         * @brief Set whether or not the scene is hidden or rendered
+         *        when it is paused
+         * @param True to show or false to hide
+         *
+         * When the scene is shown on pause, it is rendered behind the
+         * current active scene but it does not receive any events or
+         * updates. Note that the scene will only be rendered if it has
+         * been entered and it is the next scene (It is the scene that
+         * will run if the current one is popped)
+         *
+         * By default the scene is hidden when it is paused
+         *
+         * @see onPause
+         */
+        void setVisibleOnPause(bool show);
+
         /**
          * @brief Set the name of the scene
          * @param name The name of the scene
@@ -476,6 +504,7 @@ namespace ime {
         input::InputManager inputManager_; //!< Scene level input manager
         audio::AudioManager audioManager_; //!< Scene level audio manager
         EventEmitter eventEmitter_;        //!< scene level event dispatcher
+        EventEmitter internalEmitter_;     //!< Emits internal scene events
         TimerManager timerManager_;        //!< Scene level timer manager
         ui::GuiContainer guiContainer_;    //!< Scene level gui container
         ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene

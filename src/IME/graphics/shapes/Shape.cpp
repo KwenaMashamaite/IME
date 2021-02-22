@@ -28,7 +28,8 @@
 
 namespace ime {
     Shape::Shape(Type type) :
-        type_{type}
+        type_{type},
+        postStepId_{-1}
     {}
 
     Shape::Type Shape::getShapeType() const {
@@ -42,6 +43,16 @@ namespace ime {
         setOrigin(getLocalBounds().width / 2.0f, getLocalBounds().height / 2.0f);
         setPosition(body->getPosition());
         setRotation(body->getRotation());
+
+        // Synchronize the shape with its rigid body
+        if (postStepId_ == -1) {
+            postStepId_ = body_->getWorld()->getScene().on_("postStep", Callback<>([this] {
+                if (body_) {
+                    setPosition(body_->getPosition());
+                    setRotation(body_->getRotation());
+                }
+            }));
+        }
     }
 
     void Shape::removeRigidBody() {
@@ -61,6 +72,11 @@ namespace ime {
 
     bool Shape::hasRigidBody() const {
         return body_ != nullptr;
+    }
+
+    Shape::~Shape() {
+        if (postStepId_ != -1 && body_)
+            body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
     }
 }
 

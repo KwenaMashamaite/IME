@@ -179,11 +179,12 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Shape() = default;
+        virtual ~Shape();
 
     private:
         Type type_;            //!< The type of this shape
         Body::sharedPtr body_; //!< The shapes rigid body
+        int postStepId_;       //!< Scene post step handler id
     };
 }
 

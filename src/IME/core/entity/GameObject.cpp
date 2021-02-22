@@ -41,6 +41,14 @@ namespace ime {
         direction_{Direction::Unknown}
     {
         initTransformEvents();
+
+        // Synchronize the game object with its rigid body
+        postStepId_ = scene_.get().on_("postStep", Callback<>([this] {
+            if (body_) {
+                transform_.setPosition(body_->getPosition());
+                transform_.setRotation(body_->getRotation());
+            }
+        }));
     }
 
     GameObject::GameObject(const GameObject &other) :
@@ -254,5 +262,9 @@ namespace ime {
                 dispatchEvent("rotationChange", transform_.getRotation());
             }
         });
+    }
+
+    GameObject::~GameObject() {
+        scene_.get().unsubscribe_("postStep", postStepId_);
     }
 }

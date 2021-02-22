@@ -349,7 +349,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~GameObject() = default;
+        virtual ~GameObject();
 
     private:
         /**
@@ -383,6 +383,7 @@ namespace ime {
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object
+        int postStepId_;                      //!< Scene post step handler id
     };
 }
 

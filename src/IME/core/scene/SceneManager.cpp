@@ -147,15 +147,21 @@ namespace ime {
             return;
 
         auto& scene = scenes_.top();
+        scene->internalEmitter_.emit("preUpdate");
+        scene->internalEmitter_.emit("preUpdate", deltaTime * scene->getTimescale());
 
         // Update physics simulation
         if (scene->hasPhysicsSim_) {
+            scene->internalEmitter_.emit("preStep");
+            scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
+
             if (fixedUpdate && scene->world_->isFixedStep()) {
                 scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
             } else if (!fixedUpdate && !scene->world_->isFixedStep())
                 scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
-            scene->eventEmitter_.emit("postStep");
-            scene->eventEmitter_.emit("postStep", deltaTime);
+
+            scene->internalEmitter_.emit("postStep");
+            scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
 
         // Update scene
@@ -163,5 +169,8 @@ namespace ime {
             scene->fixedUpdate(deltaTime * scene->getTimescale());
         else
             scene->update(deltaTime * scene->getTimescale());
+
+        scene->internalEmitter_.emit("postUpdate");
+        scene->internalEmitter_.emit("postUpdate", deltaTime * scene->getTimescale());
     }
 }
