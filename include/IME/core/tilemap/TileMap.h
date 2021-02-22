@@ -30,7 +30,7 @@
 #include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/tilemap/Index.h"
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include <unordered_map>

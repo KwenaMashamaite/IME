@@ -11,12 +11,12 @@ set(IME_SRC
     core/audio/Audio.cpp
     core/audio/Music.cpp
     core/audio/SoundEffect.cpp
-    core/entity/GameObject.cpp
+    core/game_object/GameObject.cpp
     core/event/EventEmitter.cpp
     core/event/EventDispatcher.cpp
     core/input/Keyboard.cpp
     core/input/Mouse.cpp
-    core/loop/Engine.cpp
+    core/engine/Engine.cpp
     core/audio/AudioManager.cpp
     core/input/InputManager.cpp
     core/resources/ResourceManager.cpp

@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "Container.h"
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 
 namespace ime {
     /**

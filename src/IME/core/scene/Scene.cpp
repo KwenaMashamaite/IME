@@ -23,9 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/Scene.h"
-#include "IME/core/loop/Engine.h"
+#include "IME/core/engine/Engine.h"
 #include "IME/core/physics/World.h"
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 
 namespace ime {
     Scene::Scene(Engine &engine) :

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"

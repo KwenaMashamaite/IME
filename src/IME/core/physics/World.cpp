@@ -24,7 +24,7 @@
 
 #include "IME/core/physics/World.h"
 #include "../../utility/Helpers.h"
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "../../graphics/DebugDrawer.h"
 #include <box2d/b2_world.h>

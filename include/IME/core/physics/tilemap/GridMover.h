@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
-#include "IME/core/entity/GameObject.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
 

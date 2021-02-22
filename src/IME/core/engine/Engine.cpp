@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/loop/Engine.h"
+#include "IME/core/engine/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
 #include <SFML/Window/VideoMode.hpp>
