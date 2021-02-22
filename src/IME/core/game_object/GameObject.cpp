@@ -27,7 +27,7 @@
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 
-std::size_t ime::GameObject::prevEntityId_{0};
+unsigned int ime::GameObject::prevEntityId_{0};
 
 namespace ime {
     GameObject::GameObject(Scene& scene, Type type) :
@@ -177,7 +177,7 @@ namespace ime {
         return isVulnerable_;
     }
 
-    std::size_t GameObject::getObjectId() const {
+    unsigned int GameObject::getObjectId() const {
         return id_;
     }
 

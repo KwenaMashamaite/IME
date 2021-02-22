@@ -143,7 +143,7 @@ namespace ime {
         return shapeContainer_;
     }
 
-    EntityContainer &Scene::entities() {
+    GameObjectContainer &Scene::gameObjects() {
         return entityContainer_;
     }
 

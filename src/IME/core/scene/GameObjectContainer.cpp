@@ -22,20 +22,39 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_ENTITYCONTAINER_H
-#define IME_ENTITYCONTAINER_H
-
-#include "IME/Config.h"
-#include "Container.h"
-#include "IME/core/game_object/GameObject.h"
+#include "IME/core/scene/GameObjectContainer.h"
 
 namespace ime {
-    /**
-     * @brief GameObject container
-     */
-    class IME_API EntityContainer : public Container<GameObject> {
+    GameObject::sharedPtr GameObjectContainer::getObjectById(unsigned int id) {
+        return std::as_const(*this).getObjectById(id);
+    }
 
-    };
+    GameObject::sharedPtr GameObjectContainer::getObjectById(unsigned int id) const {
+        return findIf([id](const constItemPtr gameObject) {
+            return gameObject->getObjectId() == id;
+        });
+    }
+
+    GameObject::sharedPtr GameObjectContainer::getObjectByName(const std::string &name) {
+        return std::as_const(*this).getObjectByName(name);
+    }
+
+    const GameObject::sharedPtr GameObjectContainer::getObjectByName(const std::string &name) const {
+        return findIf([&name](const constItemPtr gameObject) {
+            return gameObject->getName() == name;
+        });
+    }
+
+    bool GameObjectContainer::removeObjectWithId(unsigned int id) {
+        return removeIf([id](const constItemPtr gameObject) {
+            return gameObject->getObjectId() == id;
+        });
+    }
+
+    bool GameObjectContainer::removeObjectWithName(const std::string &name) {
+        return removeIf([&name](const constItemPtr gameObject) {
+            return gameObject->getName() == name;
+        });
+    }
 }
 
-#endif //IME_ENTITYCONTAINER_H

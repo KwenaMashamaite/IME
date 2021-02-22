@@ -34,7 +34,7 @@
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/scene/ShapeContainer.h"
-#include "IME/core/scene/EntityContainer.h"
+#include "IME/core/scene/GameObjectContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include <string>
@@ -477,13 +477,13 @@ namespace ime {
 
         /**
          * @brief Get the scene game object container
-         * @return The scene entity container
+         * @return The scene game object container
          *
-         * This class stores entities that belong to this scene
+         * This class stores game objects that belong to this scene
          *
          * @warning Do not keep the returned reference
          */
-        EntityContainer& entities();
+        GameObjectContainer& gameObjects();
 
         /**
          * @brief Create a physics simulation
@@ -508,7 +508,7 @@ namespace ime {
         TimerManager timerManager_;        //!< Scene level timer manager
         ui::GuiContainer guiContainer_;    //!< Scene level gui container
         ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene
-        EntityContainer entityContainer_;  //!< Stores entities that belong to the scene
+        GameObjectContainer entityContainer_;  //!< Stores game objects that belong to the scene
         float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered

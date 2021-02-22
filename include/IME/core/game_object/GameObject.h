@@ -235,7 +235,7 @@ namespace ime {
          *
          * Each game object instance has it's own unique identification number
          */
-        std::size_t getObjectId() const;
+        unsigned int getObjectId() const;
 
         /**
          * @brief Attach a physics Body to the game object
@@ -370,9 +370,9 @@ namespace ime {
 
     private:
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
-        static std::size_t prevEntityId_;     //!< Object id counter
+        static unsigned int prevEntityId_;    //!< Object id counter
         Type type_;                           //!< The type of the game object
-        std::size_t id_;                      //!< Unique identifier
+        unsigned int id_;                     //!< Unique identifier
         int state_;                           //!< The current state of the game object
         std::string name_;                    //!< The name of the game object
         bool isVulnerable_;                   //!< Vulnerability state
