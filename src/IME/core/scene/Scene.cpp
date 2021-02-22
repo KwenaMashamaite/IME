@@ -56,6 +56,35 @@ namespace ime {
         }));
     }
 
+    Scene::Scene(Scene&& other) :
+        engine_{other.engine_},
+        cache_{other.cache_}
+    {
+        *this = std::move(other);
+    }
+
+    Scene &Scene::operator=(Scene && other) {
+        // We can't use a default move assignment operator because of reference members
+        if (this != &other) {
+            world_ = std::move(other.world_);
+            name_ = std::move(other.name_);
+            inputManager_ = std::move(other.inputManager_);
+            audioManager_ = std::move(other.audioManager_);
+            eventEmitter_ = std::move(other.eventEmitter_);
+            timerManager_ = std::move(other.timerManager_);
+            guiContainer_ = std::move(other.guiContainer_);
+            shapeContainer_ = std::move(other.shapeContainer_);
+            entityContainer_ = std::move(other.entityContainer_);
+            timescale_ = std::move(other.timescale_);
+            isManaged_ = std::move(other.isManaged_);
+            isEntered_ = std::move(other.isEntered_);
+            isVisibleWhenPaused_ = std::move(other.isVisibleWhenPaused_);
+            hasPhysicsSim_ = std::move(other.hasPhysicsSim_);
+        }
+
+        return *this;
+    }
+
     void Scene::setName(const std::string &name) {
         name_ = name;
     }
@@ -136,4 +165,6 @@ namespace ime {
         world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
     }
+
+    Scene::~Scene() = default;
 }

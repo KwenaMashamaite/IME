@@ -54,6 +54,16 @@ namespace ime {
             NonCopyable() = default;
 
             /**
+             * @brief Move constructor
+             */
+            NonCopyable(NonCopyable&&) = default;
+
+            /**
+             * @brief Move assignment operator
+             */
+            NonCopyable& operator=(NonCopyable&&) = default;
+
+            /**
              * @brief Destructor
              */
             ~NonCopyable() = default;

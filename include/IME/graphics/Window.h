@@ -65,6 +65,16 @@ namespace ime {
         Window();
 
         /**
+         * @brief Move constructor
+         */
+        Window(Window&&) = delete;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Window& operator=(Window&&) = delete;
+
+        /**
          * @brief Create a render window
          * @param title Title of the window
          * @param width Width of the window

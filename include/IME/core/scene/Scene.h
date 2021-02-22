@@ -36,6 +36,7 @@
 #include "IME/core/scene/ShapeContainer.h"
 #include "IME/core/scene/EntityContainer.h"
 #include "IME/ui/GuiContainer.h"
+#include "IME/utility/NonCopyable.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -71,7 +72,7 @@ namespace ime {
      * scene, the process repeats; the "pause" scene gets paused and the the new
      * scene becomes active)
      */
-    class IME_API Scene {
+    class IME_API Scene : utility::NonCopyable {
     public:
         using sharedPtr = std::shared_ptr<Scene>; //!< Shared Scene pointer
 
@@ -80,6 +81,16 @@ namespace ime {
          * @param engine A reference to the game engine
          */
         explicit Scene(Engine &engine);
+
+        /**
+         * @brief Move constructor
+         */
+        Scene(Scene&&);
+
+        /**
+         * @brief Move assignment operator
+         */
+        Scene& operator=(Scene&&);
 
         /**
          * @brief Enter the scene
@@ -241,7 +252,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Scene() = default;
+        virtual ~Scene();
 
     protected:
         /**

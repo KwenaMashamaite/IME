@@ -36,13 +36,14 @@
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
+#include "IME/utility/NonCopyable.h"
 #include <queue>
 
 namespace ime {
     /**
      * @brief Runs the main loop
      */
-    class IME_API Engine {
+    class IME_API Engine : utility::NonCopyable {
     public:
         /**
          * @brief Constructor
@@ -68,14 +69,14 @@ namespace ime {
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
-         * @brief Copy constructor
+         * @brief Move constructor
          */
-        Engine(const Engine&) = delete;
+        Engine(Engine&&) = delete;
 
         /**
-         * @brief Assignment operator
+         * @brief Move Assignment operator
          */
-        Engine& operator=(const Engine&) = delete;
+        Engine& operator=(Engine&&) = delete;
 
         /**
          * @brief Initialize the engine
