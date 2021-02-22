@@ -23,18 +23,43 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-inline void Container<T>::add(Item item) {
+inline void Container<T>::add(ItemPtr item) {
     items_.push_back(std::move(item));
 }
 
 template <typename T>
-inline bool Container<T>::remove(Item item) {
+inline typename Container<T>::ItemPtr Container<T>::findIf(Predicate predicate) {
+    std::as_const(*this)->findIf(predicate);
+}
+
+template <typename T>
+inline const typename Container<T>::ItemPtr Container<T>::findIf(Predicate predicate) const {
+    auto found = std::find_if(items_.begin(), items_.end(), predicate);
+
+    if (found != items_.cend())
+        return *found;
+
+    return nullptr;
+}
+
+template <typename T>
+inline bool Container<T>::remove(ItemPtr item) {
+    if (item == nullptr)
+        return false;
+
     if (auto found = std::find(items_.begin(), items_.end(), item); found != items_.end()) {
         items_.erase(found);
         return true;
     }
 
     return false;
+}
+
+template <typename T>
+inline bool Container<T>::removeIf(Predicate predicate) {
+    auto prevSize = items_.size();
+    items_.erase(std::remove_if(items_.begin(), items_.end(), predicate), items_.end());
+    return items_.size() < prevSize;
 }
 
 template <typename T>
@@ -48,8 +73,8 @@ inline std::size_t Container<T>::getCount() const {
 }
 
 template <typename T>
-inline void Container<T>::render(Window& window, Callback<Item> preRenderCallback) {
-    forEach([&window, &preRenderCallback](Item item) {
+inline void Container<T>::render(Window& window, Callback<ItemPtr> preRenderCallback) {
+    forEach([&window, &preRenderCallback](ItemPtr item) {
         if (preRenderCallback)
             preRenderCallback(item);
         item->draw(window);;
@@ -66,7 +91,7 @@ inline void Container<GameObject>::render(Window& window, Callback<GameObject::s
 }
 
 template <typename T>
-inline void Container<T>::forEach(Callback<Item> callback) {
+inline void Container<T>::forEach(Callback<ItemPtr> callback) {
     std::for_each(items_.begin(), items_.end(), callback);
 }
 

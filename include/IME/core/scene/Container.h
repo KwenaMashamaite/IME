@@ -29,6 +29,7 @@
 #include "IME/core/game_object/GameObject.h"
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 namespace ime {
     /**
@@ -37,11 +38,13 @@ namespace ime {
     template <typename T>
     class Container {
     public:
-        using Item = std::shared_ptr<T>; //!< Shared item pointer
-        using constIterator = typename std::vector<Item>::const_iterator;
+        using ItemPtr = std::shared_ptr<T>;
+        using constItemPtr = std::shared_ptr<const T>;
+        using constIterator = typename std::vector<ItemPtr>::const_iterator;
 
         template <typename... Args>
-        using Callback = std::function<void(Args...)>; //!< Event listener
+        using Callback = std::function<void(Args...)>;
+        using Predicate = std::function<bool(const constItemPtr)>;
         
         /**
          * @brief Add an item to the container
@@ -49,15 +52,36 @@ namespace ime {
          * 
          * @note This class does not check for duplicates
          */
-        void add(Item item);
-        
+        void add(ItemPtr item);
+
+        /**
+         * @brief Conditionally find an item in the container
+         * @param predicate A function which returns true if the item should
+         *                  be returned or false if the search should continue
+         * @return The item that matches the found condition or a nullptr if
+         *         an item that matches the success condition could not be
+         *         found in the container
+         */
+        ItemPtr findIf(Predicate predicate);
+        const ItemPtr findIf(Predicate predicate) const;
+
         /**
          * @brief Remove a item form the container
          * @param item The item to be removed
          * @return True if the item was removed or false if the item does
          *         not exist in the container
          */
-        bool remove(Item item);
+        bool remove(ItemPtr item);
+
+        /**
+         * @brief Conditionally remove items from the container
+         * @param predicate A function which returns true if the object should
+         *                 be removed or false if it should not be removed
+         *                 from the container
+         * @return True if the items were removed from the container or false
+         *         if no items matched the remove condition
+         */
+        bool removeIf(Predicate predicate);
 
         /**
          * @brief Remove all items from the container
@@ -80,13 +104,13 @@ namespace ime {
          * know if the items should be rendered to the background or
          * foreground of the scene
          */
-        void render(Window& window, Callback<Item> preRenderCallback = nullptr);
+        void render(Window& window, Callback<ItemPtr> preRenderCallback = nullptr);
 
         /**
          * @brief Execute a callback function for each item in the container
          * @param callback The function to be executed
          */
-        void forEach(Callback<Item> callback);
+        void forEach(Callback<ItemPtr> callback);
 
         /**
          * @brief Get a constant iterator that points to the first element in
@@ -110,7 +134,7 @@ namespace ime {
         virtual ~Container() = default;
 
     private:
-        std::vector<Item> items_;
+        std::vector<ItemPtr> items_;
     };
 
     #include "IME/core/scene/Container.inl"
