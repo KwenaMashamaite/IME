@@ -41,7 +41,8 @@ namespace ime {
          isLooped_{false},
          repeatCounter_{0},
          isShownOnStart_{true},
-         isHiddenOnComplete_{false}
+         isHiddenOnComplete_{false},
+         completionFrame_{-1}
     {
         IME_ASSERT(spriteSheet_.isReady(), "Cannot create an animation with an uncreated spritesheet");
     }
@@ -226,6 +227,25 @@ namespace ime {
 
     void Animation::removeAll() {
         frames_.clear();
+    }
+
+    void Animation::finishOnFrame(unsigned int index) {
+        if (hasFrameAtIndex(index))
+            completionFrame_ = index;
+    }
+
+    void Animation::finishOnFirstFrame() {
+        completionFrame_ = 0;
+    }
+
+    void Animation::finishOnLastFrame() {
+        // We don't use frames_.size() - 1 here because more frames may be added
+        // after this function is called
+        completionFrame_ = -1;
+    }
+
+    unsigned int Animation::getCompletionFrameIndex() const {
+        return completionFrame_ >= 0 ? completionFrame_ : frames_.size() - 1;
     }
 
     void Animation::calculateFrameRate(Time duration, unsigned int frameRate) {

@@ -361,6 +361,8 @@ namespace ime {
     }
 
     void Animator::onComplete() {
+        setCurrentFrame(*currentAnimation_->getFrameAt(currentAnimation_->getCompletionFrameIndex()));
+
         if (currentAnimation_->isTargetHiddenOnCompletion())
             (*target_).get().setVisible(false);
 

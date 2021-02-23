@@ -414,6 +414,46 @@ namespace ime {
          */
         void removeAll();
 
+        /**
+         * @brief Set the frame the animation should finish on
+         * @param index The index of the frame the animation should finish on
+         *
+         * Note that @a index will be ignored if it is out of bounds
+         *
+         * By default, the animation finishes on the last frame
+         *
+         * @warning If the completion frame is not the last or the first frame
+         * then this function must be called every time a frame is removed
+         * from the sequence
+         */
+        void finishOnFrame(unsigned int index);
+
+        /**
+         * @brief Set the animation to finish on the first frame
+         *
+         * By default, the animation finishes on the last frame
+         *
+         * @see finishOnFrame
+         */
+        void finishOnFirstFrame();
+
+        /**
+         * @brief Set the animation to finish on the last frame
+         *
+         * By default, the animation finishes on the last frame
+         *
+         * @see finishOnFrame
+         */
+        void finishOnLastFrame();
+
+        /**
+         * @brief Get the index of the completion frame
+         * @return The index of the completion frame
+         *
+         * @see finishOnFrame
+         */
+        unsigned int getCompletionFrameIndex() const;
+
     private:
         /**
          * @brief Calculate the duration and frame rate of the animation
@@ -428,18 +468,19 @@ namespace ime {
         void calculateFrameRate(Time duration, unsigned int frameRate);
 
     private:
-        std::vector<Frame> frames_;  //!< Animation frames container
-        std::string name_;           //!< Name of the animation
-        SpriteSheet spriteSheet_;    //!< The spritesheet used by the animation
-        Time duration_;              //!< How long the animation plays before completing, repeating or looping
-        unsigned int frameRate_;     //!< The frame rate playback
-        Time frameTime_;             //!< The amount of time spent on each frame before switching to the next one
-        Direction direction_;        //!< The direction in which the animation is played
-        Time startDelay_;            //!< Time to wait before playing animation
-        bool isLooped_;              //!< Flags whether or not the animation repeats forever
-        unsigned int repeatCounter_; //!< The number of times the animation is repeated before it completes
-        bool isShownOnStart_;        //!< Flags whether or not the sprite is shown when the animations starts
-        bool isHiddenOnComplete_;    //!< Flags whether or not the sprite is hidden when the animation completes
+        std::vector<Frame> frames_;    //!< Animation frames container
+        std::string name_;             //!< Name of the animation
+        SpriteSheet spriteSheet_;      //!< The spritesheet used by the animation
+        Time duration_;                //!< How long the animation plays before completing, repeating or looping
+        unsigned int frameRate_;       //!< The frame rate playback
+        Time frameTime_;               //!< The amount of time spent on each frame before switching to the next one
+        Direction direction_;          //!< The direction in which the animation is played
+        Time startDelay_;              //!< Time to wait before playing animation
+        bool isLooped_;                //!< Flags whether or not the animation repeats forever
+        unsigned int repeatCounter_;   //!< The number of times the animation is repeated before it completes
+        bool isShownOnStart_;          //!< Flags whether or not the sprite is shown when the animations starts
+        bool isHiddenOnComplete_;      //!< Flags whether or not the sprite is hidden when the animation completes
+        int completionFrame_;          //!< The index of the frame to be shown when an animation finishes
     };
 }
 
