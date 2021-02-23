@@ -27,6 +27,8 @@
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "../../graphics/DebugDrawer.h"
+#include "IME/core/scene/Scene.h"
+#include "IME/graphics/Window.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_fixture.h>
@@ -169,6 +171,12 @@ namespace ime {
     {
         b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
         world_->SetContactListener(b2ContactListener_.get());
+
+        using WindowRef = std::reference_wrapper<Window>;
+        postRenderId_ = scene_.on_("postRender", ime::Callback<WindowRef>([this](WindowRef) {
+            if (isDebugDrawEnabled_)
+                debugDraw();
+        }));
     }
 
     World::sharedPtr World::create(Scene &scene, Vector2f gravity) {
@@ -381,19 +389,17 @@ namespace ime {
     }
 
     void World::debugDraw() {
-        if (isDebugDrawEnabled_) {
-            IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one");
+        IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one");
 
-            // Reset the flags in case of a change since last step
-            uint32 flags = 0;
-            flags += debugDrawerFilter_.drawShapes * b2Draw::e_shapeBit;
-            flags += debugDrawerFilter_.drawJoints * b2Draw::e_jointBit;
-            flags += debugDrawerFilter_.drawAABB * b2Draw::e_aabbBit;
-            flags += debugDrawerFilter_.drawCentreOfMass * b2Draw::e_centerOfMassBit;
-            debugDrawer_->SetFlags(flags);
+        // Reset the flags in case of a change since last step
+        uint32 flags = 0;
+        flags += debugDrawerFilter_.drawShapes * b2Draw::e_shapeBit;
+        flags += debugDrawerFilter_.drawJoints * b2Draw::e_jointBit;
+        flags += debugDrawerFilter_.drawAABB * b2Draw::e_aabbBit;
+        flags += debugDrawerFilter_.drawCentreOfMass * b2Draw::e_centerOfMassBit;
+        debugDrawer_->SetFlags(flags);
 
-            world_->DebugDraw();
-        }
+        world_->DebugDraw();
     }
 
     std::unique_ptr<b2World>& World::getInternalWorld() {
@@ -413,5 +419,7 @@ namespace ime {
         }
     }
 
-    World::~World() = default;
+    World::~World() {
+        scene_.unsubscribe_("postRender", postRenderId_);
+    }
 }

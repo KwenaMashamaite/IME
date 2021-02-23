@@ -106,6 +106,7 @@ namespace ime {
                 prevScene_->render(window);
 
             scenes_.top()->render(window);
+            scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
         }
     }
 

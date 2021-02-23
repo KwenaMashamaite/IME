@@ -473,7 +473,7 @@ namespace ime {
 
         /**
          * @brief Enable or disable debug drawing
-         * @param enable True to enable debug draw or false to disable it
+         * @param enable True to enable debug drawing or false to disable it
          *
          * Debug drawing allows you to see what the rigid bodies are doing and
          * where they are in the world. When enabled, the physics simulation
@@ -493,13 +493,7 @@ namespace ime {
          *
          * Be default, debug drawing is disabled
          *
-         * @warning Don't forget to call debugDraw function when rendering
-         * otherwise debug draw data will not be rendered and it will appear
-         * as if the debug draw is not working
-         *
          * @note Debug drawing is only available in project debug mode
-         *
-         * @see debugDraw
          */
         void enableDebugDraw(bool enable);
 
@@ -522,14 +516,6 @@ namespace ime {
          */
         DebugDrawerFilter& getDebugDrawerFilter();
         const DebugDrawerFilter& getDebugDrawerFilter() const;
-
-        /**
-         * @brief Draw physics entities
-         * @param renderWindow Window to render physics entities on
-         *
-         * @see enableDebugDraw
-         */
-        void debugDraw();
 
         /**
          * @internal
@@ -582,6 +568,13 @@ namespace ime {
          */
         World(Scene& scene, Vector2f gravity);
 
+        /**
+         * @brief Draw physics entities
+         *
+         * @see enableDebugDraw
+         */
+        void debugDraw();
+
     private:
         Scene& scene_;                         //!< The scene this world belongs to
         std::unique_ptr<b2World> world_;       //!< The physics world simulation
@@ -590,6 +583,7 @@ namespace ime {
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
         ContactListener contactListener_;      //!< Listens for contact between fixtures and alerts interested parties
         DebugDrawerFilter debugDrawerFilter_;  //!< Control what gets renders by the debug drawer
+        int postRenderId_;                     //!< Post render callback id
 
         std::unique_ptr<priv::DebugDrawer> debugDrawer_;   //!< Draws physics entities when debug draw is enabled
         std::unordered_map<int, Body::sharedPtr> bodies_;  //!< All bodies in this simulation
