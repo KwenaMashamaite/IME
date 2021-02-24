@@ -64,8 +64,10 @@ namespace ime {
          * @brief The playing direction of the animation
          */
         enum class Direction {
-            Forward, //!< The animation is played forward
-            Reverse  //!< The animation is played in reverse
+            Forward,           //!< The animation is played forwards
+            Reverse,           //!< The animation is played in reverse
+            Alternate_Forward, //!< The animation alternates back and forth starting in the forward direction
+            Alternate_Reverse  //!< The animation alternates back and forth starting in the reverse direction
         };
 
        /**
@@ -115,56 +117,35 @@ namespace ime {
         const SpriteSheet& getSpriteSheet() const;
 
         /**
-         * @brief Set whether or not the animation should loop after reaching
-         *        the end
-         * @param loop True to play animation in loop, false to play once
-         *
-         * Note that a looped animation cannot repeat. Whenever looping is
-         * enabled, repeating is disabled. A looping animation is one that
-         * repeats forever whilst a repeating animation repeats a certain
-         * number of times before completing. In other words, a repeating
-         * animation has a complete condition while a looping one doesn't
-         *
-         * By default, the animation is not looped. It plays once then
-         * completes
-         *
-         * @see setRepeatCount
-         */
-        void setLoop(bool loop);
-
-        /**
-         * @brief Check if the animation is looped or not
-         * @return True if the animation is looped, otherwise false
-         */
-        bool isLooped() const;
-
-        /**
-         * @brief Enable animation repetition
+         * @brief Enable or disable animation repetition
          * @param count The number of times to repeat the animation
          *
-         * The animation cannot repeat and loop at the same time. A looping
-         * animation plays forever and never completes, whilst a repeating
-         * animation is played a given number of times before it completes.
+         * Set @a count to -1 to repeat forever or set it to some number x,
+         * where x is the number of times to repeat the animation before it
+         * completes or set it to 0 to disable repetition if the animation is
+         * currently repeating. Note that if @a count is set to value that is
+         * less than zero but not '-1', then the repeat count will be set to
+         * zero meaning that the animation will not repeat
          *
-         * If the looped property is set to true, then the repeat property
-         * is ignored and set to zero. Pass 0 to disable repetition if the
-         * animation is currently repeating
-         *
-         * By default, the animation does not repeat (repeat count is zero),
-         * it plays once then completes
-         *
-         * @see setLoop
+         * By default, the animation does not repeat (repeat count is 0), it
+         * plays once then completes
          */
-        void setRepeatCount(unsigned int count);
+        void setRepeatCount(int count);
 
         /**
          * @brief Get the number of times the animation is repeated before
          *        completing
          * @return The number of times the animation is repeated
          *
+         * The return value of this function imply the following:
+         *
+         * -1 = The animation repeats forever
+         *  0 = The animation does not repeat
+         *  x = The animation repeats x times
+         *
          * @see setRepeatCount
          */
-        unsigned int getRepeatCount() const;
+        int getRepeatCount() const;
 
         /**
          * @brief Check if the animation is repeating or not
@@ -224,6 +205,11 @@ namespace ime {
         /**
          * @brief Set the direction in which the animation should be played
          * @param direction The animations direction of play
+         *
+         * Note that if the animation is set to alternate but it is not
+         * looped or it does not repeat, it will play once like a normal
+         * forward or reverse animation (depending on the initial direction
+         * of alternation)
          *
          * By default the animation is played forwards
          */
@@ -468,19 +454,18 @@ namespace ime {
         void calculateFrameRate(Time duration, unsigned int frameRate);
 
     private:
-        std::vector<Frame> frames_;    //!< Animation frames container
-        std::string name_;             //!< Name of the animation
-        SpriteSheet spriteSheet_;      //!< The spritesheet used by the animation
-        Time duration_;                //!< How long the animation plays before completing, repeating or looping
-        unsigned int frameRate_;       //!< The frame rate playback
-        Time frameTime_;               //!< The amount of time spent on each frame before switching to the next one
-        Direction direction_;          //!< The direction in which the animation is played
-        Time startDelay_;              //!< Time to wait before playing animation
-        bool isLooped_;                //!< Flags whether or not the animation repeats forever
-        unsigned int repeatCounter_;   //!< The number of times the animation is repeated before it completes
-        bool isShownOnStart_;          //!< Flags whether or not the sprite is shown when the animations starts
-        bool isHiddenOnComplete_;      //!< Flags whether or not the sprite is hidden when the animation completes
-        int completionFrame_;          //!< The index of the frame to be shown when an animation finishes
+        std::vector<Frame> frames_; //!< Animation frames container
+        std::string name_;          //!< Name of the animation
+        SpriteSheet spriteSheet_;   //!< The spritesheet used by the animation
+        Time duration_;             //!< How long the animation plays before completing, repeating or looping
+        unsigned int frameRate_;    //!< The frame rate playback
+        Time frameTime_;            //!< The amount of time spent on each frame before switching to the next one
+        Direction direction_;       //!< The direction in which the animation is played
+        Time startDelay_;           //!< Time to wait before playing animation
+        int repeatCounter_;         //!< The number of times the animation is repeated before it completes
+        bool isShownOnStart_;       //!< Flags whether or not the sprite is shown when the animations starts
+        bool isHiddenOnComplete_;   //!< Flags whether or not the sprite is hidden when the animation completes
+        int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
     };
 }
 

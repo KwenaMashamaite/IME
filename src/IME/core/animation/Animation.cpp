@@ -38,7 +38,6 @@ namespace ime {
          duration_{duration},
          frameRate_{0},
          direction_{Direction::Forward},
-         isLooped_{false},
          repeatCounter_{0},
          isShownOnStart_{true},
          isHiddenOnComplete_{false},
@@ -57,30 +56,19 @@ namespace ime {
         return spriteSheet_;
     }
 
-    void Animation::setLoop(bool loop) {
-        if (isLooped_ == loop)
-            return;
-
-        isLooped_ = loop;
-        if (isRepeating() && isLooped_) // Repeating and looping are mutually exclusive
+    void Animation::setRepeatCount(int count) {
+        if (count < 0 && count != -1)
             repeatCounter_ = 0;
-    }
-
-    bool Animation::isLooped() const {
-        return isLooped_;
-    }
-
-    void Animation::setRepeatCount(unsigned int count) {
-        if (!isLooped_)
+        else
             repeatCounter_ = count;
     }
 
-    unsigned int Animation::getRepeatCount() const {
+    int Animation::getRepeatCount() const {
         return repeatCounter_;
     }
 
     bool Animation::isRepeating() const {
-        return repeatCounter_ > 0;
+        return repeatCounter_ > 0 || repeatCounter_ == -1;
     }
 
     void Animation::setDuration(Time duration) {

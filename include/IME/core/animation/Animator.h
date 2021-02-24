@@ -535,6 +535,18 @@ namespace ime {
          */
         void swap(Animator& other);
 
+        /**
+         * @brief Determines the direction of the current animation cycle
+         */
+        void setCycleDirection();
+
+        /**
+         * @brief Cycle current animation sequence
+         * @param isAlternating True if animation is  alternating, otherwise
+         *        false
+         */
+        void cycle(bool isAlternating);
+
     private:
         unsigned int currentFrameIndex_;          //!< The index of the animation frame that is currently displayed
         Time totalTime_;                          //!< Time passed since animation was started
@@ -548,6 +560,18 @@ namespace ime {
 
         std::unique_ptr<std::reference_wrapper<Sprite>> target_;          //!< Sprite to be animated
         std::unordered_map<std::string, Animation::sharedPtr> animations_; //!< Animations container
+
+        /**
+         * @brief Direction of the current animation cycle
+         */
+        enum class Direction {
+            Unknown,
+            Forward,
+            Backward
+        };
+
+        Direction cycleDirection_;
+        bool completedFirstAlternateCycle_;
     };
 }
 

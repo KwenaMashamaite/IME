@@ -34,7 +34,9 @@ namespace ime {
         isPlaying_{false},
         isPaused_{false},
         hasStarted_{false},
-        target_{std::make_unique<std::reference_wrapper<Sprite>>(target)}
+        target_{std::make_unique<std::reference_wrapper<Sprite>>(target)},
+        cycleDirection_{Direction::Unknown},
+        completedFirstAlternateCycle_{false}
     {}
 
     Animator::Animator(const Animator& other) :
@@ -188,9 +190,11 @@ namespace ime {
 
         if (!currentAnimation_) {
             currentAnimation_ = animations_.at(animation);
+            setCycleDirection();
         } else if ((isPlaying_ || isPaused_) && !ignoreIfPlaying) {
             stop();
             currentAnimation_ = animations_.at(animation);
+            setCycleDirection();
             fireEvent(Event::AnimationSwitch, currentAnimation_);
         } else
             return false;
@@ -209,6 +213,8 @@ namespace ime {
             clearAllChains();
 
         currentAnimation_ = animations_.at(name);
+        setCycleDirection();
+
         play();
     }
 
@@ -252,10 +258,15 @@ namespace ime {
 
     void Animator::complete() {
         if (currentAnimation_) {
-            if (currentAnimation_->getDirection() == Animation::Direction::Forward)
+            if (currentAnimation_->getDirection() == Animation::Direction::Forward
+                || currentAnimation_->getDirection() == Animation::Direction::Alternate_Reverse)
+            {
                 currentFrameIndex_ = currentAnimation_->getFrameCount() - 1;
-            else if (currentAnimation_->getDirection() == Animation::Direction::Reverse)
+            } else if (currentAnimation_->getDirection() == Animation::Direction::Reverse
+                || currentAnimation_->getDirection() == Animation::Direction::Alternate_Forward)
+            {
                 currentFrameIndex_ = 0;
+            }
 
             setCurrentFrame(*currentAnimation_->getFrameAt(currentFrameIndex_));
             onComplete();
@@ -289,10 +300,12 @@ namespace ime {
             }
         } else if (totalTime_ >= currentAnimation_->getFrameTime()) {
             totalTime_ = Time::Zero;
-            if (currentAnimation_->getDirection() == Animation::Direction::Forward)
-                advanceFrame();
-            else if (currentAnimation_->getDirection() == Animation::Direction::Reverse)
-                reverseFrame();
+            if (currentAnimation_->getDirection() == Animation::Direction::Forward
+                || currentAnimation_->getDirection() == Animation::Direction::Reverse)
+            {
+                cycle(false);
+            } else
+                cycle(true);
         }
     }
 
@@ -351,6 +364,78 @@ namespace ime {
         eventEmitter_.emit(std::to_string(static_cast<int>(event)), animation);
     }
 
+    void Animator::setCycleDirection() {
+        if (currentAnimation_->getDirection() == Animation::Direction::Forward
+            || currentAnimation_->getDirection() == Animation::Direction::Alternate_Forward)
+        {
+            cycleDirection_ = Direction::Forward;
+        } else
+            cycleDirection_ = Direction::Backward;
+    }
+
+    void Animator::cycle(bool isAlternating) {
+        static auto completeFirstAlternateCycle = [this] {
+            completedFirstAlternateCycle_ = true;
+            if (cycleDirection_ == Direction::Forward) {
+                currentFrameIndex_--;
+                cycleDirection_ = Direction::Backward;
+            } else {
+                currentFrameIndex_++;
+                cycleDirection_ = Direction::Forward;
+            }
+        };
+
+        if ((cycleDirection_ == Direction::Backward && currentFrameIndex_ == 0)
+            || (cycleDirection_ == Direction::Forward && currentFrameIndex_ == currentAnimation_->getFrameCount() - 1))
+        {
+            if (!currentAnimation_->isRepeating()) {
+                if (isAlternating) {
+                    if (completedFirstAlternateCycle_) {
+                        completedFirstAlternateCycle_ = false;
+                        onComplete();
+                        return;
+                    } else {
+                        completeFirstAlternateCycle();
+                    }
+                } else {
+                    onComplete();
+                    return;
+                }
+            } else {
+                // Update repeat counter
+                if (currentAnimation_->getRepeatCount() != -1) { // -1 = repeat forever
+                    if (isAlternating) {
+                        if (completedFirstAlternateCycle_) {
+                            completedFirstAlternateCycle_ = false;
+                            currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
+                            fireEvent(Event::AnimationRepeat, currentAnimation_);
+                        }
+                    } else {
+                        currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
+                        fireEvent(Event::AnimationRepeat, currentAnimation_);
+                    }
+                }
+
+                // Repeat animation
+                if (!isAlternating) {
+                    if (currentFrameIndex_ == 0)
+                        currentFrameIndex_ = currentAnimation_->getFrameCount() - 1;
+                    else
+                        currentFrameIndex_ = 0;
+                } else {
+                    completeFirstAlternateCycle();
+                }
+            }
+        } else {
+            if (cycleDirection_ == Direction::Forward)
+                currentFrameIndex_++;
+            else
+                currentFrameIndex_--;
+        }
+
+        setCurrentFrame(*currentAnimation_->getFrameAt(currentFrameIndex_));
+    }
+
     void Animator::onStart() {
         hasStarted_ = true;
         if (currentAnimation_->isTargetShownOnStart())
@@ -378,40 +463,11 @@ namespace ime {
     }
 
     void Animator::advanceFrame() {
-        if (currentFrameIndex_ == currentAnimation_->getFrameCount() - 1) {
-            if (currentAnimation_->isLooped())
-                currentFrameIndex_ = 0;
-            else if (currentAnimation_->isRepeating()) {
-                currentFrameIndex_ = 0;
-                currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
-                fireEvent(Event::AnimationRepeat, currentAnimation_);
-            } else {
-                onComplete();
-                return;
-            }
-        } else
-            currentFrameIndex_ += 1;
 
-        setCurrentFrame(*currentAnimation_->getFrameAt(currentFrameIndex_));
     }
 
     void Animator::reverseFrame() {
-        auto lastFrameIndex = currentAnimation_->getFrameCount() - 1;
-        if (currentFrameIndex_ == 0) {
-            if (currentAnimation_->isLooped())
-                currentFrameIndex_ = lastFrameIndex;
-            else if (currentAnimation_->isRepeating()) {
-                currentFrameIndex_ = lastFrameIndex;
-                currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
-                fireEvent(Event::AnimationRepeat, currentAnimation_);
-            } else {
-                onComplete();
-                return;
-            }
-        } else
-            currentFrameIndex_ -= 1;
 
-        setCurrentFrame(*currentAnimation_->getFrameAt(currentFrameIndex_));
     }
 
     void Animator::setCurrentFrame(Animation::Frame frame) {
@@ -420,9 +476,9 @@ namespace ime {
     }
 
     void Animator::resetCurrentFrame() {
-        if (currentAnimation_->getDirection() == Animation::Direction::Forward)
+        if (cycleDirection_ == Direction::Forward)
             currentFrameIndex_ = 0;
-        else if (currentAnimation_->getDirection() == Animation::Direction::Reverse)
+        else if (cycleDirection_ == Direction::Backward)
             currentFrameIndex_ = currentAnimation_->getFrameCount() - 1;
         else
             return;
