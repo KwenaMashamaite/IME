@@ -39,7 +39,7 @@ namespace ime::ui {
     ////////////////////////////////////////////////////////////////////////////
 
     Slider::Slider(float minValue, float maxValue) :
-        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Slider>>(tgui::Slider::create(minValue, maxValue))),
+        Widget(std::make_unique<priv::WidgetImpl<tgui::Slider>>(tgui::Slider::create(minValue, maxValue))),
         pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<SliderRenderer>());

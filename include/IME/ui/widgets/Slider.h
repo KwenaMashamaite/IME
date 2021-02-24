@@ -26,7 +26,7 @@
 #define IME_SLIDER_H
 
 #include "IME/Config.h"
-#include "IME/ui/widgets/ClickableWidget.h"
+#include "IME/ui/widgets/Widget.h"
 #include "IME/ui/renderers/SliderRenderer.h"
 #include <memory>
 
@@ -35,7 +35,7 @@ namespace ime {
         /**
          * @brief Slider widget
          */
-        class IME_API Slider : public ClickableWidget {
+        class IME_API Slider : public Widget {
         public:
             using sharedPtr = std::shared_ptr<Slider>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer

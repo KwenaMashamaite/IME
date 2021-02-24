@@ -41,7 +41,7 @@ namespace ime::ui {
     ////////////////////////////////////////////////////////////////////////////
     
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
-        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
+        Widget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
         pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<TabsRenderer>());

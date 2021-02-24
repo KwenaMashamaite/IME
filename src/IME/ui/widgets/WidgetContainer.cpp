@@ -122,7 +122,7 @@ namespace ime::ui {
     // Widget container class delegation
     //////////////////////////////////////////////////////////////////////////
     WidgetContainer::WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl) :
-        ClickableWidget(std::move(widgetImpl)),
+        Widget(std::move(widgetImpl)),
         pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {}
 

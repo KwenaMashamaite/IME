@@ -63,6 +63,14 @@ namespace ime::ui {
         return widget;
     }
 
+    BoxLayoutRenderer::sharedPtr VerticalLayout::getRenderer() {
+        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    }
+
+    const BoxLayoutRenderer::sharedPtr VerticalLayout::getRenderer() const {
+        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    }
+
     std::string VerticalLayout::getWidgetType() const {
         return "HorizontalLayout";
     }

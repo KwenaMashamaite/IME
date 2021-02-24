@@ -26,7 +26,7 @@
 #define IME_TABS_H
 
 #include "IME/Config.h"
-#include "IME/ui/widgets/ClickableWidget.h"
+#include "IME/ui/widgets/Widget.h"
 #include "IME/ui/renderers/TabsRenderer.h"
 #include <memory>
 
@@ -38,7 +38,7 @@ namespace ime {
          * This widget can hold multiple tabs. If you want Tabs with
          * panels, checkout the TabsContainer class
          */
-        class IME_API Tabs : public ClickableWidget {
+        class IME_API Tabs : public Widget {
         public:
             using sharedPtr = std::shared_ptr<Tabs>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const Tabs>; //!< const shared widget pointer

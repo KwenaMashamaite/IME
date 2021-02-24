@@ -43,7 +43,7 @@ namespace ime {
          * If you are looking for Tabs without a panel, check out the
          * Tabs class
          */
-        class IME_API TabsContainer : public ClickableWidget {
+        class IME_API TabsContainer : public Widget {
         public:
             using sharedPtr = std::shared_ptr<TabsContainer>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const TabsContainer>; //!< const shared widget pointer

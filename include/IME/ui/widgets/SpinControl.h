@@ -26,19 +26,15 @@
 #define IME_SPINCONTROL_H
 
 #include "IME/Config.h"
-#include "IME/ui/widgets/ClickableWidget.h"
+#include "IME/ui/widgets/Widget.h"
 #include "IME/ui/renderers/SpinButtonRenderer.h"
-
-namespace tgui {
-    class SpinControl;
-}
 
 namespace ime {
     namespace ui {
         /**
          * @brief A spin control widget
          */
-        class IME_API SpinControl : public ClickableWidget {
+        class IME_API SpinControl : public Widget {
         public:
             using sharedPtr = std::shared_ptr<SpinControl>; //!< Shared widget pointer
             using constSharedPtr = std::shared_ptr<const SpinControl>; //!< const shared widget pointer

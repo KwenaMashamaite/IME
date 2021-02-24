@@ -39,7 +39,7 @@ namespace ime::ui {
     ////////////////////////////////////////////////////////////////////////////
 
     Tabs::Tabs() :
-        ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Tabs>>(tgui::Tabs::create())),
+        Widget(std::make_unique<priv::WidgetImpl<tgui::Tabs>>(tgui::Tabs::create())),
         pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<TabsRenderer>());

@@ -40,7 +40,7 @@ namespace ime::ui {
 
     SpinControl::SpinControl(float minValue, float maxValue, float initialValue,
         unsigned int decimal, float step) :
-            ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::SpinControl>>(
+            Widget(std::make_unique<priv::WidgetImpl<tgui::SpinControl>>(
                 tgui::SpinControl::create(minValue, maxValue, initialValue, decimal, step))),
             pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {

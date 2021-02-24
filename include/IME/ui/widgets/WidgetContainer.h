@@ -26,7 +26,7 @@
 #define IME_WIDGETCONTAINER_H
 
 #include "IME/Config.h"
-#include "IME/ui/widgets/ClickableWidget.h"
+#include "IME/ui/widgets/Widget.h"
 #include <memory>
 
 namespace ime {
@@ -35,7 +35,7 @@ namespace ime {
          * @brief Abstract base class for widgets that can store other
          *        widgets in them
          */
-        class IME_API WidgetContainer : public ClickableWidget {
+        class IME_API WidgetContainer : public Widget {
         public:
             using sharedPtr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
 
