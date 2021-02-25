@@ -34,6 +34,9 @@ namespace ime {
         setRadius(radius);
     }
 
+    CircleCollider::CircleCollider(CircleCollider &&) = default;
+    CircleCollider &CircleCollider::operator=(CircleCollider &&) = default;
+
     CircleCollider::sharedPtr CircleCollider::create(float radius) {
         return CircleCollider::sharedPtr(new CircleCollider(radius));
     }
@@ -72,5 +75,7 @@ namespace ime {
     const b2Shape& CircleCollider::getInternalShape() const {
         return *circle_;
     }
+
+    CircleCollider::~CircleCollider() = default;
 }
 

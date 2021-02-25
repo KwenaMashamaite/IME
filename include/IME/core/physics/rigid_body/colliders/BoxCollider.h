@@ -47,12 +47,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        BoxCollider(BoxCollider&&) = default;
+        BoxCollider(BoxCollider&&);
 
         /**
          * @brief Move assignment operator
          */
-        BoxCollider& operator=(BoxCollider&&) = default;
+        BoxCollider& operator=(BoxCollider&&);
 
         /**
          * @brief Create a box collider object
@@ -61,7 +61,12 @@ namespace ime {
          *
          * By default the size is 0.1f (width) x 0.1f (height)
          *
-         * @warning The minimum size of the rectangle is 0.1f x 0.1f
+         * @warning The minimum size of the rectangle is 0.1f x 0.1f. Any
+         * size below this is undefined behaviour
+         *
+         * @warning The collider must be attached to a rigid body before
+         * any of its functions are are called. Calling a member function
+         * without a rigid body is undefined behavior
          */
         static sharedPtr create(Vector2f size = {0.1f, 0.1f});
 
@@ -95,15 +100,9 @@ namespace ime {
         Vector2f getSize() const;
 
         /**
-         * @internal
-         * @brief Get the internal shape
-         * @return The internal shape
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
+         * @brief Destructor
          */
-        b2Shape &getInternalShape() override;
-        const b2Shape &getInternalShape() const override;
+        ~BoxCollider();
 
     private:
         /**
@@ -111,6 +110,13 @@ namespace ime {
          * @param size The size of the box
          */
         explicit BoxCollider(Vector2f size);
+
+        /**
+         * @brief Get the internal shape
+         * @return The internal shape
+         */
+        b2Shape &getInternalShape() override;
+        const b2Shape &getInternalShape() const override;
 
     private:
         Vector2f size_;                       //!< The size of the box

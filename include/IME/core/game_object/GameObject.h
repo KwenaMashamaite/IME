@@ -222,12 +222,15 @@ namespace ime {
 
         /**
          * @brief Get concrete class type
-         * @return Name of the concrete class the game object is instantiated from
+         * @return Name of the concrete class the game object is instantiated
+         *         from
          *
-         * If a concrete class is derived further, this function must always
-         * be overridden to reflect the new concrete class
+         * By default, this function returns this class and must be overridden
+         * if you extend this class classes
          */
-        virtual std::string getClassType() = 0;
+        virtual std::string getClassType() {
+            return "GameObject";
+        }
 
         /**
          * @brief Get the game object's unique identifier

@@ -48,12 +48,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        PolygonCollider(PolygonCollider&&) = default;
+        PolygonCollider(PolygonCollider&&);
 
         /**
          * @brief Move assignment operator
          */
-        PolygonCollider& operator=(PolygonCollider&&) = default;
+        PolygonCollider& operator=(PolygonCollider&&);
 
         /**
          * @brief Create a new polygon collider
@@ -84,21 +84,22 @@ namespace ime {
         void set(const std::vector<Vector2f>& vertices);
 
         /**
-         * @internal
-         * @brief Get the internal collider
-         * @return The internal collider
-         *
-         * @warning This function is intended for internal use and should never
-         * be called outside of IME
+         * @brief Destructor
          */
-        b2Shape& getInternalShape() override;
-        const b2Shape& getInternalShape() const override;
+        ~PolygonCollider();
 
     private:
         /**
          * @brief Default constructor
          */
         PolygonCollider();
+
+        /**
+         * @brief Get the internal collider
+         * @return The internal collider
+         */
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
         std::unique_ptr<b2PolygonShape> polygon_; //!< Internal polygon collider

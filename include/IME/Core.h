@@ -54,8 +54,6 @@
 #include "IME/core/physics/rigid_body/AABB.h"
 #include "IME/core/physics/rigid_body/BodyDefinition.h"
 #include "IME/core/physics/rigid_body/Body.h"
-#include "IME/core/physics/rigid_body/FixtureDefinition.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/rigid_body/colliders/CircleCollider.h"

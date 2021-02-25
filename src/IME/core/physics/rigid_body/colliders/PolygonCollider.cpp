@@ -32,6 +32,9 @@ namespace ime {
         polygon_{std::make_unique<b2PolygonShape>()}
     {}
 
+    PolygonCollider::PolygonCollider(PolygonCollider&&) = default;
+    PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) = default;
+
     PolygonCollider::sharedPtr PolygonCollider::create() {
         return PolygonCollider::sharedPtr(new PolygonCollider);
     }
@@ -62,4 +65,6 @@ namespace ime {
     const b2Shape& PolygonCollider::getInternalShape() const {
         return *polygon_;
     }
+
+    PolygonCollider::~PolygonCollider() = default;
 }

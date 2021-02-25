@@ -29,8 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
 #include "IME/core/physics/rigid_body/BodyDefinition.h"
-#include "IME/core/physics/rigid_body/FixtureDefinition.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
+#include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include <memory>
 #include <vector>
 #include <functional>
@@ -69,58 +68,46 @@ namespace ime {
         using Callback = std::function<void(Args...)>; //!< Event listener
 
         /**
-         * @brief Create a fixture and attach it to this body
-         * @param definition The fixture definition to contract fixture from
-         * @return The created fixture or nullptr if the callbacks are being
-         *         dispatched
+         * @brief Attach a collider to the body
+         * @param collider The collider to be attached to the body
          *
-         * A body may have more than one fixture
-         *
-         * @note All fixtures attached to a body are destroyed when the body
-         * is destroyed
-         *
-         * @warning This function is locked during world callbacks
-         */
-        Fixture::sharedPtr createFixture(const FixtureDefinition& definition);
-
-        /**
-         * @brief Create a fixture from a collider and attach it to this body
-         * @param collider The collider to construct the fixture from
-         * @param density The density of the collider (set zero for static bodies)
-         * @return The created fixture or nullptr if the callbacks are being
-         *         dispatched
-         *
-         * The body will be created from default FixtureDefinition properties.
-         * The mass of the body is automatically updated
-         *
-         * @note This function does not keep a reference to the collider, it is
-         * cloned
+         * Note that a body may have more than one collider. However a
+         * collider can only be attached to one rigid body. All colliders
+         * attached to the body are destroyed when the body is destroyed
          *
          * @warning This function is locked during callbacks
          */
-        Fixture::sharedPtr createFixture(Collider::sharedPtr collider, float density);
+        void attachCollider(Collider::sharedPtr collider);
 
         /**
-         * @brief Get a fixture by its id
-         * @param id The unique identifier of the fixture
-         * @return The fixture with the given id or a nullptr if the body
-         *         does not have a fixture with the given id
+         * @brief Get a collider by its id
+         * @param id The unique identifier of the collider
+         * @return The collider with the given id or a nullptr if the body
+         *         does not have a collider with the given id attached to it
+         *
+         * @warning This function is locked during callbacks
          */
-        Fixture::sharedPtr getFixtureById(unsigned int id);
+        Collider::sharedPtr getColliderById(unsigned int id);
 
         /**
-         * @brief Destroy a fixture
-         * @param fixture The fixture to be removed
+         * @brief Remove a collider from the body
+         * @param collider The collider to be removed
          *
-         * The mass of the body will be adjusted if the body is dynamic and the
-         * fixture has a positive density.
+         * The mass of the body will be adjusted if the body is dynamic
+         * and the collider has a positive density
          *
-         * @note All fixtures attached to a body are destroyed when the body
-         * is destroyed
+         * @note All colliders attached to a body are destroyed when the
+         * body is destroyed
          *
          * @warning This function is locked during world callbacks
          */
-        void destroyFixture(Fixture::sharedPtr fixture);
+        void removeCollider(Collider::sharedPtr collider);
+
+        /**
+         * @brief Remove a collider with a given id
+         * @param id The id of the collider to be removed
+         */
+        void removeColliderWithId(unsigned int id);
 
         /**
          * @brief Set the world position of the body's local origin
@@ -348,6 +335,10 @@ namespace ime {
         /**
          * @brief Set the type of this body
          * @param type The type of this body
+         *
+         * This may alter the mass and velocity.
+         *
+         * @warning This function is locked during callbacks
          */
         void setType(BodyType type);
 
@@ -419,11 +410,11 @@ namespace ime {
          * @param enable True to enable or false to disable
          *
          * A disabled body is not simulated and cannot be collided with or
-         * woken up. If you pass a flag of true, all fixtures will be added
-         * to the broad-phase. If you pass a flag of false, all fixtures will
+         * woken up. If you pass a flag of true, all colliders will be added
+         * to the broad-phase. If you pass a flag of false, all colliders will
          * be removed from the broad-phase and all contacts will be destroyed.
-         * Fixtures and joints are otherwise unaffected. You may continue to
-         * create/destroy fixtures and joints on disabled bodies. Fixtures on
+         * Colliders and joints are otherwise unaffected. You may continue to
+         * create/destroy colliders and joints on disabled bodies. Colliders on
          * a disabled body are implicitly disabled and will not participate
          * in collisions, ray-casts, or queries. Joints connected to a disabled
          * body are implicitly disabled. A disabled body is still owned by a
@@ -431,6 +422,8 @@ namespace ime {
          *
          * @warning Enabling a disabled body is almost as expensive as creating
          * the body from scratch, so use this function sparingly
+         *
+         * @warning This function is locked during callbacks
          */
         void setEnabled(bool enable);
 
@@ -474,12 +467,12 @@ namespace ime {
         unsigned int getId() const;
 
         /**
-         * @brief Execute a function for each fixture on the body
+         * @brief Execute a function for each collider attached to the body
          * @param callback The function to be executed
          *
-         * The callback is passed a fixture on invocation
+         * The callback is passed a collider on invocation
          */
-        void forEachFixture(Callback<Fixture::sharedPtr> callback);
+        void forEachCollider(Callback<Collider::sharedPtr> callback);
 
         /**
          * @internal
@@ -507,7 +500,7 @@ namespace ime {
         PropertyContainer userData_;                //!< Application specific body data
         friend class World;                         //!< Needs access to constructor
 
-        std::unordered_map<int, Fixture::sharedPtr> fixtures_;  //!< Fixtures attached to this body
+        std::unordered_map<int, Collider::sharedPtr> colliders_;  //!< Colliders attached to this body
     };
 }
 

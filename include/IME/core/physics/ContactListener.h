@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/event/EventEmitter.h"
-#include "IME/core/physics/rigid_body/Fixture.h"
+#include "IME/core/physics/rigid_body/colliders/Collider.h"
 
 namespace ime {
     class World;
@@ -35,18 +35,18 @@ namespace ime {
     /**
      * @brief Subscribe to contact events
      *
-     * These events are fired when fixtures start/cease to overlap.
-     * The callbacks are passed the fixtures that started overlapping
+     * These events are fired when colliders start/cease to overlap.
+     * The callbacks are passed the colliders that started overlapping
      * or ceased overlapping
      *
-     * @warning You cannot create/destroy bodies, fixtures and joints inside
+     * @warning You cannot create/destroy bodies, colliders and joints inside
      * these callbacks. For example, you may have a collision that applies
      * damage and try to destroy the associated game object and its rigid body.
      * However, it is not allowed to alter the physics world inside a callback
      * because you might destroy objects that are currently being processed,
      * leading to undefined behaviour. It is recommended to somehow flag the
-     * game object for destruction inside the callback and destroy them after the
-     * time step
+     * game object for destruction inside the callback and destroy them after
+     * the time step
      */
     class IME_API ContactListener {
     public:
@@ -55,25 +55,25 @@ namespace ime {
          * @param callback The function to be executed when event is fired
          * @return The callback id
          *
-         * This function is called when two fixtures begin to overlap.
+         * This function is called when two colliders begin to overlap.
          * It is called for sensors and non-sensors
          *
          * @note The event can only occur inside the time step
          */
-        int onContactBegin(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback);
+        int onContactBegin(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to a contact end event
          * @param callback The function to be executed when event is fired
          * @return The callback id
          *
-         * This function is called when two fixtures cease to overlap.
+         * This function is called when two colliders cease to overlap.
          * It is called for sensors and non-sensors
          *
          * @note The function may be called when a body is destroyed, so
          * this event can occur outside the time step
          */
-        int onContactEnd(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callbackB);
+        int onContactEnd(Callback<Collider::sharedPtr, Collider::sharedPtr> callbackB);
 
         /**
          * @brief Add an event listener to a pre-solve event
@@ -86,7 +86,7 @@ namespace ime {
          * @note The pre-solve event may be fired multiple times per time
          * step per contact due to continuous collision detection
          */
-        int onPreSolve(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback);
+        int onPreSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
 
         /**
          * @brief Add an event listener to a post-solve event
@@ -95,10 +95,10 @@ namespace ime {
          *
          * This function is called after the collision resolution
          */
-        int onPostSolve(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback);
+        int onPostSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
 
         /**
-         * @brief Remove a callback from a contact
+         * @brief Remove a callback from a contact event
          * @param callbackId The event listeners identification number
          * @return True if the event listener was removed or false if
          *         there is no such listener in the event listener list

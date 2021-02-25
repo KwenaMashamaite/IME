@@ -145,8 +145,8 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
-                body_->forEachFixture([isCollidable](Fixture::sharedPtr fixture) {
-                    fixture->setCollidable(isCollidable);
+                body_->forEachCollider([isCollidable](Collider::sharedPtr fixture) {
+                    fixture->setEnable(isCollidable);
                 });
             }
 

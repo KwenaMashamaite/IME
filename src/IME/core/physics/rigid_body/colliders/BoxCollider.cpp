@@ -34,6 +34,9 @@ namespace ime {
         setSize(size.x, size.y);
     }
 
+    BoxCollider::BoxCollider(BoxCollider &&) = default;
+    BoxCollider &BoxCollider::operator=(BoxCollider &&) = default;
+
     BoxCollider::sharedPtr BoxCollider::create(Vector2f size) {
         return BoxCollider::sharedPtr(new BoxCollider(size));
     }
@@ -73,5 +76,7 @@ namespace ime {
     const b2Shape& BoxCollider::getInternalShape() const {
         return *box_;
     }
+
+    BoxCollider::~BoxCollider() = default;
 }
 

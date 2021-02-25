@@ -46,12 +46,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        EdgeCollider(EdgeCollider&&) = default;
+        EdgeCollider(EdgeCollider&&);
 
         /**
          * @brief Move assignment operator
          */
-        EdgeCollider& operator=(EdgeCollider&&) = default;
+        EdgeCollider& operator=(EdgeCollider&&);
 
         /**
          * @brief Create a new edge collider
@@ -150,21 +150,22 @@ namespace ime {
         bool isOneSided() const;
 
         /**
-         * @internal
-         * @brief Get the internal collider
-         * @return The internal collider
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
+         * @brief Destructor
          */
-        b2Shape& getInternalShape() override;
-        const b2Shape& getInternalShape() const override;
+        ~EdgeCollider();
 
     private:
         /**
          * @brief Default constructor
          */
         EdgeCollider();
+
+        /**
+         * @brief Get the internal collider
+         * @return The internal collider
+         */
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
         std::unique_ptr<b2EdgeShape> edgeShape_; //!< Internal shape

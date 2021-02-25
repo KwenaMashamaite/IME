@@ -27,8 +27,6 @@ set(IME_SRC
     core/path/IGridPathFinder.cpp
     core/physics/rigid_body/BodyDefinition.cpp
     core/physics/rigid_body/Body.cpp
-    core/physics/rigid_body/FixtureDefinition.cpp
-    core/physics/rigid_body/Fixture.cpp
     core/physics/rigid_body/colliders/Collider.cpp
     core/physics/rigid_body/colliders/CircleCollider.cpp
     core/physics/rigid_body/colliders/PolygonCollider.cpp

@@ -38,16 +38,16 @@ namespace ime {
     namespace
     {
         /**
-         * @brief Convert Box2d fixture pointer to own fixture pointer
-         * @param fixture Box2d fixture pointer to be converted
-         * @return Own Fixture pointer
+         * @brief Convert Box2d fixture to own collider
+         * @param fixture Box2d fixture to be converted
+         * @return Own collider
          */
-        Fixture::sharedPtr getOwnFixture(b2Fixture* fixture, World& world) {
-            // Every IME Fixture object has an instance of b2Fixture.
-            // When the b2Fixture is instantiated, the id of Fixture that
+        Collider::sharedPtr convertFixtureToCollider(b2Fixture* fixture, World& world) {
+            // Every IME Collider object has an instance of a b2Fixture.
+            // When the b2Fixture is instantiated, the id of the Collider that
             // contains it is passed as user data so that we can retrieve it later.
             return world.getBodyById(fixture->GetBody()->GetUserData().pointer)
-                     ->getFixtureById(fixture->GetUserData().pointer);
+                     ->getColliderById(fixture->GetUserData().pointer);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ namespace ime {
 
             // Called by box2d when a fixture overlaps the query AABB
             bool ReportFixture(b2Fixture *b2_fixture) override {
-                return (*callback_)(getOwnFixture(b2_fixture, world_));
+                return (*callback_)(convertFixtureToCollider(b2_fixture, world_));
             }
 
             ~B2QueryCallback() {
@@ -101,7 +101,7 @@ namespace ime {
                 const b2Vec2 &normal, float fraction) override
             {
                 using namespace utility;
-                return (*callback_)(getOwnFixture(b2_fixture, world_),
+                return (*callback_)(convertFixtureToCollider(b2_fixture, world_),
                         {metresToPixels(point.x), metresToPixels(point.y)},
                         {metresToPixels(normal.x), metresToPixels(normal.y)},
                         fraction);
@@ -115,7 +115,6 @@ namespace ime {
             World& world_;
             const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
-
     } // anonymous namespace
 
     /////////////////////////////////////////////////////////////////////////////
@@ -157,8 +156,8 @@ namespace ime {
 
         void emit(const std::string& event, b2Contact *contact) {
             contactListener_.eventEmitter_.emit(event,
-                getOwnFixture(contact->GetFixtureA(), world_),
-                getOwnFixture(contact->GetFixtureB(), world_));
+                convertFixtureToCollider(contact->GetFixtureA(), world_),
+                convertFixtureToCollider(contact->GetFixtureB(), world_));
         }
     };
 
@@ -219,6 +218,11 @@ namespace ime {
     }
 
     Body::sharedPtr World::createBody(const BodyDefinition &definition) {
+        if (world_->IsLocked()) {
+            IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback");
+            return nullptr;
+        }
+
         auto body = Body::sharedPtr(new Body(definition, shared_from_this()));
         bodies_.insert({body->id_, body});
         return body;
@@ -244,41 +248,50 @@ namespace ime {
                 bodies_.erase(body->getId());
                 return true;
             }
-        }
+        } else
+            IME_PRINT_WARNING("Operation ignored: destroyBody() called inside a world callback");
 
         return false;
     }
 
     Joint::sharedPtr World::createJoint(const JointDefinition& definition) {
-        if (world_ && !world_->IsLocked()) {
-            Joint::sharedPtr joint;
-            switch (definition.type) {
-                case JointType::Distance:
-                    joint = Joint::sharedPtr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
-                    break;
-                default:
-                    return nullptr;
-            }
-
-            joints_.insert({joint->getId(), joint});
-            return joint;
+        if (world_->IsLocked()) {
+            IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback");
+            return nullptr;
         }
-        return nullptr;
+
+        Joint::sharedPtr joint;
+        switch (definition.type) {
+            case JointType::Distance:
+                joint = Joint::sharedPtr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
+                break;
+            default:
+                return nullptr;
+        }
+
+        joints_.insert({joint->getId(), joint});
+        return joint;
     }
 
     bool World::destroyJoint(Joint::sharedPtr joint) {
-        if (world_ && !world_->IsLocked()) {
+        if (!world_->IsLocked()) {
             if (utility::findIn(joints_, joint->getId())) {
                 world_->DestroyJoint(joints_[joint->getId()]->getInternalJoint());
                 joints_.erase(joint->getId());
                 return true;
             }
-        }
+        } else
+            IME_PRINT_WARNING("Operation ignored: destroyJoint() called inside a world callback");
 
         return false;
     }
 
     void World::destroyAllBodies() {
+        if (world_->IsLocked()) {
+            IME_PRINT_WARNING("Operation ignored: removeAllBodies() called inside a world callback");
+            return;
+        }
+
         // Destroy all bodies in box2D first
         std::for_each(bodies_.begin(), bodies_.end(), [this] (auto pair) {
             world_->DestroyBody(pair.second->getInternalBody().get());
@@ -288,6 +301,11 @@ namespace ime {
     }
 
     void World::destroyAllJoints() {
+        if (world_->IsLocked()) {
+            IME_PRINT_WARNING("Operation ignored: removeAllJoints() called inside a world callback");
+            return;
+        }
+
         // Destroy all joints in box2D first
         std::for_each(joints_.begin(), joints_.end(), [this] (auto pair) {
             world_->DestroyJoint(pair.second->getInternalJoint());
@@ -343,6 +361,11 @@ namespace ime {
     std::size_t World::getBodyCount() const {
         return world_->GetBodyCount();
     }
+
+    std::size_t World::getJointCount() const {
+        return world_->GetJointCount();
+    }
+
 
     bool World::isLocked() const {
         return world_->IsLocked();

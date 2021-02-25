@@ -68,39 +68,41 @@ namespace ime {
             world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
-    Fixture::sharedPtr Body::createFixture(const FixtureDefinition& definition) {
-        if (world_ && !world_->isLocked()) {
-            auto fixture = Fixture::sharedPtr(new Fixture(definition, shared_from_this()));
-            fixtures_.insert({fixture->id_, fixture});
-            return fixture;
-        }
-        return nullptr;
-    }
-
-    Fixture::sharedPtr Body::createFixture(Collider::sharedPtr collider, float density) {
+    void Body::attachCollider(Collider::sharedPtr collider) {
+        IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body");
+        IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider");
         if (!world_->isLocked()) {
-            auto fixtureDef = FixtureDefinition();
-            fixtureDef.collider = collider;
-            fixtureDef.density = density;
-            return createFixture(fixtureDef);
-        }
+            collider->setBody(shared_from_this());
+            colliders_.insert({collider->getId(), collider});
+        } else
+            IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
+    }
+
+    Collider::sharedPtr Body::getColliderById(unsigned int id) {
+        if (utility::findIn(colliders_, id))
+            return colliders_.at(id);
         return nullptr;
     }
 
-    Fixture::sharedPtr Body::getFixtureById(unsigned int id) {
-        if (utility::findIn(fixtures_, id))
-            return fixtures_.at(id);
-
-        return nullptr;
-    }
-
-    void Body::destroyFixture(Fixture::sharedPtr fixture) {
-        if (world_ && !world_->isLocked()) {
-            if (utility::findIn(fixtures_, fixture->getId())) {
-                body_->DestroyFixture(fixtures_[fixture->getId()]->fixture_.get());
-                fixtures_.erase(fixture->getId());
+    void Body::removeColliderWithId(unsigned int id) {
+        if (!world_->isLocked()) {
+            if (colliders_.find(id) != colliders_.end()) {
+                body_->DestroyFixture(colliders_[id]->fixture_.get());
+                colliders_.erase(id);
             }
-        }
+        } else
+            IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback");
+    }
+
+    void Body::removeCollider(Collider::sharedPtr collider) {
+        IME_ASSERT(collider, "RemoveCollider() called with a nullptr");
+        if (!world_->isLocked()) {
+            if (utility::findIn(colliders_, collider->getId())) {
+                body_->DestroyFixture(colliders_[collider->getId()]->fixture_.get());
+                colliders_.erase(collider->getId());
+            }
+        } else
+            IME_PRINT_WARNING("Operation ignored: removeCollider() called inside a world callback");
     }
 
     void Body::setPosition(Vector2f position) {
@@ -253,6 +255,11 @@ namespace ime {
     }
 
     void Body::setType(BodyType type) {
+        if (world_->isLocked()) {
+            IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback");
+            return;
+        }
+
         body_->SetType(static_cast<b2BodyType>(type));
     }
 
@@ -285,6 +292,11 @@ namespace ime {
     }
 
     void Body::setEnabled(bool enable) {
+        if (world_->isLocked()) {
+            IME_PRINT_WARNING("Operation ignored: setEnabled() called inside a world callback");
+            return;
+        }
+
         body_->SetEnabled(enable);
     }
 
@@ -316,8 +328,8 @@ namespace ime {
         return id_;
     }
 
-    void Body::forEachFixture(Callback<Fixture::sharedPtr> callback) {
-        std::for_each(fixtures_.begin(), fixtures_.end(), [&callback](auto pair) {
+    void Body::forEachCollider(std::function<void(Collider::sharedPtr)> callback) {
+        std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto pair) {
             callback(pair.second);
         });
     }

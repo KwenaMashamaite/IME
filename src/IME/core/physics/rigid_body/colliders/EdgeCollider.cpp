@@ -32,6 +32,9 @@ namespace ime {
         edgeShape_{std::make_unique<b2EdgeShape>()}
     {}
 
+    EdgeCollider::EdgeCollider(EdgeCollider &&) = default;
+    EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) = default;
+
     EdgeCollider::sharedPtr EdgeCollider::create() {
         return EdgeCollider::sharedPtr(new EdgeCollider());
     }
@@ -42,6 +45,7 @@ namespace ime {
 
     const Collider::sharedPtr EdgeCollider::copy() const {
         auto collider = create();
+
         collider->edgeShape_.reset(new b2EdgeShape(*(this->edgeShape_.get())));
         return collider;
     }
@@ -88,4 +92,6 @@ namespace ime {
     const b2Shape& EdgeCollider::getInternalShape() const {
         return *edgeShape_;
     }
+
+    EdgeCollider::~EdgeCollider() = default;
 }

@@ -25,19 +25,19 @@
 #include "IME/core/physics/ContactListener.h"
 
 namespace ime {
-    int ContactListener::onContactBegin(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback) {
+    int ContactListener::onContactBegin(Callback<Collider::sharedPtr, Collider::sharedPtr> callback) {
         return eventEmitter_.on("contactBegin", std::move(callback));
     }
 
-    int ContactListener::onContactEnd(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback) {
+    int ContactListener::onContactEnd(Callback<Collider::sharedPtr, Collider::sharedPtr> callback) {
         return eventEmitter_.on("contactEnd", std::move(callback));
     }
 
-    int ContactListener::onPreSolve(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback) {
+    int ContactListener::onPreSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback) {
         return eventEmitter_.on("preSolve", std::move(callback));
     }
 
-    int ContactListener::onPostSolve(Callback<Fixture::sharedPtr, Fixture::sharedPtr> callback) {
+    int ContactListener::onPostSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback) {
         return eventEmitter_.on("postSolve", std::move(callback));
     }
 

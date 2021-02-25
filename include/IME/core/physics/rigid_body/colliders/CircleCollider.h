@@ -48,12 +48,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        CircleCollider(CircleCollider&&) = default;
+        CircleCollider(CircleCollider&&);
 
         /**
          * @brief Move assignment operator
          */
-        CircleCollider& operator=(CircleCollider&&) = default;
+        CircleCollider& operator=(CircleCollider&&);
 
         /**
          * @brief Create a new circle collider
@@ -97,15 +97,9 @@ namespace ime {
         float getRadius() const;
 
         /**
-         * @internal
-         * @brief Get the internal collider
-         * @return The internal collider
-         *
-         * @warning This function is intended for internal use and should never
-         * be called outside of IME
+         * @brief Destructor
          */
-        b2Shape& getInternalShape() override;
-        const b2Shape& getInternalShape() const override;
+        ~CircleCollider();
 
     private:
         /**
@@ -113,6 +107,13 @@ namespace ime {
          * @param radius The radius of the circle
          */
         CircleCollider(float radius = 0.0f);
+
+        /**
+         * @brief Get the internal collider
+         * @return The internal collider
+         */
+        b2Shape& getInternalShape() override;
+        const b2Shape& getInternalShape() const override;
 
     private:
         std::unique_ptr<b2CircleShape> circle_;  //!< Internal collision circle
