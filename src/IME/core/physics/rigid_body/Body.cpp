@@ -312,6 +312,14 @@ namespace ime {
         return body_->IsFixedRotation();
     }
 
+    std::shared_ptr<GameObject> Body::getGameObject() {
+        return gameObject_;
+    }
+
+    std::shared_ptr<GameObject> Body::getGameObject() const {
+        return gameObject_;
+    }
+
     Body::WorldPtr Body::getWorld() {
         return world_;
     }
@@ -332,6 +340,21 @@ namespace ime {
         std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto pair) {
             callback(pair.second);
         });
+    }
+
+    void Body::onCollisionStart(Callback<Body::sharedPtr, Body::sharedPtr> callback) {
+        onContactBegin_ = std::move(callback);
+    }
+
+    void Body::onCollisionEnd(Callback<Body::sharedPtr, Body::sharedPtr> callback) {
+        onContactEnd_ = std::move(callback);
+    }
+
+    void Body::emitCollisionEvent(const std::string &event, Body::sharedPtr other) {
+        if (event == "contactBegin" && onContactBegin_)
+            onContactBegin_(shared_from_this(), other);
+        else if (event == "contactEnd" && onContactEnd_)
+            onContactEnd_(shared_from_this(), other);
     }
 
     std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() {

@@ -42,7 +42,7 @@ namespace ime {
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
      */
-    class IME_API GameObject {
+    class IME_API GameObject : public std::enable_shared_from_this<GameObject> {
     public:
         using sharedPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
         using BodyPtr = std::shared_ptr<Body>;     //!< Shared Body pointer
@@ -208,11 +208,20 @@ namespace ime {
 
         /**
          * @brief Set whether the game object is collidable or not
-         * @param isCollidable True to make collidable, otherwise false
+         * @param collidable True to make collidable, otherwise false
          *
-         * The game object is not collidable by default
+         * This function has no effect if the game object does not have a
+         * physics body attached to it or if the attached physics body
+         * does not have a collider.
+         *
+         * When @a collidable is true, this function will reset the collision
+         * filter to all collisions and when @a collidable is false the function
+         * will reset the collision filter to no collisions. If the game object
+         * must collide with some game objects and ignore other game objects
+         * then it is advised to use the game objects Collider to enable or
+         * disable collisions as it gives you great flexibility
          */
-        void setCollidable(bool isCollidable);
+        void setCollidable(bool collidable);
 
         /**
          * @brief Check if the game object is collidable or not
@@ -226,7 +235,7 @@ namespace ime {
          *         from
          *
          * By default, this function returns this class and must be overridden
-         * if you extend this class classes
+         * if you extend this class class
          */
         virtual std::string getClassType() {
             return "GameObject";
@@ -242,17 +251,20 @@ namespace ime {
 
         /**
          * @brief Attach a physics Body to the game object
-         * @param body Physics body to be attached
+         * @param body Physics body to be attached to the game object
          *
-         * Attaching a rigid Body to a game object enables physics for that
-         * game object. This means that you should refrain from calling
-         * functions that MODIFY the game objects transform (position,
-         * rotation and origin). Note that the physics simulation does not
-         * account for scaling, that should be handles by you
-         *
-         * @note Attaching a rigid body will alter the origin of the game objects
-         * sprite to match the centre of mass of the body. In addition, the
-         * transform of the game object will be reset to that of the rigid body
+         * When a rigid body is attached to a game object, the game object
+         * becomes enabled for physics. This means that it will react to
+         * gravity, friction, applies forces, impulses etc. The position
+         * and rotation of the game object will be controlled by the physics
+         * engine therefore you should refrain from calling functions that
+         * MODIFY the game objects transform (position, rotation and origin).
+         * A result of doing so is inconsistency. Note that the physics engine
+         * does not account for scaling. This means that scaling the objects
+         * sprite will NOT scale the objects body or the body's collider. If
+         * you want the body to scale with the objects sprite, you should
+         * remove the old collider and attach a new one with the appropriate
+         * size.
          *
          * @warning The pointer must not be a nullptr. Also, you cannot attach
          * a rigid body to a game object that already has a rigid body attached
@@ -285,6 +297,55 @@ namespace ime {
          *         otherwise false
          */
         bool hasRigidBody() const;
+
+        /**
+         * @brief Add an event listener to a collision begin event
+         * @param callback The function to be executed when event is fired
+         *
+         * The callback function is called when two game objects begin to
+         * overlap. The callback is passed this game object and the game
+         * object that collided with this game object respectively. Pass
+         * nullptr to remove the current callback
+         *
+         * A collision begin handler may be registered on the game object or on
+         * the rigid body attached to the game object or on both. However, it
+         * is advised to register the handler on either the game object or the
+         * rigid Body because registering the handler on both objects will result
+         * in the handler being executed twice each time the event is fired
+         *
+         * @note A collision begin event can only occur if the game object has a
+         * rigid body attached to it and the rigid body has a Collider attached
+         * to it
+         *
+         * @see attachRigidBody
+         * @see onCollisionEnd
+         */
+        void onCollisionStart(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+
+        /**
+         * @brief Add an event listener to a collision end event
+         * @param callback The function to be executed when event is fired
+         *
+         * The callback function is called when two game objects stop
+         * overlapping. The callback is passed this game object and the
+         * game object that stopped overlapping with this game object
+         * respectively. Pass nullptr to remove the current callback.
+         *
+         * A collision end handler may be registered on the game object or on
+         * the rigid body attached to the game object or on both. However, it
+         * is advised to register the handler on either the game object or the
+         * rigid Body because registering the handler on both objects will
+         * result in the handler being executed twice each time the event is
+         * fired
+         *
+         * @note A collision end event can only occur if the game object has a
+         * rigid body attached to it and the rigid body has a Collider attached
+         * to it
+         *
+         * @see attachRigidBody
+         * @see onCollisionStart
+         */
+        void onCollisionEnd(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
 
         /**
          * @brief Get the game objects transform
@@ -350,6 +411,18 @@ namespace ime {
         bool unsubscribe(const std::string& event, int id);
 
         /**
+         * @internal
+         * @brief Emit a collision event on the game object
+         * @param event Collision event to be emitted
+         * @param other The game object that is colliding or ceased colliding
+         *              with this game object
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void emitCollisionEvent(const std::string& event, GameObject::sharedPtr other);
+
+        /**
          * @brief Destructor
          */
         virtual ~GameObject();
@@ -387,6 +460,9 @@ namespace ime {
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object
         int postStepId_;                      //!< Scene post step handler id
+
+        Callback<sharedPtr, sharedPtr> onContactBegin_; //!< Called when this game object starts colliding with another game object or vice versa
+        Callback<sharedPtr, sharedPtr> onContactEnd_;   //!< Called when this game object stops colliding with another game object or vice versa
     };
 }
 

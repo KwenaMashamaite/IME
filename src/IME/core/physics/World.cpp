@@ -155,9 +155,25 @@ namespace ime {
         ContactListener& contactListener_;
 
         void emit(const std::string& event, b2Contact *contact) {
-            contactListener_.eventEmitter_.emit(event,
-                convertFixtureToCollider(contact->GetFixtureA(), world_),
-                convertFixtureToCollider(contact->GetFixtureB(), world_));
+            auto colliderA = convertFixtureToCollider(contact->GetFixtureA(), world_);
+            auto colliderB = convertFixtureToCollider(contact->GetFixtureB(), world_);
+            contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
+
+            auto bodyA = colliderA->getBody();
+            auto bodyB = colliderB->getBody();
+
+            if (bodyA && bodyB) {
+                bodyA->emitCollisionEvent(event, bodyB);
+                bodyB->emitCollisionEvent(event, bodyA);
+            }
+
+            auto gameObjectA = bodyA->getGameObject();
+            auto gameObjectB = bodyB->getGameObject();
+
+            if (gameObjectA && gameObjectB) {
+                gameObjectA->emitCollisionEvent(event, gameObjectB);
+                gameObjectB->emitCollisionEvent(event, gameObjectA);
+            }
         }
     };
 
@@ -230,7 +246,9 @@ namespace ime {
 
     void World::createBody(GameObject::sharedPtr gameObject, const BodyDefinition &definition) {
         if (gameObject) {
-            gameObject->attachRigidBody(createBody(definition));
+            auto rigidBody = createBody(definition);
+            rigidBody->gameObject_ = gameObject;
+            gameObject->attachRigidBody(std::move(rigidBody));
         }
     }
 

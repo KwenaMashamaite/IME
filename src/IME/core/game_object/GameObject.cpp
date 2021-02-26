@@ -52,6 +52,7 @@ namespace ime {
     }
 
     GameObject::GameObject(const GameObject &other) :
+        std::enable_shared_from_this<GameObject>(),
         scene_{other.scene_},
         type_{other.type_},
         id_{prevEntityId_++},
@@ -145,8 +146,11 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
-                body_->forEachCollider([isCollidable](Collider::sharedPtr fixture) {
-                    fixture->setEnable(isCollidable);
+                body_->forEachCollider([isCollidable](Collider::sharedPtr collider) {
+                    if (isCollidable)
+                        collider->resetCollisionFilterData();
+                    else
+                        collider->setEnable(false);
                 });
             }
 
@@ -205,6 +209,14 @@ namespace ime {
         }
     }
 
+    void GameObject::onCollisionStart(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+        onContactBegin_ = std::move(callback);
+    }
+
+    void GameObject::onCollisionEnd(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+        onContactEnd_ = std::move(callback);
+    }
+
     bool GameObject::hasRigidBody() const {
         return body_ != nullptr;
     }
@@ -235,6 +247,13 @@ namespace ime {
 
     bool GameObject::unsubscribe(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
+    }
+
+    void GameObject::emitCollisionEvent(const std::string &event, GameObject::sharedPtr other) {
+        if (event == "contactBegin" && onContactBegin_)
+            onContactBegin_(shared_from_this(), other);
+        else if (event == "contactEnd" && onContactEnd_)
+            onContactEnd_(shared_from_this(), other);
     }
 
     bool GameObject::operator==(const GameObject &rhs) {

@@ -104,14 +104,19 @@ namespace ime {
     /**
      * @brief Abstract Base class for colliders
      *
-     * A collider enables collisions between game objects. Usually a collider
-     * is attached to a rigid Body which is then attached to a game object.
-     * A game object that has a rigid body attached to it which does not have
-     * a collider will be affected by physics (impulses, gravity, friction etc),
-     * but the game object cannot react/respond to collisions.
+     * A collider enables collisions between rigid bodies/game objects.
+     * It defines the shape of a rigid body/game object for the purpose
+     * of physical collisions. Usually a collider is attached to a rigid
+     * Body which is then attached to a GameObject. A game object that has
+     * a rigid body attached to it which does not have a collider will be
+     * affected by physics (impulses, gravity, friction etc), but the game
+     * object cannot react/respond to collisions.
      *
-     * Rigid bodies enable physics while colliders enable collision detection
-     * and collision resolution
+     * Colliders are invisible however they may be drawn on the render
+     * window during debug mode by enabling debug drawing of the physics
+     * World.
+     *
+     * Rigid bodies enable physics while colliders enable collisions
      */
     class IME_API Collider : utility::NonCopyable {
     public:

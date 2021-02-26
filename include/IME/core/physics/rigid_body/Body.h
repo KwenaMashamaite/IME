@@ -38,8 +38,9 @@
 class b2Body;
 
 namespace ime {
-    class World; //!< World class forward declaration
-    class Scene; //!< Scene class forward declaration
+    class World;
+    class Scene;
+    class GameObject;
 
     /**
      * @brief A rigid body
@@ -55,6 +56,17 @@ namespace ime {
      *
      * 3. A dynamic body is fully simulated. They can be moved manually by the
      *    user, but normally they move according to forces
+     *
+     * Note that a rigid body without a Collider attached to it will not be
+     * able to collide with other rigid bodies. This means that it will not
+     * generate a collision when it overlaps with another rigid body. A
+     * Collider must be attached to the rigid body if you want the body to
+     * react to physics (gravity, friction, applied forces, impulses etc...)
+     * and also be able to collide with other rigid bodies. In addition a
+     * rigid body does not have a shape or size, the shape and the size of
+     * the body are derived from the body's Collider. As a result, when debug
+     * drawing is enabled, rigid bodies without colliders will not be rendered
+     * on the render window
      *
      * A body is not constructed directly, use the World::createBody function
      * to construct a rigid body
@@ -448,6 +460,13 @@ namespace ime {
         bool isFixedRotation() const;
 
         /**
+         * @brief Get the game object this body is attached to
+         * @return The game object this game object is attached to
+         */
+        std::shared_ptr<GameObject> getGameObject();
+        std::shared_ptr<GameObject> getGameObject() const;
+
+        /**
          * @brief Get the world the body is in
          * @return The world the body belong sto
          */
@@ -475,6 +494,50 @@ namespace ime {
         void forEachCollider(Callback<Collider::sharedPtr> callback);
 
         /**
+         * @brief Add an event listener to a collision begin event
+         * @param callback The function to be executed when event is fired
+         *
+         * The callback function is called when two bodies begin to overlap.
+         * It is passed this body and the body that started to overlap with
+         * this body respectively. Pass nullptr to remove the callback
+         *
+         * @note A collision begin event can only occur if the body has a
+         * Collider attached to it
+         *
+         * @see attachCollider
+         * @see onCollisionEnd
+         */
+        void onCollisionStart(Callback<Body::sharedPtr, Body::sharedPtr> callback);
+
+        /**
+         * @brief Add an event listener to a collision end event
+         * @param callback The function to be executed when event is fired
+         *
+         * The callback function is called when two bodies stop overlapping.
+         * It is passed this body and the body that stopped overlapping with
+         * this body respectively. Pass nullptr to remove the callback
+         *
+         * @note A collision end event can only occur if the body has a
+         * Collider attached to it
+         *
+         * @see attachCollider
+         * @see onCollisionStart
+         */
+        void onCollisionEnd(Callback<Body::sharedPtr, Body::sharedPtr> callback);
+
+        /**
+         * @internal
+         * @brief Emit a collision event on the game object
+         * @param event Collision event to be emitted
+         * @param other The body that is colliding or ceased colliding
+         *              with this body
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void emitCollisionEvent(const std::string& event, Body::sharedPtr other);
+
+        /**
          * @internal
          * @brief Get the internal body
          * @return The internal body
@@ -495,12 +558,16 @@ namespace ime {
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_; //!< Internal rigid body
+        std::shared_ptr<GameObject> gameObject_;    //!< The game object this body is attached to
         unsigned int id_;                           //!< The id of this body
         WorldPtr world_;                            //!< The world the body is in
         PropertyContainer userData_;                //!< Application specific body data
         friend class World;                         //!< Needs access to constructor
 
         std::unordered_map<int, Collider::sharedPtr> colliders_;  //!< Colliders attached to this body
+
+        Callback<sharedPtr, sharedPtr> onContactBegin_; //!< Called when this body starts colliding with another body or vice versa
+        Callback<sharedPtr, sharedPtr> onContactEnd_;   //!< Called when this body stops colliding with another body or vice versa
     };
 }
 
