@@ -109,6 +109,17 @@ namespace ime {
         return !(row >= static_cast<int>(numOfRows_) || row < 0 || colm >= static_cast<int>(numOfColms_) || colm < 0);
     }
 
+    void TileMap::construct(Vector2u size, char id) {
+        for (auto i = 0u; i < size.x; ++i) {
+            auto innerVector = std::vector<char>(size.y, id);
+            mapData_.push_back(std::move(innerVector));
+        }
+
+        computeDimensions();
+        createTiledMap();
+        createObjectList();
+    }
+
     void TileMap::loadFromFile(const std::string &filename, const char& separator) {
         mapData_ = TileMapParser().parse(filename, separator);
         computeDimensions();

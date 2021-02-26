@@ -121,6 +121,20 @@ namespace ime {
         void setCurrentTileset(const std::string& name);
 
         /**
+         * @brief Construct a tilemap
+         * @param id The id of each tile
+         * @param size The size of the tilemap in tiles
+         *
+         * This function should be used when there are no special tiles
+         * in the tilemap, that is, when all tiles have the same id. The
+         * x component of @a size is the number of rows whilst the y
+         * component is the number of columns
+         *
+         * @see loadFromFile and loadFromVector
+         */
+        void construct(Vector2u size, char id);
+
+        /**
          * @brief Construct the tilemap from data located on a file on the disk
          * @param filename Name of the file that contains the map data
          * @param separator Character used to separate map data
