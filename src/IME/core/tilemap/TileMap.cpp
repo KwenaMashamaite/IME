@@ -285,6 +285,9 @@ namespace ime {
         IME_ASSERT(child, "Cannot add nullptr to a tilemap");
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
+            if (child->hasRigidBody())
+                child->getRigidBody()->setPosition(getTile(index).getWorldCentre());
+
             children_[index].push_back(std::move(child));
             return true;
         }
