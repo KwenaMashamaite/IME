@@ -141,12 +141,12 @@ namespace ime {
 
         // Called by Box2d after collision detection, but before collision resolution
         // may be called multiple times per time step per contact due to continuous collision detection
-        void PreSolve(b2Contact *contact, __attribute__((unused)) const b2Manifold *oldManifold) override {
+        void PreSolve(b2Contact *contact, const b2Manifold*) override {
             emit("preSolve", contact);
         }
 
         // Called by box2d after collision resolution
-        void PostSolve(b2Contact *contact, __attribute__((unused)) const b2ContactImpulse *impulse) override {
+        void PostSolve(b2Contact *contact, const b2ContactImpulse*) override {
             emit("postSolve", contact);
         }
 

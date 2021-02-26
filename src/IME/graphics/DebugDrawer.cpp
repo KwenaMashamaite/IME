@@ -130,7 +130,7 @@ namespace ime::priv {
         DrawSegment(transform.p, yAxis, {0, 1, 0, 1});
     }
 
-    void DebugDrawer::DrawPoint(const b2Vec2 &point, __attribute__((unused)) float size, const b2Color &colour) {
+    void DebugDrawer::DrawPoint(const b2Vec2 &point, float, const b2Color &colour) {
         auto p = sf::Vertex({utility::metresToPixels(point.x), utility::metresToPixels(point.y)}, utility::convertToSFMLColour(convertToOwnColour(colour)));
         window_.getImpl()->getSFMLWindow().draw(&p, 1, sf::Points);
     }

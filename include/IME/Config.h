@@ -69,6 +69,9 @@
 #define IME_ASSERT(condition, msg)
 #endif
 
+// Portable macro that suppress unused parameter warnings
+#define IME_UNUSED(x) (void)(x)
+
 // Version of the library
 #define IME_VERSION_MAJOR 2
 #define IME_VERSION_MINOR 0

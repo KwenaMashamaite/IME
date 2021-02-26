@@ -127,7 +127,7 @@ namespace ime {
          *
          * @see fixedUpdate
          */
-        virtual void update(__attribute__((unused)) Time deltaTime) {}
+        virtual void update(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
          * @brief Update the scene in fixed time steps
@@ -148,7 +148,7 @@ namespace ime {
          *
          * @see update
          */
-        virtual void fixedUpdate(__attribute__((unused)) Time deltaTime) {}
+        virtual void fixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
          * @brief Render the scene
