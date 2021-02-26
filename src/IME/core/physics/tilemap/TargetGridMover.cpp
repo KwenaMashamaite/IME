@@ -90,6 +90,10 @@ namespace ime {
         return targetTileIndex_;
     }
 
+    const std::stack<Index> &TargetGridMover::getPath() const {
+        return pathToTargetTile_;
+    }
+
     bool TargetGridMover::isDestinationReachable(Index index) {
         IME_ASSERT(getTarget(), "Cannot check destination reachability without a target");
         return !(pathFinder_->findPath(getGrid(),

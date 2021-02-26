@@ -83,6 +83,12 @@ namespace ime {
         Index getDestination() const;
 
         /**
+         * @brief Get the path of the target
+         * @return The path of the target
+         */
+        const std::stack<Index>& getPath() const;
+
+        /**
          * @brief Check whether or not a destination is reachable
          * @param index Destination to be checked
          * @return True if the destination is reachable from the targets
