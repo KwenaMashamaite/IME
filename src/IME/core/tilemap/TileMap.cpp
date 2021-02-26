@@ -126,7 +126,9 @@ namespace ime {
     void TileMap::computeDimensions() {
         numOfRows_ = mapData_.size();
         numOfColms_ = mapData_[0].size();
-        mapSizeInPixels_ = {numOfColms_ * tileSize_.y, numOfRows_ * tileSize_.x};
+        mapSizeInPixels_.x = numOfColms_ * tileSize_.y + (numOfColms_ + 1) * tileSpacing_;
+        mapSizeInPixels_.y = numOfRows_ * tileSize_.x + (numOfRows_ + 1) * tileSpacing_;
+        backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
     void TileMap::setPosition(int x, int y) {
@@ -137,9 +139,9 @@ namespace ime {
         for (auto i = 0u; i < tiledMap_.size(); i++) {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 if (i == 0 && j == 0)
-                    tiledMap_[i][j].setPosition(mapPos_);
+                    tiledMap_[i][j].setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
                 else if (j == 0)
-                    tiledMap_[i][j].setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
+                    tiledMap_[i][j].setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
                     tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y});
             }
@@ -166,9 +168,9 @@ namespace ime {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 auto tile = Tile(tileSize_, {-99, -99});
                 if (i == 0 && j == 0)
-                    tile.setPosition(mapPos_);
+                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
+                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
                     tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
 
@@ -178,10 +180,6 @@ namespace ime {
             }
             tiledMap_.push_back(row);
         }
-        //Accommodate tile spacing in overall tilemap size
-        mapSizeInPixels_.x += (numOfColms_ - 1) * tileSpacing_;
-        mapSizeInPixels_.y += (numOfRows_ - 1) * tileSpacing_;
-        backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
     void TileMap::createObjectList() {
