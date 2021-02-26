@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API ToggleButton : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<ToggleButton>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const ToggleButton>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<ToggleButton>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const ToggleButton>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -56,7 +56,7 @@ namespace ime {
              * @param checked True to create button checked otherwise false
              * @return The new toggle button
              */
-            static sharedPtr create(const std::string& text = "", bool checked = false);
+            static ToggleButton::Ptr create(const std::string& text = "", bool checked = false);
 
             /**
              * @brief Create a copy of another toggle button
@@ -81,7 +81,8 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static ToggleButton::Ptr copy(ToggleButton::ConstPtr other,
+                bool shareRenderer = true);
 
             /**
              * @brief Get the buttons renderer
@@ -93,8 +94,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ButtonRenderer::sharedPtr getRenderer();
-            const ButtonRenderer::sharedPtr getRenderer() const;
+            ButtonRenderer::Ptr getRenderer();
+            const ButtonRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the text displayed on the button

@@ -74,7 +74,7 @@ namespace ime {
      */
     class IME_API Scene : utility::NonCopyable {
     public:
-        using sharedPtr = std::shared_ptr<Scene>; //!< Shared Scene pointer
+        using Ptr = std::shared_ptr<Scene>; //!< Shared Scene pointer
 
         /**
          * @brief Constructor

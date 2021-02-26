@@ -39,11 +39,11 @@ namespace ime::ui {
 
     Panel &Panel::operator=(Panel &&) = default;
 
-    Panel::sharedPtr Panel::create(const std::string& width, const std::string& height) {
-        return Panel::sharedPtr(new Panel(width, height));
+    Panel::Ptr Panel::create(const std::string& width, const std::string& height) {
+        return Panel::Ptr(new Panel(width, height));
     }
 
-    Panel::sharedPtr Panel::copy(Panel::constSharedPtr other, bool shareRenderer) {
+    Panel::Ptr Panel::copy(Panel::ConstPtr other, bool shareRenderer) {
         auto widget = create();
 
         return widget;
@@ -53,7 +53,7 @@ namespace ime::ui {
         return std::static_pointer_cast<PanelRenderer>(Widget::getRenderer());
     }
 
-    const PanelRenderer::sharedPtr Panel::getRenderer() const {
+    const PanelRenderer::Ptr Panel::getRenderer() const {
         return std::static_pointer_cast<PanelRenderer>(Widget::getRenderer());
     }
 

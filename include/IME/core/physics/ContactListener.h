@@ -60,7 +60,7 @@ namespace ime {
          *
          * @note The event can only occur inside the time step
          */
-        int onContactBegin(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
+        int onContactBegin(Callback<Collider::Ptr, Collider::Ptr> callback);
 
         /**
          * @brief Add an event listener to a contact end event
@@ -73,7 +73,7 @@ namespace ime {
          * @note The function may be called when a body is destroyed, so
          * this event can occur outside the time step
          */
-        int onContactEnd(Callback<Collider::sharedPtr, Collider::sharedPtr> callbackB);
+        int onContactEnd(Callback<Collider::Ptr, Collider::Ptr> callbackB);
 
         /**
          * @brief Add an event listener to a pre-solve event
@@ -86,7 +86,7 @@ namespace ime {
          * @note The pre-solve event may be fired multiple times per time
          * step per contact due to continuous collision detection
          */
-        int onPreSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
+        int onPreSolve(Callback<Collider::Ptr, Collider::Ptr> callback);
 
         /**
          * @brief Add an event listener to a post-solve event
@@ -95,7 +95,7 @@ namespace ime {
          *
          * This function is called after the collision resolution
          */
-        int onPostSolve(Callback<Collider::sharedPtr, Collider::sharedPtr> callback);
+        int onPostSolve(Callback<Collider::Ptr, Collider::Ptr> callback);
 
         /**
          * @brief Remove a callback from a contact event

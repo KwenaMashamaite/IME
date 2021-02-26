@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API Panel : public WidgetContainer {
         public:
-            using sharedPtr = std::shared_ptr<Panel>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Panel>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Panel>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Panel>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -67,7 +67,7 @@ namespace ime {
              * 
              * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create(const std::string& width = "100%",
+            static Panel::Ptr create(const std::string& width = "100%",
                 const std::string& height = "100%");
 
             /**
@@ -93,7 +93,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Panel::Ptr copy(Panel::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the panels renderer
@@ -105,8 +105,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            PanelRenderer::sharedPtr getRenderer();
-            const PanelRenderer::sharedPtr getRenderer() const;
+            PanelRenderer::Ptr getRenderer();
+            const PanelRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Get the type of the panel

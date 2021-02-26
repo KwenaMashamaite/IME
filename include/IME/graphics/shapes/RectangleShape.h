@@ -35,7 +35,7 @@ namespace ime {
      */
     class IME_API RectangleShape : public Shape {
     public:
-        using sharedPtr = std::shared_ptr<Shape>; //!< Shared shape pointer
+        using Ptr = std::shared_ptr<Shape>; //!< Shared shape pointer
 
         /**
          * @brief Default constructor
@@ -68,7 +68,7 @@ namespace ime {
          * @param size The size of the rectangle
          * @return The created rectangle shape
          */
-        static sharedPtr create(const Vector2f& size = Vector2f(0, 0));
+        static RectangleShape::Ptr create(const Vector2f& size = Vector2f(0, 0));
 
         /**
          * @brief Set the size of the rectangle

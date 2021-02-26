@@ -36,7 +36,7 @@ namespace ime::ui {
             button_{std::static_pointer_cast<tgui::ToggleButton>(widget)}
         {}
 
-        static ToggleButton::sharedPtr copy(ToggleButton::constSharedPtr other, bool shareRenderer) {
+        static ToggleButton::Ptr copy(ToggleButton::ConstPtr other, bool shareRenderer) {
             auto widget = create("");
 
             return widget;
@@ -85,11 +85,11 @@ namespace ime::ui {
 
     ToggleButton &ToggleButton::operator=(ToggleButton &&) = default;
 
-    ToggleButton::sharedPtr ToggleButton::create(const std::string &text, bool checked) {
-        return ToggleButton::sharedPtr(new ToggleButton(text, checked));
+    ToggleButton::Ptr ToggleButton::create(const std::string &text, bool checked) {
+        return ToggleButton::Ptr(new ToggleButton(text, checked));
     }
 
-    ToggleButton::sharedPtr ToggleButton::copy(ToggleButton::constSharedPtr other, bool shareRenderer) {
+    ToggleButton::Ptr ToggleButton::copy(ToggleButton::ConstPtr other, bool shareRenderer) {
         return ButtonImpl::copy(other, shareRenderer);
     }
 
@@ -97,7 +97,7 @@ namespace ime::ui {
         return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 
-    const ButtonRenderer::sharedPtr ToggleButton::getRenderer() const {
+    const ButtonRenderer::Ptr ToggleButton::getRenderer() const {
         return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 

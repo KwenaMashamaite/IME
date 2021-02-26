@@ -56,24 +56,24 @@ namespace ime::ui {
 
     ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel &&) = default;
 
-    ScrollablePanel::sharedPtr ScrollablePanel::create(const std::string &width,
+    ScrollablePanel::Ptr ScrollablePanel::create(const std::string &width,
         const std::string &height, Vector2f contentSize)
     {
-        return sharedPtr(new ScrollablePanel(width, height, contentSize));
+        return Ptr(new ScrollablePanel(width, height, contentSize));
     }
 
-    ScrollablePanel::sharedPtr ScrollablePanel::copy(ScrollablePanel::constSharedPtr other,
+    ScrollablePanel::Ptr ScrollablePanel::copy(ScrollablePanel::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();
         return widget;
     }
 
-    ScrollablePanelRenderer::sharedPtr ScrollablePanel::getRenderer() {
+    ScrollablePanelRenderer::Ptr ScrollablePanel::getRenderer() {
         return std::static_pointer_cast<ScrollablePanelRenderer>(Widget::getRenderer());
     }
 
-    const ScrollablePanelRenderer::sharedPtr ScrollablePanel::getRenderer() const {
+    const ScrollablePanelRenderer::Ptr ScrollablePanel::getRenderer() const {
         return std::static_pointer_cast<ScrollablePanelRenderer>(Widget::getRenderer());
     }
 

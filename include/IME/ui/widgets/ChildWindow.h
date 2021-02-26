@@ -39,8 +39,8 @@ namespace ime {
          */
         class IME_API ChildWindow : public WidgetContainer {
         public:
-            using sharedPtr = std::shared_ptr<ChildWindow>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const ChildWindow>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<ChildWindow>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const ChildWindow>; //!< const shared widget pointer
 
             /**
              * @brief Title alignments, possible options for the setTitleAlignment function
@@ -77,7 +77,7 @@ namespace ime {
              * @param titleButtons Title buttons
              * @return The new child window
              */
-            static sharedPtr create(const std::string& title = "",
+            static ChildWindow::Ptr create(const std::string& title = "",
                 unsigned int titleButtons = TitleButton::Close);
 
             /**
@@ -103,7 +103,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static ChildWindow::Ptr copy(ChildWindow::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the child window renderer
@@ -115,8 +115,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ChildWindowRenderer::sharedPtr getRenderer();
-            const ChildWindowRenderer::sharedPtr getRenderer() const;
+            ChildWindowRenderer::Ptr getRenderer();
+            const ChildWindowRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the client size of the child window

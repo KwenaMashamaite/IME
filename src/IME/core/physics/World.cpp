@@ -42,7 +42,7 @@ namespace ime {
          * @param fixture Box2d fixture to be converted
          * @return Own collider
          */
-        Collider::sharedPtr convertFixtureToCollider(b2Fixture* fixture, World& world) {
+        Collider::Ptr convertFixtureToCollider(b2Fixture* fixture, World& world) {
             // Every IME Collider object has an instance of a b2Fixture.
             // When the b2Fixture is instantiated, the id of the Collider that
             // contains it is passed as user data so that we can retrieve it later.
@@ -194,8 +194,8 @@ namespace ime {
         }));
     }
 
-    World::sharedPtr World::create(Scene &scene, Vector2f gravity) {
-        return World::sharedPtr(new World(scene, gravity));
+    World::Ptr World::create(Scene &scene, Vector2f gravity) {
+        return World::Ptr(new World(scene, gravity));
     }
 
     void World::setGravity(Vector2f gravity) {
@@ -233,18 +233,18 @@ namespace ime {
         return fixedTimeStep_;
     }
 
-    Body::sharedPtr World::createBody(const BodyDefinition &definition) {
+    Body::Ptr World::createBody(const BodyDefinition &definition) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback");
             return nullptr;
         }
 
-        auto body = Body::sharedPtr(new Body(definition, shared_from_this()));
+        auto body = Body::Ptr(new Body(definition, shared_from_this()));
         bodies_.insert({body->id_, body});
         return body;
     }
 
-    void World::createBody(GameObject::sharedPtr gameObject, const BodyDefinition &definition) {
+    void World::createBody(GameObject::Ptr gameObject, const BodyDefinition &definition) {
         if (gameObject) {
             auto rigidBody = createBody(definition);
             rigidBody->gameObject_ = gameObject;
@@ -252,14 +252,14 @@ namespace ime {
         }
     }
 
-    Body::sharedPtr World::getBodyById(unsigned int id) {
+    Body::Ptr World::getBodyById(unsigned int id) {
         if (utility::findIn(bodies_, id))
             return bodies_.at(id);
 
         return nullptr;
     }
 
-    bool World::destroyBody(Body::sharedPtr body) {
+    bool World::destroyBody(Body::Ptr body) {
         if (!world_->IsLocked()) {
             if (utility::findIn(bodies_, body->getId())) {
                 world_->DestroyBody(bodies_[body->getId()]->getInternalBody().get());
@@ -272,16 +272,16 @@ namespace ime {
         return false;
     }
 
-    Joint::sharedPtr World::createJoint(const JointDefinition& definition) {
+    Joint::Ptr World::createJoint(const JointDefinition& definition) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback");
             return nullptr;
         }
 
-        Joint::sharedPtr joint;
+        Joint::Ptr joint;
         switch (definition.type) {
             case JointType::Distance:
-                joint = Joint::sharedPtr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
+                joint = Joint::Ptr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
                 break;
             default:
                 return nullptr;
@@ -291,7 +291,7 @@ namespace ime {
         return joint;
     }
 
-    bool World::destroyJoint(Joint::sharedPtr joint) {
+    bool World::destroyJoint(Joint::Ptr joint) {
         if (!world_->IsLocked()) {
             if (utility::findIn(joints_, joint->getId())) {
                 world_->DestroyJoint(joints_[joint->getId()]->getInternalJoint());
@@ -364,13 +364,13 @@ namespace ime {
         return world_->GetSubStepping();
     }
 
-    void World::forEachBody(Callback<Body::sharedPtr&> callback) {
+    void World::forEachBody(Callback<Body::Ptr&> callback) {
         std::for_each(bodies_.begin(), bodies_.end(), [&callback](auto pair) {
             callback(pair.second);
         });
     }
 
-    void World::forEachJoint(Callback<Joint::sharedPtr &> callback) {
+    void World::forEachJoint(Callback<Joint::Ptr &> callback) {
         std::for_each(joints_.begin(), joints_.end(), [&callback](auto pair) {
             callback(pair.second);
         });

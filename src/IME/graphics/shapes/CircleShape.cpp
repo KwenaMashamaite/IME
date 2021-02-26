@@ -63,8 +63,8 @@ namespace ime {
 
     CircleShape &CircleShape::operator=(CircleShape &&) noexcept = default;
 
-    CircleShape::sharedPtr CircleShape::create(float radius) {
-        return CircleShape::sharedPtr(new CircleShape(radius));
+    CircleShape::Ptr CircleShape::create(float radius) {
+        return CircleShape::Ptr(new CircleShape(radius));
     }
 
     void CircleShape::setRadius(float radius) {

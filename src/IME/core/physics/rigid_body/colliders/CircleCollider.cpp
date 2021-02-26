@@ -37,15 +37,15 @@ namespace ime {
     CircleCollider::CircleCollider(CircleCollider &&) = default;
     CircleCollider &CircleCollider::operator=(CircleCollider &&) = default;
 
-    CircleCollider::sharedPtr CircleCollider::create(float radius) {
-        return CircleCollider::sharedPtr(new CircleCollider(radius));
+    CircleCollider::Ptr CircleCollider::create(float radius) {
+        return CircleCollider::Ptr(new CircleCollider(radius));
     }
 
-    Collider::sharedPtr CircleCollider::copy() {
+    Collider::Ptr CircleCollider::copy() {
         return std::as_const(*this).copy();
     }
 
-    const Collider::sharedPtr CircleCollider::copy() const {
+    const Collider::Ptr CircleCollider::copy() const {
         auto collider = create();
         collider->circle_.reset(new b2CircleShape(*(this->circle_.get())));
         return collider;

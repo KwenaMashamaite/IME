@@ -52,8 +52,8 @@ namespace ime {
      */
     class IME_API World : public std::enable_shared_from_this<World> {
     public:
-        using sharedPtr = std::shared_ptr<World>;  //!< Shared World pointer
-        using EntityPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
+        using Ptr = std::shared_ptr<World>;  //!< Shared World pointer
+        using GameObjectPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
 
         /**
          * Callback function passed to queryAABB function
@@ -63,7 +63,7 @@ namespace ime {
          * or true to continue with the query until all colliders have been
          * processed
          */
-        using AABBCallback = std::function<bool(Collider::sharedPtr)>;
+        using AABBCallback = std::function<bool(Collider::Ptr)>;
 
         /**
          *  Callback function passed to rayCast Function
@@ -99,7 +99,7 @@ namespace ime {
          * forth arg:  The distance from the rays starting point to the current
          *              point of intersection (fraction)
          */
-        using RayCastCallback = std::function<float(Collider::sharedPtr,
+        using RayCastCallback = std::function<float(Collider::Ptr,
             Vector2f, Vector2f, float)>;
 
         /**
@@ -136,7 +136,7 @@ namespace ime {
          *
          * @note This class does not keep a reference to the created object
          */
-        static sharedPtr create(Scene& scene, Vector2f gravity);
+        static World::Ptr create(Scene& scene, Vector2f gravity);
 
         /**
          * @brief Set the gravity of the world
@@ -214,14 +214,17 @@ namespace ime {
          * @return The created body or a nullptr if this function is called
          *         inside a world callback
          *
+         * This
+         * @a definition is left unspecified, th
+         *
          * @warning This function is locked during callbacks. This usually
          * means you should not attempt to create a body inside a callback
          * dispatched by the world (Callbacks are dispatched during a step)
          */
-        Body::sharedPtr createBody(const BodyDefinition& definition);
+        Body::Ptr createBody(const BodyDefinition& definition);
 
         /**
-         * @brief Create a body and attach it to an entity
+         * @brief Create a body and attach it to a game object
          * @param entity The entity to attach the body to
          * @param definition The definition to construct the rigid body from
          *
@@ -230,7 +233,7 @@ namespace ime {
          * body inside a callback dispatched by the world (Callbacks are
          * dispatched during a step)
          */
-        void createBody(EntityPtr gameObject, const BodyDefinition& definition);
+        void createBody(GameObjectPtr gameObject, const BodyDefinition& definition);
 
         /**
          * @brief Get the body by its unique identifier
@@ -238,7 +241,7 @@ namespace ime {
          * @return The body with the given id or a nullptr if there is no
          *         body with the given id in the world
          */
-        Body::sharedPtr getBodyById(unsigned int id);
+        Body::Ptr getBodyById(unsigned int id);
 
         /**
          * @brief Destroy a rigid body
@@ -254,7 +257,7 @@ namespace ime {
          *
          * @see createBody(const BodyDefinition&)
          */
-        bool destroyBody(Body::sharedPtr body);
+        bool destroyBody(Body::Ptr body);
 
         /**
          * @brief Create a joint
@@ -269,7 +272,7 @@ namespace ime {
          * means you should not attempt to create a joint inside a callback
          * dispatched by the world (Callbacks are dispatched during a step)
          */
-        Joint::sharedPtr createJoint(const JointDefinition& definition);
+        Joint::Ptr createJoint(const JointDefinition& definition);
 
         /**
          * @brief Destroy a joint
@@ -287,7 +290,7 @@ namespace ime {
          *
          * @see createJoint
          */
-        bool destroyJoint(Joint::sharedPtr joint);
+        bool destroyJoint(Joint::Ptr joint);
 
         /**
          * @brief Destroy all the bodies in the world
@@ -402,7 +405,7 @@ namespace ime {
          * The callback is passed a reference to a pointer to the body
          * on invocation
          */
-        void forEachBody(Callback<Body::sharedPtr&> callback);
+        void forEachBody(Callback<Body::Ptr&> callback);
 
         /**
          * @brief Execute a callback for each joint in the world
@@ -411,7 +414,7 @@ namespace ime {
          * The callback is passed a reference to a pointer to the joint
          * on invocation
          */
-        void forEachJoint(Callback<Joint::sharedPtr&> callback);
+        void forEachJoint(Callback<Joint::Ptr&> callback);
 
         /**
          * @brief Get the number of bodies in the world
@@ -601,8 +604,8 @@ namespace ime {
         int postRenderId_;                     //!< Post render callback id
 
         std::unique_ptr<priv::DebugDrawer> debugDrawer_;   //!< Draws physics entities when debug draw is enabled
-        std::unordered_map<int, Body::sharedPtr> bodies_;  //!< All bodies in this simulation
-        std::unordered_map<int, Joint::sharedPtr> joints_; //!< All joints in this simulation
+        std::unordered_map<int, Body::Ptr> bodies_;  //!< All bodies in this simulation
+        std::unordered_map<int, Joint::Ptr> joints_; //!< All joints in this simulation
 
         class B2ContactListener;
         std::unique_ptr<B2ContactListener> b2ContactListener_;

@@ -43,7 +43,7 @@ namespace ime {
      */
     class IME_API Joint {
     public:
-        using sharedPtr = std::shared_ptr<Joint>; //!< Shared joint pointer
+        using Ptr = std::shared_ptr<Joint>; //!< Shared joint pointer
         using BodyPtr = std::shared_ptr<Body>; //!< Shared body pointer
 
         /**

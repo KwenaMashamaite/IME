@@ -37,7 +37,7 @@ namespace ime {
          */
         class IME_API WidgetContainer : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
+            using Ptr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
 
             /**
              * @brief Move constructor
@@ -59,7 +59,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(Widget::sharedPtr widget, const std::string& name);
+            bool addWidget(Widget::Ptr widget, const std::string& name);
             
             /**
              * @brief Get access to a widget in the container
@@ -72,7 +72,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the 
              * given name, a recursive search will be performed.
              */
-            Widget::sharedPtr getWidget(const std::string& name) const;
+            Widget::Ptr getWidget(const std::string& name) const;
 
             /**
              * @brief Get access to a widget in the container
@@ -102,7 +102,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            Widget::sharedPtr getWidgetAtPosition(Vector2f pos) const;
+            Widget::Ptr getWidgetAtPosition(Vector2f pos) const;
 
             /**
              * @brief Remove a widget from the container
@@ -122,14 +122,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToFront(Widget::sharedPtr widget);
+            void moveWidgetToFront(Widget::Ptr widget);
 
             /**
              * @brief Place a widget behind all other widgets, to the back
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToBack(Widget::sharedPtr widget);
+            void moveWidgetToBack(Widget::Ptr widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -137,7 +137,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetForward(Widget::sharedPtr widget);
+            std::size_t moveWidgetForward(Widget::Ptr widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -145,7 +145,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetBackward(Widget::sharedPtr widget);
+            std::size_t moveWidgetBackward(Widget::Ptr widget);
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -158,7 +158,7 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            Widget::sharedPtr getFocusedWidget() const;
+            Widget::Ptr getFocusedWidget() const;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -173,7 +173,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            Widget::sharedPtr getFocusedLeaf() const;
+            Widget::Ptr getFocusedLeaf() const;
 
             /**
              * @brief Focus the next widget in the container

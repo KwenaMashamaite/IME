@@ -63,8 +63,8 @@ namespace ime {
 
     RectangleShape &RectangleShape::operator=(RectangleShape &&) noexcept = default;
 
-    RectangleShape::sharedPtr RectangleShape::create(const Vector2f &size) {
-        return sharedPtr(new RectangleShape(size));
+    RectangleShape::Ptr RectangleShape::create(const Vector2f &size) {
+        return Ptr(new RectangleShape(size));
     }
 
     void RectangleShape::setSize(const Vector2f &size) {

@@ -58,11 +58,11 @@ namespace ime::ui {
 
     EditBox &EditBox::operator=(EditBox &&) = default;
 
-    EditBox::sharedPtr EditBox::create(const std::string& defaultText) {
-        return sharedPtr(new EditBox(defaultText));
+    EditBox::Ptr EditBox::create(const std::string& defaultText) {
+        return Ptr(new EditBox(defaultText));
     }
 
-    EditBox::sharedPtr EditBox::copy(EditBox::constSharedPtr other, bool shareRenderer) {
+    EditBox::Ptr EditBox::copy(EditBox::ConstPtr other, bool shareRenderer) {
         auto widget = create();
 
         return widget;

@@ -42,7 +42,7 @@ namespace ime {
          */
         class IME_API BoxLayoutRenderer : public IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<BoxLayoutRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<BoxLayoutRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Set the size of the padding

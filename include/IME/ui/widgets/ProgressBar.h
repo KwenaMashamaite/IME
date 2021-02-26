@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API ProgressBar : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<ProgressBar>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const ProgressBar>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<ProgressBar>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const ProgressBar>; //!< const shared widget pointer
 
             /**
              * @brief Determines in which direction the progress bar is filled
@@ -66,7 +66,7 @@ namespace ime {
              * @param text Text displayed on the progress bar
              * @return The new progress bar
              */
-            static sharedPtr create(const std::string& text = "");
+            static ProgressBar::Ptr create(const std::string& text = "");
 
             /**
              * @brief Create a copy of another progress bar
@@ -91,7 +91,8 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static ProgressBar::Ptr copy(ProgressBar::ConstPtr other,
+                bool shareRenderer = true);
 
             /**
              * @brief Get the progress bars renderer
@@ -103,8 +104,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ProgressBarRenderer::sharedPtr getRenderer();
-            const ProgressBarRenderer::sharedPtr getRenderer() const;
+            ProgressBarRenderer::Ptr getRenderer();
+            const ProgressBarRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set a minimum value

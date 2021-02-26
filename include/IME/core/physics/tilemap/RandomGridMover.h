@@ -34,12 +34,14 @@ namespace ime {
      */
     class IME_API RandomGridMover : public GridMover {
     public:
+        using Ptr = std::shared_ptr<RandomGridMover>; //!< Shared grid mover pointer
+
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
          * @param target GameObject to be moved in the grid
          */
-        explicit RandomGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
+        explicit RandomGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
          * @brief Start moving the target in the grid

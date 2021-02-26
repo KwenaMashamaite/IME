@@ -168,7 +168,7 @@ namespace ime {
          * initialization. This means that only the optional callback attached
          * to the last scene will be invoked
          */
-        void pushScene(Scene::sharedPtr scene, Callback<> callback = nullptr);
+        void pushScene(Scene::Ptr scene, Callback<> callback = nullptr);
 
         /**
          * @brief Remove the current scene from the engine
@@ -373,8 +373,8 @@ namespace ime {
         SceneManager sceneManager_;                  //!< The games scene manager
         audio::AudioManager audioManager_;           //!< The games global audio manager
         input::InputManager inputManager_;           //!< The games global input manager
-        ResourceManager::sharedPtr resourceManager_; //!< The games global resource manager
-        EventDispatcher::sharedPtr eventDispatcher_; //!< Engines Event dispatcher
+        ResourceManager::Ptr resourceManager_; //!< The games global resource manager
+        EventDispatcher::Ptr eventDispatcher_; //!< Engines Event dispatcher
         PropertyContainer dataSaver_;                //!< Holds Data that persists across scenes
         bool pendingPop_;                            //!< A flag indicting whether or not the current scene should be popped
         Callback<> onWindowClose_;                   //!< A Function executed when a request to close the window is received
@@ -382,7 +382,7 @@ namespace ime {
         Callback<> onFrameEnd_;                      //!< A Function called at the end of the current frame
         TimerManager timerManager_;                  //!< Manages global timers
 
-        std::queue<std::pair<Scene::sharedPtr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
+        std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
 }
 

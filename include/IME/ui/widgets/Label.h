@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API Label : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<Label>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Label>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Label>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Label>; //!< const shared widget pointer
 
             /**
              * @brief The horizontal text alignment
@@ -64,7 +64,7 @@ namespace ime {
              * @param text Text to be displayed on the label
              * @return The new label
              */
-            static sharedPtr create(const std::string& text = "");
+            static Label::Ptr create(const std::string& text = "");
 
             /**
              * @brief Create a copy of another label
@@ -89,7 +89,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Label::Ptr copy(Label::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the labels renderer
@@ -101,8 +101,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            LabelRenderer::sharedPtr getRenderer();
-            const LabelRenderer::sharedPtr getRenderer() const;
+            LabelRenderer::Ptr getRenderer();
+            const LabelRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the text displayed on the label

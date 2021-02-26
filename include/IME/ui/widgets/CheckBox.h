@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API CheckBox : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<CheckBox>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const CheckBox>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<CheckBox>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const CheckBox>; //!< const shared widget pointer
 
             /**
              * @brief Constructor
@@ -55,7 +55,7 @@ namespace ime {
              * @param text Text to display next to the checkbox
              * @return The new checkbox
              */
-            static sharedPtr create(const std::string& text = "");
+            static CheckBox::Ptr create(const std::string& text = "");
 
             /**
              * @brief Create a copy of another checkbox
@@ -80,7 +80,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static CheckBox::Ptr copy(CheckBox::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the checkboxes renderer
@@ -92,8 +92,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            CheckBoxRenderer::sharedPtr getRenderer();
-            const CheckBoxRenderer::sharedPtr getRenderer() const;
+            CheckBoxRenderer::Ptr getRenderer();
+            const CheckBoxRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Allow or disallow the checkbox to be checked by clicking

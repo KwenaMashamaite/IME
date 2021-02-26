@@ -45,7 +45,7 @@ namespace ime {
         return type_;
     }
 
-    void Collider::setBody(Body::sharedPtr body) {
+    void Collider::setBody(Body::Ptr body) {
         IME_ASSERT(body, "A body attached to a collider cannot be a nullptr");
         id_ = idCounter++;
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
@@ -56,11 +56,11 @@ namespace ime {
         body_ = body;
     }
 
-    Body::sharedPtr Collider::getBody() {
+    Body::Ptr Collider::getBody() {
         return body_;
     }
 
-    const Body::sharedPtr& Collider::getBody() const {
+    const Body::Ptr& Collider::getBody() const {
         return body_;
     }
 

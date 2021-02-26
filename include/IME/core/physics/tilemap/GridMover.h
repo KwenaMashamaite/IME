@@ -45,14 +45,31 @@ namespace ime {
      */
     class IME_API GridMover {
     public:
+        using Ptr = std::shared_ptr<GridMover>; //!< Shared grid mover pointer
+
         /**
          * @brief Types of grid movers
          */
         enum class Type {
-            Random,            //!< Moves a game object randomly in the grid
-            Target,            //!< Moves a game object to a specific tile within the grid
-            KeyboardControlled //!< Moves a game object within the grid using the keyboard as a trigger
+            Manual,             //!< Manually triggered grid mover
+            Random,             //!< Moves a game object randomly in the grid
+            Target,             //!< Moves a game object to a specific tile within the grid
+            KeyboardControlled, //!< Moves a game object within the grid using the keyboard as a trigger
+            Custom              //!< For classes that extend the grid mover outside of IME
         };
+
+        /**
+         * @brief Create a manually controlled grid mover
+         * @param tilemap The grid the game object is in
+         * @param gameObject The game object to be controlled by the grid mover
+         *
+         * @warning You may omit the game object if you want to set it later,
+         * However if the target is provided @a gameObject != nullptr, then
+         * it must be placed in the grid prior to instantiation of this class
+         *
+         * @see setTarget
+         */
+        explicit GridMover(TileMap& tilemap, GameObject::Ptr gameObject = nullptr);
 
         /**
          * @brief Change the direction of the target entity
@@ -79,14 +96,28 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must exist in
          * the grid prior to function call
          */
-        void setTarget(GameObject::sharedPtr target);
+        void setTarget(GameObject::Ptr target);
 
         /**
          * @brief Get access to the controlled entity
          * @return The controlled entity, or a nullptr if there is no entity to
          *         control
          */
-        GameObject::sharedPtr getTarget() const;
+        GameObject::Ptr getTarget() const;
+
+        /**
+         * @brief Change the velocity of the target
+         * @param velocity The new velocity
+         *
+         * If the target is currently moving, the speed will be set after it
+         * reaches its current destination tile
+         *
+         * @warning When using a grid mover the velocity of the target must
+         * not be set directly but rather through this function. Setting the
+         * velocity directly will transfer movement management of the game
+         * object from the grid mover to the physics engine
+         */
+        void setVelocity(Vector2f velocity);
 
         /**
          * @brief Set the horizontal (x-axis) velocity of the target
@@ -192,7 +223,7 @@ namespace ime {
          * @param callback Function to execute when the target changes
          * @return The event listeners identification number
          */
-        int onTargetChanged(Callback<GameObject::sharedPtr> callback);
+        int onTargetChanged(Callback<GameObject::Ptr> callback);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
@@ -254,7 +285,7 @@ namespace ime {
          * The callback is passed the target as the first argument and the
          * obstacle it collided with as the second argument
          */
-        int onObstacleCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        int onObstacleCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Add an event listener to a collectable collision event
@@ -265,7 +296,7 @@ namespace ime {
          * in the grid. The callback is passed the target as the first argument
          * and the collectable it collided with as the second argument
          */
-        int onCollectableCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        int onCollectableCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Add an event listener to an enemy collision event
@@ -276,7 +307,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the enemy it collided with as the second argument
          */
-        int onEnemyCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        int onEnemyCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Add an event listener to a player collision event
@@ -287,7 +318,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the player it collided with as the second argument
          */
-        int onPlayerCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        int onPlayerCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Remove a collision handler
@@ -389,7 +420,7 @@ namespace ime {
          *         and the second is a pointer to the first encountered obstacle
          *         in the target tile or a nullptr if the first element is false
          */
-        std::pair<bool, GameObject::sharedPtr> targetTileHasObstacle();
+        std::pair<bool, GameObject::Ptr> targetTileHasObstacle();
 
         /**
          * @brief Perfectly align target with the target destination
@@ -409,15 +440,22 @@ namespace ime {
          * @param tileMap Grid to move a target entity in
          * @param target GameObject to be moved in the grid
          *
+         * Note that this constructor is intended to be used by derived
+         * classes such that the user cannot change the type of the grid
+         * mover during instantiation. The public constructor sets the
+         * type to Type::Manual and it cannot be changed once set. Since
+         * derived classes must set their own type, they use this constructor
+         * to initialize the base class
+         *
          * @warning if the target is not a nullptr, then it must be placed
          * in the grid prior to instantiation of this class
          */
-        GridMover(Type type, TileMap &tileMap, GameObject::sharedPtr target);
+        GridMover(Type type, TileMap &tileMap, GameObject::Ptr target);
 
     private:
         Type type_;                    //!< The type of the grid mover
         TileMap& tileMap_;             //!< Grid to move entity in
-        GameObject::sharedPtr target_; //!< Target to be moved in the grid
+        GameObject::Ptr target_; //!< Target to be moved in the grid
         Vector2f targetVelocity_;      //!< The targets linear velocity
         Direction targetDirection_;    //!< Stores the direction in which the target wishes to go
         Tile targetTile_;              //!< The grid tile the target wishes to reach

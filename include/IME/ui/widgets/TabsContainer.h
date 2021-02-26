@@ -45,8 +45,8 @@ namespace ime {
          */
         class IME_API TabsContainer : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<TabsContainer>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const TabsContainer>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<TabsContainer>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const TabsContainer>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -74,7 +74,7 @@ namespace ime {
              * 
              * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create(const std::string& width = "100%",
+            static TabsContainer::Ptr create(const std::string& width = "100%",
                 const std::string& height = "100%");
 
             /**
@@ -100,7 +100,8 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static TabsContainer::Ptr copy(TabsContainer::ConstPtr other,
+                bool shareRenderer = true);
 
             /**
              * @brief Get the tabs renderer
@@ -112,8 +113,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            TabsRenderer::sharedPtr getRenderer();
-            const TabsRenderer::sharedPtr getRenderer() const;
+            TabsRenderer::Ptr getRenderer();
+            const TabsRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the height of the tabs part of the widget
@@ -133,7 +134,7 @@ namespace ime {
              *
              * By default, the panel is selected after being added
              */
-            void addPanel(Panel::sharedPtr panel, const std::string& text, bool select = true);
+            void addPanel(Panel::Ptr panel, const std::string& text, bool select = true);
 
             /**
              * @brief Insert a panel between other panels
@@ -149,14 +150,14 @@ namespace ime {
              * 
              * @warning This function os experimental
              */
-            bool insertPanel(Panel::sharedPtr panel, const std::string& text,
+            bool insertPanel(Panel::Ptr panel, const std::string& text,
                 std::size_t index, bool select = true);
 
             /**
              * @brief Remove a panel from the container
              * @param panel Panel to remove
              */
-            void removePanel(Panel::sharedPtr panel);
+            void removePanel(Panel::Ptr panel);
 
             /**
              * @brief Select a panel
@@ -176,14 +177,14 @@ namespace ime {
              * @return The index of the panel or -1 if the panel does not
              *         exist in the container
              */
-            int getIndex(Panel::sharedPtr panel);
+            int getIndex(Panel::Ptr panel);
 
             /**
              * @brief Get the currently selected panel
              * @return The panel that is selected or a nullptr if no panel
              *         is selected
              */
-            Panel::sharedPtr getSelected();
+            Panel::Ptr getSelected();
 
             /**
              * @brief Get the index of the currently selected panel
@@ -198,7 +199,7 @@ namespace ime {
              * @return Panel with the given index or a nullptr if the index
              *         is out of bounds
              */
-            Panel::sharedPtr getPanel(int index);
+            Panel::Ptr getPanel(int index);
 
             /**
              * @brief Get the text of a container

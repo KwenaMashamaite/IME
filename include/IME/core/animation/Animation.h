@@ -58,7 +58,7 @@ namespace ime {
     class IME_API Animation {
     public:
         using Frame = UIntRect; //!< Animation Frame
-        using sharedPtr = std::shared_ptr<Animation>; //!< Shared animation pointer
+        using Ptr = std::shared_ptr<Animation>; //!< Shared animation pointer
 
         /**
          * @brief The playing direction of the animation
@@ -107,7 +107,7 @@ namespace ime {
          * duration is specified then the frame rate will be overridden and
          * derived from the given duration
          */
-        static sharedPtr create(const std::string &name, const SpriteSheet& spriteSheet,
+        static Animation::Ptr create(const std::string &name, const SpriteSheet& spriteSheet,
             Time duration = Time::Zero);
 
         /**

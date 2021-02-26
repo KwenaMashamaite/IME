@@ -35,7 +35,7 @@ namespace ime {
      */
     class IME_API ConvexShape : public Shape {
     public:
-        using sharedPtr = std::shared_ptr<ConvexShape>; //!< Shared shape pointer
+        using Ptr = std::shared_ptr<ConvexShape>; //!< Shared shape pointer
 
         /**
          * @brief Default constructor
@@ -68,7 +68,7 @@ namespace ime {
          * @param pointCount The number of points of the polygon
          * @return The created convex shape shape
          */
-        static sharedPtr create(std::size_t pointCount = 0);
+        static ConvexShape::Ptr create(std::size_t pointCount = 0);
 
         /**
          * @brief Set the number of points of the polygon

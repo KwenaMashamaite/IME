@@ -37,11 +37,11 @@ namespace ime::ui {
 
     Separator &Separator::operator=(Separator &&) = default;
 
-    Separator::sharedPtr Separator::create() {
-        return sharedPtr(new Separator());
+    Separator::Ptr Separator::create() {
+        return Ptr(new Separator());
     }
 
-    Separator::sharedPtr Separator::copy(Separator::constSharedPtr other, 
+    Separator::Ptr Separator::copy(Separator::ConstPtr other,
         bool shareRenderer) 
     {
         auto widget = create();

@@ -35,15 +35,15 @@ namespace ime {
     PolygonCollider::PolygonCollider(PolygonCollider&&) = default;
     PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) = default;
 
-    PolygonCollider::sharedPtr PolygonCollider::create() {
-        return PolygonCollider::sharedPtr(new PolygonCollider);
+    PolygonCollider::Ptr PolygonCollider::create() {
+        return PolygonCollider::Ptr(new PolygonCollider);
     }
 
-    Collider::sharedPtr PolygonCollider::copy() {
+    Collider::Ptr PolygonCollider::copy() {
         return std::as_const(*this).copy();
     }
 
-    const Collider::sharedPtr PolygonCollider::copy() const {
+    const Collider::Ptr PolygonCollider::copy() const {
         auto collider = create();
         collider->polygon_.reset(new b2PolygonShape(*(this->polygon_.get())));
         return collider;

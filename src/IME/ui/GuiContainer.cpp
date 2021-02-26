@@ -218,7 +218,7 @@ namespace ime::ui {
 
     private:
         tgui::GuiSFML sfmlGui_; //!< Gui controller and renderer
-        std::unordered_map<std::string, Widget::sharedPtr> widgets_; //!< Widgets container
+        std::unordered_map<std::string, Widget::Ptr> widgets_; //!< Widgets container
     }; // class Impl
 
     //////////////////////////////////////////////////////////////////////////

@@ -40,7 +40,7 @@ namespace ime {
      */
     class IME_API Shape : public IDrawable, public ITransformable {
     public:
-        using sharedPtr = std::shared_ptr<Shape>; //!< Shared shape pointer
+        using Ptr = std::shared_ptr<Shape>; //!< Shared shape pointer
 
         /**
          * @brief The types of shapes
@@ -82,7 +82,7 @@ namespace ime {
          *
          * @see removeRigidBody
          */
-        void attachRigidBody(Body::sharedPtr body);
+        void attachRigidBody(Body::Ptr body);
 
         /**
          * @brief Remove a rigid body from the shape
@@ -98,8 +98,8 @@ namespace ime {
          * @return The rigid body attached to the shape or a nullptr if the
          *         shape does not have a rigid body attached to it
          */
-        Body::sharedPtr getRigidBody();
-        const Body::sharedPtr getRigidBody() const;
+        Body::Ptr getRigidBody();
+        const Body::Ptr getRigidBody() const;
 
         /**
          * @brief Check if the the shape has a rigid body attached to it or not
@@ -183,7 +183,7 @@ namespace ime {
 
     private:
         Type type_;            //!< The type of this shape
-        Body::sharedPtr body_; //!< The shapes rigid body
+        Body::Ptr body_; //!< The shapes rigid body
         int postStepId_;       //!< Scene post step handler id
     };
 }

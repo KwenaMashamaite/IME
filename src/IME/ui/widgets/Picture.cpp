@@ -84,21 +84,21 @@ namespace ime::ui {
 
     Picture &Picture::operator=(Picture &&) = default;
 
-    Picture::sharedPtr Picture::create() {
-        return sharedPtr(new Picture());
+    Picture::Ptr Picture::create() {
+        return Ptr(new Picture());
     }
 
-    Picture::sharedPtr Picture::create(const std::string &filename, bool transparentTexture) {
-        return sharedPtr(new Picture(filename, transparentTexture));
+    Picture::Ptr Picture::create(const std::string &filename, bool transparentTexture) {
+        return Ptr(new Picture(filename, transparentTexture));
     }
 
-    Picture::sharedPtr Picture::create(const std::string &filename,
+    Picture::Ptr Picture::create(const std::string &filename,
         UIntRect frame, bool transparentTexture)
     {
-        return sharedPtr(new Picture(filename, frame, transparentTexture));
+        return Ptr(new Picture(filename, frame, transparentTexture));
     }
 
-    Picture::sharedPtr Picture::copy(Picture::constSharedPtr other, bool shareRenderer) {
+    Picture::Ptr Picture::copy(Picture::ConstPtr other, bool shareRenderer) {
         auto widget = create();
 
         return widget;

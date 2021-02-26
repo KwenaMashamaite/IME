@@ -34,8 +34,8 @@ namespace ime {
          */
         class IME_API ScrollablePanel : public WidgetContainer {
         public:
-            using sharedPtr = std::shared_ptr<ScrollablePanel>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const ScrollablePanel>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<ScrollablePanel>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const ScrollablePanel>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -68,7 +68,7 @@ namespace ime {
              *
              * By default, the new panel is the same size as its parent
              */
-            static sharedPtr create(const std::string& width = "100%",
+            static ScrollablePanel::Ptr create(const std::string& width = "100%",
                 const std::string& height = "100%", Vector2f contentSize = {0, 0});
 
             /**
@@ -94,7 +94,8 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static ScrollablePanel::Ptr copy(ScrollablePanel::ConstPtr other,
+                bool shareRenderer = true);
 
             /**
              * @brief Get the panels renderer
@@ -106,8 +107,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ScrollablePanelRenderer::sharedPtr getRenderer();
-            const ScrollablePanelRenderer::sharedPtr getRenderer() const;
+            ScrollablePanelRenderer::Ptr getRenderer();
+            const ScrollablePanelRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the size available for child widgets

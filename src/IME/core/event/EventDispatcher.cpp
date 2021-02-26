@@ -29,11 +29,11 @@ namespace ime {
         return eventEmitter_.removeEventListener(event, id);
     }
 
-    std::shared_ptr<EventDispatcher> EventDispatcher::instance() {
+    EventDispatcher::Ptr EventDispatcher::instance() {
         std::scoped_lock lock(mutex_);
         static std::weak_ptr<EventDispatcher> instance_;
         if (const auto result = instance_.lock())
             return result;
-        return (instance_ = std::shared_ptr<EventDispatcher>(new EventDispatcher())).lock();
+        return (instance_ = EventDispatcher::Ptr(new EventDispatcher())).lock();
     }
 }

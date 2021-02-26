@@ -28,7 +28,7 @@
 #include "IME/graphics/shapes/ConvexShape.h"
 
 namespace ime {
-    Shape::sharedPtr ShapeContainer::createShape(Shape::Type type) {
+    Shape::Ptr ShapeContainer::createShape(Shape::Type type) {
         switch (type) {
             case Shape::Type::Rectangle:
                 add(RectangleShape::create());

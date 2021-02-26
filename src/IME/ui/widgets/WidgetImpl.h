@@ -51,7 +51,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            virtual void setRenderer(ui::IWidgetRenderer::sharedPtr renderer) = 0;
+            virtual void setRenderer(ui::IWidgetRenderer::Ptr renderer) = 0;
 
             /**
              * @brief Get the widgets renderer
@@ -63,7 +63,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            virtual ui::IWidgetRenderer::sharedPtr getRenderer() = 0;
+            virtual ui::IWidgetRenderer::Ptr getRenderer() = 0;
 
             /**
              * @brief Set the position of the widget relative to the
@@ -326,14 +326,14 @@ namespace ime {
                 widget_{std::move(widget)}
             {}
 
-            void setRenderer(ui::IWidgetRenderer::sharedPtr renderer) override {
+            void setRenderer(ui::IWidgetRenderer::Ptr renderer) override {
                 IME_ASSERT(renderer, "Cannot set nullptr as renderer");
                 renderer_ = std::move(renderer);
                 renderer_->setInternalPtr(widget_->getRenderer());
                 widget_->setRenderer(renderer_->getInternalPtr()->getData());
             }
 
-            ui::IWidgetRenderer::sharedPtr getRenderer() override {
+            ui::IWidgetRenderer::Ptr getRenderer() override {
                 return renderer_;
             }
 
@@ -492,7 +492,7 @@ namespace ime {
 
         protected:
             std::shared_ptr<T> widget_; //!< Pointer to third party widget
-            ui::IWidgetRenderer::sharedPtr renderer_;
+            ui::IWidgetRenderer::Ptr renderer_;
         };
     } // namespace priv
 } // namespace ime

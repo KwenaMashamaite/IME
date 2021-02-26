@@ -51,23 +51,23 @@ namespace ime::ui {
 
     VerticalLayout &VerticalLayout::operator=(VerticalLayout &&) = default;
 
-    VerticalLayout::sharedPtr VerticalLayout::create(const std::string& width, const std::string& height)
+    VerticalLayout::Ptr VerticalLayout::create(const std::string& width, const std::string& height)
     {
-        return sharedPtr(new VerticalLayout(width, height));
+        return Ptr(new VerticalLayout(width, height));
     }
 
-    VerticalLayout::sharedPtr VerticalLayout::copy(
-            VerticalLayout::constSharedPtr other, bool shareRenderer)
+    VerticalLayout::Ptr VerticalLayout::copy(
+            VerticalLayout::ConstPtr other, bool shareRenderer)
     {
         auto widget = create();
         return widget;
     }
 
-    BoxLayoutRenderer::sharedPtr VerticalLayout::getRenderer() {
+    BoxLayoutRenderer::Ptr VerticalLayout::getRenderer() {
         return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
     }
 
-    const BoxLayoutRenderer::sharedPtr VerticalLayout::getRenderer() const {
+    const BoxLayoutRenderer::Ptr VerticalLayout::getRenderer() const {
         return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
     }
 

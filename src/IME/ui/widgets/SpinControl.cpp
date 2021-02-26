@@ -55,23 +55,23 @@ namespace ime::ui {
 
     SpinControl &SpinControl::operator=(SpinControl &&) = default;
 
-    SpinControl::sharedPtr SpinControl::create(float minValue, float maxValue, 
+    SpinControl::Ptr SpinControl::create(float minValue, float maxValue,
         float initialValue, unsigned int decimal, float step) 
     {
-        return sharedPtr(new SpinControl(minValue, maxValue, initialValue, decimal, step));
+        return Ptr(new SpinControl(minValue, maxValue, initialValue, decimal, step));
     }
 
-    SpinControl::sharedPtr SpinControl::copy(SpinControl::constSharedPtr other, bool shareRenderer) {
+    SpinControl::Ptr SpinControl::copy(SpinControl::ConstPtr other, bool shareRenderer) {
         auto widget = create();
         widget->pimpl_->spinControl_ = widget->pimpl_->spinControl_->copy(other->pimpl_->spinControl_);
         return widget;
     }
 
-    SpinButtonRenderer::sharedPtr SpinControl::getSpinButtonRenderer() {
+    SpinButtonRenderer::Ptr SpinControl::getSpinButtonRenderer() {
         return std::static_pointer_cast<SpinButtonRenderer>(Widget::getRenderer());
     }
 
-    const SpinButtonRenderer::sharedPtr SpinControl::getSpinButtonRenderer() const {
+    const SpinButtonRenderer::Ptr SpinControl::getSpinButtonRenderer() const {
         return std::static_pointer_cast<SpinButtonRenderer>(Widget::getRenderer());
     }
 

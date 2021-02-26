@@ -34,7 +34,7 @@ namespace ime {
         static auto idCounter{0u};
     }
 
-    Body::Body(const BodyDefinition &definition, World::sharedPtr world) :
+    Body::Body(const BodyDefinition &definition, World::Ptr world) :
         id_{idCounter++}
     {
         auto b2Definition = std::make_unique<b2BodyDef>();
@@ -68,7 +68,7 @@ namespace ime {
             world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
-    void Body::attachCollider(Collider::sharedPtr collider) {
+    void Body::attachCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body");
         IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider");
         if (!world_->isLocked()) {
@@ -78,7 +78,7 @@ namespace ime {
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
     }
 
-    Collider::sharedPtr Body::getColliderById(unsigned int id) {
+    Collider::Ptr Body::getColliderById(unsigned int id) {
         if (utility::findIn(colliders_, id))
             return colliders_.at(id);
         return nullptr;
@@ -94,7 +94,7 @@ namespace ime {
             IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback");
     }
 
-    void Body::removeCollider(Collider::sharedPtr collider) {
+    void Body::removeCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "RemoveCollider() called with a nullptr");
         if (!world_->isLocked()) {
             if (utility::findIn(colliders_, collider->getId())) {
@@ -336,21 +336,21 @@ namespace ime {
         return id_;
     }
 
-    void Body::forEachCollider(std::function<void(Collider::sharedPtr)> callback) {
+    void Body::forEachCollider(std::function<void(Collider::Ptr)> callback) {
         std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto pair) {
             callback(pair.second);
         });
     }
 
-    void Body::onCollisionStart(Callback<Body::sharedPtr, Body::sharedPtr> callback) {
+    void Body::onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback) {
         onContactBegin_ = std::move(callback);
     }
 
-    void Body::onCollisionEnd(Callback<Body::sharedPtr, Body::sharedPtr> callback) {
+    void Body::onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback) {
         onContactEnd_ = std::move(callback);
     }
 
-    void Body::emitCollisionEvent(const std::string &event, Body::sharedPtr other) {
+    void Body::emitCollisionEvent(const std::string &event, Body::Ptr other) {
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(shared_from_this(), other);
         else if (event == "contactEnd" && onContactEnd_)

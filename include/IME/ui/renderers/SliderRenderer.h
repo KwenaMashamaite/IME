@@ -42,7 +42,7 @@ namespace ime {
          */
         class IME_API SliderRenderer : public IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<SliderRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<SliderRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Change the ize of the widget borders

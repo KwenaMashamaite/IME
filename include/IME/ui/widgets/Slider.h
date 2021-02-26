@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API Slider : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<Slider>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Slider>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -56,7 +56,7 @@ namespace ime {
              * @param maximum The maximum value of the slider
              * @return The new slider
              */
-            static sharedPtr create(float minimum = 0, float maximum = 10);
+            static Slider::Ptr create(float minimum = 0, float maximum = 10);
 
             /**
              * @brief Create a copy of another slider
@@ -81,7 +81,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Slider::Ptr copy(Slider::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the sliders renderer
@@ -93,8 +93,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SliderRenderer::sharedPtr getRenderer();
-            const SliderRenderer::sharedPtr getRenderer() const;
+            SliderRenderer::Ptr getRenderer();
+            const SliderRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set a minimum value for the slider

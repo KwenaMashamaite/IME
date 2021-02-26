@@ -35,15 +35,15 @@ namespace ime {
     EdgeCollider::EdgeCollider(EdgeCollider &&) = default;
     EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) = default;
 
-    EdgeCollider::sharedPtr EdgeCollider::create() {
-        return EdgeCollider::sharedPtr(new EdgeCollider());
+    EdgeCollider::Ptr EdgeCollider::create() {
+        return EdgeCollider::Ptr(new EdgeCollider());
     }
 
-    Collider::sharedPtr EdgeCollider::copy() {
+    Collider::Ptr EdgeCollider::copy() {
         return std::as_const(*this).copy();
     }
 
-    const Collider::sharedPtr EdgeCollider::copy() const {
+    const Collider::Ptr EdgeCollider::copy() const {
         auto collider = create();
 
         collider->edgeShape_.reset(new b2EdgeShape(*(this->edgeShape_.get())));

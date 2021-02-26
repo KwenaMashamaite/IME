@@ -146,7 +146,7 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
-                body_->forEachCollider([isCollidable](Collider::sharedPtr collider) {
+                body_->forEachCollider([isCollidable](Collider::Ptr collider) {
                     if (isCollidable)
                         collider->resetCollisionFilterData();
                     else
@@ -185,7 +185,7 @@ namespace ime {
         return id_;
     }
 
-    void GameObject::attachRigidBody(Body::sharedPtr body) {
+    void GameObject::attachRigidBody(Body::Ptr body) {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity");
         IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one");
         body_ = body;
@@ -194,11 +194,11 @@ namespace ime {
         transform_.setRotation(body->getRotation());
     }
 
-    Body::sharedPtr &GameObject::getRigidBody() {
+    Body::Ptr &GameObject::getRigidBody() {
         return body_;
     }
 
-    const Body::sharedPtr &GameObject::getRigidBody() const {
+    const Body::Ptr &GameObject::getRigidBody() const {
         return body_;
     }
 
@@ -209,11 +209,11 @@ namespace ime {
         }
     }
 
-    void GameObject::onCollisionStart(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    void GameObject::onCollisionStart(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         onContactBegin_ = std::move(callback);
     }
 
-    void GameObject::onCollisionEnd(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    void GameObject::onCollisionEnd(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         onContactEnd_ = std::move(callback);
     }
 
@@ -249,7 +249,7 @@ namespace ime {
         return eventEmitter_.removeEventListener(event, id);
     }
 
-    void GameObject::emitCollisionEvent(const std::string &event, GameObject::sharedPtr other) {
+    void GameObject::emitCollisionEvent(const std::string &event, GameObject::Ptr other) {
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(shared_from_this(), other);
         else if (event == "contactEnd" && onContactEnd_)

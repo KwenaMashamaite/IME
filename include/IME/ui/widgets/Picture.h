@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API Picture : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<Picture>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Picture>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Picture>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Picture>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -54,7 +54,7 @@ namespace ime {
              * @brief Create an empty picture widget
              * @return The new picture widget
              */
-            static sharedPtr create();
+            static Picture::Ptr create();
 
             /**
              * @brief Create a copy of another picture
@@ -79,7 +79,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Picture::Ptr copy(Picture::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Create a new picture widget
@@ -92,7 +92,7 @@ namespace ime {
              *
              * By default, the widget is the same size as the image
              */
-            static sharedPtr create(const std::string& filename,
+            static Picture::Ptr create(const std::string& filename,
                 bool transparentTexture = false);
 
             /**
@@ -114,7 +114,7 @@ namespace ime {
              * Picture("image.png", {20, 15, 60, 40}}); // Load part of the image from (20,15) to (80,55)
              * @endcode
              */
-            static sharedPtr create(const std::string& filename, UIntRect frame,
+            static Picture::Ptr create(const std::string& filename, UIntRect frame,
                 bool transparentTexture = true);
 
             /**
@@ -127,8 +127,8 @@ namespace ime {
              *
              * @see getRenderer
              */
-            PictureRenderer::sharedPtr getRenderer();
-            const PictureRenderer::sharedPtr getRenderer() const;
+            PictureRenderer::Ptr getRenderer();
+            const PictureRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set whether or not the picture ignores mouse events

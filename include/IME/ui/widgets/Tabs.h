@@ -40,8 +40,8 @@ namespace ime {
          */
         class IME_API Tabs : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<Tabs>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Tabs>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Tabs>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Tabs>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -57,7 +57,7 @@ namespace ime {
              * @brief Create a new tabs widget
              * @return The new tabs widget
              */
-            static sharedPtr create();
+            static Tabs::Ptr create();
 
             /**
              * @brief Create a copy of another tabs
@@ -82,7 +82,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Tabs::Ptr copy(Tabs::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the tabs renderer
@@ -94,8 +94,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            TabsRenderer::sharedPtr getRenderer();
-            const TabsRenderer::sharedPtr getRenderer() const;
+            TabsRenderer::Ptr getRenderer();
+            const TabsRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set whether or not the tabs auto-size

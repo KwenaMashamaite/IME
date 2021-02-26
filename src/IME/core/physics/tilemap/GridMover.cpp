@@ -25,7 +25,11 @@
 #include "IME/core/physics/tilemap/GridMover.h"
 
 namespace ime {
-    GridMover::GridMover(Type type, TileMap &tileMap, GameObject::sharedPtr target) :
+    GridMover::GridMover(TileMap& tilemap, GameObject::Ptr gameObject) :
+        GridMover(Type::Manual, tilemap, gameObject)
+    {}
+
+    GridMover::GridMover(Type type, TileMap &tileMap, GameObject::Ptr target) :
         type_{type},
         tileMap_(tileMap),
         targetVelocity_{Vector2f {0, 0}},
@@ -37,7 +41,7 @@ namespace ime {
         setTarget(target);
     }
 
-    void GridMover::setTarget(GameObject::sharedPtr target) {
+    void GridMover::setTarget(GameObject::Ptr target) {
         if (target_ == target)
             return;
         else if (target) {
@@ -63,8 +67,12 @@ namespace ime {
         return type_;
     }
 
-    GameObject::sharedPtr GridMover::getTarget() const {
+    GameObject::Ptr GridMover::getTarget() const {
         return target_;
+    }
+
+    void GridMover::setVelocity(Vector2f velocity) {
+        targetVelocity_ = {std::abs(velocity.x), std::abs(velocity.y)};
     }
 
     void GridMover::setHorizontalVelocity(float velocity) {
@@ -196,9 +204,9 @@ namespace ime {
         return false;
     }
 
-    std::pair<bool, GameObject::sharedPtr> GridMover::targetTileHasObstacle() {
-        GameObject::sharedPtr obstacle;
-        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](GameObject::sharedPtr child) {
+    std::pair<bool, GameObject::Ptr> GridMover::targetTileHasObstacle() {
+        GameObject::Ptr obstacle;
+        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](GameObject::Ptr child) {
             if (child->getType() == GameObject::Type::Obstacle && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
@@ -233,7 +241,7 @@ namespace ime {
     }
 
     void GridMover::onDestinationReached() {
-        tileMap_.forEachChildInTile(targetTile_, [this](GameObject::sharedPtr gameObject) {
+        tileMap_.forEachChildInTile(targetTile_, [this](GameObject::Ptr gameObject) {
             if (target_->isCollidable() && gameObject->isCollidable()) {
                 switch (gameObject->getType()) {
                     case GameObject::Type::Player:
@@ -273,7 +281,7 @@ namespace ime {
         }
     }
 
-    int GridMover::onTargetChanged(Callback<GameObject::sharedPtr> callback) {
+    int GridMover::onTargetChanged(Callback<GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
@@ -289,19 +297,19 @@ namespace ime {
         return eventEmitter_.addEventListener("adjacentTileReached", std::move(callback));
     }
 
-    int GridMover::onObstacleCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    int GridMover::onObstacleCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("obstacleCollision", std::move(callback));
     }
 
-    int GridMover::onCollectableCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    int GridMover::onCollectableCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("collectableCollision", std::move(callback));
     }
 
-    int GridMover::onEnemyCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    int GridMover::onEnemyCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("enemyCollision", std::move(callback));
     }
 
-    int GridMover::onPlayerCollision(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback) {
+    int GridMover::onPlayerCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("playerCollision", std::move(callback));
     }
 

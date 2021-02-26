@@ -40,6 +40,7 @@ namespace ime {
      */
     struct IME_API DistanceJointDefinition : public JointDefinition {
         using BodyPtr = std::shared_ptr<Body>;
+
         /**
          * @brief Constructor
          */
@@ -79,6 +80,7 @@ namespace ime {
      */
     class IME_API DistanceJoint final : public Joint {
     public:
+        using Ptr = std::shared_ptr<Joint>;
         using BodyPtr = std::shared_ptr<Body>;
 
         /**

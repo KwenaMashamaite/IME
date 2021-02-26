@@ -70,7 +70,7 @@ namespace ime {
         std::swap(animations_, other.animations_);
     }
 
-    Animation::sharedPtr Animator::createAnimation(const std::string &name,
+    Animation::Ptr Animator::createAnimation(const std::string &name,
         const SpriteSheet& spriteSheet, Time duration)
     {
         auto animation = Animation::create(name, spriteSheet, duration);
@@ -95,7 +95,7 @@ namespace ime {
         return timescale_;
     }
 
-    bool Animator::addAnimation(Animation::sharedPtr animation) {
+    bool Animator::addAnimation(Animation::Ptr animation) {
         IME_ASSERT(animation, "Cannot add nullptr to animator");
         return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
@@ -108,13 +108,13 @@ namespace ime {
         );
     }
 
-    Animation::sharedPtr Animator::getAnimation(const std::string &name) const {
+    Animation::Ptr Animator::getAnimation(const std::string &name) const {
         if (hasAnimation(name))
             return animations_.at(name);
         return nullptr;
     }
 
-    Animation::sharedPtr Animator::getCurrentAnimation() const {
+    Animation::Ptr Animator::getCurrentAnimation() const {
         return currentAnimation_;
     }
 
@@ -126,7 +126,7 @@ namespace ime {
         return false;
     }
 
-    bool Animator::removeAnimation(Animation::sharedPtr animation) {
+    bool Animator::removeAnimation(Animation::Ptr animation) {
         if (animation)
             removeAnimation(animation->getName());
         return false;
@@ -136,7 +136,7 @@ namespace ime {
         animations_.clear();
     }
 
-    bool Animator::hasAnimation(const Animation::sharedPtr &animation) const {
+    bool Animator::hasAnimation(const Animation::Ptr &animation) const {
         if (animation)
             return hasAnimation(animation->getName());
         return false;
@@ -146,7 +146,7 @@ namespace ime {
         return animations_.find(name) != animations_.end();
     }
 
-    void Animator::chainAnimation(Animation::sharedPtr animation) {
+    void Animator::chainAnimation(Animation::Ptr animation) {
         if (!animation || (currentAnimation_ && currentAnimation_ == animation))
             return;
 
@@ -169,7 +169,7 @@ namespace ime {
             return false;
 
         auto sizeBeforeOp = chains_.size();
-        auto newChains = std::queue<Animation::sharedPtr>{};
+        auto newChains = std::queue<Animation::Ptr>{};
         while (!chains_.empty()) {
             if (chains_.front()->getName() != name)
                 newChains.push(std::move(chains_.front()));
@@ -309,7 +309,7 @@ namespace ime {
         }
     }
 
-    int Animator::on(Animator::Event event, Callback<Animation::sharedPtr> callback) {
+    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback) {
         return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
     }
 
@@ -322,7 +322,7 @@ namespace ime {
     }
 
     int Animator::on(Animator::Event event, const std::string &name,
-        Callback<Animation::sharedPtr> callback)
+        Callback<Animation::Ptr> callback)
     {
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
@@ -337,7 +337,7 @@ namespace ime {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)) + name, id);
     }
 
-    void Animator::fireEvent(Animator::Event event, Animation::sharedPtr animation) {
+    void Animator::fireEvent(Animator::Event event, Animation::Ptr animation) {
         /**
          * Event handlers are separated into specific and general handlers
          *

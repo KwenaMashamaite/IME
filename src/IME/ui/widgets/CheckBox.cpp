@@ -49,11 +49,11 @@ namespace ime::ui {
 
     CheckBox &CheckBox::operator=(CheckBox &&) = default;
 
-    CheckBox::sharedPtr CheckBox::create(const std::string &text) {
-        return CheckBox::sharedPtr(new  CheckBox(text));
+    CheckBox::Ptr CheckBox::create(const std::string &text) {
+        return CheckBox::Ptr(new  CheckBox(text));
     }
 
-    CheckBox::sharedPtr CheckBox::copy(CheckBox::constSharedPtr other, bool shareRenderer) {
+    CheckBox::Ptr CheckBox::copy(CheckBox::ConstPtr other, bool shareRenderer) {
         auto widget = create();
         return widget;
     }
@@ -62,7 +62,7 @@ namespace ime::ui {
         return std::static_pointer_cast<CheckBoxRenderer>(Widget::getRenderer());
     }
 
-    const CheckBoxRenderer::sharedPtr CheckBox::getRenderer() const {
+    const CheckBoxRenderer::Ptr CheckBox::getRenderer() const {
         return std::static_pointer_cast<CheckBoxRenderer>(Widget::getRenderer());
     }
     

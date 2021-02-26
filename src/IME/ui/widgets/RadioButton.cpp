@@ -62,11 +62,11 @@ namespace ime::ui {
 
     RadioButton &RadioButton::operator=(RadioButton &&) = default;
 
-    RadioButton::sharedPtr RadioButton::create(const std::string &text) {
-        return sharedPtr(new RadioButton(text));
+    RadioButton::Ptr RadioButton::create(const std::string &text) {
+        return Ptr(new RadioButton(text));
     }
 
-    RadioButton::sharedPtr RadioButton::copy( RadioButton::constSharedPtr other,
+    RadioButton::Ptr RadioButton::copy( RadioButton::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();

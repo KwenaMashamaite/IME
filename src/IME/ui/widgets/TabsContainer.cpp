@@ -35,7 +35,7 @@ namespace ime::ui {
         {}
 
         std::shared_ptr<tgui::TabContainer> tabContainer_;
-        std::unordered_map<std::size_t, Panel::sharedPtr> panel_;
+        std::unordered_map<std::size_t, Panel::Ptr> panel_;
     }; // class Impl
 
     ////////////////////////////////////////////////////////////////////////////
@@ -55,13 +55,13 @@ namespace ime::ui {
 
     TabsContainer &TabsContainer::operator=(TabsContainer &&) = default;
 
-    TabsContainer::sharedPtr TabsContainer::create(const std::string& width,
+    TabsContainer::Ptr TabsContainer::create(const std::string& width,
         const std::string& height)
     {
-        return sharedPtr(new TabsContainer(width, height));
+        return Ptr(new TabsContainer(width, height));
     }
 
-    TabsContainer::sharedPtr TabsContainer::copy(TabsContainer::constSharedPtr other,
+    TabsContainer::Ptr TabsContainer::copy(TabsContainer::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();

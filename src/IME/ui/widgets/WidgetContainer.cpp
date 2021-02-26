@@ -39,7 +39,7 @@ namespace ime::ui {
             IME_ASSERT(tguiContainer_, "A non container widget derived from WidgetContainer, change to Widget");
         }
 
-        bool addWidget(ui::Widget::sharedPtr widget, const std::string &name)  {
+        bool addWidget(ui::Widget::Ptr widget, const std::string &name)  {
             IME_ASSERT(widget, "Cannot add nullptr to a GUI container");
             if (widgets_.insert({name, widget}).second) {
                 tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
@@ -48,7 +48,7 @@ namespace ime::ui {
             return false;
         }
 
-        ui::Widget::sharedPtr getWidget(const std::string &name) const  {
+        ui::Widget::Ptr getWidget(const std::string &name) const  {
             if (utility::findIn(widgets_, name))
                 return widgets_.at(name);
             return utility::findRecursively(widgets_, name);
@@ -63,7 +63,7 @@ namespace ime::ui {
             return false;
         }
 
-        ui::Widget::sharedPtr getWidgetAtPosition(Vector2f pos) const  {
+        ui::Widget::Ptr getWidgetAtPosition(Vector2f pos) const  {
             auto widget = tguiContainer_->getWidgetAtPosition({pos.x, pos.y});
             if (widget)
                 return widgets_.at(widget->getWidgetName().toStdString());
@@ -75,30 +75,30 @@ namespace ime::ui {
             widgets_.clear();
         }
 
-        void moveWidgetToFront(ui::Widget::sharedPtr widget)  {
+        void moveWidgetToFront(ui::Widget::Ptr widget)  {
             tguiContainer_->moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        void moveWidgetToBack(ui::Widget::sharedPtr widget)  {
+        void moveWidgetToBack(ui::Widget::Ptr widget)  {
             tguiContainer_->moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetForward(ui::Widget::sharedPtr widget)  {
+        size_t moveWidgetForward(ui::Widget::Ptr widget)  {
             return tguiContainer_->moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetBackward(ui::Widget::sharedPtr widget)  {
+        size_t moveWidgetBackward(ui::Widget::Ptr widget)  {
             return tguiContainer_->moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        ui::Widget::sharedPtr getFocusedWidget() const  {
+        ui::Widget::Ptr getFocusedWidget() const  {
             auto widget = tguiContainer_->getFocusedChild();
             if (widget)
                 return widgets_.at(widget->getWidgetName().toStdString());
             return nullptr;
         }
 
-        ui::Widget::sharedPtr getFocusedLeaf() const  {
+        ui::Widget::Ptr getFocusedLeaf() const  {
             auto widget = tguiContainer_->getFocusedLeaf();
             if (widget)
                 return widgets_.at(widget->getWidgetName().toStdString());
@@ -115,7 +115,7 @@ namespace ime::ui {
 
     private:
         std::shared_ptr<tgui::Container> tguiContainer_;
-        std::unordered_map<std::string, Widget::sharedPtr> widgets_;
+        std::unordered_map<std::string, Widget::Ptr> widgets_;
     }; // class Impl
 
     //////////////////////////////////////////////////////////////////////////
@@ -130,15 +130,15 @@ namespace ime::ui {
 
     WidgetContainer &WidgetContainer::operator=(WidgetContainer &&) = default;
 
-    bool WidgetContainer::addWidget(Widget::sharedPtr widget, const std::string &name) {
+    bool WidgetContainer::addWidget(Widget::Ptr widget, const std::string &name) {
         return pimpl_->addWidget(std::move(widget), name);
     }
 
-    Widget::sharedPtr WidgetContainer::getWidget(const std::string &name) const {
+    Widget::Ptr WidgetContainer::getWidget(const std::string &name) const {
         return pimpl_->getWidget(name);
     }
 
-    Widget::sharedPtr WidgetContainer::getWidgetAtPosition(Vector2f pos) const {
+    Widget::Ptr WidgetContainer::getWidgetAtPosition(Vector2f pos) const {
         return pimpl_->getWidgetAtPosition(pos);
     }
 
@@ -150,27 +150,27 @@ namespace ime::ui {
         pimpl_->removeAllWidgets();
     }
 
-    void WidgetContainer::moveWidgetToFront(Widget::sharedPtr widget) {
+    void WidgetContainer::moveWidgetToFront(Widget::Ptr widget) {
         pimpl_->moveWidgetToFront(std::move(widget));
     }
 
-    void WidgetContainer::moveWidgetToBack(Widget::sharedPtr widget) {
+    void WidgetContainer::moveWidgetToBack(Widget::Ptr widget) {
         pimpl_->moveWidgetToBack(std::move(widget));
     }
 
-    std::size_t WidgetContainer::moveWidgetForward(Widget::sharedPtr widget) {
+    std::size_t WidgetContainer::moveWidgetForward(Widget::Ptr widget) {
         return pimpl_->moveWidgetForward(std::move(widget));
     }
 
-    std::size_t WidgetContainer::moveWidgetBackward(Widget::sharedPtr widget) {
+    std::size_t WidgetContainer::moveWidgetBackward(Widget::Ptr widget) {
         return pimpl_->moveWidgetBackward(std::move(widget));
     }
 
-    Widget::sharedPtr WidgetContainer::getFocusedWidget() const {
+    Widget::Ptr WidgetContainer::getFocusedWidget() const {
         return pimpl_->getFocusedWidget();
     }
 
-    Widget::sharedPtr WidgetContainer::getFocusedLeaf() const {
+    Widget::Ptr WidgetContainer::getFocusedLeaf() const {
         return pimpl_->getFocusedLeaf();
     }
 

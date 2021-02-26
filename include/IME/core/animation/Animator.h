@@ -50,7 +50,8 @@ namespace ime {
      */
     class IME_API Animator {
     public:
-        using Animations = std::initializer_list<Animation::sharedPtr>; //!< Alias
+        using Ptr = std::shared_ptr<Animator>;
+        using Animations = std::initializer_list<Animation::Ptr>; //!< Alias
 
         /**
          * @brief Animation events (Triggered by the current animation)
@@ -122,7 +123,7 @@ namespace ime {
          * duration is specified then the frame rate will be overridden and
          * derived from the given duration
          */
-        Animation::sharedPtr createAnimation(const std::string &name,
+        Animation::Ptr createAnimation(const std::string &name,
             const SpriteSheet& spriteSheet, Time duration = Time::Zero);
 
         /**
@@ -166,7 +167,7 @@ namespace ime {
          *         with the same name as the specified animation already
          *         exists
          */
-        bool addAnimation(Animation::sharedPtr animation);
+        bool addAnimation(Animation::Ptr animation);
 
         /**
          * @brief Add multiple animations at the same time to the animator
@@ -186,14 +187,14 @@ namespace ime {
          * @return Pointer to the requested animation if it exists, otherwise
          *         a nullptr
          */
-        Animation::sharedPtr getAnimation(const std::string& name) const;
+        Animation::Ptr getAnimation(const std::string& name) const;
 
         /**
          * @brief Get the current animation
          * @return Pointer to the current animation if there is one, otherwise
          *         a nullptr
          */
-        Animation::sharedPtr getCurrentAnimation() const;
+        Animation::Ptr getCurrentAnimation() const;
 
         /**
          * @brief Remove an animation from the animator
@@ -209,7 +210,7 @@ namespace ime {
          * @return True if the animation was removed or false if it does
          *         not exist in the animator
          */
-        bool removeAnimation(Animation::sharedPtr animation);
+        bool removeAnimation(Animation::Ptr animation);
 
         /**
          * @brief Remove all animations from the animator
@@ -221,7 +222,7 @@ namespace ime {
          * @param animation Animation to be checked
          * @return True if the animation exists, otherwise false
          */
-        bool hasAnimation(const Animation::sharedPtr& animation) const;
+        bool hasAnimation(const Animation::Ptr& animation) const;
 
         /**
          * @brief Check whether or not an animation exists in the animator
@@ -240,7 +241,7 @@ namespace ime {
          * played. If the current animation is chained to another animation
          * then then the given animation will be chained to that animation
          */
-        void chainAnimation(Animation::sharedPtr animation);
+        void chainAnimation(Animation::Ptr animation);
 
         /**
          * @brief Chain an animation to play after the current animation
@@ -414,7 +415,7 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int on(Event event, Callback<Animation::sharedPtr> callback);
+        int on(Event event, Callback<Animation::Ptr> callback);
         int on(Event event, Callback<> callback);
 
         /**
@@ -441,7 +442,7 @@ namespace ime {
          *
          * @see unsubscribe(Event, const std::string, Callback)
          */
-        int on(Event event, const std::string& name, Callback<Animation::sharedPtr> callback);
+        int on(Event event, const std::string& name, Callback<Animation::Ptr> callback);
         int on(Event event, const std::string& name, Callback<> callback);
 
         /**
@@ -527,7 +528,7 @@ namespace ime {
           * @param event Event event to e dispatched
           * @param animation The animation that triggered the event
           */
-        void fireEvent(Event event, Animation::sharedPtr animation);
+        void fireEvent(Event event, Animation::Ptr animation);
 
         /**
          * @brief Swap another animator with this animator
@@ -555,11 +556,11 @@ namespace ime {
         bool isPaused_;                           //!< Flags whether or not an animation is paused
         bool hasStarted_;                         //!< Flags whether or not a playing animation has started or is still waiting o a delay to expire
         EventEmitter eventEmitter_;               //!< Publishes animation events
-        Animation::sharedPtr currentAnimation_;   //!< Pointer to the current animation
-        std::queue<Animation::sharedPtr> chains_; //!< Animations that play immediately after the current animation finishes
+        Animation::Ptr currentAnimation_;   //!< Pointer to the current animation
+        std::queue<Animation::Ptr> chains_; //!< Animations that play immediately after the current animation finishes
 
         std::unique_ptr<std::reference_wrapper<Sprite>> target_;          //!< Sprite to be animated
-        std::unordered_map<std::string, Animation::sharedPtr> animations_; //!< Animations container
+        std::unordered_map<std::string, Animation::Ptr> animations_; //!< Animations container
 
         /**
          * @brief Direction of the current animation cycle

@@ -71,11 +71,11 @@ namespace ime::ui {
 
     ChildWindow &ChildWindow::operator=(ChildWindow &&) = default;
 
-    ChildWindow::sharedPtr ChildWindow::create(const std::string& title, unsigned int titleButtons) {
-        return ChildWindow::sharedPtr(new ChildWindow(title, titleButtons));
+    ChildWindow::Ptr ChildWindow::create(const std::string& title, unsigned int titleButtons) {
+        return ChildWindow::Ptr(new ChildWindow(title, titleButtons));
     }
 
-    ChildWindow::sharedPtr ChildWindow::copy(ChildWindow::constSharedPtr other,
+    ChildWindow::Ptr ChildWindow::copy(ChildWindow::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();
@@ -87,7 +87,7 @@ namespace ime::ui {
         return std::static_pointer_cast<ChildWindowRenderer>(Widget::getRenderer());
     }
 
-    const ChildWindowRenderer::sharedPtr ChildWindow::getRenderer() const {
+    const ChildWindowRenderer::Ptr ChildWindow::getRenderer() const {
         return std::static_pointer_cast<ChildWindowRenderer>(Widget::getRenderer());
     }
 

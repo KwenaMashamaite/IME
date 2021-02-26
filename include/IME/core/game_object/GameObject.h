@@ -44,8 +44,8 @@ namespace ime {
      */
     class IME_API GameObject : public std::enable_shared_from_this<GameObject> {
     public:
-        using sharedPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
-        using BodyPtr = std::shared_ptr<Body>;     //!< Shared Body pointer
+        using Ptr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
+        using BodyPtr = std::shared_ptr<Body>;   //!< Shared Body pointer
 
         /**
          * @brief The type of the GameObject
@@ -320,7 +320,7 @@ namespace ime {
          * @see attachRigidBody
          * @see onCollisionEnd
          */
-        void onCollisionStart(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        void onCollisionStart(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Add an event listener to a collision end event
@@ -345,7 +345,7 @@ namespace ime {
          * @see attachRigidBody
          * @see onCollisionStart
          */
-        void onCollisionEnd(Callback<GameObject::sharedPtr, GameObject::sharedPtr> callback);
+        void onCollisionEnd(Callback<GameObject::Ptr, GameObject::Ptr> callback);
 
         /**
          * @brief Get the game objects transform
@@ -420,7 +420,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void emitCollisionEvent(const std::string& event, GameObject::sharedPtr other);
+        void emitCollisionEvent(const std::string& event, GameObject::Ptr other);
 
         /**
          * @brief Destructor
@@ -461,8 +461,8 @@ namespace ime {
         BodyPtr body_;                        //!< The rigid body attached to this game object
         int postStepId_;                      //!< Scene post step handler id
 
-        Callback<sharedPtr, sharedPtr> onContactBegin_; //!< Called when this game object starts colliding with another game object or vice versa
-        Callback<sharedPtr, sharedPtr> onContactEnd_;   //!< Called when this game object stops colliding with another game object or vice versa
+        Callback<GameObject::Ptr, GameObject::Ptr> onContactBegin_; //!< Called when this game object starts colliding with another game object or vice versa
+        Callback<GameObject::Ptr, GameObject::Ptr> onContactEnd_;   //!< Called when this game object stops colliding with another game object or vice versa
     };
 }
 

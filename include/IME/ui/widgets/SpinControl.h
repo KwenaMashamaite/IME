@@ -36,8 +36,8 @@ namespace ime {
          */
         class IME_API SpinControl : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<SpinControl>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const SpinControl>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<SpinControl>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const SpinControl>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -58,9 +58,8 @@ namespace ime {
              * @param step The increment value
              * @return The new spin control
              */
-            static sharedPtr create(float minValue = 0.0f, float maxValue = 10.0f,
-                float initialValue = 0.0f, unsigned int decimal = 0,
-                float step = 1.0f);
+            static SpinControl::Ptr create(float minValue = 0.0f, float maxValue = 10.0f,
+                float initialValue = 0.0f, unsigned int decimal = 0, float step = 1.0f);
 
             /**
              * @brief Create a copy of another spin control
@@ -85,7 +84,8 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static SpinControl::Ptr copy(SpinControl::ConstPtr other,
+                bool shareRenderer = true);
 
             /**
              * @brief Get the spin controls renderer
@@ -97,8 +97,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SpinButtonRenderer::sharedPtr getSpinButtonRenderer();
-            const SpinButtonRenderer::sharedPtr getSpinButtonRenderer() const;
+            SpinButtonRenderer::Ptr getSpinButtonRenderer();
+            const SpinButtonRenderer::Ptr getSpinButtonRenderer() const;
 
             /**
              * @brief Set a minimum value for the spin control

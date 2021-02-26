@@ -120,8 +120,8 @@ namespace ime {
      */
     class IME_API Collider : utility::NonCopyable {
     public:
-        using sharedPtr = std::shared_ptr<Collider>; //!< Shared collider pointer
-        using BodyPtr = std::shared_ptr<Body>;       //!< Shared Body pointer
+        using Ptr = std::shared_ptr<Collider>; //!< Shared collider pointer
+        using BodyPtr = std::shared_ptr<Body>; //!< Shared Body pointer
 
         /**
          * @brief The type of the collider
@@ -157,8 +157,8 @@ namespace ime {
          * @brief Create a copy of the collider
          * @return The new collider copied from this collider
          */
-        virtual sharedPtr copy() = 0;
-        virtual const sharedPtr copy() const = 0;
+        virtual Collider::Ptr copy() = 0;
+        virtual const Collider::Ptr copy() const = 0;
 
         /**
          * @brief Get the type of the collider

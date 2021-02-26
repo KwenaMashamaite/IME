@@ -90,11 +90,11 @@ namespace ime::ui {
         setRenderer(std::make_shared<LabelRenderer>());
     }
 
-    Label::sharedPtr Label::create(const std::string &text) {
-        return Label::sharedPtr(new Label(text));
+    Label::Ptr Label::create(const std::string &text) {
+        return Label::Ptr(new Label(text));
     }
 
-    Label::sharedPtr Label::copy(Label::constSharedPtr other, bool shareRenderer) {
+    Label::Ptr Label::copy(Label::ConstPtr other, bool shareRenderer) {
         auto widget = create();
         /*widget->label_ = widget->label_->copy(other->label_);
 

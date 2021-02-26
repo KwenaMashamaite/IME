@@ -73,7 +73,8 @@ namespace ime {
      */
     class IME_API Body : public std::enable_shared_from_this<Body> {
     public:
-        using sharedPtr = std::shared_ptr<Body>; //!< Shared Body pointer
+        using Ptr = std::shared_ptr<Body>; //!< Shared Body pointer
+        using ConstPtr = std::shared_ptr<const Body>; //!< Const shared world pointer
         using WorldPtr = std::shared_ptr<World>; //!< Shared World pointer
 
         template <typename... Args>
@@ -89,7 +90,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        void attachCollider(Collider::sharedPtr collider);
+        void attachCollider(Collider::Ptr collider);
 
         /**
          * @brief Get a collider by its id
@@ -99,7 +100,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        Collider::sharedPtr getColliderById(unsigned int id);
+        Collider::Ptr getColliderById(unsigned int id);
 
         /**
          * @brief Remove a collider from the body
@@ -113,7 +114,7 @@ namespace ime {
          *
          * @warning This function is locked during world callbacks
          */
-        void removeCollider(Collider::sharedPtr collider);
+        void removeCollider(Collider::Ptr collider);
 
         /**
          * @brief Remove a collider with a given id
@@ -491,7 +492,7 @@ namespace ime {
          *
          * The callback is passed a collider on invocation
          */
-        void forEachCollider(Callback<Collider::sharedPtr> callback);
+        void forEachCollider(Callback<Collider::Ptr> callback);
 
         /**
          * @brief Add an event listener to a collision begin event
@@ -507,7 +508,7 @@ namespace ime {
          * @see attachCollider
          * @see onCollisionEnd
          */
-        void onCollisionStart(Callback<Body::sharedPtr, Body::sharedPtr> callback);
+        void onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback);
 
         /**
          * @brief Add an event listener to a collision end event
@@ -523,7 +524,7 @@ namespace ime {
          * @see attachCollider
          * @see onCollisionStart
          */
-        void onCollisionEnd(Callback<Body::sharedPtr, Body::sharedPtr> callback);
+        void onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback);
 
         /**
          * @internal
@@ -535,7 +536,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void emitCollisionEvent(const std::string& event, Body::sharedPtr other);
+        void emitCollisionEvent(const std::string& event, Body::Ptr other);
 
         /**
          * @internal
@@ -564,10 +565,10 @@ namespace ime {
         PropertyContainer userData_;                //!< Application specific body data
         friend class World;                         //!< Needs access to constructor
 
-        std::unordered_map<int, Collider::sharedPtr> colliders_;  //!< Colliders attached to this body
+        std::unordered_map<int, Collider::Ptr> colliders_;  //!< Colliders attached to this body
 
-        Callback<sharedPtr, sharedPtr> onContactBegin_; //!< Called when this body starts colliding with another body or vice versa
-        Callback<sharedPtr, sharedPtr> onContactEnd_;   //!< Called when this body stops colliding with another body or vice versa
+        Callback<Body::Ptr, Body::Ptr> onContactBegin_; //!< Called when this body starts colliding with another body or vice versa
+        Callback<Body::Ptr, Body::Ptr> onContactEnd_;   //!< Called when this body stops colliding with another body or vice versa
     };
 }
 

@@ -36,7 +36,7 @@ namespace ime::ui {
             button_{std::static_pointer_cast<tgui::Button>(widget)}
         {}
 
-        static Button::sharedPtr copy(Button::constSharedPtr other, bool shareRenderer) {
+        static Button::Ptr copy(Button::ConstPtr other, bool shareRenderer) {
             auto widget = create("");
             /*pimpl_->button_ = tgui::Button::copy(other->pimpl_->button_);
 
@@ -73,11 +73,11 @@ namespace ime::ui {
 
     Button &Button::operator=(Button &&) = default;
 
-    Button::sharedPtr Button::create(const std::string &text) {
-        return Button::sharedPtr(new Button(text));
+    Button::Ptr Button::create(const std::string &text) {
+        return Button::Ptr(new Button(text));
     }
 
-    Button::sharedPtr Button::copy(Button::constSharedPtr other, bool shareRenderer) {
+    Button::Ptr Button::copy(Button::ConstPtr other, bool shareRenderer) {
         return ButtonImpl::copy(other, shareRenderer);
     }
 
@@ -85,7 +85,7 @@ namespace ime::ui {
         return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 
-    const ButtonRenderer::sharedPtr Button::getRenderer() const {
+    const ButtonRenderer::Ptr Button::getRenderer() const {
         return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
     }
 

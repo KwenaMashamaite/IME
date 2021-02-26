@@ -42,8 +42,8 @@ namespace ime {
          *         the container does not have a game object with the
          *         given id
          */
-        GameObject::sharedPtr getObjectById(unsigned int id);
-        GameObject::sharedPtr getObjectById(unsigned int id) const;
+        GameObject::Ptr getObjectById(unsigned int id);
+        GameObject::Ptr getObjectById(unsigned int id) const;
 
         /**
          * @brief Get a game object by its name
@@ -56,8 +56,8 @@ namespace ime {
          * this function will return the first game object it finds if there
          * is any
          */
-        GameObject::sharedPtr getObjectByName(const std::string& name);
-        const GameObject::sharedPtr getObjectByName(const std::string& name) const;
+        GameObject::Ptr getObjectByName(const std::string& name);
+        const GameObject::Ptr getObjectByName(const std::string& name) const;
 
         /**
          * @brief Remove a game object with a given id from the container

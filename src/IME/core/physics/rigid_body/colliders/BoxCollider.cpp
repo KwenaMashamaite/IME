@@ -37,15 +37,15 @@ namespace ime {
     BoxCollider::BoxCollider(BoxCollider &&) = default;
     BoxCollider &BoxCollider::operator=(BoxCollider &&) = default;
 
-    BoxCollider::sharedPtr BoxCollider::create(Vector2f size) {
-        return BoxCollider::sharedPtr(new BoxCollider(size));
+    BoxCollider::Ptr BoxCollider::create(Vector2f size) {
+        return BoxCollider::Ptr(new BoxCollider(size));
     }
 
-    Collider::sharedPtr BoxCollider::copy() {
+    Collider::Ptr BoxCollider::copy() {
         return std::as_const(*this).copy();
     }
 
-    const Collider::sharedPtr BoxCollider::copy() const {
+    const Collider::Ptr BoxCollider::copy() const {
         auto collider = create();
         collider->size_ = this->size_;
         collider->box_.reset(new b2PolygonShape(*(this->box_.get())));

@@ -51,14 +51,14 @@ namespace ime::ui {
 
     HorizontalLayout &HorizontalLayout::operator=(HorizontalLayout &&) = default;
 
-    HorizontalLayout::sharedPtr HorizontalLayout::create(const std::string& width,
+    HorizontalLayout::Ptr HorizontalLayout::create(const std::string& width,
         const std::string& height)
     {
-        return sharedPtr(new HorizontalLayout(width, height));
+        return Ptr(new HorizontalLayout(width, height));
     }
 
-    HorizontalLayout::sharedPtr HorizontalLayout::copy(
-        HorizontalLayout::constSharedPtr other, bool shareRenderer) 
+    HorizontalLayout::Ptr HorizontalLayout::copy(
+        HorizontalLayout::ConstPtr other, bool shareRenderer)
     {
         auto widget = create();
         return widget;
@@ -68,11 +68,11 @@ namespace ime::ui {
         return "HorizontalLayout";
     }
 
-    BoxLayoutRenderer::sharedPtr HorizontalLayout::getRenderer() {
+    BoxLayoutRenderer::Ptr HorizontalLayout::getRenderer() {
         return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
     }
 
-    const BoxLayoutRenderer::sharedPtr HorizontalLayout::getRenderer() const {
+    const BoxLayoutRenderer::Ptr HorizontalLayout::getRenderer() const {
         return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
     }
 

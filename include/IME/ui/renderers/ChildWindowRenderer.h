@@ -43,7 +43,7 @@ namespace ime {
          */
         class IME_API ChildWindowRenderer : public IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<ChildWindowRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<ChildWindowRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Change the ize of the widget borders

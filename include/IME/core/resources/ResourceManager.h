@@ -58,7 +58,7 @@ namespace ime {
      */
     class IME_API ResourceManager final {
     public:
-        using sharedPtr = std::shared_ptr<ResourceManager>; //!< Shared ResourceManager pointer
+        using Ptr = std::shared_ptr<ResourceManager>; //!< Shared ResourceManager pointer
 
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
@@ -153,7 +153,7 @@ namespace ime {
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
-        static sharedPtr getInstance();
+        static ResourceManager::Ptr getInstance();
 
         /**
          * @brief Destructor

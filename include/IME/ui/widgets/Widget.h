@@ -80,7 +80,7 @@ namespace ime {
          */
         class IME_API Widget : public ITransformable {
         public:
-            using sharedPtr = std::shared_ptr<Widget>; //!< Shared widget pointer
+            using Ptr = std::shared_ptr<Widget>; //!< Shared widget pointer
 
             /**
              * @brief Move constructor
@@ -100,7 +100,7 @@ namespace ime {
              *
              * @see getRenderer
              */
-            void setRenderer(IWidgetRenderer::sharedPtr renderer);
+            void setRenderer(IWidgetRenderer::Ptr renderer);
 
             /**
              * @brief Get the widgets renderer
@@ -112,8 +112,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ui::IWidgetRenderer::sharedPtr getRenderer();
-            const ui::IWidgetRenderer::sharedPtr getRenderer() const;
+            ui::IWidgetRenderer::Ptr getRenderer();
+            const ui::IWidgetRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the position of the widget
@@ -628,7 +628,6 @@ namespace ime {
             std::unique_ptr<priv::IWidgetImpl> pimpl_;
             EventEmitter eventEmitter_; //!< Widgets event publisher
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
-            std::shared_ptr<IWidgetRenderer> renderer_;
         };
     } // namespace ui
 
@@ -637,56 +636,56 @@ namespace ime {
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindLeft(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindLeft(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the y position of the widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindTop(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindTop(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the width of a widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindWidth(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindWidth(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the height of a widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindHeight(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindHeight(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the right position of a widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindRight(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindRight(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the bottom position of a widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindBottom(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindBottom(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the position of the widget
      * @param widget Widget to bind to
      * @return The bound position
      */
-    extern IME_API std::string bindPosition(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindPosition(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the size of the widget
      * @param widget The widget to bind to
      * @return The bound size
      */
-    extern IME_API std::string bindSize(std::shared_ptr<ui::Widget> widget);
+    extern IME_API std::string bindSize(ui::Widget::Ptr widget);
 
     /**
      * @brief Bind to the minimum value of two values

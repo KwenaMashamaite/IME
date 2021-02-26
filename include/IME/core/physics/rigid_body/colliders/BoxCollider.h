@@ -41,8 +41,8 @@ namespace ime {
      */
     class IME_API BoxCollider final : public Collider {
     public:
-        using sharedPtr = std::shared_ptr<BoxCollider>; //!< shred collider pointer
-        using constSharedPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider instance
+        using Ptr = std::shared_ptr<BoxCollider>; //!< shred collider pointer
+        using ConstPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider pointer
 
         /**
          * @brief Move constructor
@@ -68,15 +68,15 @@ namespace ime {
          * any of its functions are are called. Calling a member function
          * without a rigid body is undefined behavior
          */
-        static sharedPtr create(Vector2f size = {0.1f, 0.1f});
+        static BoxCollider::Ptr create(Vector2f size = {0.1f, 0.1f});
 
         /**
          * @brief Create a new box collider from an existing box collider
          * @param other The box collider to contract the new one from
          * @return The new box collider instance
          */
-        Collider::sharedPtr copy() override;
-        const Collider::sharedPtr copy() const override;
+        Collider::Ptr copy() override;
+        const Collider::Ptr copy() const override;
 
         /**
          * @brief Set the size of the box

@@ -48,6 +48,8 @@ namespace ime {
      */
     class IME_API TileMap {
     public:
+        using Ptr = std::shared_ptr<TileMap>; // Shared tilemap pointer
+
         /**
          * @brief Create an empty tilemap
          * @param tileWidth Width of each tile in the map
@@ -417,7 +419,7 @@ namespace ime {
          * as a visitor of that tile. Note that @a child will always be placed
          * at the centre point of the tile
          */
-        bool addChild(GameObject::sharedPtr child, Index index);
+        bool addChild(GameObject::Ptr child, Index index);
 
         /**
          * @brief Get the child in the tilemap with a certain id
@@ -425,14 +427,14 @@ namespace ime {
          * @return The child with the specified id or a nullptr if the child
          *         with the specified id does not exist in the tilemap
          */
-        GameObject::sharedPtr getChildWithId(std::size_t id) const;
+        GameObject::Ptr getChildWithId(std::size_t id) const;
 
         /**
          * @brief Check if the tilemap has a certain child or not
          * @param child Child to search for in the tilemap
          * @return True if the tilemap has the child, otherwise false
          */
-        bool hasChild(GameObject::sharedPtr child);
+        bool hasChild(GameObject::Ptr child);
 
         /**
          * @brief Remove a child from a tile
@@ -441,7 +443,7 @@ namespace ime {
          * @return True if the child was removed or false if the child is not
          *         in the specified tile
          */
-        bool removeChildFromTile(const Tile& tile, const GameObject::sharedPtr& child);
+        bool removeChildFromTile(const Tile& tile, const GameObject::Ptr& child);
 
         /**
          * @brief Remove an occupant of a tile
@@ -470,7 +472,7 @@ namespace ime {
          * @return True if the child was removed or false if the child does
          *         not exist in the grid
          */
-        bool removeChild(GameObject::sharedPtr child);
+        bool removeChild(GameObject::Ptr child);
 
         /**
          * @brief Remove children from the grid using a condition
@@ -480,7 +482,7 @@ namespace ime {
          * All children for which @a callback returns true are removed
          * from the grid
          */
-        void removeChildrenIf(std::function<bool(GameObject::sharedPtr)> callback);
+        void removeChildrenIf(std::function<bool(GameObject::Ptr)> callback);
 
         /**
          * @brief Remove all the visitors of a tile
@@ -516,7 +518,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject::sharedPtr child, Index index);
+        void moveChild(GameObject::Ptr child, Index index);
 
         /**
          * @brief Move child to a different tile
@@ -528,7 +530,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject::sharedPtr child, const Tile& tile);
+        void moveChild(GameObject::Ptr child, const Tile& tile);
 
         /**
          * @brief Get the tile occupied by a child of the tilemap
@@ -538,7 +540,7 @@ namespace ime {
          *
          * An invalid tile has a negative index
          */
-        Tile& getTileOccupiedByChild(GameObject::sharedPtr child);
+        Tile& getTileOccupiedByChild(GameObject::Ptr child);
 
         /**
          * @brief Check if tile is occupied or not
@@ -573,13 +575,13 @@ namespace ime {
          *
          * @see forEachTile(Tile&, Callback)
          */
-        GameObject::sharedPtr getOccupant(const Tile& tile);
+        GameObject::Ptr getOccupant(const Tile& tile);
 
         /**
          * @brief Execute a callback for each child in the tilemap
          * @param callback Function to execute
          */
-        void forEachChild(Callback<GameObject::sharedPtr> callback);
+        void forEachChild(Callback<GameObject::Ptr> callback);
 
         /**
          * @brief Execute a callback for each child in a tile
@@ -590,7 +592,7 @@ namespace ime {
          * child being the occupant of the tile. The callback will be ignored
          * if the specified index is invalid or the tile is not occupied
          */
-        void forEachChildInTile(const Tile& tile, Callback<GameObject::sharedPtr> callback);
+        void forEachChildInTile(const Tile& tile, Callback<GameObject::Ptr> callback);
 
         /**
          * @brief Get the number of occupants in a tile
@@ -682,7 +684,7 @@ namespace ime {
         Sprite background_;          //!< Background image (first layer)
 
         RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
-        std::unordered_map<Index, std::vector<GameObject::sharedPtr>> children_; //!< Children container
+        std::unordered_map<Index, std::vector<GameObject::Ptr>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;                            //!< Tiles container
     };

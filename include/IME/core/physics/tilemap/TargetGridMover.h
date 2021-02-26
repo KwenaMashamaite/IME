@@ -34,6 +34,8 @@ namespace ime {
      */
     class IME_API TargetGridMover : public GridMover {
     public:
+        using Ptr = std::shared_ptr<TargetGridMover>; //!< Shared grid mover pointer
+
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
@@ -42,7 +44,7 @@ namespace ime {
          * @warning The tilemap must be loaded before constructing this
          * grid mover
          */
-        explicit TargetGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
+        explicit TargetGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
          * @brief Set the path finder

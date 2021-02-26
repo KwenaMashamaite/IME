@@ -54,11 +54,11 @@ namespace ime::ui {
 
     ProgressBar &ProgressBar::operator=(ProgressBar &&) = default;
 
-    ProgressBar::sharedPtr ProgressBar::create(const std::string& text) {
-        return sharedPtr(new ProgressBar(text));
+    ProgressBar::Ptr ProgressBar::create(const std::string& text) {
+        return Ptr(new ProgressBar(text));
     }
 
-    ProgressBar::sharedPtr ProgressBar::copy(ProgressBar::constSharedPtr other,
+    ProgressBar::Ptr ProgressBar::copy(ProgressBar::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();

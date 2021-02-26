@@ -40,8 +40,8 @@ namespace ime {
          */
         class IME_API Separator : public Widget {
         public:
-            using sharedPtr = std::shared_ptr<Separator>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const Separator>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<Separator>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const Separator>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -57,7 +57,7 @@ namespace ime {
              * @brief Create a new separator widget
              * @return The new separator separator
              */
-            static sharedPtr create();
+            static Separator::Ptr create();
 
             /**
              * @brief Create a copy of another separator
@@ -82,7 +82,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static Separator::Ptr copy(Separator::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the separators renderer
@@ -94,8 +94,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SeparatorRenderer::sharedPtr getRenderer();
-            const SeparatorRenderer::sharedPtr getRenderer() const;
+            SeparatorRenderer::Ptr getRenderer();
+            const SeparatorRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Get the type of the separator

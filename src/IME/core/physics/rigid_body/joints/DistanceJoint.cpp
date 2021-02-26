@@ -67,7 +67,7 @@ namespace ime {
     // DistanceJoint class stuff
     //////////////////////////////////////////////////////////////////////////
 
-    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, World::sharedPtr world) {
+    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, World::Ptr world) {
         IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr");
         IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr");
         IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects");
@@ -148,11 +148,11 @@ namespace ime {
         return JointType::Distance;
     }
 
-    Body::sharedPtr DistanceJoint::getBodyA() {
+    Body::Ptr DistanceJoint::getBodyA() {
         return bodyA_;
     }
 
-    Body::sharedPtr DistanceJoint::getBodyB() {
+    Body::Ptr DistanceJoint::getBodyB() {
         return bodyB_;
     }
 

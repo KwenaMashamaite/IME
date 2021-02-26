@@ -53,11 +53,11 @@ namespace ime::ui {
 
     Tabs &Tabs::operator=(Tabs &&) = default;
 
-    Tabs::sharedPtr Tabs::create() {
-        return sharedPtr(new Tabs());
+    Tabs::Ptr Tabs::create() {
+        return Ptr(new Tabs());
     }
 
-    Tabs::sharedPtr Tabs::copy(Tabs::constSharedPtr other, bool shareRenderer) {
+    Tabs::Ptr Tabs::copy(Tabs::ConstPtr other, bool shareRenderer) {
         auto widget = create();
         return widget;
     }

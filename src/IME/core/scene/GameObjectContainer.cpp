@@ -25,21 +25,21 @@
 #include "IME/core/scene/GameObjectContainer.h"
 
 namespace ime {
-    GameObject::sharedPtr GameObjectContainer::getObjectById(unsigned int id) {
+    GameObject::Ptr GameObjectContainer::getObjectById(unsigned int id) {
         return std::as_const(*this).getObjectById(id);
     }
 
-    GameObject::sharedPtr GameObjectContainer::getObjectById(unsigned int id) const {
+    GameObject::Ptr GameObjectContainer::getObjectById(unsigned int id) const {
         return findIf([id](const constItemPtr gameObject) {
             return gameObject->getObjectId() == id;
         });
     }
 
-    GameObject::sharedPtr GameObjectContainer::getObjectByName(const std::string &name) {
+    GameObject::Ptr GameObjectContainer::getObjectByName(const std::string &name) {
         return std::as_const(*this).getObjectByName(name);
     }
 
-    const GameObject::sharedPtr GameObjectContainer::getObjectByName(const std::string &name) const {
+    const GameObject::Ptr GameObjectContainer::getObjectByName(const std::string &name) const {
         return findIf([&name](const constItemPtr gameObject) {
             return gameObject->getName() == name;
         });

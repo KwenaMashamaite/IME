@@ -45,14 +45,14 @@ namespace ime {
      */
     class IME_API KeyboardControlledGridMover : public GridMover {
     public:
-        using Key = input::Keyboard::Key; //!< Keyboard key alias
+        using Ptr = std::shared_ptr<KeyboardControlledGridMover>; //!< Shared grid mover pointer
 
         /**
          * @brief Constructor
          * @param tileMap Grid to move target in
          * @param target Target to be moved in the grid
          */
-        explicit KeyboardControlledGridMover(TileMap &tileMap, GameObject::sharedPtr target = nullptr);
+        explicit KeyboardControlledGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
          * @brief Set the key event that triggers the targets movement

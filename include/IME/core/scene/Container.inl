@@ -82,8 +82,8 @@ inline void Container<T>::render(Window& window, Callback<ItemPtr> preRenderCall
 }
 
 template <>
-inline void Container<GameObject>::render(Window& window, Callback<GameObject::sharedPtr> preRenderCallback) {
-    forEach([&window, &preRenderCallback](GameObject::sharedPtr gameObject) {
+inline void Container<GameObject>::render(Window& window, Callback<GameObject::Ptr> preRenderCallback) {
+    forEach([&window, &preRenderCallback](GameObject::Ptr gameObject) {
         if (preRenderCallback)
             preRenderCallback(gameObject);
         gameObject->getSprite().draw(window);;

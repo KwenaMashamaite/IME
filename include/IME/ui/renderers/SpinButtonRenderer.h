@@ -43,7 +43,7 @@ namespace ime {
          */
         class IME_API SpinButtonRenderer : public IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<SpinButtonRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<SpinButtonRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Change the size of the widget borders

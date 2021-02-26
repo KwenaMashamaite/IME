@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API EditBox : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<EditBox>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<EditBox>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -55,7 +55,7 @@ namespace ime {
              * @param defaultText Text is displayed when the edit box is empty
              * @return The new edit box
              */
-            static sharedPtr create(const std::string& defaultText = "");
+            static EditBox::Ptr create(const std::string& defaultText = "");
 
             /**
              * @brief Create a copy of another edit box
@@ -80,7 +80,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static EditBox::Ptr copy(EditBox::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the labels renderer
@@ -90,8 +90,8 @@ namespace ime {
              * widget is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
              */
-            EditBoxRenderer::sharedPtr getRenderer();
-            const EditBoxRenderer::sharedPtr getRenderer() const;
+            EditBoxRenderer::Ptr getRenderer();
+            const EditBoxRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the text inside the edit box

@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API BitmapButton : public ClickableWidget {
         public:
-            using sharedPtr = std::shared_ptr<BitmapButton>; //!< Shared widget pointer
-            using constSharedPtr = std::shared_ptr<const BitmapButton>; //!< const shared widget pointer
+            using Ptr = std::shared_ptr<BitmapButton>; //!< Shared widget pointer
+            using ConstPtr = std::shared_ptr<const BitmapButton>; //!< const shared widget pointer
 
             /**
              * @brief Move constructor
@@ -56,7 +56,7 @@ namespace ime {
              * @param text Text to display on the button
              * @return The new bitmap button
              */
-            static sharedPtr create(const std::string& text = "");
+            static BitmapButton::Ptr create(const std::string& text = "");
 
             /**
              * @brief Create a copy of another button
@@ -81,7 +81,7 @@ namespace ime {
              * @warning Once a renderer is shared, it cannot be unshared at
              * a later time
              */
-            static sharedPtr copy(constSharedPtr other, bool shareRenderer = true);
+            static BitmapButton::Ptr copy(BitmapButton::ConstPtr other, bool shareRenderer = true);
 
             /**
              * @brief Get the buttons renderer
@@ -93,8 +93,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ButtonRenderer::sharedPtr getRenderer();
-            const ButtonRenderer::sharedPtr getRenderer() const;
+            ButtonRenderer::Ptr getRenderer();
+            const ButtonRenderer::Ptr getRenderer() const;
 
             /**
              * @brief Set the text displayed on the button

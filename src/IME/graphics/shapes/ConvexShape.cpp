@@ -63,8 +63,8 @@ namespace ime {
 
     ConvexShape &ConvexShape::operator=(ConvexShape &&) noexcept = default;
 
-    ConvexShape::sharedPtr ConvexShape::create(std::size_t pointCount) {
-        return ConvexShape::sharedPtr(new ConvexShape(pointCount));
+    ConvexShape::Ptr ConvexShape::create(std::size_t pointCount) {
+        return ConvexShape::Ptr(new ConvexShape(pointCount));
     }
 
     void ConvexShape::setPointCount(std::size_t count) {

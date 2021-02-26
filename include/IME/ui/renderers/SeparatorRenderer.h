@@ -43,7 +43,7 @@ namespace ime {
          */
         class IME_API SeparatorRenderer : public IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<SeparatorRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<SeparatorRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Set the colour of the widget

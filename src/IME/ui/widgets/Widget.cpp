@@ -64,15 +64,15 @@ namespace ime::ui {
 
     Widget &Widget::operator=(Widget&&) = default;
 
-    void Widget::setRenderer(IWidgetRenderer::sharedPtr renderer) {
+    void Widget::setRenderer(IWidgetRenderer::Ptr renderer) {
         pimpl_->setRenderer(std::move(renderer));
     }
 
-    ui::IWidgetRenderer::sharedPtr Widget::getRenderer() {
+    ui::IWidgetRenderer::Ptr Widget::getRenderer() {
         return pimpl_->getRenderer();
     }
 
-    const ui::IWidgetRenderer::sharedPtr Widget::getRenderer() const {
+    const ui::IWidgetRenderer::Ptr Widget::getRenderer() const {
         return pimpl_->getRenderer();
     }
 

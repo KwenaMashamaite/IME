@@ -43,7 +43,7 @@ namespace ime {
      */
     class IME_API PolygonCollider final : public Collider {
     public:
-        using sharedPtr = std::shared_ptr<PolygonCollider>; //!< Shared polygon collider
+        using Ptr = std::shared_ptr<PolygonCollider>; //!< Shared polygon collider
 
         /**
          * @brief Move constructor
@@ -59,15 +59,15 @@ namespace ime {
          * @brief Create a new polygon collider
          * @return The created polygon collider
          */
-        static sharedPtr create();
+        static PolygonCollider::Ptr create();
 
         /**
          * @brief Create a new collider from an existing polygon collider
          * @param other The polygon collider to contract the new one from
          * @return The new polygon collider instance
          */
-        Collider::sharedPtr copy() override;
-        const Collider::sharedPtr copy() const override;
+        Collider::Ptr copy() override;
+        const Collider::Ptr copy() const override;
 
         /**
          * @brief Create a convex hull from the an array of local points

@@ -72,7 +72,7 @@ namespace ime {
          */
         class IME_API IWidgetRenderer {
         public:
-            using sharedPtr = std::shared_ptr<IWidgetRenderer>; //!< Shared renderer pointer
+            using Ptr = std::shared_ptr<IWidgetRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Set the opacity of the widget

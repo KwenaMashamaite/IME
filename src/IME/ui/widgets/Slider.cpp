@@ -53,11 +53,11 @@ namespace ime::ui {
 
     Slider &Slider::operator=(Slider &&) = default;
 
-    Slider::sharedPtr Slider::create(float minimum, float maximum) {
-        return sharedPtr(new Slider(minimum, maximum));
+    Slider::Ptr Slider::create(float minimum, float maximum) {
+        return Ptr(new Slider(minimum, maximum));
     }
 
-    Slider::sharedPtr Slider::copy(Slider::constSharedPtr other,
+    Slider::Ptr Slider::copy(Slider::ConstPtr other,
         bool shareRenderer)
     {
         auto widget = create();

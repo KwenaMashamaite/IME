@@ -74,7 +74,7 @@ namespace ime {
          * if it has a rigid body attached and rendered so that you don't have
          * to do that manually
          */
-        Shape::sharedPtr createShape(Shape::Type type);
+        Shape::Ptr createShape(Shape::Type type);
 
         /**
          * @brief Create a shape
