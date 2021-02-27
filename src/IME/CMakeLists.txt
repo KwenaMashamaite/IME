@@ -104,6 +104,7 @@ set(IME_SRC
     graphics/shapes/CircleShape.cpp
     graphics/shapes/ConvexShape.cpp
     graphics/DebugDrawer.cpp
+    graphics/Camera.cpp
     utility/ConfigFileParser.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp

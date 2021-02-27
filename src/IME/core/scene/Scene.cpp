@@ -30,6 +30,7 @@
 namespace ime {
     Scene::Scene(Engine &engine) :
         engine_{engine},
+        camera_{std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()))},
         cache_{engine.getPersistentData()},
         guiContainer_{engine.getRenderTarget()},
         timescale_{1.0f},
@@ -50,6 +51,7 @@ namespace ime {
         // We can't use a default move assignment operator because of reference members
         if (this != &other) {
             world_ = std::move(other.world_);
+            camera_ = std::move(other.camera_);
             name_ = std::move(other.name_);
             inputManager_ = std::move(other.inputManager_);
             audioManager_ = std::move(other.audioManager_);
@@ -105,6 +107,10 @@ namespace ime {
 
     Engine &Scene::engine() const {
         return engine_;
+    }
+
+    Camera &Scene::camera() {
+        return *camera_;
     }
 
     World& Scene::physics() {

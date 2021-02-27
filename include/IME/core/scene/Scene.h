@@ -37,6 +37,7 @@
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
+#include "IME/graphics/Camera.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -339,6 +340,12 @@ namespace ime {
         Engine &engine() const;
 
         /**
+         * @brief Get the scene camera
+         * @return The scene camera
+         */
+        Camera& camera();
+
+        /**
          * @brief Get the physics simulation
          * @return The physics simulation
          *
@@ -498,6 +505,7 @@ namespace ime {
 
     private:
         Engine &engine_;                   //!< A reference to the game engine
+        std::unique_ptr<Camera> camera_;   //!< Scene level camera
         PropertyContainer& cache_;         //!< The global cache
         std::shared_ptr<World> world_;     //!< Physics simulation
         std::string name_;                 //!< The name of the scene (optional)
