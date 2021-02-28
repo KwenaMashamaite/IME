@@ -33,6 +33,7 @@
 #include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
+#include "IME/core/scene/RenderLayerContainer.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -49,15 +50,6 @@ namespace ime {
     class IME_API TileMap {
     public:
         using Ptr = std::shared_ptr<TileMap>; // Shared tilemap pointer
-
-        /**
-         * @brief Create an empty tilemap
-         * @param tileWidth Width of each tile in the map
-         * @param tileHeight height of each tile in the map
-         *
-         * The tile map has the position (0, 0) by default
-         */
-        explicit TileMap(unsigned int tileWidth = 8, unsigned int tileHeight = 8);
 
         /**
          * @brief Show or hide the tilemap
@@ -241,20 +233,6 @@ namespace ime {
         unsigned int getSpaceBetweenTiles() const;
 
         /**
-         * @brief Get the tilemap background
-         * @return The tilemap background
-         *
-         * The background of the tilemap may be manipulated through the
-         * returned sprite. @note By default there is no background set,
-         * if the background texture is set then showLayer() must be
-         * invoked with "background" as the argument in order for the
-         * background to be rendered and displayed
-         *
-         * @see showLayer
-         */
-        Sprite& getBackground();
-
-        /**
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
          * @return The tile at the specified index or an invalid tile if the
@@ -347,6 +325,21 @@ namespace ime {
         void forEachTileInRange(Index startPos, Index endPos, Callback<Tile&> callback);
 
         /**
+         * @brief Get the scene render layers
+         * @return The scene render layers
+         *
+         * Render layers allow the tilemap to be rendered in separate layers
+         * which are then composed back together. By default the tilemap has
+         * a "default" layer at index 0. When a drawable object is added to
+         * the scene without an explicit layer, it will be added to the default
+         * layer. You can add objects to the "default" layer or even remove
+         * the "default" layer from the render layer container, however you
+         * mus not forget to reallocate the objects in the "default" layer to
+         * another layer, otherwise they will not be drawn to the screen
+         */
+        RenderLayerContainer& renderLayers();
+
+        /**
          * @brief Texture a tile at given index
          * @param index Index of the tile to apply a texture to
          * @param rect Texture to apply
@@ -384,29 +377,27 @@ namespace ime {
         void textureTilesById(char id, const Sprite& sprite);
 
         /**
-         * @brief Show a hidden layer
-         * @param layer Name of the layer to be shown
-         */
-        void showLayer(const std::string& layer);
-
-        /**
-         * @brief Hide a layer
-         * @param layer Name of the layer to be hidden
-         */
-        void hideLayer(const std::string& layer);
-
-        /**
-         * @brief Check if a layer is hidden or not
-         * @param layer Name of the layer to be checked
-         * @return True if specified layer is hidden, otherwise false
-         */
-        bool isLayerHidden(const std::string& layer) const;
-
-        /**
          * @brief Render tilemap on a render target
          * @param renderTarget Target to render tilemap on
          */
         void draw(Window &renderTarget);
+
+        /**
+         * @brief Add a sprite to the tilemap
+         * @param sprite The sprite to be added to the tilemap
+         * @param index The index of the tile to add the sprite at
+         * @param renderOrder The render order of the sprite in the layer
+         * @param renderLayer The render layer to add the sprite to
+         *
+         * If @a renderLayer cannot be found, then sprite will be added to
+         * the "default" layer. If the default layer cannot be found the
+         * program will crash. A tilemap without a "default" layer is
+         * undefined behavior
+         *
+         * Note that the sprite is added at the centre of the the tile
+         */
+        void addSprite(Sprite& sprite, Index index, int renderOrder = 0,
+            const std::string& renderLayer = "default");
 
         /**
          * @brief Add an entity to the tilemap
@@ -601,13 +592,16 @@ namespace ime {
          */
         std::size_t getNumOfOccupants(const Tile& tile) const;
 
-        void update(Time deltaTime) {
-            forEachTile([deltaTime](Tile& tile) {
-                tile.getSprite().updateAnimation(deltaTime);
-            });
-        }
-
     private:
+        /**
+         * @brief Create an empty tilemap
+         * @param tileWidth Width of each tile in the map
+         * @param tileHeight height of each tile in the map
+         *
+         * The tile map has the position (0, 0) by default
+         */
+        TileMap(unsigned int tileWidth, unsigned int tileHeight);
+
         /**
          * @brief Create the visual gird
          */
@@ -656,7 +650,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile & getTileLeftOf(const Index& index);
+        Tile& getTileLeftOf(const Index& index);
 
         /**
          * @brief Get the tile to the right of a tile at a given location
@@ -681,12 +675,15 @@ namespace ime {
         bool isBackgroundDrawable_;  //!< First layer render state
         bool isTilesDrawable_;       //!< Second layer render state
         Tile invalidTile_;           //!< Tile returned when an invalid index is provided
-        Sprite background_;          //!< Background image (first layer)
+        RenderLayerContainer renderLayers_;   //!< Render layers for this scene
 
         RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
         std::unordered_map<Index, std::vector<GameObject::Ptr>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
-        std::vector<std::vector<Tile>> tiledMap_;                            //!< Tiles container
+        std::vector<std::vector<Tile>> tiledMap_;//!< Tiles container
+        std::vector<std::reference_wrapper<Sprite>> sprites_;
+
+        friend class Scene;
     };
 }
 

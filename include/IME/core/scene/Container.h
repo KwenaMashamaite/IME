@@ -95,18 +95,6 @@ namespace ime {
         std::size_t getCount() const;
 
         /**
-         * @brief Render all the items on a render target
-         * @param window The window to render the items on
-         * @param preRenderCallback Optional callback that is called before
-         *        an item is rendered to the given render target
-         *
-         * You'll have to call this function yourself because we don't
-         * know if the items should be rendered to the background or
-         * foreground of the scene
-         */
-        void render(Window& window, Callback<ItemPtr> preRenderCallback = nullptr);
-
-        /**
          * @brief Execute a callback function for each item in the container
          * @param callback The function to be executed
          */

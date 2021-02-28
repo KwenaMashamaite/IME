@@ -37,8 +37,11 @@ namespace ime {
         isManaged_{false},
         isEntered_{false},
         isVisibleWhenPaused_{false},
-        hasPhysicsSim_{false}
-    {}
+        hasPhysicsSim_{false},
+        hasTilemap_{false}
+    {
+        renderLayers_.create("default");
+    }
 
     Scene::Scene(Scene&& other) :
         engine_{other.engine_},
@@ -141,6 +144,14 @@ namespace ime {
         return cache_;
     }
 
+    RenderLayerContainer &Scene::renderLayers() {
+        return renderLayers_;
+    }
+
+    TileMap &Scene::tilemap() {
+        return *tileMap_;
+    }
+
     ui::GuiContainer &Scene::gui() {
         return guiContainer_;
     }
@@ -157,6 +168,11 @@ namespace ime {
         world_ = World::create(*this, gravity);
         world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
+    }
+
+    void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
+        tileMap_ = std::unique_ptr<TileMap>(new TileMap(tileWidth, tileHeight));
+        hasTilemap_ = true;
     }
 
     Scene::~Scene() = default;

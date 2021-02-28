@@ -27,7 +27,6 @@
 
 #include "IME/core/tilemap/Index.h"
 #include "IME/common/Vector2.h"
-#include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/graphics/IDrawable.h"
 #include <unordered_map>
@@ -45,21 +44,6 @@ namespace ime {
          * @param position Position of the tile
          */
         explicit Tile(Vector2u size = {32, 32}, Vector2f position = {0, 0});
-
-        /**
-         * @brief Add a sprite to the tile
-         * @param sprite Sprite to be added
-         *
-         * The tile can only contain a single sprite. Therefore, subsequent
-         * calls to this function will replace the previous sprite
-         */
-        void addSprite(Sprite sprite);
-
-        /**
-         * @brief Get the sprite set on the tile
-         * @return Sprite on the tile
-         */
-        Sprite &getSprite();
 
         /**
          * @brief Set the fill colour of the tile
@@ -218,8 +202,7 @@ namespace ime {
         bool isSolid_;          //!< Stores whether tile is a solid or an empty tile
         char id_;               //!< Tile id
         Index index_;           //!< Position of the tile in the tilemap
-        Sprite sprite_;         //!< Tile texture representation
-        RectangleShape tile_;   //!< Tile
+        RectangleShape tile_;   //!< Tile reset
         Colour prevFillColour_; //!< Tiles fill colour before it was hidden
     };
 }

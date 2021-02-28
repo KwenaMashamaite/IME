@@ -35,9 +35,11 @@
 #include "IME/common/PropertyContainer.h"
 #include "IME/core/scene/ShapeContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
+#include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
+#include "IME/core/tilemap/TileMap.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -98,7 +100,8 @@ namespace ime {
          *
          * This function will be called by the game engine when the scene
          * is entered for the first time. Note that a scene cannot be entered
-         * more than once
+         * more than once, in other words this function will only be called
+         * once
          */
         virtual void onEnter() = 0;
 
@@ -106,10 +109,18 @@ namespace ime {
          * @brief Handle a system event
          * @param event System event to be handled
          *
-         * This function will be called by the game engine before the
-         * scene is updated. The function is called once per frame
+         * This function will be called by the game engine before the scene
+         * is updated. Override this function if you want to handle a window
+         * specific events such as window resize event. Do not use it to
+         * handle input related events. Use the scenes input manager or the
+         * global input manager found in the Engine. The function is called
+         * once per frame
+         *
+         * Note that IME will never put anything inside this function,
+         * therefore you don't have to call the base class method in your
+         * implementation
          */
-        virtual void handleEvent(Event event) = 0;
+        virtual void handleEvent(Event event) {IME_UNUSED(event);};
 
         /**
          * @brief Update the scene
@@ -124,7 +135,8 @@ namespace ime {
          * All updates that should be synced with the render fps must be
          * in this function. Note that implementing this function is optional
          * and must be overridden if needed. IME will never put anything inside
-         * this function
+         * this function, therefore you don't have to call the base class
+         * method in your implementation
          *
          * @see fixedUpdate
          */
@@ -145,26 +157,27 @@ namespace ime {
          * Updates that are frame-rate independent must be in this function.
          * Note that implementing this function is optional and must be
          * overridden if needed. IME will never put anything inside this
-         * function
+         * function, therefore you don't have to call the base class method
+         * in your implementation
          *
          * @see update
          */
         virtual void fixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @brief Render the scene
-         * @param renderTarget Target to render scene on
+         * @brief Post update
          *
-         * This function will be called by the game engine after the scene
-         * has handled all events and been updated. The function will be
-         * called once per frame.
+         * This function is called after fixed update and update but
+         * before the scene is rendered. It may be useful if you want to do something
+         * after all time updates (timer updates, physics updates, gui updates
+         * etc) have completed.
          *
-         * @note You should never render anything outside of this function
-         * because the contents of the render window will be cleared before
-         * this function is called meaning you won't be able to see what was
-         * rendered prior. Always render in this function
+         * Note that implementing this function is optional and must be
+         * overridden if needed. IME will never put anything inside this
+         * function, therefore you don't have to call the base class method
+         * in your implementation
          */
-        virtual void render(Window &renderTarget) = 0;
+        virtual void postUpdate() {}
 
         /**
          * @brief Pause the scene
@@ -174,7 +187,8 @@ namespace ime {
          *
          * Note that implementing this function is optional and must be
          * overridden if you want to do something when the scene is paused.
-         * IME will never put anything inside this function
+         * IME will never put anything inside this function, therefore you
+         * don't have to call the base class method in your implementation
          *
          * @see onResume
          */
@@ -188,7 +202,9 @@ namespace ime {
          *
          * Note that implementing this function is optional and must
          * be overridden if you want to do something when the scene is
-         * resumed. IME will never put anything inside this function
+         * resumed. IME will never put anything inside this function,
+         * therefore you don't have to call the base class method in
+         * your implementation
          *
          * @see onPause
          */
@@ -204,7 +220,8 @@ namespace ime {
          *
          * Note that implementing this function is optional and must be
          * overridden if you want to do something when the scene is resumed.
-         * IME will never put anything inside this function
+         * IME will never put anything inside this function. therefore you
+         * don't have to call the base class method in your implementation
          *
          * @warning This function is not a replacement for the destructor,
          * it will be called first, then the destructor immediately after
@@ -457,16 +474,47 @@ namespace ime {
         PropertyContainer& cache();
 
         /**
+         * @brief Get the scene render layers
+         * @return The scene render layers
+         *
+         * Render layers allow the scene to be rendered in separate layers
+         * which are then composed back together. By default the scene has
+         * a "default" layer at index 0. When a drawable object is added to
+         * the scene without an explicit layer, it will be added to the default
+         * layer. You can add objects to the "default" layer or even remove
+         * the "default" layer from the render layer container, however you
+         * mus not forget to reallocate the objects in the "default" layer to
+         * another layer, otherwise they will not be drawn to the screen
+         *
+         * @note When the scene contains a tilemap (createTilemap called),
+         * the scene uses the tilemap's render layers instead of its own.
+         * This means that drawables added using this function will not
+         * be rendered. Only use this function if the scene does not have
+         * a tilemap
+         */
+        RenderLayerContainer& renderLayers();
+
+        /**
+         * @brief Get the scene Tilemap
+         * @return The scene tilemap
+         *
+         * Note that only one tilemap can be created per scene
+         *
+         * @warning The tilemap must be created before it is used. Calling
+         * this function before the tilemap is created is undefined behavior
+         *
+         * @see createTilemap
+         */
+        TileMap& tilemap();
+
+        /**
          * @brief Get the scene gui container
          * @return The scene gui container
          *
          * The gui container is provided here for convenience, you can
          * manually instantiate as many gui containers as you desire.
-         * Note that you don't have to update the returned gui container
-         * or set the render target, it will done automatically by the
-         * scene. However, you have to call the gui containers draw
-         * function yourself because we don't know if the gui should
-         * be rendered to the background or foreground
+         * Note that the gui does not belong to any render layer and is
+         * always rendered on top
          */
         ui::GuiContainer& gui();
 
@@ -503,26 +551,47 @@ namespace ime {
          */
         void createWorld(Vector2f gravity);
 
+        /**
+         * @brief Create tilemap instance
+         * @param tileWidth The width of the tilemap
+         * @param tileHeight The height of the tilemap
+         *
+         * Note that this function only creates a tilemap instance so that
+         * it can be used. You still need to construct the tilemap using
+         * the appropriate member function. In addition, when a tilemap is
+         * created the scene uses the tilemap's render layer instead of its
+         * own
+         *
+         * @warning Only a single tilemap can be created, therefore calling
+         * this function will destroy the previous tilemap
+         *
+         * @see tilemap
+         */
+        void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
+
     private:
-        Engine &engine_;                   //!< A reference to the game engine
-        std::unique_ptr<Camera> camera_;   //!< Scene level camera
-        PropertyContainer& cache_;         //!< The global cache
-        std::shared_ptr<World> world_;     //!< Physics simulation
-        std::string name_;                 //!< The name of the scene (optional)
-        input::InputManager inputManager_; //!< Scene level input manager
-        audio::AudioManager audioManager_; //!< Scene level audio manager
-        EventEmitter eventEmitter_;        //!< scene level event dispatcher
-        EventEmitter internalEmitter_;     //!< Emits internal scene events
-        TimerManager timerManager_;        //!< Scene level timer manager
-        ui::GuiContainer guiContainer_;    //!< Scene level gui container
-        ShapeContainer shapeContainer_;    //!< Stores shapes that belong to the scene
-        GameObjectContainer entityContainer_;  //!< Stores game objects that belong to the scene
-        float timescale_;                  //!< Controls the speed of the scene without affecting the render fps
-        bool isManaged_;                   //!< A flag indicating whether or not this scene has been added to a scene manager
-        bool isEntered_;                   //!< A flag indicating whether or not the scene has been entered
-        bool isVisibleWhenPaused_;         //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
-        bool hasPhysicsSim_;               //!< A flag indicating whether or not the scene has a physics simulation
-        friend class SceneManager;         //!< Pre updates the scene
+        Engine &engine_;                      //!< A reference to the game engine
+        std::unique_ptr<Camera> camera_;      //!< Scene level camera
+        PropertyContainer& cache_;            //!< The global cache
+        std::shared_ptr<World> world_;        //!< Physics simulation
+        std::string name_;                    //!< The name of the scene (optional)
+        input::InputManager inputManager_;    //!< Scene level input manager
+        audio::AudioManager audioManager_;    //!< Scene level audio manager
+        EventEmitter eventEmitter_;           //!< scene level event dispatcher
+        EventEmitter internalEmitter_;        //!< Emits internal scene events
+        TimerManager timerManager_;           //!< Scene level timer manager
+        ui::GuiContainer guiContainer_;       //!< Scene level gui container
+        ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
+        GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
+        RenderLayerContainer renderLayers_;   //!< Render layers for this scene
+        std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
+        float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
+        bool isManaged_;                      //!< A flag indicating whether or not this scene has been added to a scene manager
+        bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
+        bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
+        bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
+        bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
+        friend class SceneManager;            //!< Pre updates the scene
     };
 }
 

@@ -101,11 +101,22 @@ namespace ime {
     }
 
     void SceneManager::render(Window &window) {
+        auto static renderScene = [](ScenePtr& scene, Window& renderWindow) {
+            if (scene->hasTilemap_) {
+                scene->tileMap_->draw(renderWindow); //Draw the tiles
+                scene->tileMap_->renderLayers().render(renderWindow);
+            } else
+                scene->renderLayers_.render(renderWindow);
+
+            // Draw the gui on top of everything
+            scene->gui().draw();
+        };
+
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause())
-                prevScene_->render(window);
+                renderScene(prevScene_, window);
 
-            scenes_.top()->render(window);
+            renderScene(scenes_.top(), window);
             scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
         }
     }

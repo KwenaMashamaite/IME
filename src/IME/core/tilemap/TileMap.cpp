@@ -35,6 +35,8 @@ namespace ime {
         isTilesDrawable_(true),
         invalidTile_({0, 0}, {-1, -1})
     {
+        renderLayers_.create("default");
+
         invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
         invalidTile_.setPosition({-99, -99});
         invalidTile_.setIndex({-1, -1});
@@ -47,7 +49,6 @@ namespace ime {
             tileHeight = 8;
 
         tileSize_ = Vector2u{tileWidth, tileHeight};
-        background_.setPosition(0, 0);
         backgroundTile_.setFillColour(Colour::Grey);
     }
 
@@ -98,10 +99,6 @@ namespace ime {
 
     Tile &TileMap::getTileRightOf(const Tile &tile) {
         return getTileRightOf(tile.getIndex());
-    }
-
-    Sprite &TileMap::getBackground() {
-        return background_;
     }
 
     bool TileMap::isIndexValid(const Index &index) const {
@@ -200,19 +197,22 @@ namespace ime {
     }
 
     void TileMap::draw(Window &renderTarget) {
-        // Draw tile background
         renderTarget.draw(backgroundTile_);
+        forEachTile([&renderTarget](Tile& tile) {
+            renderTarget.draw(tile);
+        });
+    }
 
-        // Draw user background
-        if (isBackgroundDrawable_)
-            renderTarget.draw(background_);
+    void TileMap::addSprite(Sprite &sprite, Index index, int renderOrder, const std::string &renderLayer) {
+        auto layer = renderLayers_.findByName(renderLayer);
+        if (!layer && renderLayer != "default")
+            layer = renderLayers_.findByName("default");
 
-        //Draw tiles (second layer)
-        if (isTilesDrawable_) {
-            forEachTile([&](Tile &tile) {
-                renderTarget.draw(tile);
-            });
-        }
+        IME_ASSERT(layer, "The layer '" + renderLayer + "' could not be found in the Tilemaps render layers and the fallback layer 'default' is removed");
+
+        layer->addDrawable(sprite, renderOrder);
+        sprite.setPosition(getTile(index).getWorldCentre());
+        sprites_.push_back(std::ref(sprite));
     }
 
     void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
@@ -234,14 +234,14 @@ namespace ime {
     }
 
     void TileMap::setCollidableById(char id, bool isCollidable) {
-        forEachTile([=](Tile& tile) {
+        forEachTile([id, isCollidable](Tile& tile) {
             if (tile.getId() == id)
                 tile.setSolid(isCollidable);
         });
     }
 
     void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
-        forEachTile([=](Tile& tile) {
+        forEachTile([id, isCollidable](Tile& tile) {
             if (tile.getId() != id)
                 tile.setSolid(isCollidable);
         });
@@ -251,28 +251,6 @@ namespace ime {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
         return invalidTile_;
-    }
-
-    void TileMap::hideLayer(const std::string &layer) {
-        if (layer == "background")
-            isBackgroundDrawable_ = false;
-        else if (layer == "tiles")
-            isTilesDrawable_ = false;
-    }
-
-    void TileMap::showLayer(const std::string &layer) {
-        if (layer == "background")
-            isBackgroundDrawable_ = true;
-        else if (layer == "tiles")
-            isTilesDrawable_ = true;
-    }
-
-    bool TileMap::isLayerHidden(const std::string &layer) const {
-        if (layer == "background")
-            return isBackgroundDrawable_;
-        else if (layer == "tiles")
-            return isTilesDrawable_;
-        return false;
     }
 
     bool TileMap::isCollidable(const Index &index) const {
@@ -309,9 +287,8 @@ namespace ime {
     std::shared_ptr<GameObject> TileMap::getChildWithId(std::size_t id) const {
         for (const auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
-                if (childList.second[i]->getObjectId() == id) {
+                if (childList.second[i]->getObjectId() == id)
                     return childList.second[i];
-                }
         }
         return nullptr;
     }
@@ -431,12 +408,16 @@ namespace ime {
         return tileSize_;
     }
 
-     void TileMap::textureTile(Index index, FloatRect rect) {
+    RenderLayerContainer &TileMap::renderLayers() {
+        return renderLayers_;
+    }
+
+    void TileMap::textureTile(Index index, FloatRect rect) {
         IME_ASSERT(!tilesets_.empty(), "Cannot texture tile with an empty tileset, set tileset to be used first");
         if (isIndexValid(index)) {
-            auto& sprite = tiledMap_[index.row][index.colm].getSprite();
-            sprite.setTexture(tileSet_);
+            auto sprite = Sprite(tileSet_);
             sprite.setTextureRect(rect.left, rect.top, rect.width, rect.height);
+            // @TODO add sprite to textures - Dont know the render layer to add it to
         }
     }
 
@@ -450,12 +431,12 @@ namespace ime {
     void TileMap::textureTilesById(char id, const Sprite &sprite) {
         forEachTile([&](Tile& tile) {
             if (tile.getId() == id)
-                tile.addSprite(sprite);
+                ;//addSprite(sprite, tile.getIndex()); @TODO fix - dont know the layer to put it in
         });
     }
 
     void TileMap::forEachTile(Callback<Tile&> callback) {
-        std::for_each(tiledMap_.begin(), tiledMap_.end(), [&](auto& row) {
+        std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
             std::for_each(row.begin(), row.end(), callback);
         });
     }

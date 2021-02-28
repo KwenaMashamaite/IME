@@ -37,7 +37,7 @@ namespace ime {
         state_{-1},
         isVulnerable_{true},
         isActive_{true},
-        isCollidable_{false},
+        isCollidable_{true},
         direction_{Direction::Unknown}
     {
         initTransformEvents();

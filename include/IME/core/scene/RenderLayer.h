@@ -1,0 +1,172 @@
+////////////////////////////////////////////////////////////////////////////////
+// IME - Infinite Motion Engine
+//
+// Copyright (c) 2020-2021 Kwena Mashamaite (kwena.mashamaite1@gmail.com)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+////////////////////////////////////////////////////////////////////////////////
+
+#ifndef IME_RENDERLAYER_H
+#define IME_RENDERLAYER_H
+
+#include "IME/Config.h"
+#include "IME/utility/NonCopyable.h"
+#include <memory>
+#include <map>
+
+namespace ime {
+    class Window;
+    class IDrawable;
+    class GameObject;
+
+    /**
+     * @brief A layer for drawable entities
+     *
+     * Typically you add objects that should be drawn together to the
+     * same layer. The order in which render layers are rendered is
+     * specified in the RenderLayerContainer. Objects in the same layer
+     * can also be sorted. For example, you may have a background layer
+     * which has mountains, trees and valleys. However you don't want the
+     * objects to be drawn non-deterministically. You can specify which
+     * objects are drawn over which and which objects are drawn under which
+     * by specifying the render order of the object when adding it to the
+     * layer. Objects with the lowest render order are drawn first whilst
+     * objects with the highest render order are drawn last. When objects
+     * have the same render order, the object that was added first to the
+     * layer will be rendered first.
+     *
+     * By default, all objects have the same render order, as a result, they
+     * are drawn in the order in which they were added to the layer
+     *
+     * A layer is not instantiated directly but rather using a
+     * RenderLayerContainer
+     */
+    class IME_API RenderLayer : utility::NonCopyable {
+    public:
+        using Ptr = std::shared_ptr<RenderLayer>; //!< Shared render layer pointer
+
+        /**
+         * @brief Get the name of the layer
+         * @return The name of the layer
+         */
+        const std::string& getName() const;
+
+        /**
+         * @brief Set whether or not the layer should be drawn by the scene
+         * @param render True to have the layer drawn by the scene otherwise
+         *               false
+         *
+         * By default the layer is drawable
+         */
+        void setDrawable(bool render);
+
+        /**
+         * @brief Check whether or not the layer is drawn by the scene
+         * @return True if drawn by the scene, otherwise false
+         *
+         * @see setDrawable
+         */
+        bool isDrawable() const;
+
+        /**
+         * @brief Get the index of the layer in the RenderLayerContainer
+         * @return The index of the layer in the RenderLayerContainer
+         *
+         * The index indicates the render order of the layer. The bigger the
+         * index the further away the layer is from the foreground. The layer
+         * with the an index of 0 is always the foreground layer and all other
+         * layers are rendered behind it
+         */
+        unsigned int getIndex() const;
+
+        /**
+         * @brief Add a drawable to the layer
+         * @param drawable The drawable to be added
+         * @param renderOrder The layer level render order of the drawable
+         *
+         * The render order determines which game objects get rendered
+         * first and which game objects get rendered last in the layer.
+         * Therefore the order in which drawables are added to the layer
+         * does not necessarily matter. Drawables with the smallest render
+         * order are be rendered first. Note that multiple drawables can
+         * have the same render order, in such a case the drawables will be
+         * drawn in the order in which they were added to the layer
+         *
+         * By default, all drawables have the same render order of 0
+         */
+        void addDrawable(IDrawable& drawable, int renderOrder = 0);
+
+        /**
+         * @brief Add a game object to the layer
+         * @param gameObject The game object to be added to the layer
+         *
+         * This function is for convenience sake. It is a shortcut for:
+         *
+         * @code
+         * layer.addDrawable(gameObject->getSprite(), renderOrder);
+         * @endcode
+         *
+         * @warning The layer does not keep a reference to the game object
+         * but a reference to the game objects sprite, therefore remove
+         * must be called before a game object is destroyed. Not calling
+         * remove is undefined behavior as the layer will try to render
+         * a destroyed sprite object
+         */
+        void addGameObject(std::shared_ptr<GameObject> gameObject, int renderOrder = 0);
+
+        /**
+         * @internal
+         * @brief Render all the objects in this layer
+         * @param window The render window to render objects on
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
+         */
+        void render(Window& window);
+
+    private:
+        /**
+         * @brief Constructor
+         * @param index Index of the layer
+         */
+        explicit RenderLayer(unsigned int index);
+
+        /**
+         * @brief Set the name of the render layer
+         * @param name The name of the render layer
+         */
+        void setName(const std::string& name);
+
+        /**
+         * @brief Change the index of the layer
+         * @param index The new index of the layer
+         */
+        void setIndex(unsigned int index);
+
+    private:
+        unsigned int index_; //!< The index of the layer in the render layer container
+        std::string name_;   //!< The name of the render layer
+        bool shouldRender_;  //!< A flag indicating whether the layer should be rendered or not
+
+        std::multimap<int, std::reference_wrapper<IDrawable>> drawables_;
+        friend class RenderLayerContainer; //!< Needs access to constructor
+    };
+}
+
+#endif //IME_RENDERLAYER_H

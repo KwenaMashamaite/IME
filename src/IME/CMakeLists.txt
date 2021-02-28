@@ -44,6 +44,8 @@ set(IME_SRC
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
     core/scene/ShapeContainer.cpp
+    core/scene/RenderLayer.cpp
+    core/scene/RenderLayerContainer.cpp
     core/scene/GameObjectContainer.cpp
     core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp

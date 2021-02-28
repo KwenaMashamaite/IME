@@ -44,7 +44,6 @@ namespace ime {
 
     void Tile::setPosition(float x, float y) {
         tile_.setPosition(x, y);
-        sprite_.setPosition(getPosition().x, getPosition().y);
     }
 
     void Tile::setPosition(Vector2f position) {
@@ -90,34 +89,26 @@ namespace ime {
 
     void Tile::draw(Window &renderTarget) const {
         renderTarget.draw(tile_);
-        renderTarget.draw(sprite_);
     }
 
     void Tile::setVisible(bool visible) {
         if (isVisible() == visible)
             return;
 
-        if (visible) {
-            sprite_.setVisible(true);
+        if (visible)
             tile_.setFillColour(prevFillColour_);
-        } else {
-            sprite_.setVisible(false);
+        else {
             prevFillColour_ = tile_.getFillColour();
             tile_.setFillColour(Colour::Transparent);
         }
     }
 
     bool Tile::isVisible() const {
-        return sprite_.isVisible();
+        return tile_.getFillColour() != Colour::Transparent;
     }
 
     void Tile::toggleVisibility() {
-        sprite_.toggleVisibility();
-    }
-
-    void Tile::addSprite(Sprite sprite) {
-        sprite.setPosition(sprite_.getPosition());
-        sprite_ = sprite;
+        setVisible(!isVisible());
     }
 
     bool Tile::isCollidable() const {
@@ -127,10 +118,6 @@ namespace ime {
     bool Tile::contains(float x, float y) const {
         return ((x >= getPosition().x && x <= getPosition().x + getSize().x)
                 && (y >= getPosition().y && y <= getPosition().y + getSize().y));
-    }
-
-    Sprite &Tile::getSprite() {
-        return sprite_;
     }
 
     void Tile::setIndex(Index index) {
