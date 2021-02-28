@@ -58,7 +58,7 @@ namespace ime {
         return pImpl_->isOpen();
     }
 
-    bool Window::pollEvent(Event& event) {
+    bool Window::pollEvent(Event& event, WindowPassKey) {
         return pImpl_->pollEvent(event);
     }
 

@@ -209,11 +209,6 @@ namespace ime {
          * @brief Get access to the engines render target
          * @return The engines render target
          *
-         * @warning Don't call pollEvent(), on the instance as it will empty
-         * the event queue and prevent the engine from properly dispatching
-         * events. Also avoid drawing directly on the window because it will
-         * be cleared by the engine before rendering the current scene.
-         *
          * @warning This function must only be called after the engine has
          *          been initialized
          *

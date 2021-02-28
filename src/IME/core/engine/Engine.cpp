@@ -131,7 +131,7 @@ namespace ime {
 
     void Engine::processEvents() {
         Event event;
-        while (window_.pollEvent(event)) {
+        while (window_.pollEvent(event, {})) {
             if (event.type == Event::Closed && onWindowClose_)
                 onWindowClose_();
 

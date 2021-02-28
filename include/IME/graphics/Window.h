@@ -38,6 +38,11 @@ namespace ime {
         class WindowImpl;
     }
 
+    class WindowPassKey : utility::NonCopyable {
+        WindowPassKey(){};
+        friend class Engine;
+    };
+
     /**
      * @brief Window that can serve as a target for 2D drawing
      */
@@ -136,12 +141,15 @@ namespace ime {
          */
         bool isOpen() const;
 
-        /**
+        /**@internal
          * @brief Check if the event queue is empty or not.
          * @param event Event queue to be checked
          * @return true if event queue is not empty, false if it is empty
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
          */
-        bool pollEvent(Event &event);
+        bool pollEvent(Event &event, WindowPassKey);
 
         /**
          * @brief Close the window
