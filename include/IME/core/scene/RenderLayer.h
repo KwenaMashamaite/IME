@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/utility/NonCopyable.h"
+#include "IME/common/Object.h"
 #include <memory>
 #include <map>
 
@@ -57,15 +58,15 @@ namespace ime {
      * A layer is not instantiated directly but rather using a
      * RenderLayerContainer
      */
-    class IME_API RenderLayer : utility::NonCopyable {
+    class IME_API RenderLayer : public Object, utility::NonCopyable {
     public:
         using Ptr = std::shared_ptr<RenderLayer>; //!< Shared render layer pointer
 
         /**
-         * @brief Get the name of the layer
-         * @return The name of the layer
+         * @brief Get the name of this class
+         * @return The name of this class
          */
-        const std::string& getName() const;
+        std::string getClassName() const override;
 
         /**
          * @brief Set whether or not the layer should be drawn by the scene
@@ -148,20 +149,15 @@ namespace ime {
         explicit RenderLayer(unsigned int index);
 
         /**
-         * @brief Set the name of the render layer
-         * @param name The name of the render layer
-         */
-        void setName(const std::string& name);
-
-        /**
          * @brief Change the index of the layer
          * @param index The new index of the layer
          */
         void setIndex(unsigned int index);
 
+        using Object::setName;
+
     private:
         unsigned int index_; //!< The index of the layer in the render layer container
-        std::string name_;   //!< The name of the render layer
         bool shouldRender_;  //!< A flag indicating whether the layer should be rendered or not
 
         std::multimap<int, std::reference_wrapper<IDrawable>> drawables_;

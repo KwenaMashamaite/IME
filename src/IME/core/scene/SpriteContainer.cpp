@@ -22,26 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_IDRAWABLE_H
-#define IME_IDRAWABLE_H
-
-#include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/scene/SpriteContainer.h"
 
 namespace ime {
-    class Window; //!< Window class forward declaration
 
-    /**
-     * @brief Interface for drawable objects
-     */
-    class IME_API IDrawable : public Object {
-    public:
-        /**
-         * @brief Draw object on a render target
-         * @param renderTarget Target to draw object on
-         */
-        virtual void draw(Window &renderTarget) const = 0;
-    };
 }
-
-#endif // IME_IDRAWABLE_H

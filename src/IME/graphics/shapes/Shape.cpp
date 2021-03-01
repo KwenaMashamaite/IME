@@ -32,6 +32,10 @@ namespace ime {
         postStepId_{-1}
     {}
 
+    std::string Shape::getClassType() const {
+        return "Shape";
+    }
+
     Shape::Type Shape::getShapeType() const {
         return type_;
     }
@@ -74,7 +78,7 @@ namespace ime {
         return body_ != nullptr;
     }
 
-    Shape::~Shape() {
+    Shape::~Shape() noexcept {
         if (postStepId_ != -1 && body_)
             body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
     }

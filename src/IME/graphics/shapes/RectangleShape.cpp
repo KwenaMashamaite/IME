@@ -67,6 +67,10 @@ namespace ime {
         return Ptr(new RectangleShape(size));
     }
 
+    std::string RectangleShape::getClassName() const {
+        return "RectangleShape";
+    }
+
     void RectangleShape::setSize(const Vector2f &size) {
         impl_->rectangle_.setSize({size.x, size.y});
     }

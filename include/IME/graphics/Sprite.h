@@ -28,6 +28,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/common/ITransformable.h"
+#include "IME/common/Object.h"
 #include "IME/core/time/Time.h"
 #include "IME/graphics/IDrawable.h"
 #include "IME/graphics/Colour.h"
@@ -104,6 +105,12 @@ namespace ime {
          * @brief Move assignment operator
          */
         Sprite& operator=(Sprite&&) noexcept;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Set the texture of the object

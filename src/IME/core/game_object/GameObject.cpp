@@ -27,13 +27,10 @@
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 
-unsigned int ime::GameObject::prevEntityId_{0};
-
 namespace ime {
     GameObject::GameObject(Scene& scene, Type type) :
         scene_{scene},
         type_{type},
-        id_{prevEntityId_++},
         state_{-1},
         isVulnerable_{true},
         isActive_{true},
@@ -52,12 +49,11 @@ namespace ime {
     }
 
     GameObject::GameObject(const GameObject &other) :
+        Object(),
         std::enable_shared_from_this<GameObject>(),
         scene_{other.scene_},
         type_{other.type_},
-        id_{prevEntityId_++},
         state_{other.state_},
-        name_{other.name_},
         isVulnerable_{other.isVulnerable_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
@@ -70,11 +66,10 @@ namespace ime {
     }
 
     GameObject &GameObject::operator=(const GameObject &other) {
-        if (this != &other) { // Copy swap not applicable - class is polymorphic
+        if (this != &other) {
             scene_ = other.scene_;
             type_ = other.type_;
             state_ = other.state_;
-            name_ = other.name_;
             isVulnerable_ = other.isVulnerable_;
             isActive_ = other.isActive_;
             isCollidable_ = other.isCollidable_;
@@ -97,18 +92,6 @@ namespace ime {
 
     int GameObject::getState() const {
         return state_;
-    }
-
-    void GameObject::setName(const std::string &name) {
-        if (name_ == name)
-            return;
-
-        name_ = name;
-        dispatchEvent("nameChange", name_);
-    }
-
-    const std::string &GameObject::getName() const {
-        return name_;
     }
 
     void GameObject::setDirection(Direction dir) {
@@ -169,6 +152,14 @@ namespace ime {
         return isCollidable_;
     }
 
+    std::string GameObject::getClassName() const {
+        return "GameObject";
+    }
+
+    std::string GameObject::getClassType() const {
+        return "GameObject";
+    }
+
     void GameObject::setType(GameObject::Type type) {
         type_ = type;
     }
@@ -179,10 +170,6 @@ namespace ime {
 
     bool GameObject::isVulnerable() const {
         return isVulnerable_;
-    }
-
-    unsigned int GameObject::getObjectId() const {
-        return id_;
     }
 
     void GameObject::attachRigidBody(Body::Ptr body) {
@@ -254,14 +241,6 @@ namespace ime {
             onContactBegin_(shared_from_this(), other);
         else if (event == "contactEnd" && onContactEnd_)
             onContactEnd_(shared_from_this(), other);
-    }
-
-    bool GameObject::operator==(const GameObject &rhs) {
-        return id_ == rhs.id_;
-    }
-
-    bool GameObject::operator!=(const GameObject &rhs) {
-        return !(*this == rhs);
     }
 
     void GameObject::initTransformEvents() {

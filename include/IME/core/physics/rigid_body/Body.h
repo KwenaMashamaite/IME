@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
+#include "IME/common/Object.h"
 #include "IME/core/physics/rigid_body/BodyDefinition.h"
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include <memory>
@@ -71,7 +72,7 @@ namespace ime {
      * A body is not constructed directly, use the World::createBody function
      * to construct a rigid body
      */
-    class IME_API Body : public std::enable_shared_from_this<Body> {
+    class IME_API Body : public Object, public std::enable_shared_from_this<Body> {
     public:
         using Ptr = std::shared_ptr<Body>; //!< Shared Body pointer
         using ConstPtr = std::shared_ptr<const Body>; //!< Const shared world pointer
@@ -79,6 +80,12 @@ namespace ime {
 
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Attach a collider to the body
@@ -481,12 +488,6 @@ namespace ime {
         PropertyContainer& getUserData();
 
         /**
-         * @brief Get the unique identifier of the body
-         * @return The unique identifier of the body
-         */
-        unsigned int getId() const;
-
-        /**
          * @brief Execute a function for each collider attached to the body
          * @param callback The function to be executed
          *
@@ -558,17 +559,14 @@ namespace ime {
         Body(const BodyDefinition& definition, WorldPtr world);
 
     private:
-        std::unique_ptr<b2Body, Callback<b2Body*>> body_; //!< Internal rigid body
-        std::shared_ptr<GameObject> gameObject_;    //!< The game object this body is attached to
-        unsigned int id_;                           //!< The id of this body
-        WorldPtr world_;                            //!< The world the body is in
-        PropertyContainer userData_;                //!< Application specific body data
-        friend class World;                         //!< Needs access to constructor
-
-        std::unordered_map<int, Collider::Ptr> colliders_;  //!< Colliders attached to this body
-
-        Callback<Body::Ptr, Body::Ptr> onContactBegin_; //!< Called when this body starts colliding with another body or vice versa
-        Callback<Body::Ptr, Body::Ptr> onContactEnd_;   //!< Called when this body stops colliding with another body or vice versa
+        std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body
+        std::shared_ptr<GameObject> gameObject_;           //!< The game object this body is attached to
+        WorldPtr world_;                                   //!< The world the body is in
+        PropertyContainer userData_;                       //!< Application specific body data
+        friend class World;                                //!< Needs access to constructor
+        std::unordered_map<int, Collider::Ptr> colliders_; //!< Colliders attached to this body
+        Callback<Body::Ptr, Body::Ptr> onContactBegin_;    //!< Called when this body starts colliding with another body or vice versa
+        Callback<Body::Ptr, Body::Ptr> onContactEnd_;      //!< Called when this body stops colliding with another body or vice versa
     };
 }
 

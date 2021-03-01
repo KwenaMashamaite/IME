@@ -72,6 +72,10 @@ namespace ime {
         });
     }
 
+    std::string TargetGridMover::getClassName() const {
+        return "TargetGridMover";
+    }
+
     void TargetGridMover::setDestination(Index index) {
         if (index != targetTileIndex_ && getGrid().isIndexValid(index)) {
             targetTileIndex_ = index;

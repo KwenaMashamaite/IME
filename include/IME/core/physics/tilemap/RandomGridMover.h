@@ -44,6 +44,12 @@ namespace ime {
         explicit RandomGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Start moving the target in the grid
          *
          * This function will move the target if it hasn't been moved for the

@@ -47,6 +47,12 @@ namespace ime {
         explicit TargetGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the path finder
          * @param pathFinder New path finder
          *

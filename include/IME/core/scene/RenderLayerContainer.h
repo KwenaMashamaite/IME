@@ -56,7 +56,7 @@ namespace ime {
      * instantiate a Scene object. Each scene instance has its own render
      * layers and a single render layer container
      */
-    class IME_API RenderLayerContainer : utility::NonCopyable {
+    class IME_API RenderLayerContainer : public Object, utility::NonCopyable {
     public:
         using Callback = std::function<void(const RenderLayer::Ptr&)>; //!< Callback
 
@@ -76,6 +76,12 @@ namespace ime {
          * @see removeByName, removeByIndex and removeAll
          */
         RenderLayer::Ptr create(const std::string& name);
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Get the render layer at the front

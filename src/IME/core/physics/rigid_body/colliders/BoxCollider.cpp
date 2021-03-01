@@ -34,8 +34,8 @@ namespace ime {
         setSize(size.x, size.y);
     }
 
-    BoxCollider::BoxCollider(BoxCollider &&) = default;
-    BoxCollider &BoxCollider::operator=(BoxCollider &&) = default;
+    BoxCollider::BoxCollider(BoxCollider&&) noexcept = default;
+    BoxCollider &BoxCollider::operator=(BoxCollider&&) noexcept = default;
 
     BoxCollider::Ptr BoxCollider::create(Vector2f size) {
         return BoxCollider::Ptr(new BoxCollider(size));
@@ -50,6 +50,10 @@ namespace ime {
         collider->size_ = this->size_;
         collider->box_.reset(new b2PolygonShape(*(this->box_.get())));
         return collider;
+    }
+
+    std::string BoxCollider::getClassName() const {
+        return "BoxCollider";
     }
 
     void BoxCollider::setSize(float width, float height) {

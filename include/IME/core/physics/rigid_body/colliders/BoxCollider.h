@@ -47,12 +47,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        BoxCollider(BoxCollider&&);
+        BoxCollider(BoxCollider&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        BoxCollider& operator=(BoxCollider&&);
+        BoxCollider& operator=(BoxCollider&&) noexcept;
 
         /**
          * @brief Create a box collider object
@@ -77,6 +77,12 @@ namespace ime {
          */
         Collider::Ptr copy() override;
         const Collider::Ptr copy() const override;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Set the size of the box

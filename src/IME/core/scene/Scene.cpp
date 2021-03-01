@@ -55,7 +55,6 @@ namespace ime {
         if (this != &other) {
             world_ = std::move(other.world_);
             camera_ = std::move(other.camera_);
-            name_ = std::move(other.name_);
             inputManager_ = std::move(other.inputManager_);
             audioManager_ = std::move(other.audioManager_);
             eventEmitter_ = std::move(other.eventEmitter_);
@@ -77,12 +76,8 @@ namespace ime {
         return internalEmitter_.removeEventListener(event, id);
     }
 
-    void Scene::setName(const std::string &name) {
-        name_ = name;
-    }
-
-    const std::string &Scene::getName() const {
-        return name_;
+    std::string Scene::getClassName() const {
+        return "Scene";
     }
 
     void Scene::setVisibleOnPause(bool show) {
@@ -162,6 +157,10 @@ namespace ime {
 
     GameObjectContainer &Scene::gameObjects() {
         return entityContainer_;
+    }
+
+    SpriteContainer &Scene::sprites() {
+        return spriteContainer_;
     }
 
     void Scene::createWorld(Vector2f gravity) {

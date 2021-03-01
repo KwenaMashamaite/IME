@@ -30,6 +30,7 @@
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
+#include "IME/common/Object.h"
 
 namespace ime {
     /**
@@ -43,7 +44,7 @@ namespace ime {
      * Note that the grid mover only supports orthogonal movement (left, right,
      * up and down)
      */
-    class IME_API GridMover {
+    class IME_API GridMover : public Object {
     public:
         using Ptr = std::shared_ptr<GridMover>; //!< Shared grid mover pointer
 
@@ -70,6 +71,17 @@ namespace ime {
          * @see setTarget
          */
         explicit GridMover(TileMap& tilemap, GameObject::Ptr gameObject = nullptr);
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         *
+         * Note that this function is only implemented by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see Object::getClassType and Object::getClassName
+         */
+        std::string getClassType() const override;
 
         /**
          * @brief Change the direction of the target entity

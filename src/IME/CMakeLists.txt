@@ -6,6 +6,7 @@ set(IME_SRC
     common/Property.cpp
     common/PropertyContainer.cpp
     common/Transform.cpp
+    common/Object.cpp
     core/animation/Animation.cpp
     core/animation/Animator.cpp
     core/audio/Audio.cpp
@@ -32,6 +33,7 @@ set(IME_SRC
     core/physics/rigid_body/colliders/PolygonCollider.cpp
     core/physics/rigid_body/colliders/BoxCollider.cpp
     core/physics/rigid_body/colliders/EdgeCollider.cpp
+    core/physics/rigid_body/joints/Joint.cpp
     core/physics/rigid_body/joints/JointDefinition.cpp
     core/physics/rigid_body/joints/DistanceJoint.cpp
     core/physics/rigid_body/AABB.cpp
@@ -112,7 +114,8 @@ set(IME_SRC
     utility/DiskFileLogger.cpp
     utility/DiskFileReader.cpp
     utility/Helpers.cpp
-    utility/Utils.cpp)
+    utility/Utils.cpp
+    core/scene/SpriteContainer.cpp)
 
 # Optimize single build
 if(IME_OPTIMIZE_SINGLE_BUILD)

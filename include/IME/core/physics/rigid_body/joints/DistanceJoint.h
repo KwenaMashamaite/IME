@@ -84,6 +84,12 @@ namespace ime {
         using BodyPtr = std::shared_ptr<Body>;
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the rest length
          * @param length The rest length to set
          * @return The clamped length

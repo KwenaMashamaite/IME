@@ -30,16 +30,16 @@
 #include <box2d/b2_settings.h>
 
 namespace ime {
-    namespace {
-        auto static idCounter{0u}; // Collider instance id counter
-    } // anonymous namespace
-
     Collider::Collider(Collider::Type type) :
         type_{type}
     {}
 
-    Collider::Collider(Collider &&) = default;
-    Collider &Collider::operator=(Collider &&) = default;
+    Collider::Collider(Collider &&) noexcept = default;
+    Collider &Collider::operator=(Collider &&) noexcept = default;
+
+    std::string Collider::getClassType() const {
+        return "Collider";
+    }
 
     Collider::Type Collider::getType() const {
         return type_;
@@ -47,10 +47,9 @@ namespace ime {
 
     void Collider::setBody(Body::Ptr body) {
         IME_ASSERT(body, "A body attached to a collider cannot be a nullptr");
-        id_ = idCounter++;
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
-        b2FixtureDefinition->userData.pointer = id_;
+        b2FixtureDefinition->userData.pointer = getObjectId();
 
         fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
         body_ = body;
@@ -141,10 +140,6 @@ namespace ime {
 
     PropertyContainer &Collider::getUserData() {
         return userData_;
-    }
-
-    unsigned int Collider::getId() const {
-        return id_;
     }
 
     void Collider::updateCollisionFilter() {

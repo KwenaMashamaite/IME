@@ -39,6 +39,10 @@ namespace ime {
                              utility::pixelsToMetres(upperBounds.y)};
     }
 
+    std::string AABB::getClassName() const {
+        return "AABB";
+    }
+
     std::pair<Vector2f, Vector2f> AABB::getBounds() const {
         return {getLowerBounds(), getUpperBounds()};
     }

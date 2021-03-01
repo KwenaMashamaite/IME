@@ -36,6 +36,7 @@
 #include "IME/core/scene/ShapeContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/scene/RenderLayerContainer.h"
+#include "IME/core/scene/SpriteContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
@@ -75,7 +76,7 @@ namespace ime {
      * scene, the process repeats; the "pause" scene gets paused and the the new
      * scene becomes active)
      */
-    class IME_API Scene : utility::NonCopyable {
+    class IME_API Scene : public Object, utility::NonCopyable {
     public:
         using Ptr = std::shared_ptr<Scene>; //!< Shared Scene pointer
 
@@ -232,7 +233,7 @@ namespace ime {
          * @brief Get the name of the scene
          * @return The name of the scene
          */
-        const std::string& getName() const;
+        std::string getClassName() const override;
 
         /**
          * @brief Check if the scene is visible when paused or not
@@ -300,28 +301,6 @@ namespace ime {
          * @see onPause
          */
         void setVisibleOnPause(bool show);
-
-        /**
-         * @brief Set the name of the scene
-         * @param name The name of the scene
-         *
-         * The scene name is optional. By default it is empty
-         *
-         * This function may be useful if you want to distinguish scenes
-         * by name in your own code:
-         *
-         * @code
-         * using Keyboard = ime::input::Keyboard;
-         *
-         * input().onKeyUp([](Keyboard::Key key) {
-         *     if (key == Keyboard::Key::Escape)
-         *          engine().pushScene(scenes.get("quit");
-         *     else if (key == Keyboard::Key::P)
-         *          engine().pushScene(scenes.get("pause");
-         * });
-         * @endcode
-         */
-        void setName(const std::string& name);
 
         /**
          * @brief Set the scene timescale
@@ -541,6 +520,15 @@ namespace ime {
         GameObjectContainer& gameObjects();
 
         /**
+         * @brief Get the scene sprite container
+         * @return The scene sprite container
+         *
+         * This class stores the sprites in the scene. The sprite's animator
+         * will automatically be updated
+         */
+        SpriteContainer& sprites();
+
+        /**
          * @brief Create a physics simulation
          * @param gravity Acceleration of bodies in the simulation due to gravity
          *
@@ -574,7 +562,6 @@ namespace ime {
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
         PropertyContainer& cache_;            //!< The global cache
         std::shared_ptr<World> world_;        //!< Physics simulation
-        std::string name_;                    //!< The name of the scene (optional)
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
         EventEmitter eventEmitter_;           //!< scene level event dispatcher
@@ -583,6 +570,7 @@ namespace ime {
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
         ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
         GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
+        SpriteContainer spriteContainer_;     //!< Stores sprites that belong to the scene
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps

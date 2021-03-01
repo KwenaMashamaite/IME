@@ -32,8 +32,8 @@ namespace ime {
         polygon_{std::make_unique<b2PolygonShape>()}
     {}
 
-    PolygonCollider::PolygonCollider(PolygonCollider&&) = default;
-    PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) = default;
+    PolygonCollider::PolygonCollider(PolygonCollider&&) noexcept = default;
+    PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) noexcept = default;
 
     PolygonCollider::Ptr PolygonCollider::create() {
         return PolygonCollider::Ptr(new PolygonCollider);
@@ -47,6 +47,10 @@ namespace ime {
         auto collider = create();
         collider->polygon_.reset(new b2PolygonShape(*(this->polygon_.get())));
         return collider;
+    }
+
+    std::string PolygonCollider::getClassName() const {
+        return "PolygonCollider";
     }
 
     void PolygonCollider::set(const std::vector<Vector2f>& vertices) {

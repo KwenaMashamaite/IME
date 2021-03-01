@@ -140,6 +140,10 @@ namespace ime {
         pimpl_{std::make_unique<CameraImpl>(window)}
     {}
 
+    std::string Camera::getClassName() const {
+        return "Camera";
+    }
+
     void Camera::setCenter(float x, float y) {
         pimpl_->setCenter(x, y);
     }

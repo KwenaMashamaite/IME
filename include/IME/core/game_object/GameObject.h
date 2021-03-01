@@ -29,11 +29,10 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Direction.h"
 #include "IME/common/Transform.h"
+#include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
 #include <stack>
-#include <string>
-#include <memory>
 
 namespace ime {
     class Body;  //!< Rigid body class forward declaration
@@ -42,7 +41,7 @@ namespace ime {
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
      */
-    class IME_API GameObject : public std::enable_shared_from_this<GameObject> {
+    class IME_API GameObject : public Object, public std::enable_shared_from_this<GameObject> {
     public:
         using Ptr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
         using BodyPtr = std::shared_ptr<Body>;   //!< Shared Body pointer
@@ -79,36 +78,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        GameObject(GameObject&&) = default;
+        GameObject(GameObject&&) noexcept = default;
 
         /**
          * @brief Move assignment operator
          */
-        GameObject& operator=(GameObject&&) = default;
-
-        /**
-         * @brief Check if two game objects are the same object or not
-         * @param rhs Object to compare against this object
-         * @return True if the two entities are the same object
-         *
-         * Two game objects are the same object if they have the same
-         * object id
-         *
-         * @see getObjectId
-         */
-        bool operator==(const GameObject& rhs);
-
-        /**
-         * @brief Check if this game object is not the same object as another object
-         * @param rhs Object to compare against this object
-         * @return True if the two objects are not the same object
-         *
-         * Two game objects are not the same object if they don't have the
-         * same object id
-         *
-         * @see getObjectId
-         */
-        bool operator!=(const GameObject& rhs);
+        GameObject& operator=(GameObject&&) noexcept = default;
 
         /**
          * @brief Set the type of the game object
@@ -142,20 +117,6 @@ namespace ime {
          * @return The current state of the game object
          */
         int getState() const;
-
-        /**
-         * @brief Set the name of the game object (optional)
-         * @param name The name to set
-         *
-         * By default, the name is an empty string
-         */
-        void setName(const std::string& name);
-
-        /**
-         * @brief Get the name of the game object
-         * @return The name of the game object
-         */
-        const std::string& getName() const;
 
         /**
          * @brief Set the direction of the game object
@@ -230,24 +191,28 @@ namespace ime {
         bool isCollidable() const;
 
         /**
-         * @brief Get concrete class type
-         * @return Name of the concrete class the game object is instantiated
+         * @brief Get the name of the class the game object is instantiated from
+         * @return The name of the concrete class the game object is instantiated
          *         from
          *
-         * By default, this function returns this class and must be overridden
-         * if you extend this class class
+         * Note that this function must be overridden further if this class
+         * is extended, otherwise it will return the name of this class
+         * instead of your class name
+         *
+         * @see getClassType
          */
-        virtual std::string getClassType() {
-            return "GameObject";
-        }
+        std::string getClassName() const override;
 
         /**
-         * @brief Get the game object's unique identifier
-         * @return The game object's unique identifier
+         * @brief Get the name of this class
+         * @return The name of this class
          *
-         * Each game object instance has it's own unique identification number
+         * Note that this function is only implemented by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see getClassName
          */
-        unsigned int getObjectId() const;
+        std::string getClassType() const override;
 
         /**
          * @brief Attach a physics Body to the game object
@@ -446,11 +411,8 @@ namespace ime {
 
     private:
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
-        static unsigned int prevEntityId_;    //!< Object id counter
         Type type_;                           //!< The type of the game object
-        unsigned int id_;                     //!< Unique identifier
         int state_;                           //!< The current state of the game object
-        std::string name_;                    //!< The name of the game object
         bool isVulnerable_;                   //!< Vulnerability state
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state

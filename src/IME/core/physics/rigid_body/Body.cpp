@@ -30,13 +30,7 @@
 #include <box2d/b2_world.h>
 
 namespace ime {
-    namespace {
-        static auto idCounter{0u};
-    }
-
-    Body::Body(const BodyDefinition &definition, World::Ptr world) :
-        id_{idCounter++}
-    {
+    Body::Body(const BodyDefinition &definition, World::Ptr world) {
         auto b2Definition = std::make_unique<b2BodyDef>();
         b2Definition->type = static_cast<b2BodyType>(definition.bodyType);
         b2Definition->position = {utility::pixelsToMetres(definition.position.x), utility::pixelsToMetres(definition.position.y)};
@@ -51,7 +45,7 @@ namespace ime {
         b2Definition->bullet = definition.isFastBody;
         b2Definition->enabled = definition.isEnabled;
         b2Definition->gravityScale = definition.gravityScale;
-        b2Definition->userData.pointer = id_;
+        b2Definition->userData.pointer = getObjectId();
 
         world_ = world;
         userData_ = definition.userData;
@@ -68,12 +62,16 @@ namespace ime {
             world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
+    std::string Body::getClassName() const {
+        return "Body";
+    }
+
     void Body::attachCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body");
         IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider");
         if (!world_->isLocked()) {
             collider->setBody(shared_from_this());
-            colliders_.insert({collider->getId(), collider});
+            colliders_.insert({collider->getObjectId(), collider});
         } else
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
     }
@@ -97,9 +95,9 @@ namespace ime {
     void Body::removeCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "RemoveCollider() called with a nullptr");
         if (!world_->isLocked()) {
-            if (utility::findIn(colliders_, collider->getId())) {
-                body_->DestroyFixture(colliders_[collider->getId()]->fixture_.get());
-                colliders_.erase(collider->getId());
+            if (utility::findIn(colliders_, collider->getObjectId())) {
+                body_->DestroyFixture(colliders_[collider->getObjectId()]->fixture_.get());
+                colliders_.erase(collider->getObjectId());
             }
         } else
             IME_PRINT_WARNING("Operation ignored: removeCollider() called inside a world callback");
@@ -330,10 +328,6 @@ namespace ime {
 
     PropertyContainer &Body::getUserData() {
         return userData_;
-    }
-
-    unsigned int Body::getId() const {
-        return id_;
     }
 
     void Body::forEachCollider(std::function<void(Collider::Ptr)> callback) {

@@ -55,6 +55,12 @@ namespace ime {
         explicit KeyboardControlledGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the key event that triggers the targets movement
          * @param trigger The targets movement trigger
          *

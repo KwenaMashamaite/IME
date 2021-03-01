@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
+#include "IME/common/Object.h"
 
 class b2AABB;
 
@@ -34,7 +35,7 @@ namespace ime {
     /**
      * @brief An Axis Aligned Bounding Box (AABB)
      */
-    class IME_API AABB {
+    class IME_API AABB : public Object {
     public:
         /**
          * @brief Default constructor
@@ -47,6 +48,12 @@ namespace ime {
          * @param upperBounds The upper bounds
          */
         void create(Vector2f lowerBounds, Vector2f upperBounds);
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Get the bounds of the AABB

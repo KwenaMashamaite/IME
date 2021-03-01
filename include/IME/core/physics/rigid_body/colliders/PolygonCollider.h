@@ -48,12 +48,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        PolygonCollider(PolygonCollider&&);
+        PolygonCollider(PolygonCollider&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        PolygonCollider& operator=(PolygonCollider&&);
+        PolygonCollider& operator=(PolygonCollider&&) noexcept;
 
         /**
          * @brief Create a new polygon collider
@@ -68,6 +68,12 @@ namespace ime {
          */
         Collider::Ptr copy() override;
         const Collider::Ptr copy() const override;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Create a convex hull from the an array of local points

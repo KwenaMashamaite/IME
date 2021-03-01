@@ -22,26 +22,17 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_IDRAWABLE_H
-#define IME_IDRAWABLE_H
+#ifndef IME_SPRITECONTAINER_H
+#define IME_SPRITECONTAINER_H
 
-#include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/scene/Container.h"
+#include "IME/graphics/Sprite.h"
 
 namespace ime {
-    class Window; //!< Window class forward declaration
-
-    /**
-     * @brief Interface for drawable objects
-     */
-    class IME_API IDrawable : public Object {
+    class IME_API SpriteContainer : public Container<Sprite> {
     public:
-        /**
-         * @brief Draw object on a render target
-         * @param renderTarget Target to draw object on
-         */
-        virtual void draw(Window &renderTarget) const = 0;
+
     };
 }
 
-#endif // IME_IDRAWABLE_H
+#endif //IME_SPRITECONTAINER_H

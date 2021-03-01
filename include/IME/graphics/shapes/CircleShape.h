@@ -71,6 +71,12 @@ namespace ime {
          * @return The created circle shape
          */
         static CircleShape::Ptr create(float radius = 0.0f);
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
         
         /**
          * @brief Set the radius of the circle

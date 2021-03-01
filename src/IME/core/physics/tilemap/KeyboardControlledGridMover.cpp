@@ -42,6 +42,10 @@ namespace ime {
         setKeys(Key::A, Key::D, Key::W, Key::S);
     }
 
+    std::string KeyboardControlledGridMover::getClassName() const {
+        return "KeyboardControlledGridMover";
+    }
+
     void KeyboardControlledGridMover::setMovementTrigger(MovementTrigger trigger) {
         if (trigger_ != trigger) {
             trigger_ = trigger;

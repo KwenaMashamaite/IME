@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
+#include "IME/common/Object.h"
 #include "JointDefinition.h"
 
 class b2Joint;
@@ -41,18 +42,21 @@ namespace ime {
      * Note that joints are not constructed directly, use the createJoint
      * method on a World instance to create a joint
      */
-    class IME_API Joint {
+    class IME_API Joint : public Object {
     public:
         using Ptr = std::shared_ptr<Joint>; //!< Shared joint pointer
         using BodyPtr = std::shared_ptr<Body>; //!< Shared body pointer
 
         /**
-         * @brief Constructor
+         * @brief Get the name of this class
+         * @return The name of this class
+         *
+         * Note that this function is only implemented by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see Object::getClassType and Object::getClassName
          */
-        Joint() {
-            auto static counter = 0u;
-            id_ = counter++;
-        }
+        std::string getClassType() const override;
 
         /**
          * @brief Get the type of the joint
@@ -125,20 +129,6 @@ namespace ime {
          */
         virtual b2Joint* getInternalJoint() = 0;
         virtual const b2Joint* getInternalJoint() const = 0;
-
-        /**
-         * @brief Get the unique identifier for this entity
-         * @return The unique identifier
-         */
-        unsigned int getId() const {return id_;}
-
-        /**
-         * @brief Destructor
-         */
-        virtual ~Joint() = default;
-
-    private:
-        unsigned int id_; //!< unique identifier for this joint
     };
 }
 

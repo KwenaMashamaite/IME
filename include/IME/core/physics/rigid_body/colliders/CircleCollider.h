@@ -48,12 +48,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        CircleCollider(CircleCollider&&);
+        CircleCollider(CircleCollider&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        CircleCollider& operator=(CircleCollider&&);
+        CircleCollider& operator=(CircleCollider&&) noexcept;
 
         /**
          * @brief Create a new circle collider
@@ -71,6 +71,12 @@ namespace ime {
          */
         Collider::Ptr copy() override;
         const Collider::Ptr copy() const override;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Set the position of the circle

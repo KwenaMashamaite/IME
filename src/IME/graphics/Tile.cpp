@@ -37,6 +37,10 @@ namespace ime {
         setPosition(position);
     }
 
+    std::string Tile::getClassName() const {
+        return "Tile";
+    }
+
     Vector2u Tile::getSize() const {
         return {static_cast<unsigned int>(tile_.getGlobalBounds().width),
                 static_cast<unsigned int>(tile_.getGlobalBounds().height)};

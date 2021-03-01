@@ -32,8 +32,8 @@ namespace ime {
         edgeShape_{std::make_unique<b2EdgeShape>()}
     {}
 
-    EdgeCollider::EdgeCollider(EdgeCollider &&) = default;
-    EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) = default;
+    EdgeCollider::EdgeCollider(EdgeCollider &&) noexcept = default;
+    EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) noexcept = default;
 
     EdgeCollider::Ptr EdgeCollider::create() {
         return EdgeCollider::Ptr(new EdgeCollider());
@@ -48,6 +48,10 @@ namespace ime {
 
         collider->edgeShape_.reset(new b2EdgeShape(*(this->edgeShape_.get())));
         return collider;
+    }
+
+    std::string EdgeCollider::getClassName() const {
+        return "EdgeCollider";
     }
 
     void EdgeCollider::setOneSided(Vector2f v0, Vector2f v1, Vector2f v2, Vector2f v3)

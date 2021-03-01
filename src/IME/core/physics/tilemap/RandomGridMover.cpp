@@ -97,6 +97,10 @@ namespace ime {
         enableAdvancedMovement(false);
     }
 
+    std::string RandomGridMover::getClassName() const {
+        return "RandomGridMover";
+    }
+
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;

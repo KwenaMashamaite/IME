@@ -29,6 +29,7 @@
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
+#include "IME/common/Object.h"
 #include <memory>
 
 namespace ime {
@@ -50,7 +51,7 @@ namespace ime {
      * instantiate a scene and it is accessible within the scene. Each
      * scene instance has its own camera
      */
-    class IME_API Camera : utility::NonCopyable {
+    class IME_API Camera : public Object, utility::NonCopyable {
     public:
         /**
          * @brief Move constructor
@@ -61,6 +62,12 @@ namespace ime {
          * @brief Move assignment operator
          */
         Camera& operator=(Camera&&) = delete;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Set the centre of the camera

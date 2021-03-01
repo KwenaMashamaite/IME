@@ -67,6 +67,10 @@ namespace ime {
         return ConvexShape::Ptr(new ConvexShape(pointCount));
     }
 
+    std::string ConvexShape::getClassName() const {
+        return "ConvexShape";
+    }
+
     void ConvexShape::setPointCount(std::size_t count) {
         impl_->polygon_.setPointCount(count);
     }

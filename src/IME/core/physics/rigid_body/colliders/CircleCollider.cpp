@@ -34,8 +34,8 @@ namespace ime {
         setRadius(radius);
     }
 
-    CircleCollider::CircleCollider(CircleCollider &&) = default;
-    CircleCollider &CircleCollider::operator=(CircleCollider &&) = default;
+    CircleCollider::CircleCollider(CircleCollider&&) noexcept = default;
+    CircleCollider &CircleCollider::operator=(CircleCollider&&) noexcept = default;
 
     CircleCollider::Ptr CircleCollider::create(float radius) {
         return CircleCollider::Ptr(new CircleCollider(radius));
@@ -49,6 +49,10 @@ namespace ime {
         auto collider = create();
         collider->circle_.reset(new b2CircleShape(*(this->circle_.get())));
         return collider;
+    }
+
+    std::string CircleCollider::getClassName() const {
+        return "CircleCollider";
     }
 
     void CircleCollider::setPosition(Vector2f position) {

@@ -41,6 +41,10 @@ namespace ime {
         setTarget(target);
     }
 
+    std::string GridMover::getClassType() const {
+        return "GridMover";
+    }
+
     void GridMover::setTarget(GameObject::Ptr target) {
         if (target_ == target)
             return;

@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/utility/NonCopyable.h"
+#include "IME/common/Object.h"
 #include <memory>
 
 class b2Shape;
@@ -118,7 +119,7 @@ namespace ime {
      *
      * Rigid bodies enable physics while colliders enable collisions
      */
-    class IME_API Collider : utility::NonCopyable {
+    class IME_API Collider : public Object, utility::NonCopyable {
     public:
         using Ptr = std::shared_ptr<Collider>; //!< Shared collider pointer
         using BodyPtr = std::shared_ptr<Body>; //!< Shared Body pointer
@@ -146,12 +147,23 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        Collider(Collider&&);
+        Collider(Collider&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        Collider& operator=(Collider&&);
+        Collider& operator=(Collider&&) noexcept;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         *
+         * Note that this function is only implemented by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see Object::getClassType and Object::getClassName
+         */
+        std::string getClassType() const override;
 
         /**
          * @brief Create a copy of the collider
@@ -350,12 +362,6 @@ namespace ime {
         PropertyContainer& getUserData();
 
         /**
-         * @brief Get the unique identifier of the collider
-         * @return The id of the collider
-         */
-        unsigned int getId() const;
-
-        /**
          * @brief Destructor
          */
         virtual ~Collider() = 0;
@@ -371,7 +377,6 @@ namespace ime {
          */
         virtual b2Shape& getInternalShape() = 0;
         virtual const b2Shape& getInternalShape() const = 0;
-
 
     private:
         /**
@@ -389,7 +394,6 @@ namespace ime {
     private:
         Type type_;                          //!< The type of the collider
         std::unique_ptr<b2Fixture> fixture_; //!< Internal collider
-        unsigned int id_;                    //!< Id of this collider
         BodyPtr body_;                       //!< The body this collider is attached to
         friend class Body;                   //!< Needs access to constructor
         PropertyContainer userData_;         //!< Application specific collider data

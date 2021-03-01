@@ -71,6 +71,12 @@ namespace ime {
         static ConvexShape::Ptr create(std::size_t pointCount = 0);
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the number of points of the polygon
          * @param count The new number of points of the polygon
          * 

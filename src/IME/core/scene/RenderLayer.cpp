@@ -34,12 +34,8 @@ namespace ime {
         shouldRender_{true}
     {}
 
-    void RenderLayer::setName(const std::string &name) {
-        name_ = name;
-    }
-
-    const std::string &RenderLayer::getName() const {
-        return name_;
+    std::string RenderLayer::getClassName() const {
+        return "RenderLayer";
     }
 
     void RenderLayer::setDrawable(bool render) {

@@ -80,7 +80,7 @@ namespace ime {
         b2Definition->maxLength = utility::pixelsToMetres(definition.maxLength);
         b2Definition->bodyA = definition.bodyA->getInternalBody().get();
         b2Definition->bodyB = definition.bodyB->getInternalBody().get();
-        b2Definition->userData.pointer = getId();
+        b2Definition->userData.pointer = getObjectId();
 
         b2Definition->localAnchorA = {utility::pixelsToMetres(definition.bodyALocalAnchorPoint.x),
                                       utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
@@ -94,6 +94,10 @@ namespace ime {
         // Cleanup
         delete b2Definition;
         b2Definition = nullptr;
+    }
+
+    std::string DistanceJoint::getClassName() const {
+        return "DistanceJoint";
     }
 
     float DistanceJoint::setRestLength(float length) {

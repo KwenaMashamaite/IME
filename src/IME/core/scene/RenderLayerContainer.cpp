@@ -37,6 +37,10 @@ namespace ime {
         return layer;
     }
 
+    std::string RenderLayerContainer::getClassName() const {
+        return "RenderLayerContainer";
+    }
+
     RenderLayer::Ptr RenderLayerContainer::front() const {
         if (layers_.empty())
             return nullptr;

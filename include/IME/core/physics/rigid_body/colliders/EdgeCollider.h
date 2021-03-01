@@ -46,12 +46,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        EdgeCollider(EdgeCollider&&);
+        EdgeCollider(EdgeCollider&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        EdgeCollider& operator=(EdgeCollider&&);
+        EdgeCollider& operator=(EdgeCollider&&) noexcept;
 
         /**
          * @brief Create a new edge collider
@@ -66,6 +66,12 @@ namespace ime {
          */
         Collider::Ptr copy() override;
         const Collider::Ptr copy() const override;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Create a one sided collision edge

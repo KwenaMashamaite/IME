@@ -240,7 +240,7 @@ namespace ime {
         }
 
         auto body = Body::Ptr(new Body(definition, shared_from_this()));
-        bodies_.insert({body->id_, body});
+        bodies_.insert({body->getObjectId(), body});
         return body;
     }
 
@@ -261,9 +261,9 @@ namespace ime {
 
     bool World::destroyBody(Body::Ptr body) {
         if (!world_->IsLocked()) {
-            if (utility::findIn(bodies_, body->getId())) {
-                world_->DestroyBody(bodies_[body->getId()]->getInternalBody().get());
-                bodies_.erase(body->getId());
+            if (utility::findIn(bodies_, body->getObjectId())) {
+                world_->DestroyBody(bodies_[body->getObjectId()]->getInternalBody().get());
+                bodies_.erase(body->getObjectId());
                 return true;
             }
         } else
@@ -287,15 +287,15 @@ namespace ime {
                 return nullptr;
         }
 
-        joints_.insert({joint->getId(), joint});
+        joints_.insert({joint->getObjectId(), joint});
         return joint;
     }
 
     bool World::destroyJoint(Joint::Ptr joint) {
         if (!world_->IsLocked()) {
-            if (utility::findIn(joints_, joint->getId())) {
-                world_->DestroyJoint(joints_[joint->getId()]->getInternalJoint());
-                joints_.erase(joint->getId());
+            if (utility::findIn(joints_, joint->getObjectId())) {
+                world_->DestroyJoint(joints_[joint->getObjectId()]->getInternalJoint());
+                joints_.erase(joint->getObjectId());
                 return true;
             }
         } else

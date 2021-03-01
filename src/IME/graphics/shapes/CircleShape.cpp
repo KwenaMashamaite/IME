@@ -67,6 +67,10 @@ namespace ime {
         return CircleShape::Ptr(new CircleShape(radius));
     }
 
+    std::string CircleShape::getClassName() const {
+        return "CircleShape";
+    }
+
     void CircleShape::setRadius(float radius) {
         impl_->circle_.setRadius(radius);
     }

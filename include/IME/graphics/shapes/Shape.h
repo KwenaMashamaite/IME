@@ -58,6 +58,37 @@ namespace ime {
         explicit Shape(Type type);
 
         /**
+         * @brief Copy constructor
+         */
+        Shape(const Shape&) = default;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Shape& operator=(const Shape&) = default;
+
+        /**
+         * @brief Move constructor
+         */
+        Shape(Shape&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Shape& operator=(Shape&&) noexcept = default;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         *
+         * Note that this function is only implemented by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see Object::getClassType and Object::getClassName
+         */
+        std::string getClassType() const override;
+
+        /**
          * @brief Get the type of this shape
          * @return The type of the shape
          */

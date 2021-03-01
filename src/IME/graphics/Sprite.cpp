@@ -252,6 +252,10 @@ namespace ime {
 
     Sprite &Sprite::operator=(Sprite &&) noexcept = default;
 
+    std::string Sprite::getClassName() const {
+        return "Sprite";
+    }
+
     void Sprite::swap(Sprite &other) {
         pImpl_->swap(*other.pImpl_);
     }

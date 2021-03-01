@@ -71,6 +71,12 @@ namespace ime {
         static RectangleShape::Ptr create(const Vector2f& size = Vector2f(0, 0));
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the size of the rectangle
          * @param size The new size of the rectangle
          */

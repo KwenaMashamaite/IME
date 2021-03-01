@@ -46,6 +46,12 @@ namespace ime {
         explicit Tile(Vector2u size = {32, 32}, Vector2f position = {0, 0});
 
         /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
+
+        /**
          * @brief Set the fill colour of the tile
          * @param colour New fill colour of the tile
          */
