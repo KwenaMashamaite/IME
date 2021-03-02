@@ -102,7 +102,7 @@ namespace ime {
     }
 
     void RenderLayerContainer::moveUp(unsigned int index) {
-        swap(index, index - 1);
+        swap(index, index + 1);
     }
 
     void RenderLayerContainer::moveUp(const std::string &name) {
@@ -111,7 +111,7 @@ namespace ime {
     }
 
     void RenderLayerContainer::moveDown(unsigned int index) {
-        swap(index, index + 1);
+        swap(index, index - 1);
     }
 
     void RenderLayerContainer::moveDown(const std::string &name) {
@@ -120,25 +120,6 @@ namespace ime {
     }
 
     void RenderLayerContainer::moveToFront(unsigned int index) {
-        if (!(isIndexValid(index) && layers_.begin()->first != index))
-            return;
-
-        for (auto iter = std::prev(layers_.rend(), index + 1); iter != layers_.rend(); ++iter) {
-            auto next = std::next(iter);
-
-            if (next == layers_.rend())
-                break;
-
-            swap(iter->first, next->first);
-        }
-    }
-
-    void RenderLayerContainer::moveToFront(const std::string &name) {
-        if (hasLayer(name))
-            moveToFront(inverseLayers_[name]);
-    }
-
-    void RenderLayerContainer::sendToBack(unsigned int index) {
         if (!(isIndexValid(index) && std::prev(layers_.end())->first != index))
             return;
 
@@ -152,6 +133,25 @@ namespace ime {
 
             // After swap function iter is swapped with next, so we restore it
             iter = std::prev(iter);
+        }
+    }
+
+    void RenderLayerContainer::moveToFront(const std::string &name) {
+        if (hasLayer(name))
+            moveToFront(inverseLayers_[name]);
+    }
+
+    void RenderLayerContainer::sendToBack(unsigned int index) {
+        if (!(isIndexValid(index) && layers_.begin()->first != index))
+            return;
+
+        for (auto iter = std::prev(layers_.rend(), index + 1); iter != layers_.rend(); ++iter) {
+            auto next = std::next(iter);
+
+            if (next == layers_.rend())
+                break;
+
+            swap(iter->first, next->first);
         }
     }
 

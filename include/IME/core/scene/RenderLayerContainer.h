@@ -213,9 +213,6 @@ namespace ime {
          * @brief Move a layer to the highest level (foreground)
          * @param index The index of the layer to be moved
          *
-         * The layer at the front will be placed at @a index whilst the layer
-         * @a index will be moved to the front
-         *
          * This function has no effect if the layer does not exist or the
          * layer is already at the highest level
          *
@@ -235,7 +232,7 @@ namespace ime {
         void moveToFront(const std::string& name);
 
         /**
-         * @brief Move a layer to the lowest level (first background)
+         * @brief Move a layer to the lowest level (background)
          * @param index The index of the layer ot be moved
          *
          * This function has no effect if the layer does not exist or the
@@ -246,7 +243,7 @@ namespace ime {
         void sendToBack(unsigned int index);
 
         /**
-         * @brief Move a layer to the lowest level (first background)
+         * @brief Move a layer to the lowest level (background)
          * @param name The name of the layer ot be moved
          *
          * This function has no effect if the layer does not exist or the
