@@ -22,42 +22,50 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_GAMEOBJECTCONTAINER_H
-#define IME_GAMEOBJECTCONTAINER_H
+#ifndef IME_DRAWABLECONTAINER_H
+#define IME_DRAWABLECONTAINER_H
 
-#include "IME/Config.h"
 #include "IME/common/ObjectContainer.h"
-#include "IME/core/game_object/GameObject.h"
+#include "IME/graphics/IDrawable.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 
 namespace ime {
     /**
-     * @brief A container for GameObject instances
+     * @brief A container for IDrawable objects
      */
-    class IME_API GameObjectContainer : public ObjectContainer<GameObject> {
+    template <typename T>
+    class IME_API DrawableContainer : public ObjectContainer<T> {
     public:
         /**
          * @brief Constructor
          * @param renderLayers The render layer container for
          */
-        explicit GameObjectContainer(RenderLayerContainer& renderLayers);
+        explicit DrawableContainer(RenderLayerContainer& renderLayers);
 
         /**
-         * @brief Add a game object to the container
+         * @brief Add a drawable object to the container
          * @param gameObject The game object to be added
-         * @param renderOrder The render order of the game object
-         * @param renderLayer The RenderLayer the game object belongs to
+         * @param renderOrder The render order of the object in the render layer
+         * @param renderLayer The RenderLayer the object belongs to
          *
-         * Note that the container keeps the pointer so there is no need to
-         * keep the your pointer after adding the game objet
+         * Note that the container keeps the pointer so there's no need to
+         * keep the your pointer after adding the game object
          */
-        void add(GameObject::Ptr gameObject, unsigned int renderOrder = 0u,
-             const std::string& renderLayer = "default");
+        void add(std::shared_ptr<T> drawable, unsigned int renderOrder = 0u,
+            const std::string& renderLayer = "default");
 
     private:
         std::reference_wrapper<RenderLayerContainer> renderLayers_;
-        using ObjectContainer::addObject;
+        using ObjectContainer<T>::addObject;
     };
+
+    #include "IME/core/scene/DrawableContainer.inl"
+
+    class Sprite;
+    class Shape;
+
+    using SpriteContainer = DrawableContainer<Sprite>; //!< Shape object container
+    using ShapeContainer = DrawableContainer<Shape>;   //!< Sprite object container
 }
 
-#endif //IME_GAMEOBJECTCONTAINER_H
+#endif //IME_DRAWABLECONTAINER_H

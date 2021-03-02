@@ -45,7 +45,6 @@ set(IME_SRC
     core/physics/World.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
-    core/scene/ShapeContainer.cpp
     core/scene/RenderLayer.cpp
     core/scene/RenderLayerContainer.cpp
     core/scene/GameObjectContainer.cpp
@@ -114,8 +113,7 @@ set(IME_SRC
     utility/DiskFileLogger.cpp
     utility/DiskFileReader.cpp
     utility/Helpers.cpp
-    utility/Utils.cpp
-    core/scene/SpriteContainer.cpp)
+    utility/Utils.cpp)
 
 # Optimize single build
 if(IME_OPTIMIZE_SINGLE_BUILD)

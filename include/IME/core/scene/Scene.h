@@ -33,10 +33,9 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/scene/ShapeContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/scene/RenderLayerContainer.h"
-#include "IME/core/scene/SpriteContainer.h"
+#include "IME/core/scene/DrawableContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
@@ -568,10 +567,10 @@ namespace ime {
         EventEmitter internalEmitter_;        //!< Emits internal scene events
         TimerManager timerManager_;           //!< Scene level timer manager
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
-        ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
-        GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
-        SpriteContainer spriteContainer_;     //!< Stores sprites that belong to the scene
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
+        GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
+        ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
+        SpriteContainer spriteContainer_;     //!< Stores sprites that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                      //!< A flag indicating whether or not this scene has been added to a scene manager

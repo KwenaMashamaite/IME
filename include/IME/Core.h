@@ -70,7 +70,7 @@
 #include "IME/core/physics/World.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/scene/ShapeContainer.h"
+#include "IME/core/scene/DrawableContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/tilemap/Index.h"
 #include "IME/core/tilemap/TileMap.h"

@@ -33,6 +33,9 @@ namespace ime {
         camera_{std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()))},
         cache_{engine.getPersistentData()},
         guiContainer_{engine.getRenderTarget()},
+        entityContainer_{renderLayers_},
+        shapeContainer_{renderLayers_},
+        spriteContainer_{renderLayers_},
         timescale_{1.0f},
         isManaged_{false},
         isEntered_{false},
@@ -45,7 +48,10 @@ namespace ime {
 
     Scene::Scene(Scene&& other) :
         engine_{other.engine_},
-        cache_{other.cache_}
+        cache_{other.cache_},
+        entityContainer_{renderLayers_},
+        shapeContainer_{renderLayers_},
+        spriteContainer_{renderLayers_}
     {
         *this = std::move(other);
     }

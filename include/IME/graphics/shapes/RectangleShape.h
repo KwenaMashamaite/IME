@@ -35,7 +35,7 @@ namespace ime {
      */
     class IME_API RectangleShape : public Shape {
     public:
-        using Ptr = std::shared_ptr<Shape>; //!< Shared shape pointer
+        using Ptr = std::shared_ptr<RectangleShape>; //!< Shared shape pointer
 
         /**
          * @brief Default constructor

@@ -22,7 +22,22 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-template <class T>
-inline std::shared_ptr<T> ShapeContainer::createShape(Shape::Type type) {
-    return std::dynamic_pointer_cast<T>(createShape(type));
+template<typename T>
+inline DrawableContainer<T>::DrawableContainer(RenderLayerContainer &renderLayers) :
+    renderLayers_{renderLayers}
+{}
+
+template<typename T>
+inline void DrawableContainer<T>::add(std::shared_ptr<T> drawable,
+    unsigned int renderOrder, const std::string &renderLayer)
+{
+    IME_ASSERT(drawable, "Cannot ad a nullptr to an object container");
+    auto layer = renderLayers_.get().findByName(renderLayer);
+    if (!layer && renderLayer != "default")
+        layer = renderLayers_.get().findByName("default");
+
+    IME_ASSERT(layer, "The layer '" + renderLayer + "' could not be found in the scenes render layers and the fallback layer 'default' is removed");
+    layer->addDrawable(*drawable, renderOrder);
+
+    ObjectContainer<T>::addObject(std::move(drawable));
 }

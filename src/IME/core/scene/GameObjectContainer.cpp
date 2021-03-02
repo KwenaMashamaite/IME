@@ -25,36 +25,20 @@
 #include "IME/core/scene/GameObjectContainer.h"
 
 namespace ime {
-    GameObject::Ptr GameObjectContainer::getObjectById(unsigned int id) {
-        return std::as_const(*this).getObjectById(id);
-    }
+    GameObjectContainer::GameObjectContainer(RenderLayerContainer &renderLayers) :
+        renderLayers_{renderLayers}
+    {}
 
-    GameObject::Ptr GameObjectContainer::getObjectById(unsigned int id) const {
-        return findIf([id](const constItemPtr gameObject) {
-            return gameObject->getObjectId() == id;
-        });
-    }
+    void GameObjectContainer::add(GameObject::Ptr gameObject, unsigned int renderOrder,
+        const std::string &renderLayer)
+    {
+        auto layer = renderLayers_.get().findByName(renderLayer);
+        if (!layer && renderLayer != "default")
+            layer = renderLayers_.get().findByName("default");
 
-    GameObject::Ptr GameObjectContainer::getObjectByName(const std::string &name) {
-        return std::as_const(*this).getObjectByName(name);
-    }
+        IME_ASSERT(layer, "The layer '" + renderLayer + "' could not be found in the scenes render layers and the fallback layer 'default' is removed");
+        layer->addGameObject(gameObject, renderOrder);
 
-    const GameObject::Ptr GameObjectContainer::getObjectByName(const std::string &name) const {
-        return findIf([&name](const constItemPtr gameObject) {
-            return gameObject->getName() == name;
-        });
-    }
-
-    bool GameObjectContainer::removeObjectWithId(unsigned int id) {
-        return removeIf([id](const constItemPtr gameObject) {
-            return gameObject->getObjectId() == id;
-        });
-    }
-
-    bool GameObjectContainer::removeObjectWithName(const std::string &name) {
-        return removeIf([&name](const constItemPtr gameObject) {
-            return gameObject->getName() == name;
-        });
+        ObjectContainer::addObject(std::move(gameObject));
     }
 }
-
