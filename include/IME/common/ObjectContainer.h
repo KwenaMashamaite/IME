@@ -50,9 +50,7 @@ namespace ime {
         /**
          * @brief Default constructor
          */
-        ObjectContainer() {
-            static_assert(std::is_base_of<Object, T>::value,"An ObjectContainer class can only store instances of classes derived from Object class");
-        }
+        ObjectContainer();
         
         /**
          * @brief Add an object to the container
@@ -73,6 +71,50 @@ namespace ime {
         ObjectPtr findByName(const std::string& name) const;
 
         /**
+         * @brief Get an object with a given name
+         * @param name The name of the game object to retrieve
+         * @return The object with the given name or a nullptr if the object
+         *         could not be found in the container or the the object is
+         *         found but it is not of type U
+         *
+         * Note that this function will return the first object it finds with
+         * the the given name. You can use this function to get the derived
+         * class type U if T is a base class:
+         *
+         * @code
+         * // The type of rectangle is std::shared_ptr<ime::Shape>
+         * auto rectangle = shapeContainer.findByName("myRect");
+         *
+         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
+         * auto rectangle2 = shapeContainer.findByName<ime::RectangleShape>("myRect");
+         * @endcode
+         */
+        template<typename U>
+        std::shared_ptr<U> findByName(const std::string& name);
+
+        /**
+         * @brief Get an object with a given name
+         * @param name The name of the game object to retrieve
+         * @return The object with the given name or a nullptr if the object
+         *         could not be found in the container or the the object is
+         *         found but it is not of type U
+         *
+         * Note that this function will return the first object it finds with
+         * the the given name. You can use this function to get the derived
+         * class type U if T is a base class:
+         *
+         * @code
+         * // The type of rectangle is std::shared_ptr<ime::Shape>
+         * auto rectangle = shapeContainer.findByName("myRect");
+         *
+         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
+         * auto rectangle2 = shapeContainer.findByName<ime::RectangleShape>("myRect");
+         * @endcode
+         */
+        template<typename U>
+        std::shared_ptr<const U> findByName(const std::string& name) const;
+
+        /**
          * @brief Get an object with the given id
          * @param id The id of the object to be retrieved
          * @return The object with the given id or a nullptr if the object
@@ -80,6 +122,48 @@ namespace ime {
          */
         ObjectPtr findById(unsigned int id);
         ObjectPtr findById(unsigned int id) const;
+
+        /**
+         * @brief Get an object with the given id
+         * @param id The id of the object to be retrieved
+         * @return The object with the given id or a nullptr if the object
+         *         could not be found in the container or the the object is
+         *         found but it is not of type U
+         *
+         * You can use this function to get the derived class type U if T is
+         * a base class
+         *
+         * @code
+         * // The type of rectangle is std::shared_ptr<ime::Shape>
+         * auto rectangle = shapeContainer.findById(4);
+         *
+         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
+         * auto rectangle2 = shapeContainer.findById<ime::RectangleShape>(4);
+         * @endcode
+         */
+        template<typename U>
+        std::shared_ptr<U> findById(unsigned int id);
+
+        /**
+         * @brief Get an object with the given id
+         * @param id The id of the object to be retrieved
+         * @return The object with the given id or a nullptr if the object
+         *         could not be found in the container or the the object is
+         *         found but it is not of type U
+         *
+         * You can use this function to get the derived class type U if T is
+         * a base class
+         *
+         * @code
+         * // The type of rectangle is std::shared_ptr<ime::Shape>
+         * auto rectangle = shapeContainer.findById(4);
+         *
+         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
+         * auto rectangle2 = shapeContainer.findById<ime::RectangleShape>(4);
+         * @endcode
+         */
+        template<typename U>
+        std::shared_ptr<const U> findById(unsigned int id) const;
 
         /**
          * @brief Conditionally find an object in the container

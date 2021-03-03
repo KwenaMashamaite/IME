@@ -23,33 +23,62 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
+inline ObjectContainer<T>::ObjectContainer() {
+    static_assert(std::is_base_of<Object, T>::value,"An ObjectContainer class can only store instances of classes derived from Object class");
+}
+
+template <typename T>
 inline void ObjectContainer<T>::addObject(ObjectPtr object) {
     IME_ASSERT(object, "Cannot add a nullptr to an object container");
     objects_.push_back(std::move(object));
 }
 
 template<typename T>
-typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) {
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) {
     return std::as_const(*this).findByName(name);
 }
 
 template<typename T>
-typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) const {
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) const {
     return findIf([&name](const constObjectPtr object) {
         return object->getName() == name;
     });
 }
 
+template <typename T>
+template <typename U>
+inline std::shared_ptr<U> ObjectContainer<T>::findByName(const std::string& name) {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByName(name));
+}
+
+template <typename T>
+template <typename U>
+inline std::shared_ptr<const U> ObjectContainer<T>::findByName(const std::string& name) const {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByName(name));
+}
+
 template<typename T>
-typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) {
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) {
     return std::as_const(*this).findById(id);
 }
 
 template<typename T>
-typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) const {
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) const {
     return findIf([id](const constObjectPtr object) {
         return object->getObjectId() == id;
     });
+}
+
+template <typename T>
+template <typename U>
+inline std::shared_ptr<U> ObjectContainer<T>::findById(unsigned int id) {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findById(id));
+}
+
+template <typename T>
+template <typename U>
+inline std::shared_ptr<const U> ObjectContainer<T>::findById(unsigned int id) const {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findById(id));
 }
 
 template <typename T>
