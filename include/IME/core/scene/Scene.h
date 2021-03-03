@@ -165,19 +165,20 @@ namespace ime {
         virtual void fixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @brief Post update
+         * @brief Post update the scene
+         * @param deltaTime Time passed since last update
          *
          * This function is called after fixed update and update but
-         * before the scene is rendered. It may be useful if you want to do something
-         * after all time updates (timer updates, physics updates, gui updates
-         * etc) have completed.
+         * before the scene is rendered. It may be useful if you want to do
+         * something after all time updates (timer updates, physics updates,
+         * animation updates, gui updates etc...) have completed.
          *
          * Note that implementing this function is optional and must be
          * overridden if needed. IME will never put anything inside this
          * function, therefore you don't have to call the base class method
          * in your implementation
          */
-        virtual void postUpdate() {}
+        virtual void postUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
          * @brief Pause the scene

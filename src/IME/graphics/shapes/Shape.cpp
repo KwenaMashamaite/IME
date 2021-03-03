@@ -50,7 +50,7 @@ namespace ime {
 
         // Synchronize the shape with its rigid body
         if (postStepId_ == -1) {
-            postStepId_ = body_->getWorld()->getScene().on_("postStep", Callback<>([this] {
+            postStepId_ = body_->getWorld()->getScene().on_("postStep", Callback<Time>([this](Time) {
                 if (body_) {
                     setPosition(body_->getPosition());
                     setRotation(body_->getRotation());

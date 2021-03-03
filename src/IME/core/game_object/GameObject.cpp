@@ -40,7 +40,7 @@ namespace ime {
         initTransformEvents();
 
         // Synchronize the game object with its rigid body
-        postStepId_ = scene_.get().on_("postStep", Callback<>([this] {
+        postStepId_ = scene_.get().on_("postStep", Callback<Time>([this](Time) {
             if (body_) {
                 transform_.setPosition(body_->getPosition());
                 transform_.setRotation(body_->getRotation());

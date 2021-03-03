@@ -152,6 +152,7 @@ namespace ime {
         scene->timerManager_.preUpdate();
         scene->timerManager_.update(deltaTime * scene->getTimescale());
         scene->audioManager_.removePlayedAudio();
+        scene->internalEmitter_.emit("preUpdate", deltaTime * scene->getTimescale());
     }
 
     void SceneManager::updateScene(Time deltaTime, bool fixedUpdate) {
@@ -159,12 +160,9 @@ namespace ime {
             return;
 
         auto& scene = scenes_.top();
-        scene->internalEmitter_.emit("preUpdate");
-        scene->internalEmitter_.emit("preUpdate", deltaTime * scene->getTimescale());
 
         // Update physics simulation
         if (scene->hasPhysicsSim_) {
-            scene->internalEmitter_.emit("preStep");
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
 
             if (fixedUpdate && scene->world_->isFixedStep()) {
@@ -172,17 +170,31 @@ namespace ime {
             } else if (!fixedUpdate && !scene->world_->isFixedStep())
                 scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
 
-            scene->internalEmitter_.emit("postStep");
             scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
 
-        // Update scene
+        // Update user scene
         if (fixedUpdate)
             scene->fixedUpdate(deltaTime * scene->getTimescale());
-        else
+        else {
+            //Update game objects - By default, the game object updates its sprite animation
+            scene->gameObjects().forEach([&scene, &deltaTime](GameObject::Ptr gameObject) {
+                gameObject->update(deltaTime * scene->getTimescale());
+            });
+
+            // Update sprite animations
+            scene->sprites().forEach([&scene, &deltaTime](Sprite::Ptr sprite) {
+                sprite->updateAnimation(deltaTime * scene->getTimescale());
+            });
+
+            // Update user scene after all internal updates
             scene->update(deltaTime * scene->getTimescale());
 
-        scene->internalEmitter_.emit("postUpdate");
-        scene->internalEmitter_.emit("postUpdate", deltaTime * scene->getTimescale());
+            // Emit internal post update
+            scene->internalEmitter_.emit("postUpdate", deltaTime * scene->getTimescale());
+
+            // Normal update is always called after fixed update: fixedUpdate -> update -> postUpdate
+            scene->postUpdate(deltaTime * scene->getTimescale());
+        }
     }
 }
