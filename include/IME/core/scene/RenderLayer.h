@@ -86,6 +86,16 @@ namespace ime {
         bool isDrawable() const;
 
         /**
+         * @brief Toggle the draw state of the layer
+         *
+         * This function will set the layer to drawable if its currently not
+         * drawable and vice versa
+         *
+         * @see setDrawable
+         */
+        void toggleDrawable();
+
+        /**
          * @brief Get the index of the layer in the RenderLayerContainer
          * @return The index of the layer in the RenderLayerContainer
          *

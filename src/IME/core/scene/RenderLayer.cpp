@@ -46,6 +46,10 @@ namespace ime {
         return shouldRender_;
     }
 
+    void RenderLayer::toggleDrawable() {
+        setDrawable(!shouldRender_);
+    }
+
     void RenderLayer::setIndex(unsigned int index) {
         index_ = index;
     }
