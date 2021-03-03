@@ -36,6 +36,7 @@
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
+#include "IME/core/scene/GridMoverContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
@@ -361,6 +362,16 @@ namespace ime {
         World& physics();
 
         /**
+         * @brief Get the scenes grid mover container
+         * @return The scenes grid mover container
+         *
+         * Note that you can use this container to store a GridMover or you
+         * can use your own container. The advantage of using this container
+         * is that the grid mover is updated on your behalf
+         */
+        GridMoverContainer& gridMovers();
+
+        /**
          * @brief Get the scenes event event emitter
          * @return The scenes event event emitter
          *
@@ -570,6 +581,7 @@ namespace ime {
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
         GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
+        GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
         ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
         SpriteContainer spriteContainer_;     //!< Stores sprites that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap

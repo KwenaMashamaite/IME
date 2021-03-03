@@ -48,6 +48,7 @@ set(IME_SRC
     core/scene/RenderLayer.cpp
     core/scene/RenderLayerContainer.cpp
     core/scene/GameObjectContainer.cpp
+    core/scene/GridMoverContainer.cpp
     core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp

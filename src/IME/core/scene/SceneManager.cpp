@@ -134,6 +134,7 @@ namespace ime {
 
         scenes_.top()->inputManager_.handleEvent(event);
         scenes_.top()->guiContainer_.handleEvent(event);
+        scenes_.top()->gridMovers().handleEvent(event);
         scenes_.top()->handleEvent(event);
     }
 
@@ -174,9 +175,10 @@ namespace ime {
         }
 
         // Update user scene
-        if (fixedUpdate)
+        if (fixedUpdate) {
+            scene->gridMovers().update(deltaTime * scene->getTimescale());
             scene->fixedUpdate(deltaTime * scene->getTimescale());
-        else {
+        } else {
             //Update game objects - By default, the game object updates its sprite animation
             scene->gameObjects().forEach([&scene, &deltaTime](GameObject::Ptr gameObject) {
                 gameObject->update(deltaTime * scene->getTimescale());

@@ -121,6 +121,10 @@ namespace ime {
         return *world_;
     }
 
+    GridMoverContainer &Scene::gridMovers() {
+        return gridMovers_;
+    }
+
     input::InputManager &Scene::input() {
         return inputManager_;
     }
