@@ -42,9 +42,7 @@ namespace ime {
          isShownOnStart_{true},
          isHiddenOnComplete_{false},
          completionFrame_{-1}
-    {
-        IME_ASSERT(spriteSheet_.isReady(), "Cannot create an animation with an uncreated spritesheet");
-    }
+    {}
 
     std::shared_ptr<Animation> Animation::create(const std::string &name,
         const SpriteSheet& spriteSheet, Time duration)

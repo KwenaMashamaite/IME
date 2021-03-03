@@ -39,6 +39,8 @@ namespace ime {
      */
     class IME_API Texture {
     public:
+        using Ptr = std::shared_ptr<Texture>; //!< shared texture pointer
+
         /**
          * @brief Construct the texture
          * @param filename Filename of the image file to load

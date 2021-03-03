@@ -109,6 +109,8 @@ set(IME_SRC
     graphics/shapes/ConvexShape.cpp
     graphics/DebugDrawer.cpp
     graphics/Camera.cpp
+    graphics/SpriteImage.cpp
+    graphics/TextureAtlas.cpp
     utility/ConfigFileParser.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp

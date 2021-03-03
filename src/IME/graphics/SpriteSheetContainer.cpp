@@ -26,7 +26,6 @@
 
 namespace ime {
     bool SpriteSheetContainer::add(SpriteSheet spritesheet) {
-        IME_ASSERT(spritesheet.isReady(), "Cannot add a spritesheet that is not constructed");
         return spritesheets_.insert({spritesheet.getName(), std::move(spritesheet)}).second;
     }
 

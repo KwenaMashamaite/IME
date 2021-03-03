@@ -29,7 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/core/tilemap/Index.h"
-#include "Texture.h"
+#include "IME/graphics/SpriteImage.h"
 #include <vector>
 #include <string>
 #include <optional>
@@ -39,52 +39,50 @@ namespace ime {
     class Sprite; //!< Sprite class forward declaration
 
     /**
-     * @brief Construct sprites and animation frames from a spritesheet
-     *        image
+     * @brief An ImageSprite which contains images of the same size arranged in
+     *        a grid
      *
-     * This class only supports images that are contiguous and are the
-     * same size (i.e perfectly aligned in grid formation on the
-     * spritesheet image)
+     * This class only works with a SpriteImage that has contiguous textures
+     * (perfectly aligned vertically or horizontally) that are the same size.
+     * Use the TextureAtlas for textures that are different sizes and have no
+     * specific arrangement in the source texture. Usually a spritesheet holds
+     * animation frames of a single entity such as (but not limited to) a
+     * characters animation in an idle, walking, running or jumping state
      */
-    class IME_API SpriteSheet {
+    class IME_API SpriteSheet : public SpriteImage {
     public:
-        using Frame = UIntRect; //!< A frame on the spritesheet
+        using Ptr = std::shared_ptr<SpriteSheet>; //!< shared spritesheet pointer
+        using Frame = UIntRect; //!< A frame in the spritesheet
 
         /**
          * @brief Create the spritesheet
-         * @param name Name of the spritesheet
-         * @param texture Filename of the image used by this spritesheet
-         * @param frameSize The size of each frame in the spritesheet
-         * @param spacing The space between frames on the spritesheet texture
-         */
-        SpriteSheet(const std::string& name, const std::string& texture,
-            Vector2u frameSize, Vector2u spacing);
-
-        /**
-         * @brief Create the spritesheet
+         * @param sourceTexture Filename of the image used by the spritesheet
+         * @param frameSize The size of each frame in the source texture
+         * @param spacing The space between frames in the source texture
          * @param area Sub-rectangle to construct spritesheet from
          * @throws FileNotFount if the the source image cannot be found on the
-         *         disk (Filename given during construction)
+         *         disk
          *
          * The @a area can be used to construct the spritesheet from a
          * sub-rectangle of the whole spritesheet image. To construct
          * the spritesheet from the whole image (default), leave the
          * @a area argument unspecified. If the @a area rectangle crosses
          * the bounds of the image, it is adjusted to fit the image size
+         *
+         * @note This class assumes that if the spacing between frames in non-
+         * zero then the frame has spacing on both sides. For example if the
+         * spacing is {1, 0}, it is assumed that each individual frame has a
+         * space of 1 pixel to its left and a space of 1 pixel to its right
+         * (The assumption applies for first frames)
          */
-        void create(UIntRect area = {});
+        SpriteSheet(const std::string& sourceTexture, Vector2u frameSize,
+            Vector2u spacing = {0, 0}, UIntRect area = {});
 
         /**
-         * @brief Set the name of the spritesheet
-         * @param name The name to set
+         * @brief Get the name of this class
+         * @return The name of this class
          */
-        void setName(const std::string& name);
-
-        /**
-         * @brief Get the name of the spritesheet
-         * @return The name of the spritesheet
-         */
-        const std::string& getName() const;
+        std::string getClassName() const override;
 
         /**
          * @brief Get the size of each frame in the spritesheet
@@ -93,8 +91,17 @@ namespace ime {
         Vector2u getFrameSize() const;
 
         /**
-         * @brief Get the number of frames constructed from the spritesheet
+         * @brief Get the space between frames in the spritesheet
+         * @return The space between frames in the spritesheet
+         */
+        Vector2u getSpaceBetweenFrames() const;
+
+        /**
+         * @brief Get the number of frames in the spritesheet
          * @return The total number of frames in the spritesheet
+         *
+         * Note that the number of sprites in the spritesheet is the same
+         * as the number of frames
          */
         std::size_t getFramesCount() const;
 
@@ -111,7 +118,7 @@ namespace ime {
         /**
          * @brief Get the frame by its assigned alias
          * @param alias The alias assigned to a frame
-         * @return he frame at the specified index if it is within
+         * @return The frame at the specified index if it is within
          *         bounds otherwise returns no value
          */
         std::optional<Frame> getFrame(const std::string& alias) const;
@@ -172,27 +179,6 @@ namespace ime {
         std::vector<Frame> getAllFrames() const;
 
         /**
-         * @brief Get the size of the spritesheet in pixels
-         * @return The size of the spritesheet in pixels
-         *
-         * The x component is width whilst the y component is the height
-         * of the spritesheet
-         */
-        Vector2u getSize() const;
-
-        /**
-         * @brief Get the width of the spritesheet in pixels
-         * @return The width of the spritesheet in pixels
-         */
-        unsigned int getWidth() const;
-
-        /**
-         * @brief Get the height of the spritesheet in pixels
-         * @return The height of the spritesheet in pixels
-         */
-        unsigned int getHeight() const;
-
-        /**
          * @brief Get the size of the spritesheet in frames
          * @return The size of the spritesheet in frames
          *
@@ -205,19 +191,13 @@ namespace ime {
          * @brief Get the number of rows in the spritesheet
          * @return The number of rows in the spritesheet
          */
-        unsigned int getNumberOfRows() const;
+        unsigned int getRowCount() const;
 
         /**
          * @brief Get the number of columns in the spritesheet
          * @return The number of columns in the spritesheet
          */
-        unsigned int getNumberOfColumns() const;
-
-        /**
-         * @brief Get the filename of the image used by the spritesheet
-         * @return The filename of the images used by the spritesheet
-         */
-        const std::string& getTextureFilename() const;
+        unsigned int getColumnCount() const;
 
         /**
          * @brief Get a sprite from an index
@@ -299,33 +279,6 @@ namespace ime {
         std::vector<Sprite> getAllSprites() const;
 
         /**
-         * @brief Get the texture used to create the spritesheet
-         * @return The spritesheet texture
-         *
-         * @warning Don't call this function when the spritesheet is not yet
-         * created. Also, the texture is destroyed when the spritesheet is
-         * destroyed, exercise caution when there are Sprite objects referencing
-         * the spritesheet texture
-         *
-         * @see create
-         */
-        const Texture& getTexture() const;
-
-        /**
-         * @brief Get the top-left position of the spritesheet relative to
-         *        the original spritesheet image
-         * @return The relative top-left position
-         *
-         * This function returns the top-left position of the spritesheet
-         * on the original spritesheet image if it was constructed from a
-         * sub-rectangle. If the spritesheet was created from the whole
-         * image, the function returns {0, 0}
-         *
-         * @see create
-         */
-        Vector2u getRelativePosition() const;
-
-        /**
          * @brief Check if an index has a frame or not
          * @param index Index to be checked
          * @return True if there is a frame at the specified index of false
@@ -355,49 +308,22 @@ namespace ime {
          * its name instead of its index
          *
          * @code
-         * spritesheet.assignAlias("blank_frame", Index{4, 0});
-         * spritesheet.getFrame("blank_frame");  //Returns frame at index 4, 0
+         * sprite image.assignAlias("blank_frame", Index{4, 0});
+         * sprite image.getFrame("blank_frame");  //Returns frame at index 4, 0
          *
          * //Returns a sprite displaying the image at index 4, 0
-         * spritesheet.getSprite("blank_frame");
+         * sprite image.getSprite("blank_frame");
          * @endcode
          *
          * @see getFrame(const std::string&)
          */
         bool assignAlias(Index index, const std::string& alias);
 
-        /**
-         * @brief Check if the spritesheet is ready to be used or not
-         * @return True if the spritesheet is ready, otherwise false
-         *
-         * The spritesheet is ready to use if it has been created. That
-         * is, the create function was called
-         *
-         * @see create
-         */
-        bool isReady() const;
-
     private:
-        /**
-         * @brief Calculate the dimensions of interest from spritesheet image
-         *
-         * This function loads the spritesheet image and calculates the
-         * size of the spritesheet, the number of rows and columns based
-         * on the given frame size
-         */
-        void computeDimensions();
+        const Vector2u frameSize_; //!< The size of each frame in the spritesheet
+        const Vector2u spacing_;   //!< The space between frames in the spritesheet
+        Vector2u sizeInFrames_;    //!< The size of the spritesheet in frames
 
-    private:
-        std::string name_;      //!< The name of the spritesheet
-        std::string filename_;  //!< Filename of the texture the spritesheet uses
-        Vector2u frameSize_;    //!< The size of each frame in the spritesheet
-        Vector2u spacing_;      //!< The space between frames on the spritesheet
-        Vector2u sizeInPixels_; //!< The size of the spritesheet in pixels
-        Vector2u sizeInFrames_; //!< The size of the spritesheet in frames
-        Vector2u relativePos_;  //!< The top-left position of the spritesheet relative to the top-left position of the original spritesheet image
-        bool isReady_;          //!< A flag indicating whether or not the spritesheet is created
-
-        std::shared_ptr<Texture> texture_;               //!< Spritesheet texture
         std::unordered_map<Index, Frame> frames_;        //!< Stores the frames
         std::unordered_map<std::string, Index> aliases_; //!< Saves the index of frames with aliases
     };

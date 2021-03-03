@@ -22,25 +22,42 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_GRAPHICS_H
-#define IME_GRAPHICS_H
-
-////////////////////////////////////////////////////////////////////////////////
-// Includes all the graphics headers
-////////////////////////////////////////////////////////////////////////////////
-
-#include "IME/graphics/shapes/CircleShape.h"
-#include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/shapes/ConvexShape.h"
-#include "IME/graphics/Colour.h"
-#include "IME/graphics/Sprite.h"
 #include "IME/graphics/SpriteImage.h"
-#include "IME/graphics/SpriteSheet.h"
-#include "IME/graphics/TextureAtlas.h"
-#include "IME/graphics/SpriteSheetContainer.h"
-#include "IME/graphics/Texture.h"
-#include "IME/graphics/Tile.h"
-#include "IME/graphics/Window.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/core/resources/ResourceManager.h"
 
-#endif //IME_GRAPHICS_H
+namespace ime {
+    SpriteImage::SpriteImage(const std::string &sourceTexture, UIntRect area) {
+        relativePos_ = {area.left, area.top};
+        texture_ = std::make_shared<Texture>(sourceTexture, area);
+    }
+
+    Vector2u SpriteImage::getSize() const {
+        return texture_->getSize();
+    }
+
+    unsigned int SpriteImage::getWidth() const {
+        return texture_->getSize().x;
+    }
+
+    unsigned int SpriteImage::getHeight() const {
+        return texture_->getSize().y;
+    }
+
+    std::string SpriteImage::getClassType() const {
+        return "SpriteImage";
+    }
+
+    const Texture &SpriteImage::getTexture() const {
+        return *texture_;
+    }
+
+    Vector2u SpriteImage::getRelativePosition() const {
+        return relativePos_;
+    }
+
+    bool SpriteImage::contains(Vector2u point) const {
+        return (point.x <= texture_->getSize().x && point.y <= texture_->getSize().y);
+    }
+
+    SpriteImage::~SpriteImage() = default;
+}
