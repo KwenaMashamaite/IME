@@ -58,16 +58,11 @@ namespace ime {
         return index_;
     }
 
-    void RenderLayer::addDrawable(IDrawable& object, int renderOrder) {
-        drawables_.insert({renderOrder, std::ref(object)});
+    void RenderLayer::add(const IDrawable& drawable, int renderOrder) {
+        drawables_.insert({renderOrder, std::cref(drawable)});
     }
 
-    void RenderLayer::addGameObject(GameObject::Ptr gameObject, int renderOrder) {
-        if (gameObject)
-            addDrawable(gameObject->getSprite(), renderOrder);
-    }
-
-    void RenderLayer::render(Window &window) {
+    void RenderLayer::render(Window &window) const {
         std::for_each(drawables_.begin(), drawables_.end(), [&window](auto& pair) {
             pair.second.get().draw(window);
         });

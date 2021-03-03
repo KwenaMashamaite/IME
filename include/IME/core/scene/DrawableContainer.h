@@ -44,12 +44,20 @@ namespace ime {
 
         /**
          * @brief Add a drawable object to the container
-         * @param gameObject The game object to be added
+         * @param drawable The drawable object to be added
          * @param renderOrder The render order of the object in the render layer
          * @param renderLayer The RenderLayer the object belongs to
          *
+         * If the render layer is unspecified or the specified layer cannot be
+         * found then the drawable will be added to the 'default' layer. The
+         * 'default' render layer is created by the Scene when you instantiate
+         * it. Note that the 'default' layer may be deleted from the scenes
+         * render layers, however you must make sure that the layer you specify
+         * during a call to this function already exists otherwise undefined
+         * behavior
+         *
          * Note that the container keeps the pointer so there's no need to
-         * keep the your pointer after adding the game object
+         * keep your pointer after adding the drawable object
          */
         void add(std::shared_ptr<T> drawable, unsigned int renderOrder = 0u,
             const std::string& renderLayer = "default");

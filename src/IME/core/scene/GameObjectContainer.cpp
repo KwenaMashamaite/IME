@@ -32,15 +32,8 @@ namespace ime {
     void GameObjectContainer::add(GameObject::Ptr gameObject, unsigned int renderOrder,
         const std::string &renderLayer)
     {
-        auto layer = renderLayers_.get().findByName(renderLayer);
-        if (!layer && renderLayer != "default") {
-            layer = renderLayers_.get().findByName("default");
-            IME_ASSERT(layer, "The render layer '" + renderLayer + "' could not be found in the scenes render layers and the fallback layer 'default' is removed");
-            IME_PRINT_WARNING("The render layer '" + renderLayer + "' does not exist, the game object was added to the 'default' layer");
-        }
-
-        layer->addGameObject(gameObject, renderOrder);
-
+        IME_ASSERT(gameObject, "Cannot add nullptr to a GameObjectContainer");
+        renderLayers_.get().add(gameObject->getSprite(), renderOrder, renderLayer);
         ObjectContainer::addObject(std::move(gameObject));
     }
 }

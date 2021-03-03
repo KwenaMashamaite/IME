@@ -25,20 +25,15 @@
 template<typename T>
 inline DrawableContainer<T>::DrawableContainer(RenderLayerContainer &renderLayers) :
     renderLayers_{renderLayers}
-{}
+{
+    static_assert(std::is_base_of<IDrawable, T>::value, "A DrawableContainer can only store instances of classes derived from IDrawable");
+}
 
 template<typename T>
 inline void DrawableContainer<T>::add(std::shared_ptr<T> drawable,
     unsigned int renderOrder, const std::string &renderLayer)
 {
-    IME_ASSERT(drawable, "Cannot ad a nullptr to an object container");
-    auto layer = renderLayers_.get().findByName(renderLayer);
-    if (!layer && renderLayer != "default") {
-        layer = renderLayers_.get().findByName("default");
-        IME_ASSERT(layer, "The render layer '" + renderLayer + "' could not be found in the scenes render layers and the fallback layer 'default' is removed");
-        IME_PRINT_WARNING("The render layer '" + renderLayer + "' does not exist, the object was added to the 'default' layer");
-    }
-
-    layer->addDrawable(*drawable, renderOrder);
+    IME_ASSERT(drawable, "Cannot add a nullptr to a DrawableContainer");
+    renderLayers_.get().add(*drawable, renderOrder, renderLayer);
     ObjectContainer<T>::addObject(std::move(drawable));
 }

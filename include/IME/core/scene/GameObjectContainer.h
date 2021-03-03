@@ -48,8 +48,16 @@ namespace ime {
          * @param renderOrder The render order of the game object
          * @param renderLayer The RenderLayer the game object belongs to
          *
+         * If the render layer is unspecified or the specified layer cannot be
+         * found then the drawable will be added to the 'default' layer. The
+         * 'default' render layer is created by the Scene when you instantiate
+         * it. Note that the 'default' layer may be deleted from the scenes
+         * render layers, however you must make sure that the layer you specify
+         * during a call to this function already exists otherwise undefined
+         * behavior
+         *
          * Note that the container keeps the pointer so there is no need to
-         * keep the your pointer after adding the game objet
+         * keep your pointer after adding the game object
          */
         void add(GameObject::Ptr gameObject, unsigned int renderOrder = 0u,
              const std::string& renderLayer = "default");

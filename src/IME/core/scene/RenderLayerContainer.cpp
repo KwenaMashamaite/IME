@@ -37,6 +37,19 @@ namespace ime {
         return layer;
     }
 
+    void RenderLayerContainer::add(const IDrawable &drawable, unsigned int renderOrder,
+        const std::string &renderLayer)
+    {
+        auto layer = findByName(renderLayer);
+        if (!layer && renderLayer != "default") {
+            layer = findByName("default");
+            IME_ASSERT(layer, "The render layer '" + renderLayer + "' could not be found in the scenes render layers and the fallback layer 'default' is removed");
+            IME_PRINT_WARNING("The render layer '" + renderLayer + "' does not exist, the object was added to the 'default' layer");
+        }
+
+        layer->add(drawable, renderOrder);
+    }
+
     std::string RenderLayerContainer::getClassName() const {
         return "RenderLayerContainer";
     }
@@ -210,8 +223,8 @@ namespace ime {
         });
     }
 
-    void RenderLayerContainer::render(Window &window) {
-        std::for_each(layers_.begin(), layers_.end(), [this, &window](auto& pair) {
+    void RenderLayerContainer::render(Window &window) const {
+        std::for_each(layers_.begin(), layers_.end(), [&window](auto& pair) {
             if (pair.second->isDrawable())
                 pair.second->render(window);
         });

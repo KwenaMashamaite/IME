@@ -121,25 +121,7 @@ namespace ime {
          *
          * By default, all drawables have the same render order of 0
          */
-        void addDrawable(IDrawable& drawable, int renderOrder = 0);
-
-        /**
-         * @brief Add a game object to the layer
-         * @param gameObject The game object to be added to the layer
-         *
-         * This function is for convenience sake. It is a shortcut for:
-         *
-         * @code
-         * layer.addDrawable(gameObject->getSprite(), renderOrder);
-         * @endcode
-         *
-         * @warning The layer does not keep a reference to the game object
-         * but a reference to the game objects sprite, therefore remove
-         * must be called before a game object is destroyed. Not calling
-         * remove is undefined behavior as the layer will try to render
-         * a destroyed sprite object
-         */
-        void addGameObject(std::shared_ptr<GameObject> gameObject, int renderOrder = 0);
+        void add(const IDrawable& drawable, int renderOrder = 0);
 
         /**
          * @internal
@@ -149,7 +131,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void render(Window& window);
+        void render(Window& window) const;
 
     private:
         /**
@@ -170,7 +152,7 @@ namespace ime {
         unsigned int index_; //!< The index of the layer in the render layer container
         bool shouldRender_;  //!< A flag indicating whether the layer should be rendered or not
 
-        std::multimap<int, std::reference_wrapper<IDrawable>> drawables_;
+        std::multimap<int, std::reference_wrapper<const IDrawable>> drawables_;
         friend class RenderLayerContainer; //!< Needs access to constructor
     };
 }

@@ -204,13 +204,7 @@ namespace ime {
     }
 
     void TileMap::addSprite(Sprite &sprite, Index index, int renderOrder, const std::string &renderLayer) {
-        auto layer = renderLayers_.findByName(renderLayer);
-        if (!layer && renderLayer != "default")
-            layer = renderLayers_.findByName("default");
-
-        IME_ASSERT(layer, "The layer '" + renderLayer + "' could not be found in the Tilemaps render layers and the fallback layer 'default' is removed");
-
-        layer->addDrawable(sprite, renderOrder);
+        renderLayers_.add(sprite, renderOrder, renderLayer);
         sprite.setPosition(getTile(index).getWorldCentre());
         sprites_.push_back(std::ref(sprite));
     }

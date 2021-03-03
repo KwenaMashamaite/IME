@@ -78,6 +78,28 @@ namespace ime {
         RenderLayer::Ptr create(const std::string& name);
 
         /**
+         * @brief Add a drawable object to a render layer in the container
+         * @param drawable The drawable object to be added
+         * @param renderOrder The render order of the object in the render layer
+         * @param renderLayer The RenderLayer to add the object belongs to
+         *
+         * If the render layer is unspecified or the specified layer cannot be
+         * found then the drawable will be added to the 'default' layer. The
+         * 'default' render layer is created by the Scene when you instantiate
+         * it. Note that the 'default' layer may be deleted from the container,
+         * however you must make sure that the layer you specify during a call
+         * to this function already exists in the container otherwise undefined
+         * behavior
+         *
+         * @note You should only use this function if you don't want to the
+         * scene to keep an instance of the drawable on your behalf, otherwise
+         * you should use the container classes found in the Scene class, the
+         * drawable will be automatically added to the specified render layer
+         */
+        void add(const IDrawable& drawable, unsigned int renderOrder = 0u,
+             const std::string& renderLayer = "default");
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */
@@ -289,10 +311,14 @@ namespace ime {
         void forEachLayer(Callback callback);
 
         /**
+         * @internal
          * @brief Render all the layers
          * @param window The window to render layers on
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
-        void render(Window& window);
+        void render(Window& window) const;
 
     private:
         /**
