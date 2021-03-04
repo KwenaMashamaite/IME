@@ -51,7 +51,7 @@ namespace ime {
             /**
              * @brief Default constructor
              */
-            NonCopyable() = default;
+            NonCopyable(){};
 
             /**
              * @brief Move constructor
