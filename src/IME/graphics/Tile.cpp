@@ -27,14 +27,14 @@
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
-            isCollidable_{false},
-            id_{'\0'},
-            index_{-1, -1}
+        isCollidable_{false},
+        id_{'\0'},
+        index_{-1, -1}
     {
-        setSize(size.x, size.y);
+        setSize(size.x, size.y, {});
         tile_.setFillColour({36, 37, 38, 255});
         prevFillColour_ = tile_.getFillColour();
-        setPosition(position);
+        setPosition(position, {});
     }
 
     std::string Tile::getClassName() const {
@@ -46,12 +46,12 @@ namespace ime {
                 static_cast<unsigned int>(tile_.getGlobalBounds().height)};
     }
 
-    void Tile::setPosition(float x, float y) {
+    void Tile::setPosition(float x, float y, TilePassKey) {
         tile_.setPosition(x, y);
     }
 
-    void Tile::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
+    void Tile::setPosition(Vector2f position, TilePassKey) {
+        setPosition(position.x, position.y, {});
     }
 
     Vector2f Tile::getPosition() const {
@@ -67,19 +67,19 @@ namespace ime {
         return tile_.getSize() / 2.0f;
     }
 
-    void Tile::setSize(unsigned int width, unsigned int height) {
+    void Tile::setSize(unsigned int width, unsigned int height, TilePassKey) {
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
     }
 
-    void Tile::setSize(Vector2u size) {
-        setSize(size.x, size.y);
+    void Tile::setSize(Vector2u size, TilePassKey) {
+        setSize(size.x, size.y, {});
     }
 
     void Tile::setCollidable(bool collidable) {
         isCollidable_ = collidable;
     }
 
-    void Tile::setId(char id) {
+    void Tile::setId(char id, TilePassKey) {
         id_ = id;
     }
 
@@ -91,7 +91,7 @@ namespace ime {
         renderTarget.draw(tile_);
     }
 
-    void Tile::setVisible(bool visible) {
+    void Tile::setVisible(bool visible, TilePassKey) {
         if (isVisible() == visible)
             return;
 
@@ -107,8 +107,8 @@ namespace ime {
         return tile_.getFillColour() != Colour::Transparent;
     }
 
-    void Tile::toggleVisibility() {
-        setVisible(!isVisible());
+    void Tile::toggleVisibility(TilePassKey) {
+        setVisible(!isVisible(), {});
     }
 
     bool Tile::isCollidable() const {
@@ -120,7 +120,7 @@ namespace ime {
                 && (y >= getPosition().y && y <= getPosition().y + getSize().y));
     }
 
-    void Tile::setIndex(Index index) {
+    void Tile::setIndex(Index index, TilePassKey) {
         index_ = index;
     }
 
@@ -128,7 +128,7 @@ namespace ime {
         return index_;
     }
 
-    void Tile::setFillColour(const Colour &colour) {
+    void Tile::setFillColour(const Colour &colour, TilePassKey) {
         tile_.setFillColour(colour);
     }
 

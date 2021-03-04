@@ -36,10 +36,7 @@ namespace ime {
         invalidTile_({0, 0}, {-1, -1})
     {
         renderLayers_.create("default");
-
-        invalidTile_.setId('!'); //Any tile returned from a function with this token is invalid
-        invalidTile_.setPosition({-99, -99});
-        invalidTile_.setIndex({-1, -1});
+        invalidTile_.setIndex({-1, -1}, {});
         mapPos_ = {0, 0};
         numOfRows_ = numOfColms_ = 0u;
         if (tileWidth <= 0)
@@ -59,7 +56,7 @@ namespace ime {
         isVisible_ = visible;
 
         forEachTile([=](Tile& tile) {
-            tile.setVisible(visible);
+            tile.setVisible(visible, {});
         });
 
         if (isVisible_)
@@ -147,11 +144,11 @@ namespace ime {
         for (auto i = 0u; i < tiledMap_.size(); i++) {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 if (i == 0 && j == 0)
-                    tiledMap_[i][j].setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
+                    tiledMap_[i][j].setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_, {});
                 else if (j == 0)
-                    tiledMap_[i][j].setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
+                    tiledMap_[i][j].setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_}, {});
                 else
-                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y});
+                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y}, {});
             }
         }
     }
@@ -176,14 +173,14 @@ namespace ime {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 auto tile = Tile(tileSize_, {-99, -99});
                 if (i == 0 && j == 0)
-                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
+                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_, {});
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
+                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_}, {});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y}, {});
 
-                tile.setId(mapData_[i][j]);
-                tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
+                tile.setId(mapData_[i][j], {});
+                tile.setIndex({static_cast<int>(i), static_cast<int>(j)}, {});
                 row.emplace_back(tile);
             }
             tiledMap_.push_back(row);

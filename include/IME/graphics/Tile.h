@@ -34,16 +34,40 @@
 
 namespace ime {
     /**
-     * @brief Represents a tile in the tilemap
+     * @brief A Tilemap tile
      */
     class IME_API Tile : public IDrawable {
     public:
         /**
+         * @internal
+         * @brief Controls access to some public member functions
+         *
+         * This is known as the Passkey idiom. It restricts the use of public
+         * member functions to any class that can instantiate a Passkey. We
+         * control which classes can instantiate a passkey by granting them
+         * friendship to the Passkey class and not the class of interest. This
+         * way the two classes (class that needs access to something from another
+         * class and the class that contains the needed thing) are decoupled from
+         * one another. Traditionally, you would make the member functions private
+         * and grant friendship to the classes that need access to those functions.
+         * However, this kind of friendship grants access to not only the information
+         * of interest but to everything including private implementation
+         */
+        class TilePassKey final : utility::NonCopyable {
+            TilePassKey(){};
+            friend class TileMap;
+            friend class Tile;
+        };
+
+        /**
+         * @internal
          * @brief Construct a tile
          * @param size Size of the tile
          * @param position Position of the tile
+         *
+         * @warning This function is intended for internal use only
          */
-        explicit Tile(Vector2u size = {32, 32}, Vector2f position = {0, 0});
+        explicit Tile(Vector2u size, Vector2f position);
 
         /**
          * @brief Get the name of this class
@@ -52,10 +76,13 @@ namespace ime {
         std::string getClassName() const override;
 
         /**
+         * @internal
          * @brief Set the fill colour of the tile
          * @param colour New fill colour of the tile
+         *
+         * @note This function is intended for internal use only
          */
-        void setFillColour(const Colour& colour);
+        void setFillColour(const Colour& colour, TilePassKey);
 
         /**
          * @brief Get the tiles fill colour
@@ -64,17 +91,23 @@ namespace ime {
         Colour getFillColour() const;
 
         /**
+         * @internal
          * @brief Set the position of the tile
          * @param x X coordinate of the tile
          * @param y Y coordinate of the tile
+         *
+         * @note This function is intended for internal use only
          */
-        void setPosition(float x, float y);
+        void setPosition(float x, float y, TilePassKey);
 
         /**
+         * @internal
          * @brief Set the position of the tile in coordinates
          * @param position Position to set
+         *
+         * @note This function is intended for internal use only
          */
-        void setPosition(Vector2f position);
+        void setPosition(Vector2f position, TilePassKey);
 
         /**
          * @brief Get the position of the tile
@@ -95,17 +128,23 @@ namespace ime {
         Vector2f getLocalCentre() const;
 
         /**
+         * @internal
          * @brief Set the size of the tile
          * @param width The horizontal size
          * @param height The vertical size
+         *
+         * @note This function is intended for internal use only
          */
-        void setSize(unsigned int width, unsigned int height);
+        void setSize(unsigned int width, unsigned int height, TilePassKey);
 
         /**
+         * @internal
          * @brief Set the size of the tile
          * @param size New tile size
+         *
+         * @note This function is intended for internal use only
          */
-        void setSize(Vector2u size);
+        void setSize(Vector2u size, TilePassKey);
 
         /**
          * @brief Get the size of the tile
@@ -114,15 +153,15 @@ namespace ime {
         Vector2u getSize() const;
 
         /**
+         * @internal
          * @brief Set the index of the tile in the tilemap
          * @param index The index of the tile in the tilemap
          *
          * The index corresponds to the position of the tile in the tilemap
          *
-         * @warning This function is called by the tilemap and should never
-         * be called directly if the tile is part of a tilemap
+         * @note This function is intended for internal use only
          */
-        void setIndex(Index index);
+        void setIndex(Index index, TilePassKey);
 
         /**
          * @brief Get the index of the tile in the tilemap
@@ -131,12 +170,15 @@ namespace ime {
         Index getIndex() const;
 
         /**
+         * @internal
          * @brief Assign the tile an identification token
          * @param id Identification token to assign
          *
          * The id is an empty character by default
+         *
+         * @note This function is intended for internal use only
          */
-        void setId(char id);
+        void setId(char id, TilePassKey);
 
         /**
          * @brief Get the tiles id
@@ -162,20 +204,27 @@ namespace ime {
         bool isCollidable() const;
 
         /**
-         * @brief Render tile
-         * @param renderTarget Target to render tile on
+         * @internal
+         * @brief Draw the tile on a render target
+         * @param renderTarget Render target to draw tile on
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void draw(Window &renderTarget) const override;
 
         /**
+         * @internal
          * @brief Show or hide the tile
          * @param visible True to show or false to hide
          *
          * When hidden the tile will not be shown on the render target
          *
          * By default, the tile is visible
+         *
+         * @note This function is intended for internal use only
          */
-        void setVisible(bool visible);
+        void setVisible(bool visible, TilePassKey);
 
         /**
          * @brief Check whether or not the tile is visible
@@ -184,12 +233,15 @@ namespace ime {
         bool isVisible() const;
 
         /**
+         * @internal
          * @brief Toggle the visibility of the tile
          *
          * This function will hide the tile if its currently
          * visible or show it if it is currently hidden
+         *
+         *  @note This function is intended for internal use only
          */
-        void toggleVisibility();
+        void toggleVisibility(TilePassKey);
 
         /**
          * @brief Check if tile contains pixel coordinates
