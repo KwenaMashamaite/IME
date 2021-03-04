@@ -41,7 +41,7 @@ namespace ime {
         adjacencyList_.clear();
         auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {
             if (tilemap.isIndexValid({row, colm})
-                && !tilemap.getTile(Index{row, colm}).isSolid()
+                && !tilemap.getTile(Index{row, colm}).isCollidable()
                 && !tileHasObstacle(tilemap, Index{row, colm}))
             {
                 neighboursVec.push_back({row, colm});
@@ -50,7 +50,7 @@ namespace ime {
 
         for (auto i = 0; i < static_cast<int>(tileMap.getSizeInTiles().y); i++) {
             for (auto j = 0 ; j < static_cast<int>(tileMap.getSizeInTiles().x); j++) {
-                if (tileMap.getTile(Index{i, j}).isSolid() || tileHasObstacle(tileMap, Index{i, j}))
+                if (tileMap.getTile(Index{i, j}).isCollidable() || tileHasObstacle(tileMap, Index{i, j}))
                     continue;
                 auto neighbours = std::vector<Index>{};
                 addNeighbour(tileMap, neighbours, i - 1, j); //Left neighbour

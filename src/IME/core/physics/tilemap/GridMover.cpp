@@ -186,7 +186,7 @@ namespace ime {
     }
 
     bool GridMover::handleSolidTileCollision() {
-        if (targetTile_.isSolid()) {
+        if (targetTile_.isCollidable()) {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Direction::Unknown;

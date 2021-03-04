@@ -211,7 +211,7 @@ namespace ime {
 
     void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
         if (isIndexValid(index))
-            tiledMap_[index.row][index.colm].setSolid(isCollidable);
+            tiledMap_[index.row][index.colm].setCollidable(isCollidable);
     }
 
     void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable) {
@@ -230,14 +230,14 @@ namespace ime {
     void TileMap::setCollidableById(char id, bool isCollidable) {
         forEachTile([id, isCollidable](Tile& tile) {
             if (tile.getId() == id)
-                tile.setSolid(isCollidable);
+                tile.setCollidable(isCollidable);
         });
     }
 
     void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
         forEachTile([id, isCollidable](Tile& tile) {
             if (tile.getId() != id)
-                tile.setSolid(isCollidable);
+                tile.setCollidable(isCollidable);
         });
     }
 

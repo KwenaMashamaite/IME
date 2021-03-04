@@ -27,9 +27,9 @@
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
-        isSolid_{false},
-        id_{'\0'},
-        index_{-1, -1}
+            isCollidable_{false},
+            id_{'\0'},
+            index_{-1, -1}
     {
         setSize(size.x, size.y);
         tile_.setFillColour({36, 37, 38, 255});
@@ -75,12 +75,8 @@ namespace ime {
         setSize(size.x, size.y);
     }
 
-    void Tile::setSolid(bool isSolid) {
-        isSolid_ = isSolid;
-    }
-
-    bool Tile::isSolid() const {
-        return isSolid_;
+    void Tile::setCollidable(bool collidable) {
+        isCollidable_ = collidable;
     }
 
     void Tile::setId(char id) {
@@ -116,7 +112,7 @@ namespace ime {
     }
 
     bool Tile::isCollidable() const {
-        return isSolid_;
+        return isCollidable_;
     }
 
     bool Tile::contains(float x, float y) const {

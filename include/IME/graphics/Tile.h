@@ -145,19 +145,21 @@ namespace ime {
         char getId() const;
 
         /**
-         * @brief Set whether the tile is a solid or an empty tile
-         * @param isSolid True to set solid or false to set empty
+         * @brief Set whether or not the tile is collidable
+         * @param collidable True to set collidable. otherwise false
          *
-         * Solid tiles are collidable while empty tiles are not collidable.
-         * The tile is empty by default
+         * The tile is collidable or not collidable on all sides depending on
+         * the value of @a collidable
          */
-        void setSolid(bool isSolid);
+        void setCollidable(bool collidable);
 
         /**
-         * @brief Check if tile is a solid or an empty tile
-         * @return True if solid or false if empty
+         * @brief Check if tile is collidable on all sides or not
+         * @return True if tile is collidable on all sides, otherwise false
+         *
+         * @see setCollidable
          */
-        bool isSolid() const;
+        bool isCollidable() const;
 
         /**
          * @brief Render tile
@@ -190,12 +192,6 @@ namespace ime {
         void toggleVisibility();
 
         /**
-         * @brief Check if tile is collidable on all sides or not
-         * @return True if tile is collidable on all sides, otherwise false
-         */
-        bool isCollidable() const;
-
-        /**
          * @brief Check if tile contains pixel coordinates
          * @param x X coordinate to be checked
          * @param y Y coordinate to be checked
@@ -205,7 +201,7 @@ namespace ime {
         bool contains(float x, float y) const;
 
     private:
-        bool isSolid_;          //!< Stores whether tile is a solid or an empty tile
+        bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable
         char id_;               //!< Tile id
         Index index_;           //!< Position of the tile in the tilemap
         RectangleShape tile_;   //!< Tile reset
