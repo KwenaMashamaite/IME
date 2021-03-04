@@ -29,7 +29,6 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
 #include "IME/common/Object.h"
-#include "IME/core/physics/rigid_body/BodyDefinition.h"
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include <memory>
 #include <vector>
@@ -82,6 +81,15 @@ namespace ime {
         using Callback = std::function<void(Args...)>; //!< Event listener
 
         /**
+        * @brief The rigid body type
+        */
+        enum class Type {
+            Static = 0, //!< Zero mass, zero velocity, may be moved manually
+            Kinematic,  //!< Zero mass, non-zero velocity set by user, moved by physics engine
+            Dynamic     //!< Positive mass, non-zero velocity determined by forces, moved by physics engine
+        };
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */
@@ -94,6 +102,8 @@ namespace ime {
          * Note that a body may have more than one collider. However a
          * collider can only be attached to one rigid body. All colliders
          * attached to the body are destroyed when the body is destroyed
+         *
+         * By default, the body has no collider attached to it
          *
          * @warning This function is locked during callbacks
          */
@@ -132,6 +142,8 @@ namespace ime {
         /**
          * @brief Set the world position of the body's local origin
          * @param position The position to set
+         *
+         * By default, the position is (0, 0)
          */
         void setPosition(Vector2f position);
 
@@ -144,6 +156,8 @@ namespace ime {
         /**
          * @brief Set the body's rotation about the world origin
          * @param angle The body's world rotation
+         *
+         * By default, the rotation is 0 degrees
          */
         void setRotation(float angle);
 
@@ -166,8 +180,10 @@ namespace ime {
         Vector2f getLocalCenter() const;
 
         /**
-         * @brief Set the linear velocity of the centre of mass
+         * @brief Set the linear velocity of the body in pixels per second
          * @param velocity The new linear velocity of the centre of mass
+         *
+         * By default, the linear velocity is 0 pixels per second
          */
         void setLinearVelocity(Vector2f velocity);
 
@@ -178,8 +194,10 @@ namespace ime {
         Vector2f getLinearVelocity() const;
 
         /**
-         * @brief Set the angular velocity
+         * @brief Set the angular velocity in degrees per second
          * @param degrees The new angular velocity
+         *
+         * By default, the angular velocity is 0 degrees per second
          */
         void setAngularVelocity(float degrees);
 
@@ -254,6 +272,13 @@ namespace ime {
         /**
          * @brief Get the total mass of the body
          * @return The mass of the body in kilograms (Kg)
+         *
+         * The mass of the body is derived from the colliders attached to the
+         * body. The more colliders are attached the bigger the mass of the
+         * body, likewise the less number of colliders attached, the smaller
+         * the mass
+         *
+         * By default, the mass is 0
          */
         float getMass() const;
 
@@ -314,6 +339,8 @@ namespace ime {
          * damping parameter can be larger than 1.0f but the damping effect
          * becomes sensitive to the time step when the damping parameter is
          * large. Units are 1/time
+         *
+         * By default, the linear damping is 0.0f
          */
         void setLinearDamping(float damping);
 
@@ -331,6 +358,8 @@ namespace ime {
          * damping parameter can be larger than 1.0f but the damping effect
          * becomes sensitive to the time step when the damping parameter is
          * large. Units are 1/time
+         *
+         * By default, the angular damping is zero
          */
         void setAngularDamping(float damping);
 
@@ -343,6 +372,8 @@ namespace ime {
         /**
          * @brief Set the gravity scale of the body
          * @param scale The gravity scale
+         *
+         * By default, the gravity scale is 1.0f
          */
         void setGravityScale(float scale);
 
@@ -353,20 +384,20 @@ namespace ime {
         float getGravityScale() const;
 
         /**
-         * @brief Set the type of this body
+         * @brief Change the type of the body
          * @param type The type of this body
          *
-         * This may alter the mass and velocity.
+         * This function may alter the mass and velocity.
          *
          * @warning This function is locked during callbacks
          */
-        void setType(BodyType type);
+        void setType(Type type);
 
         /**
          * @brief Get the body type
          * @return The type of this body
          */
-        BodyType getType() const;
+        Type getType() const;
 
         /**
          * @brief Set whether or not the body is fast moving
@@ -378,8 +409,11 @@ namespace ime {
          * from tunneling through kinematic and static bodies. This option is
          * only considered for dynamic bodies
          *
-         * @warning You should use this function sparingly since it increases
-         * processing time
+         * By default, the body is NOT a fast body
+         *
+         * @warning Fast bodies increases processing time and hence decreases
+         * performance. Therefore, you should only set the body as a fast body
+         * if it is indeed a fast body, such as a bullet
          */
         void setFastBody(bool fast);
 
@@ -392,21 +426,24 @@ namespace ime {
         bool isFastBody() const;
 
         /**
-         * @brief Set whether or not this body sleeps
+         * @brief Set whether or not this body isSleepingAllowed
          * @param sleeps True to allow sleep or false to keep the body awake
          *         at all times
          *
+         * By default, the body is allowed to sleep when not in contact
+         * with another body or is not in motion
+         *
          * @note Setting the body to never sleep increases CPU usage
          */
-        void setSleeps(bool sleeps);
+        void setSleepingAllowed(bool sleeps);
 
         /**
-         * @brief Check if the body sleeps or not
+         * @brief Check if the body is allowed to sleep when inactive or not
          * @return True if the body sleeps or false if the body never sleeps
          *
-         * @see setSleeps
+         * @see setSleepingAllowed
          */
-        bool sleeps() const;
+        bool isSleepingAllowed() const;
 
         /**
          * @brief Awake the body or put it to sleep
@@ -415,7 +452,9 @@ namespace ime {
          * A sleeping body is not simulated. Note that if a body is awake and
          * collides with a sleeping body, then the sleeping body wakes up.
          * Bodies will also wake up if a joint or contact attached to them is
-         * destroyed
+         * destroyed.
+         *
+         * By default, the body is awake
          */
         void setAwake(bool awake);
 
@@ -443,6 +482,8 @@ namespace ime {
          * @warning Enabling a disabled body is almost as expensive as creating
          * the body from scratch, so use this function sparingly
          *
+         * By default, the body is enabled
+         *
          * @warning This function is locked during callbacks
          */
         void setEnabled(bool enable);
@@ -454,8 +495,10 @@ namespace ime {
         bool isEnabled() const;
 
         /**
-         * @brief Set whether or not this body can rotate
+         * @brief Set whether or not the body can rotate
          * @param rotate True to allow rotations or false to disallow rotations
+         *
+         * By default, the body can rotate
          */
         void setFixedRotation(bool rotate);
 
@@ -468,22 +511,30 @@ namespace ime {
         bool isFixedRotation() const;
 
         /**
-         * @brief Get the game object this body is attached to
-         * @return The game object this game object is attached to
+         * @brief Get the game object the body is attached to
+         * @return The game object this body is attached to or a nullptr if
+         *          teh body is not attached to any game object
+         *
+         * By default, the body is not attached to any game object
          */
         std::shared_ptr<GameObject> getGameObject();
         std::shared_ptr<GameObject> getGameObject() const;
 
         /**
-         * @brief Get the world the body is in
-         * @return The world the body belong sto
+         * @brief Get the physics world the body is in
+         * @return The physics world the body is simulated in
          */
         WorldPtr getWorld();
         const WorldPtr& getWorld() const;
 
         /**
-         * @brief Get the user data extracted from the body definition
+         * @brief Get the user data added to this body
          * @return The user data
+         *
+         * The user data can be used to store additional information to
+         * the body. You can store any type of data in the user date.
+         * IME does not use this data and it is sorely available for you
+         * to use
          */
         PropertyContainer& getUserData();
 
@@ -556,7 +607,7 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        Body(const BodyDefinition& definition, WorldPtr world);
+        Body(WorldPtr world, Type bodyType);
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body

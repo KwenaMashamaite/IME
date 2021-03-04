@@ -139,7 +139,7 @@ namespace ime {
         static World::Ptr create(Scene& scene, Vector2f gravity);
 
         /**
-         * @brief Set the gravity of the world
+         * @brief Change the gravity of the world
          * @param gravity The new gravity
          */
         void setGravity(Vector2f gravity);
@@ -179,12 +179,16 @@ namespace ime {
         /**
          * @brief Enable or disable continuous physics
          * @param enable True to enable otherwise false
+         *
+         * By default the physics engine uses continues physics
          */
         void enableContinuousPhysics(bool enable);
 
         /**
          * @brief Check whether continuous physics is enabled or not
          * @return True if enabled, otherwise false
+         *
+         * @see enableContinuousPhysics
          */
         bool isContinuousPhysicsEnabled() const;
 
@@ -209,31 +213,32 @@ namespace ime {
         bool isFixedStep() const;
 
         /**
-         * @brief Create a rigid body from its definition
-         * @param definition The body definition to construct a rigid body from
+         * @brief Create a rigid body
+         * @param type The type of the body to be created
          * @return The created body or a nullptr if this function is called
          *         inside a world callback
          *
-         * This
-         * @a definition is left unspecified, th
+         * By default, this function creates a static body
          *
          * @warning This function is locked during callbacks. This usually
          * means you should not attempt to create a body inside a callback
          * dispatched by the world (Callbacks are dispatched during a step)
          */
-        Body::Ptr createBody(const BodyDefinition& definition);
+        Body::Ptr createBody(Body::Type type = Body::Type::Static);
 
         /**
          * @brief Create a body and attach it to a game object
-         * @param entity The entity to attach the body to
-         * @param definition The definition to construct the rigid body from
+         * @param gameObject The game object to attach the body to
+         * @param type The type of the body to be created
+         *
+         * By default, this function creates a static body
          *
          * @note If the world is in the middle of a step, the body will not
          * be created. This usually means you should not attempt to create a
          * body inside a callback dispatched by the world (Callbacks are
          * dispatched during a step)
          */
-        void createBody(GameObjectPtr gameObject, const BodyDefinition& definition);
+        void createBody(GameObjectPtr gameObject, Body::Type type = Body::Type::Static);
 
         /**
          * @brief Get the body by its unique identifier
@@ -375,7 +380,7 @@ namespace ime {
         void clearForces();
 
         /**
-         * @brief Set whether or not the world sleeps
+         * @brief Set whether or not the world isSleepingAllowed
          * @param sleep True to enable sleeping or false to disable
          */
         void allowSleep(bool sleep);

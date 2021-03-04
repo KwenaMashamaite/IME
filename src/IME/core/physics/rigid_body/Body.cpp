@@ -30,25 +30,13 @@
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(const BodyDefinition &definition, World::Ptr world) {
-        auto b2Definition = std::make_unique<b2BodyDef>();
-        b2Definition->type = static_cast<b2BodyType>(definition.bodyType);
-        b2Definition->position = {utility::pixelsToMetres(definition.position.x), utility::pixelsToMetres(definition.position.y)};
-        b2Definition->angle = utility::degToRad(definition.angle);
-        b2Definition->linearVelocity = {utility::pixelsToMetres(definition.linearVelocity.x), utility::pixelsToMetres(definition.linearVelocity.y)};
-        b2Definition->angularVelocity = utility::degToRad(definition.angularVelocity);
-        b2Definition->linearDamping = definition.linearDamping;
-        b2Definition->angularDamping = definition.angularDamping;
-        b2Definition->allowSleep = definition.canSleep;
-        b2Definition->awake = definition.isAwake;
-        b2Definition->fixedRotation = definition.isFixedRotation;
-        b2Definition->bullet = definition.isFastBody;
-        b2Definition->enabled = definition.isEnabled;
-        b2Definition->gravityScale = definition.gravityScale;
-        b2Definition->userData.pointer = getObjectId();
-
+    Body::Body(World::Ptr world, Type bodyType) {
+        IME_ASSERT(world, "Cannot construct body from a nullptr");
         world_ = world;
-        userData_ = definition.userData;
+
+        auto b2Definition = std::make_unique<b2BodyDef>();
+        b2Definition->type = static_cast<b2BodyType>(bodyType);
+        b2Definition->userData.pointer = getObjectId();
 
         auto b2BodyDeleter = [this](b2Body* body) {
             if (body != nullptr) {
@@ -252,7 +240,7 @@ namespace ime {
         return body_->GetGravityScale();
     }
 
-    void Body::setType(BodyType type) {
+    void Body::setType(Type type) {
         if (world_->isLocked()) {
             IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback");
             return;
@@ -261,8 +249,8 @@ namespace ime {
         body_->SetType(static_cast<b2BodyType>(type));
     }
 
-    BodyType Body::getType() const {
-        return static_cast<BodyType>(body_->GetType());
+    Body::Type Body::getType() const {
+        return static_cast<Type>(body_->GetType());
     }
 
     void Body::setFastBody(bool fast) {
@@ -273,11 +261,11 @@ namespace ime {
         return body_->IsBullet();
     }
 
-    void Body::setSleeps(bool sleeps) {
+    void Body::setSleepingAllowed(bool sleeps) {
         body_->SetSleepingAllowed(sleeps);
     }
 
-    bool Body::sleeps() const {
+    bool Body::isSleepingAllowed() const {
         return body_->IsSleepingAllowed();
     }
 

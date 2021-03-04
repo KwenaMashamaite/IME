@@ -50,7 +50,7 @@ namespace ime {
             return;
         else if (target) {
             IME_ASSERT(target->hasRigidBody(), "Game objects controlled by a grid mover must have a rigid body attached to them");
-            IME_ASSERT(target->getRigidBody()->getType() == BodyType::Kinematic, "A grid mover can only control game objects with a BodyType::Kinematic rigid body");
+            IME_ASSERT(target->getRigidBody()->getType() == Body::Type::Kinematic, "A grid mover can only control game objects with a Body::Type::Kinematic rigid body");
             IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover");
 
             if (target_)
@@ -132,7 +132,7 @@ namespace ime {
         if (target_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover");
             IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover");
-            IME_ASSERT(target_->getRigidBody()->getType() == BodyType::Kinematic, "The targets rigid body was changed from BodyType::Kinematic, a grid mover can only move game objects with a Kinematic rigid body");
+            IME_ASSERT(target_->getRigidBody()->getType() == Body::Type::Kinematic, "The targets rigid body was changed from Body::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body");
 
             if (!isTargetMoving() && targetDirection_ != Direction::Unknown) {
                 setTargetTile();

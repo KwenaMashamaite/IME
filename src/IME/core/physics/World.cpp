@@ -233,23 +233,22 @@ namespace ime {
         return fixedTimeStep_;
     }
 
-    Body::Ptr World::createBody(const BodyDefinition &definition) {
+    Body::Ptr World::createBody(Body::Type type) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback");
             return nullptr;
         }
 
-        auto body = Body::Ptr(new Body(definition, shared_from_this()));
+        auto body = Body::Ptr(new Body(shared_from_this(), type));
         bodies_.insert({body->getObjectId(), body});
         return body;
     }
 
-    void World::createBody(GameObject::Ptr gameObject, const BodyDefinition &definition) {
-        if (gameObject) {
-            auto rigidBody = createBody(definition);
-            rigidBody->gameObject_ = gameObject;
-            gameObject->attachRigidBody(std::move(rigidBody));
-        }
+    void World::createBody(GameObject::Ptr gameObject, Body::Type type) {
+        IME_ASSERT(gameObject, "Cannot attach a rigid body to a nullptr");
+        auto rigidBody = createBody(type);
+        rigidBody->gameObject_ = gameObject;
+        gameObject->attachRigidBody(std::move(rigidBody));
     }
 
     Body::Ptr World::getBodyById(unsigned int id) {
