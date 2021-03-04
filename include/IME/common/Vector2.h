@@ -196,6 +196,64 @@ namespace ime {
     template <typename T>
     bool operator !=(const Vector2<T>& left, const Vector2<T>& right);
 
+    /**
+     * @relates Vector2
+     * @brief Overload of binary operator <
+     * @param left Left operand (a vector)
+     * @param right Right operand (a vector)
+     * @return True if @a left is less than @a right
+     *
+     * This function returns true if the x member of @a left is less than
+     * the x member of @a right AND the y member of @a left is less than
+     * the y member of @a right, otherwise it returns false
+     */
+    template <typename T>
+    bool operator <(const Vector2<T>& left, const Vector2<T>& right);
+
+    /**
+     * @relates Vector2
+     * @brief Overload of binary operator >
+     * @param left Left operand (a vector)
+     * @param right Right operand (a vector)
+     * @return True if @a left is greater than @a right
+     *
+     * This function returns true if the x member of @a left is greater than
+     * the x member of @a right AND the y member of @a left is greater than
+     * the y member of @a right, otherwise it returns false
+     */
+    template <typename T>
+    bool operator >(const Vector2<T>& left, const Vector2<T>& right);
+
+    /**
+     * @relates Vector2
+     * @brief Overload of binary operator <=
+     * @param left Left operand (a vector)
+     * @param right Right operand (a vector)
+     * @return True if @a left is less than or equal to @a right
+     *
+     * This function returns true if the x member of @a left is less than
+     * or equal to the x member of @a right AND the y member of @a left is
+     * less than or equal to the y member of @a right, otherwise it returns
+     * false
+     */
+    template <typename T>
+    bool operator <=(const Vector2<T>& left, const Vector2<T>& right);
+
+    /**
+     * @relates Vector2
+     * @brief Overload of binary operator >=
+     * @param left Left operand (a vector)
+     * @param right Right operand (a vector)
+     * @return True if @a left is greater than or equal to @a right
+     *
+     * This function returns true if the x member of @a left is greater than
+     * or equal to the x member of @a right AND the y member of @a left is
+     * greater than or equal to the y member of @a right, otherwise it returns
+     * false
+     */
+    template <typename T>
+    bool operator >=(const Vector2<T>& left, const Vector2<T>& right);
+
     #include <IME/common/Vector2.inl>
 
     ///< Define the most common types
