@@ -34,6 +34,7 @@
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/core/scene/RenderLayerContainer.h"
+#include "IME/core/scene/DrawableContainer.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -50,6 +51,15 @@ namespace ime {
     class IME_API TileMap {
     public:
         using Ptr = std::shared_ptr<TileMap>; // Shared tilemap pointer
+
+        /**
+         * @internal
+         * @brief Set the physics simulation
+         * @param physicsSimulation The simulation to be set
+         *
+         * @warning This function is intednded for internal use only
+         */
+        void setPhysicsSimulation(std::shared_ptr<World> physicsSimulation);
 
         /**
          * @brief Show or hide the tilemap
@@ -140,6 +150,15 @@ namespace ime {
          * @param map Vector to construct map from
          */
         void loadFromVector(Map map);
+
+        /**
+         * @brief Set whether or not a tile is collidable
+         * @param tile The tile to enable or disable collisions for
+         * @param collidable True to set collidable, otherwise false
+         *
+         * By default, a tile is not collidable
+         */
+        void setCollidable(Tile& tile, bool collidable);
 
         /**
          * @brief Enable or disable collision for a tile at a certain location
@@ -325,8 +344,8 @@ namespace ime {
         void forEachTileInRange(Index startPos, Index endPos, Callback<Tile&> callback);
 
         /**
-         * @brief Get the scene render layers
-         * @return The scene render layers
+         * @brief Get the tilemap render layers
+         * @return The tilemap render layers
          *
          * Render layers allow the tilemap to be rendered in separate layers
          * which are then composed back together. By default the tilemap has
@@ -334,7 +353,7 @@ namespace ime {
          * the scene without an explicit layer, it will be added to the default
          * layer. You can add objects to the "default" layer or even remove
          * the "default" layer from the render layer container, however you
-         * mus not forget to reallocate the objects in the "default" layer to
+         * must not forget to reallocate the objects in the "default" layer to
          * another layer, otherwise they will not be drawn to the screen
          */
         RenderLayerContainer& renderLayers();
@@ -377,8 +396,16 @@ namespace ime {
         void textureTilesById(char id, const Sprite& sprite);
 
         /**
+         * @internal
          * @brief Render tilemap on a render target
          * @param renderTarget Target to render tilemap on
+         *
+         * The tilemap's tiles do not belong to any render layer and are
+         * always drawn behind everything. That is, they are drawn first
+         * before the first render layer (layer at index 0) is drawn.
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void draw(Window &renderTarget);
 
@@ -390,13 +417,13 @@ namespace ime {
          * @param renderLayer The render layer to add the sprite to
          *
          * If @a renderLayer cannot be found, then sprite will be added to
-         * the "default" layer. If the default layer cannot be found the
-         * program will crash. A tilemap without a "default" layer is
-         * undefined behavior
+         * the "default" layer. If the default layer cannot be found then
+         * the behaviour is undefined. A tilemap without a "default" layer
+         * is undefined behavior
          *
          * Note that the sprite is added at the centre of the the tile
          */
-        void addSprite(Sprite& sprite, Index index, int renderOrder = 0,
+        void addSprite(Sprite::Ptr sprite, Index index, int renderOrder = 0,
             const std::string& renderLayer = "default");
 
         /**
@@ -672,16 +699,14 @@ namespace ime {
         Map mapData_;                //!< Map data used to identify different tiles
         std::string tileSet_;        //!< Tileset the visual grid is constructed from
         bool isVisible_;             //!< A flag indicating whether or not the tilemap is visible
-        bool isBackgroundDrawable_;  //!< First layer render state
-        bool isTilesDrawable_;       //!< Second layer render state
         Tile invalidTile_;           //!< Tile returned when an invalid index is provided
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
-
+        SpriteContainer sprites_;    //!< Stores sprites that belong to the tilemap
         RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
         std::unordered_map<Index, std::vector<GameObject::Ptr>> children_; //!< Children container
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;//!< Tiles container
-        std::vector<std::reference_wrapper<Sprite>> sprites_;
+        std::shared_ptr<World> physicsSim_; //!< The physics simulation
 
         friend class Scene;
     };

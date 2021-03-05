@@ -25,15 +25,16 @@
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/core/resources/ResourceManager.h"
+#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
+#include "IME/core/physics/World.h"
 #include "IME/graphics/Window.h"
 
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight) :
         tileSpacing_{1u},
         isVisible_(true),
-        isBackgroundDrawable_(false),
-        isTilesDrawable_(true),
-        invalidTile_({0, 0}, {-1, -1})
+        invalidTile_({0, 0}, {-1, -1}),
+        sprites_{renderLayers_}
     {
         renderLayers_.create("default");
         invalidTile_.setIndex({-1, -1}, {});
@@ -48,6 +49,11 @@ namespace ime {
         tileSize_ = Vector2u{tileWidth, tileHeight};
         backgroundTile_.setFillColour(Colour::Grey);
     }
+
+    void TileMap::setPhysicsSimulation(std::shared_ptr<World> physicsSimulation) {
+        physicsSim_ = std::move(physicsSimulation);
+    }
+
 
     void TileMap::setVisible(bool visible) {
         if (isVisible_ == visible)
@@ -76,7 +82,7 @@ namespace ime {
     Tile& TileMap::getTile(const Vector2f &position) {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
-                if (tile.contains(position.x, position.y))
+                if (tile.contains(position))
                     return tile;
         }
         return invalidTile_;
@@ -134,6 +140,18 @@ namespace ime {
         mapSizeInPixels_.x = numOfColms_ * tileSize_.y + (numOfColms_ + 1) * tileSpacing_;
         mapSizeInPixels_.y = numOfRows_ * tileSize_.x + (numOfRows_ + 1) * tileSpacing_;
         backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
+    }
+
+    void TileMap::setCollidable(Tile &tile, bool collidable) {
+        if (collidable && !tile.hasCollider()) {
+            auto collider = BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)});
+            auto body = physicsSim_->createBody();
+            body->attachCollider(collider);
+            collider->setDensity(1.0f);
+            tile.attachCollider(std::move(collider));
+            tile.setCollidable(true, {});
+        } else
+            tile.setCollidable(collidable, {});
     }
 
     void TileMap::setPosition(int x, int y) {
@@ -200,15 +218,16 @@ namespace ime {
         });
     }
 
-    void TileMap::addSprite(Sprite &sprite, Index index, int renderOrder, const std::string &renderLayer) {
-        renderLayers_.add(sprite, renderOrder, renderLayer);
-        sprite.setPosition(getTile(index).getWorldCentre());
-        sprites_.push_back(std::ref(sprite));
+    void TileMap::addSprite(Sprite::Ptr sprite, Index index, int renderOrder, const std::string &renderLayer) {
+        IME_ASSERT(sprite, "Sprite cannot be a nullptr");
+        renderLayers_.add(*sprite, renderOrder, renderLayer);
+        sprite->setPosition(getTile(index).getWorldCentre());
+        sprites_.add(std::move(sprite));
     }
 
     void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
         if (isIndexValid(index))
-            tiledMap_[index.row][index.colm].setCollidable(isCollidable);
+                setCollidable(tiledMap_[index.row][index.colm], isCollidable);
     }
 
     void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable) {
@@ -225,16 +244,16 @@ namespace ime {
     }
 
     void TileMap::setCollidableById(char id, bool isCollidable) {
-        forEachTile([id, isCollidable](Tile& tile) {
+        forEachTile([id, isCollidable, this](Tile& tile) {
             if (tile.getId() == id)
-                tile.setCollidable(isCollidable);
+                setCollidable(tile, isCollidable);
         });
     }
 
     void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
-        forEachTile([id, isCollidable](Tile& tile) {
+        forEachTile([id, isCollidable, this](Tile& tile) {
             if (tile.getId() != id)
-                tile.setCollidable(isCollidable);
+                setCollidable(tile, isCollidable);
         });
     }
 

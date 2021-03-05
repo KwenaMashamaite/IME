@@ -557,7 +557,7 @@ namespace ime {
          * @note A collision begin event can only occur if the body has a
          * Collider attached to it
          *
-         * @see attachCollider
+         * @see setCollidable
          * @see onCollisionEnd
          */
         void onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback);
@@ -573,7 +573,7 @@ namespace ime {
          * @note A collision end event can only occur if the body has a
          * Collider attached to it
          *
-         * @see attachCollider
+         * @see setCollidable
          * @see onCollisionStart
          */
         void onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback);

@@ -28,7 +28,6 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/utility/NonCopyable.h"
 #include "IME/common/Object.h"
 #include <memory>
 
@@ -119,7 +118,7 @@ namespace ime {
      *
      * Rigid bodies enable physics while colliders enable collisions
      */
-    class IME_API Collider : public Object, utility::NonCopyable {
+    class IME_API Collider : public Object {
     public:
         using Ptr = std::shared_ptr<Collider>; //!< Shared collider pointer
         using BodyPtr = std::shared_ptr<Body>; //!< Shared Body pointer
@@ -143,6 +142,16 @@ namespace ime {
          * without a rigid body is undefined behavior
          */
         explicit Collider(Type type);
+
+        /**
+         * @brief Copy constructor
+         */
+        Collider(const Collider&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Collider& operator=(const Collider&) = delete;
 
         /**
          * @brief Move constructor

@@ -45,6 +45,21 @@ namespace ime {
         using ConstPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider pointer
 
         /**
+         * @brief Default constructor
+         * @param size The size of the box
+         *
+         * By default the size is 0.1f (width) x 0.1f (height)
+         *
+         * @warning The minimum size of the rectangle is 0.1f x 0.1f. Any
+         * size below this is undefined behaviour
+         *
+         * @warning The collider must be attached to a rigid body before
+         * any of its functions are are called. Calling a member function
+         * without a rigid body is undefined behavior
+         */
+        explicit BoxCollider(Vector2f size = {0.1f, 0.1f});
+
+        /**
          * @brief Move constructor
          */
         BoxCollider(BoxCollider&&) noexcept;
@@ -58,6 +73,9 @@ namespace ime {
          * @brief Create a box collider object
          * @param size The size of the box
          * @return The new box collider instance
+         *
+         * This function is just a helper function for creating a shared
+         * pointer to a box collider. The class does not keep the pointer
          *
          * By default the size is 0.1f (width) x 0.1f (height)
          *
@@ -111,12 +129,6 @@ namespace ime {
         ~BoxCollider();
 
     private:
-        /**
-         * @brief Default constructor
-         * @param size The size of the box
-         */
-        explicit BoxCollider(Vector2f size);
-
         /**
          * @brief Get the internal shape
          * @return The internal shape

@@ -44,6 +44,11 @@ namespace ime {
         using Ptr = std::shared_ptr<EdgeCollider>; //!< Shared collider pointer
 
         /**
+         * @brief Default constructor
+         */
+        EdgeCollider();
+
+        /**
          * @brief Move constructor
          */
         EdgeCollider(EdgeCollider&&) noexcept;
@@ -56,6 +61,9 @@ namespace ime {
         /**
          * @brief Create a new edge collider
          * @return The created edge collider
+         *
+         * This function is just a helper function for creating a shared
+         * pointer to an edge collider. The class does not keep the pointer
          */
         static EdgeCollider::Ptr create();
 
@@ -161,11 +169,6 @@ namespace ime {
         ~EdgeCollider();
 
     private:
-        /**
-         * @brief Default constructor
-         */
-        EdgeCollider();
-
         /**
          * @brief Get the internal collider
          * @return The internal collider

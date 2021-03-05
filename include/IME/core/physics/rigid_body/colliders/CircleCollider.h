@@ -46,6 +46,14 @@ namespace ime {
         using Ptr = std::shared_ptr<CircleCollider>; //!< Shared collider pointer
 
         /**
+         * @brief Default constructor
+         * @param radius The radius of the circle
+         *
+         * By default, the circle radius is 0.0f
+         */
+        explicit CircleCollider(float radius = 0.0f);
+
+        /**
          * @brief Move constructor
          */
         CircleCollider(CircleCollider&&) noexcept;
@@ -59,6 +67,9 @@ namespace ime {
          * @brief Create a new circle collider
          * @param radius The radius of the circle
          * @return The created circle collider
+         *
+         * This function is just a helper function for creating a shared
+         * pointer to a circle collider. The class does not keep the pointer
          *
          * By default, the circle radius is 0.0f
          */
@@ -108,12 +119,6 @@ namespace ime {
         ~CircleCollider();
 
     private:
-        /**
-         * @brief Default constructor
-         * @param radius The radius of the circle
-         */
-        CircleCollider(float radius = 0.0f);
-
         /**
          * @brief Get the internal collider
          * @return The internal collider

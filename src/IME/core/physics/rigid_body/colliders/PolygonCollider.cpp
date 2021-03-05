@@ -36,7 +36,7 @@ namespace ime {
     PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) noexcept = default;
 
     PolygonCollider::Ptr PolygonCollider::create() {
-        return PolygonCollider::Ptr(new PolygonCollider);
+        return std::make_shared<PolygonCollider>();
     }
 
     Collider::Ptr PolygonCollider::copy() {

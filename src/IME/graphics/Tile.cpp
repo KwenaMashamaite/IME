@@ -24,17 +24,75 @@
 
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Window.h"
+#include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
+#include "IME/core/physics/World.h"
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
         isCollidable_{false},
         id_{'\0'},
-        index_{-1, -1}
+        index_{-1, -1},
+        tile_({static_cast<float>(size.x), static_cast<float>(size.y)})
     {
-        setSize(size.x, size.y, {});
         tile_.setFillColour({36, 37, 38, 255});
         prevFillColour_ = tile_.getFillColour();
-        setPosition(position, {});
+        tile_.setPosition(position);
+    }
+
+    Tile::Tile(const Tile& other) :
+        isCollidable_{other.isCollidable_},
+        id_{other.id_},
+        index_{other.index_},
+        tile_{other.tile_},
+        prevFillColour_{other.prevFillColour_}
+    {
+        /*if (other.collider_) {
+            collider_ = std::make_shared<BoxCollider>(other.collider_->getSize());
+            collider_->getBody()->setPosition(getWorldCentre());
+            collider_->setEnable(isCollidable_);
+        }*/
+    }
+
+    Tile& Tile::operator=(Tile other) {
+        swap(other);
+        return *this;
+    }
+
+    void Tile::swap(Tile &other) {
+        using std::swap;
+
+        swap(isCollidable_, other.isCollidable_);
+        swap(id_, other.id_);
+        swap(index_, other.index_);
+        swap(tile_, other.tile_);
+        swap(prevFillColour_, other.prevFillColour_);
+        swap(collider_, other.collider_);
+    }
+
+    Tile::Tile(Tile&&) noexcept = default;
+    Tile &Tile::operator=(Tile&&) noexcept = default;
+
+    void Tile::attachCollider(std::shared_ptr<BoxCollider> collider) {
+        IME_ASSERT(!collider_, "Cannot add a collider to a tile that already has one, use the removeCollider function to remove it first");
+        IME_ASSERT(collider->getBody(), "A tile collider must have a rigid body attached to it");
+        IME_ASSERT(collider->getBody()->getType() == Body::Type::Static, "The rigid body a tile collider is attached to must be of type Body::Type::Static");
+        collider_ = std::move(collider);
+        if (collider_->getSize() < tile_.getSize() || collider_->getSize() > tile_.getSize())
+            collider_->setSize(tile_.getSize());
+
+        collider_->getBody()->setPosition(getWorldCentre());
+    }
+
+    void Tile::removeCollider(Tile::TilePassKey) {
+        setCollidable(false, {});
+        auto body = collider_->getBody();
+        body->removeColliderWithId(collider_->getObjectId());
+        body->getWorld()->removeBodyById(body->getObjectId());
+        collider_.reset();
+    }
+
+    bool Tile::hasCollider() const {
+        return collider_ != nullptr;
     }
 
     std::string Tile::getClassName() const {
@@ -48,6 +106,9 @@ namespace ime {
 
     void Tile::setPosition(float x, float y, TilePassKey) {
         tile_.setPosition(x, y);
+
+        if (collider_)
+            collider_->getBody()->setPosition(getWorldCentre());
     }
 
     void Tile::setPosition(Vector2f position, TilePassKey) {
@@ -69,14 +130,28 @@ namespace ime {
 
     void Tile::setSize(unsigned int width, unsigned int height, TilePassKey) {
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
+
+        if (collider_) {
+            collider_->setSize(width, height);
+            collider_->getBody()->setPosition(getWorldCentre());
+        }
     }
 
     void Tile::setSize(Vector2u size, TilePassKey) {
         setSize(size.x, size.y, {});
     }
 
-    void Tile::setCollidable(bool collidable) {
+    void Tile::setCollidable(bool collidable, TilePassKey) {
+        if (isCollidable_ == collidable)
+            return;
+
+        if (collidable)
+            IME_ASSERT(collider_, "Cannot set Tile as collidable without a collider, use the setCollidable function to add one");
+
         isCollidable_ = collidable;
+
+        if (collider_)
+            collider_->setEnable(collidable);
     }
 
     void Tile::setId(char id, TilePassKey) {
@@ -115,9 +190,9 @@ namespace ime {
         return isCollidable_;
     }
 
-    bool Tile::contains(float x, float y) const {
-        return ((x >= getPosition().x && x <= getPosition().x + getSize().x)
-                && (y >= getPosition().y && y <= getPosition().y + getSize().y));
+    bool Tile::contains(Vector2f point) const {
+        return ((point.x >= getPosition().x && point.x <= getPosition().x + getSize().x)
+                && (point.y >= getPosition().y && point.y <= getPosition().y + getSize().y));
     }
 
     void Tile::setIndex(Index index, TilePassKey) {
@@ -135,4 +210,6 @@ namespace ime {
     Colour Tile::getFillColour() const {
         return tile_.getFillColour();
     }
+
+    Tile::~Tile() = default;
 }

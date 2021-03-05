@@ -38,7 +38,7 @@ namespace ime {
     CircleCollider &CircleCollider::operator=(CircleCollider&&) noexcept = default;
 
     CircleCollider::Ptr CircleCollider::create(float radius) {
-        return CircleCollider::Ptr(new CircleCollider(radius));
+        return std::make_shared<CircleCollider>(radius);
     }
 
     Collider::Ptr CircleCollider::copy() {

@@ -36,7 +36,7 @@ namespace ime {
     EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) noexcept = default;
 
     EdgeCollider::Ptr EdgeCollider::create() {
-        return EdgeCollider::Ptr(new EdgeCollider());
+        return std::make_shared<EdgeCollider>();
     }
 
     Collider::Ptr EdgeCollider::copy() {

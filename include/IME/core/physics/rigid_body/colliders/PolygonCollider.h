@@ -46,6 +46,11 @@ namespace ime {
         using Ptr = std::shared_ptr<PolygonCollider>; //!< Shared polygon collider
 
         /**
+         * @brief Default constructor
+         */
+        PolygonCollider();
+
+        /**
          * @brief Move constructor
          */
         PolygonCollider(PolygonCollider&&) noexcept;
@@ -58,6 +63,9 @@ namespace ime {
         /**
          * @brief Create a new polygon collider
          * @return The created polygon collider
+         *
+         * This function is just a helper function for creating a shared
+         * pointer to a polygon collider. The class does not keep the pointer
          */
         static PolygonCollider::Ptr create();
 
@@ -95,11 +103,6 @@ namespace ime {
         ~PolygonCollider();
 
     private:
-        /**
-         * @brief Default constructor
-         */
-        PolygonCollider();
-
         /**
          * @brief Get the internal collider
          * @return The internal collider

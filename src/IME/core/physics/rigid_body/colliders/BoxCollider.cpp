@@ -38,7 +38,7 @@ namespace ime {
     BoxCollider &BoxCollider::operator=(BoxCollider&&) noexcept = default;
 
     BoxCollider::Ptr BoxCollider::create(Vector2f size) {
-        return BoxCollider::Ptr(new BoxCollider(size));
+        return std::make_shared<BoxCollider>(size);
     }
 
     Collider::Ptr BoxCollider::copy() {
@@ -57,6 +57,7 @@ namespace ime {
     }
 
     void BoxCollider::setSize(float width, float height) {
+        // The size constraints are from Box2d
         IME_ASSERT(width >= 0.1f, "The width of the rectangle must be greater than or equal to the minimum value of 0.1f");
         IME_ASSERT(height >= 0.1f, "The height of the rectangle must be greater than or equal to the minimum value of 0.1f");
 

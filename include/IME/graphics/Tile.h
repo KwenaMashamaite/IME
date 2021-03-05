@@ -33,6 +33,8 @@
 #include <memory>
 
 namespace ime {
+    class BoxCollider;
+
     /**
      * @brief A Tilemap tile
      */
@@ -53,27 +55,104 @@ namespace ime {
          * However, this kind of friendship grants access to not only the information
          * of interest but to everything including private implementation
          */
-        class TilePassKey final : utility::NonCopyable {
+        class TilePassKey final {
             TilePassKey(){};
+            TilePassKey(const TilePassKey&) = delete;
+            TilePassKey& operator=(const TilePassKey&) = delete;
+
+            // Classes that have access to restricted public member functions
             friend class TileMap;
             friend class Tile;
         };
 
         /**
-         * @internal
          * @brief Construct a tile
          * @param size Size of the tile
          * @param position Position of the tile
-         *
-         * @warning This function is intended for internal use only
          */
-        explicit Tile(Vector2u size, Vector2f position);
+        Tile(Vector2u size, Vector2f position);
+
+        /**
+         * @brief Copy constructor
+         */
+        Tile(const Tile&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Tile& operator=(Tile);
+
+        /**
+         * @brief Move constructor
+         */
+        Tile(Tile&&) noexcept;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Tile& operator=(Tile&&) noexcept;
 
         /**
          * @brief Get the name of this class
          * @return The name of this class
          */
         std::string getClassName() const override;
+
+        /**
+         * @brief Get the size of the tile
+         * @return The size of the tile
+         */
+        Vector2u getSize() const;
+
+        /**
+         * @brief Get the fill colour of the tile
+         * @return The fill colour of the tile
+         */
+        Colour getFillColour() const;
+
+        /**
+         * @brief Get the position of the tile
+         * @return The position of the tile
+         */
+        Vector2f getPosition() const;
+
+        /**
+         * @brief Get the tile's centre point in local coordinates
+         * @return The tiles centre point in local coordinates
+         */
+        Vector2f getLocalCentre() const;
+
+        /**
+         * @brief Get the tile's centre point in world coordinates
+         * @return The tiles centre point in world coordinates
+         */
+        Vector2f getWorldCentre() const;
+
+        /**
+         * @brief Get the index of the tile in the Tilemap
+         * @return The index of the tile in the tilemap
+         */
+        Index getIndex() const;
+
+        /**
+         * @brief Get the id of the tile
+         * @return The id of the tile
+         */
+        char getId() const;
+
+        /**
+         * @brief Check if the tile is collidable or not
+         * @return True if the tile is collidable, otherwise false
+         */
+        bool isCollidable() const;
+
+        /**
+         * @brief Check if the tile contains a world coordinate
+         * @param point The point (in world coordinates) to be checked
+         * @return True if the tile contains the coordinates, otherwise
+         *         false
+         */
+        bool contains(Vector2f point) const;
 
         /**
          * @internal
@@ -83,12 +162,6 @@ namespace ime {
          * @note This function is intended for internal use only
          */
         void setFillColour(const Colour& colour, TilePassKey);
-
-        /**
-         * @brief Get the tiles fill colour
-         * @return The tiles fill colour
-         */
-        Colour getFillColour() const;
 
         /**
          * @internal
@@ -110,24 +183,6 @@ namespace ime {
         void setPosition(Vector2f position, TilePassKey);
 
         /**
-         * @brief Get the position of the tile
-         * @return The position of the tile
-         */
-        Vector2f getPosition() const;
-
-        /**
-         * @brief Get the tile's centre point in world coordinates
-         * @return The tiles centre point in world coordinates
-         */
-        Vector2f getWorldCentre() const;
-
-        /**
-         * @brief Get the tile's centre point in local coordinates
-         * @return The tiles centre point in local coordinates
-         */
-        Vector2f getLocalCentre() const;
-
-        /**
          * @internal
          * @brief Set the size of the tile
          * @param width The horizontal size
@@ -147,12 +202,6 @@ namespace ime {
         void setSize(Vector2u size, TilePassKey);
 
         /**
-         * @brief Get the size of the tile
-         * @return The size of the tile
-         */
-        Vector2u getSize() const;
-
-        /**
          * @internal
          * @brief Set the index of the tile in the tilemap
          * @param index The index of the tile in the tilemap
@@ -162,12 +211,6 @@ namespace ime {
          * @note This function is intended for internal use only
          */
         void setIndex(Index index, TilePassKey);
-
-        /**
-         * @brief Get the index of the tile in the tilemap
-         * @return The index of the tile in the tilemap
-         */
-        Index getIndex() const;
 
         /**
          * @internal
@@ -181,27 +224,66 @@ namespace ime {
         void setId(char id, TilePassKey);
 
         /**
-         * @brief Get the tiles id
-         * @return The tiles id
-         */
-        char getId() const;
-
-        /**
+         * @internal
          * @brief Set whether or not the tile is collidable
          * @param collidable True to set collidable. otherwise false
          *
-         * The tile is collidable or not collidable on all sides depending on
-         * the value of @a collidable
+         * Note that disabling a collision for a tile that was previously
+         * collidable does not remove the tiles collider, This may be
+         * useful if the collision will be re-enabled at a later time. You
+         * can explicitly remove the collider by calling the removeCollider
+         * function
+         *
+         * @note This function is intended for internal use only
+         *
+         * @see setCollidable and removeCollider
          */
-        void setCollidable(bool collidable);
+        void setCollidable(bool collidable, TilePassKey);
 
         /**
-         * @brief Check if tile is collidable on all sides or not
-         * @return True if tile is collidable on all sides, otherwise false
+         * @internal
+         * @brief Add a collider to the tile
+         * @param collider The collider to be added
          *
-         * @see setCollidable
+         * @warning It is required that all tilemap tiles that are collidable
+         * have a collider attached to them. The collider must be attached to
+         * a static rigid body. Providing a collider that is not attached to a
+         * rigid body is undefined behavior. In addition calling the function
+         * setCollidable with an argument of true on a tile without a collider
+         * is undefined behavior.
+         *
+         * Note that a tile can only have one collider attached to it. You
+         * have to remove the previous collider first if you want to attach
+         * a new one
+         *
+         * @note This function is intended for internal use only
+         *
+         * @see removeCollider and hasCollider
          */
-        bool isCollidable() const;
+        void attachCollider(std::shared_ptr<BoxCollider> collider);
+
+        /**
+         * @internal
+         * @brief Remove the collider added to the tile
+         *
+         * Note that if the tile is collidable and the collider is removed,
+         * it will no longer be collidable. This function has no effect if
+         * the tile does not have a collider attached to it
+         *
+         * @note This function is intended for internal use only
+         *
+         * @see setCollidable and hasCollider
+         */
+        void removeCollider(TilePassKey);
+
+        /**
+         * @internal
+         * @brief Check if the tile has a collider or not
+         * @return True if the tile has a collider, otherwise false
+         *
+         * @note This function is intended for internal use only
+         */
+        bool hasCollider() const;
 
         /**
          * @internal
@@ -227,8 +309,11 @@ namespace ime {
         void setVisible(bool visible, TilePassKey);
 
         /**
+         * @internal
          * @brief Check whether or not the tile is visible
          * @return True if visible, otherwise false
+         *
+         * @note This function is intended for internal use only
          */
         bool isVisible() const;
 
@@ -244,13 +329,16 @@ namespace ime {
         void toggleVisibility(TilePassKey);
 
         /**
-         * @brief Check if tile contains pixel coordinates
-         * @param x X coordinate to be checked
-         * @param y Y coordinate to be checked
-         * @return True if the tile contains the pixel coordinates, otherwise
-         *         false
+         * @brief Destructor
          */
-        bool contains(float x, float y) const;
+        ~Tile();
+
+    private:
+        /**
+         * @brief Swap the contents of this tile with that of another tile
+         * @param other The tile to swap contents with
+         */
+        void swap(Tile& other);
 
     private:
         bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable
@@ -258,6 +346,7 @@ namespace ime {
         Index index_;           //!< Position of the tile in the tilemap
         RectangleShape tile_;   //!< Tile reset
         Colour prevFillColour_; //!< Tiles fill colour before it was hidden
+        std::shared_ptr<BoxCollider> collider_; //!< The tiles collider
     };
 }
 
