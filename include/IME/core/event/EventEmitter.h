@@ -49,7 +49,7 @@ namespace ime {
     class IME_API EventEmitter {
     public:
         /**
-         * @brief Default copy constructor
+         * @brief Default constructor
          */
         EventEmitter() = default;
 
@@ -59,9 +59,19 @@ namespace ime {
         EventEmitter(const EventEmitter&);
 
         /**
-         * @brief Assignment operator
+         * @brief Copy assignment operator
          */
         EventEmitter& operator=(const EventEmitter&);
+
+        /**
+         * @brief Move constructor
+         */
+        EventEmitter(EventEmitter&&) noexcept;
+
+        /**
+         * @brief Move assignment operator
+         */
+        EventEmitter& operator=(EventEmitter&&) noexcept;
 
         /**
          * @brief Add an event listener (callback) to an event
@@ -188,7 +198,7 @@ namespace ime {
          * @param listenerId Identification number of the listener to be checked
          * @return A pair, of which the first element is a bool that is true if
          *         the specified event has an event listener with the specified id, 
-                   otherwise false and the second is an int which is the index of 
+                   otherwise false and the second is an int which is the index of
                    the found event listener in the specified event listeners list
          *
          * @warning If the first element of the pair is false, the second element
