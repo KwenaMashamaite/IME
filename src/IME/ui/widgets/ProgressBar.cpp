@@ -27,9 +27,9 @@
 #include <TGUI/Widgets/ProgressBar.hpp>
 
 namespace ime::ui {
-    class ProgressBar::Impl {
+    class ProgressBar::ProgressBarImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        ProgressBarImpl(std::shared_ptr<tgui::Widget> widget) :
             progressBar_{std::static_pointer_cast<tgui::ProgressBar>(widget)}
         {}
 
@@ -40,7 +40,7 @@ namespace ime::ui {
     
     ProgressBar::ProgressBar(const std::string& text) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::ProgressBar>>(tgui::ProgressBar::create())),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<ProgressBarRenderer>());
         pimpl_->progressBar_->setText(text);
@@ -50,21 +50,28 @@ namespace ime::ui {
         });
     }
 
-    ProgressBar::ProgressBar(ProgressBar &&) = default;
+    ProgressBar::ProgressBar(const ProgressBar& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<ProgressBarImpl>(*other.pimpl_)}
+    {}
 
-    ProgressBar &ProgressBar::operator=(ProgressBar &&) = default;
+    ProgressBar &ProgressBar::operator=(const ProgressBar& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ProgressBarImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    ProgressBar::ProgressBar(ProgressBar &&) noexcept = default;
+    ProgressBar &ProgressBar::operator=(ProgressBar &&) noexcept = default;
 
     ProgressBar::Ptr ProgressBar::create(const std::string& text) {
         return Ptr(new ProgressBar(text));
     }
 
-    ProgressBar::Ptr ProgressBar::copy(ProgressBar::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-        widget->pimpl_->progressBar_ = widget->pimpl_->progressBar_->copy(other->pimpl_->progressBar_);
-
-        return widget;
+    ProgressBar::Ptr ProgressBar::copy() {
+        return std::static_pointer_cast<ProgressBar>(clone());
     }
 
     std::shared_ptr<ProgressBarRenderer> ProgressBar::getRenderer() {
@@ -118,6 +125,10 @@ namespace ime::ui {
 
     std::string ProgressBar::getText() const {
         return pimpl_->progressBar_->getText().toStdString();
+    }
+
+    Widget::Ptr ProgressBar::clone() const {
+        return std::make_shared<ProgressBar>(*this);
     }
 
     std::string ProgressBar::getWidgetType() const {

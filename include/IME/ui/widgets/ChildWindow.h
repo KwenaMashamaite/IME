@@ -62,14 +62,24 @@ namespace ime {
             };
 
             /**
+             * @brief Copy constructor
+             */
+            ChildWindow(const ChildWindow&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            ChildWindow& operator=(const ChildWindow&);
+
+            /**
              * @brief Move constructor
              */
-            ChildWindow(ChildWindow&&);
+            ChildWindow(ChildWindow&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            ChildWindow& operator=(ChildWindow&&);
+            ChildWindow& operator=(ChildWindow&&) noexcept;
 
             /**
              * @brief Create a child window
@@ -81,29 +91,12 @@ namespace ime {
                 unsigned int titleButtons = TitleButton::Close);
 
             /**
-             * @brief Create a copy of another window
-             * @param other The window to copy
-             * @param shareRenderer True if the new window should have the
-             *          same renderer as the copied window
-             * @return The new window widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the windows share a renderer, changes in a render
-             * property of one of the windows automatically reflect on
-             * the other window, otherwise each window has its own renderer
-             * and changes in render properties are isolated to the specific
-             * window.
-             *
-             * @note when the windows don't share a render, the renderer of
-             * the new window widget will initially have the properties of
-             * the copied window such that the two look the same after this
-             * function returns
-             *
-             * By default, the windows share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static ChildWindow::Ptr copy(ChildWindow::ConstPtr other, bool shareRenderer = true);
+            ChildWindow::Ptr copy();
 
             /**
              * @brief Get the child window renderer
@@ -141,7 +134,7 @@ namespace ime {
              * @param size New maximum size of the child window
              *
              * This function sets the maximum size of the entire window,
-             * including borders and titlebar. If the window is larger than
+             * including borders and title bar. If the window is larger than
              * the new maximum size, it will automatically be shrunk
              */
             void setMaximumSize(Vector2f size);
@@ -300,6 +293,17 @@ namespace ime {
             bool isKeptInParent() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the window
              * @return The type of the window
              */
@@ -320,8 +324,8 @@ namespace ime {
                 unsigned int titleButtons = TitleButton::Close);
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class ChildWindowImpl;
+            std::unique_ptr<ChildWindowImpl> pimpl_;
         };
     }
 }

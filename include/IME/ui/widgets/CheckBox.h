@@ -41,14 +41,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const CheckBox>; //!< const shared widget pointer
 
             /**
-             * @brief Constructor
+             * @brief Copy constructor
              */
-            CheckBox(CheckBox&&);
+            CheckBox(const CheckBox&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            CheckBox& operator=(const CheckBox&);
+
+            /**
+             * @brief Move Constructor
+             */
+            CheckBox(CheckBox&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            CheckBox& operator=(CheckBox&&);
+            CheckBox& operator=(CheckBox&&) noexcept;
 
             /**
              * @brief Create a new checkbox widget
@@ -58,29 +68,12 @@ namespace ime {
             static CheckBox::Ptr create(const std::string& text = "");
 
             /**
-             * @brief Create a copy of another checkbox
-             * @param other The checkbox to copy
-             * @param shareRenderer True if the new checkbox should have the
-             *          same renderer as the copied checkbox
-             * @return The new checkbox widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the checkboxes share a renderer, changes in a render
-             * property of one of the checkboxes automatically reflect on
-             * the other checkbox, otherwise each checkbox has its own renderer
-             * and changes in render properties are isolated to the specific
-             * checkbox.
-             *
-             * @note when the checkboxes don't share a render, the renderer of
-             * the new checkbox widget will initially have the properties of
-             * the copied checkbox such that the two look the same after this
-             * function returns
-             *
-             * By default, the checkboxes share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static CheckBox::Ptr copy(CheckBox::ConstPtr other, bool shareRenderer = true);
+            CheckBox::Ptr copy();
 
             /**
              * @brief Get the checkboxes renderer
@@ -138,6 +131,17 @@ namespace ime {
             std::string getText() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the check box
              * @return The type of the check box
              */
@@ -156,8 +160,8 @@ namespace ime {
             explicit CheckBox(const std::string &text = "");
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class CheckBoxImpl;
+            std::unique_ptr<CheckBoxImpl> pimpl_;
         };
     }
 }

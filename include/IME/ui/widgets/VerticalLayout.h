@@ -44,14 +44,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const VerticalLayout>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            VerticalLayout(const VerticalLayout&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            VerticalLayout& operator=(const VerticalLayout&);
+
+            /**
              * @brief Move constructor
              */
-            VerticalLayout(VerticalLayout&&);
+            VerticalLayout(VerticalLayout&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            VerticalLayout& operator=(VerticalLayout&&);
+            VerticalLayout& operator=(VerticalLayout&&) noexcept;
 
             /**
              * @brief Create a new VerticalLayout widget
@@ -71,30 +81,10 @@ namespace ime {
                 const std::string& height = "100%");
 
             /**
-             * @brief Create a copy of another layout
-             * @param other The layout to copy
-             * @param shareRenderer True if the new layout should have the
-             *          same renderer as the copied layout
-             * @return The new layout widget
-             *
-             * When the layouts share a renderer, changes in a render
-             * property of one of the layouts automatically reflect on
-             * the other layout, otherwise each layout has its own renderer
-             * and changes in render properties are isolated to the specific
-             * layout.
-             *
-             * @note when the layouts don't share a render, the renderer of
-             * the new layout widget will initially have the properties of
-             * the copied layout such that the two look the same after this
-             * function returns
-             *
-             * By default, the layouts share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @brief Create a copy this widget
+             * @return The new vertical layout widget
              */
-            static VerticalLayout::Ptr copy(VerticalLayout::ConstPtr other,
-                bool shareRenderer = true);
+            VerticalLayout::Ptr copy();
 
             /**
              * @brief Get the layout renderer
@@ -195,6 +185,17 @@ namespace ime {
             float getRatio(std::size_t index) const override;
 
             /**
+             * @brief Make a copy of the widget
+             * @return A copy of the widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Destructor
              */
             ~VerticalLayout();
@@ -218,8 +219,8 @@ namespace ime {
                 const std::string& height = "100%");
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class VerticalLayoutImpl;
+            std::unique_ptr<VerticalLayoutImpl> pimpl_;
         };
     }
 }

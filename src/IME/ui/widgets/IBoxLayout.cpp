@@ -30,4 +30,3 @@ namespace ime::ui {
         : WidgetContainer(std::move(widgetImpl))
     {}
 }
-

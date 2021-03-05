@@ -42,14 +42,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Button>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Button(const Button&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Button& operator=(const Button&);
+
+            /**
              * @brief Move constructor
              */
-            Button(Button&&);
+            Button(Button&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            Button& operator=(Button&&);
+            Button& operator=(Button&&) noexcept;
 
             /**
              * @brief Create a new button widget
@@ -59,29 +69,12 @@ namespace ime {
             static Button::Ptr create(const std::string& text = "");
 
             /**
-             * @brief Create a copy of another button
-             * @param other The button to copy
-             * @param shareRenderer True if the new button should have the
-             *          same renderer as the copied button
-             * @return The new button widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the buttons share a renderer, changes in a render
-             * property of one of the buttons automatically reflect on
-             * the other button, otherwise each button has its own renderer
-             * and changes in render properties are isolated to the specific
-             * button.
-             *
-             * @note when the buttons don't share a render, the renderer of
-             * the new button widget will initially have the properties of
-             * the copied button such that the two look the same after this
-             * function returns
-             *
-             * By default, the buttons share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Button::Ptr copy(Button::ConstPtr other, bool shareRenderer = true);
+            Button::Ptr copy();
 
             /**
              * @brief Get the buttons renderer
@@ -110,6 +103,17 @@ namespace ime {
              * @return The text displayed oon the button
              */
             std::string getText() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the button

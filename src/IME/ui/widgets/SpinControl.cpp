@@ -27,9 +27,9 @@
 #include <TGUI/Widgets/SpinControl.hpp>
 
 namespace ime::ui {
-    class SpinControl::Impl {
+    class SpinControl::SpinControlImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        SpinControlImpl(std::shared_ptr<tgui::Widget> widget) :
             spinControl_{std::static_pointer_cast<tgui::SpinControl>(widget)}
         {}
 
@@ -42,7 +42,7 @@ namespace ime::ui {
         unsigned int decimal, float step) :
             Widget(std::make_unique<priv::WidgetImpl<tgui::SpinControl>>(
                 tgui::SpinControl::create(minValue, maxValue, initialValue, decimal, step))),
-            pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+            pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<SpinButtonRenderer>());
 
@@ -51,9 +51,21 @@ namespace ime::ui {
         });
     }
 
-    SpinControl::SpinControl(SpinControl &&) = default;
+    SpinControl::SpinControl(const SpinControl& other) :
+        Widget(other),
+        pimpl_{std::make_unique<SpinControlImpl>(*other.pimpl_)}
+    {}
 
-    SpinControl &SpinControl::operator=(SpinControl &&) = default;
+    SpinControl &SpinControl::operator=(const SpinControl& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<SpinControlImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    SpinControl::SpinControl(SpinControl &&) noexcept = default;
+    SpinControl &SpinControl::operator=(SpinControl &&) noexcept = default;
 
     SpinControl::Ptr SpinControl::create(float minValue, float maxValue,
         float initialValue, unsigned int decimal, float step) 
@@ -61,10 +73,8 @@ namespace ime::ui {
         return Ptr(new SpinControl(minValue, maxValue, initialValue, decimal, step));
     }
 
-    SpinControl::Ptr SpinControl::copy(SpinControl::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-        widget->pimpl_->spinControl_ = widget->pimpl_->spinControl_->copy(other->pimpl_->spinControl_);
-        return widget;
+    SpinControl::Ptr SpinControl::copy() {
+        return std::static_pointer_cast<SpinControl>(clone());
     }
 
     SpinButtonRenderer::Ptr SpinControl::getSpinButtonRenderer() {
@@ -113,6 +123,10 @@ namespace ime::ui {
 
     unsigned int SpinControl::getDecimalPlaces() const {
         return pimpl_->spinControl_->getDecimalPlaces();
+    }
+
+    Widget::Ptr SpinControl::clone() const {
+        return std::make_shared<SpinControl>(*this);
     }
 
     std::string SpinControl::getWidgetType() const {

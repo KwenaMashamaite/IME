@@ -40,14 +40,31 @@ namespace ime {
             using Ptr = std::shared_ptr<ClickableWidget>; //!< Shared widget pointer
 
             /**
+             * @internal
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            explicit ClickableWidget(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+
+            /**
+             * @brief Copy constructor
+             */
+            ClickableWidget(const ClickableWidget&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            ClickableWidget& operator=(const ClickableWidget&);
+
+            /**
              * @brief Move constructor
              */
-            ClickableWidget(ClickableWidget&&);
+            ClickableWidget(ClickableWidget&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            ClickableWidget& operator=(ClickableWidget&&);
+            ClickableWidget& operator=(ClickableWidget&&) noexcept;
 
             /**
              * @brief Enable or disable the widget
@@ -88,16 +105,9 @@ namespace ime {
              */
             ~ClickableWidget();
 
-        protected:
-            /**
-             * @brief Constructor
-             * @param widgetImpl Widget implementation
-             */
-            ClickableWidget(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
-
         private:
-            struct Impl;
-            std::unique_ptr<Impl> pimpl_;
+            struct ClickableWidgetImpl;
+            std::unique_ptr<ClickableWidgetImpl> pimpl_;
         };
     }
 }

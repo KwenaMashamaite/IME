@@ -49,17 +49,28 @@ namespace ime::ui {
         });
     }
 
-    Tabs::Tabs(Tabs &&) = default;
+    Tabs::Tabs(const Tabs& other) :
+        Widget(other),
+        pimpl_{std::make_unique<TabsImpl>(*other.pimpl_)}
+    {}
 
-    Tabs &Tabs::operator=(Tabs &&) = default;
+    Tabs &Tabs::operator=(const Tabs& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<TabsImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    Tabs::Tabs(Tabs &&) noexcept = default;
+    Tabs &Tabs::operator=(Tabs &&) noexcept = default;
 
     Tabs::Ptr Tabs::create() {
         return Ptr(new Tabs());
     }
 
-    Tabs::Ptr Tabs::copy(Tabs::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-        return widget;
+    Tabs::Ptr Tabs::copy() {
+        return std::static_pointer_cast<Tabs>(clone());
     }
 
     std::shared_ptr<TabsRenderer> Tabs::getRenderer() {
@@ -164,6 +175,10 @@ namespace ime::ui {
 
     std::size_t Tabs::getTabsCount() const {
         return pimpl_->tabs_->getTabsCount();
+    }
+
+    Widget::Ptr Tabs::clone() const {
+        return std::make_shared<Tabs>(*this);
     }
 
     std::string Tabs::getWidgetType() const {

@@ -28,9 +28,9 @@
 #include <TGUI/Widgets/ChildWindow.hpp>
 
 namespace ime::ui {
-    class ChildWindow::Impl {
+    class ChildWindow::ChildWindowImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        ChildWindowImpl(std::shared_ptr<tgui::Widget> widget) :
             window_{std::static_pointer_cast<tgui::ChildWindow>(widget)}
         {}
 
@@ -41,7 +41,7 @@ namespace ime::ui {
 
     ChildWindow::ChildWindow(const std::string &title, unsigned int titleButtons) :
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ChildWindow>>(tgui::ChildWindow::create(title, titleButtons))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ChildWindowImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<ChildWindowRenderer>());
         setAsContainer(true);
@@ -67,20 +67,28 @@ namespace ime::ui {
         });
     }
 
-    ChildWindow::ChildWindow(ChildWindow &&) = default;
+    ChildWindow::ChildWindow(const ChildWindow& other) :
+        WidgetContainer(other),
+        pimpl_{std::make_unique<ChildWindowImpl>(*other.pimpl_)}
+    {}
 
-    ChildWindow &ChildWindow::operator=(ChildWindow &&) = default;
+    ChildWindow &ChildWindow::operator=(const ChildWindow& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ChildWindowImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    ChildWindow::ChildWindow(ChildWindow &&) noexcept = default;
+    ChildWindow &ChildWindow::operator=(ChildWindow &&) noexcept = default;
 
     ChildWindow::Ptr ChildWindow::create(const std::string& title, unsigned int titleButtons) {
         return ChildWindow::Ptr(new ChildWindow(title, titleButtons));
     }
 
-    ChildWindow::Ptr ChildWindow::copy(ChildWindow::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-
-        return widget;
+    ChildWindow::Ptr ChildWindow::copy() {
+        return std::static_pointer_cast<ChildWindow>(clone());
     }
 
     std::shared_ptr<ChildWindowRenderer> ChildWindow::getRenderer() {
@@ -173,6 +181,10 @@ namespace ime::ui {
 
     bool ChildWindow::isKeptInParent() const {
         return pimpl_->window_->isKeptInParent();
+    }
+
+    Widget::Ptr ChildWindow::clone() const {
+        return std::make_shared<ChildWindow>(*this);
     }
 
     std::string ChildWindow::getWidgetType() const {

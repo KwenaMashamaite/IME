@@ -60,9 +60,24 @@ namespace ime::ui {
         });
     }
 
-    Widget::Widget(Widget&&) = default;
+    Widget::Widget(const Widget& other) :
+        pimpl_{other.pimpl_->clone()},
+        eventEmitter_{other.eventEmitter_},
+        isContainer_{other.isContainer_}
+    {}
 
-    Widget &Widget::operator=(Widget&&) = default;
+    Widget &Widget::operator=(const Widget& rhs) {
+        if (this != &rhs) {
+            pimpl_ = rhs.pimpl_->clone();
+            eventEmitter_ = rhs.eventEmitter_;
+            isContainer_ = rhs.isContainer_;
+        }
+
+        return *this;
+    }
+
+    Widget::Widget(Widget&&) noexcept = default;
+    Widget &Widget::operator=(Widget&&) noexcept = default;
 
     void Widget::setRenderer(IWidgetRenderer::Ptr renderer) {
         pimpl_->setRenderer(std::move(renderer));

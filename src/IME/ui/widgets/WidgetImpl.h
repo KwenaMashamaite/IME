@@ -44,6 +44,15 @@ namespace ime {
         class IWidgetImpl : public ITransformable {
         public:
             /**
+             * @brief Make a copy of the the implementation
+             * @return A copy of the implementation
+             *
+             * We returning std::unique_ptr to make sure each widget has its
+             * own implementation
+             */
+            virtual std::unique_ptr<IWidgetImpl> clone() = 0;
+
+            /**
              * @brief Set the widgets renderer
              * @param renderer The renderer to set
              *
@@ -63,7 +72,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            virtual ui::IWidgetRenderer::Ptr getRenderer() = 0;
+            virtual ui::IWidgetRenderer::Ptr getRenderer() const = 0;
 
             /**
              * @brief Set the position of the widget relative to the
@@ -326,6 +335,38 @@ namespace ime {
                 widget_{std::move(widget)}
             {}
 
+            WidgetImpl(const WidgetImpl& other) :
+                widget_{std::make_shared<T>(*other.widget_)}
+            {
+                setRenderer(other.getRenderer());
+            }
+
+            WidgetImpl& operator=(const WidgetImpl& rhs) {
+                if (this != &rhs) {
+                    widget_ = rhs.widget_;
+                    setRenderer(rhs.getRenderer());
+                }
+
+                return *this;
+            }
+
+            WidgetImpl(WidgetImpl&& other) noexcept {
+                *this = std::move(other);
+            }
+
+            WidgetImpl& operator=(WidgetImpl&& rhs) noexcept {
+                if (this != &rhs) {
+                    widget_ = std::move(rhs.widget_);
+                    setRenderer(std::move(rhs.renderer_));
+                }
+
+                return *this;
+            }
+
+            std::unique_ptr<IWidgetImpl> clone() override {
+                return std::make_unique<WidgetImpl<T>>(*this);
+            }
+
             void setRenderer(ui::IWidgetRenderer::Ptr renderer) override {
                 IME_ASSERT(renderer, "Cannot set nullptr as renderer");
                 renderer_ = std::move(renderer);
@@ -333,7 +374,7 @@ namespace ime {
                 widget_->setRenderer(renderer_->getInternalPtr()->getData());
             }
 
-            ui::IWidgetRenderer::Ptr getRenderer() override {
+            ui::IWidgetRenderer::Ptr getRenderer() const override {
                 return renderer_;
             }
 
@@ -490,7 +531,9 @@ namespace ime {
                 return widget_;
             }
 
-        protected:
+            ~WidgetImpl() = default;
+
+        private:
             std::shared_ptr<T> widget_; //!< Pointer to third party widget
             ui::IWidgetRenderer::Ptr renderer_;
         };

@@ -49,19 +49,28 @@ namespace ime::ui {
         });
     }
 
-    Slider::Slider(Slider &&) = default;
+    Slider::Slider(const Slider &other) :
+        Widget(other),
+        pimpl_{std::make_unique<SliderImpl>(*other.pimpl_)}
+    {}
 
-    Slider &Slider::operator=(Slider &&) = default;
+    Slider &Slider::operator=(const Slider& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<SliderImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    Slider::Slider(Slider &&) noexcept = default;
+    Slider &Slider::operator=(Slider &&) noexcept = default;
 
     Slider::Ptr Slider::create(float minimum, float maximum) {
         return Ptr(new Slider(minimum, maximum));
     }
 
-    Slider::Ptr Slider::copy(Slider::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    Slider::Ptr Slider::copy() {
+        return std::static_pointer_cast<Slider>(clone());
     }
 
     std::shared_ptr<SliderRenderer> Slider::getRenderer() {
@@ -126,6 +135,10 @@ namespace ime::ui {
 
     bool Slider::isValueChangedOnScroll() const {
         return pimpl_->slider_->getChangeValueOnScroll();
+    }
+
+    Widget::Ptr Slider::clone() const {
+        return std::make_shared<Slider>(*this);
     }
 
     std::string Slider::getWidgetType() const {

@@ -28,9 +28,9 @@
 #include <TGUI/Widgets/VerticalLayout.hpp>
 
 namespace ime::ui {
-    class VerticalLayout::Impl {
+    class VerticalLayout::VerticalLayoutImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        VerticalLayoutImpl(std::shared_ptr<tgui::Widget> widget) :
             layout_{std::static_pointer_cast<tgui::VerticalLayout>(widget)}
         {}
 
@@ -41,26 +41,34 @@ namespace ime::ui {
 
     VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::VerticalLayout>>(tgui::VerticalLayout::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<BoxLayoutRenderer>());
         setAsContainer(true);
     }
 
-    VerticalLayout::VerticalLayout(VerticalLayout &&) = default;
+    VerticalLayout::VerticalLayout(const VerticalLayout& other) :
+        IBoxLayout(other),
+        pimpl_{std::make_unique<VerticalLayoutImpl>(*other.pimpl_)}
+    {}
 
-    VerticalLayout &VerticalLayout::operator=(VerticalLayout &&) = default;
+    VerticalLayout &VerticalLayout::operator=(const VerticalLayout& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<VerticalLayoutImpl>(*rhs.pimpl_);
+        }
 
-    VerticalLayout::Ptr VerticalLayout::create(const std::string& width, const std::string& height)
-    {
-        return Ptr(new VerticalLayout(width, height));
+        return *this;
     }
 
-    VerticalLayout::Ptr VerticalLayout::copy(
-            VerticalLayout::ConstPtr other, bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    VerticalLayout::VerticalLayout(VerticalLayout&&) noexcept = default;
+    VerticalLayout &VerticalLayout::operator=(VerticalLayout&&) noexcept = default;
+
+    VerticalLayout::Ptr VerticalLayout::create(const std::string& width, const std::string& height) {
+        return VerticalLayout::Ptr(new VerticalLayout(width, height));
+    }
+
+    VerticalLayout::Ptr VerticalLayout::copy() {
+        return std::static_pointer_cast<VerticalLayout>(clone());
     }
 
     BoxLayoutRenderer::Ptr VerticalLayout::getRenderer() {
@@ -107,6 +115,10 @@ namespace ime::ui {
 
     float VerticalLayout::getRatio(std::size_t index) const {
         return pimpl_->layout_->getRatio(index);
+    }
+
+    Widget::Ptr VerticalLayout::clone() const {
+        return std::make_shared<VerticalLayout>(*this);
     }
 
     VerticalLayout::~VerticalLayout() = default;

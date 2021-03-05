@@ -40,14 +40,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const SpinControl>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            SpinControl(const SpinControl&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            SpinControl& operator=(const SpinControl&);
+
+            /**
              * @brief Move constructor
              */
-            SpinControl(SpinControl&&);
+            SpinControl(SpinControl&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            SpinControl& operator=(SpinControl&&);
+            SpinControl& operator=(SpinControl&&) noexcept;
 
             /**
              * @brief Create a new spin control widget
@@ -62,30 +72,12 @@ namespace ime {
                 float initialValue = 0.0f, unsigned int decimal = 0, float step = 1.0f);
 
             /**
-             * @brief Create a copy of another spin control
-             * @param other The spin control to be copied
-             * @param shareRenderer True if the new spin control should have the
-             *          same renderer as the copied spin control
-             * @return The new toggle spin control widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the spin controls share a renderer, changes in a render
-             * property of one of the spin controls automatically reflect on
-             * the other spin control, otherwise each spin control has its own
-             * renderer and changes in render properties are isolated to the
-             * specific spin control.
-             *
-             * @note when the spin controls don't share a render, the renderer
-             * of the new spin control widget will initially have the properties
-             * of the copied spin control such that the two look the same after
-             * this function returns
-             *
-             * By default, the spin controls share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static SpinControl::Ptr copy(SpinControl::ConstPtr other,
-                bool shareRenderer = true);
+            SpinControl::Ptr copy();
 
             /**
              * @brief Get the spin controls renderer
@@ -188,6 +180,17 @@ namespace ime {
             unsigned int getDecimalPlaces() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the spin control
              * @return The type of the spin control
              */
@@ -211,8 +214,8 @@ namespace ime {
                 float initialValue = 0.0f, unsigned int decimal = 0, float step = 1.0f);
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class SpinControlImpl;
+            std::unique_ptr<SpinControlImpl> pimpl_;
         };
     }
 }

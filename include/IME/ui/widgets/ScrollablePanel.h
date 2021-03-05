@@ -38,14 +38,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const ScrollablePanel>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            ScrollablePanel(const ScrollablePanel&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            ScrollablePanel& operator=(const ScrollablePanel&);
+
+            /**
              * @brief Move constructor
              */
-            ScrollablePanel(ScrollablePanel&&);
+            ScrollablePanel(ScrollablePanel&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            ScrollablePanel& operator=(ScrollablePanel&&);
+            ScrollablePanel& operator=(ScrollablePanel&&) noexcept;
 
             /**
              * @brief Create a new Panel widget
@@ -72,30 +82,12 @@ namespace ime {
                 const std::string& height = "100%", Vector2f contentSize = {0, 0});
 
             /**
-             * @brief Create a copy of another panel
-             * @param other The panel to copy
-             * @param shareRenderer True if the new panel should have the
-             *          same renderer as the copied panel
-             * @return The new panel widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the panels share a renderer, changes in a render
-             * property of one of the panels automatically reflect on
-             * the other panel, otherwise each panel has its own renderer
-             * and changes in render properties are isolated to the specific
-             * panel.
-             *
-             * @note when the panels don't share a render, the renderer of
-             * the new panel widget will initially have the properties of
-             * the copied panel such that the two look the same after this
-             * function returns
-             *
-             * By default, the panels share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static ScrollablePanel::Ptr copy(ScrollablePanel::ConstPtr other,
-                bool shareRenderer = true);
+            ScrollablePanel::Ptr copy();
 
             /**
              * @brief Get the panels renderer
@@ -201,6 +193,17 @@ namespace ime {
             unsigned int getHorizontalThumbValue() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the panel
              * @return The type of the panel
              */
@@ -236,8 +239,8 @@ namespace ime {
                 const std::string& height = "100%", Vector2f contentSize = {0, 0});
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class PanelImpl;
+            std::unique_ptr<PanelImpl> pimpl_;
         };
     }
 }

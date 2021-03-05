@@ -44,14 +44,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Tabs>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Tabs(const Tabs&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Tabs& operator=(const Tabs&);
+
+            /**
              * @brief Move constructor
              */
-            Tabs(Tabs&&);
+            Tabs(Tabs&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            Tabs& operator=(Tabs&&);
+            Tabs& operator=(Tabs&&) noexcept;
 
             /**
              * @brief Create a new tabs widget
@@ -60,29 +70,12 @@ namespace ime {
             static Tabs::Ptr create();
 
             /**
-             * @brief Create a copy of another tabs
-             * @param other The tabs to copy
-             * @param shareRenderer True if the new tabs should have the
-             *          same renderer as the copied tabs
-             * @return The new tabs widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the tabs share a renderer, changes in a render
-             * property of one of the tabs automatically reflect on
-             * the other tabs, otherwise each tabs has its own renderer
-             * and changes in render properties are isolated to the specific
-             * tabs.
-             *
-             * @note when the tabs don't share a render, the renderer of
-             * the new tabs widget will initially have the properties of
-             * the copied tabs such that the two look the same after this
-             * function returns
-             *
-             * By default, the tabs share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Tabs::Ptr copy(Tabs::ConstPtr other, bool shareRenderer = true);
+            Tabs::Ptr copy();
 
             /**
              * @brief Get the tabs renderer
@@ -327,6 +320,17 @@ namespace ime {
              * @return The number of tabs
              */
             std::size_t getTabsCount() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the tab

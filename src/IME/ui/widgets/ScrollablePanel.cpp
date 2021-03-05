@@ -28,9 +28,9 @@
 #include <TGUI/Widgets/ScrollablePanel.hpp>
 
 namespace ime::ui {
-    class ScrollablePanel::Impl {
+    class ScrollablePanel::PanelImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        PanelImpl(std::shared_ptr<tgui::Widget> widget) :
            panel_{std::static_pointer_cast<tgui::ScrollablePanel>(widget)}
         {}
 
@@ -40,8 +40,8 @@ namespace ime::ui {
     ////////////////////////////////////////////////////////////////////////////
 
     ScrollablePanel::ScrollablePanel(const std::string &width, const std::string &height, Vector2f contentSize) :
-        WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ScrollablePanel>>(tgui::ScrollablePanel::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ScrollablePanel>>(tgui::ScrollablePanel::create({width.c_str(), height.c_str()}, {contentSize.x, contentSize.y}))),
+        pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::shared_ptr<ScrollablePanelRenderer>());
         setAsContainer(true);
@@ -52,9 +52,21 @@ namespace ime::ui {
         });
     }
 
-    ScrollablePanel::ScrollablePanel(ScrollablePanel &&) = default;
+    ScrollablePanel::ScrollablePanel(const ScrollablePanel& other) :
+        WidgetContainer(other),
+        pimpl_{std::make_unique<PanelImpl>(*other.pimpl_)}
+    {}
 
-    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel &&) = default;
+    ScrollablePanel &ScrollablePanel::operator=(const ScrollablePanel& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<PanelImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    ScrollablePanel::ScrollablePanel(ScrollablePanel &&) noexcept = default;
+    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel &&) noexcept = default;
 
     ScrollablePanel::Ptr ScrollablePanel::create(const std::string &width,
         const std::string &height, Vector2f contentSize)
@@ -62,11 +74,8 @@ namespace ime::ui {
         return Ptr(new ScrollablePanel(width, height, contentSize));
     }
 
-    ScrollablePanel::Ptr ScrollablePanel::copy(ScrollablePanel::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    ScrollablePanel::Ptr ScrollablePanel::copy() {
+        return std::static_pointer_cast<ScrollablePanel>(clone());
     }
 
     ScrollablePanelRenderer::Ptr ScrollablePanel::getRenderer() {
@@ -123,6 +132,10 @@ namespace ime::ui {
 
     unsigned int ScrollablePanel::getHorizontalThumbValue() const {
         return pimpl_->panel_->getHorizontalScrollbarValue();
+    }
+
+    Widget::Ptr ScrollablePanel::clone() const {
+        return std::make_shared<ScrollablePanel>(*this);
     }
 
     std::string ScrollablePanel::getWidgetType() const {

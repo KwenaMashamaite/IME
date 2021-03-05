@@ -90,19 +90,28 @@ namespace ime::ui {
         setRenderer(std::make_shared<LabelRenderer>());
     }
 
+    Label::Label(const Label& other) :
+        Widget(other),
+        pimpl_{std::make_unique<LabelImpl>(*other.pimpl_)}{
+    }
+
+    Label &Label::operator=(const Label& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<LabelImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    Label::Label(Label &&) noexcept = default;
+    Label &Label::operator=(Label &&) noexcept = default;
+
     Label::Ptr Label::create(const std::string &text) {
         return Label::Ptr(new Label(text));
     }
 
-    Label::Ptr Label::copy(Label::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-        /*widget->label_ = widget->label_->copy(other->label_);
-
-        if (!shareRenderer)
-            widget->label_->setRenderer(other->label_->getRenderer()->clone());
-        widget->renderer_->setInternalPtr(other->label_->getRenderer());*/
-
-        return widget;
+    Label::Ptr Label::copy() {
+        return std::static_pointer_cast<Label>(clone());
     }
 
     std::shared_ptr<LabelRenderer> Label::getRenderer() {
@@ -151,6 +160,10 @@ namespace ime::ui {
 
     float Label::getMaximumTextWidth() const {
         return pimpl_->getMaximumTextWidth();
+    }
+
+    Widget::Ptr Label::clone() const {
+        return std::make_shared<Label>(*this);
     }
 
     std::string Label::getWidgetType() const {

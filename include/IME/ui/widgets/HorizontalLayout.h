@@ -44,14 +44,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const HorizontalLayout>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            HorizontalLayout(const HorizontalLayout&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            HorizontalLayout& operator=(const HorizontalLayout&);
+
+            /**
              * @brief Move constructor
              */
-            HorizontalLayout(HorizontalLayout&&);
+            HorizontalLayout(HorizontalLayout&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            HorizontalLayout& operator=(HorizontalLayout&&);
+            HorizontalLayout& operator=(HorizontalLayout&&) noexcept;
 
             /**
              * @brief Create a new HorizontalLayout widget
@@ -71,30 +81,12 @@ namespace ime {
                 const std::string& height = "100%");
 
             /**
-             * @brief Create a copy of another layout
-             * @param other The layout to copy
-             * @param shareRenderer True if the new layout should have the
-             *          same renderer as the copied layout
-             * @return The new layout widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the layouts share a renderer, changes in a render
-             * property of one of the layouts automatically reflect on
-             * the other layout, otherwise each layout has its own renderer
-             * and changes in render properties are isolated to the specific
-             * layout.
-             *
-             * @note when the layouts don't share a render, the renderer of
-             * the new layout widget will initially have the properties of
-             * the copied layout such that the two look the same after this
-             * function returns
-             *
-             * By default, the layouts share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static HorizontalLayout::Ptr copy(HorizontalLayout::ConstPtr other,
-                bool shareRenderer = true);
+            HorizontalLayout::Ptr copy();
 
             /**
              * @brief Get the layout renderer
@@ -108,6 +100,17 @@ namespace ime {
              */
             BoxLayoutRenderer::Ptr getRenderer();
             const BoxLayoutRenderer::Ptr getRenderer() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the layout
@@ -217,8 +220,8 @@ namespace ime {
             explicit HorizontalLayout(const std::string& width = "100%", const std::string& height = "100%");
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class HorizontalLayoutImpl;
+            std::unique_ptr<HorizontalLayoutImpl> pimpl_;
         };
     }
 }

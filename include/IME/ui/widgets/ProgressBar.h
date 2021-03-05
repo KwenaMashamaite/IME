@@ -52,14 +52,24 @@ namespace ime {
             };
 
             /**
+             * @brief Copy constructor
+             */
+            ProgressBar(const ProgressBar&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            ProgressBar& operator=(const ProgressBar&);
+
+            /**
              * @brief Move constructor
              */
-            ProgressBar(ProgressBar&&);
+            ProgressBar(ProgressBar&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            ProgressBar& operator=(ProgressBar&&);
+            ProgressBar& operator=(ProgressBar&&) noexcept;
 
             /**
              * @brief Create a new progress bar widget
@@ -69,30 +79,12 @@ namespace ime {
             static ProgressBar::Ptr create(const std::string& text = "");
 
             /**
-             * @brief Create a copy of another progress bar
-             * @param other The progress bar to copy
-             * @param shareRenderer True if the new progress bar should have the
-             *          same renderer as the copied progress bar
-             * @return The new progress bar widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the progress bars share a renderer, changes in a render
-             * property of one of the progress bars automatically reflect on
-             * the other progress bar, otherwise each progress bar has its own renderer
-             * and changes in render properties are isolated to the specific
-             * progress bar.
-             *
-             * @note when the progress bars don't share a render, the renderer of
-             * the new progress bar widget will initially have the properties of
-             * the copied progress bar such that the two look the same after this
-             * function returns
-             *
-             * By default, the progress bars share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static ProgressBar::Ptr copy(ProgressBar::ConstPtr other,
-                bool shareRenderer = true);
+            ProgressBar::Ptr copy();
 
             /**
              * @brief Get the progress bars renderer
@@ -196,6 +188,17 @@ namespace ime {
             std::string getText() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the progress bar
              * @return The type of the progress bar
              */
@@ -214,8 +217,8 @@ namespace ime {
             explicit ProgressBar(const std::string& text = "");
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class ProgressBarImpl;
+            std::unique_ptr<ProgressBarImpl> pimpl_;
         };
     }
 }

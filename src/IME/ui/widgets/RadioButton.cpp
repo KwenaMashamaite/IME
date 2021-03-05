@@ -58,19 +58,28 @@ namespace ime::ui {
         });
     }
 
-    RadioButton::RadioButton(RadioButton &&) = default;
+    RadioButton::RadioButton(const RadioButton& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+    {}
 
-    RadioButton &RadioButton::operator=(RadioButton &&) = default;
+    RadioButton &RadioButton::operator=(const RadioButton& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    RadioButton::RadioButton(RadioButton &&) noexcept = default;
+    RadioButton &RadioButton::operator=(RadioButton &&) noexcept = default;
 
     RadioButton::Ptr RadioButton::create(const std::string &text) {
         return Ptr(new RadioButton(text));
     }
 
-    RadioButton::Ptr RadioButton::copy( RadioButton::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    RadioButton::Ptr RadioButton::copy() {
+        return std::static_pointer_cast<RadioButton>(clone());
     }
 
     std::shared_ptr<RadioButtonRenderer> RadioButton::getRenderer() {
@@ -103,6 +112,11 @@ namespace ime::ui {
 
     std::string RadioButton::getText() const {
         return pimpl_->button_->getText().toStdString();
+    }
+
+    Widget::Ptr RadioButton::clone() const {
+        return std::make_shared<RadioButton>(*this);
+
     }
 
     std::string RadioButton::getWidgetType() const {

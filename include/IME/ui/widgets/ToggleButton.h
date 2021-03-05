@@ -33,7 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A button tht can be toggled between two states
+         * @brief A button that can be toggled between two states (on and off)
          */
         class IME_API ToggleButton : public ClickableWidget {
         public:
@@ -41,14 +41,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const ToggleButton>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            ToggleButton(const ToggleButton&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            ToggleButton& operator=(const ToggleButton&);
+
+            /**
              * @brief Move constructor
              */
-            ToggleButton(ToggleButton&&);
+            ToggleButton(ToggleButton&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            ToggleButton& operator=(ToggleButton&&);
+            ToggleButton& operator=(ToggleButton&&) noexcept;
 
             /**
              * @brief Create a new toggle button widget
@@ -59,30 +69,10 @@ namespace ime {
             static ToggleButton::Ptr create(const std::string& text = "", bool checked = false);
 
             /**
-             * @brief Create a copy of another toggle button
-             * @param other The button to be copied
-             * @param shareRenderer True if the new button should have the
-             *          same renderer as the copied button
-             * @return The new toggle button widget
-             *
-             * When the buttons share a renderer, changes in a render
-             * property of one of the buttons automatically reflect on
-             * the other button, otherwise each button has its own renderer
-             * and changes in render properties are isolated to the specific
-             * button.
-             *
-             * @note when the buttons don't share a render, the renderer of
-             * the new button widget will initially have the properties of
-             * the copied button such that the two look the same after this
-             * function returns
-             *
-             * By default, the buttons share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              */
-            static ToggleButton::Ptr copy(ToggleButton::ConstPtr other,
-                bool shareRenderer = true);
+            ToggleButton::Ptr copy();
 
             /**
              * @brief Get the buttons renderer
@@ -123,6 +113,17 @@ namespace ime {
              * @return True if checked, otherwise false
              */
             bool isChecked() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the button

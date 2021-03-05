@@ -28,9 +28,9 @@
 #include <TGUI/Widgets/HorizontalLayout.hpp>
 
 namespace ime::ui {
-    class HorizontalLayout::Impl {
+    class HorizontalLayout::HorizontalLayoutImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        HorizontalLayoutImpl(std::shared_ptr<tgui::Widget> widget) :
             layout_{std::static_pointer_cast<tgui::HorizontalLayout>(widget)}
         {}
 
@@ -41,15 +41,27 @@ namespace ime::ui {
     
     HorizontalLayout::HorizontalLayout(const std::string& width, const std::string& height) :
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::HorizontalLayout>>(tgui::HorizontalLayout::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<BoxLayoutRenderer>());
         setAsContainer(true);
     }
 
-    HorizontalLayout::HorizontalLayout(HorizontalLayout &&) = default;
+    HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
+        IBoxLayout(other),
+        pimpl_{std::make_unique<HorizontalLayoutImpl>(*other.pimpl_)}
+    {}
 
-    HorizontalLayout &HorizontalLayout::operator=(HorizontalLayout &&) = default;
+    HorizontalLayout &HorizontalLayout::operator=(const HorizontalLayout& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<HorizontalLayoutImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    HorizontalLayout::HorizontalLayout(HorizontalLayout &&) noexcept = default;
+    HorizontalLayout &HorizontalLayout::operator=(HorizontalLayout &&) noexcept = default;
 
     HorizontalLayout::Ptr HorizontalLayout::create(const std::string& width,
         const std::string& height)
@@ -57,11 +69,12 @@ namespace ime::ui {
         return Ptr(new HorizontalLayout(width, height));
     }
 
-    HorizontalLayout::Ptr HorizontalLayout::copy(
-        HorizontalLayout::ConstPtr other, bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    HorizontalLayout::Ptr HorizontalLayout::copy() {
+        return std::static_pointer_cast<HorizontalLayout>(clone());
+    }
+
+    Widget::Ptr HorizontalLayout::clone() const {
+        return std::make_shared<HorizontalLayout>(*this);
     }
 
     std::string HorizontalLayout::getWidgetType() const {

@@ -35,18 +35,12 @@ namespace ime::ui {
         setAsContainer(true);
     }
 
-    Panel::Panel(Panel &&) = default;
-
-    Panel &Panel::operator=(Panel &&) = default;
-
     Panel::Ptr Panel::create(const std::string& width, const std::string& height) {
         return Panel::Ptr(new Panel(width, height));
     }
 
-    Panel::Ptr Panel::copy(Panel::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-
-        return widget;
+    Panel::Ptr Panel::copy() {
+        return std::static_pointer_cast<Panel>(clone());
     }
 
     std::shared_ptr<PanelRenderer> Panel::getRenderer() {
@@ -57,9 +51,11 @@ namespace ime::ui {
         return std::static_pointer_cast<PanelRenderer>(Widget::getRenderer());
     }
 
+    Widget::Ptr Panel::clone() const {
+        return std::make_shared<Panel>(*this);
+    }
+
     std::string Panel::getWidgetType() const {
         return "Panel";
     }
-
-    Panel::~Panel() = default;
 }

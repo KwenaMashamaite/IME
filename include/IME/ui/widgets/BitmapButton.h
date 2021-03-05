@@ -42,14 +42,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const BitmapButton>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            BitmapButton(const BitmapButton&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            BitmapButton& operator=(const BitmapButton&);
+
+            /**
              * @brief Move constructor
              */
-            BitmapButton(BitmapButton&&);
+            BitmapButton(BitmapButton&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            BitmapButton& operator=(BitmapButton&&);
+            BitmapButton& operator=(BitmapButton&&) noexcept;
 
             /**
              * @brief Create a new bitmap button widget
@@ -59,29 +69,12 @@ namespace ime {
             static BitmapButton::Ptr create(const std::string& text = "");
 
             /**
-             * @brief Create a copy of another button
-             * @param other The button to copy
-             * @param shareRenderer True if the new button should have the
-             *          same renderer as the copied button
-             * @return The new button widget
+             * @brief Get a copy of this widget
+             * @return A copy of this widget
              *
-             * When the buttons share a renderer, changes in a render
-             * property of one of the buttons automatically reflect on
-             * the other button, otherwise each button has its own renderer
-             * and changes in render properties are isolated to the specific
-             * button.
-             *
-             * @note when the buttons don't share a render, the renderer of
-             * the new button widget will initially have the properties of
-             * the copied button such that the two look the same after this
-             * function returns
-             *
-             * By default, the buttons share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static BitmapButton::Ptr copy(BitmapButton::ConstPtr other, bool shareRenderer = true);
+            BitmapButton::Ptr copy();
 
             /**
              * @brief Get the buttons renderer
@@ -137,6 +130,17 @@ namespace ime {
              * @return The relative size of the image displayed next to the text
              */
             float getImageScaling() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the button

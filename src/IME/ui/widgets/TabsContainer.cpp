@@ -28,21 +28,21 @@
 #include <unordered_map>
 
 namespace ime::ui {
-    class TabsContainer::Impl {
+    class TabsContainer::TabsContainerImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        TabsContainerImpl(std::shared_ptr<tgui::Widget> widget) :
             tabContainer_{std::static_pointer_cast<tgui::TabContainer>(widget)}
         {}
 
         std::shared_ptr<tgui::TabContainer> tabContainer_;
         std::unordered_map<std::size_t, Panel::Ptr> panel_;
-    }; // class Impl
+    }; // class WidgetContainerImpl
 
     ////////////////////////////////////////////////////////////////////////////
     
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
         Widget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<TabsRenderer>());
         
@@ -51,9 +51,21 @@ namespace ime::ui {
         });
     }
 
-    TabsContainer::TabsContainer(TabsContainer &&) = default;
+    TabsContainer::TabsContainer(const TabsContainer& other) :
+        Widget(other),
+        pimpl_{std::make_unique<TabsContainerImpl>(*other.pimpl_)}
+    {}
 
-    TabsContainer &TabsContainer::operator=(TabsContainer &&) = default;
+    TabsContainer &TabsContainer::operator=(const TabsContainer& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<TabsContainerImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    TabsContainer::TabsContainer(TabsContainer &&) noexcept = default;
+    TabsContainer &TabsContainer::operator=(TabsContainer &&) noexcept = default;
 
     TabsContainer::Ptr TabsContainer::create(const std::string& width,
         const std::string& height)
@@ -61,11 +73,8 @@ namespace ime::ui {
         return Ptr(new TabsContainer(width, height));
     }
 
-    TabsContainer::Ptr TabsContainer::copy(TabsContainer::ConstPtr other,
-        bool shareRenderer)
-    {
-        auto widget = create();
-        return widget;
+    TabsContainer::Ptr TabsContainer::copy() {
+        return std::static_pointer_cast<TabsContainer>(clone());
     }
 
     std::shared_ptr<TabsRenderer> TabsContainer::getRenderer() {
@@ -155,6 +164,10 @@ namespace ime::ui {
 
     bool TabsContainer::changeTabText(std::size_t index, const std::string &text) {
         return pimpl_->tabContainer_->changeTabText(index, text);
+    }
+
+    Widget::Ptr TabsContainer::clone() const {
+        return std::make_shared<TabsContainer>(*this);
     }
 
     std::string TabsContainer::getWidgetType() const {

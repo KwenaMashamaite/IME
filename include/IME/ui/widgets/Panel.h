@@ -42,14 +42,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Panel>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Panel(const Panel&) = default;
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Panel& operator=(const Panel&) = default;
+
+            /**
              * @brief Move constructor
              */
-            Panel(Panel&&);
+            Panel(Panel&&) noexcept = default;
 
             /**
              * @brief Move assignment operator
              */
-            Panel& operator=(Panel&&);
+            Panel& operator=(Panel&&) noexcept = default;
 
             /**
              * @brief Create a new Panel widget
@@ -71,29 +81,12 @@ namespace ime {
                 const std::string& height = "100%");
 
             /**
-             * @brief Create a copy of another panel
-             * @param other The panel to copy
-             * @param shareRenderer True if the new panel should have the
-             *          same renderer as the copied panel
-             * @return The new panel widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the panels share a renderer, changes in a render
-             * property of one of the panels automatically reflect on
-             * the other panel, otherwise each panel has its own renderer
-             * and changes in render properties are isolated to the specific
-             * panel.
-             *
-             * @note when the panels don't share a render, the renderer of
-             * the new panel widget will initially have the properties of
-             * the copied panel such that the two look the same after this
-             * function returns
-             *
-             * By default, the panels share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Panel::Ptr copy(Panel::ConstPtr other, bool shareRenderer = true);
+            Panel::Ptr copy();
 
             /**
              * @brief Get the panels renderer
@@ -109,6 +102,17 @@ namespace ime {
             const PanelRenderer::Ptr getRenderer() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the panel
              * @return The type of the panel
              */
@@ -117,7 +121,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Panel();
+            ~Panel() = default;
 
         private:
             /**

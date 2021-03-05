@@ -41,14 +41,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            EditBox(const EditBox&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            EditBox& operator=(const EditBox&);
+
+            /**
              * @brief Move constructor
              */
-            EditBox(EditBox&&);
+            EditBox(EditBox&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            EditBox& operator=(EditBox&&);
+            EditBox& operator=(EditBox&&) noexcept;
 
             /**
              * @brief Create a new edit box widget
@@ -58,29 +68,12 @@ namespace ime {
             static EditBox::Ptr create(const std::string& defaultText = "");
 
             /**
-             * @brief Create a copy of another edit box
-             * @param other The edit box to copy
-             * @param shareRenderer True if the new edit box should have the
-             *          same renderer as the copied edit box
-             * @return The new edit box widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the edit boxes share a renderer, changes in a render
-             * property of one of the edit boxes automatically reflect on
-             * the other edit box, otherwise each edit box has its own renderer
-             * and changes in render properties are isolated to the specific
-             * edit box.
-             *
-             * @note when the edit boxes don't share a render, the renderer of
-             * the new edit box widget will initially have the properties of
-             * the copied edit box such that the two look the same after this
-             * function returns
-             *
-             * By default, the edit boxes share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static EditBox::Ptr copy(EditBox::ConstPtr other, bool shareRenderer = true);
+            EditBox::Ptr copy();
 
             /**
              * @brief Get the labels renderer
@@ -203,6 +196,17 @@ namespace ime {
              * @return Text shown on right side of edit box
              */
             std::string getSuffix() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the edit box

@@ -36,12 +36,6 @@ namespace ime::ui {
             button_{std::static_pointer_cast<tgui::ToggleButton>(widget)}
         {}
 
-        static ToggleButton::Ptr copy(ToggleButton::ConstPtr other, bool shareRenderer) {
-            auto widget = create("");
-
-            return widget;
-        }
-
         void setText(const std::string &text) {
             button_->setText(text);
         }
@@ -75,22 +69,34 @@ namespace ime::ui {
     {
         setRenderer(std::make_shared<ButtonRenderer>());
 
-        pimpl_->getPtr()->onToggle([this](bool checked) {
+        pimpl_->getPtr()->onToggle([this](bool checkedStatus) {
             emit("toggle");
-            emit("toggle", checked);
+            emit("toggle", checkedStatus);
         });
     }
 
-    ToggleButton::ToggleButton(ToggleButton &&) = default;
+    ToggleButton::ToggleButton(const ToggleButton& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+    {}
 
-    ToggleButton &ToggleButton::operator=(ToggleButton &&) = default;
+    ToggleButton &ToggleButton::operator=(const ToggleButton& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    ToggleButton::ToggleButton(ToggleButton &&) noexcept = default;
+    ToggleButton &ToggleButton::operator=(ToggleButton &&) noexcept = default;
 
     ToggleButton::Ptr ToggleButton::create(const std::string &text, bool checked) {
         return ToggleButton::Ptr(new ToggleButton(text, checked));
     }
 
-    ToggleButton::Ptr ToggleButton::copy(ToggleButton::ConstPtr other, bool shareRenderer) {
-        return ButtonImpl::copy(other, shareRenderer);
+    ToggleButton::Ptr ToggleButton::copy() {
+        return std::static_pointer_cast<ToggleButton>(clone());
     }
 
     std::shared_ptr<ButtonRenderer> ToggleButton::getRenderer() {
@@ -115,6 +121,10 @@ namespace ime::ui {
 
     bool ToggleButton::isChecked() const {
         return pimpl_->isChecked();
+    }
+
+    Widget::Ptr ToggleButton::clone() const {
+        return std::make_shared<ToggleButton>(*this);
     }
 
     std::string ToggleButton::getWidgetType() const {

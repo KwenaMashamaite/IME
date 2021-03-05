@@ -49,14 +49,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const TabsContainer>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            TabsContainer(const TabsContainer&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            TabsContainer& operator=(const TabsContainer&);
+
+            /**
              * @brief Move constructor
              */
-            TabsContainer(TabsContainer&&);
+            TabsContainer(TabsContainer&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            TabsContainer& operator=(TabsContainer&&);
+            TabsContainer& operator=(TabsContainer&&) noexcept;
 
             /**
              * @brief Create a new TabsContainer widget
@@ -78,30 +88,12 @@ namespace ime {
                 const std::string& height = "100%");
 
             /**
-             * @brief Create a copy of another container
-             * @param other The container to copy
-             * @param shareRenderer True if the new container should have the
-             *          same renderer as the copied container
-             * @return The new container widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the containers share a renderer, changes in a render
-             * property of one of the containers automatically reflect on
-             * the other container, otherwise each container has its own renderer
-             * and changes in render properties are isolated to the specific
-             * container.
-             *
-             * @note when the containers don't share a render, the renderer of
-             * the new container widget will initially have the properties of
-             * the copied container such that the two look the same after this
-             * function returns
-             *
-             * By default, the containers share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static TabsContainer::Ptr copy(TabsContainer::ConstPtr other,
-                bool shareRenderer = true);
+            TabsContainer::Ptr copy();
 
             /**
              * @brief Get the tabs renderer
@@ -223,6 +215,16 @@ namespace ime {
             bool changeTabText(std::size_t index, const std::string& text);
 
             /**
+             * @brief Make a copy of the widget
+             * @return A copy of the widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function for
+             * copying purposes
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the container
              * @return The type of the container
              */
@@ -253,8 +255,8 @@ namespace ime {
                 const std::string& height = "100%");
 
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class TabsContainerImpl;
+            std::unique_ptr<TabsContainerImpl> pimpl_;
         };
     }
 }

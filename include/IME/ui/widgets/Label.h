@@ -60,6 +60,26 @@ namespace ime {
             };
 
             /**
+             * @brief Copy constructor
+             */
+            Label(const Label&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Label& operator=(const Label&);
+
+            /**
+             * @brief Move constructor
+             */
+            Label(Label&&) noexcept;
+
+            /**
+             * @brief Move assignment operator
+             */
+            Label& operator=(Label&&) noexcept;
+
+            /**
              * @brief Create a new label widget
              * @param text Text to be displayed on the label
              * @return The new label
@@ -67,29 +87,12 @@ namespace ime {
             static Label::Ptr create(const std::string& text = "");
 
             /**
-             * @brief Create a copy of another label
-             * @param other The label to copy
-             * @param shareRenderer True if the new label should have the
-             *          same renderer as the copied label
-             * @return The new label widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the labels share a renderer, changes in a render
-             * property of one of the labels automatically reflect on
-             * the other label, otherwise each label has its own renderer
-             * and changes in render properties are isolated to the specific
-             * label.
-             *
-             * @note when the labels don't share a render, the renderer of
-             * the new label widget will initially have the properties of
-             * the copied label such that the two look the same after this
-             * function returns
-             *
-             * By default, the labels share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Label::Ptr copy(Label::ConstPtr other, bool shareRenderer = true);
+            Label::Ptr copy();
 
             /**
              * @brief Get the labels renderer
@@ -196,6 +199,17 @@ namespace ime {
              * - 0 when auto-sizing but there is no maximum width.
              */
             float getMaximumTextWidth() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the widget

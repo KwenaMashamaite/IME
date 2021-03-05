@@ -40,14 +40,31 @@ namespace ime {
             using Ptr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
 
             /**
+             * @internal
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            explicit WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+
+            /**
+             * @brief Copy constructor
+             */
+            WidgetContainer(const WidgetContainer&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            WidgetContainer& operator=(const WidgetContainer&);
+
+            /**
              * @brief Move constructor
              */
-            WidgetContainer(WidgetContainer&&);
+            WidgetContainer(WidgetContainer&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            WidgetContainer& operator=(WidgetContainer&&);
+            WidgetContainer& operator=(WidgetContainer&&) noexcept;
             
             /**
              * @brief Add a widget to the container
@@ -198,16 +215,9 @@ namespace ime {
              */
             ~WidgetContainer();
 
-        protected:
-            /**
-             * @brief Constructor
-             * @param widgetImpl Widget implementation
-             */
-            WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
-
         private:
-            class Impl;
-            std::unique_ptr<Impl> pimpl_;
+            class WidgetContainerImpl;
+            std::unique_ptr<WidgetContainerImpl> pimpl_;
         };
     }
 }

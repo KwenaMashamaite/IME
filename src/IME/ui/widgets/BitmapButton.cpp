@@ -37,12 +37,6 @@ namespace ime::ui {
             button_{std::static_pointer_cast<tgui::BitmapButton>(widget)}
         {}
 
-        static BitmapButton::Ptr copy(BitmapButton::ConstPtr other, bool shareRenderer) {
-            auto widget = create("");
-
-            return widget;
-        }
-
         void setText(const std::string &text) {
             button_->setText(text);
         }
@@ -77,16 +71,28 @@ namespace ime::ui {
         setRenderer(std::make_shared<ButtonRenderer>());
     }
 
-    BitmapButton::BitmapButton(BitmapButton &&) = default;
+    BitmapButton::BitmapButton(const BitmapButton& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+    {}
 
-    BitmapButton &BitmapButton::operator=(BitmapButton &&) = default;
+    BitmapButton &BitmapButton::operator=(const BitmapButton& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    BitmapButton::BitmapButton(BitmapButton &&) noexcept = default;
+    BitmapButton &BitmapButton::operator=(BitmapButton &&) noexcept = default;
 
     BitmapButton::Ptr BitmapButton::create(const std::string &text) {
         return BitmapButton::Ptr(new BitmapButton(text));
     }
 
-    BitmapButton::Ptr BitmapButton::copy(BitmapButton::ConstPtr other, bool shareRenderer) {
-        return ButtonImpl::copy(other, shareRenderer);
+    BitmapButton::Ptr BitmapButton::copy() {
+        return std::static_pointer_cast<BitmapButton>(clone());
     }
 
     std::shared_ptr<ButtonRenderer> BitmapButton::getRenderer() {
@@ -115,6 +121,10 @@ namespace ime::ui {
 
     float BitmapButton::getImageScaling() const {
         return pimpl_->getImageScaling();
+    }
+
+    Widget::Ptr BitmapButton::clone() const {
+        return std::make_shared<BitmapButton>(*this);
     }
 
     std::string BitmapButton::getWidgetType() const {

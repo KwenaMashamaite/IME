@@ -80,12 +80,28 @@ namespace ime::ui {
         });
     }
 
-    Picture::Picture(Picture &&) = default;
+    Picture::Picture(const Picture& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<PictureImpl>(*other.pimpl_)}
+    {}
 
-    Picture &Picture::operator=(Picture &&) = default;
+    Picture &Picture::operator=(const Picture& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<PictureImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    Picture::Picture(Picture &&) noexcept = default;
+    Picture &Picture::operator=(Picture &&) noexcept = default;
 
     Picture::Ptr Picture::create() {
         return Ptr(new Picture());
+    }
+
+    Picture::Ptr Picture::copy() {
+        return std::static_pointer_cast<Picture>(clone());
     }
 
     Picture::Ptr Picture::create(const std::string &filename, bool transparentTexture) {
@@ -96,12 +112,6 @@ namespace ime::ui {
         UIntRect frame, bool transparentTexture)
     {
         return Ptr(new Picture(filename, frame, transparentTexture));
-    }
-
-    Picture::Ptr Picture::copy(Picture::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-
-        return widget;
     }
 
     std::shared_ptr<PictureRenderer> Picture::getRenderer() {
@@ -118,6 +128,11 @@ namespace ime::ui {
 
     bool Picture::isMouseEventsIgnored() const {
         return pimpl_->picture_->isIgnoringMouseEvents();
+    }
+
+    Widget::Ptr Picture::clone() const {
+        return std::make_shared<Picture>(*this);
+
     }
 
     std::string Picture::getWidgetType() const {

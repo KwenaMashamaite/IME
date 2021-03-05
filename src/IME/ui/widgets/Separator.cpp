@@ -33,20 +33,12 @@ namespace ime::ui {
         setRenderer(std::make_shared<SeparatorRenderer>());
     }
 
-    Separator::Separator(Separator &&) = default;
-
-    Separator &Separator::operator=(Separator &&) = default;
-
     Separator::Ptr Separator::create() {
         return Ptr(new Separator());
     }
 
-    Separator::Ptr Separator::copy(Separator::ConstPtr other,
-        bool shareRenderer) 
-    {
-        auto widget = create();
-
-        return widget;
+    Separator::Ptr Separator::copy() {
+        return std::static_pointer_cast<Separator>(clone());
     }
 
     std::shared_ptr<SeparatorRenderer> Separator::getRenderer() {
@@ -57,9 +49,11 @@ namespace ime::ui {
         return std::static_pointer_cast<SeparatorRenderer>(Widget::getRenderer());
     }
 
+    Widget::Ptr Separator::clone() const {
+        return std::make_shared<Separator>(*this);
+    }
+
     std::string Separator::getWidgetType() const {
         return "Separator";
     }
-
-    Separator::~Separator() = default;
 }

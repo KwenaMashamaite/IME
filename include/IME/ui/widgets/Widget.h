@@ -36,6 +36,9 @@
 #include <memory>
 
 namespace ime {
+    /**
+     * @internal
+     */
     namespace priv {
         class IWidgetImpl;
     }
@@ -83,14 +86,31 @@ namespace ime {
             using Ptr = std::shared_ptr<Widget>; //!< Shared widget pointer
 
             /**
+             * @internal
+             * @brief Constructor
+             * @param impl The widgets implementation
+             */
+            explicit Widget(std::unique_ptr<priv::IWidgetImpl> impl);
+
+            /**
+             * @brief Copy constructor
+             */
+            Widget(const Widget&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Widget& operator=(const Widget&);
+
+            /**
              * @brief Move constructor
              */
-            Widget(Widget&&);
+            Widget(Widget&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            Widget& operator=(Widget&&);
+            Widget& operator=(Widget&&) noexcept;
 
             /**
              * @brief Set the widgets renderer
@@ -579,6 +599,16 @@ namespace ime {
             bool unsubscribe(const std::string& event, int id);
 
             /**
+             * @brief Make a copy of the widget
+             * @return A copy of the widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function for
+             * copying purposes
+             */
+            virtual Widget::Ptr clone() const = 0;
+
+            /**
              * @internal
              * @brief Get the internal widget pointer
              * @return The internal widget pointer
@@ -594,12 +624,6 @@ namespace ime {
             ~Widget();
 
         protected:
-            /**
-             * @brief Constructor
-             * @param impl The widgets implementation
-             */
-            explicit Widget(std::unique_ptr<priv::IWidgetImpl> impl);
-
             /**
              * @brief Emit a widget event
              * @param event Name of the event to be emitted

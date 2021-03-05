@@ -27,8 +27,8 @@
 #include <TGUI/Widgets/ClickableWidget.hpp>
 
 namespace ime::ui {
-    struct ClickableWidget::Impl {
-        Impl(std::shared_ptr<tgui::Widget> widget) {
+    struct ClickableWidget::ClickableWidgetImpl {
+        ClickableWidgetImpl(std::shared_ptr<tgui::Widget> widget) {
             IME_ASSERT(widget, "A clickable widget cannot be instantiated from a nullptr");
             widget_ = std::dynamic_pointer_cast<tgui::ClickableWidget>(widget);
             IME_ASSERT(widget_, "A non clickable widget derived from ClickableWidget, change to Widget");
@@ -43,7 +43,7 @@ namespace ime::ui {
 
     ClickableWidget::ClickableWidget(std::unique_ptr<priv::IWidgetImpl> widgetImpl) :
         Widget(std::move(widgetImpl)),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){
@@ -78,9 +78,21 @@ namespace ime::ui {
         });
     }
 
-    ClickableWidget::ClickableWidget(ClickableWidget &&) = default;
+    ClickableWidget::ClickableWidget(const ClickableWidget& other) :
+        Widget(other),
+        pimpl_{std::make_unique<ClickableWidgetImpl>(*other.pimpl_)}
+    {}
 
-    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&) = default;
+    ClickableWidget& ClickableWidget::operator=(const ClickableWidget& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<ClickableWidgetImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    ClickableWidget::ClickableWidget(ClickableWidget &&) noexcept = default;
+    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&) noexcept = default;
 
     void ClickableWidget::setEnabled(bool isEnable) {
         pimpl_->widget_->setEnabled(isEnable);

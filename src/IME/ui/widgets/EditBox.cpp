@@ -54,18 +54,28 @@ namespace ime::ui {
         });
     }
 
-    EditBox::EditBox(EditBox &&) = default;
+    EditBox::EditBox(const EditBox & other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<EditBoxImpl>(*other.pimpl_)}
+    {}
 
-    EditBox &EditBox::operator=(EditBox &&) = default;
+    EditBox &EditBox::operator=(const EditBox& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<EditBoxImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    EditBox::EditBox(EditBox &&) noexcept = default;
+    EditBox &EditBox::operator=(EditBox &&) noexcept = default;
 
     EditBox::Ptr EditBox::create(const std::string& defaultText) {
         return Ptr(new EditBox(defaultText));
     }
 
-    EditBox::Ptr EditBox::copy(EditBox::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-
-        return widget;
+    EditBox::Ptr EditBox::copy() {
+        return std::static_pointer_cast<EditBox>(clone());
     }
 
     std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() {
@@ -130,6 +140,10 @@ namespace ime::ui {
 
     std::string EditBox::getSuffix() const {
         return pimpl_->editbox_->getSuffix().toStdString();
+    }
+
+    Widget::Ptr EditBox::clone() const {
+        return std::make_shared<EditBox>(*this);
     }
 
     std::string EditBox::getWidgetType() const {

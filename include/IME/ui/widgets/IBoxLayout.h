@@ -39,6 +39,13 @@ namespace ime {
             using Ptr = std::shared_ptr<IBoxLayout>; //!< Shared widget pointer
 
             /**
+             * @internal
+             * @brief Constructor
+             * @param widgetImpl Widget implementation
+             */
+            IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+
+            /**
              * @brief Insert a widget to the container
              * @param index Where the widget should be inserted
              * @param widget Pointer to the widget to be inserted
@@ -115,13 +122,6 @@ namespace ime {
              *         found
              */
             virtual float getRatio(std::size_t index) const = 0;
-
-        protected:
-            /**
-             * @brief Constructor
-             * @param widgetImpl Widget implementation
-             */
-            IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
         };
     }
 }

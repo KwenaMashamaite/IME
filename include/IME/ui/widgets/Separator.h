@@ -44,14 +44,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Separator>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Separator(const Separator&) = default;
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Separator& operator=(const Separator&) = default;
+
+            /**
              * @brief Move constructor
              */
-            Separator(Separator&&);
+            Separator(Separator&&) noexcept = default;
 
             /**
              * @brief Move assignment operator
              */
-            Separator& operator=(Separator&&);
+            Separator& operator=(Separator&&) noexcept = default;
 
             /**
              * @brief Create a new separator widget
@@ -60,29 +70,12 @@ namespace ime {
             static Separator::Ptr create();
 
             /**
-             * @brief Create a copy of another separator
-             * @param other The separator to copy
-             * @param shareRenderer True if the new separator should have the
-             *          same renderer as the copied separator
-             * @return The new separator widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the separators share a renderer, changes in a render
-             * property of one of the separators automatically reflect on
-             * the other separator, otherwise each separator has its own renderer
-             * and changes in render properties are isolated to the specific
-             * separator.
-             *
-             * @note when the separators don't share a render, the renderer of
-             * the new separator widget will initially have the properties of
-             * the copied separator such that the two look the same after this
-             * function returns
-             *
-             * By default, the separators share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Separator::Ptr copy(Separator::ConstPtr other, bool shareRenderer = true);
+            Separator::Ptr copy();
 
             /**
              * @brief Get the separators renderer
@@ -98,6 +91,17 @@ namespace ime {
             const SeparatorRenderer::Ptr getRenderer() const;
 
             /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
+
+            /**
              * @brief Get the type of the separator
              * @return The type of the separator
              */
@@ -106,7 +110,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Separator();
+            ~Separator() = default;
 
         private:
             /**

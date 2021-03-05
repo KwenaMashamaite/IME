@@ -27,35 +27,46 @@
 #include <TGUI/Widgets/CheckBox.hpp>
 
 namespace ime::ui {
-    class CheckBox::Impl {
+    class CheckBox::CheckBoxImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) :
+        CheckBoxImpl(std::shared_ptr<tgui::Widget> widget) :
             checkbox_{std::static_pointer_cast<tgui::CheckBox>(widget)}
         {}
         
         std::shared_ptr<tgui::CheckBox> checkbox_;
-    }; // class Impl
+    }; // class WidgetContainerImpl
 
 
 ////////////////////////////////////////////////////////////////////////////////
     CheckBox::CheckBox(const std::string &text) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::CheckBox>>(tgui::CheckBox::create(text))),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {
         setRenderer(std::make_shared<CheckBoxRenderer>());
     }
 
-    CheckBox::CheckBox(CheckBox &&) = default;
+    CheckBox::CheckBox(const CheckBox& other) :
+        ClickableWidget(other),
+        pimpl_{std::make_unique<CheckBoxImpl>(*other.pimpl_)}
+    {}
 
-    CheckBox &CheckBox::operator=(CheckBox &&) = default;
+    CheckBox &CheckBox::operator=(const CheckBox& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<CheckBoxImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    CheckBox::CheckBox(CheckBox &&) noexcept = default;
+    CheckBox &CheckBox::operator=(CheckBox &&) noexcept = default;
 
     CheckBox::Ptr CheckBox::create(const std::string &text) {
         return CheckBox::Ptr(new  CheckBox(text));
     }
 
-    CheckBox::Ptr CheckBox::copy(CheckBox::ConstPtr other, bool shareRenderer) {
-        auto widget = create();
-        return widget;
+    CheckBox::Ptr CheckBox::copy() {
+        return std::static_pointer_cast<CheckBox>(clone());
     }
 
     std::shared_ptr<CheckBoxRenderer> CheckBox::getRenderer() {
@@ -88,6 +99,10 @@ namespace ime::ui {
 
     bool CheckBox::isChecked() const {
         return pimpl_->checkbox_->isChecked();
+    }
+
+    Widget::Ptr CheckBox::clone() const {
+        return std::make_shared<CheckBox>(*this);
     }
 
     std::string CheckBox::getWidgetType() const {

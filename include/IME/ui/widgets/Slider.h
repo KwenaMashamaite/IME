@@ -41,14 +41,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Slider(const Slider&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Slider& operator=(const Slider&);
+
+            /**
              * @brief Move constructor
              */
-            Slider(Slider&&);
+            Slider(Slider&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            Slider& operator=(Slider&&);
+            Slider& operator=(Slider&&) noexcept;
 
             /**
              * @brief Create a new slider widget
@@ -59,29 +69,12 @@ namespace ime {
             static Slider::Ptr create(float minimum = 0, float maximum = 10);
 
             /**
-             * @brief Create a copy of another slider
-             * @param other The slider to copy
-             * @param shareRenderer True if the new slider should have the
-             *          same renderer as the copied slider
-             * @return The new slider widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the sliders share a renderer, changes in a render
-             * property of one of the sliders automatically reflect on
-             * the other slider, otherwise each slider has its own renderer
-             * and changes in render properties are isolated to the specific
-             * slider.
-             *
-             * @note when the sliders don't share a render, the renderer of
-             * the new slider widget will initially have the properties of
-             * the copied slider such that the two look the same after this
-             * function returns
-             *
-             * By default, the sliders share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Slider::Ptr copy(Slider::ConstPtr other, bool shareRenderer = true);
+            Slider::Ptr copy();
 
             /**
              * @brief Get the sliders renderer
@@ -218,6 +211,17 @@ namespace ime {
              *         otherwise false
              */
             bool isValueChangedOnScroll() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the slider

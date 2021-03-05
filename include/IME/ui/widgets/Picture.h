@@ -41,14 +41,24 @@ namespace ime {
             using ConstPtr = std::shared_ptr<const Picture>; //!< const shared widget pointer
 
             /**
+             * @brief Copy constructor
+             */
+            Picture(const Picture&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Picture& operator=(const Picture&);
+
+            /**
              * @brief Move constructor
              */
-            Picture(Picture&&);
+            Picture(Picture&&) noexcept;
 
             /**
              * @brief Move assignment operator
              */
-            Picture& operator=(Picture&&);
+            Picture& operator=(Picture&&) noexcept;
 
             /**
              * @brief Create an empty picture widget
@@ -57,29 +67,12 @@ namespace ime {
             static Picture::Ptr create();
 
             /**
-             * @brief Create a copy of another picture
-             * @param other The picture to copy
-             * @param shareRenderer True if the new picture should have the
-             *          same renderer as the copied picture
-             * @return The new picture widget
+             * @brief Create a copy of this widget
+             * @return A copy of this widget
              *
-             * When the pictures share a renderer, changes in a render
-             * property of one of the pictures automatically reflect on
-             * the other picture, otherwise each picture has its own renderer
-             * and changes in render properties are isolated to the specific
-             * picture.
-             *
-             * @note when the pictures don't share a render, the renderer of
-             * the new picture widget will initially have the properties of
-             * the copied picture such that the two look the same after this
-             * function returns
-             *
-             * By default, the pictures share a renderer
-             *
-             * @warning Once a renderer is shared, it cannot be unshared at
-             * a later time
+             * @see clone
              */
-            static Picture::Ptr copy(Picture::ConstPtr other, bool shareRenderer = true);
+            Picture::Ptr copy();
 
             /**
              * @brief Create a new picture widget
@@ -148,6 +141,17 @@ namespace ime {
              * @see ignoreMouseEvents
              */
             bool isMouseEventsIgnored() const;
+
+            /**
+             * @brief Make a copy of this widget
+             * @return A copy of this widget
+             *
+             * You should use this function if you don't care about the type
+             * of the widget, otherwise use the widgets copy function
+             *
+             * @see copy
+             */
+            Widget::Ptr clone() const override;
 
             /**
              * @brief Get the type of the picture

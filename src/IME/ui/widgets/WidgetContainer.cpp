@@ -31,9 +31,9 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     // Widget container class implementation
     //////////////////////////////////////////////////////////////////////////
-    class WidgetContainer::Impl {
+    class WidgetContainer::WidgetContainerImpl {
     public:
-        Impl(std::shared_ptr<tgui::Widget> widget) {
+        WidgetContainerImpl(std::shared_ptr<tgui::Widget> widget) {
             IME_ASSERT(widget, "A widget container cannot be a nullptr");
             tguiContainer_ = std::dynamic_pointer_cast<tgui::Container>(widget);
             IME_ASSERT(tguiContainer_, "A non container widget derived from WidgetContainer, change to Widget");
@@ -116,19 +116,31 @@ namespace ime::ui {
     private:
         std::shared_ptr<tgui::Container> tguiContainer_;
         std::unordered_map<std::string, Widget::Ptr> widgets_;
-    }; // class Impl
+    }; // class WidgetContainerImpl
 
     //////////////////////////////////////////////////////////////////////////
     // Widget container class delegation
     //////////////////////////////////////////////////////////////////////////
     WidgetContainer::WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl) :
         Widget(std::move(widgetImpl)),
-        pimpl_{std::make_unique<Impl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
     {}
 
-    WidgetContainer::WidgetContainer(WidgetContainer &&) = default;
+    WidgetContainer::WidgetContainer(const WidgetContainer& other) :
+        Widget(other),
+        pimpl_{std::make_unique<WidgetContainerImpl>(*other.pimpl_)}
+    {}
 
-    WidgetContainer &WidgetContainer::operator=(WidgetContainer &&) = default;
+    WidgetContainer &WidgetContainer::operator=(const WidgetContainer& rhs) {
+        if (this != &rhs) {
+            pimpl_ = std::make_unique<WidgetContainerImpl>(*rhs.pimpl_);
+        }
+
+        return *this;
+    }
+
+    WidgetContainer::WidgetContainer(WidgetContainer&&) noexcept = default;
+    WidgetContainer &WidgetContainer::operator=(WidgetContainer&&) noexcept = default;
 
     bool WidgetContainer::addWidget(Widget::Ptr widget, const std::string &name) {
         return pimpl_->addWidget(std::move(widget), name);
