@@ -115,7 +115,7 @@ endif ()
 
 # Find TGUI if not build in same project
 if (NOT TARGET tgui)
-    find_package(TGUI 0.9.0 REQUIRED)
+    find_package(TGUI 0.9.1 REQUIRED)
 endif()
 
 if (NOT TARGET box2d::box2d)
