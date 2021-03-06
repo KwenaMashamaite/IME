@@ -60,8 +60,9 @@ namespace ime {
         if (!world_->isLocked()) {
             collider->setBody(shared_from_this());
             colliders_.insert({collider->getObjectId(), collider});
-        } else
+        } else {
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
+        }
     }
 
     Collider::Ptr Body::getColliderById(unsigned int id) {
@@ -76,8 +77,9 @@ namespace ime {
                 body_->DestroyFixture(colliders_[id]->fixture_.get());
                 colliders_.erase(id);
             }
-        } else
+        } else {
             IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback");
+        }
     }
 
     void Body::removeCollider(Collider::Ptr collider) {
@@ -87,8 +89,9 @@ namespace ime {
                 body_->DestroyFixture(colliders_[collider->getObjectId()]->fixture_.get());
                 colliders_.erase(collider->getObjectId());
             }
-        } else
+        } else {
             IME_PRINT_WARNING("Operation ignored: removeCollider() called inside a world callback");
+        }
     }
 
     void Body::setPosition(Vector2f position) {

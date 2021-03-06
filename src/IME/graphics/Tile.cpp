@@ -145,8 +145,9 @@ namespace ime {
         if (isCollidable_ == collidable)
             return;
 
-        if (collidable)
+        if (collidable) {
             IME_ASSERT(collider_, "Cannot set Tile as collidable without a collider, use the setCollidable function to add one");
+        }
 
         isCollidable_ = collidable;
 

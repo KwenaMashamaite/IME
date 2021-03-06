@@ -187,11 +187,13 @@ namespace ime {
         b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
         world_->SetContactListener(b2ContactListener_.get());
 
+#if !defined(NDEBUG)
         using WindowRef = std::reference_wrapper<Window>;
         postRenderId_ = scene_.on_("postRender", ime::Callback<WindowRef>([this](WindowRef) {
             if (isDebugDrawEnabled_)
                 debugDraw();
         }));
+#endif
     }
 
     World::Ptr World::create(Scene &scene, Vector2f gravity) {
@@ -265,8 +267,9 @@ namespace ime {
                 bodies_.erase(body->getObjectId());
                 return true;
             }
-        } else
+        } else {
             IME_PRINT_WARNING("Operation ignored: destroyBody() called inside a world callback");
+        }
 
         return false;
     }
@@ -297,8 +300,9 @@ namespace ime {
                 joints_.erase(joint->getObjectId());
                 return true;
             }
-        } else
+        } else {
             IME_PRINT_WARNING("Operation ignored: destroyJoint() called inside a world callback");
+        }
 
         return false;
     }
@@ -413,6 +417,8 @@ namespace ime {
     void World::enableDebugDraw(bool enable) {
 #if !defined(NDEBUG)
         isDebugDrawEnabled_ = enable;
+#else
+        IME_UNUSED(enable);
 #endif
     }
 

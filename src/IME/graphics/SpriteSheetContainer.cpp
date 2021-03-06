@@ -31,7 +31,7 @@ namespace ime {
 
     const SpriteSheet &SpriteSheetContainer::get(const std::string &name) const {
         IME_ASSERT(contains(name), R"(The spritesheet" )" + name + R"(" does not exist")");
-        return spritesheets_.at("name");
+        return spritesheets_.at(name);
     }
 
     bool SpriteSheetContainer::contains(const std::string &name) const {
