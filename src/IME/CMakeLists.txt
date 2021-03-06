@@ -70,6 +70,7 @@ set(IME_SRC
     ui/renderers/PictureRenderer.cpp
     ui/renderers/SeparatorRenderer.cpp
     ui/renderers/SpinButtonRenderer.cpp
+    ui/renderers/MenuBarRenderer.cpp
     ui/widgets/Widget.cpp
     ui/widgets/WidgetContainer.cpp
     ui/widgets/ClickableWidget.cpp
@@ -93,6 +94,7 @@ set(IME_SRC
     ui/widgets/Picture.cpp
     ui/widgets/Separator.cpp
     ui/widgets/SpinControl.cpp
+    ui/widgets/MenuBar.cpp
     ui/GuiContainer.cpp
     graphics/Texture.cpp
     graphics/Sprite.cpp
