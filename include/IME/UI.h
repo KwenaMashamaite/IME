@@ -49,6 +49,7 @@
 #include "IME/ui/widgets/SpinControl.h"
 #include "IME/ui/widgets/Separator.h"
 #include "IME/ui/widgets/MenuBar.h"
+#include "IME/ui/widgets/MessageBox.h"
 #include "IME/ui/GuiContainer.h"
 
 #endif //IME_UI_H

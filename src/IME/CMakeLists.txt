@@ -26,7 +26,7 @@ set(IME_SRC
     core/path/BFS.cpp
     core/path/DFS.cpp
     core/path/IGridPathFinder.cpp
-        core/physics/rigid_body/Body.cpp
+    core/physics/rigid_body/Body.cpp
     core/physics/rigid_body/colliders/Collider.cpp
     core/physics/rigid_body/colliders/CircleCollider.cpp
     core/physics/rigid_body/colliders/PolygonCollider.cpp
@@ -71,6 +71,7 @@ set(IME_SRC
     ui/renderers/SeparatorRenderer.cpp
     ui/renderers/SpinButtonRenderer.cpp
     ui/renderers/MenuBarRenderer.cpp
+    ui/renderers/MessageBoxRenderer.cpp
     ui/widgets/Widget.cpp
     ui/widgets/WidgetContainer.cpp
     ui/widgets/ClickableWidget.cpp
@@ -95,6 +96,7 @@ set(IME_SRC
     ui/widgets/Separator.cpp
     ui/widgets/SpinControl.cpp
     ui/widgets/MenuBar.cpp
+    ui/widgets/MessageBox.cpp
     ui/GuiContainer.cpp
     graphics/Texture.cpp
     graphics/Sprite.cpp
