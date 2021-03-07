@@ -32,9 +32,6 @@ ime_set_option(IME_BUILD_EXAMPLES FALSE BOOL "TRUE to build the IME examples, FA
 # Add options to build the tests
 ime_set_option(IME_BUILD_TESTS FALSE BOOL "TRUE to build the IME tests")
 
-# Add options to run the tests with coverage
-ime_set_option(IME_RUN_TESTS_WITH_COVERAGE FALSE BOOL "TRUE to run the IME tests with code coverage")
-
 # Add option to build the documentation
 ime_set_option(IME_BUILD_DOC FALSE BOOL "TRUE to generate the API documentation, FALSE to ignore it")
 
