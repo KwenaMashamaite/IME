@@ -132,7 +132,7 @@ namespace ime {
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
 
         if (collider_) {
-            collider_->setSize(width, height);
+            collider_->setSize(static_cast<float>(width), static_cast<float>(height));
             collider_->getBody()->setPosition(getWorldCentre());
         }
     }

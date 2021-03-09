@@ -155,8 +155,8 @@ namespace ime {
     }
 
     void TileMap::setPosition(int x, int y) {
-        mapPos_.x = x;
-        mapPos_.y = y;
+        mapPos_.x = static_cast<float>(x);
+        mapPos_.y = static_cast<float>(y);
         backgroundTile_.setPosition(mapPos_);
 
         for (auto i = 0u; i < tiledMap_.size(); i++) {
@@ -422,7 +422,7 @@ namespace ime {
         return renderLayers_;
     }
 
-    void TileMap::textureTile(Index index, FloatRect rect) {
+    void TileMap::textureTile(Index index, UIntRect rect) {
         IME_ASSERT(!tilesets_.empty(), "Cannot texture tile with an empty tileset, set tileset to be used first");
         if (isIndexValid(index)) {
             auto sprite = Sprite(tileSet_);
@@ -431,7 +431,7 @@ namespace ime {
         }
     }
 
-    void TileMap::textureTilesById(char id, FloatRect rect) {
+    void TileMap::textureTilesById(char id, UIntRect rect) {
         forEachTile([&](Tile& tile) {
             if (tile.getId() == id)
                 textureTile(tile.getIndex(), rect);
@@ -439,9 +439,11 @@ namespace ime {
     }
 
     void TileMap::textureTilesById(char id, const Sprite &sprite) {
+        IME_UNUSED(sprite);
         forEachTile([&](Tile& tile) {
-            if (tile.getId() == id)
-                ;//addSprite(sprite, tile.getIndex()); @TODO fix - dont know the layer to put it in
+            if (tile.getId() == id) {
+                //addSprite(sprite, tile.getIndex()); @TODO fix - dont know the layer to put it in
+            }
         });
     }
 

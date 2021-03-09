@@ -65,11 +65,8 @@ function(ime_export_target export_name)
     export(EXPORT ${export_name}
             FILE "${PROJECT_BINARY_DIR}/${targets_config_filename}")
 
-    if (IME_BUILD_FRAMEWORK)
-        set(config_package_location "IME.framework/Resources/CMake")
-    else()
-        set(config_package_location ${CMAKE_INSTALL_LIBDIR}/cmake/IME)
-    endif()
+    set(config_package_location ${CMAKE_INSTALL_LIBDIR}/cmake/IME)
+
     configure_package_config_file("${PROJECT_SOURCE_DIR}/cmake/IMEConfig.cmake.in" "${PROJECT_BINARY_DIR}/IMEConfig.cmake"
         INSTALL_DESTINATION "${config_package_location}")
 

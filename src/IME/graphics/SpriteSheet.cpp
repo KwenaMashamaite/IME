@@ -25,6 +25,7 @@
 #include "IME/graphics/SpriteSheet.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/core/resources/ResourceManager.h"
+#include <iterator>
 
 namespace ime {
     SpriteSheet::SpriteSheet(const std::string &sourceTexture, Vector2u frameSize,

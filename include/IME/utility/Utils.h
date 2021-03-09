@@ -101,8 +101,16 @@ namespace ime {
          */
         static auto createRandomNumGenerator(int min, int max) {
             return [distribution = std::uniform_int_distribution(min, max)]() mutable {
+#if defined(__GNUC__)
+                // MinGW compiler on windows does not provide non-deterministic
+                // values from its std::random_device, so the random numbers
+                // are the same on every run
                 static auto randomEngine = std::mt19937(std::time(nullptr));
                 return distribution(randomEngine);
+#else
+                static auto randomEngine = std::mt19937(std::random_device{}());
+                return distribution(randomEngine);
+#endif
             };
         }
 

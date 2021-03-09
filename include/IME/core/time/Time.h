@@ -26,13 +26,9 @@
 #define IME_TIME_H
 
 #include "IME/Config.h"
-#include <stdint.h>
 #include <chrono>
 
 namespace ime {
-    using Int64 = std::int64_t; //!< 64-bit signed int
-    using Int32 = std::int32_t; //!< 32-bit signed int
-
     /**
      * @brief Represents a time value
      */

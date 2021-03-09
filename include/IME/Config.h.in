@@ -32,6 +32,13 @@
     #define IME_SYSTEM_WINDOWS // Windows
 #endif
 
+// Define a portable debug macro
+#if !defined(NDEBUG)
+
+#define IME_DEBUG
+
+#endif
+
 // IME will link in the same way as SFML and TGUI, unless IME_DYNAMIC or IME_STATIC is defined
 #if !defined(IME_DYNAMIC) && !defined(IME_STATIC)
     #ifdef SFML_STATIC
@@ -47,10 +54,16 @@
         #else
             #define IME_API __declspec(dllimport)
         #endif
+
+        // For Visual C++ compilers, we also need to turn off this annoying C4251 warning
+        #ifdef _MSC_VER
+
+            #pragma warning(disable: 4251)
+
+        #endif
     #endif
 #else
     // Static build doesn't need import/export macros
-    #define IME_API
     #define IME_API
 #endif
 
@@ -71,6 +84,34 @@
 
 // Portable macro that suppress unused parameter warnings
 #define IME_UNUSED(x) (void)(x)
+
+// Define portable fixed-size types
+namespace ime {
+    // All "common" platforms use the same size for char, short and int
+    // (basically there are 3 types for 3 sizes, so no other match is possible),
+    // we can use them without doing any kind of check
+
+    // 8 bits integer types
+    typedef signed   char Int8;
+    typedef unsigned char Uint8;
+
+    // 16 bits integer types
+    typedef signed   short Int16;
+    typedef unsigned short Uint16;
+
+    // 32 bits integer types
+    typedef signed   int Int32;
+    typedef unsigned int Uint32;
+
+    // 64 bits integer types
+#if defined(_MSC_VER)
+    typedef signed   __int64 Int64;
+    typedef unsigned __int64 Uint64;
+#else
+    typedef signed   long long Int64;
+    typedef unsigned long long Uint64;
+#endif
+} // namespace ime
 
 // Version of the library
 #define IME_VERSION_MAJOR @IME_VERSION_MAJOR@

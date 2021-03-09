@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include <functional>
+#include <string>
 #include <any>
 
 namespace ime {

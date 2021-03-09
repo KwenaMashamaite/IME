@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/tilemap/Index.h"
 #include <stack>
+#include <string>
 
 namespace ime {
     class TileMap;

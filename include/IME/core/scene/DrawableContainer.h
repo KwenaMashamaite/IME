@@ -34,7 +34,7 @@ namespace ime {
      * @brief A container for IDrawable objects
      */
     template <typename T>
-    class IME_API DrawableContainer : public ObjectContainer<T> {
+    class DrawableContainer : public ObjectContainer<T> {
     public:
         /**
          * @brief Constructor

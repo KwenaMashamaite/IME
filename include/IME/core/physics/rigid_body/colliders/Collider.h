@@ -60,9 +60,6 @@ namespace ime {
      *    bodies connected by a joint.
      */
     struct IME_API CollisionFilterData {
-        using UInt16 = std::uint16_t; //!< unsigned short
-        using Int16 = std::int16_t;   //!< singed short
-
         /**
          * @brief Constrictor
          */
@@ -80,14 +77,14 @@ namespace ime {
          * Specifies the categories the rigid body defined by this filter
          * data belongs to. The default value is 0x0001
          */
-        UInt16 categoryBitMask;
+        Uint16 categoryBitMask;
 
         /**
          * Defines which categories of rigid bodies can collide with
          * the rigid body defined by this filter data. The default
          * value is 0xFFFF, a value of 0 disables all collisions
          */
-        UInt16 collisionBitMask;
+        Uint16 collisionBitMask;
 
         /**
          * Collision group index

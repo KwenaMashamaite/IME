@@ -367,7 +367,7 @@ namespace ime {
          * The @a rect defines the sub-rectangle of the tileset to use
          * for texturing the tile
          */
-        void textureTile(Index index, FloatRect rect);
+        void textureTile(Index index, UIntRect rect);
 
         /**
          * @brief Apply a texture to all tiles with a certain id
@@ -381,7 +381,7 @@ namespace ime {
          *
          * @see textureTilesById(char, const Sprite&)
          */
-        void textureTilesById(char id, FloatRect rect);
+        void textureTilesById(char id, UIntRect rect);
 
         /**
          * @brief Apply a texture to all tiles with a certain id

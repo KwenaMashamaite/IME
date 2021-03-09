@@ -29,7 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Object.h"
 
-class b2AABB;
+struct b2AABB;
 
 namespace ime {
     /**

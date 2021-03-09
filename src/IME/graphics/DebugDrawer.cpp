@@ -121,7 +121,7 @@ namespace ime::priv {
     }
 
     void DebugDrawer::DrawTransform(const b2Transform &transform) {
-        float lineLength = 0.4;
+        auto lineLength = 0.4f;
 
         b2Vec2 xAxis = transform.p + lineLength * transform.q.GetXAxis();
         DrawSegment(transform.p, xAxis, {1, 0, 0, 1});

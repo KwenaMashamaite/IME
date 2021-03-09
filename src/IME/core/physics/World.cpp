@@ -157,18 +157,19 @@ namespace ime {
         void emit(const std::string& event, b2Contact *contact) {
             auto colliderA = convertFixtureToCollider(contact->GetFixtureA(), world_);
             auto colliderB = convertFixtureToCollider(contact->GetFixtureB(), world_);
-            contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
 
             auto bodyA = colliderA->getBody();
             auto bodyB = colliderB->getBody();
+
+            auto gameObjectA = bodyA->getGameObject();
+            auto gameObjectB = bodyB->getGameObject();
+
+            contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
 
             if (bodyA && bodyB) {
                 bodyA->emitCollisionEvent(event, bodyB);
                 bodyB->emitCollisionEvent(event, bodyA);
             }
-
-            auto gameObjectA = bodyA->getGameObject();
-            auto gameObjectB = bodyB->getGameObject();
 
             if (gameObjectA && gameObjectB) {
                 gameObjectA->emitCollisionEvent(event, gameObjectB);
@@ -187,7 +188,7 @@ namespace ime {
         b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
         world_->SetContactListener(b2ContactListener_.get());
 
-#if !defined(NDEBUG)
+#if defined(IME_DEBUG)
         using WindowRef = std::reference_wrapper<Window>;
         postRenderId_ = scene_.on_("postRender", ime::Callback<WindowRef>([this](WindowRef) {
             if (isDebugDrawEnabled_)
@@ -415,7 +416,7 @@ namespace ime {
     }
 
     void World::enableDebugDraw(bool enable) {
-#if !defined(NDEBUG)
+#if defined(IME_DEBUG)
         isDebugDrawEnabled_ = enable;
 #else
         IME_UNUSED(enable);
@@ -459,10 +460,14 @@ namespace ime {
     }
 
     void World::createDebugDrawer(Window &renderWindow) {
+#if defined(IME_DEBUG)
         if (!debugDrawer_) {
             debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);
             world_->SetDebugDraw(debugDrawer_.get());
         }
+#else
+        IME_UNUSED(renderWindow);
+#endif
     }
 
     World::~World() {

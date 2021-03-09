@@ -35,6 +35,9 @@ ime_set_option(IME_BUILD_TESTS FALSE BOOL "TRUE to build the IME tests")
 # Add option to build the documentation
 ime_set_option(IME_BUILD_DOC FALSE BOOL "TRUE to generate the API documentation, FALSE to ignore it")
 
+# add an option to let the user specify a custom directory for external libraries installation
+ime_set_option(IME_DEPENDENCIES_INSTALL_PREFIX "." PATH "External libraries (SFML, TGUI, Box2D, ...) installation directory")
+
 # Set CXX Standard
 ime_set_option(IME_CXX_STANDARD "17" STRING "C++ standard version to build IME with. Possible values: 17 or 20. Projects using IME must use a version equal or higher to this")
 
@@ -88,17 +91,9 @@ if(IME_OS_WINDOWS)
     endif()
 endif()
 
-# Apply the IME_USE_STATIC_STD_LIBS option on windows when using VC++
-# This can't be done in the ime_set_stdlib macro because it is too late to change these variables by then
-if(IME_OS_WINDOWS AND IME_COMPILER_MSVC AND IME_USE_STATIC_STD_LIBS)
-    foreach(flag
-        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-        if(${flag} MATCHES "/MD")
-            string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-        endif()
-    endforeach()
-endif()
+# enable project folders
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
 # Link SFML in the same way as IME, unless SFML_STATIC_LIBRARIES is manually specified
 if(NOT DEFINED SFML_STATIC_LIBRARIES)
@@ -117,23 +112,6 @@ if(NOT DEFINED TGUI_STATIC_LIBRARIES)
         set(TGUI_STATIC_LIBRARIES TRUE)
     endif()
 endif()
-
-# Find SFML if not build in same project
-if (NOT TARGET sfml-system OR NOT TARGET sfml-window OR NOT TARGET sfml-graphics OR NOT TARGET sfml-audio)
-    find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
-endif ()
-
-# Find TGUI if not build in same project
-if (NOT TARGET tgui)
-    find_package(TGUI 0.9.1 REQUIRED)
-endif()
-
-if (NOT TARGET box2d::box2d)
-    find_package(box2d REQUIRED)
-endif()
-
-# Set the path for the libraries
-set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 # Add source directory
 add_subdirectory(src/IME)
@@ -176,5 +154,5 @@ if(IME_GENERATE_PDB)
 endif()
 
 # Install miscellaneous files
-install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_DOCDIR})
-install(FILES README.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(FILES LICENSE DESTINATION ${IME_MISC_INSTALL_PREFIX})
+install(FILES README.md DESTINATION ${IME_MISC_INSTALL_PREFIX})

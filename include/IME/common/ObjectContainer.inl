@@ -83,7 +83,7 @@ inline std::shared_ptr<const U> ObjectContainer<T>::findById(unsigned int id) co
 
 template <typename T>
 inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(Predicate predicate) {
-    std::as_const(*this).findIf(predicate);
+    return std::as_const(*this).findIf(predicate);
 }
 
 template <typename T>

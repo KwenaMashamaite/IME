@@ -516,7 +516,9 @@ namespace ime {
          *
          * Be default, debug drawing is disabled
          *
-         * @note Debug drawing is only available in project debug mode
+         * @note Debug drawing is only available when IME is linked to
+         * in debug mode, calling this function when IME is linked to in
+         * release mode has no effect
          */
         void enableDebugDraw(bool enable);
 
@@ -569,7 +571,8 @@ namespace ime {
          * @brief Instantiate a debug drawer
          * @param renderWindow The render target for debug drawing
          *
-         * Note that only one debug drawer can be instantiated
+         * Note that only one debug drawer can be instantiated and it can
+         * only be instantiated when IME is in debug mode
          *
          * @warning This function is intended for internal use and should
          * never be called outside of IME

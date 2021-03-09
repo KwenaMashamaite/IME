@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/RenderLayerContainer.h"
+#include <algorithm>
 
 namespace ime {
     RenderLayer::Ptr RenderLayerContainer::create(const std::string& name) {

@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Rect.h"
 #include <memory>
+#include <string>
 
 namespace sf {
     class Texture;

@@ -53,6 +53,10 @@ namespace ime::utility {
         return path_ + file_;
     }
 
+#if defined(_MSC_VER)
+    #pragma warning( push )
+    #pragma warning( disable : 4996 )
+#endif
     void DiskFileLogger::log(MessageType messageType, const std::string &msg) {
         auto logMessageType = std::string();
         switch (messageType) {
@@ -70,6 +74,7 @@ namespace ime::utility {
         }
         auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         auto message = std::stringstream();
+
         auto dateAndTime = std::string(ctime(&now));
         //ctime() function inserts a newline character at the end of the returned string but we don't want it
         dateAndTime.erase(std::remove(dateAndTime.begin(), dateAndTime.end(), '\n'), dateAndTime.end());
@@ -77,4 +82,7 @@ namespace ime::utility {
         static auto diskFileReader = DiskFileReader();
         diskFileReader.writeToFile(message, getFullPath(), WriteMode::Append);
     }
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 }

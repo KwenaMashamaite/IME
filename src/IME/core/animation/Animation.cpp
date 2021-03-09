@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/animation/Animation.h"
+#include <iterator>
 
 namespace ime {
     namespace {
@@ -240,7 +241,7 @@ namespace ime {
             duration_ = ime::seconds(static_cast<float>(getFrameCount()) / frameRate_);
         } else if (duration > Time::Zero && frameRate == 0) {
             duration_ = duration;
-            frameRate_ = getFrameCount() / duration.asSeconds();
+            frameRate_ = static_cast<unsigned int>(getFrameCount() / duration.asSeconds());
         } else {
             frameRate_ = frameRate;
             duration_ = ime::seconds(static_cast<float>(getFrameCount()) / frameRate);

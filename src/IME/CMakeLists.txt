@@ -167,20 +167,23 @@ if(IME_SHARED_LIBS)
         set_target_properties(ime PROPERTIES IMPORT_SUFFIX ".a")
     endif()
 
+    target_compile_definitions(ime PUBLIC IME_DYNAMIC)
+
 else()
     add_library(ime STATIC ${IME_SRC})
     set_target_properties(ime PROPERTIES DEBUG_POSTFIX -s-d)
     set_target_properties(ime PROPERTIES RELEASE_POSTFIX -s)
     set_target_properties(ime PROPERTIES MINSIZEREL_POSTFIX -s)
     set_target_properties(ime PROPERTIES RELWITHDEBINFO_POSTFIX -s)
-endif()
 
-# Define either IME_STATIC or IME_DYNAMIC
-if(IME_SHARED_LIBS)
-    target_compile_definitions(ime PUBLIC IME_DYNAMIC)
-else()
     target_compile_definitions(ime PUBLIC IME_STATIC)
 endif()
+
+# set the target's folder (for IDEs that support it, e.g. Visual Studio)
+set_target_properties(ime PROPERTIES FOLDER "IME")
+
+# set the output directory for IME library
+set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 ime_set_global_compile_flags(ime)
 ime_set_stdlib(ime)
@@ -190,10 +193,27 @@ if(IME_OPTIMIZE_SINGLE_BUILD AND IME_COMPILER_MSVC)
 endif()
 
 # Add <project>/include as public include directory
-target_include_directories(ime PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+target_include_directories(ime PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+                            PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
 target_include_directories(ime INTERFACE $<INSTALL_INTERFACE:include>)
 
-# Link TGUI and SFML
+# Find SFML if not build in same project
+if (NOT TARGET sfml-system OR NOT TARGET sfml-window OR NOT TARGET sfml-graphics OR NOT TARGET sfml-audio)
+    find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
+endif ()
+
+# Find TGUI if not build in same project
+if (NOT TARGET tgui)
+    find_package(TGUI 0.9.1 REQUIRED)
+endif()
+
+# Find Box2D if not build in same project
+if (NOT TARGET box2d::box2d)
+    find_package(box2d REQUIRED)
+endif()
+
+# Link IME dependencies
 target_link_libraries(ime PRIVATE box2d::box2d tgui sfml-graphics sfml-window sfml-system sfml-audio)
 
 # For Visual Studio on Windows, export debug symbols (PDB files) to lib directory
@@ -220,10 +240,9 @@ endif()
 
 # Install library
 install(TARGETS ime EXPORT IMEConfigExport
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bin
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/${CMAKE_BUILD_TYPE} COMPONENT bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT bin
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT devel
-        FRAMEWORK DESTINATION "." COMPONENT bin
         )
 
 # Generate the IMEConfig.cmake file
