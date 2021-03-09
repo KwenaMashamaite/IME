@@ -37,7 +37,6 @@
 #include "IME/graphics/SpriteImage.h"
 #include "IME/graphics/SpriteSheet.h"
 #include "IME/graphics/TextureAtlas.h"
-#include "IME/graphics/SpriteSheetContainer.h"
 #include "IME/graphics/Texture.h"
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Window.h"

@@ -105,7 +105,6 @@ set(IME_SRC
     graphics/Window.cpp
     graphics/WindowImpl.cpp
     graphics/SpriteSheet.cpp
-    graphics/SpriteSheetContainer.cpp
     graphics/shapes/Shape.cpp
     graphics/shapes/RectangleShape.cpp
     graphics/shapes/CircleShape.cpp
