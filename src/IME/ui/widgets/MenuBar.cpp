@@ -89,6 +89,11 @@ namespace ime::ui {
         pimpl_->menuBar->addMenu(text);
     }
 
+    void MenuBar::addMenus(const std::initializer_list<std::string> &menus) {
+        for (const auto& menu : menus)
+            pimpl_->menuBar->addMenu(menu);
+    }
+
     bool MenuBar::addMenuItem(const std::string &text) {
         return pimpl_->menuBar->addMenuItem(text);
     }

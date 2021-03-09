@@ -107,6 +107,18 @@ namespace ime {
             void addMenu(const std::string& text);
 
             /**
+             * @brief Add new menus
+             * @param text The menus to be added
+             *
+             * The menus are created in the given order
+             *
+             * @code
+             * menuBar.addMenus({"File", "Edit", "View", "Help"});
+             * @endcode
+             */
+            void addMenus(const std::initializer_list<std::string>& menus);
+
+            /**
              * @brief Add a new menu item to the last added menu
              * @param text The text to be displayed on the menu item
              * @return True if the menu item was added or false if the menu bar
