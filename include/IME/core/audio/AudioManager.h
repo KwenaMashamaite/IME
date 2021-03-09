@@ -61,6 +61,26 @@ namespace ime {
             AudioManager();
 
             /**
+             * @brief Copy constructor
+             */
+            AudioManager(const AudioManager&) = delete;
+
+            /**
+             * @brief Copy assignment operator
+             */
+            AudioManager& operator=(const AudioManager&) = delete;
+
+            /**
+             * @brief Move constructor
+             */
+            AudioManager(AudioManager&&) noexcept = default;
+
+            /**
+             * @brief Move assignment operator
+             */
+            AudioManager& operator=(AudioManager&&) noexcept = default;
+
+            /**
              * @brief Play an audio file
              * @param audioType Type of the audio file to play
              * @param filename Filename of the audio to play

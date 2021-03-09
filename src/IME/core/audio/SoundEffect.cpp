@@ -135,6 +135,22 @@ namespace ime::audio {
         pImpl_{std::make_unique<Impl>()}
     {}
 
+    SoundEffect::SoundEffect(const SoundEffect& other) :
+        pImpl_{std::make_unique<Impl>(*other.pImpl_)}
+    {}
+
+    SoundEffect &SoundEffect::operator=(const SoundEffect& rhs) {
+        if (this != &rhs) {
+            auto temp{rhs};
+            std::swap(pImpl_, temp.pImpl_);
+        }
+
+        return *this;
+    }
+
+    SoundEffect::SoundEffect(SoundEffect &&) noexcept = default;
+    SoundEffect &SoundEffect::operator=(SoundEffect &&) noexcept = default;
+
     void SoundEffect::setSource(const std::string &filename){
         pImpl_->setSource(filename);
     }

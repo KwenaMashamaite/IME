@@ -50,6 +50,26 @@ namespace ime {
             SoundEffect();
 
             /**
+             * @brief Copy constructor
+             */
+            SoundEffect(const SoundEffect&);
+
+            /**
+             * @brief Copy assignment operator
+             */
+            SoundEffect& operator=(const SoundEffect&);
+
+            /**
+             * @brief Move constructor
+             */
+            SoundEffect(SoundEffect&&) noexcept;
+
+            /**
+             * @brief Move assignment operator
+             */
+            SoundEffect& operator=(SoundEffect&&) noexcept;
+
+            /**
              * @brief Set the sound effect file to be played
              * @param source Filename of an audio file
              *

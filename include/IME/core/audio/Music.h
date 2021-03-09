@@ -49,6 +49,26 @@ namespace ime {
             Music();
 
             /**
+             * @brief Copy constructor
+             */
+            Music(const Music&) = delete;
+
+            /**
+             * @brief Copy assignment operator
+             */
+            Music& operator=(const Music&) = delete;
+
+            /**
+             * @brief Move constructor
+             */
+            Music(Music&&) noexcept;
+
+            /**
+             * @brief Move assignment operator
+             */
+            Music& operator=(Music&&) noexcept;
+
+            /**
              * @brief Set the music file to be played
              * @param source Filename of an audio file
              *

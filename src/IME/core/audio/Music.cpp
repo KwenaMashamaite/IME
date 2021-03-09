@@ -161,6 +161,9 @@ namespace ime::audio {
         pImpl_{std::make_unique<Impl>()}
     {}
 
+    Music::Music(Music &&) noexcept = default;
+    Music &Music::operator=(Music &&) noexcept = default;
+
     void Music::setSource(const std::string &source) {
         pImpl_->setSource(source);
     }
