@@ -47,6 +47,8 @@ endif()
 if(IME_OS_WINDOWS)
     set(DEFAULT_INSTALL_MISC_DIR .)
 endif()
+
+# add an option to let the user specify a custom directory for doc, examples, licence, readme and other miscellaneous files
 ime_set_option(IME_MISC_INSTALL_PREFIX "${DEFAULT_INSTALL_MISC_DIR}" PATH "Prefix installation path for miscellaneous files")
 mark_as_advanced(IME_MISC_INSTALL_PREFIX)
 
@@ -60,6 +62,11 @@ if (IME_INSTALL_PKGCONFIG_FILES)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pkgconfig/ime.pc" DESTINATION "${IME_PKGCONFIG_INSTALL_PREFIX}")
 endif()
 
+# Add an option to choose whether PDB debug symbols should be generated for Visual Studio
+if(IME_COMPILER_MSVC)
+    ime_set_option(IME_GENERATE_PDB TRUE BOOL "True to generate PDB debug symbols, FALSE otherwise.")
+endif()
+
 # Define an option for choosing between static and dynamic C runtime
 if(IME_OS_WINDOWS)
     ime_set_option(IME_USE_STATIC_STD_LIBS FALSE BOOL "TRUE to statically link to the standard libraries, FALSE to use them as DLLs. This option has to match with the one from SFML.")
@@ -68,11 +75,17 @@ if(IME_OS_WINDOWS)
     if(IME_SHARED_LIBS AND IME_USE_STATIC_STD_LIBS)
         message(FATAL_ERROR "IME_SHARED_LIBS and IME_USE_STATIC_STD_LIBS cannot be used together")
     endif()
-endif()
 
-# Add an option to choose whether PDB debug symbols should be generated for Visual Studio
-if(IME_COMPILER_MSVC)
-    ime_set_option(IME_GENERATE_PDB TRUE BOOL "True to generate PDB debug symbols, FALSE otherwise.")
+    # for VC++, we can apply it globally by modifying the compiler flags
+    if(IME_COMPILER_MSVC AND IME_USE_STATIC_STD_LIBS)
+        foreach(flag
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+            if(${flag} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+            endif()
+        endforeach()
+    endif()
 endif()
 
 # Apply the IME_USE_STATIC_STD_LIBS option on windows when using VC++
