@@ -161,3 +161,38 @@ endif()
 # Install miscellaneous files
 install(FILES LICENSE DESTINATION ${IME_MISC_INSTALL_PREFIX})
 install(FILES README.md DESTINATION ${IME_MISC_INSTALL_PREFIX})
+
+# Install 3rd-party binaries
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    # Install SFML binaries
+    install(DIRECTORY "${SFML_DIR}/../../../bin/"
+            DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}
+            COMPONENT devel
+            FILES_MATCHING PATTERN "*-d-2.dll"
+            )
+
+    # Install TGUI binaries
+    install(FILES "${TGUI_DIR}/../../../bin/tgui-d.dll" DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE})
+else()
+    # Install SFML binaries
+    install(DIRECTORY "${SFML_DIR}/../../../bin/"
+            DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE}
+            COMPONENT devel
+            FILES_MATCHING PATTERN "*.dll"
+            )
+
+    # Install TGUI binaries
+    install(FILES "${TGUI_DIR}/../../../bin/tgui.dll" DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE})
+endif()
+
+# Remove unwanted binaries from folder (only release binaries in "Release" and debug binaries in "Debug")
+install(CODE [[
+    file(GLOB DEBUG_BINARIES_IN_RELEASE_FOLDER "${CMAKE_INSTALL_PREFIX}/bin/Release/*-d-2.dll")
+    if (DEBUG_BINARIES_IN_RELEASE_FOLDER)
+        file(REMOVE_RECURSE ${DEBUG_BINARIES_IN_RELEASE_FOLDER})
+    endif()
+
+    # IME does not use the sfml-network module
+    file(REMOVE "${CMAKE_INSTALL_PREFIX}/bin/Release/sfml-network-2.dll")
+    file(REMOVE "${CMAKE_INSTALL_PREFIX}/bin/Debug/sfml-network-d-2.dll")
+]])
