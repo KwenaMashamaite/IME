@@ -201,16 +201,28 @@ target_include_directories(ime INTERFACE $<INSTALL_INTERFACE:include>)
 # Find SFML if not build in same project
 if (NOT TARGET sfml-system OR NOT TARGET sfml-window OR NOT TARGET sfml-graphics OR NOT TARGET sfml-audio)
     find_package(SFML 2.5.1 REQUIRED COMPONENTS system window graphics audio)
+
+    if (${SFML_VERSION} VERSION_LESS "2.5.1")
+        message(FATAL_ERROR "IME requires SFML 2.5.1 or higher")
+    endif()
 endif ()
 
 # Find TGUI if not build in same project
 if (NOT TARGET tgui)
     find_package(TGUI 0.9.1 REQUIRED)
+
+    if (${TGUI_VERSION} VERSION_LESS "0.9.1")
+        message(FATAL_ERROR "IME requires TGUI 0.9.1 or higher")
+    endif()
 endif()
 
 # Find Box2D if not build in same project
 if (NOT TARGET box2d::box2d)
     find_package(box2d REQUIRED)
+
+    if (${box2d_VERSION} VERSION_LESS "2.4.1")
+        message(FATAL_ERROR "IME requires Box2D 2.4.1 or higher")
+    endif()
 endif()
 
 # Link IME dependencies
