@@ -84,7 +84,7 @@ namespace ime {
          * @brief Constructor
          * @param engine A reference to the game engine
          */
-        explicit Scene(Engine &engine);
+        Scene();
 
         /**
          * @brief Move constructor
@@ -95,6 +95,20 @@ namespace ime {
          * @brief Move assignment operator
          */
         Scene& operator=(Scene&&);
+
+        /**
+         * @internal
+         * @brief Initialize the scene
+         * @param engine The engine that runs the scene
+         *
+         * This function initializes all scene components that depend on the
+         * engine for their functionality. This function is called before the
+         * scene is entered
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        void init(Engine& engine);
 
         /**
          * @brief Enter the scene
@@ -569,9 +583,9 @@ namespace ime {
         void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
 
     private:
-        Engine &engine_;                      //!< A reference to the game engine
+        Engine* engine_;      //!< A reference to the game engine
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        PropertyContainer& cache_;            //!< The global cache
+        PropertyContainer* cache_;            //!< The global cache
         std::shared_ptr<World> world_;        //!< Physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager

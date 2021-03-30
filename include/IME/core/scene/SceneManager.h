@@ -176,6 +176,12 @@ namespace ime {
          */
         void handleEvent(Event event);
 
+        /**
+         * @brief Execute a callback for every scene in the scene manager
+         * @param callback The callback to be executed
+         */
+        void forEachScene(const Callback<const ScenePtr&>& callback);
+
     private:
         /**
          * @brief Update the active scene

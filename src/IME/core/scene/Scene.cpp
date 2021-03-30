@@ -28,12 +28,10 @@
 #include "IME/core/game_object/GameObject.h"
 
 namespace ime {
-    Scene::Scene(Engine &engine) :
-        engine_{engine},
-        camera_{std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()))},
-        cache_{engine.getPersistentData()},
-        guiContainer_{engine.getRenderTarget()},
+    Scene::Scene() :
+        engine_{nullptr},
         entityContainer_{renderLayers_},
+        cache_{nullptr},
         shapeContainer_{renderLayers_},
         spriteContainer_{renderLayers_},
         timescale_{1.0f},
@@ -78,6 +76,18 @@ namespace ime {
         return *this;
     }
 
+    void Scene::init(Engine &engine) {
+        engine_ = &engine;
+        camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
+        cache_ = &engine.getPersistentData();
+        guiContainer_.setTarget(engine.getRenderTarget());
+
+        engine.onShutDown([this] {
+            engine_ = nullptr;
+            cache_ = nullptr;
+        });
+    }
+
     bool Scene::unsubscribe_(const std::string &event, int id) {
         return internalEmitter_.removeEventListener(event, id);
     }
@@ -110,7 +120,7 @@ namespace ime {
     }
 
     Engine &Scene::engine() const {
-        return engine_;
+        return *engine_;
     }
 
     Camera &Scene::camera() {
@@ -146,7 +156,7 @@ namespace ime {
     }
 
     PropertyContainer &Scene::cache() {
-        return cache_;
+        return *cache_;
     }
 
     RenderLayerContainer &Scene::renderLayers() {

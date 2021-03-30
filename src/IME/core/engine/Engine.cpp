@@ -149,6 +149,14 @@ namespace ime {
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
         IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states");
 
+        // Initialize scenes that were added to the engine before it was ran. Scenes
+        // that are added while the engine is running are initialized before they are
+        // pushed to the scene manager whilst scenes that are added before the engine
+        // ran are immediately added to the scene manager and await late initialization
+        sceneManager_.forEachScene([this](const Scene::Ptr& scene) {
+            scene->init(*this);
+        });
+
         isRunning_ = true;
         sceneManager_.enterTopScene();
         auto const frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
@@ -199,11 +207,12 @@ namespace ime {
         window_.display();
     }
 
-    void Engine::pushScene(std::shared_ptr<Scene> state, Callback<> callback) {
+    void Engine::pushScene(std::shared_ptr<Scene> scene, Callback<> callback) {
+        IME_ASSERT(scene, "A scene pushed to the engine cannot be a nullptr");
         if (!isRunning_)
-            sceneManager_.pushScene(std::move(state));
+            sceneManager_.pushScene(std::move(scene));
         else
-            scenesPendingPush_.push({std::move(state), callback});
+            scenesPendingPush_.push({std::move(scene), std::move(callback)});
     }
 
     void Engine::popScene() {
@@ -224,14 +233,18 @@ namespace ime {
         }
 
         while (!scenesPendingPush_.empty()) {
+            auto scene = scenesPendingPush_.front().first;
+            scene->init(*this);
+
             if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
-                sceneManager_.pushScene(scenesPendingPush_.front().first, true);
+                sceneManager_.pushScene(std::move(scene), true);
                 if (auto& callback = scenesPendingPush_.front().second; callback)
                     callback();
+
                 scenesPendingPush_.pop();
                 break;
             } else {
-                sceneManager_.pushScene(scenesPendingPush_.front().first);
+                sceneManager_.pushScene(std::move(scene));
                 scenesPendingPush_.pop();
             }
         }
@@ -242,6 +255,7 @@ namespace ime {
     }
 
     void Engine::shutdown() {
+        eventEmitter_.emit("shutdown");
         audioManager_.stopAllAudio();
         audioManager_.removePlayedAudio();
         window_.close();
@@ -323,5 +337,9 @@ namespace ime {
 
     void Engine::onFrameEnd(Callback<> callback) {
         onFrameEnd_ = std::move(callback);
+    }
+
+    void Engine::onShutDown(Callback<> callback) {
+        eventEmitter_.addEventListener("shutdown", std::move(callback));
     }
 }

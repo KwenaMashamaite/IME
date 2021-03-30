@@ -142,6 +142,14 @@ namespace ime {
         updateScene(deltaTime, true);
     }
 
+    void SceneManager::forEachScene(const Callback<const SceneManager::ScenePtr&>& callback) {
+        auto scenesCopy = scenes_; //Intentional shallow copy
+        while (!scenesCopy.empty()) {
+            callback(scenesCopy.top());
+            scenesCopy.pop();
+        }
+    }
+
     void SceneManager::preUpdate(Time deltaTime) {
         if (scenes_.empty())
             return;

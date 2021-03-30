@@ -294,6 +294,15 @@ namespace ime {
          */
         void onFrameEnd(Callback<> callback);
 
+        /**
+         * @brief Execute a callback before the engine is shutdown
+         * @param callback The function to be executed
+         *
+         * This function is called before the engine executes its shutdown
+         * sequence
+         */
+        void onShutDown(Callback<> callback);
+
     private:
         /**
          * @brief Load engine settings from the hard drive
@@ -368,13 +377,14 @@ namespace ime {
         SceneManager sceneManager_;                  //!< The games scene manager
         audio::AudioManager audioManager_;           //!< The games global audio manager
         input::InputManager inputManager_;           //!< The games global input manager
-        ResourceManager::Ptr resourceManager_; //!< The games global resource manager
-        EventDispatcher::Ptr eventDispatcher_; //!< Engines Event dispatcher
+        ResourceManager::Ptr resourceManager_;       //!< The games global resource manager
+        EventDispatcher::Ptr eventDispatcher_;       //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                //!< Holds Data that persists across scenes
         bool pendingPop_;                            //!< A flag indicting whether or not the current scene should be popped
         Callback<> onWindowClose_;                   //!< A Function executed when a request to close the window is received
         Callback<> onFrameStart_;                    //!< A Function called at the start of the current frame
         Callback<> onFrameEnd_;                      //!< A Function called at the end of the current frame
+        EventEmitter eventEmitter_;                  //!< Emits engine events to interested parties
         TimerManager timerManager_;                  //!< Manages global timers
 
         std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
