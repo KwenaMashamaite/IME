@@ -49,6 +49,7 @@ namespace ime {
         IME_ASSERT(body, "A body attached to a collider cannot be a nullptr");
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
+        b2FixtureDefinition->density = 1.0f;
         b2FixtureDefinition->userData.pointer = getObjectId();
 
         fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));

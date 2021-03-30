@@ -193,7 +193,7 @@ namespace ime {
          * use similar densities for all of your colliders. This will improve
          * stacking stability
          *
-         * By default, the density is 0.0f
+         * By default, the density is 1.0f
          */
         void setDensity(float density);
 
