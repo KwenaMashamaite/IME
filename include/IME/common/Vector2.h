@@ -25,6 +25,8 @@
 #ifndef IME_VECTOR2_H
 #define IME_VECTOR2_H
 
+#include <cmath>
+
 namespace ime {
     /**
      * @brief 2D vector
@@ -56,6 +58,33 @@ namespace ime {
          */
         template<typename U>
         explicit Vector2(const Vector2<U> &vector);
+
+        /**
+         * @brief Get the magnitude of the vector
+         * @return The magnitude of the vector
+         */
+        float magnitude() const;
+
+        /**
+         * @brief Get the scalar product of this vector and another vector
+         * @param otherVec The vector to dot with this vector
+         * @return The scalar product of the this vector and @a otherVec
+         */
+        float dot(const Vector2<T>& otherVec) const;
+
+        /**
+         * @brief Get the distance between this vector and another vector
+         * @param otherVec The vector to get the distance to
+         * @return The distance between this vector and @a otherVec
+         */
+        float distanceTo(const Vector2<T>& otherVec) const;
+
+        /**
+         * @brief Get the angle between this vector and another vector
+         * @param otherVec The vector to get the angle to
+         * @return The angle between this vector and @a otherVect
+         */
+        float angleTo(const Vector2<T>& otherVec) const;
         
         // Member data
         T x; //!< X coordinate of the vector

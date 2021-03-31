@@ -37,6 +37,28 @@ inline Vector2<T>::Vector2(const Vector2<U>& vector) :
 {}
 
 template <typename T>
+inline float Vector2<T>::magnitude() const {
+    return sqrt(pow(x, 2) + pow(y, 2));
+}
+
+template <typename T>
+inline float Vector2<T>::dot(const Vector2<T>& otherVec) const {
+    return x * otherVec.x + y * otherVec.y;
+}
+
+template <typename T>
+inline float Vector2<T>::distanceTo(const Vector2<T>& otherVec) const {
+    auto distanceVec = otherVec - *this;
+    return distanceVec.magnitude();
+}
+
+template <typename T>
+inline float Vector2<T>::angleTo(const Vector2<T>& otherVec) const {
+    static const auto PI = 3.14159265358979323846f;
+    return (acos(dot(otherVec) / magnitude() * otherVec.magnitude()) * 180.0f) / PI;
+}
+
+template <typename T>
 inline Vector2<T> operator -(const Vector2<T>& right) {
     return Vector2<T>(-right.x, -right.y);
 }
