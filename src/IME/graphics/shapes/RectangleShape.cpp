@@ -23,48 +23,56 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/Window.h"
-#include "../../utility/Helpers.h"
-#include "../WindowImpl.h"
+#include "IME/graphics/shapes/ShapeImpl.h"
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <memory>
 
 namespace ime {
-    struct RectangleShape::Impl {
-        Impl(Vector2f size) :
-            rectangle_{sf::Vector2f{size.x, size.y}}
+    struct RectangleShape::RecShapeImpl {
+        explicit RecShapeImpl(std::shared_ptr<sf::Shape> shape) :
+            rectangle_{std::static_pointer_cast<sf::RectangleShape>(std::move(shape))}
         {}
 
-        ///////////////////////////////////////////////////////////////////////
         // Member data
-        ///////////////////////////////////////////////////////////////////////
-
-        sf::RectangleShape rectangle_;
+        std::shared_ptr<sf::RectangleShape> rectangle_;
     };
 
+    /*-------------------------------------------------------------------------
+     # RectangleShape class
+     =-----------------------------------------------------------------------*/
+
     RectangleShape::RectangleShape(const Vector2f &size) :
-        Shape( Type::Rectangle),
-        impl_{std::make_unique<Impl>(size)}
+        Shape(std::make_unique<priv::ShapeImpl<sf::RectangleShape>>(
+            std::make_shared<sf::RectangleShape>(sf::Vector2f({size.x, size.y}))),Type::Rectangle),
+        pimpl_{std::make_unique<RecShapeImpl>(std::static_pointer_cast<sf::Shape>(getInternalPtr()))}
     {}
 
     RectangleShape::RectangleShape(const RectangleShape & other) :
-        Shape(other.getShapeType()),
-        impl_{std::make_unique<Impl>(*other.impl_)}
+        Shape(other),
+        pimpl_{std::make_unique<RecShapeImpl>(*other.pimpl_)}
     {}
 
     RectangleShape &RectangleShape::operator=(const RectangleShape& other) {
         if (this != &other) {
-            *impl_ = *other.impl_;
+            *pimpl_ = *other.pimpl_;
         }
 
         return *this;
     }
 
     RectangleShape::RectangleShape(RectangleShape &&) noexcept = default;
-
     RectangleShape &RectangleShape::operator=(RectangleShape &&) noexcept = default;
 
     RectangleShape::Ptr RectangleShape::create(const Vector2f &size) {
-        return Ptr(new RectangleShape(size));
+        return std::make_shared<RectangleShape>(size);
+    }
+
+    RectangleShape::Ptr RectangleShape::copy() const {
+        return std::static_pointer_cast<RectangleShape>(clone());
+    }
+
+    Shape::Ptr RectangleShape::clone() const {
+        return std::make_shared<RectangleShape>(*this);
     }
 
     std::string RectangleShape::getClassName() const {
@@ -72,114 +80,12 @@ namespace ime {
     }
 
     void RectangleShape::setSize(const Vector2f &size) {
-        impl_->rectangle_.setSize({size.x, size.y});
+        pimpl_->rectangle_->setSize({size.x, size.y});
     }
 
     Vector2f RectangleShape::getSize() const {
-        auto [x, y] = impl_->rectangle_.getSize();
+        auto [x, y] = pimpl_->rectangle_->getSize();
         return {x, y};
-    }
-
-    void RectangleShape::setFillColour(const Colour &colour) {
-        impl_->rectangle_.setFillColor(utility::convertToSFMLColour(colour));
-    }
-
-    Colour RectangleShape::getFillColour() const {
-        return utility::convertFrom3rdPartyColour(impl_->rectangle_.getFillColor());
-    }
-
-    void RectangleShape::setOutlineColour(const Colour &colour) {
-        impl_->rectangle_.setOutlineColor(utility::convertToSFMLColour(colour));
-    }
-
-    Colour RectangleShape::getOutlineColour() const {
-        return utility::convertFrom3rdPartyColour(impl_->rectangle_.getOutlineColor());
-    }
-
-    void RectangleShape::setOutlineThickness(float thickness) {
-        impl_->rectangle_.setOutlineThickness(thickness);
-    }
-
-    float RectangleShape::getOutlineThickness() const {
-        return impl_->rectangle_.getOutlineThickness();
-    }
-
-    FloatRect RectangleShape::getLocalBounds() const {
-        auto [left, top, width, height] = impl_->rectangle_.getLocalBounds();
-        return {left, top, width, height};
-    }
-
-    FloatRect RectangleShape::getGlobalBounds() const {
-        auto [left, top, width, height] = impl_->rectangle_.getGlobalBounds();
-        return {left, top, width, height};
-    }
-
-    void RectangleShape::setPosition(float x, float y) {
-        impl_->rectangle_.setPosition(x, y);
-    }
-
-    void RectangleShape::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    Vector2f RectangleShape::getPosition() const {
-        return {impl_->rectangle_.getPosition().x, impl_->rectangle_.getPosition().y};
-    }
-
-    void RectangleShape::setRotation(float angle) {
-        impl_->rectangle_.setRotation(angle);
-    }
-
-    void RectangleShape::rotate(float angle) {
-        impl_->rectangle_.rotate(angle);
-    }
-
-    float RectangleShape::getRotation() const {
-        return impl_->rectangle_.getRotation();
-    }
-
-    void RectangleShape::setScale(float factorX, float factorY) {
-        impl_->rectangle_.setScale(factorX, factorY);
-    }
-
-    void RectangleShape::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void RectangleShape::scale(float factorX, float factorY) {
-        impl_->rectangle_.scale(factorX, factorY);
-    }
-
-    void RectangleShape::scale(Vector2f offset) {
-        impl_->rectangle_.scale({offset.x, offset.y});
-    }
-
-    Vector2f RectangleShape::getScale() const {
-        return {impl_->rectangle_.getScale().x, impl_->rectangle_.getScale().y};
-    }
-
-    void RectangleShape::setOrigin(float x, float y) {
-        impl_->rectangle_.setOrigin(x, y);
-    }
-
-    void RectangleShape::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    Vector2f RectangleShape::getOrigin() const {
-        return {impl_->rectangle_.getOrigin().x, impl_->rectangle_.getOrigin().y};
-    }
-
-    void RectangleShape::move(float offsetX, float offsetY) {
-        impl_->rectangle_.move(offsetX, offsetY);
-    }
-
-    void RectangleShape::move(Vector2f offset) {
-        impl_->rectangle_.move({offset.x, offset.y});
-    }
-
-    void RectangleShape::draw(Window &renderTarget) const {
-        renderTarget.getImpl()->getSFMLWindow().draw(impl_->rectangle_);
     }
 
     RectangleShape::~RectangleShape() = default;

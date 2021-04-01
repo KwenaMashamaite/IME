@@ -23,48 +23,56 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/shapes/CircleShape.h"
-#include "../../utility/Helpers.h"
-#include "../WindowImpl.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/shapes/ShapeImpl.h"
 #include <SFML/Graphics/CircleShape.hpp>
+#include <memory>
 
 namespace ime {
-    struct CircleShape::Impl {
-        Impl(float radius) :
-            circle_{radius}
+    struct CircleShape::CircleShapeImpl {
+        explicit CircleShapeImpl(std::shared_ptr<sf::Shape> shape) :
+            circle_{std::static_pointer_cast<sf::CircleShape>(std::move(shape))}
         {}
 
-        ///////////////////////////////////////////////////////////////////////
-        // Member data
-        ///////////////////////////////////////////////////////////////////////
-
-        sf::CircleShape circle_;
+        //Member data
+        std::shared_ptr<sf::CircleShape> circle_;
     };
 
-    CircleShape::CircleShape(float radius) : 
-        Shape(Type::Circle),
-        impl_{std::make_unique<Impl>(radius)}
+    /*-------------------------------------------------------------------------
+     # CircleShape class
+     =-----------------------------------------------------------------------*/
+
+    CircleShape::CircleShape(float radius) :
+        Shape(std::make_unique<priv::ShapeImpl<sf::CircleShape>>(
+            std::make_shared<sf::CircleShape>(radius)),Type::Circle),
+        pimpl_{std::make_unique<CircleShapeImpl>(std::static_pointer_cast<sf::Shape>(getInternalPtr()))}
     {}
 
     CircleShape::CircleShape(const CircleShape & other) :
-        Shape(other.getShapeType()),
-        impl_{std::make_unique<Impl>(*other.impl_)}
+        Shape(other),
+        pimpl_{std::make_unique<CircleShapeImpl>(*other.pimpl_)}
     {}
 
     CircleShape &CircleShape::operator=(const CircleShape& other) {
         if (this != &other) {
-            *impl_ = *other.impl_;
+            *pimpl_ = *other.pimpl_;
         }
 
         return *this;
     }
 
     CircleShape::CircleShape(CircleShape &&) noexcept = default;
-
     CircleShape &CircleShape::operator=(CircleShape &&) noexcept = default;
 
     CircleShape::Ptr CircleShape::create(float radius) {
-        return CircleShape::Ptr(new CircleShape(radius));
+        return std::make_shared<CircleShape>(radius);
+    }
+
+    CircleShape::Ptr CircleShape::copy() const {
+        return std::static_pointer_cast<CircleShape>(clone());
+    }
+
+    Shape::Ptr CircleShape::clone() const {
+        return std::make_shared<CircleShape>(*this);
     }
 
     std::string CircleShape::getClassName() const {
@@ -72,113 +80,11 @@ namespace ime {
     }
 
     void CircleShape::setRadius(float radius) {
-        impl_->circle_.setRadius(radius);
+        pimpl_->circle_->setRadius(radius);
     }
 
     float CircleShape::getRadius() const {
-        return impl_->circle_.getRadius();
-    }
-
-    void CircleShape::setFillColour(const Colour &colour) {
-        impl_->circle_.setFillColor(utility::convertToSFMLColour(colour));
-    }
-
-    Colour CircleShape::getFillColour() const {
-        return utility::convertFrom3rdPartyColour(impl_->circle_.getFillColor());
-    }
-
-    void CircleShape::setOutlineColour(const Colour &colour) {
-        impl_->circle_.setOutlineColor(utility::convertToSFMLColour(colour));
-    }
-
-    Colour CircleShape::getOutlineColour() const {
-        return utility::convertFrom3rdPartyColour(impl_->circle_.getOutlineColor());
-    }
-
-    void CircleShape::setOutlineThickness(float thickness) {
-        impl_->circle_.setOutlineThickness(thickness);
-    }
-
-    float CircleShape::getOutlineThickness() const {
-        return impl_->circle_.getOutlineThickness();
-    }
-
-    FloatRect CircleShape::getLocalBounds() const {
-        auto [left, top, width, height] = impl_->circle_.getLocalBounds();
-        return {left, top, width, height};
-    }
-
-    FloatRect CircleShape::getGlobalBounds() const {
-        auto [left, top, width, height] = impl_->circle_.getGlobalBounds();
-        return {left, top, width, height};
-    }
-
-    void CircleShape::setPosition(float x, float y) {
-        impl_->circle_.setPosition(x, y);
-    }
-
-    void CircleShape::setPosition(Vector2f position) {
-        setPosition(position.x, position.y);
-    }
-
-    Vector2f CircleShape::getPosition() const {
-        return {impl_->circle_.getPosition().x, impl_->circle_.getPosition().y};
-    }
-
-    void CircleShape::setRotation(float angle) {
-        impl_->circle_.setRotation(angle);
-    }
-
-    void CircleShape::rotate(float angle) {
-        impl_->circle_.rotate(angle);
-    }
-
-    float CircleShape::getRotation() const {
-        return impl_->circle_.getRotation();
-    }
-
-    void CircleShape::setScale(float factorX, float factorY) {
-        impl_->circle_.setScale(factorX, factorY);
-    }
-
-    void CircleShape::setScale(Vector2f scale) {
-        setScale(scale.x, scale.y);
-    }
-
-    void CircleShape::scale(float factorX, float factorY) {
-        impl_->circle_.scale(factorX, factorY);
-    }
-
-    void CircleShape::scale(Vector2f offset) {
-        impl_->circle_.scale({offset.x, offset.y});
-    }
-
-    Vector2f CircleShape::getScale() const {
-        return {impl_->circle_.getScale().x, impl_->circle_.getScale().y};
-    }
-
-    void CircleShape::setOrigin(float x, float y) {
-        impl_->circle_.setOrigin(x, y);
-    }
-
-    void CircleShape::setOrigin(Vector2f origin) {
-        setOrigin(origin.x, origin.y);
-    }
-
-    Vector2f CircleShape::getOrigin() const {
-        return {impl_->circle_.getOrigin().x, impl_->circle_.getOrigin().y};
-    }
-
-    void CircleShape::move(float offsetX, float offsetY) {
-        impl_->circle_.move(offsetX, offsetY);
-    }
-
-    void CircleShape::move(Vector2f offset) {
-        impl_->circle_.move({offset.x, offset.y});
-    }
-
-    void CircleShape::draw(Window &renderTarget) const {
-        renderTarget.getImpl()->getSFMLWindow().draw(impl_->circle_);
+        return pimpl_->circle_->getRadius();
     }
 
     CircleShape::~CircleShape() = default;

@@ -25,12 +25,35 @@
 #include "IME/graphics/shapes/Shape.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/World.h"
+#include "IME/graphics/shapes/ShapeImpl.h"
 
 namespace ime {
-    Shape::Shape(Type type) :
+    Shape::Shape(std::unique_ptr<priv::IShapeImpl> impl, Type type) :
+        pimpl_{std::move(impl)},
         type_{type},
         postStepId_{-1}
     {}
+
+    Shape::Shape(const Shape& other) :
+        IDrawable(other),
+        pimpl_{other.pimpl_->clone()},
+        type_{other.type_},
+        body_{nullptr},
+        postStepId_{-1}
+    {}
+
+    Shape &Shape::operator=(const Shape& rhs) {
+        if (this != &rhs) {
+            pimpl_ = rhs.pimpl_->clone();
+            type_ = rhs.type_;
+            postStepId_ = -1;
+        }
+
+        return *this;
+    }
+
+    Shape::Shape(Shape &&) noexcept = default;
+    Shape &Shape::operator=(Shape &&) noexcept = default;
 
     std::string Shape::getClassType() const {
         return "Shape";
@@ -45,8 +68,8 @@ namespace ime {
         IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one");
         body_ = body;
         setOrigin(getLocalBounds().width / 2.0f, getLocalBounds().height / 2.0f);
-        setPosition(body->getPosition());
-        setRotation(body->getRotation());
+        body->setPosition(getPosition());
+        body->setRotation(getRotation());
 
         // Synchronize the shape with its rigid body
         if (postStepId_ == -1) {
@@ -70,7 +93,7 @@ namespace ime {
         return body_;
     }
 
-    const Body::Ptr Shape::getRigidBody() const {
+    Body::Ptr Shape::getRigidBody() const {
         return body_;
     }
 
@@ -78,9 +101,112 @@ namespace ime {
         return body_ != nullptr;
     }
 
-    Shape::~Shape() noexcept {
+    void Shape::setFillColour(const Colour &colour) {
+        pimpl_->setFillColour(colour);
+    }
+
+    Colour Shape::getFillColour() const {
+        return pimpl_->getFillColour();
+    }
+
+    void Shape::setOutlineColour(const Colour &colour) {
+        pimpl_->setOutlineColour(colour);
+    }
+
+    Colour Shape::getOutlineColour() const {
+        return pimpl_->getOutlineColour();
+    }
+
+    void Shape::setOutlineThickness(float thickness) {
+        pimpl_->setOutlineThickness(thickness);
+    }
+
+    float Shape::getOutlineThickness() const {
+        return pimpl_->getOutlineThickness();
+    }
+
+    FloatRect Shape::getLocalBounds() const {
+        return pimpl_->getLocalBounds();
+    }
+
+    FloatRect Shape::getGlobalBounds() const {
+        return pimpl_->getGlobalBounds();
+    }
+
+    void Shape::setPosition(float x, float y) {
+        pimpl_->setPosition(x, y);
+    }
+
+    void Shape::setPosition(Vector2f position) {
+        pimpl_->setPosition(position);
+    }
+
+    Vector2f Shape::getPosition() const {
+        return pimpl_->getPosition();
+    }
+
+    void Shape::setRotation(float angle) {
+        pimpl_->setRotation(angle);
+    }
+
+    void Shape::rotate(float angle) {
+        pimpl_->rotate(angle);
+    }
+
+    float Shape::getRotation() const {
+        return pimpl_->getRotation();
+    }
+
+    void Shape::setScale(float factorX, float factorY) {
+        pimpl_->setScale(factorX, factorY);
+    }
+
+    void Shape::setScale(Vector2f scale) {
+        pimpl_->setScale(scale);
+    }
+
+    void Shape::scale(float factorX, float factorY) {
+        pimpl_->scale(factorX, factorY);
+    }
+
+    void Shape::scale(Vector2f factor) {
+        pimpl_->scale(factor);
+    }
+
+    Vector2f Shape::getScale() const {
+        return pimpl_->getScale();
+    }
+
+    void Shape::setOrigin(float x, float y) {
+        pimpl_->setOrigin(x, y);
+    }
+
+    void Shape::setOrigin(Vector2f origin) {
+        pimpl_->setOrigin(origin);
+    }
+
+    Vector2f Shape::getOrigin() const {
+        return pimpl_->getOrigin();
+    }
+
+    void Shape::move(float offsetX, float offsetY) {
+        pimpl_->move(offsetX, offsetY);
+    }
+
+    void Shape::move(Vector2f offset) {
+        pimpl_->move(offset);
+    }
+
+    void Shape::draw(Window &renderTarget) const {
+        pimpl_->draw(renderTarget);
+    }
+
+    std::shared_ptr<void> Shape::getInternalPtr() const {
+        return pimpl_->getInternalPtr();
+    }
+
+    Shape::~Shape() {
         if (postStepId_ != -1 && body_)
             body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
     }
 }
-
