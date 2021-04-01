@@ -33,6 +33,18 @@
 #include "IME/common/Object.h"
 
 namespace ime {
+
+    using Direction = Vector2i;                //!< Direction of a game object
+    static const Direction Left = {-1, 0};     //!< West direction
+    static const Direction UpLeft = {-1, -1};  //!< North-West direction
+    static const Direction Up = {0, -1};       //!< North direction
+    static const Direction UpRight = {1, -1};  //!< North-East direction
+    static const Direction Right = {1, 0};     //!< East direction
+    static const Direction DownRight = {1, 1}; //!< South-East direction
+    static const Direction Down = {0, 1};      //!< South direction
+    static const Direction DownLeft = {-1, 1}; //!< South-West direction
+    static const Direction Unknown = {0, 0};   //!< Unknown direction
+
     /**
      * @brief Class for performing grid based movement on an entity in a grid
      *
@@ -84,20 +96,25 @@ namespace ime {
         std::string getClassType() const override;
 
         /**
-         * @brief Change the direction of the target entity
-         * @param newDir The new direction of the target
-         * @return True if the direction was changed or false if the target
-         *         is in motion or there is no target at all
+         * @brief Change the direction of the game object
+         * @param newDir The new direction of the game object
+         * @return True if the direction was changed or false if the game
+         *         object is in motion or the grid mover is not in control
+         *         of any game object
          *
-         * The direction cannot be changed while the entity is moving to another
-         * tile. This function does not remember any direction change requests
-         * that were made while the target was moving. This function must be
-         * called even if the target is to be moved in its current direction
-         * as the target stops moving after reaching its destination
+         * Note that the direction of the game object cannot be changed while
+         * it is moving to another tile. In addition, this function only works
+         * with predefined directions
          *
          * @see update
          */
-        bool requestDirectionChange(Direction newDir);
+        bool requestDirectionChange(const Direction& newDir);
+
+        /**
+         * @brief Get the current direction of the game object
+         * @return The current direction of the game object
+         */
+        Direction getDirection() const;
 
         /**
          * @brief Change the controlled entity
@@ -118,57 +135,24 @@ namespace ime {
         GameObject::Ptr getTarget() const;
 
         /**
-         * @brief Change the velocity of the target
-         * @param velocity The new velocity
+         * @brief Set the maximum linear speed of the game object
+         * @param speed The new maximum speed
          *
-         * If the target is currently moving, the speed will be set after it
-         * reaches its current destination tile
+         * If the game object is currently moving, the speed will be set
+         * after it reaches its current target tile
          *
-         * @warning When using a grid mover the velocity of the target must
-         * not be set directly but rather through this function. Setting the
-         * velocity directly will transfer movement management of the game
+         * @warning When using a grid mover the velocity of the game object
+         * must not be set directly but rather through this function. Setting
+         * the velocity directly will transfer movement management of the game
          * object from the grid mover to the physics engine
          */
-        void setVelocity(Vector2f velocity);
+        void setMaxLinearSpeed(Vector2f speed);
 
         /**
-         * @brief Set the horizontal (x-axis) velocity of the target
-         * @param velocity The new vertical velocity
-         *
-         * If the target is currently moving, the speed will be set after it
-         * reaches its current destination tile
-         *
-         * @warning When using a grid mover the velocity of the target must
-         * not be set directly but rather through this function. Setting the
-         * velocity directly will transfer movement management of the game
-         * object from the grid mover to the physics engine
+         * @brief Get the maximum speed of the game object
+         * @return The maximum speed of the game object
          */
-        void setHorizontalVelocity(float velocity);
-
-        /**
-         * @brief Set the vertical (y-axis) velocity of the target
-         * @param velocity The new vertical velocity
-         *
-         * If the target is currently moving, the speed will be set after it
-         * reaches its current destination tile
-         *
-         * @warning When using a grid mover the velocity of the target must
-         * not be set directly but rather through this function. Setting the
-         * velocity directly will transfer movement management of the game
-         * object from the grid mover to the physics engine.
-         */
-        void setVerticalVelocity(float velocity);
-
-        /**
-         * @brief Get the velocity of the target when it is moving
-         * @return The velocity of the target when it is moving
-         *
-         * When a game object is controlled by a grid mover, its velocity
-         * will change between zero and its set velocity whereas when
-         * controlled by a physics simulation its set velocity is never
-         * modified
-         */
-        Vector2f getTargetVelocity() const;
+        Vector2f getMaxLinearSpeed() const;
 
         /**
          * @brief Get the index of the adjacent tile the target is trying to reach
@@ -439,12 +423,6 @@ namespace ime {
          */
         void snapTargetToTargetTile();
 
-        /**
-         * @brief Set the velocity of the target based on its intended
-         *        direction of motion
-         */
-        void setTargetVelocity();
-
     protected:
         /**
          * @brief Create a grid mover
@@ -467,13 +445,14 @@ namespace ime {
     private:
         Type type_;                    //!< The type of the grid mover
         TileMap& tileMap_;             //!< Grid to move entity in
-        GameObject::Ptr target_; //!< Target to be moved in the grid
-        Vector2f targetVelocity_;      //!< The targets linear velocity
-        Direction targetDirection_;    //!< Stores the direction in which the target wishes to go
+        GameObject::Ptr target_;       //!< Target to be moved in the grid
+        Vector2f maxSpeed_;            //!< The maximum speed of the game object
+        Direction targetDirection_;    //!< The direction in which the game object wishes to go in
+        Direction currentDirection_;   //!< The current direction of the game object
         Tile targetTile_;              //!< The grid tile the target wishes to reach
         Tile prevTile_;                //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher
-        bool isMoving_;
+        bool isMoving_;                //!< A flag indicating whether or not the game object is moving
     };
 }
 

@@ -29,16 +29,19 @@
 namespace ime {
     RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject::Ptr target) :
         GridMover(Type::Random, tileMap, target),
-        prevDirection_(Direction::Unknown),
+        currDirection_(Unknown),
+        prevDirection_(Unknown),
         movementStarted_{false},
         isAdvance_{false},
         switchToAdvanced_{false},
         switchToNormal_{false},
+        isNonDiagonalMoveEnabled_{true},
+        isDiagonalMoveEnabled_{true},
         targetGridMover_(tileMap, target)
     {
         onTargetChanged([this](GameObject::Ptr newTarget) {
             if (newTarget) {
-                prevDirection_ = newTarget->getDirection();
+                prevDirection_ = currDirection_;
                 if (movementStarted_)
                     generateNewDirection();
                 // A grid mover sets the velocity of the target to zero after receiving
@@ -50,7 +53,7 @@ namespace ime {
                 // with a move velocity of zero and the target will not move when advanced
                 // movement is enabled (Normal random movement uses this class while advanced
                 // random movement delegates to a TargetGridMover class).
-                newTarget->getRigidBody()->setLinearVelocity(getTargetVelocity());
+                newTarget->getRigidBody()->setLinearVelocity(getMaxLinearSpeed());
                 targetGridMover_.setTarget(newTarget);
             }
         });
@@ -101,6 +104,28 @@ namespace ime {
         return "RandomGridMover";
     }
 
+    void RandomGridMover::setNonDiagonalMoveOnly(bool nonDiagMoveOnly) {
+        if (nonDiagMoveOnly) {
+            IME_ASSERT(isNonDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement");
+        }
+        isDiagonalMoveEnabled_ = !nonDiagMoveOnly;
+    }
+
+    bool RandomGridMover::isDiagonalMoveEnabled() const {
+        return isDiagonalMoveEnabled_;
+    }
+
+    void RandomGridMover::setDiagonalMoveOnly(bool diagonalMoveOnly) {
+        if (diagonalMoveOnly) {
+            IME_ASSERT(isDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement");
+        }
+        isNonDiagonalMoveEnabled_ = !diagonalMoveOnly;
+    }
+
+    bool RandomGridMover::isNonDiagonalMoveEnabled() const {
+        return isNonDiagonalMoveEnabled_;
+    }
+
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;
@@ -128,29 +153,23 @@ namespace ime {
         if (!getTarget())
             return;
 
-        prevDirection_ = getTarget()->getDirection();
-        auto newDirection = Direction::Unknown;
-        auto oppositeDirection = Direction::Unknown;
-
-        if (prevDirection_ == Direction::Left)
-            oppositeDirection = Direction::Right;
-        else if (prevDirection_ == Direction::Right)
-            oppositeDirection = Direction::Left;
-        else if (prevDirection_ == Direction::Up)
-            oppositeDirection = Direction::Down;
-        else if (prevDirection_ == Direction::Down)
-            oppositeDirection = Direction::Up;
+        prevDirection_ = getDirection();
+        auto oppositeDirection = getDirection() * (- 1);
+        auto newDirection = Direction();
 
         do {
-            static auto gen_random_num_between_1_and_4 = utility::createRandomNumGenerator(1, 4);
-            newDirection = static_cast<Direction>(gen_random_num_between_1_and_4());
-        } while (newDirection == oppositeDirection);
+            static auto gen_random_num_between_neg_1_and_1 = utility::createRandomNumGenerator(-1, 1);
+            newDirection = {gen_random_num_between_neg_1_and_1(), gen_random_num_between_neg_1_and_1()};
+        } while ((!isDiagonalMoveEnabled_ && (newDirection.x != 0 && newDirection.y != 0))
+                || (!isNonDiagonalMoveEnabled_ && (newDirection.x == 0 || newDirection.y == 0))
+                || newDirection == oppositeDirection || newDirection == Vector2i{0, 0});
+
         requestDirectionChange(newDirection);
     }
 
     void RandomGridMover::revertAndGenerateDirection() {
         if (getTarget()) {
-            getTarget()->setDirection(prevDirection_);
+            currDirection_ = prevDirection_;
             generateNewDirection();
         }
     }

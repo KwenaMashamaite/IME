@@ -27,7 +27,6 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "IME/common/Direction.h"
 #include "IME/common/Transform.h"
 #include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
@@ -117,18 +116,6 @@ namespace ime {
          * @return The current state of the game object
          */
         int getState() const;
-
-        /**
-         * @brief Set the direction of the game object
-         * @param dir New direction of the game object
-         */
-        void setDirection(Direction dir);
-
-        /**
-         * @brief Get the direction of the game object
-         * @return The direction of the game object
-         */
-        Direction getDirection() const;
 
         /**
          * @brief Set whether the game object is active or inactive
@@ -416,7 +403,6 @@ namespace ime {
         bool isVulnerable_;                   //!< Vulnerability state
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state
-        Direction direction_;                 //!< Current direction
         EventEmitter eventEmitter_;           //!< Event publisher
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation

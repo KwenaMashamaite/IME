@@ -34,7 +34,7 @@ namespace ime {
             if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
                 requestDirectionChange(newDir);
-                newDir = Direction::Unknown;
+                newDir = Unknown;
             }
         });
 
@@ -97,22 +97,41 @@ namespace ime {
     }
 
     void KeyboardControlledGridMover::moveTarget(input::Keyboard::Key key) {
-        auto targetDirection = Direction::Unknown;
-        if (key == goLeftKey_)
-            targetDirection = Direction::Left;
-        else if (key == goRightKey_)
-            targetDirection = Direction::Right;
-        else if (key == goUpKey_)
-            targetDirection = Direction::Up;
-        else if (key == goDownKey_)
-            targetDirection = Direction::Down;
-        else
-            return;
+        Direction targetDirection;
+        if (key == goLeftKey_) {
+            if (Keyboard::isKeyPressed(goUpKey_)) //Up key + left key currently pressed
+                targetDirection = UpLeft;
+            else if (Keyboard::isKeyPressed(goDownKey_))
+                targetDirection = DownLeft;
+            else
+                targetDirection = Left;
+        } else if (key == goRightKey_) {
+            if (Keyboard::isKeyPressed(goUpKey_))
+                targetDirection = UpRight;
+            else if (Keyboard::isKeyPressed(goDownKey_))
+                targetDirection = DownRight;
+            else
+                targetDirection = Right;
+        } else if (key == goUpKey_) {
+            if (Keyboard::isKeyPressed(goLeftKey_))
+                targetDirection = UpLeft;
+            else if (Keyboard::isKeyPressed(goRightKey_))
+                targetDirection = UpRight;
+            else
+                targetDirection = Up;
+        } else if (key == goDownKey_) {
+            if (Keyboard::isKeyPressed(goLeftKey_))
+                targetDirection = DownLeft;
+            else if (Keyboard::isKeyPressed(goRightKey_))
+                targetDirection = DownRight;
+            else
+                targetDirection = Down;
+        }
 
         if (getTarget() && isTargetMoving()) {
             newDir_.first = true;
             newDir_.second = targetDirection;
-        } else
+        } else if (targetDirection != Vector2i{0, 0})
             requestDirectionChange(targetDirection);
     }
 

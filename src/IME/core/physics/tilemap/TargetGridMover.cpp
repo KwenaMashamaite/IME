@@ -132,18 +132,18 @@ namespace ime {
         if (!getTarget())
             return;
 
-        auto newDirection = Direction::Unknown;
+        auto newDirection = Unknown;
         auto currentPosIndex = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
         if (Index{currentPosIndex.row, currentPosIndex.colm + 1} == nextPos)
-            newDirection = Direction::Right;
+            newDirection = Right;
         else if (Index{currentPosIndex.row, currentPosIndex.colm - 1} == nextPos)
-            newDirection = Direction::Left;
+            newDirection = Left;
         else if (Index{currentPosIndex.row - 1, currentPosIndex.colm} == nextPos)
-            newDirection = Direction::Up;
+            newDirection = Up;
         else if (Index{currentPosIndex.row + 1, currentPosIndex.colm} == nextPos)
-            newDirection = Direction::Down;
+            newDirection = Down;
         else
-            newDirection = Direction::Unknown;
+            newDirection = Unknown;
         requestDirectionChange(newDirection);
     }
 

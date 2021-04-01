@@ -34,8 +34,7 @@ namespace ime {
         state_{-1},
         isVulnerable_{true},
         isActive_{true},
-        isCollidable_{true},
-        direction_{Direction::Unknown}
+        isCollidable_{true}
     {
         initTransformEvents();
 
@@ -57,7 +56,6 @@ namespace ime {
         isVulnerable_{other.isVulnerable_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
-        direction_{other.direction_},
         eventEmitter_{other.eventEmitter_},
         transform_{other.transform_}
         //body_{other.body_->clone()}
@@ -73,7 +71,6 @@ namespace ime {
             isVulnerable_ = other.isVulnerable_;
             isActive_ = other.isActive_;
             isCollidable_ = other.isCollidable_;
-            direction_ = other.direction_;
             transform_ = other.transform_;
             eventEmitter_ = other.eventEmitter_;
             //body_ = other.body_->clone();
@@ -92,17 +89,6 @@ namespace ime {
 
     int GameObject::getState() const {
         return state_;
-    }
-
-    void GameObject::setDirection(Direction dir) {
-        if (direction_ != dir) {
-            direction_ = dir;
-            dispatchEvent("directionChange", direction_);
-        }
-    }
-
-    Direction GameObject::getDirection() const {
-        return direction_;
     }
 
     void GameObject::setActive(bool isActive) {
@@ -178,7 +164,7 @@ namespace ime {
         body_ = body;
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
-        transform_.setRotation(body->getRotation());
+        body_->setRotation(transform_.getRotation());
     }
 
     Body::Ptr &GameObject::getRigidBody() {

@@ -25,6 +25,13 @@
 #include "IME/core/physics/tilemap/GridMover.h"
 
 namespace ime {
+    namespace {
+        bool isSupportedDirection(const Direction& dir) {
+            return dir == Left || dir == UpLeft || dir == Up || dir == UpRight
+                || dir == Right ||dir == DownRight || dir == Down || dir == DownLeft;
+        }
+    }
+
     GridMover::GridMover(TileMap& tilemap, GameObject::Ptr gameObject) :
         GridMover(Type::Manual, tilemap, gameObject)
     {}
@@ -32,8 +39,8 @@ namespace ime {
     GridMover::GridMover(Type type, TileMap &tileMap, GameObject::Ptr target) :
         type_{type},
         tileMap_(tileMap),
-        targetVelocity_{Vector2f {0, 0}},
-        targetDirection_(Direction::Unknown),
+        maxSpeed_{Vector2f {0, 0}},
+        targetDirection_{Unknown},
         targetTile_{tileMap.getTileSize(), Vector2f{0, 0}},
         prevTile_{tileMap.getTileSize(), Vector2f{0, 0}},
         isMoving_{false}
@@ -57,7 +64,7 @@ namespace ime {
                 teleportTargetToDestination();
 
             auto velocity = target->getRigidBody()->getLinearVelocity();
-            targetVelocity_ = {std::abs(velocity.x), std::abs(velocity.y)};
+            maxSpeed_ = {std::abs(velocity.x), std::abs(velocity.y)};
             target->getRigidBody()->setLinearVelocity({0, 0});
             targetTile_ = tileMap_.getTile(target->getTransform().getPosition());
             target_ = std::move(target);
@@ -75,20 +82,12 @@ namespace ime {
         return target_;
     }
 
-    void GridMover::setVelocity(Vector2f velocity) {
-        targetVelocity_ = {std::abs(velocity.x), std::abs(velocity.y)};
+    void GridMover::setMaxLinearSpeed(Vector2f speed) {
+        maxSpeed_ = {std::abs(speed.x), std::abs(speed.y)};
     }
 
-    void GridMover::setHorizontalVelocity(float velocity) {
-        targetVelocity_.x = std::abs(velocity);
-    }
-
-    void GridMover::setVerticalVelocity(float velocity) {
-        targetVelocity_.y = std::abs(velocity);
-    }
-
-    Vector2f GridMover::getTargetVelocity() const {
-        return targetVelocity_;
+    Vector2f GridMover::getMaxLinearSpeed() const {
+        return maxSpeed_;
     }
 
     Index GridMover::getTargetTileIndex() const {
@@ -103,29 +102,25 @@ namespace ime {
         return isMoving_;
     }
 
-    bool GridMover::requestDirectionChange(Direction newDir) {
-        if (!isTargetMoving() && targetDirection_ == Direction::Unknown) {
-            switch (newDir) {
-                case Direction::Unknown:
-                    target_->setDirection(Direction::Unknown);
-                    break;
-                case Direction::Left:
-                    target_->setDirection(Direction::Left);
-                    break;
-                case Direction::Right:
-                    target_->setDirection(Direction::Right);
-                    break;
-                case Direction::Up:
-                    target_->setDirection(Direction::Up);
-                    break;
-                case Direction::Down:
-                    target_->setDirection(Direction::Down);
-                    break;
-            }
-            targetDirection_ = target_->getDirection();
+    bool GridMover::requestDirectionChange(const Direction& newDir) {
+        IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first");
+
+        if (!isSupportedDirection(newDir)) {
+            IME_PRINT_WARNING("Direction not changed - A grid mover only works with these directions: W, NW, N, NE, E, SE, S, SW");
+            return false;
+        }
+
+        if (!isTargetMoving() && targetDirection_ == Unknown) {
+            target_->getRigidBody()->setRotation(newDir.angleTo(Right));
+            targetDirection_ = newDir;
             return true;
         }
+
         return false;
+    }
+
+    Direction GridMover::getDirection() const {
+        return currentDirection_;
     }
 
     void GridMover::update(Time deltaTime) {
@@ -134,7 +129,7 @@ namespace ime {
             IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover");
             IME_ASSERT(target_->getRigidBody()->getType() == Body::Type::Kinematic, "The targets rigid body was changed from Body::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body");
 
-            if (!isTargetMoving() && targetDirection_ != Direction::Unknown) {
+            if (!isTargetMoving() && targetDirection_ != Unknown) {
                 setTargetTile();
 
                 // Prevent target from moving to a tile that results in a collision
@@ -143,8 +138,10 @@ namespace ime {
                 else if (target_->isCollidable() && (handleSolidTileCollision() || handleObstacleCollision()))
                     return;
 
+                currentDirection_ = targetDirection_;
                 isMoving_ = true;
-                setTargetVelocity();
+                auto velocity = Vector2f{maxSpeed_.x * targetDirection_.x,maxSpeed_.y * targetDirection_.y};
+                target_->getRigidBody()->setLinearVelocity(velocity);
             } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
                 onDestinationReached();
@@ -158,38 +155,18 @@ namespace ime {
 
     void GridMover::snapTargetToTargetTile() {
         isMoving_ = false;
-        targetDirection_ = Direction::Unknown;
+        targetDirection_ = Unknown;
         tileMap_.removeChildFromTile(prevTile_, target_);
         tileMap_.addChild(target_, targetTile_.getIndex());
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getRigidBody()->setPosition(targetTile_.getWorldCentre());
     }
 
-    void GridMover::setTargetVelocity() {
-        switch (targetDirection_) {
-            case Direction::Unknown:
-                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
-                break;
-            case Direction::Left:
-                target_->getRigidBody()->setLinearVelocity({-targetVelocity_.x, 0.0f});
-                break;
-            case Direction::Right:
-                target_->getRigidBody()->setLinearVelocity({targetVelocity_.x, 0.0f});
-                break;
-            case Direction::Up:
-                target_->getRigidBody()->setLinearVelocity({0.0f, -targetVelocity_.y});
-                break;
-            case Direction::Down:
-                target_->getRigidBody()->setLinearVelocity({0.0f, targetVelocity_.y});
-                break;
-        }
-    }
-
     bool GridMover::handleSolidTileCollision() {
         if (targetTile_.isCollidable()) {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::Unknown;
+            targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("solidTileCollision", hitTile);
             return true;
@@ -200,7 +177,7 @@ namespace ime {
     bool GridMover::handleObstacleCollision() {
         if (auto [found, obstacle] = targetTileHasObstacle(); found) {
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::Unknown;
+            targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("obstacleCollision", target_, obstacle);
             return true;
@@ -223,7 +200,7 @@ namespace ime {
         //A tile outside the grid bounds has the index {-1, -1}
         if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
             targetTile_ = prevTile_;
-            targetDirection_ = Direction::Unknown;
+            targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("gridBorderCollision");
             return true;
@@ -232,15 +209,18 @@ namespace ime {
     }
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
-        if (targetDirection_ == Direction::Left || targetDirection_ == Direction::Right) {
-            auto horizontalDistToTarget = std::abs(targetTile_.getWorldCentre().x - target_->getRigidBody()->getPosition().x);
-            if (targetVelocity_.x * deltaTime.asSeconds() >= horizontalDistToTarget)
-                return true;
-        } else if (targetDirection_ == Direction::Up || targetDirection_ == Direction::Down) {
-            auto verticalDistToTarget = std::abs(targetTile_.getWorldCentre().y - target_->getRigidBody()->getPosition().y);
-            if (targetVelocity_.y * deltaTime.asSeconds() >= verticalDistToTarget)
-                return true;
+        auto distanceToTile = target_->getTransform().getPosition().distanceTo(targetTile_.getWorldCentre());
+        auto distanceMoved = target_->getRigidBody()->getLinearVelocity() * deltaTime.asSeconds();
+
+        // Horizontally movement
+        if (targetDirection_.x != 0 && std::fabs(distanceMoved.x) >= distanceToTile) {
+            return true;
         }
+
+        // Vertical movement
+        if (targetDirection_.y != 0 && std::fabs(distanceMoved.y) >= distanceToTile)
+            return true;
+
         return false;
     }
 
@@ -267,22 +247,22 @@ namespace ime {
 
     void GridMover::setTargetTile() {
         prevTile_ = targetTile_;
-        switch (targetDirection_) {
-            case Direction::Left:
-                targetTile_ = tileMap_.getTileLeftOf(targetTile_);
-                break;
-            case Direction::Right:
-                targetTile_ = tileMap_.getTileRightOf(targetTile_);
-                break;
-            case Direction::Up:
-                targetTile_ = tileMap_.getTileAbove(targetTile_);
-                break;
-            case Direction::Down:
-                targetTile_ = tileMap_.getTileBelow(targetTile_);
-                break;
-            case Direction::Unknown:
-                return;
-        }
+        if (targetDirection_ == Left)
+            targetTile_ = tileMap_.getTileLeftOf(targetTile_);
+        else if (targetDirection_ == UpLeft)
+            targetTile_ = tileMap_.getTileAbove(tileMap_.getTileLeftOf(targetTile_));
+        else if (targetDirection_ == Up)
+            targetTile_ = tileMap_.getTileAbove(targetTile_);
+        else if (targetDirection_ == UpRight)
+            targetTile_ = tileMap_.getTileAbove(tileMap_.getTileRightOf(targetTile_));
+        else if (targetDirection_ == Right)
+            targetTile_ = tileMap_.getTileRightOf(targetTile_);
+        else if (targetDirection_ == DownRight)
+            targetTile_ = tileMap_.getTileBelow(tileMap_.getTileRightOf(targetTile_));
+        else if (targetDirection_ == Down)
+            targetTile_ = tileMap_.getTileBelow(targetTile_);
+        else if (targetDirection_ == DownLeft)
+            targetTile_ = tileMap_.getTileBelow(tileMap_.getTileLeftOf(targetTile_));
     }
 
     int GridMover::onTargetChanged(Callback<GameObject::Ptr> callback) {
