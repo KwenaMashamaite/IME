@@ -338,31 +338,6 @@ namespace ime {
         virtual void update(Time deltaTime);
 
         /**
-         * @brief Add an event listener to a game object event
-         * @param event Event to add event listener to
-         * @param callback Function to execute when the event is published
-         * @return The event listeners identification number
-         */
-        template<typename ...Args>
-        int onEvent(const std::string& event, Callback<Args...> callback) {
-            return eventEmitter_.on(event, std::move(callback));
-        }
-
-        /**
-         * @brief Remove an event listener form a game object event
-         * @param event Event to remove event listener from
-         * @param id Identification number of the event listener
-         * @return True if the event listener was removed or false if no such
-         *         event listener exists for the specified event
-         *
-         * The identification number is the number issued when an event
-         * listener is added to a game object event
-         *
-         * @see onEvent
-         */
-        bool unsubscribe(const std::string& event, int id);
-
-        /**
          * @internal
          * @brief Emit a collision event on the game object
          * @param event Collision event to be emitted
@@ -384,17 +359,6 @@ namespace ime {
          * @brief Subscribe interested parties to a transform property change
          */
         void initTransformEvents();
-
-    protected:
-        /**
-         * @brief Dispatch a game object event
-         * @param event Event to publish
-         * @param args Arguments passed to event listeners
-         */
-        template<typename...Args>
-        void dispatchEvent(const std::string& event, Args&&...args) {
-            eventEmitter_.emit(event, std::forward<Args>(args)...);
-        }
 
     private:
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to

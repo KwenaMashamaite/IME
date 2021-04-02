@@ -81,6 +81,7 @@ namespace ime {
 
     void RectangleShape::setSize(const Vector2f &size) {
         pimpl_->rectangle_->setSize({size.x, size.y});
+        emitChange(Property{"size", size});
     }
 
     Vector2f RectangleShape::getSize() const {

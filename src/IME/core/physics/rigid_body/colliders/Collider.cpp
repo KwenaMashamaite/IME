@@ -53,7 +53,9 @@ namespace ime {
         b2FixtureDefinition->userData.pointer = getObjectId();
 
         fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
-        body_ = body;
+        body_ = std::move(body);
+
+        emitChange(Property{"body", body_});
     }
 
     Body::Ptr Collider::getBody() {
@@ -66,6 +68,7 @@ namespace ime {
 
     void Collider::setSensor(bool sensor) {
         fixture_->SetSensor(sensor);
+        emitChange(Property{"sensor", sensor});
     }
 
     bool Collider::isSensor() const {
@@ -75,6 +78,7 @@ namespace ime {
     void Collider::setCollisionFilter(const CollisionFilterData& filterData) {
         filterData_ = filterData;
         updateCollisionFilter();
+        emitChange(Property{"collisionFilter", filterData});
     }
 
     const CollisionFilterData& Collider::getCollisionFilterData() const {
@@ -98,6 +102,8 @@ namespace ime {
             filterData_.collisionBitMask = prevCollisionBitMask_;
         }
         updateCollisionFilter();
+
+        emitChange(Property{"enable", enable});
     }
 
     bool Collider::containsPoint(Vector2f point) const {
@@ -109,6 +115,7 @@ namespace ime {
         IME_ASSERT(density >= 0, "A collider cannot have a negative density");
         fixture_->SetDensity(density);
         body_->getInternalBody()->ResetMassData();
+        emitChange(Property{"density", density});
     }
 
     float Collider::getDensity() const {
@@ -117,6 +124,7 @@ namespace ime {
 
     void Collider::setFriction(float friction) {
         fixture_->SetFriction(friction);
+        emitChange(Property{"friction", friction});
     }
 
     float Collider::getFriction() const {
@@ -125,6 +133,7 @@ namespace ime {
 
     void Collider::setRestitution(float restitution) {
         fixture_->SetRestitution(restitution);
+        emitChange(Property{"restitution", restitution});
     }
 
     float Collider::getRestitution() const {
@@ -133,6 +142,7 @@ namespace ime {
 
     void Collider::setRestitutionThreshold(float threshold) {
         fixture_->SetRestitutionThreshold(threshold);
+        emitChange(Property{"restitutionThreshold", threshold});
     }
 
     float Collider::getRestitutionThreshold() const {

@@ -81,6 +81,7 @@ namespace ime {
 
     void CircleShape::setRadius(float radius) {
         pimpl_->circle_->setRadius(radius);
+        emitChange(Property{"radius", radius});
     }
 
     float CircleShape::getRadius() const {

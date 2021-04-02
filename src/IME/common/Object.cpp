@@ -36,14 +36,14 @@ namespace ime {
     Object::Object(const Object& other) :
         id_{objectIdCounter++},
         name_{other.name_},
-        destructionListeners_{other.destructionListeners_}
+        eventEmitter_{other.eventEmitter_}
     {}
 
     Object &Object::operator=(const Object & other) {
         // We don't want to assign the object id, each must have a unique one
         if (this != &other) {
             name_ = other.name_;
-            destructionListeners_ = other.destructionListeners_;
+            eventEmitter_ = other.eventEmitter_;
         }
 
         return *this;
@@ -51,6 +51,7 @@ namespace ime {
 
     void Object::setName(const std::string &name) {
         name_ = name;
+        emitChange(Property{"name", name_});
     }
 
     const std::string &Object::getName() const {
@@ -65,31 +66,41 @@ namespace ime {
         return "Object";
     }
 
-    int Object::onDestruction(Object::DestructionCallback callback) {
-        static auto callbackIdCounter = 0u;
-        destructionListeners_.insert({++callbackIdCounter, std::move(callback)});
-        return callbackIdCounter;
+    int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback) {
+        return eventEmitter_.on(property + "Change", callback);
+    }
+
+    void Object::onPropertyChange(const Callback<Property> &callback) {
+        onPropertyChange_ = callback;
+    }
+
+    bool Object::unsubscribe(const std::string &event, int id) {
+        return eventEmitter_.removeEventListener(event, id);
+    }
+
+    int Object::onDestruction(const Callback<>& callback) {
+        return eventEmitter_.addEventListener("destruction", callback);
     }
 
     bool Object::removeDestructionListener(int id) {
-        if (destructionListeners_.find(id) != destructionListeners_.end()) {
-            destructionListeners_.erase(id);
-            return true;
-        }
-
-        return false;
+        return eventEmitter_.removeEventListener("destruction", id);
     }
 
-    bool Object::operator==(const Object &rhs) {
+    bool Object::operator==(const Object &rhs) const {
         return id_ == rhs.id_;
     }
 
-    bool Object::operator!=(const Object &rhs) {
+    bool Object::operator!=(const Object &rhs) const {
         return id_ != rhs.id_;
     }
 
+    void Object::emitChange(const Property &property) {
+        eventEmitter_.emit(property.getName() + "Change", property);
+        if (onPropertyChange_)
+            onPropertyChange_(property);
+    }
+
     Object::~Object() {
-        for (auto& callback : destructionListeners_)
-            callback.second();
+        eventEmitter_.emit("destruction");
     }
 }

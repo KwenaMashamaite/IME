@@ -64,6 +64,8 @@ namespace ime {
         size_ = {width, height};
         box_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
             utility::pixelsToMetres(height / 2.0f));
+
+        emitChange(Property{"size", size_});
     }
 
     void BoxCollider::setSize(Vector2f size) {

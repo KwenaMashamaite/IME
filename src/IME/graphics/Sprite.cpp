@@ -28,13 +28,14 @@
 #include "WindowImpl.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <SFML/Graphics/Sprite.hpp>
+#include <memory>
 
 namespace ime {
     //////////////////////////////////////////////////////////////////////////
     // Sprite class implementation
     //////////////////////////////////////////////////////////////////////////
     struct Sprite::SpriteImpl {
-        SpriteImpl(Sprite& sprite) :
+        explicit SpriteImpl(Sprite& sprite) :
             isVisible_{true},
             animator_{sprite},
             texture_{nullptr}
@@ -58,13 +59,12 @@ namespace ime {
             sprite_.setTexture(texture_->getInternalTexture(), true);
         }
 
-        void setTextureRect(const UIntRect& rect) {
-            setTextureRect(rect.left, rect.top, rect.width, rect.height);
-        }
-
         void setTextureRect(unsigned int left, unsigned int top,
             unsigned int width,unsigned int height)
         {
+            if (getTextureRect() == UIntRect{left, top, width, height})
+                return;
+
             sprite_.setTextureRect({static_cast<int>(left),
                 static_cast<int>(top), static_cast<int>(width), static_cast<int>(height)});
         }
@@ -80,10 +80,6 @@ namespace ime {
             sprite_.setPosition(x, y);
         }
 
-        void setPosition(Vector2f position) {
-            setPosition(position.x, position.y);
-        }
-
         void setRotation(float angle) {
             sprite_.setRotation(angle);
         }
@@ -92,24 +88,8 @@ namespace ime {
             sprite_.setScale(factorX, factorY);
         }
 
-        void setScale(Vector2f scale) {
-            sprite_.setScale({scale.x, scale.y});
-        }
-
-        void setOrigin(Vector2f origin) {
-            sprite_.setOrigin({origin.x, origin.y});
-        }
-
         float getRotation() const {
             return sprite_.getRotation();
-        }
-
-        void move(Vector2f offset) {
-            sprite_.move({offset.x, offset.y});
-        }
-
-        void scale(Vector2f offset) {
-            sprite_.scale({offset.x, offset.y});
         }
 
         Vector2f getPosition() const {
@@ -132,10 +112,6 @@ namespace ime {
 
         void draw(Window &renderTarget) const {
             renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
-        }
-
-        void rotate(float angle) {
-            sprite_.rotate(angle);
         }
 
         void setColour(Colour colour) {
@@ -164,24 +140,12 @@ namespace ime {
             return isVisible_;
         }
 
-        void toggleVisibility() {
-            setVisible(!isVisible());
-        }
-
         void setOrigin(float x, float y) {
             sprite_.setOrigin(x, y);
         }
 
         Vector2f getOrigin() const {
             return {sprite_.getOrigin().x, sprite_.getOrigin().y};
-        }
-
-        void scale(float xFactor, float yFactor) {
-            sprite_.scale(xFactor, yFactor);
-        }
-
-        void move(float xOffset, float yOffset) {
-            sprite_.move(xOffset, yOffset);
         }
 
         Vector2f getScale() const {
@@ -214,9 +178,10 @@ namespace ime {
         const Texture* texture_;      //!< Sprite texture
     }; // class Impl
 
-    //////////////////////////////////////////////////////////////////////////
-    // Sprite class delegation
-    //////////////////////////////////////////////////////////////////////////
+    /*-------------------------------------------------------------------------
+     # Sprite class
+     =-----------------------------------------------------------------------*/
+
     Sprite::Sprite() :
         pImpl_{std::make_unique<SpriteImpl>(*this)}
     {}
@@ -231,10 +196,11 @@ namespace ime {
 
     Sprite::Sprite(const Texture &texture, const UIntRect &rectangle) : Sprite() {
         pImpl_->setTexture(texture);
-        pImpl_->setTextureRect(rectangle);
+        setTextureRect(rectangle);
     }
 
     Sprite::Sprite(const Sprite& other) :
+        IDrawable(other),
         pImpl_{std::make_unique<SpriteImpl>(*other.pImpl_)}
     {
         pImpl_->setAnimationTarget(*this);
@@ -242,14 +208,13 @@ namespace ime {
 
     Sprite &Sprite::operator=(const Sprite& other) {
         if (this != &other) {
-            pImpl_.reset(new SpriteImpl(*other.pImpl_));
+            pImpl_ = std::make_unique<SpriteImpl>(*other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
         return *this;
     }
 
     Sprite::Sprite(Sprite &&) noexcept = default;
-
     Sprite &Sprite::operator=(Sprite &&) noexcept = default;
 
     std::string Sprite::getClassName() const {
@@ -269,13 +234,14 @@ namespace ime {
     }
 
     void Sprite::setTextureRect(const UIntRect& rect) {
-        pImpl_->setTextureRect(rect.left, rect.top, rect.width, rect.height);
+        setTextureRect(rect.left, rect.top, rect.width, rect.height);
     }
 
     void Sprite::setTextureRect(unsigned int left, unsigned int top, unsigned int width,
         unsigned int height)
     {
         pImpl_->setTextureRect(left, top, width, height);
+        emitChange(Property{"textureRect", getTextureRect()});
     }
 
     UIntRect Sprite::getTextureRect() const {
@@ -284,26 +250,29 @@ namespace ime {
 
     void Sprite::setPosition(float x, float y) {
         pImpl_->setPosition(x, y);
+        emitChange(Property{"position", Vector2f{x, y}});
     }
 
     void Sprite::setPosition(Vector2f position) {
-        pImpl_->setPosition(position);
+        setPosition(position.x, position.y);
     }
 
     void Sprite::setRotation(float angle) {
         pImpl_->setRotation(angle);
+        emitChange(Property{"rotation", angle});
     }
 
     void Sprite::setScale(float factorX, float factorY) {
         pImpl_->setScale(factorX, factorY);
+        emitChange(Property{"scale", Vector2f{factorX, factorY}});
     }
 
     void Sprite::setScale(Vector2f scale) {
-        pImpl_->setScale({scale.x, scale.y});
+        setScale(scale.x, scale.y);
     }
 
     void Sprite::setOrigin(Vector2f origin) {
-        pImpl_->setOrigin({origin.x, origin.y});
+        setOrigin(origin.x, origin.y);
     }
 
     float Sprite::getRotation() const {
@@ -311,11 +280,11 @@ namespace ime {
     }
 
     void Sprite::move(Vector2f offset) {
-        pImpl_->move({offset.x, offset.y});
+        move(offset.x, offset.y);
     }
 
     void Sprite::scale(Vector2f offset) {
-        pImpl_->scale({offset.x, offset.y});
+        setScale(offset.x, offset.y);
     }
 
     Vector2f Sprite::getPosition() const {
@@ -339,7 +308,7 @@ namespace ime {
     }
 
     void Sprite::rotate(float angle) {
-        pImpl_->rotate(angle);
+        setRotation(getRotation() + angle);
     }
 
     void Sprite::setColour(Colour colour) {
@@ -352,6 +321,7 @@ namespace ime {
 
     void Sprite::setVisible(bool visible) {
         pImpl_->setVisible(visible);
+        emitChange(Property{"visible", visible});
     }
 
     bool Sprite::isVisible() const {
@@ -359,11 +329,12 @@ namespace ime {
     }
 
     void Sprite::toggleVisibility() {
-        pImpl_->toggleVisibility();
+        setVisible(!isVisible());
     }
 
     void Sprite::setOrigin(float x, float y) {
         pImpl_->setOrigin(x, y);
+        emitChange(Property{"origin", Vector2f{x, y}});
     }
 
     Vector2f Sprite::getOrigin() const {
@@ -371,11 +342,11 @@ namespace ime {
     }
 
     void Sprite::scale(float xFactor, float yFactor) {
-        pImpl_->scale(xFactor, yFactor);
+        setScale(getScale().x * xFactor, getScale().y * yFactor);
     }
 
     void Sprite::move(float xOffset, float yOffset) {
-        pImpl_->move(xOffset, yOffset);
+        setPosition(getPosition().x + xOffset, getPosition().y + yOffset);
     }
 
     Vector2f Sprite::getScale() const {

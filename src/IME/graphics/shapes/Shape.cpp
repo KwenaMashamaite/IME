@@ -103,6 +103,7 @@ namespace ime {
 
     void Shape::setFillColour(const Colour &colour) {
         pimpl_->setFillColour(colour);
+        emitChange(Property{"fillColour", colour});
     }
 
     Colour Shape::getFillColour() const {
@@ -111,6 +112,7 @@ namespace ime {
 
     void Shape::setOutlineColour(const Colour &colour) {
         pimpl_->setOutlineColour(colour);
+        emitChange(Property{"outlineColour", colour});
     }
 
     Colour Shape::getOutlineColour() const {
@@ -119,6 +121,7 @@ namespace ime {
 
     void Shape::setOutlineThickness(float thickness) {
         pimpl_->setOutlineThickness(thickness);
+        emitChange(Property{"outlineThickness", thickness});
     }
 
     float Shape::getOutlineThickness() const {
@@ -135,10 +138,11 @@ namespace ime {
 
     void Shape::setPosition(float x, float y) {
         pimpl_->setPosition(x, y);
+        emitChange({"position", getPosition()});
     }
 
     void Shape::setPosition(Vector2f position) {
-        pimpl_->setPosition(position);
+        setPosition(position.x, position.y);
     }
 
     Vector2f Shape::getPosition() const {
@@ -147,10 +151,11 @@ namespace ime {
 
     void Shape::setRotation(float angle) {
         pimpl_->setRotation(angle);
+        emitChange(Property{"rotation", angle});
     }
 
     void Shape::rotate(float angle) {
-        pimpl_->rotate(angle);
+        setRotation(getRotation() + angle);
     }
 
     float Shape::getRotation() const {
@@ -159,18 +164,19 @@ namespace ime {
 
     void Shape::setScale(float factorX, float factorY) {
         pimpl_->setScale(factorX, factorY);
+        emitChange(Property{"scale", getScale()});
     }
 
     void Shape::setScale(Vector2f scale) {
-        pimpl_->setScale(scale);
+        setScale(scale.x, scale.y);
     }
 
     void Shape::scale(float factorX, float factorY) {
-        pimpl_->scale(factorX, factorY);
+        setScale(getScale().x * factorX, getScale().y * factorY);
     }
 
     void Shape::scale(Vector2f factor) {
-        pimpl_->scale(factor);
+        scale(factor.x, factor.y);
     }
 
     Vector2f Shape::getScale() const {
@@ -179,10 +185,11 @@ namespace ime {
 
     void Shape::setOrigin(float x, float y) {
         pimpl_->setOrigin(x, y);
+        emitChange(Property{"origin", getOrigin()});
     }
 
     void Shape::setOrigin(Vector2f origin) {
-        pimpl_->setOrigin(origin);
+        setOrigin(origin.x, origin.y);
     }
 
     Vector2f Shape::getOrigin() const {
@@ -190,11 +197,11 @@ namespace ime {
     }
 
     void Shape::move(float offsetX, float offsetY) {
-        pimpl_->move(offsetX, offsetY);
+        setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
     }
 
     void Shape::move(Vector2f offset) {
-        pimpl_->move(offset);
+        move(offset.x, offset.y);
     }
 
     void Shape::draw(Window &renderTarget) const {

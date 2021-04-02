@@ -71,6 +71,7 @@ namespace ime {
         } else
             target_ = target;
 
+        emitChange(Property{"target", target_});
         eventEmitter_.emit("targetChange", target_);
     }
 
@@ -84,6 +85,7 @@ namespace ime {
 
     void GridMover::setMaxLinearSpeed(Vector2f speed) {
         maxSpeed_ = {std::abs(speed.x), std::abs(speed.y)};
+        emitChange(Property{"maxLinearSpeed", speed});
     }
 
     Vector2f GridMover::getMaxLinearSpeed() const {

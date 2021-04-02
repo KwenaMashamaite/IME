@@ -105,10 +105,15 @@ namespace ime {
     }
 
     void Tile::setPosition(float x, float y, TilePassKey) {
+        if (getPosition() == Vector2f{x, y})
+            return;
+
         tile_.setPosition(x, y);
 
         if (collider_)
             collider_->getBody()->setPosition(getWorldCentre());
+
+        emitChange(Property{Property{"position", getPosition()}});
     }
 
     void Tile::setPosition(Vector2f position, TilePassKey) {
@@ -129,12 +134,17 @@ namespace ime {
     }
 
     void Tile::setSize(unsigned int width, unsigned int height, TilePassKey) {
+        if (getSize() == Vector2u{width, height})
+            return;
+
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
 
         if (collider_) {
             collider_->setSize(static_cast<float>(width), static_cast<float>(height));
             collider_->getBody()->setPosition(getWorldCentre());
         }
+
+        emitChange(Property{"size", getSize()});
     }
 
     void Tile::setSize(Vector2u size, TilePassKey) {
@@ -153,10 +163,15 @@ namespace ime {
 
         if (collider_)
             collider_->setEnable(collidable);
+
+        emitChange(Property{"collidable", isCollidable_});
     }
 
     void Tile::setId(char id, TilePassKey) {
-        id_ = id;
+        if (id_ != id) {
+            id_ = id;
+            emitChange(Property{"id", id_});
+        }
     }
 
     char Tile::getId() const {
@@ -177,6 +192,8 @@ namespace ime {
             prevFillColour_ = tile_.getFillColour();
             tile_.setFillColour(Colour::Transparent);
         }
+
+        emitChange(Property{"visible", isVisible()});
     }
 
     bool Tile::isVisible() const {
@@ -197,7 +214,10 @@ namespace ime {
     }
 
     void Tile::setIndex(Index index, TilePassKey) {
-        index_ = index;
+        if (index_ != index) {
+            index_ = index;
+            emitChange(Property{"index", index_});
+        }
     }
 
     Index Tile::getIndex() const {
@@ -205,7 +225,10 @@ namespace ime {
     }
 
     void Tile::setFillColour(const Colour &colour, TilePassKey) {
-        tile_.setFillColour(colour);
+        if (tile_.getFillColour() != colour) {
+            tile_.setFillColour(colour);
+            emitChange(Property{"fillColour", tile_.getFillColour()});
+        }
     }
 
     Colour Tile::getFillColour() const {

@@ -44,7 +44,7 @@ namespace ime {
          * variable is static which is not the case in this case because each
          * shape is a different type
          */
-        class IShapeImpl : public ITransformable {
+        class IShapeImpl {
         public:
             /**
              * @brief Make a copy of the the implementation
@@ -54,7 +54,88 @@ namespace ime {
              * own implementation
              */
             virtual std::unique_ptr<IShapeImpl> clone() = 0;
-            
+
+            /**
+             * @brief Set the position of the shape
+             * @param x X coordinate of the new position
+             * @param y Y coordinate of the new position
+             *
+             * This function completely overwrites the previous position.
+             * use move function to apply an offset based on the previous
+             * position instead
+             *
+             * The default position of a the shape is (0, 0)
+             *
+             * @see move
+             */
+            virtual void setPosition(float x, float y) = 0;
+
+            /**
+             * @brief Get the position of the shape
+             * @return Current position of the shape
+             */
+            virtual Vector2f getPosition() const = 0;
+
+            /**
+             * @brief Set the orientation of the shape
+             * @param angle New rotation, in degrees
+             *
+             * This function completely overwrites the previous rotation.
+             * See the rotate function to add an angle based on the previous
+             * rotation instead.
+             *
+             * The default rotation of the shape is 0
+             *
+             * @see rotate
+             */
+            virtual void setRotation(float angle) = 0;
+
+            /**
+             * @brief Get the orientation of the shape
+             * @return Current rotation, in degrees
+             *
+             * The rotation is always in the range [0, 360]
+             */
+            virtual float getRotation() const = 0;
+
+            /**
+             * @brief Set the scale factors of the shape
+             * @param factorX New horizontal scale factor
+             * @param factorY New vertical scale factor
+             *
+             * This function completely overwrites the previous scale
+             *
+             * @see scale
+             */
+            virtual void setScale(float factorX, float factorY) = 0;
+
+            /**
+             * @brief Get the current scale of the shape
+             * @return Current scale of the shape
+             */
+            virtual Vector2f getScale() const = 0;
+
+            /**
+             * @brief Set the local origin of the shape
+             * @param x X coordinate of the new origin
+             * @param y Y coordinate of the new origin
+             *
+             * The origin of the shape defines the center point for
+             * all transformations (position, scale, rotation).
+             * The coordinates of this point must be relative to the
+             * top-left corner of the shape, and ignore all
+             * transformations (position, scale, rotation).
+             *
+             * The default origin of the shape is (0, 0)
+             */
+            virtual void setOrigin(float x, float y) = 0;
+
+            /**
+             * @brief Get the local origin of the shape
+             * @return Local origin of the shape
+             */
+            virtual Vector2f getOrigin() const = 0;
+
             /**
              * @brief Set the fill colour of the shape
              * @param colour The new colour of the shape
@@ -138,6 +219,11 @@ namespace ime {
              * @param renderTarget Target to draw object on
              */
             virtual void draw(Window &renderTarget) const = 0;
+
+            /**
+             * @brief Destructor
+             */
+            virtual ~IShapeImpl() = default;
         };
 
         /*---------------------------------------------------------------------
@@ -190,20 +276,12 @@ namespace ime {
                 shape_->setPosition(x, y);
             }
 
-            void setPosition(Vector2f position) override {
-                setPosition(position.x, position.y);
-            }
-
             Vector2f getPosition() const override {
                 return {shape_->getPosition().x, shape_->getPosition().y};
             }
 
             void setRotation(float angle) override {
                 shape_->setRotation(angle);
-            }
-
-            void rotate(float angle) override {
-                setRotation(getRotation() + angle);
             }
 
             float getRotation() const override {
@@ -214,18 +292,6 @@ namespace ime {
                 shape_->setScale(factorX, factorY);
             }
 
-            void setScale(Vector2f scale) override {
-                setScale(scale.x, scale.y);
-            }
-
-            void scale(float factorX, float factorY) override {
-                setScale(getScale().x * factorX, getScale().y * factorY);
-            }
-
-            void scale(Vector2f offset) override {
-                scale(offset.x, offset.y);
-            }
-
             Vector2f getScale() const override {
                 return {shape_->getScale().x, shape_->getScale().y};
             }
@@ -234,20 +300,8 @@ namespace ime {
                 shape_->setOrigin(x, y);
             }
 
-            void setOrigin(Vector2f origin) override {
-                setOrigin(origin.x, origin.y);
-            }
-
             Vector2f getOrigin() const override {
                 return {shape_->getOrigin().x, shape_->getOrigin().y};
-            }
-
-            void move(float offsetX, float offsetY) override {
-                shape_->move(offsetX, offsetY);
-            }
-
-            void move(Vector2f offset) override {
-                shape_->move({offset.x, offset.y});
             }
 
             void setFillColour(const Colour &colour) override {

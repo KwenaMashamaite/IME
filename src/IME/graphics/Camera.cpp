@@ -47,22 +47,12 @@ namespace ime {
             window_.setView(view);
         }
 
-        void setCenter(const Vector2f &centre) {
-            view.setCenter({centre.x, centre.y});
-            window_.setView(view);
-        }
-
         Vector2f getCenter() const {
             return {view.getCenter().x, view.getCenter().y};
         }
 
         void setSize(float width, float height) {
             view.setSize(width, height);
-            window_.setView(view);
-        }
-
-        void setSize(const Vector2f &size) {
-            view.setSize({size.x, size.y});
             window_.setView(view);
         }
 
@@ -104,16 +94,6 @@ namespace ime {
             window_.setView(view);
         }
 
-        void move(const Vector2f &offset) {
-            view.move({offset.x, offset.y});
-            window_.setView(view);
-        }
-
-        void rotate(float angle) {
-            view.rotate(angle);
-            window_.setView(view);
-        }
-
         void zoom(float factor) {
             view.zoom(factor);
             window_.setView(view);
@@ -146,10 +126,11 @@ namespace ime {
 
     void Camera::setCenter(float x, float y) {
         pimpl_->setCenter(x, y);
+        emitChange(Property{"centre", Vector2f{x, y}});
     }
 
     void Camera::setCenter(const Vector2f &centre) {
-        pimpl_->setCenter(centre);
+        setCenter(centre.x, centre.y);
     }
 
     Vector2f Camera::getCenter() const {
@@ -158,10 +139,11 @@ namespace ime {
 
     void Camera::setSize(float width, float height) {
         pimpl_->setSize(width, height);
+        emitChange(Property{"size", Vector2f{width, height}});
     }
 
     void Camera::setSize(const Vector2f &size) {
-        pimpl_->setSize(size);
+        setSize(size.x, size.y);
     }
 
     Vector2f Camera::getSize() const {
@@ -170,6 +152,7 @@ namespace ime {
 
     void Camera::setRotation(float angle) {
         pimpl_->setRotation(angle);
+        emitChange(Property{"rotation", angle});
     }
 
     float Camera::getRotation() const {
@@ -178,6 +161,7 @@ namespace ime {
 
     void Camera::setViewport(const FloatRect &viewport) {
         pimpl_->setViewport(viewport);
+        emitChange(Property{"viewport", viewport});
     }
 
     FloatRect Camera::getViewport() const {
@@ -197,11 +181,11 @@ namespace ime {
     }
 
     void Camera::move(const Vector2f &offset) {
-        pimpl_->move(offset);
+        move(offset.x, offset.y);
     }
 
     void Camera::rotate(float angle) {
-        pimpl_->rotate(angle);
+        setRotation(getRotation() + angle);
     }
 
     void Camera::zoom(float factor) {

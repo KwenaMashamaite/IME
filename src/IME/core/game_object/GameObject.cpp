@@ -84,7 +84,7 @@ namespace ime {
         if (state_ == state)
             return;
         state_ = state;
-        dispatchEvent("stateChange", sprite_);
+        emitChange(Property{"state", state_});
     }
 
     int GameObject::getState() const {
@@ -98,16 +98,14 @@ namespace ime {
 
         if (body_)
             body_->setEnabled(isActive_);
-        dispatchEvent("statusChange", isActive_);
+
+        emitChange(Property{"active", isActive_});
     }
 
     void GameObject::setVulnerable(bool isVulnerable) {
         if (isVulnerable_ != isVulnerable) {
             isVulnerable_ = isVulnerable;
-            if (isVulnerable_)
-                dispatchEvent("vulnerable");
-            else
-                dispatchEvent("inVulnerable");
+            emitChange(Property{"vulnerable", isVulnerable_});
         }
     }
 
@@ -123,10 +121,7 @@ namespace ime {
                 });
             }
 
-            if (isCollidable_)
-                dispatchEvent("collisionEnable");
-            else
-                dispatchEvent("collisionDisable");
+            emitChange(Property{"collidable", isCollidable_});
         }
     }
 
@@ -148,6 +143,7 @@ namespace ime {
 
     void GameObject::setType(GameObject::Type type) {
         type_ = type;
+        emitChange(Property{"type", type_});
     }
 
     GameObject::Type GameObject::getType() const {
@@ -218,10 +214,6 @@ namespace ime {
         sprite_.updateAnimation(deltaTime);
     }
 
-    bool GameObject::unsubscribe(const std::string &event, int id) {
-        return eventEmitter_.removeEventListener(event, id);
-    }
-
     void GameObject::emitCollisionEvent(const std::string &event, GameObject::Ptr other) {
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(shared_from_this(), other);
@@ -233,17 +225,16 @@ namespace ime {
         transform_.onPropertyChange([this](std::string property, std::any) {
             if (property == "position") {
                 sprite_.setPosition(transform_.getPosition());
-                dispatchEvent("positionChange", transform_.getPosition());
-                dispatchEvent("positionChange", transform_.getPosition().x, transform_.getPosition().y);
+                emitChange({property, transform_.getPosition()});
             } else if (property == "origin") {
                 sprite_.setOrigin(transform_.getOrigin());
-                dispatchEvent("originChange", transform_.getOrigin());
+                emitChange({property, transform_.getOrigin()});
             } else if (property == "scale") {
                 sprite_.setScale(transform_.getScale());
-                dispatchEvent("scaleChange", transform_.getScale());
+                emitChange({property, transform_.getScale()});
             } else if (property == "rotation") {
                 sprite_.setRotation(transform_.getRotation());
-                dispatchEvent("rotationChange", transform_.getRotation());
+                emitChange({property, transform_.getRotation()});
             }
         });
     }

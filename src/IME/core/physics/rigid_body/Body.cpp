@@ -98,6 +98,7 @@ namespace ime {
         body_->SetTransform(
             {utility::pixelsToMetres(position.x), utility::pixelsToMetres(position.y)},
             body_->GetAngle());
+        emitChange(Property{"position", position});
     }
 
     Vector2f Body::getPosition() const {
@@ -106,6 +107,7 @@ namespace ime {
 
     void Body::setRotation(float angle) {
         body_->SetTransform(body_->GetTransform().p, utility::degToRad(angle));
+        emitChange(Property{"rotation", angle});
     }
 
     float Body::getRotation() const {
@@ -123,6 +125,7 @@ namespace ime {
 
     void Body::setLinearVelocity(Vector2f velocity) {
         body_->SetLinearVelocity({utility::pixelsToMetres(velocity.x), utility::pixelsToMetres(velocity.y)});
+        emitChange(Property{"linearVelocity", velocity});
     }
 
     Vector2f Body::getLinearVelocity() const {
@@ -131,6 +134,7 @@ namespace ime {
 
     void Body::setAngularVelocity(float degrees) {
         body_->SetAngularVelocity(utility::degToRad(degrees));
+        emitChange(Property{"angularVelocity",  degrees});
     }
 
     float Body::getAngularVelocity() const {
@@ -221,6 +225,7 @@ namespace ime {
 
     void Body::setLinearDamping(float damping) {
         body_->SetLinearDamping(damping);
+        emitChange(Property{"linearDamping", damping});
     }
 
     float Body::getLinearDamping() const {
@@ -229,6 +234,7 @@ namespace ime {
 
     void Body::setAngularDamping(float damping) {
         body_->SetAngularDamping(damping);
+        emitChange(Property{"angularDamping", damping});
     }
 
     float Body::getAngularDamping() const {
@@ -237,6 +243,7 @@ namespace ime {
 
     void Body::setGravityScale(float scale) {
         body_->SetGravityScale(scale);
+        emitChange(Property{"gravityScale", scale});
     }
 
     float Body::getGravityScale() const {
@@ -250,6 +257,7 @@ namespace ime {
         }
 
         body_->SetType(static_cast<b2BodyType>(type));
+        emitChange(Property{"type", type});
     }
 
     Body::Type Body::getType() const {
@@ -258,6 +266,7 @@ namespace ime {
 
     void Body::setFastBody(bool fast) {
         body_->SetBullet(fast);
+        emitChange(Property{"fastBody", fast});
     }
 
     bool Body::isFastBody() const {
@@ -266,6 +275,7 @@ namespace ime {
 
     void Body::setSleepingAllowed(bool sleeps) {
         body_->SetSleepingAllowed(sleeps);
+        emitChange(Property{"sleepingAllowed", sleeps});
     }
 
     bool Body::isSleepingAllowed() const {
@@ -274,6 +284,7 @@ namespace ime {
 
     void Body::setAwake(bool awake) {
         body_->SetAwake(awake);
+        emitChange(Property{"awake", awake});
     }
 
     bool Body::isAwake() const {
@@ -287,6 +298,7 @@ namespace ime {
         }
 
         body_->SetEnabled(enable);
+        emitChange(Property{"enable", enable});
     }
 
     bool Body::isEnabled() const {
@@ -295,6 +307,7 @@ namespace ime {
 
     void Body::setFixedRotation(bool rotate) {
         body_->SetFixedRotation(rotate);
+        emitChange(Property{"fixedRotation", rotate});
     }
 
     bool Body::isFixedRotation() const {

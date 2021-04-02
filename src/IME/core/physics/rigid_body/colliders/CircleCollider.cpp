@@ -58,6 +58,7 @@ namespace ime {
     void CircleCollider::setPosition(Vector2f position) {
         circle_->m_p.x = utility::pixelsToMetres(position.x);
         circle_->m_p.y = utility::pixelsToMetres(position.y);
+        emitChange(Property{"position", position});
     }
 
     Vector2f CircleCollider::getPosition() const {
@@ -66,6 +67,7 @@ namespace ime {
 
     void CircleCollider::setRadius(float radius) {
         circle_->m_radius = utility::pixelsToMetres(radius);
+        emitChange(Property{"radius", radius});
     }
 
     float CircleCollider::getRadius() const {

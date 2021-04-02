@@ -26,6 +26,8 @@
 #define IME_OBJECT_H
 
 #include "IME/Config.h"
+#include "IME/core/event/EventEmitter.h"
+#include "IME/common/Property.h"
 #include <unordered_map>
 #include <functional>
 #include <string>
@@ -41,7 +43,6 @@ namespace ime {
     class IME_API Object {
     public:
         using Ptr = std::shared_ptr<Object>; //!< Shared object pointer
-        using DestructionCallback = std::function<void()>; //!< Destruction callback
 
         /**
          * @brief Default constructor
@@ -130,9 +131,59 @@ namespace ime {
         virtual std::string getClassType() const;
 
         /**
-         * @brief Add a destruction listener
-         * @return The id of the destruction listener
+         * @brief Add an event listener to a specific property change event
+         * @param property The name of the property to listen for
+         * @param callback The function to be executed when the property changes
+         * @return The unique id of the event listener
          *
+         * Unlike onPropertyChange(const Callback&) you can add multiple event
+         * listeners to the same property using this function. However you must
+         * store the unique id of the event listener if you wish to remove it
+         * at a later time
+         *
+         * @see unsubscribe and onPropertyChange(Callback)
+         */
+        int onPropertyChange(const std::string& property,
+            const Callback<Property>& callback);
+
+        /**
+         * @brief Add an event listener to a property change event
+         * @param callback The function to be executed when the property changes
+         * @return The unique id of the event listener
+         *
+         * Note that only one callback function may be registered with this
+         * function. This means that adding a new event listener overwrites
+         * the previous event listener. To remove the callback, pass a nullptr
+         * as an argument. The function may be useful if you want to write
+         * the logic for property changes in one function.
+         *
+         * @see onPropertyChange(std::string, Callback)
+         */
+        void onPropertyChange(const Callback<Property>& callback);
+
+        /**
+         * @brief Remove an event listener from an event
+         * @param event The name of the event to remove event listener from
+         * @param id The unique id of the event listener to be removed
+         * @return True if the event listener was removed or false if the
+         *         event or the event listener is does not exist
+         *
+         * @code
+         * // Display the name of the object to console every time it changes
+         * auto nameChangeId = object.onPropertyChange("name", [](Property name) {
+         *      std::cout << name.getValue<std::string>() << std::endl;
+         * });
+         *
+         * // Stop displaying the name of the object when it changes
+         * object.unsubscribe("name", id);
+         * @endcode
+         */
+        bool unsubscribe(const std::string& event, int id);
+
+        /**
+         * @brief Add a destruction listener
+         * @param callback Function to be executed when the object is destroyed
+         * @return The id of the destruction listener
          *
          * Note that an object may have more than one destruction listeners,
          * however, you have to keep the returned id if you may want to remove
@@ -144,7 +195,7 @@ namespace ime {
          *
          * @see removeDestructionListener
          */
-        int onDestruction(DestructionCallback);
+        int onDestruction(const Callback<>& callback);
 
         /**
          * @brief Remove a destruction listener form the object
@@ -165,7 +216,7 @@ namespace ime {
          *
          * @see getObjectId and operator!=
          */
-        bool operator==(const Object& rhs);
+        bool operator==(const Object& rhs) const;
 
         /**
          * @brief Check if two objects are not the same object
@@ -178,17 +229,28 @@ namespace ime {
          *
          * @see getObjectId and operator==
          */
-        bool operator!=(const Object& rhs);
+        bool operator!=(const Object& rhs) const;
 
         /**
          * @brief Destructor
          */
         virtual ~Object();
 
+    protected:
+        /**
+         * @brief Dispatch a property change event
+         * @param property The property that changed
+         *
+         * This function will invoke all the event listeners of the specified
+         * property
+         */
+        void emitChange(const Property& property);
+
     private:
-        unsigned int id_;  //!< The id of the object
-        std::string name_; //!< Object alias
-        std::unordered_map<int, DestructionCallback> destructionListeners_;
+        unsigned int id_;           //!< The id of the object
+        std::string name_;          //!< Object alias
+        EventEmitter eventEmitter_; //!< Dispatch object events
+        Callback<Property> onPropertyChange_;
     };
 }
 
