@@ -30,7 +30,7 @@ namespace ime {
         IME_ASSERT(!hasLayer(name), "The render layer '" + name + "' already exists, try a different name");
         auto index = layers_.empty() ? 0 : ((*(layers_.rbegin())).first + 1);
         auto layer = RenderLayer::Ptr(new RenderLayer(index));
-        layer->setName(name);
+        layer->setTag(name);
 
         layers_.insert({index, layer});
         inverseLayers_.insert({name, index});
@@ -93,7 +93,7 @@ namespace ime {
 
     bool RenderLayerContainer::removeByIndex(unsigned int index) {
         if (isIndexValid(index)) {
-            inverseLayers_.erase(layers_[index]->getName());
+            inverseLayers_.erase(layers_[index]->getTag());
             layers_.erase(index);
             return true;
         }
@@ -203,8 +203,8 @@ namespace ime {
         layers_[layerTwoIndex]->setIndex(layerTwoIndex);
 
         // Update inverse map
-        inverseLayers_[layers_[layerOneIndex]->getName()] = layerOneIndex;
-        inverseLayers_[layers_[layerTwoIndex]->getName()] = layerTwoIndex;
+        inverseLayers_[layers_[layerOneIndex]->getTag()] = layerOneIndex;
+        inverseLayers_[layers_[layerTwoIndex]->getTag()] = layerTwoIndex;
 
         return true;
     }

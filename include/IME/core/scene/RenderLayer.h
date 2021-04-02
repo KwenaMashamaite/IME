@@ -146,7 +146,7 @@ namespace ime {
          */
         void setIndex(unsigned int index);
 
-        using Object::setName;
+        using Object::setTag;
 
     private:
         unsigned int index_; //!< The index of the layer in the render layer container

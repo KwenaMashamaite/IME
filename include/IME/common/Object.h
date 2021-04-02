@@ -74,20 +74,20 @@ namespace ime {
          * @param name The alias of the object
          *
          * This function is useful if you want to refer to the object
-         * by name instead of its id. Unlike an object id, multiple
-         * objects may have the same name.
+         * by tag instead of its id. Unlike an object id, multiple
+         * objects may have the same tag.
          *
-         * By default, the name is an empty string
+         * By default, the tag is an empty string
          */
-        void setName(const std::string& name);
+        void setTag(const std::string& tag);
 
         /**
          * @brief Get the alias of the object
          * @return The alias of the object
          *
-         * @see setName and getObjectId
+         * @see setTag and getObjectId
          */
-        const std::string& getName() const;
+        const std::string& getTag() const;
 
         /**
          * @brief Get the id of the object
@@ -248,7 +248,7 @@ namespace ime {
 
     private:
         unsigned int id_;           //!< The id of the object
-        std::string name_;          //!< Object alias
+        std::string tag_;           //!< Object's tag
         EventEmitter eventEmitter_; //!< Dispatch object events
         Callback<Property> onPropertyChange_;
     };

@@ -35,27 +35,27 @@ namespace ime {
 
     Object::Object(const Object& other) :
         id_{objectIdCounter++},
-        name_{other.name_},
+        tag_{other.tag_},
         eventEmitter_{other.eventEmitter_}
     {}
 
     Object &Object::operator=(const Object & other) {
         // We don't want to assign the object id, each must have a unique one
         if (this != &other) {
-            name_ = other.name_;
+            tag_ = other.tag_;
             eventEmitter_ = other.eventEmitter_;
         }
 
         return *this;
     }
 
-    void Object::setName(const std::string &name) {
-        name_ = name;
-        emitChange(Property{"name", name_});
+    void Object::setTag(const std::string &tag) {
+        tag_ = tag;
+        emitChange(Property{"tag", tag_});
     }
 
-    const std::string &Object::getName() const {
-        return name_;
+    const std::string &Object::getTag() const {
+        return tag_;
     }
 
     unsigned int Object::getObjectId() const {

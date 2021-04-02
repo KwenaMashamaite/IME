@@ -34,27 +34,27 @@ inline void ObjectContainer<T>::addObject(ObjectPtr object) {
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) {
-    return std::as_const(*this).findByName(name);
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByTag(const std::string& tag) {
+    return std::as_const(*this).findByTag(tag);
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByName(const std::string& name) const {
-    return findIf([&name](const constObjectPtr object) {
-        return object->getName() == name;
+inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByTag(const std::string& tag) const {
+    return findIf([&tag](const constObjectPtr object) {
+        return object->getTag() == tag;
     });
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<U> ObjectContainer<T>::findByName(const std::string& name) {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByName(name));
+inline std::shared_ptr<U> ObjectContainer<T>::findByTag(const std::string& tag) {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByTag(tag));
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<const U> ObjectContainer<T>::findByName(const std::string& name) const {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByName(name));
+inline std::shared_ptr<const U> ObjectContainer<T>::findByTag(const std::string& tag) const {
+    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByTag(tag));
 }
 
 template<typename T>
@@ -97,9 +97,9 @@ inline const typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(P
 }
 
 template <typename T>
-inline bool ObjectContainer<T>::removeByName(const std::string& name) {
-    return removeIf([&name](const constObjectPtr object) {
-        return object->getName() == name;
+inline bool ObjectContainer<T>::removeByTag(const std::string& tag) {
+    return removeIf([&tag](const constObjectPtr object) {
+        return object->getTag() == tag;
     });
 }
 

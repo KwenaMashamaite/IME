@@ -30,7 +30,7 @@
 namespace ime {
     void SceneManager::pushScene(std::shared_ptr<Scene> scene, bool enterScene) {
         IME_ASSERT(scene, "Cannot add nullptr as a state");
-        IME_ASSERT(!scene->isManaged_, R"(Scene )" + scene->getName() + R"( is already owned by a scene manager)");
+        IME_ASSERT(!scene->isManaged_, R"(Scene )" + scene->getTag() + R"( is already owned by a scene manager)");
         if (!scenes_.empty()) {
             prevScene_ = scenes_.top();
             if (scenes_.top()->isEntered()) {

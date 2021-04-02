@@ -59,60 +59,60 @@ namespace ime {
         void addObject(ObjectPtr object);
 
         /**
-         * @brief Get an object with a given name
-         * @param name The name of the game object to retrieve
-         * @return The object with the given name or a nullptr if the object
+         * @brief Get an object with a given tag
+         * @param tag The tag of the object to be searched
+         * @return The object with the given tag or a nullptr if the object
          *         could not be found in the container
          *
          * Note that this function will return the first object it finds with
-         * the the given name
+         * the the given tag
          */
-        ObjectPtr findByName(const std::string& name);
-        ObjectPtr findByName(const std::string& name) const;
+        ObjectPtr findByTag(const std::string& tag);
+        ObjectPtr findByTag(const std::string& tag) const;
 
         /**
-         * @brief Get an object with a given name
-         * @param name The name of the game object to retrieve
-         * @return The object with the given name or a nullptr if the object
+         * @brief Get an object with a given tag
+         * @param tag The tag of the object to be searched
+         * @return The object with the given tag or a nullptr if the object
          *         could not be found in the container or the the object is
          *         found but it is not of type U
          *
          * Note that this function will return the first object it finds with
-         * the the given name. You can use this function to get the derived
+         * the the given tag. You can use this function to get the derived
          * class type U if T is a base class:
          *
          * @code
          * // The type of rectangle is std::shared_ptr<ime::Shape>
-         * auto rectangle = shapeContainer.findByName("myRect");
+         * auto rectangle = shapeContainer.findByTag("myRect");
          *
          * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
-         * auto rectangle2 = shapeContainer.findByName<ime::RectangleShape>("myRect");
+         * auto rectangle2 = shapeContainer.findByTag<ime::RectangleShape>("myRect");
          * @endcode
          */
         template<typename U>
-        std::shared_ptr<U> findByName(const std::string& name);
+        std::shared_ptr<U> findByTag(const std::string& tag);
 
         /**
-         * @brief Get an object with a given name
-         * @param name The name of the game object to retrieve
-         * @return The object with the given name or a nullptr if the object
+         * @brief Get an object with a given tag
+         * @param tag The tag of the object to be searched
+         * @return The object with the given tag or a nullptr if the object
          *         could not be found in the container or the the object is
          *         found but it is not of type U
          *
          * Note that this function will return the first object it finds with
-         * the the given name. You can use this function to get the derived
+         * the the given tag. You can use this function to get the derived
          * class type U if T is a base class:
          *
          * @code
          * // The type of rectangle is std::shared_ptr<ime::Shape>
-         * auto rectangle = shapeContainer.findByName("myRect");
+         * auto rectangle = shapeContainer.findByTag("myRect");
          *
          * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
-         * auto rectangle2 = shapeContainer.findByName<ime::RectangleShape>("myRect");
+         * auto rectangle2 = shapeContainer.findByTag<ime::RectangleShape>("myRect");
          * @endcode
          */
         template<typename U>
-        std::shared_ptr<const U> findByName(const std::string& name) const;
+        std::shared_ptr<const U> findByTag(const std::string& tag) const;
 
         /**
          * @brief Get an object with the given id
@@ -177,15 +177,12 @@ namespace ime {
         const ObjectPtr findIf(Predicate predicate) const;
 
         /**
-         * @brief Remove all objects with the given name
-         * @param name Name of the objects to be removed
+         * @brief Remove all objects with the given tag
+         * @param tag Tag of the objects to be removed
          * @return True if the objects were removed or false an object with
-         *          the the given name does not exist in the container
-         *
-         * This function will all objects that have been assigned the given
-         * name
+         *         the the given tag does not exist in the container
          */
-        bool removeByName(const std::string& name);
+        bool removeByTag(const std::string& tag);
 
         /**
          * @brief Remove a game object with the given id

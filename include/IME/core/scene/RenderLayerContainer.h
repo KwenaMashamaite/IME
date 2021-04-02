@@ -73,7 +73,7 @@ namespace ime {
          * layer must not exist in the container with the same name as
          * @a name otherwise it is undefined behaviour
          *
-         * @see removeByName, removeByIndex and removeAll
+         * @see removeByTag, removeByIndex and removeAll
          */
         RenderLayer::Ptr create(const std::string& name);
 
@@ -129,7 +129,7 @@ namespace ime {
          * @return The index at the specified index or a nullptr if the index
          *         is out of bounds
          *
-         * @see findByName
+         * @see findByTag
          */
         RenderLayer::Ptr findByIndex(unsigned int index) const;
 
@@ -157,7 +157,7 @@ namespace ime {
          * @param name The name of the layer to be checked
          * @return True of the container has the layer otherwise false
          *
-         * @see findByName and removeByName
+         * @see findByTag and removeByTag
          */
         bool hasLayer(const std::string& name) const;
 
@@ -167,7 +167,7 @@ namespace ime {
          * @return True if the layer was removed or false if the index is
          *         out of bounds
          *
-         * @see removeByName
+         * @see removeByTag
          */
         bool removeByIndex(unsigned int index);
 
@@ -184,7 +184,7 @@ namespace ime {
         /**
          * @brief Remove all layers from the container
          *
-         * @see removeByIndex and removeByName
+         * @see removeByIndex and removeByTag
          */
         void removeAll();
 
