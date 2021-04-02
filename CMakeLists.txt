@@ -171,6 +171,9 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
             FILES_MATCHING PATTERN "*-d-2.dll"
             )
 
+    # Install openAl.dll (Needed in both dynamic and static configurations)
+    install(FILES "${SFML_DIR}/../../../bin/openal32.dll" DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE})
+
     # Install TGUI binaries
     install(FILES "${TGUI_DIR}/../../../bin/tgui-d.dll" DESTINATION ${IME_DEPENDENCIES_INSTALL_PREFIX}/bin/${CMAKE_BUILD_TYPE})
 else()
