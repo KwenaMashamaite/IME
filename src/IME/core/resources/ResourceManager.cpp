@@ -48,7 +48,17 @@ namespace ime {
                 return images_.loadFromFile(filename);
             case ResourceType::Font:
                 return fonts_.loadFromFile(filename);
-            default:
+            case ResourceType::Music:{
+                // We can't use ResourceHolder<sf::Music> because it doesnt support loadFromFile
+                if (musicHolder_.find(filename) != musicHolder_.end()) //File already loaded
+                    return true;
+
+                auto music = std::make_shared<sf::Music>();
+                if (!music->openFromFile(musicPath_ + filename))
+                    throw FileNotFound("cannot find file \"" + musicPath_ + filename + "\"");
+
+                return musicHolder_.insert({filename, std::move(music)}).second;
+            } default:
                 return false;
         }
     }
@@ -80,6 +90,15 @@ namespace ime {
         return *(soundBuffers_.get(fileName));
     }
 
+    std::shared_ptr<sf::Music> ResourceManager::getMusic(const std::string &fileName) {
+        try {
+            return musicHolder_.at(fileName);
+        } catch (...) {
+            loadFromFile(ResourceType::Music, fileName);
+            return musicHolder_[fileName];
+        }
+    }
+
     bool ResourceManager::unload(ResourceType type, const std::string &filename) {
         switch (type) {
             case ResourceType::Texture:
@@ -90,6 +109,12 @@ namespace ime {
                 return images_.unload(filename);
             case ResourceType::SoundBuffer:
                 return soundBuffers_.unload(filename);
+            case ResourceType::Music:
+                if (musicHolder_.find(filename) != musicHolder_.end()) {
+                    musicHolder_.erase(filename);
+                    return true;
+                }
+                return false;
             default:
                 return false;
         }
@@ -105,6 +130,8 @@ namespace ime {
                 return images_.getPath();
             case ResourceType::SoundBuffer:
                 return soundBuffers_.getPath();
+            case ResourceType::Music:
+                return musicPath_;
             default:
                 return "";
         }
@@ -123,6 +150,9 @@ namespace ime {
                 break;
             case ResourceType::SoundBuffer:
                 soundBuffers_.setPath(path);
+                break;
+            case ResourceType::Music:
+                musicPath_ = path;
                 break;
             default:
                 return;

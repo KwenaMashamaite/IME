@@ -36,10 +36,8 @@ namespace ime::audio {
         {}
 
         void setSource(const std::string &source) override {
-
             if (sourceFilename_ != source) {
-                if (!(*song_).openFromFile(source))
-                    throw FileNotFound(R"(cannot find file ")" + source + R"(")");
+                song_ = ResourceManager::getInstance()->getMusic(source);
                 sourceFilename_ = source;
             }
         }

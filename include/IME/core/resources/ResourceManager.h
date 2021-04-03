@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/resources/ResourceHolder.h"
+#include "IME/core/audio/Music.h"
 #include <string>
 #include <initializer_list>
 #include <functional>
@@ -150,6 +151,14 @@ namespace ime {
         const sf::Image &getImage(const std::string &fileName);
 
         /**
+         * @brief Get music
+         * @param fileName Filename of the music
+         * @throws FileNotFound If the music cannot be found on the disk
+         * @return Pointer to the requested music
+         */
+        std::shared_ptr<sf::Music> getMusic(const std::string &fileName);
+
+        /**
          * @brief Get class instance
          * @return Shared pointer to class instance
          */
@@ -181,6 +190,8 @@ namespace ime {
         ResourceHolder<sf::Image> images_; //!< Images container
         TextureHolder textures_;           //!< Textures container
         ResourceHolder<sf::SoundBuffer> soundBuffers_; //!< Sound buffers container
+        std::string musicPath_;
+        std::unordered_map<std::string, std::shared_ptr<sf::Music>> musicHolder_;
     };
 }
 
