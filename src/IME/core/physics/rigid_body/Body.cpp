@@ -106,6 +106,9 @@ namespace ime {
     }
 
     void Body::setRotation(float angle) {
+        if (isFixedRotation())
+            return;
+
         body_->SetTransform(body_->GetTransform().p, utility::degToRad(angle));
         emitChange(Property{"rotation", angle});
     }
