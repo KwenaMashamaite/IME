@@ -68,16 +68,9 @@ namespace ime::ui {
     Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture) :
         Picture()
     {
-        ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture(); //Load the image in the engine first (intercept any errors)
-        auto path = ime::ResourceManager::getInstance()->getPathFor(ResourceType::Texture);
-        pimpl_->picture_ = tgui::Picture::create(
-            {path + filename, {frame.left, frame.top, frame.width, frame.height}},
-            transparentTexture);
-
-        pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
-            emit("doubleClick");
-            emit("doubleClick", mousePos.x, mousePos.y);
-        });
+        auto texture = Texture(filename, frame);
+        pimpl_->picture_->getRenderer()->setTexture(texture.getInternalTexture());
+        pimpl_->picture_->getRenderer()->setTransparentTexture(transparentTexture);
     }
 
     Picture::Picture(const Picture& other) :
