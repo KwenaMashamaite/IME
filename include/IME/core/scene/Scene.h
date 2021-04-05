@@ -571,9 +571,7 @@ namespace ime {
          *
          * Note that this function only creates a tilemap instance so that
          * it can be used. You still need to construct the tilemap using
-         * the appropriate member function. In addition, when a tilemap is
-         * created the scene uses the tilemap's render layer instead of its
-         * own
+         * the appropriate member function
          *
          * @warning Only a single tilemap can be created, therefore calling
          * this function will destroy the previous tilemap

@@ -102,12 +102,10 @@ namespace ime {
 
     void SceneManager::render(Window &window) {
         auto static renderScene = [](ScenePtr& scene, Window& renderWindow) {
-            if (scene->hasTilemap_) {
-                scene->tileMap_->draw(renderWindow); //Draw the tiles
-                scene->tileMap_->renderLayers().render(renderWindow);
-            } else
-                scene->renderLayers_.render(renderWindow);
+            if (scene->hasTilemap_)
+                scene->tileMap_->draw(renderWindow);
 
+            scene->renderLayers_.render(renderWindow);
             // Draw the gui on top of everything
             scene->gui().draw();
         };

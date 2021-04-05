@@ -216,6 +216,8 @@ namespace ime {
         forEachTile([&renderTarget](Tile& tile) {
             renderTarget.draw(tile);
         });
+
+        renderLayers().render(renderTarget);
     }
 
     void TileMap::addSprite(Sprite::Ptr sprite, Index index, int renderOrder, const std::string &renderLayer) {
