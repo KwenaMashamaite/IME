@@ -51,7 +51,8 @@ namespace ime {
 
         void setTexture(const Texture &texture) {
             texture_ = &texture;
-            sprite_.setTexture(texture_->getInternalTexture(), true);
+            if (texture_)
+                sprite_.setTexture(texture_->getInternalTexture(), true);
         }
 
         void setTexture(const std::string &filename) {
@@ -203,6 +204,7 @@ namespace ime {
         IDrawable(other),
         pImpl_{std::make_unique<SpriteImpl>(*other.pImpl_)}
     {
+        pImpl_->setTexture(other.getTexture());
         pImpl_->setAnimationTarget(*this);
     }
 
@@ -215,7 +217,15 @@ namespace ime {
     }
 
     Sprite::Sprite(Sprite &&) noexcept = default;
-    Sprite &Sprite::operator=(Sprite &&) noexcept = default;
+
+    Sprite &Sprite::operator=(Sprite&& other) noexcept {
+        if (this != &other) {
+            pImpl_ = std::move(other.pImpl_);
+            pImpl_->setAnimationTarget(*this);
+        }
+
+        return *this;
+    }
 
     std::string Sprite::getClassName() const {
         return "Sprite";

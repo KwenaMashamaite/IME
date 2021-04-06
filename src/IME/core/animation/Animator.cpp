@@ -49,7 +49,9 @@ namespace ime {
         eventEmitter_{other.eventEmitter_},
         currentAnimation_{other.currentAnimation_},
         chains_{other.chains_},
-        animations_{other.animations_}
+        animations_{other.animations_},
+        cycleDirection_{other.cycleDirection_},
+        completedFirstAlternateCycle_{other.completedFirstAlternateCycle_}
     {}
 
     Animator &Animator::operator=(Animator other) {
@@ -67,7 +69,10 @@ namespace ime {
         std::swap(eventEmitter_, other.eventEmitter_);
         std::swap(currentAnimation_, other.currentAnimation_);
         std::swap(chains_, other.chains_);
+        std::swap(target_, other.target_);
         std::swap(animations_, other.animations_);
+        std::swap(cycleDirection_, other.cycleDirection_);
+        std::swap(completedFirstAlternateCycle_, other.completedFirstAlternateCycle_);
     }
 
     Animation::Ptr Animator::createAnimation(const std::string &name,

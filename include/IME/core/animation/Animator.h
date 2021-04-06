@@ -80,24 +80,16 @@ namespace ime {
          *
          * @warning The target of @a other will not be copied because an
          * animation target can only be owned by one animator. Therefore,
-         * the target will be empty after construction. This means that
-         * you have to initialize the target yourself by calling setTarget
-         * after this constructor finishes
+         * the target to be animated will be null after construction. This
+         * means that you have to initialize the target yourself by calling
+         * setTarget function
          *
          * @see setTarget
          */
         Animator(const Animator& other);
 
         /**
-         * @brief Assign this animator to another animator
-         * @param other The animator to be assigned
-         *
-         * @warning The target of @a other will not be copied to this
-         * animators target because an animation target can only be owned
-         * by one animator. This means that all the properties of this
-         * animator will be assigned the properties of @a other but the
-         * target property will be the same as before the assignment. In
-         * other words, the animators will not share a target
+         * @brief Copy assignment operator
          */
         Animator& operator=(Animator);
 
