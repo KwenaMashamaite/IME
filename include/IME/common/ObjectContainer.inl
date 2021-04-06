@@ -28,9 +28,17 @@ inline ObjectContainer<T>::ObjectContainer() {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::addObject(ObjectPtr object) {
+inline void ObjectContainer<T>::addObject(ObjectPtr object, const std::string& group) {
     IME_ASSERT(object, "Cannot add a nullptr to an object container");
-    objects_.push_back(std::move(object));
+    if (group == "none")
+        objects_.push_back(std::move(object));
+    else {
+        if (hasGroup(group))
+            groups_.at(group)->addObject(std::move(object));
+        else {
+            createGroup(group).addObject(std::move(object));
+        }
+    }
 }
 
 template<typename T>
@@ -141,16 +149,44 @@ inline std::size_t ObjectContainer<T>::getCount() const {
 }
 
 template <typename T>
+inline ObjectContainer<T>& ObjectContainer<T>::createGroup(const std::string& name) {
+    IME_ASSERT(!hasGroup(name), "The group \"" + name + "\" already exists in the container");
+    return *(groups_.insert({name, std::make_shared<ObjectContainer<T>>()}).first->second);
+}
+
+template <typename T>
+inline ObjectContainer<T>& ObjectContainer<T>::getGroup(const std::string& name) const {
+    IME_ASSERT(hasGroup(name), "The group \"" + name + "\" does exists in the container");
+    return *(groups_.at(name));
+}
+
+template <typename T>
+inline bool ObjectContainer<T>::hasGroup(const std::string& name) const {
+    return groups_.find(name) != groups_.end();
+}
+
+template <typename T>
+inline bool ObjectContainer<T>::removeGroup(const std::string& name) {
+    if (hasGroup(name)) {
+        groups_.erase(name);
+        return true;
+    }
+
+    return false;
+}
+
+template <typename T>
+inline void ObjectContainer<T>::removeAllGroups() {
+    groups_.clear();
+}
+
+template <typename T>
 inline void ObjectContainer<T>::forEach(Callback<ObjectPtr> callback) {
     std::for_each(objects_.begin(), objects_.end(), callback);
 }
 
 template <typename T>
-inline typename ObjectContainer<T>::constIterator ObjectContainer<T>::cbegin() const {
-    return objects_.cbegin();
-}
-
-template <typename T>
-inline typename ObjectContainer<T>::constIterator ObjectContainer<T>::cend() const {
-    return objects_.cend();
+inline void ObjectContainer<T>::forEachInGroup(const std::string& name, Callback<ObjectPtr> callback) {
+    if (hasGroup(name))
+        groups_.at(name)->forEach(std::move(callback));
 }

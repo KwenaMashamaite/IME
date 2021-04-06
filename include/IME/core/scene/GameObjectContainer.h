@@ -46,25 +46,46 @@ namespace ime {
          * @brief Add a game object to the container
          * @param gameObject The game object to be added
          * @param renderOrder The render order of the game object
-         * @param renderLayer The RenderLayer the game object belongs to
+         * @param renderLayer The render layer the game object belongs to
          *
-         * If the render layer is unspecified or the specified layer cannot be
-         * found then the drawable will be added to the 'default' layer. The
-         * 'default' render layer is created by the Scene when you instantiate
-         * it. Note that the 'default' layer may be deleted from the scenes
+         * If the render layer is unspecified or the specified layer cannot
+         * be found then the game object will be added to the @a default layer.
+         * The @a default layer is created by the Scene when you instantiate
+         * it. Note that the @a default layer may be deleted from the scenes
          * render layers, however you must make sure that the layer you specify
          * during a call to this function already exists otherwise undefined
          * behavior
          *
-         * Note that the container keeps the pointer so there is no need to
-         * keep your pointer after adding the game object
+         * @note The container keeps the pointer so there is no need to keep
+         * your pointer after the game object is added
          */
         void add(GameObject::Ptr gameObject, unsigned int renderOrder = 0u,
              const std::string& renderLayer = "default");
 
+        /**
+         * @brief Add a game object to a group in the container
+         * @param group The group to assign the game object to
+         * @param gameObject The game object to be added
+         * @param renderOrder The render order of the game object
+         * @param renderLayer The render layer the game object belongs to
+         *
+         * * If the render layer is unspecified or the specified layer cannot
+         * be found then the game object will be added to the @a default layer.
+         * The @a default layer is created by the Scene when you instantiate
+         * it. Note that the @a default layer may be deleted from the scenes
+         * render layers, however you must make sure that the layer you specify
+         * during a call to this function already exists otherwise undefined
+         * behavior
+         *
+         * @note The container keeps the pointer so there is no need to keep
+         * your pointer after the game object is added
+         */
+        void add(const std::string& group, GameObject::Ptr gameObject,
+             unsigned int renderOrder = 0u, const std::string& renderLayer = "default");
+
     private:
         std::reference_wrapper<RenderLayerContainer> renderLayers_;
-        using ObjectContainer::addObject;
+        using ObjectContainer<GameObject>::addObject;
     };
 }
 

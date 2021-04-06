@@ -31,6 +31,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <unordered_map>
 
 namespace ime {
     /**
@@ -55,8 +56,17 @@ namespace ime {
         /**
          * @brief Add an object to the container
          * @param object object to be added
+         * @param group The name of the group to add the object to
+         *
+         * If the @a group is not found, it will be created and the @a object
+         * will be the first member of it. Groups are useful if you want to
+         * refer to objects that are the same or similar as a whole
+         *
+         * By default the object does not belong to any group
+         *
+         * @see createGroup
          */
-        void addObject(ObjectPtr object);
+        void addObject(ObjectPtr object, const std::string& group = "none");
 
         /**
          * @brief Get an object with a given tag
@@ -225,24 +235,99 @@ namespace ime {
         std::size_t getCount() const;
 
         /**
+         * @brief Create a group to add objects to
+         * @param name The name of the group
+         *
+         * This function is useful if you want to relate some objects and
+         * refer to them as a whole using a common group name instead of
+         * using a common tag name and looping though the container to find
+         * which objects have a given tag
+         *
+         * @code
+         * auto weapons = objectContainer.createGroup("weapons");
+         * weapons.add(knife);
+         * weapons.add(machete, 5);
+         * weapons.add(pistol, 0, "pistols");
+         * @endcode
+         *
+         * @note The name of the groups must be unique
+         *
+         * @see add
+         */
+        ObjectContainer<T>& createGroup(const std::string& name);
+
+        /**
+         * @brief Get objects in a group
+         * @param name The name of the group
+         *
+         * @warning The specified group must exist first before calling this
+         * function otherwise undefined behavior
+         *
+         * @see hasGroup
+         */
+        ObjectContainer<T>& getGroup(const std::string& name) const;
+
+        /**
+         * @brief Check whether or not the container has a given group
+         * @param name The name of the group to be checked
+         * @return True if the container has the specified group, otherwise
+         *         false
+         */
+        bool hasGroup(const std::string& name) const;
+
+        /**
+         * @brief Remove a group from the container
+         * @param name The name of the group to be removed
+         * @return True if the group was removed or false if the specified
+         *         group does not exist in the container
+         *
+         * This function will remove all objects in the given group from the
+         * container
+         *
+         * @see add and removeAllGroups
+         */
+        bool removeGroup(const std::string& name);
+
+        /**
+         * @brief Remove all groups from the container
+         *
+         * This function will remove all objects that belong to a group
+         * from the container, leaving only objects that do not belong
+         * to a group if any
+         *
+         * @see removeGroup
+         */
+        void removeAllGroups();
+
+        /**
          * @brief Execute a callback function for each object in the container
          * @param callback The function to be executed
+         *
+         * @note The given callback is applied to all objects that do NOT
+         * belong to a group
+         *
+         * @see forEachInGroup
          */
         void forEach(Callback<ObjectPtr> callback);
 
         /**
-         * @brief Get a constant iterator that points to the first element in
-         *         the container
-         * @return A constant iterator to the first element
+         * @brief Execute a callback for each object in a group
+         * @param name The name of the group to execute callback on
+         * @param callback The function to be executed for each object in
+         *                 the group
+         *
+         * This function is a shortcut for:
+         *
+         * @code
+         * //It's undefined behaviour to call getGroup if the group does not exist
+         * if (container.hasGroup(name)) {
+         *     container.getGroup(name)->forEach(...);
+         * }
+         * @endcode
+         *
+         * @see forEach
          */
-        constIterator cbegin() const;
-
-        /**
-         * @brief Get a constant iterator that points one past the last element
-         *         in the container
-         * @return A constant iterator one past the last element
-         */
-        constIterator cend() const;
+        void forEachInGroup(const std::string& name, Callback<ObjectPtr> callback);
 
         /**
          * @brief Destructor
@@ -251,6 +336,7 @@ namespace ime {
 
     private:
         std::vector<ObjectPtr> objects_;
+        std::unordered_map<std::string, std::shared_ptr<ObjectContainer<T>>> groups_;
     };
 
     #include "IME/common/ObjectContainer.inl"
