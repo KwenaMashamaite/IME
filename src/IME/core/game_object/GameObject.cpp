@@ -48,8 +48,8 @@ namespace ime {
     }
 
     GameObject::GameObject(const GameObject &other) :
-        Object(),
-        std::enable_shared_from_this<GameObject>(),
+        Object(other),
+        std::enable_shared_from_this<GameObject>(other),
         scene_{other.scene_},
         type_{other.type_},
         state_{other.state_},
@@ -57,7 +57,9 @@ namespace ime {
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
         eventEmitter_{other.eventEmitter_},
-        transform_{other.transform_}
+        transform_{other.transform_},
+        sprite_{other.sprite_},
+        postStepId_{other.postStepId_}
         //body_{other.body_->clone()}
     {
         initTransformEvents();
@@ -73,7 +75,9 @@ namespace ime {
             isCollidable_ = other.isCollidable_;
             transform_ = other.transform_;
             eventEmitter_ = other.eventEmitter_;
+            sprite_ = other.sprite_;
             //body_ = other.body_->clone();
+
             initTransformEvents();
         }
 
