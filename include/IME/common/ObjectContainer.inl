@@ -30,9 +30,16 @@ inline ObjectContainer<T>::ObjectContainer() {
 template <typename T>
 inline void ObjectContainer<T>::addObject(ObjectPtr object, const std::string& group) {
     IME_ASSERT(object, "Cannot add a nullptr to an object container");
-    if (group == "none")
+
+    // Prevent duplicates in the container
+    if (findById(object->getObjectId())) {
+        IME_PRINT_WARNING("Object ignored, it already exists in the container");
+        return;
+    }
+
+    if (group == "none") {
         objects_.push_back(std::move(object));
-    else {
+    } else {
         if (hasGroup(group))
             groups_.at(group)->addObject(std::move(object));
         else {
@@ -98,8 +105,15 @@ template <typename T>
 inline const typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(Predicate predicate) const {
     auto found = std::find_if(objects_.begin(), objects_.end(), predicate);
 
-    if (found != objects_.cend())
+    if (found != objects_.end())
         return *found;
+
+    // Perform recursive search
+    for (const auto& group : groups_) {
+        auto object = group.second->findIf(predicate);
+        if (object)
+            return object;
+    }
 
     return nullptr;
 }
@@ -128,14 +142,23 @@ inline bool ObjectContainer<T>::remove(ObjectPtr object) {
         return true;
     }
 
+    // Perform recursive remove
+    for (const auto& group : groups_) {
+        auto removed = group.second->remove(object);
+        if (removed)
+            return true;
+    }
+
     return false;
 }
 
 template <typename T>
-inline bool ObjectContainer<T>::removeIf(Predicate predicate) {
-    auto prevSize = objects_.size();
+inline void ObjectContainer<T>::removeIf(Predicate predicate) {
     objects_.erase(std::remove_if(objects_.begin(), objects_.end(), predicate), objects_.end());
-    return objects_.size() < prevSize;
+
+    // Perform recursive remove
+    for (const auto& group : groups_)
+        group.second->removeIf(predicate);
 }
 
 template <typename T>

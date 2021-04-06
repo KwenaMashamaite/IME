@@ -221,7 +221,7 @@ namespace ime {
          * Note that this function will remove all objects for which the
          * predicate return true
          */
-        bool removeIf(Predicate predicate);
+        void removeIf(Predicate predicate);
 
         /**
          * @brief Remove all objects from the container
