@@ -34,17 +34,10 @@ namespace ime {
         state_{-1},
         isVulnerable_{true},
         isActive_{true},
-        isCollidable_{true}
+        isCollidable_{true},
+        postStepId_{-1}
     {
-        initTransformEvents();
-
-        // Synchronize the game object with its rigid body
-        postStepId_ = scene_.get().on_("postStep", Callback<Time>([this](Time) {
-            if (body_) {
-                transform_.setPosition(body_->getPosition());
-                transform_.setRotation(body_->getRotation());
-            }
-        }));
+        initEvents();
     }
 
     GameObject::GameObject(const GameObject &other) :
@@ -60,9 +53,10 @@ namespace ime {
         transform_{other.transform_},
         sprite_{other.sprite_},
         postStepId_{other.postStepId_}
-        //body_{other.body_->clone()}
     {
-        initTransformEvents();
+        initEvents();
+        if (other.hasRigidBody())
+            attachRigidBody(other.body_->copy());
     }
 
     GameObject &GameObject::operator=(const GameObject &other) {
@@ -76,17 +70,46 @@ namespace ime {
             transform_ = other.transform_;
             eventEmitter_ = other.eventEmitter_;
             sprite_ = other.sprite_;
-            //body_ = other.body_->clone();
 
-            initTransformEvents();
+            if (other.body_)
+                attachRigidBody(other.body_->copy());
+
+            initEvents();
         }
 
         return *this;
     }
 
+    GameObject::GameObject(GameObject&& other) noexcept :
+        scene_{other.scene_},
+        type_{other.type_},
+        state_{other.state_},
+        isVulnerable_{other.isVulnerable_},
+        isActive_{other.isActive_},
+        isCollidable_{other.isCollidable_},
+        eventEmitter_{std::move(other.eventEmitter_)},
+        transform_{std::move(other.transform_)},
+        sprite_{std::move(other.sprite_)},
+        postStepId_{-1}
+    {
+        if (other.body_)
+            attachRigidBody(other.body_->copy());
+
+        initEvents();
+    }
+
+    GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {
+        return std::make_shared<GameObject>(scene, type);
+    }
+
+    GameObject::Ptr GameObject::copy() const {
+        return std::make_shared<GameObject>(*this);
+    }
+
     void GameObject::setState(int state) {
         if (state_ == state)
             return;
+
         state_ = state;
         emitChange(Property{"state", state_});
     }
@@ -225,7 +248,14 @@ namespace ime {
             onContactEnd_(shared_from_this(), other);
     }
 
-    void GameObject::initTransformEvents() {
+    void GameObject::initEvents() {
+        postStepId_ = scene_.get().on_("postStep", Callback<Time>([this](Time) {
+            if (body_) {
+                transform_.setPosition(body_->getPosition());
+                transform_.setRotation(body_->getRotation());
+            }
+        }));
+
         transform_.onPropertyChange([this](std::string property, std::any) {
             if (property == "position") {
                 sprite_.setPosition(transform_.getPosition());

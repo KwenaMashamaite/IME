@@ -64,6 +64,31 @@ namespace ime {
         CircleCollider& operator=(CircleCollider&&) noexcept;
 
         /**
+         * @brief Create a copy of the collider
+         * @return A new circle collider
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see clone
+         */
+        CircleCollider::Ptr copy() const;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return A new circle collider
+         *
+         * You should use this function if you don't care about the type
+         * of the collider, otherwise use the colliders copy function
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see copy
+         */
+        Collider::Ptr clone() const override;
+
+        /**
          * @brief Create a new circle collider
          * @param radius The radius of the circle
          * @return The created circle collider
@@ -74,14 +99,6 @@ namespace ime {
          * By default, the circle radius is 0.0f
          */
         static CircleCollider::Ptr create(float radius = 0.0f);
-
-        /**
-         * @brief Create a new circle collider from an existing circle collider
-         * @param other The circle collider to contract the new one from
-         * @return The new circle collider instance
-         */
-        Collider::Ptr copy() override;
-        const Collider::Ptr copy() const override;
 
         /**
          * @brief Get the name of this class
@@ -116,9 +133,19 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~CircleCollider();
+        ~CircleCollider() override;
 
     private:
+        /**
+         * @brief Copy constructor
+         */
+        CircleCollider(const CircleCollider&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        CircleCollider& operator=(const CircleCollider&);
+
         /**
          * @brief Get the internal collider
          * @return The internal collider

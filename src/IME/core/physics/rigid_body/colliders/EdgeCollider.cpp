@@ -32,22 +32,33 @@ namespace ime {
         edgeShape_{std::make_unique<b2EdgeShape>()}
     {}
 
+    EdgeCollider::EdgeCollider(const EdgeCollider& other) :
+        Collider(other),
+        edgeShape_{std::make_unique<b2EdgeShape>(*other.edgeShape_)}
+    {}
+
+    EdgeCollider &EdgeCollider::operator=(const EdgeCollider& rhs) {
+        if (this != &rhs) {
+            auto temp{rhs};
+            edgeShape_ = std::move(temp.edgeShape_);
+        }
+
+        return *this;
+    }
+
     EdgeCollider::EdgeCollider(EdgeCollider &&) noexcept = default;
     EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) noexcept = default;
 
+    EdgeCollider::Ptr EdgeCollider::copy() const {
+        return std::static_pointer_cast<EdgeCollider>(clone());
+    }
+
+    Collider::Ptr EdgeCollider::clone() const {
+        return EdgeCollider::Ptr(new EdgeCollider(*this));
+    }
+
     EdgeCollider::Ptr EdgeCollider::create() {
         return std::make_shared<EdgeCollider>();
-    }
-
-    Collider::Ptr EdgeCollider::copy() {
-        return std::as_const(*this).copy();
-    }
-
-    const Collider::Ptr EdgeCollider::copy() const {
-        auto collider = create();
-
-        collider->edgeShape_.reset(new b2EdgeShape(*(this->edgeShape_.get())));
-        return collider;
     }
 
     std::string EdgeCollider::getClassName() const {

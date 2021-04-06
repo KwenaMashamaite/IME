@@ -34,21 +34,33 @@ namespace ime {
         setRadius(radius);
     }
 
+    CircleCollider::CircleCollider(const CircleCollider& other) :
+        Collider(other),
+        circle_{std::make_unique<b2CircleShape>(*other.circle_)}
+    {}
+
+    CircleCollider &CircleCollider::operator=(const CircleCollider& rhs) {
+        if (this != &rhs) {
+            auto temp{rhs};
+            circle_ = std::move(temp.circle_);
+        }
+
+        return *this;
+    }
+
     CircleCollider::CircleCollider(CircleCollider&&) noexcept = default;
     CircleCollider &CircleCollider::operator=(CircleCollider&&) noexcept = default;
 
+    CircleCollider::Ptr CircleCollider::copy() const {
+        return std::static_pointer_cast<CircleCollider>(clone());
+    }
+
+    Collider::Ptr CircleCollider::clone() const {
+        return CircleCollider::Ptr(new CircleCollider(*this));
+    }
+
     CircleCollider::Ptr CircleCollider::create(float radius) {
         return std::make_shared<CircleCollider>(radius);
-    }
-
-    Collider::Ptr CircleCollider::copy() {
-        return std::as_const(*this).copy();
-    }
-
-    const Collider::Ptr CircleCollider::copy() const {
-        auto collider = create();
-        collider->circle_.reset(new b2CircleShape(*(this->circle_.get())));
-        return collider;
     }
 
     std::string CircleCollider::getClassName() const {

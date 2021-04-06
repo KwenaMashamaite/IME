@@ -59,6 +59,31 @@ namespace ime {
         EdgeCollider& operator=(EdgeCollider&&) noexcept;
 
         /**
+         * @brief Create a copy of the collider
+         * @return A new edge collider
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see clone
+         */
+        EdgeCollider::Ptr copy() const;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return A new edge collider
+         *
+         * You should use this function if you don't care about the type
+         * of the collider, otherwise use the colliders copy function
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see copy
+         */
+        Collider::Ptr clone() const override;
+
+        /**
          * @brief Create a new edge collider
          * @return The created edge collider
          *
@@ -66,14 +91,6 @@ namespace ime {
          * pointer to an edge collider. The class does not keep the pointer
          */
         static EdgeCollider::Ptr create();
-
-        /**
-         * @brief Create a new edge collider from an existing edge collider
-         * @param other The edge collider to contract the new one from
-         * @return The new edge collider instance
-         */
-        Collider::Ptr copy() override;
-        const Collider::Ptr copy() const override;
 
         /**
          * @brief Get the name of this class
@@ -166,9 +183,19 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~EdgeCollider();
+        ~EdgeCollider() override;
 
     private:
+        /**
+         * @brief Copy constructor
+         */
+        EdgeCollider(const EdgeCollider&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        EdgeCollider& operator=(const EdgeCollider&);
+
         /**
          * @brief Get the internal collider
          * @return The internal collider

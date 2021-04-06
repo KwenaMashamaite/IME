@@ -141,16 +141,6 @@ namespace ime {
         explicit Collider(Type type);
 
         /**
-         * @brief Copy constructor
-         */
-        Collider(const Collider&) = delete;
-
-        /**
-         * @brief Copy assignment operator
-         */
-        Collider& operator=(const Collider&) = delete;
-
-        /**
          * @brief Move constructor
          */
         Collider(Collider&&) noexcept;
@@ -159,6 +149,16 @@ namespace ime {
          * @brief Move assignment operator
          */
         Collider& operator=(Collider&&) noexcept;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return A copy of the collider
+         *
+         * @warning The collider must be attached to a rigid body before
+         * any of its functions are are called. Calling a member function
+         * before attaching the collider to a rigid body is undefined behavior
+         */
+        virtual Collider::Ptr clone() const = 0;
 
         /**
          * @brief Get the name of this class
@@ -170,13 +170,6 @@ namespace ime {
          * @see Object::getClassType and Object::getClassName
          */
         std::string getClassType() const override;
-
-        /**
-         * @brief Create a copy of the collider
-         * @return The new collider copied from this collider
-         */
-        virtual Collider::Ptr copy() = 0;
-        virtual const Collider::Ptr copy() const = 0;
 
         /**
          * @brief Get the type of the collider
@@ -370,9 +363,19 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Collider() = 0;
+        ~Collider() override = 0;
 
     protected:
+        /**
+         * @brief Copy constructor
+         */
+        Collider(const Collider&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Collider& operator=(const Collider&);
+
         /**
          * @internal
          * @brief Get the internal collider
@@ -386,9 +389,8 @@ namespace ime {
 
     private:
         /**
-         * @brief Construct a collider
-         * @param definition The definition to construct collider from
-         * @param body The body this collider will be attached to
+         * @brief Attach the collider ot a rigid body
+         * @param body The rigid body to attach the collider to
          */
         void setBody(BodyPtr body);
 

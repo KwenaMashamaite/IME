@@ -31,8 +31,32 @@
 
 namespace ime {
     Collider::Collider(Collider::Type type) :
-        type_{type}
+        type_{type},
+        prevCollisionBitMask_{filterData_.collisionBitMask}
     {}
+
+    Collider::Collider(const Collider& other) :
+        Object(other),
+        type_{other.type_},
+        filterData_{other.filterData_},
+        prevCollisionBitMask_{other.prevCollisionBitMask_}
+    {
+        // Other member data are initialized when the collider is attached
+        // to a rigid body because b2Fixture is not copy constructable
+    }
+
+    Collider &Collider::operator=(const Collider& rhs) {
+        if (this != &rhs) {
+            type_ = rhs.type_;
+            filterData_ = rhs.filterData_;
+            prevCollisionBitMask_ = rhs.prevCollisionBitMask_;
+
+            // Other member data are initialized when the collider is attached
+            // to a rigid body because b2Fixture is not copy assignable
+        }
+
+        return *this;
+    }
 
     Collider::Collider(Collider &&) noexcept = default;
     Collider &Collider::operator=(Collider &&) noexcept = default;

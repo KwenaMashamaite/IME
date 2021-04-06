@@ -32,21 +32,33 @@ namespace ime {
         polygon_{std::make_unique<b2PolygonShape>()}
     {}
 
+    PolygonCollider::PolygonCollider(const PolygonCollider& other) :
+        Collider(other),
+        polygon_{std::make_unique<b2PolygonShape>(*other.polygon_)}
+    {}
+
+    PolygonCollider &PolygonCollider::operator=(const PolygonCollider& rhs) {
+        if (this != &rhs) {
+            auto temp{rhs};
+            polygon_ = std::move(temp.polygon_);
+        }
+
+        return *this;
+    }
+
     PolygonCollider::PolygonCollider(PolygonCollider&&) noexcept = default;
     PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) noexcept = default;
 
+    PolygonCollider::Ptr PolygonCollider::copy() const {
+        return  std::static_pointer_cast<PolygonCollider>(clone());
+    }
+
+    Collider::Ptr PolygonCollider::clone() const {
+        return PolygonCollider::Ptr(new PolygonCollider(*this));
+    }
+
     PolygonCollider::Ptr PolygonCollider::create() {
         return std::make_shared<PolygonCollider>();
-    }
-
-    Collider::Ptr PolygonCollider::copy() {
-        return std::as_const(*this).copy();
-    }
-
-    const Collider::Ptr PolygonCollider::copy() const {
-        auto collider = create();
-        collider->polygon_.reset(new b2PolygonShape(*(this->polygon_.get())));
-        return collider;
     }
 
     std::string PolygonCollider::getClassName() const {

@@ -50,6 +50,35 @@ namespace ime {
             world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
+    Body::Body(Body&&) noexcept = default;
+    Body &Body::operator=(Body &&) noexcept = default;
+
+    Body::Ptr Body::copy() const {
+        auto body = world_->createBody(getType());
+
+        // b2Body does not have any public constructors, so we use setters to simulate a copy
+        body->setPosition(getPosition());
+        body->setRotation(getRotation());
+        body->setFixedRotation(isFixedRotation());
+        body->setLinearVelocity(getLinearVelocity());
+        body->setAngularVelocity(getAngularVelocity());
+        body->setLinearDamping(getLinearDamping());
+        body->setAngularDamping(getAngularDamping());
+        body->setFastBody(isFastBody());
+        body->setEnabled(isEnabled());
+        body->setAwake(isAwake());
+        body->setGravityScale(getGravityScale());
+        body->setSleepingAllowed(isSleepingAllowed());
+        body->setTag(getTag());
+
+        for (const auto& [id, collider] : colliders_) {
+            IME_UNUSED(id);
+            body->attachCollider(collider->clone());
+        }
+
+        return body;
+    }
+
     std::string Body::getClassName() const {
         return "Body";
     }

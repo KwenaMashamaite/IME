@@ -34,6 +34,22 @@ namespace ime {
         setSize(size.x, size.y);
     }
 
+    BoxCollider::BoxCollider(const BoxCollider& other) :
+        Collider(other),
+        size_{other.size_},
+        box_{std::make_unique<b2PolygonShape>(*other.box_)}
+    {}
+
+    BoxCollider &BoxCollider::operator=(const BoxCollider& rhs) {
+        if (this != &rhs) {
+            auto temp(rhs);
+            size_ = temp.size_;
+            box_ = std::move(temp.box_);
+        }
+
+        return *this;
+    }
+
     BoxCollider::BoxCollider(BoxCollider&&) noexcept = default;
     BoxCollider &BoxCollider::operator=(BoxCollider&&) noexcept = default;
 
@@ -41,15 +57,12 @@ namespace ime {
         return std::make_shared<BoxCollider>(size);
     }
 
-    Collider::Ptr BoxCollider::copy() {
-        return std::as_const(*this).copy();
+    BoxCollider::Ptr BoxCollider::copy() const {
+        return std::static_pointer_cast<BoxCollider>(clone());
     }
 
-    const Collider::Ptr BoxCollider::copy() const {
-        auto collider = create();
-        collider->size_ = this->size_;
-        collider->box_.reset(new b2PolygonShape(*(this->box_.get())));
-        return collider;
+    Collider::Ptr BoxCollider::clone() const {
+        return BoxCollider::Ptr(new BoxCollider(*this));
     }
 
     std::string BoxCollider::getClassName() const {

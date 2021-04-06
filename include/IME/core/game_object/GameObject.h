@@ -77,12 +77,24 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        GameObject(GameObject&&) noexcept = default;
+        GameObject(GameObject&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
         GameObject& operator=(GameObject&&) noexcept = default;
+
+        /**
+         * @brief Create a game object
+         * @return The created game object
+         */
+        static GameObject::Ptr create(Scene& scene, Type type = Type::Unknown);
+
+        /**
+         * @brief Create a copy of the game object
+         * @return A new game object
+         */
+        GameObject::Ptr copy() const;
 
         /**
          * @brief Set the type of the game object
@@ -352,13 +364,13 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~GameObject();
+        ~GameObject() override;
 
     private:
         /**
-         * @brief Subscribe interested parties to a transform property change
+         * @brief Subscribe game object to events
          */
-        void initTransformEvents();
+        void initEvents();
 
     private:
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to

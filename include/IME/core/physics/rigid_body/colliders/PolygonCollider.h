@@ -61,6 +61,31 @@ namespace ime {
         PolygonCollider& operator=(PolygonCollider&&) noexcept;
 
         /**
+         * @brief Create a copy of the collider
+         * @return A new polygon collider
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see clone
+         */
+        PolygonCollider::Ptr copy() const;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return A new polygon collider
+         *
+         * You should use this function if you don't care about the type
+         * of the collider, otherwise use the colliders copy function
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see copy
+         */
+        Collider::Ptr clone() const override;
+
+        /**
          * @brief Create a new polygon collider
          * @return The created polygon collider
          *
@@ -68,14 +93,6 @@ namespace ime {
          * pointer to a polygon collider. The class does not keep the pointer
          */
         static PolygonCollider::Ptr create();
-
-        /**
-         * @brief Create a new collider from an existing polygon collider
-         * @param other The polygon collider to contract the new one from
-         * @return The new polygon collider instance
-         */
-        Collider::Ptr copy() override;
-        const Collider::Ptr copy() const override;
 
         /**
          * @brief Get the name of this class
@@ -100,9 +117,19 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~PolygonCollider();
+        ~PolygonCollider() override;
 
     private:
+        /**
+         * @brief Copy constructor
+         */
+        PolygonCollider(const PolygonCollider&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        PolygonCollider& operator=(const PolygonCollider&);
+
         /**
          * @brief Get the internal collider
          * @return The internal collider

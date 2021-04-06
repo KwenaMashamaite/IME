@@ -89,12 +89,29 @@ namespace ime {
         static BoxCollider::Ptr create(Vector2f size = {0.1f, 0.1f});
 
         /**
-         * @brief Create a new box collider from an existing box collider
-         * @param other The box collider to contract the new one from
-         * @return The new box collider instance
+         * @brief Create a copy of the collider
+         * @return The new box collider
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see clone
          */
-        Collider::Ptr copy() override;
-        const Collider::Ptr copy() const override;
+        BoxCollider::Ptr copy() const;
+
+        /**
+         * @brief Create a copy of the collider
+         * @return A copy of the collider
+         *
+         * You should use this function if you don't care about the type
+         * of the collider, otherwise use the colliders copy function
+         *
+         * @warning You must attach a rigid Body to the returned collider
+         * before using it. Failure to do so is undefined behavior
+         *
+         * @see copy
+         */
+        Collider::Ptr clone() const override;
 
         /**
          * @brief Get the name of this class
@@ -126,9 +143,19 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~BoxCollider();
+        ~BoxCollider() override;
 
     private:
+        /**
+         * @brief Copy constructor
+         */
+        BoxCollider(const BoxCollider&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        BoxCollider& operator=(const BoxCollider&);
+
         /**
          * @brief Get the internal shape
          * @return The internal shape

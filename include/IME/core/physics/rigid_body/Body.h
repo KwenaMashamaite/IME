@@ -90,6 +90,35 @@ namespace ime {
         };
 
         /**
+         * @brief Copy constructor
+         */
+        Body(const Body&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Body& operator=(const Body&) = delete;
+
+        /**
+         * @brief Move constructor
+         */
+        Body(Body&&) noexcept;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Body& operator=(Body&&) noexcept;
+
+        /**
+         * @brief Create a copy of the rigid body
+         * @return The new rigid body
+         *
+         * @note The user data of this object will not be copied and the copy
+         * will not be attached to a game object
+         */
+        Body::Ptr copy() const;
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */
