@@ -32,7 +32,6 @@ namespace ime {
         scene_{scene},
         type_{type},
         state_{-1},
-        isVulnerable_{true},
         isActive_{true},
         isCollidable_{true},
         postStepId_{-1}
@@ -46,7 +45,6 @@ namespace ime {
         scene_{other.scene_},
         type_{other.type_},
         state_{other.state_},
-        isVulnerable_{other.isVulnerable_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
         eventEmitter_{other.eventEmitter_},
@@ -64,7 +62,6 @@ namespace ime {
             scene_ = other.scene_;
             type_ = other.type_;
             state_ = other.state_;
-            isVulnerable_ = other.isVulnerable_;
             isActive_ = other.isActive_;
             isCollidable_ = other.isCollidable_;
             transform_ = other.transform_;
@@ -84,7 +81,6 @@ namespace ime {
         scene_{other.scene_},
         type_{other.type_},
         state_{other.state_},
-        isVulnerable_{other.isVulnerable_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
         eventEmitter_{std::move(other.eventEmitter_)},
@@ -119,7 +115,7 @@ namespace ime {
     }
 
     void GameObject::setActive(bool isActive) {
-        if (isActive_ == isActive || (isActive_ && !isVulnerable_))
+        if (isActive_ == isActive)
             return;
         isActive_ = isActive;
 
@@ -127,13 +123,6 @@ namespace ime {
             body_->setEnabled(isActive_);
 
         emitChange(Property{"active", isActive_});
-    }
-
-    void GameObject::setVulnerable(bool isVulnerable) {
-        if (isVulnerable_ != isVulnerable) {
-            isVulnerable_ = isVulnerable;
-            emitChange(Property{"vulnerable", isVulnerable_});
-        }
     }
 
     void GameObject::setCollidable(bool isCollidable) {
@@ -175,10 +164,6 @@ namespace ime {
 
     GameObject::Type GameObject::getType() const {
         return type_;
-    }
-
-    bool GameObject::isVulnerable() const {
-        return isVulnerable_;
     }
 
     void GameObject::attachRigidBody(Body::Ptr body) {

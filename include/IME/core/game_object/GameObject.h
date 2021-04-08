@@ -146,27 +146,6 @@ namespace ime {
         bool isActive() const;
 
         /**
-         * @brief Set whether the game object is vulnerable or inVulnerable
-         * @param isVulnerable True to set vulnerable or false to set
-         *                     invulnerable
-         *
-         * A vulnerable game object can be deactivated whilst an invulnerable
-         * game object cannot be deactivated. That is, setActive(false) on a
-         * game object that is active and invulnerable will always fail.
-         *
-         * The game object is vulnerable by default
-         */
-        void setVulnerable(bool isVulnerable);
-
-        /**
-         * @brief Check if the game object is vulnerable or not
-         * @return True if the game object is vulnerable or false if inVulnerable
-         *
-         * @see setVulnerable
-         */
-        bool isVulnerable() const;
-
-        /**
          * @brief Set whether the game object is collidable or not
          * @param collidable True to make collidable, otherwise false
          *
@@ -376,7 +355,6 @@ namespace ime {
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
         Type type_;                           //!< The type of the game object
         int state_;                           //!< The current state of the game object
-        bool isVulnerable_;                   //!< Vulnerability state
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state
         EventEmitter eventEmitter_;           //!< Event publisher
