@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Slider.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Slider.hpp>
 
 namespace ime::ui {
     class Slider::SliderImpl {
     public:
-        SliderImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit SliderImpl(const std::shared_ptr<tgui::Widget>& widget) :
             slider_{std::static_pointer_cast<tgui::Slider>(widget)}
         {}
 
@@ -69,7 +69,7 @@ namespace ime::ui {
         return Ptr(new Slider(minimum, maximum));
     }
 
-    Slider::Ptr Slider::copy() {
+    Slider::Ptr Slider::copy() const {
         return std::static_pointer_cast<Slider>(clone());
     }
 

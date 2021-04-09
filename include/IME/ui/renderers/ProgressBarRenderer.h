@@ -253,7 +253,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~ProgressBarRenderer();
+            ~ProgressBarRenderer() override;
 
         private:
             tgui::ProgressBarRenderer* progressBarRenderer_; //!< Pointer to third party renderer

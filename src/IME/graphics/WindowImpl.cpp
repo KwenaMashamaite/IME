@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "WindowImpl.h"
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime::priv {
     bool WindowImpl::isInstantiated_{false};
@@ -30,7 +30,7 @@ namespace ime::priv {
     WindowImpl::WindowImpl() :
         frameRateLimit_(0)
     {
-        IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated");
+        IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated")
         isInstantiated_ = true;
     }
 

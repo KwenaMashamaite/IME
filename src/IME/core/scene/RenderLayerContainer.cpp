@@ -38,7 +38,7 @@ namespace ime {
         return layer;
     }
 
-    void RenderLayerContainer::add(const IDrawable &drawable, unsigned int renderOrder,
+    void RenderLayerContainer::add(const IDrawable &drawable, int renderOrder,
         const std::string &renderLayer)
     {
         auto layer = findByName(renderLayer);

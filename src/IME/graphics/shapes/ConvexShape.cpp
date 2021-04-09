@@ -29,8 +29,8 @@
 
 namespace ime {
     struct ConvexShape::ConvexShapeImpl {
-        explicit ConvexShapeImpl(std::shared_ptr<sf::Shape> shape) :
-            polygon_{std::static_pointer_cast<sf::ConvexShape>(std::move(shape))}
+        explicit ConvexShapeImpl(const std::shared_ptr<sf::Shape>& shape) :
+            polygon_{std::static_pointer_cast<sf::ConvexShape>(shape)}
         {}
 
         // Member data
@@ -89,13 +89,13 @@ namespace ime {
     }
 
     void ConvexShape::setPoint(std::size_t index, const Vector2f &point) {
-        IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds");
+        IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds")
         pimpl_->polygon_->setPoint(index, {point.x, point.y});
         emitChange(Property{"point", index});
     }
 
     Vector2f ConvexShape::getPoint(std::size_t index) const {
-        IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds");
+        IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds")
         auto [x, y] = pimpl_->polygon_->getPoint(index);
         return {x, y};
     }

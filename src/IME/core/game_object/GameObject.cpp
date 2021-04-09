@@ -24,7 +24,6 @@
 
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 
 namespace ime {
@@ -129,7 +128,7 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
-                body_->forEachCollider([isCollidable](Collider::Ptr collider) {
+                body_->forEachCollider([isCollidable](const Collider::Ptr& collider) {
                     if (isCollidable)
                         collider->resetCollisionFilterData();
                     else
@@ -167,9 +166,9 @@ namespace ime {
     }
 
     void GameObject::attachRigidBody(Body::Ptr body) {
-        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity");
-        IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one");
-        body_ = body;
+        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity")
+        IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one")
+        body_ = std::move(body);
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
         body_->setRotation(transform_.getRotation());
@@ -232,7 +231,7 @@ namespace ime {
         sprite_.updateAnimation(deltaTime);
     }
 
-    void GameObject::emitCollisionEvent(const std::string &event, GameObject::Ptr other) {
+    void GameObject::emitCollisionEvent(const std::string &event, const GameObject::Ptr& other) {
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(shared_from_this(), other);
         else if (event == "contactEnd" && onContactEnd_)
@@ -247,19 +246,20 @@ namespace ime {
             }
         }));
 
-        transform_.onPropertyChange([this](std::string property, std::any) {
-            if (property == "position") {
+        transform_.onPropertyChange([this](const Property& property) {
+            const auto& name = property.getName();
+            if (name == "position") {
                 sprite_.setPosition(transform_.getPosition());
-                emitChange({property, transform_.getPosition()});
-            } else if (property == "origin") {
+                emitChange(Property{name, transform_.getPosition()});
+            } else if (name == "origin") {
                 sprite_.setOrigin(transform_.getOrigin());
-                emitChange({property, transform_.getOrigin()});
-            } else if (property == "scale") {
+                emitChange(Property{name, transform_.getOrigin()});
+            } else if (name == "scale") {
                 sprite_.setScale(transform_.getScale());
-                emitChange({property, transform_.getScale()});
-            } else if (property == "rotation") {
+                emitChange(Property{name, transform_.getScale()});
+            } else if (name == "rotation") {
                 sprite_.setRotation(transform_.getRotation());
-                emitChange({property, transform_.getRotation()});
+                emitChange(Property{name, transform_.getRotation()});
             }
         });
     }

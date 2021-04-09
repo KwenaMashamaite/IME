@@ -87,7 +87,7 @@ namespace ime {
              *
              * @see clone
              */
-            ScrollablePanel::Ptr copy();
+            ScrollablePanel::Ptr copy() const;
 
             /**
              * @brief Get the panels renderer
@@ -212,7 +212,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~ScrollablePanel();
+            ~ScrollablePanel() override;
 
         private:
             /**

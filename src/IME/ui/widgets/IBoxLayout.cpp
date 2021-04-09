@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/IBoxLayout.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 
 namespace ime::ui {
     IBoxLayout::IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl)

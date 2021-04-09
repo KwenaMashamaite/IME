@@ -23,15 +23,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ClickableWidget.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/ClickableWidget.hpp>
 
 namespace ime::ui {
     struct ClickableWidget::ClickableWidgetImpl {
-        ClickableWidgetImpl(std::shared_ptr<tgui::Widget> widget) {
-            IME_ASSERT(widget, "A clickable widget cannot be instantiated from a nullptr");
+        explicit ClickableWidgetImpl(const std::shared_ptr<tgui::Widget>& widget) {
+            IME_ASSERT(widget, "A clickable widget cannot be instantiated from a nullptr")
             widget_ = std::dynamic_pointer_cast<tgui::ClickableWidget>(widget);
-            IME_ASSERT(widget_, "A non clickable widget derived from ClickableWidget, change to Widget");
+            IME_ASSERT(widget_, "A non clickable widget derived from ClickableWidget, change to Widget")
         }
 
         //////////////////////////////////////////////////////////////////////

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Label.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Label.hpp>
 
 namespace ime::ui {
@@ -32,7 +32,7 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class Label::LabelImpl {
     public:
-        LabelImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit LabelImpl(const std::shared_ptr<tgui::Widget>& widget) :
             label_{std::static_pointer_cast<tgui::Label>(widget)}
         {}
 
@@ -110,7 +110,7 @@ namespace ime::ui {
         return Label::Ptr(new Label(text));
     }
 
-    Label::Ptr Label::copy() {
+    Label::Ptr Label::copy() const {
         return std::static_pointer_cast<Label>(clone());
     }
 
@@ -169,4 +169,6 @@ namespace ime::ui {
     std::string Label::getWidgetType() const {
         return "Label";
     }
+
+    Label::~Label() = default;
 }

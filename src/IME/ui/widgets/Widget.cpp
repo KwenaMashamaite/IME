@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Widget.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 
 namespace ime::ui {
     Widget::Widget(std::unique_ptr<priv::IWidgetImpl> impl) :

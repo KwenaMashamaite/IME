@@ -323,7 +323,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~ChildWindowRenderer();
+            ~ChildWindowRenderer() override;
 
         private:
             tgui::ChildWindowRenderer *windowRenderer_; //!< Pointer to third party child window renderer

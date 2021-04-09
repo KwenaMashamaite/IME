@@ -108,7 +108,7 @@ namespace ime {
              * @param audioType Type of the audio to get volume for
              * @return The volume for a given audio type
              */
-            float getVolumeFor(Type audioType);
+            float getVolumeFor(Type audioType) const;
 
             /**
              * @brief Set the maximum volume for all audio types

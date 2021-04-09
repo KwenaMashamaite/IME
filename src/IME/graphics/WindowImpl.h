@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Window.h"
-#include "../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>

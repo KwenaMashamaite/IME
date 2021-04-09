@@ -61,7 +61,7 @@ namespace ime {
          *
          * @see setTextureRect
          */
-        Sprite(const std::string& texture);
+        explicit Sprite(const std::string& texture);
 
         /**
          * @brief Construct a sprite from a texture
@@ -69,7 +69,7 @@ namespace ime {
          *
          * @see setTextureRect
          */
-        Sprite(const Texture& texture);
+        explicit Sprite(const Texture& texture);
 
         /**
          * @brief Construct the sprite from a sub-rectangle of a source texture
@@ -449,7 +449,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~Sprite();
+        ~Sprite() override;
 
     private:
         struct SpriteImpl;

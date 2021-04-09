@@ -524,7 +524,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~ButtonRenderer();
+            ~ButtonRenderer() override;
 
         private:
             //Pointer to third party button

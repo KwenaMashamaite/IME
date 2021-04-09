@@ -24,7 +24,7 @@
 
 #include "IME/ui/renderers/SliderRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Renderers/SliderRenderer.hpp>
 
 namespace ime::ui {

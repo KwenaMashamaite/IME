@@ -320,9 +320,9 @@ namespace ime {
         bool assignAlias(Index index, const std::string& alias);
 
     private:
-        const Vector2u frameSize_; //!< The size of each frame in the spritesheet
-        const Vector2u spacing_;   //!< The space between frames in the spritesheet
-        Vector2u sizeInFrames_;    //!< The size of the spritesheet in frames
+        Vector2u frameSize_;    //!< The size of each frame in the spritesheet
+        Vector2u spacing_;      //!< The space between frames in the spritesheet
+        Vector2u sizeInFrames_; //!< The size of the spritesheet in frames
 
         std::unordered_map<Index, Frame> frames_;        //!< Stores the frames
         std::unordered_map<std::string, Index> aliases_; //!< Saves the index of frames with aliases

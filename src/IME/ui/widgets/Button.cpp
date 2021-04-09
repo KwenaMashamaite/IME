@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Button.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Button.hpp>
 
 namespace ime::ui {
@@ -32,7 +32,7 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class Button::ButtonImpl {
     public:
-        ButtonImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
             button_{std::static_pointer_cast<tgui::Button>(widget)}
         {}
 
@@ -78,7 +78,7 @@ namespace ime::ui {
         return Button::Ptr(new Button(text));
     }
 
-    Button::Ptr Button::copy() {
+    Button::Ptr Button::copy() const {
         return std::static_pointer_cast<Button>(clone());
     }
 

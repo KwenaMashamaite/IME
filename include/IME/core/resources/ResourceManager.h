@@ -65,6 +65,16 @@ namespace ime {
         using Callback = std::function<void(Args...)>; //!< Event listener
 
         /**
+         * @brief Copy constructor
+         */
+        ResourceManager(const ResourceManager&) = delete;
+
+        /**
+         * @brief Assignment operator
+         */
+        ResourceManager& operator=(const ResourceManager&) = delete;
+
+        /**
          * @brief Load a resource from the disk
          * @param type Type of the resource to be loaded
          * @param filename Filename of the resource to be loaded
@@ -174,16 +184,6 @@ namespace ime {
          * @brief Default constructor
          */
         ResourceManager();
-
-        /**
-         * @brief Copy constructor
-         */
-        ResourceManager(const ResourceManager&) = delete;
-
-        /**
-         * @brief Assignment operator
-         */
-        ResourceManager& operator=(const ResourceManager&) = delete;
 
     private:
         ResourceHolder<sf::Font> fonts_;   //!< Fonts container

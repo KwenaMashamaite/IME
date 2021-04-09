@@ -23,16 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/World.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "../../graphics/DebugDrawer.h"
+#include "IME/graphics/DebugDrawer.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/graphics/Window.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
-#include <box2d/b2_fixture.h>
-#include <box2d/b2_world_callbacks.h>
 
 namespace ime {
     namespace
@@ -62,7 +60,7 @@ namespace ime {
             B2QueryCallback(const World::AABBCallback* callback, World& world) :
                 world_{world}
             {
-                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
+                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
 
@@ -71,7 +69,7 @@ namespace ime {
                 return (*callback_)(convertFixtureToCollider(b2_fixture, world_));
             }
 
-            ~B2QueryCallback() {
+            ~B2QueryCallback() override {
                 callback_ = nullptr;
             }
 
@@ -92,7 +90,7 @@ namespace ime {
             B2RayCastCallback(const World::RayCastCallback* callback, World& world) :
                 world_{world}
             {
-                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr");
+                IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
 
@@ -107,7 +105,7 @@ namespace ime {
                         fraction);
             }
 
-            ~B2RayCastCallback() {
+            ~B2RayCastCallback() override {
                 callback_ = nullptr;
             }
 
@@ -238,7 +236,7 @@ namespace ime {
 
     Body::Ptr World::createBody(Body::Type type) {
         if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback")
             return nullptr;
         }
 
@@ -247,8 +245,8 @@ namespace ime {
         return body;
     }
 
-    void World::createBody(GameObject::Ptr gameObject, Body::Type type) {
-        IME_ASSERT(gameObject, "Cannot attach a rigid body to a nullptr");
+    void World::createBody(const GameObject::Ptr& gameObject, Body::Type type) {
+        IME_ASSERT(gameObject, "Cannot attach a rigid body to a nullptr")
         auto rigidBody = createBody(type);
         rigidBody->gameObject_ = gameObject;
         gameObject->attachRigidBody(std::move(rigidBody));
@@ -256,20 +254,20 @@ namespace ime {
 
     Body::Ptr World::getBodyById(unsigned int id) {
         if (utility::findIn(bodies_, id))
-            return bodies_.at(id);
+            return bodies_.at(static_cast<int>(id));
 
         return nullptr;
     }
 
-    bool World::destroyBody(Body::Ptr body) {
+    bool World::destroyBody(const Body::Ptr& body) {
         if (!world_->IsLocked()) {
             if (utility::findIn(bodies_, body->getObjectId())) {
-                world_->DestroyBody(bodies_[body->getObjectId()]->getInternalBody().get());
-                bodies_.erase(body->getObjectId());
+                world_->DestroyBody(bodies_[static_cast<int>(body->getObjectId())]->getInternalBody().get());
+                bodies_.erase(static_cast<int>(body->getObjectId()));
                 return true;
             }
         } else {
-            IME_PRINT_WARNING("Operation ignored: destroyBody() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: destroyBody() called inside a world callback")
         }
 
         return false;
@@ -277,7 +275,7 @@ namespace ime {
 
     Joint::Ptr World::createJoint(const JointDefinition& definition) {
         if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback")
             return nullptr;
         }
 
@@ -294,15 +292,15 @@ namespace ime {
         return joint;
     }
 
-    bool World::destroyJoint(Joint::Ptr joint) {
+    bool World::destroyJoint(const Joint::Ptr& joint) {
         if (!world_->IsLocked()) {
             if (utility::findIn(joints_, joint->getObjectId())) {
-                world_->DestroyJoint(joints_[joint->getObjectId()]->getInternalJoint());
-                joints_.erase(joint->getObjectId());
+                world_->DestroyJoint(joints_[static_cast<int>(joint->getObjectId())]->getInternalJoint());
+                joints_.erase(static_cast<int>(joint->getObjectId()));
                 return true;
             }
         } else {
-            IME_PRINT_WARNING("Operation ignored: destroyJoint() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: destroyJoint() called inside a world callback")
         }
 
         return false;
@@ -310,7 +308,7 @@ namespace ime {
 
     void World::destroyAllBodies() {
         if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: removeAllBodies() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: removeAllBodies() called inside a world callback")
             return;
         }
 
@@ -324,7 +322,7 @@ namespace ime {
 
     void World::destroyAllJoints() {
         if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: removeAllJoints() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: removeAllJoints() called inside a world callback")
             return;
         }
 
@@ -337,7 +335,7 @@ namespace ime {
     }
 
     void World::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
-        world_->Step(timeStep.asSeconds() * timescale_, velocityIterations, positionIterations);
+        world_->Step(timeStep.asSeconds() * timescale_, static_cast<int32>(velocityIterations), static_cast<int32>(positionIterations));
     }
 
     void World::autoClearForceBuffer(bool autoClear) {
@@ -436,7 +434,7 @@ namespace ime {
     }
 
     void World::debugDraw() {
-        IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one");
+        IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one")
 
         // Reset the flags in case of a change since last step
         uint32 flags = 0;

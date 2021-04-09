@@ -89,12 +89,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        Scene(Scene&&);
+        Scene(Scene&&) noexcept ;
 
         /**
          * @brief Move assignment operator
          */
-        Scene& operator=(Scene&&);
+        Scene& operator=(Scene&&) noexcept ;
 
         /**
          * @internal
@@ -297,7 +297,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~Scene();
+        ~Scene() override;
 
     protected:
         /**
@@ -581,9 +581,7 @@ namespace ime {
         void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
 
     private:
-        Engine* engine_;      //!< A reference to the game engine
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        PropertyContainer* cache_;            //!< The global cache
         std::shared_ptr<World> world_;        //!< Physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
@@ -592,10 +590,7 @@ namespace ime {
         TimerManager timerManager_;           //!< Scene level timer manager
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
-        GameObjectContainer entityContainer_; //!< Stores game objects that belong to the scene
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
-        ShapeContainer shapeContainer_;       //!< Stores shapes that belong to the scene
-        SpriteContainer spriteContainer_;     //!< Stores sprites that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isManaged_;                      //!< A flag indicating whether or not this scene has been added to a scene manager
@@ -604,6 +599,12 @@ namespace ime {
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
         friend class SceneManager;            //!< Pre updates the scene
+
+        std::unique_ptr<std::reference_wrapper<Engine>> engine_;   //!< A reference to the game engine
+        std::unique_ptr<SpriteContainer> spriteContainer_;         //!< Stores sprites that belong to the scene
+        std::unique_ptr<GameObjectContainer> entityContainer_;     //!< Stores game objects that belong to the scene
+        std::unique_ptr<ShapeContainer> shapeContainer_;           //!< Stores shapes that belong to the scene
+        std::unique_ptr<std::reference_wrapper<PropertyContainer>> cache_; //!< The global cache
     };
 }
 

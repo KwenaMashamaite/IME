@@ -238,7 +238,7 @@ namespace ime {
          * body inside a callback dispatched by the world (Callbacks are
          * dispatched during a step)
          */
-        void createBody(GameObjectPtr gameObject, Body::Type type = Body::Type::Static);
+        void createBody(const GameObjectPtr& gameObject, Body::Type type = Body::Type::Static);
 
         /**
          * @brief Get the body by its unique identifier
@@ -262,7 +262,7 @@ namespace ime {
          *
          * @see createBody(const BodyDefinition&)
          */
-        bool destroyBody(Body::Ptr body);
+        bool destroyBody(const Body::Ptr& body);
 
         /**
          * @brief Create a joint
@@ -295,7 +295,7 @@ namespace ime {
          *
          * @see createJoint
          */
-        bool destroyJoint(Joint::Ptr joint);
+        bool destroyJoint(const Joint::Ptr& joint);
 
         /**
          * @brief Destroy all the bodies in the world

@@ -43,12 +43,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SFML/Graphics/Vertex.hpp>
-#include "DebugDrawer.h"
+#include "IME/graphics/DebugDrawer.h"
 #include "IME/graphics/shapes/CircleShape.h"
 #include "IME/graphics/shapes/ConvexShape.h"
 #include "IME/graphics/Window.h"
-#include "../utility/Helpers.h"
-#include "../graphics/WindowImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime::priv {
     namespace {

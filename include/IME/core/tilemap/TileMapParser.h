@@ -45,7 +45,7 @@ namespace ime {
          * This function parses a map file and returns a map object created
          * form the parsed date
          */
-        Map parse(const std::string& filename, char separator = ',');
+        static Map parse(const std::string& filename, char separator = ',');
     };
 }
 

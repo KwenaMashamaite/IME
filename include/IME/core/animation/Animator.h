@@ -197,14 +197,6 @@ namespace ime {
         bool removeAnimation(const std::string& name);
 
         /**
-         * @brief Remove an animation from the animator
-         * @param animation Animation to be removed
-         * @return True if the animation was removed or false if it does
-         *         not exist in the animator
-         */
-        bool removeAnimation(Animation::Ptr animation);
-
-        /**
          * @brief Remove all animations from the animator
          */
         void removeAll();
@@ -520,7 +512,7 @@ namespace ime {
           * @param event Event event to e dispatched
           * @param animation The animation that triggered the event
           */
-        void fireEvent(Event event, Animation::Ptr animation);
+        void fireEvent(Event event, const Animation::Ptr& animation);
 
         /**
          * @brief Swap another animator with this animator

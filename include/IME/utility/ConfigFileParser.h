@@ -42,7 +42,7 @@ namespace ime {
              * @throws FileNotFound if the config file cannot be found on
              *        the disk
              */
-            PropertyContainer parse(const std::string& filename);
+            static PropertyContainer parse(const std::string& filename);
         };
     }
 }

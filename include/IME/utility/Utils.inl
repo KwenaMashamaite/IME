@@ -30,7 +30,7 @@ void setTimeoutSync(Time delay, const Callable& callback, Args&&...args) {
 
 template <typename Callable, typename...Args>
 void setTimeout(Time delay, const Callable& callback, Args&&...args){
-    std::thread([=] {
+    std::thread([delay, &callback, args = std::move(args...)] {
         setTimeoutSync(delay, callback, std::forward<Args>(args)...);
     }).detach();
 }
@@ -46,7 +46,7 @@ void setIntervalSync(Time delay, const Callable& callback, Args&&...args){
 
 template <typename Callable, typename...Args>
 void setInterval(Time delay, const Callable& callback, Args&&...args){
-    std::thread([=] {
+    std::thread([delay, &callback, args = std::move(args...)] {
         setIntervalSync(delay, callback, std::forward<Args>(args)...);
     }).detach();
 }

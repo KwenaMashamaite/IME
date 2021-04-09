@@ -43,7 +43,7 @@ namespace ime {
              * @brief Constructor
              * @param widgetImpl Widget implementation
              */
-            IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
+            explicit IBoxLayout(std::unique_ptr<priv::IWidgetImpl> widgetImpl);
 
             /**
              * @brief Insert a widget to the container
@@ -57,7 +57,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            virtual void insertWidget(std::size_t index, std::shared_ptr<Widget> widget,
+            virtual void insertWidget(std::size_t index, const Widget::Ptr& widget,
                 const std::string& widgetName) = 0;
 
             /**
@@ -94,7 +94,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            virtual bool setRatio(std::shared_ptr<Widget> widget, float ratio) = 0;
+            virtual bool setRatio(const Widget::Ptr& widget, float ratio) = 0;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -112,7 +112,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            virtual float getRatio(std::shared_ptr<Widget> widget) const = 0;
+            virtual float getRatio(const Widget::Ptr& widget) const = 0;
 
             /**
              * @brief Get the ratio of a widget at a certain index

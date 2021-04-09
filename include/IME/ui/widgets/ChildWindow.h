@@ -96,7 +96,7 @@ namespace ime {
              *
              * @see clone
              */
-            ChildWindow::Ptr copy();
+            ChildWindow::Ptr copy() const;
 
             /**
              * @brief Get the child window renderer
@@ -312,7 +312,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~ChildWindow();
+            ~ChildWindow() override;
 
         private:
             /**

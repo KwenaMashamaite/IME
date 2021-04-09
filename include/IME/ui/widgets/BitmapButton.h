@@ -74,7 +74,7 @@ namespace ime {
              *
              * @see clone
              */
-            BitmapButton::Ptr copy();
+            BitmapButton::Ptr copy() const;
 
             /**
              * @brief Get the buttons renderer
@@ -151,14 +151,14 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~BitmapButton();
+            ~BitmapButton() override;
 
         private:
             /**
              * @brief Create a bitmap button
              * @param buttonText Text to be displayed on the button
              */
-            BitmapButton(const std::string &buttonText = "");
+            explicit BitmapButton(const std::string &buttonText = "");
 
         private:
             class ButtonImpl;

@@ -228,7 +228,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~DistanceJoint();
+        ~DistanceJoint() override;
 
     private:
         /**
@@ -241,7 +241,7 @@ namespace ime {
          * mistaken for the body origin when using this function
          * (use Body::getWorldCentre when not sure about the origin)
          */
-        DistanceJoint(const DistanceJointDefinition& definition, std::shared_ptr<World> world);
+        DistanceJoint(const DistanceJointDefinition& definition, const std::shared_ptr<World>& world);
 
     private:
         b2DistanceJoint* joint_;      //!< Internal joint

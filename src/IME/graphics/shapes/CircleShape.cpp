@@ -29,8 +29,8 @@
 
 namespace ime {
     struct CircleShape::CircleShapeImpl {
-        explicit CircleShapeImpl(std::shared_ptr<sf::Shape> shape) :
-            circle_{std::static_pointer_cast<sf::CircleShape>(std::move(shape))}
+        explicit CircleShapeImpl(const std::shared_ptr<sf::Shape>& shape) :
+            circle_{std::static_pointer_cast<sf::CircleShape>(shape)}
         {}
 
         //Member data

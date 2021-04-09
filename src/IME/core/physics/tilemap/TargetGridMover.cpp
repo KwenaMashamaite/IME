@@ -24,17 +24,16 @@
 
 #include "IME/core/physics/tilemap/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
-#include "IME/graphics/Sprite.h"
 
 namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject::Ptr target) :
-        GridMover(Type::Target, tileMap, target),
+        GridMover(Type::Target, tileMap, std::move(target)),
         pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         movementStarted_{false},
         targetTileChangedWhileMoving_{false}
     {
-        IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap");
+        IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
 
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
@@ -99,7 +98,7 @@ namespace ime {
     }
 
     bool TargetGridMover::isDestinationReachable(Index index) {
-        IME_ASSERT(getTarget(), "Cannot check destination reachability without a target");
+        IME_ASSERT(getTarget(), "Cannot check destination reachability without a target")
         return !(pathFinder_->findPath(getGrid(),
             getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
             index).empty());

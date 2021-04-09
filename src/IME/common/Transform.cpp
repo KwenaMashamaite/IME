@@ -27,9 +27,6 @@
 
 namespace ime {
     Transform::Transform() :
-        position_{0.0f, 0.0f},
-        scale_{1.0f, 1.0f},
-        origin_{0.0f, 0.0f},
         rotation_{0.0f}
     {}
 
@@ -37,7 +34,7 @@ namespace ime {
         position_.x = x;
         position_.y = y;
         if (onPropertyChange_)
-            onPropertyChange_("position", position_);
+            onPropertyChange_(Property{"position", position_});
     }
 
     void Transform::setPosition(Vector2f position) {
@@ -54,7 +51,7 @@ namespace ime {
             rotation_ += 360.f;
 
         if (onPropertyChange_)
-            onPropertyChange_("rotation", rotation_);
+            onPropertyChange_(Property{"rotation", rotation_});
     }
 
     void Transform::rotate(float angle) {
@@ -70,7 +67,7 @@ namespace ime {
         scale_.y = factorY;
 
         if (onPropertyChange_)
-            onPropertyChange_("scale", scale_);
+            onPropertyChange_(Property{"scale", scale_});
     }
 
     void Transform::setScale(Vector2f scale) {
@@ -94,7 +91,7 @@ namespace ime {
         origin_.y = y;
 
         if (onPropertyChange_)
-            onPropertyChange_("origin", origin_);
+            onPropertyChange_(Property{"origin", origin_});
     }
 
     void Transform::setOrigin(Vector2f origin) {
@@ -113,7 +110,7 @@ namespace ime {
         move(offset.x, offset.y);
     }
 
-    void Transform::onPropertyChange(Callback<std::string, std::any> callback) {
+    void Transform::onPropertyChange(Callback<const Property&> callback) {
         onPropertyChange_ = std::move(callback);
     }
 }

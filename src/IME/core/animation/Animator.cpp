@@ -23,9 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/animation/Animator.h"
-#include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Sprite.h"
 #include <algorithm>
+#include <memory>
 
 namespace ime {
     Animator::Animator(Sprite& target) :
@@ -86,7 +86,7 @@ namespace ime {
     }
 
     void Animator::setTarget(Sprite &target) {
-        target_.reset(new std::reference_wrapper<Sprite>(target));
+        target_ = std::make_unique<std::reference_wrapper<Sprite>>(target);
     }
 
     void Animator::setTimescale(float timescale) {
@@ -101,7 +101,7 @@ namespace ime {
     }
 
     bool Animator::addAnimation(Animation::Ptr animation) {
-        IME_ASSERT(animation, "Cannot add nullptr to animator");
+        IME_ASSERT(animation, "Cannot add nullptr to animator")
         return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
 
@@ -128,12 +128,6 @@ namespace ime {
             animations_.erase(name);
             return true;
         }
-        return false;
-    }
-
-    bool Animator::removeAnimation(Animation::Ptr animation) {
-        if (animation)
-            removeAnimation(animation->getName());
         return false;
     }
 
@@ -291,7 +285,7 @@ namespace ime {
     }
 
     void Animator::update(Time deltaTime) {
-        IME_ASSERT(target_, "Cannot start Animator without a target to animate");
+        IME_ASSERT(target_, "Cannot start Animator without a target to animate")
         if (!currentAnimation_ || !isPlaying_ || isPaused_)
             return;
 
@@ -326,15 +320,11 @@ namespace ime {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)), id);
     }
 
-    int Animator::on(Animator::Event event, const std::string &name,
-        Callback<Animation::Ptr> callback)
-    {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback) {
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 
-    int Animator::on(Animator::Event event, const std::string &name,
-        Callback<> callback)
-    {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback) {
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 
@@ -342,24 +332,7 @@ namespace ime {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)) + name, id);
     }
 
-    void Animator::fireEvent(Animator::Event event, Animation::Ptr animation) {
-        /**
-         * Event handlers are separated into specific and general handlers
-         *
-         * Specific handlers are only invoked when the event is generated
-         * by a specific animation object whilst general handlers are always
-         * invoked when an animation is fired regardless of the animation
-         * object that triggered the event. This separation of general and
-         * specific handlers alleviates the issue of having one monolithic
-         * handler in the client code with if-else-if branches that checks
-         * the animation name before performing an action
-         *
-         * We first notify specific handlers (which may not be invoked) about
-         * the event, then notify general handlers. Note that the callback
-         * argument is optional so we fire the event twice, first without the
-         * argument and secondly with the argument.
-         */
-
+    void Animator::fireEvent(Animator::Event event, const Animation::Ptr& animation) {
         // Specific handlers
         eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName());
         eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName(), animation);

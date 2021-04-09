@@ -260,7 +260,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~SliderRenderer();
+            ~SliderRenderer() override;
 
         private:
             tgui::SliderRenderer* sliderRenderer_; //!< Pointer to third party renderer

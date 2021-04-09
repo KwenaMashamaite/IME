@@ -25,67 +25,61 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/core/physics/World.h"
-#include "IME/core/game_object/GameObject.h"
 
 namespace ime {
     Scene::Scene() :
-        engine_{nullptr},
-        cache_{nullptr},
-        entityContainer_{renderLayers_},
-        shapeContainer_{renderLayers_},
-        spriteContainer_{renderLayers_},
         timescale_{1.0f},
         isManaged_{false},
         isEntered_{false},
         isVisibleWhenPaused_{false},
         hasPhysicsSim_{false},
-        hasTilemap_{false}
+        hasTilemap_{false},
+        spriteContainer_{std::make_unique<SpriteContainer>(renderLayers_)},
+        entityContainer_{std::make_unique<GameObjectContainer>(renderLayers_)},
+        shapeContainer_{std::make_unique<ShapeContainer>(renderLayers_)}
     {
         renderLayers_.create("default");
     }
 
-    Scene::Scene(Scene&& other) :
-        engine_{other.engine_},
-        cache_{other.cache_},
-        entityContainer_{renderLayers_},
-        shapeContainer_{renderLayers_},
-        spriteContainer_{renderLayers_}
-    {
+    Scene::Scene(Scene&& other) noexcept{
         *this = std::move(other);
     }
 
-    Scene &Scene::operator=(Scene && other) {
+    Scene &Scene::operator=(Scene&& other) noexcept {
         // We can't use a default move assignment operator because of reference members
         if (this != &other) {
-            world_ = std::move(other.world_);
+            engine_ = std::move(other.engine_);
             camera_ = std::move(other.camera_);
+            cache_ = std::move(other.cache_);
+            world_ = std::move(other.world_);
             inputManager_ = std::move(other.inputManager_);
             audioManager_ = std::move(other.audioManager_);
             eventEmitter_ = std::move(other.eventEmitter_);
+            internalEmitter_ = std::move(other.internalEmitter_);
             timerManager_ = std::move(other.timerManager_);
             guiContainer_ = std::move(other.guiContainer_);
-            shapeContainer_ = std::move(other.shapeContainer_);
+            renderLayers_ = std::move(other.renderLayers_);
             entityContainer_ = std::move(other.entityContainer_);
-            timescale_ = std::move(other.timescale_);
-            isManaged_ = std::move(other.isManaged_);
-            isEntered_ = std::move(other.isEntered_);
-            isVisibleWhenPaused_ = std::move(other.isVisibleWhenPaused_);
-            hasPhysicsSim_ = std::move(other.hasPhysicsSim_);
+            gridMovers_ = std::move(other.gridMovers_);
+            shapeContainer_ = std::move(other.shapeContainer_);
+            tileMap_ = std::move(other.tileMap_);
+            timescale_ = other.timescale_;
+            isManaged_ = other.isManaged_;
+            isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
+            hasPhysicsSim_ = other.hasPhysicsSim_;
+            hasTilemap_ = other.hasTilemap_;
+            isEntered_ = false;
+            isManaged_ = false;
         }
 
         return *this;
     }
 
     void Scene::init(Engine &engine) {
-        engine_ = &engine;
+        engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
-        cache_ = &engine.getPersistentData();
+        cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
         guiContainer_.setTarget(engine.getRenderTarget());
-
-        engine.onShutDown([this] {
-            engine_ = nullptr;
-            cache_ = nullptr;
-        });
     }
 
     bool Scene::unsubscribe_(const std::string &event, int id) {
@@ -172,15 +166,15 @@ namespace ime {
     }
 
     ShapeContainer &Scene::shapes() {
-        return shapeContainer_;
+        return *shapeContainer_;
     }
 
     GameObjectContainer &Scene::gameObjects() {
-        return entityContainer_;
+        return *entityContainer_;
     }
 
     SpriteContainer &Scene::sprites() {
-        return spriteContainer_;
+        return *spriteContainer_;
     }
 
     void Scene::createWorld(Vector2f gravity) {

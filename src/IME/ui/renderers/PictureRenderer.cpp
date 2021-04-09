@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "../../utility/Helpers.h"
 #include "IME/ui/renderers/PictureRenderer.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <TGUI/Renderers/PictureRenderer.hpp>
 

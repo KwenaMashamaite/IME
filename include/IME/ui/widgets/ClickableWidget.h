@@ -103,7 +103,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~ClickableWidget();
+            ~ClickableWidget() override;
 
         private:
             struct ClickableWidgetImpl;

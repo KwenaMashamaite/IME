@@ -601,7 +601,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~CheckBoxRenderer();
+            ~CheckBoxRenderer() override;
 
         private:
             tgui::CheckBoxRenderer* checkBoxRenderer_; //!< Pointer to third party checkbox renderer

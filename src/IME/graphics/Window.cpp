@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Window.h"
-#include "../graphics/WindowImpl.h"
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime {
     Window::Window() :

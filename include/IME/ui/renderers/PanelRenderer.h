@@ -178,7 +178,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~PanelRenderer();
+            ~PanelRenderer() override;
 
         private:
             tgui::PanelRenderer* panelRenderer_; //!< Pointer to third party renderer

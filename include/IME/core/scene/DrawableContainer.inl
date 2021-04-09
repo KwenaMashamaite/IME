@@ -30,8 +30,8 @@ inline DrawableContainer<T>::DrawableContainer(RenderLayerContainer &renderLayer
 }
 
 template<typename T>
-inline void DrawableContainer<T>::add(std::shared_ptr<T> drawable,
-    unsigned int renderOrder, const std::string &renderLayer)
+inline void DrawableContainer<T>::add(std::shared_ptr<T> drawable, int renderOrder,
+    const std::string &renderLayer)
 {
     IME_ASSERT(drawable, "Cannot add a nullptr to a DrawableContainer");
     renderLayers_.get().add(*drawable, renderOrder, renderLayer);

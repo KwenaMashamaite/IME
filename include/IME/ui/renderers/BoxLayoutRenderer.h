@@ -155,7 +155,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~BoxLayoutRenderer();
+            ~BoxLayoutRenderer() override;
 
         private:
             tgui::BoxLayoutRenderer* boxLayoutRenderer_; //!< Pointer to third party renderer

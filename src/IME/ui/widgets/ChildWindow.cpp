@@ -23,14 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ChildWindow.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/ChildWindow.hpp>
 
 namespace ime::ui {
     class ChildWindow::ChildWindowImpl {
     public:
-        ChildWindowImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ChildWindowImpl(const std::shared_ptr<tgui::Widget>& widget) :
             window_{std::static_pointer_cast<tgui::ChildWindow>(widget)}
         {}
 
@@ -87,7 +86,7 @@ namespace ime::ui {
         return ChildWindow::Ptr(new ChildWindow(title, titleButtons));
     }
 
-    ChildWindow::Ptr ChildWindow::copy() {
+    ChildWindow::Ptr ChildWindow::copy() const {
         return std::static_pointer_cast<ChildWindow>(clone());
     }
 

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/TabsRenderer.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <TGUI/Renderers/TabsRenderer.hpp>
 

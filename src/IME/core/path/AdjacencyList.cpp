@@ -25,18 +25,20 @@
 #include "IME/core/path/AdjacencyList.h"
 #include "IME/core/tilemap/TileMap.h"
 
-bool tileHasObstacle(ime::TileMap& grid, ime::Index index) {
-    auto hasObstacle = false;
-    grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](std::shared_ptr<ime::GameObject> child) {
-        if (child->getType() == ime::GameObject::Type::Obstacle && child->isCollidable()) {
-            hasObstacle = true;
-            return;
-        }
-    });
-    return hasObstacle;
-}
-
 namespace ime {
+    namespace {
+        bool tileHasObstacle(TileMap& grid, Index index) {
+            auto hasObstacle = false;
+            grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GameObject::Ptr & child) {
+                if (child->getType() == GameObject::Type::Obstacle && child->isCollidable()) {
+                    hasObstacle = true;
+                    return;
+                }
+            });
+            return hasObstacle;
+        }
+    }
+
     void AdjacencyList::generateFrom(TileMap &tileMap) {
         adjacencyList_.clear();
         auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {

@@ -75,7 +75,7 @@ namespace ime {
              *
              * @see clone
              */
-            Tabs::Ptr copy();
+            Tabs::Ptr copy() const;
 
             /**
              * @brief Get the tabs renderer
@@ -341,7 +341,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Tabs();
+            ~Tabs() override;
 
         private:
             /**

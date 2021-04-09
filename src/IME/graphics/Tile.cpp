@@ -40,6 +40,7 @@ namespace ime {
     }
 
     Tile::Tile(const Tile& other) :
+        IDrawable(other),
         isCollidable_{other.isCollidable_},
         id_{other.id_},
         index_{other.index_},
@@ -73,9 +74,9 @@ namespace ime {
     Tile &Tile::operator=(Tile&&) noexcept = default;
 
     void Tile::attachCollider(std::shared_ptr<BoxCollider> collider) {
-        IME_ASSERT(!collider_, "Cannot add a collider to a tile that already has one, use the removeCollider function to remove it first");
-        IME_ASSERT(collider->getBody(), "A tile collider must have a rigid body attached to it");
-        IME_ASSERT(collider->getBody()->getType() == Body::Type::Static, "The rigid body a tile collider is attached to must be of type Body::Type::Static");
+        IME_ASSERT(!collider_, "Cannot add a collider to a tile that already has one, use the removeCollider function to remove it first")
+        IME_ASSERT(collider->getBody(), "A tile collider must have a rigid body attached to it")
+        IME_ASSERT(collider->getBody()->getType() == Body::Type::Static, "The rigid body a tile collider is attached to must be of type Body::Type::Static")
         collider_ = std::move(collider);
         if (collider_->getSize() < tile_.getSize() || collider_->getSize() > tile_.getSize())
             collider_->setSize(tile_.getSize());
@@ -156,7 +157,7 @@ namespace ime {
             return;
 
         if (collidable) {
-            IME_ASSERT(collider_, "Cannot set Tile as collidable without a collider, use the setCollidable function to add one");
+            IME_ASSERT(collider_, "Cannot set Tile as collidable without a collider, use the setCollidable function to add one")
         }
 
         isCollidable_ = collidable;

@@ -24,12 +24,12 @@
 
 #include "IME/ui/widgets/MenuBar.h"
 #include "TGUI/Widgets/MenuBar.hpp"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 
 namespace ime::ui {
     class MenuBar::MenuBarImpl {
     public:
-        MenuBarImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit MenuBarImpl(const std::shared_ptr<tgui::Widget>& widget) :
             menuBar{std::static_pointer_cast<tgui::MenuBar>(widget)}
         {}
 
@@ -69,7 +69,7 @@ namespace ime::ui {
         return MenuBar::Ptr(new MenuBar());;
     }
 
-    MenuBar::Ptr MenuBar::copy() {
+    MenuBar::Ptr MenuBar::copy() const {
         return std::static_pointer_cast<MenuBar>(clone());
     }
 

@@ -24,7 +24,6 @@
 
 #include "IME/utility/ConfigFileParser.h"
 #include "IME/utility/DiskFileReader.h"
-#include "IME/utility/ConsoleLogger.h"
 #include "IME/core/exceptions/Exceptions.h"
 #include <sstream>
 
@@ -39,7 +38,7 @@ namespace ime::utility {
         return hasCharacter(str, ' ').first;
     }
 
-    bool addProperty(PropertyContainer& container, std::string key, std::string type, std::string value) {
+    bool addProperty(PropertyContainer& container, const std::string& key, const std::string& type, const std::string& value) {
         auto property = Property(key);
         if (type == "STRING")
             property.setValue(value);

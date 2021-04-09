@@ -23,14 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ScrollablePanel.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/ScrollablePanel.hpp>
 
 namespace ime::ui {
     class ScrollablePanel::PanelImpl {
     public:
-        PanelImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit PanelImpl(const std::shared_ptr<tgui::Widget>& widget) :
            panel_{std::static_pointer_cast<tgui::ScrollablePanel>(widget)}
         {}
 
@@ -74,7 +73,7 @@ namespace ime::ui {
         return Ptr(new ScrollablePanel(width, height, contentSize));
     }
 
-    ScrollablePanel::Ptr ScrollablePanel::copy() {
+    ScrollablePanel::Ptr ScrollablePanel::copy() const {
         return std::static_pointer_cast<ScrollablePanel>(clone());
     }
 

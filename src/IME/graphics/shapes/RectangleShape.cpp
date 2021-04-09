@@ -29,8 +29,8 @@
 
 namespace ime {
     struct RectangleShape::RecShapeImpl {
-        explicit RecShapeImpl(std::shared_ptr<sf::Shape> shape) :
-            rectangle_{std::static_pointer_cast<sf::RectangleShape>(std::move(shape))}
+        explicit RecShapeImpl(const std::shared_ptr<sf::Shape>& shape) :
+            rectangle_{std::static_pointer_cast<sf::RectangleShape>(shape)}
         {}
 
         // Member data

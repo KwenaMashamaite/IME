@@ -77,7 +77,7 @@ namespace ime {
          * @see setValue
          */
         template<typename T>
-        T getValue(const std::string name) const;
+        T getValue(const std::string& name) const;
 
         /**
          * @brief Remove a property

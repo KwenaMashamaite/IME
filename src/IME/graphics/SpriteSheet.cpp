@@ -34,7 +34,7 @@ namespace ime {
         frameSize_{frameSize},
         spacing_{spacing}
     {
-        IME_ASSERT((frameSize.x >= 1 && frameSize.y >= 1), "The minimum size of a Spritesheet frame is 1x1");
+        IME_ASSERT((frameSize.x >= 1 && frameSize.y >= 1), "The minimum size of a Spritesheet frame is 1x1")
 
         //Remove the spacing to get the actual number of columns and rows
         auto numerator = getSize() - spacing_;
@@ -153,10 +153,10 @@ namespace ime {
         if (hasFrame(start) && hasFrame(end)) {
             if (start.row == end.row) {
                 for (auto colm = start.colm; colm <= end.colm; ++colm)
-                    sprites.push_back(Sprite(getTexture(), frames_.at({ start.row, colm})));
+                    sprites.emplace_back(getTexture(), frames_.at({ start.row, colm}));
             } else if (start.colm == end.colm) {
                 for (auto row = start.row; row <= end.row; ++row)
-                    sprites.push_back(Sprite(getTexture(), frames_.at({row, start.colm})));
+                    sprites.emplace_back(getTexture(), frames_.at({row, start.colm}));
             }
         }
         return sprites;

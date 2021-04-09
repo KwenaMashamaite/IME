@@ -144,7 +144,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~SeparatorRenderer();
+            ~SeparatorRenderer() override;
 
         private:
             tgui::SeparatorLineRenderer* separatorRenderer_; //!< Pointer to third party renderer

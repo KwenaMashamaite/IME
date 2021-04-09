@@ -72,7 +72,7 @@ namespace ime {
              *
              * @see clone
              */
-            Picture::Ptr copy();
+            Picture::Ptr copy() const;
 
             /**
              * @brief Create a new picture widget
@@ -162,7 +162,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Picture();
+            ~Picture() override;
 
         private:
             /**
@@ -180,7 +180,7 @@ namespace ime {
              *
              * By default, the widget is the same size as the image
              */
-            Picture(const std::string& filename, bool transparentTexture = true);
+            explicit Picture(const std::string& filename, bool transparentTexture = true);
 
             /**
              * @brief Create a picture from a certain parts of an image

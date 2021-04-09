@@ -43,7 +43,7 @@ namespace ime {
          *
          * @see setValue
          */
-        Property(const std::string& name);
+        explicit Property(const std::string& name);
 
         /**
          * @brief Constructor

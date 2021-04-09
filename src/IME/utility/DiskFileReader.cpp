@@ -46,6 +46,8 @@ namespace ime::utility {
             case WriteMode::Append:
                 outFile_.open(filename, std::ios::app);
                 break;
+            default:
+                break;
         }
 
         if (!outFile_.good())

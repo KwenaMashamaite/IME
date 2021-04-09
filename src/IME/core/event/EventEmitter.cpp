@@ -75,14 +75,14 @@ namespace ime {
         return false;
     }
 
-    int EventEmitter::getNumOfEventListenersFor(const std::string& event) const {
+    std::size_t EventEmitter::getEventListenerCount(const std::string& event) const {
         std::scoped_lock lock(mutex_);
         if (hasEvent(event))
             return eventList_.at(event).size();
-        return -1;
+        return 0;
     }
 
-    int EventEmitter::getNumberOfEvents() const {
+    std::size_t EventEmitter::getEventsCount() const {
         std::scoped_lock lock(mutex_);
         return eventList_.size();
     }

@@ -23,14 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/HorizontalLayout.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/HorizontalLayout.hpp>
 
 namespace ime::ui {
     class HorizontalLayout::HorizontalLayoutImpl {
     public:
-        HorizontalLayoutImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit HorizontalLayoutImpl(const std::shared_ptr<tgui::Widget>& widget) :
             layout_{std::static_pointer_cast<tgui::HorizontalLayout>(widget)}
         {}
 
@@ -69,7 +69,7 @@ namespace ime::ui {
         return Ptr(new HorizontalLayout(width, height));
     }
 
-    HorizontalLayout::Ptr HorizontalLayout::copy() {
+    HorizontalLayout::Ptr HorizontalLayout::copy() const {
         return std::static_pointer_cast<HorizontalLayout>(clone());
     }
 
@@ -90,7 +90,7 @@ namespace ime::ui {
     }
 
     void HorizontalLayout::insertWidget(std::size_t index,
-        std::shared_ptr<Widget> widget, const std::string &name)
+        const Widget::Ptr& widget, const std::string &name)
     {
         pimpl_->layout_->insert(index, std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
     }
@@ -107,7 +107,7 @@ namespace ime::ui {
         pimpl_->layout_->insertSpace(index, ratio);
     }
 
-    bool HorizontalLayout::setRatio(std::shared_ptr<Widget> widget, float ratio) {
+    bool HorizontalLayout::setRatio(const Widget::Ptr& widget, float ratio) {
         return pimpl_->layout_->setRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), ratio);
     }
 
@@ -115,7 +115,7 @@ namespace ime::ui {
         return pimpl_->layout_->setRatio(index, ratio);
     }
 
-    float HorizontalLayout::getRatio(std::shared_ptr<Widget> widget) const {
+    float HorizontalLayout::getRatio(const Widget::Ptr& widget) const {
         return pimpl_->layout_->getRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
     }
 

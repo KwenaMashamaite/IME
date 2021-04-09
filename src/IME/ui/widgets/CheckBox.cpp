@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/CheckBox.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/CheckBox.hpp>
 
 namespace ime::ui {
     class CheckBox::CheckBoxImpl {
     public:
-        CheckBoxImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit CheckBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
             checkbox_{std::static_pointer_cast<tgui::CheckBox>(widget)}
         {}
         
@@ -65,7 +65,7 @@ namespace ime::ui {
         return CheckBox::Ptr(new  CheckBox(text));
     }
 
-    CheckBox::Ptr CheckBox::copy() {
+    CheckBox::Ptr CheckBox::copy() const {
         return std::static_pointer_cast<CheckBox>(clone());
     }
 

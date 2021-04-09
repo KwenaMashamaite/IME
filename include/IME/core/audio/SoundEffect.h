@@ -203,7 +203,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~SoundEffect();
+            ~SoundEffect() override;
 
         private:
             struct Impl;

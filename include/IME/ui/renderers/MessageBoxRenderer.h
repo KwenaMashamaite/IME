@@ -335,7 +335,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~MessageBoxRenderer();
+            ~MessageBoxRenderer() override;
 
         private:
             tgui::MessageBoxRenderer* messageBoxRenderer_;

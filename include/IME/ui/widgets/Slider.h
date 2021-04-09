@@ -74,7 +74,7 @@ namespace ime {
              *
              * @see clone
              */
-            Slider::Ptr copy();
+            Slider::Ptr copy() const;
 
             /**
              * @brief Get the sliders renderer
@@ -232,7 +232,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Slider();
+            ~Slider() override;
 
         private:
             /**

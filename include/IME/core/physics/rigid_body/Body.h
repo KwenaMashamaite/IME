@@ -149,22 +149,16 @@ namespace ime {
         Collider::Ptr getColliderById(unsigned int id);
 
         /**
-         * @brief Remove a collider from the body
-         * @param collider The collider to be removed
+         * @brief Remove a collider with a given id from the body
+         * @param id The id of the collider to be removed
          *
-         * The mass of the body will be adjusted if the body is dynamic
+         * * The mass of the body will be adjusted if the body is dynamic
          * and the collider has a positive density
          *
          * @note All colliders attached to a body are destroyed when the
          * body is destroyed
          *
          * @warning This function is locked during world callbacks
-         */
-        void removeCollider(Collider::Ptr collider);
-
-        /**
-         * @brief Remove a collider with a given id
-         * @param id The id of the collider to be removed
          */
         void removeColliderWithId(unsigned int id);
 
@@ -617,7 +611,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void emitCollisionEvent(const std::string& event, Body::Ptr other);
+        void emitCollisionEvent(const std::string& event, const Body::Ptr& other);
 
         /**
          * @internal
@@ -636,7 +630,7 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        Body(WorldPtr world, Type bodyType);
+        Body(const WorldPtr& world, Type bodyType);
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body

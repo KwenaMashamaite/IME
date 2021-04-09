@@ -24,14 +24,14 @@
 
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
-#include "../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(World::Ptr world, Type bodyType) {
-        IME_ASSERT(world, "Cannot construct body from a nullptr");
+    Body::Body(const World::Ptr& world, Type bodyType) {
+        IME_ASSERT(world, "Cannot construct body from a nullptr")
         world_ = world;
 
         auto b2Definition = std::make_unique<b2BodyDef>();
@@ -84,45 +84,32 @@ namespace ime {
     }
 
     void Body::attachCollider(Collider::Ptr collider) {
-        IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body");
-        IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider");
+        IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body")
+        IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider")
         if (!world_->isLocked()) {
             collider->setBody(shared_from_this());
-            colliders_.insert({collider->getObjectId(), collider});
+            colliders_.insert({collider->getObjectId(), std::move(collider)});
             emit("attachCollider");
         } else {
-            IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback")
         }
     }
 
     Collider::Ptr Body::getColliderById(unsigned int id) {
         if (utility::findIn(colliders_, id))
-            return colliders_.at(id);
+            return colliders_.at(static_cast<int>(id));
         return nullptr;
     }
 
     void Body::removeColliderWithId(unsigned int id) {
         if (!world_->isLocked()) {
-            if (colliders_.find(id) != colliders_.end()) {
-                body_->DestroyFixture(colliders_[id]->fixture_.get());
-                colliders_.erase(id);
+            if (colliders_.find(static_cast<int>(id)) != colliders_.end()) {
+                body_->DestroyFixture(colliders_[static_cast<int>(id)]->fixture_.get());
+                colliders_.erase(static_cast<int>(id));
                 emit("removeCollider");
             }
         } else {
-            IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback");
-        }
-    }
-
-    void Body::removeCollider(Collider::Ptr collider) {
-        IME_ASSERT(collider, "RemoveCollider() called with a nullptr");
-        if (!world_->isLocked()) {
-            if (utility::findIn(colliders_, collider->getObjectId())) {
-                body_->DestroyFixture(colliders_[collider->getObjectId()]->fixture_.get());
-                colliders_.erase(collider->getObjectId());
-                emit("removeCollider");
-            }
-        } else {
-            IME_PRINT_WARNING("Operation ignored: removeCollider() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback")
         }
     }
 
@@ -287,7 +274,7 @@ namespace ime {
 
     void Body::setType(Type type) {
         if (world_->isLocked()) {
-            IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback")
             return;
         }
 
@@ -328,7 +315,7 @@ namespace ime {
 
     void Body::setEnabled(bool enable) {
         if (world_->isLocked()) {
-            IME_PRINT_WARNING("Operation ignored: setEnabled() called inside a world callback");
+            IME_PRINT_WARNING("Operation ignored: setEnabled() called inside a world callback")
             return;
         }
 
@@ -385,7 +372,7 @@ namespace ime {
         emit("collisionEnd");
     }
 
-    void Body::emitCollisionEvent(const std::string &event, Body::Ptr other) {
+    void Body::emitCollisionEvent(const std::string &event, const Body::Ptr& other) {
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(shared_from_this(), other);
         else if (event == "contactEnd" && onContactEnd_)

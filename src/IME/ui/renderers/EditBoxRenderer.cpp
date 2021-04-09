@@ -24,7 +24,7 @@
 
 #include "IME/ui/renderers/EditBoxRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Renderers/EditBoxRenderer.hpp>
 
 namespace ime::ui {

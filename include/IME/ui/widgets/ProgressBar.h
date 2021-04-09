@@ -84,7 +84,7 @@ namespace ime {
              *
              * @see clone
              */
-            ProgressBar::Ptr copy();
+            ProgressBar::Ptr copy() const;
 
             /**
              * @brief Get the progress bars renderer
@@ -207,7 +207,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~ProgressBar();
+            ~ProgressBar() override;
 
         private:
             /**

@@ -24,7 +24,7 @@
 
 #include "IME/ui/widgets/BitmapButton.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/BitmapButton.hpp>
 
 namespace ime::ui {
@@ -33,7 +33,7 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class BitmapButton::ButtonImpl {
     public:
-        ButtonImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
             button_{std::static_pointer_cast<tgui::BitmapButton>(widget)}
         {}
 
@@ -91,7 +91,7 @@ namespace ime::ui {
         return BitmapButton::Ptr(new BitmapButton(text));
     }
 
-    BitmapButton::Ptr BitmapButton::copy() {
+    BitmapButton::Ptr BitmapButton::copy() const {
         return std::static_pointer_cast<BitmapButton>(clone());
     }
 

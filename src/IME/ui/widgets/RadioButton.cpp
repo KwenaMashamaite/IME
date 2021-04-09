@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/RadioButton.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/RadioButton.hpp>
 
 namespace ime::ui {
     class RadioButton::ButtonImpl {
     public:
-        ButtonImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
             button_{std::static_pointer_cast<tgui::RadioButton>(widget)}
         {}
 
@@ -78,7 +78,7 @@ namespace ime::ui {
         return Ptr(new RadioButton(text));
     }
 
-    RadioButton::Ptr RadioButton::copy() {
+    RadioButton::Ptr RadioButton::copy() const {
         return std::static_pointer_cast<RadioButton>(clone());
     }
 

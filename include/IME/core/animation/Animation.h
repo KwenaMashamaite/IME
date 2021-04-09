@@ -404,7 +404,8 @@ namespace ime {
          * @brief Set the frame the animation should finish on
          * @param index The index of the frame the animation should finish on
          *
-         * Note that @a index will be ignored if it is out of bounds
+         * Note that @a index will be ignored if it is out of bounds. When set
+         * to a negative value, the animation will end on the last frame
          *
          * By default, the animation finishes on the last frame
          *
@@ -412,7 +413,7 @@ namespace ime {
          * then this function must be called every time a frame is removed
          * from the sequence
          */
-        void finishOnFrame(unsigned int index);
+        void finishOnFrame(int index);
 
         /**
          * @brief Set the animation to finish on the first frame

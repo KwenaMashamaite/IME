@@ -140,7 +140,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~PictureRenderer();
+            ~PictureRenderer() override;
 
         private:
             tgui::PictureRenderer* pictureRenderer_; //!< Pointer to third party renderer

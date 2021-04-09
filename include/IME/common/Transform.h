@@ -27,9 +27,9 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
+#include "IME/common/Property.h"
 #include <functional>
 #include <string>
-#include <any>
 
 namespace ime {
     /**
@@ -217,12 +217,12 @@ namespace ime {
          * @brief Add an event listener to a property change event
          * @param callback The function to be executed when a property changes
          *
-         * The callback is passed the name and the value of the property
-         * respectively. Pass nullptr to cancel the callback.
-         *
-         * @warning The value is passed as an std::any
+         * Note that only one callback may be registered at a time. The new
+         * callback overwrites the previous one. The callback is passed the
+         * property that changed on invocation. Pass nullptr to cancel the
+         * callback.
          */
-        void onPropertyChange(Callback<std::string, std::any> callback);
+        void onPropertyChange(Callback<const Property&> callback);
 
     private:
         Vector2f position_; //!< Position of the object in the 2D world
@@ -230,7 +230,7 @@ namespace ime {
         Vector2f origin_;   //!< Origin of translation/rotation/scaling of the object
         float rotation_;    //!< Orientation of the object, in degrees
 
-        Callback<std::string, std::any> onPropertyChange_; //!< A function executed when a property of the object changes
+        Callback<const Property&> onPropertyChange_; //!< A function executed when a property of the object changes
     };
 }
 

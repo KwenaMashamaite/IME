@@ -228,7 +228,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~MenuBarRenderer();
+            ~MenuBarRenderer() override;
             
         private:
             tgui::MenuBarRenderer* menuBarRenderer_; //!< Pointer to third party renderer

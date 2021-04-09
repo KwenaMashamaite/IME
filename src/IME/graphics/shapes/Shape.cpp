@@ -64,12 +64,12 @@ namespace ime {
     }
 
     void Shape::attachRigidBody(Body::Ptr body) {
-        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to a shape");
-        IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one");
-        body_ = body;
+        IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to a shape")
+        IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one")
+        body_ = std::move(body);
         setOrigin(getLocalBounds().width / 2.0f, getLocalBounds().height / 2.0f);
-        body->setPosition(getPosition());
-        body->setRotation(getRotation());
+        body_->setPosition(getPosition());
+        body_->setRotation(getRotation());
 
         // Synchronize the shape with its rigid body
         if (postStepId_ == -1) {

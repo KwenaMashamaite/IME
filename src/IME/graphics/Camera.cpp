@@ -23,8 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Camera.h"
-#include "WindowImpl.h"
-#include <SFML/Graphics/View.hpp>
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime {
     class Camera::CameraImpl {

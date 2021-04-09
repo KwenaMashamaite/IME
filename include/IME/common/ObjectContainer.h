@@ -189,18 +189,14 @@ namespace ime {
         /**
          * @brief Remove all objects with the given tag
          * @param tag Tag of the objects to be removed
-         * @return True if the objects were removed or false an object with
-         *         the the given tag does not exist in the container
          */
-        bool removeByTag(const std::string& tag);
+        void removeByTag(const std::string& tag);
 
         /**
          * @brief Remove a game object with the given id
          * @param id The id of the object to be removed
-         * @return True if the object was removed or false if an object with
-         *         the the given name does not exist in the container
          */
-        bool removeById(unsigned int id);
+        void removeById(unsigned int id);
 
         /**
          * @brief Remove an object from the container

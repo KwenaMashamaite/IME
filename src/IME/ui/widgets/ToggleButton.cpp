@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ToggleButton.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/ToggleButton.hpp>
 
 namespace ime::ui {
@@ -32,7 +32,7 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class ToggleButton::ButtonImpl {
     public:
-        ButtonImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
             button_{std::static_pointer_cast<tgui::ToggleButton>(widget)}
         {}
 
@@ -95,7 +95,7 @@ namespace ime::ui {
         return ToggleButton::Ptr(new ToggleButton(text, checked));
     }
 
-    ToggleButton::Ptr ToggleButton::copy() {
+    ToggleButton::Ptr ToggleButton::copy() const {
         return std::static_pointer_cast<ToggleButton>(clone());
     }
 

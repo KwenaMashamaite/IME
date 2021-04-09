@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/MessageBox.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/MessageBox.hpp>
 
 namespace ime::ui {
     class MessageBox::MessageBoxImpl {
     public:
-        MessageBoxImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit MessageBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
             messageBox_{std::static_pointer_cast<tgui::MessageBox>(widget)}
         {}
 
@@ -99,7 +99,7 @@ namespace ime::ui {
         return messageBox;
     }
 
-    MessageBox::Ptr MessageBox::copy() {
+    MessageBox::Ptr MessageBox::copy() const {
         return std::static_pointer_cast<MessageBox>(clone());
     }
 

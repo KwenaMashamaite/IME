@@ -23,14 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/VerticalLayout.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/VerticalLayout.hpp>
 
 namespace ime::ui {
     class VerticalLayout::VerticalLayoutImpl {
     public:
-        VerticalLayoutImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit VerticalLayoutImpl(const std::shared_ptr<tgui::Widget>& widget) :
             layout_{std::static_pointer_cast<tgui::VerticalLayout>(widget)}
         {}
 
@@ -67,7 +67,7 @@ namespace ime::ui {
         return VerticalLayout::Ptr(new VerticalLayout(width, height));
     }
 
-    VerticalLayout::Ptr VerticalLayout::copy() {
+    VerticalLayout::Ptr VerticalLayout::copy() const {
         return std::static_pointer_cast<VerticalLayout>(clone());
     }
 
@@ -83,7 +83,7 @@ namespace ime::ui {
         return "HorizontalLayout";
     }
 
-    void VerticalLayout::insertWidget(std::size_t index, std::shared_ptr<Widget> widget,
+    void VerticalLayout::insertWidget(std::size_t index, const Widget::Ptr& widget,
         const std::string &name)
     {
         pimpl_->layout_->insert(index, std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
@@ -101,7 +101,7 @@ namespace ime::ui {
         pimpl_->layout_->insertSpace(index, ratio);
     }
 
-    bool VerticalLayout::setRatio(std::shared_ptr<Widget> widget, float ratio) {
+    bool VerticalLayout::setRatio(const Widget::Ptr& widget, float ratio) {
         return pimpl_->layout_->setRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), ratio);
     }
 
@@ -109,7 +109,7 @@ namespace ime::ui {
         return pimpl_->layout_->setRatio(index, ratio);
     }
 
-    float VerticalLayout::getRatio(std::shared_ptr<Widget> widget) const {
+    float VerticalLayout::getRatio(const Widget::Ptr& widget) const {
         return pimpl_->layout_->getRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
     }
 

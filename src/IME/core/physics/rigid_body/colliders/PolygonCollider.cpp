@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/colliders/PolygonCollider.h"
-#include "../../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
@@ -66,12 +66,12 @@ namespace ime {
     }
 
     void PolygonCollider::set(const std::vector<Vector2f>& vertices) {
-        IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed");
+        IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed")
         b2Vec2 points[8]; // 8 is the maximum allowed and std::vector.size() is not a constexpr
         for (auto i = 0u; i < vertices.size(); i++)
             points[i].Set(utility::pixelsToMetres(vertices[i].x), utility::pixelsToMetres(vertices[i].y));
 
-        polygon_->Set(points, vertices.size());
+        polygon_->Set(points, static_cast<int32>(vertices.size()));
     }
 
     b2Shape& PolygonCollider::getInternalShape() {

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "../../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
@@ -71,8 +71,8 @@ namespace ime {
 
     void BoxCollider::setSize(float width, float height) {
         // The size constraints are from Box2d
-        IME_ASSERT(width >= 0.1f, "The width of the rectangle must be greater than or equal to the minimum value of 0.1f");
-        IME_ASSERT(height >= 0.1f, "The height of the rectangle must be greater than or equal to the minimum value of 0.1f");
+        IME_ASSERT(width >= 0.1f, "The width of the rectangle must be greater than or equal to the minimum value of 0.1f")
+        IME_ASSERT(height >= 0.1f, "The height of the rectangle must be greater than or equal to the minimum value of 0.1f")
 
         size_ = {width, height};
         box_->SetAsBox(utility::pixelsToMetres(width / 2.0f),

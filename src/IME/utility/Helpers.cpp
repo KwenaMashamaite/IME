@@ -22,15 +22,12 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Helpers.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/ui/widgets/WidgetContainer.h"
-#include "IME/core/input/Keyboard.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <TGUI/Font.hpp>
 #include <TGUI/Color.hpp>
 
 namespace ime::utility {
@@ -119,7 +116,7 @@ namespace ime::utility {
                             "Joysticks are not supported in IME v"
                             + std::to_string(IME_VERSION_MAJOR) + "."
                             + std::to_string(IME_VERSION_MINOR) + + "."
-                            + std::to_string(IME_VERSION_PATCH));
+                            + std::to_string(IME_VERSION_PATCH))
                         break;
                     case sf::Event::TouchBegan:
                     case sf::Event::TouchEnded:
@@ -150,7 +147,7 @@ namespace ime::utility {
                             "Sensors are not supported in IME v"
                             + std::to_string(IME_VERSION_MAJOR) + "."
                             + std::to_string(IME_VERSION_MINOR) + + "."
-                            + std::to_string(IME_VERSION_PATCH));
+                            + std::to_string(IME_VERSION_PATCH))
                         break;
                     default:
                         break;

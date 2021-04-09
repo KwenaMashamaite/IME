@@ -25,7 +25,7 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/audio/Music.h"
 #include "IME/core/audio/SoundEffect.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime::audio {
     AudioManager::AudioManager() :
@@ -84,7 +84,7 @@ namespace ime::audio {
         eventEmitter_.emit("muteChanged", isMuted_);
     }
 
-    float AudioManager::getVolumeFor(Type audioType) {
+    float AudioManager::getVolumeFor(Type audioType) const {
         switch (audioType) {
             case Type::Sfx:
                 return sfxVolume_;

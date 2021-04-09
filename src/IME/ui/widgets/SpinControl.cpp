@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/SpinControl.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/SpinControl.hpp>
 
 namespace ime::ui {
     class SpinControl::SpinControlImpl {
     public:
-        SpinControlImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit SpinControlImpl(const std::shared_ptr<tgui::Widget>& widget) :
             spinControl_{std::static_pointer_cast<tgui::SpinControl>(widget)}
         {}
 
@@ -73,7 +73,7 @@ namespace ime::ui {
         return Ptr(new SpinControl(minValue, maxValue, initialValue, decimal, step));
     }
 
-    SpinControl::Ptr SpinControl::copy() {
+    SpinControl::Ptr SpinControl::copy() const {
         return std::static_pointer_cast<SpinControl>(clone());
     }
 

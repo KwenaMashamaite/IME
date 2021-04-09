@@ -23,12 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
-#include "../../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/World.h"
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_world.h>
-#include <cmath>
 
 namespace ime {
     //////////////////////////////////////////////////////////////////////////
@@ -48,17 +47,17 @@ namespace ime {
     void DistanceJointDefinition::join(DistanceJointDefinition::BodyPtr body1,
         DistanceJointDefinition::BodyPtr body2, Vector2f anchorA, Vector2f anchorB)
     {
-        IME_ASSERT(body1, "Two bodies are needed for a joint to occur, Body A is a nullptr");
-        IME_ASSERT(body2, "Two bodies are needed for a joint to occur, Body B is a nullptr");
-        IME_ASSERT(body1 != body2, "Cannot self join, bodies to be joined must be different objects");
+        IME_ASSERT(body1, "Two bodies are needed for a joint to occur, Body A is a nullptr")
+        IME_ASSERT(body2, "Two bodies are needed for a joint to occur, Body B is a nullptr")
+        IME_ASSERT(body1 != body2, "Cannot self join, bodies to be joined must be different objects")
 
-        bodyA = body1;
-        bodyB = body2;
-        bodyALocalAnchorPoint = body1->getLocalPoint(anchorA);
-        bodyBLocalAnchorPoint = body2->getLocalPoint(anchorB);
+        bodyA = std::move(body1);
+        bodyB = std::move(body2);
+        bodyALocalAnchorPoint = bodyA->getLocalPoint(anchorA);
+        bodyBLocalAnchorPoint = bodyB->getLocalPoint(anchorB);
 
-        auto distance = anchorB - anchorA;
-        length = std::max(std::sqrt(distance.x * distance.x + distance.y * distance.y), b2_linearSlop);
+        Vector2f distance = anchorB - anchorA;
+        length = std::max(distance.magnitude(), b2_linearSlop);
         minLength = length;
         maxLength = length;
     }
@@ -67,10 +66,12 @@ namespace ime {
     // DistanceJoint class stuff
     //////////////////////////////////////////////////////////////////////////
 
-    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, World::Ptr world) {
-        IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr");
-        IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr");
-        IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects");
+    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, const World::Ptr& world) :
+        joint_{nullptr}
+    {
+        IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr")
+        IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr")
+        IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects")
 
         auto b2Definition = new b2DistanceJointDef();
         b2Definition->collideConnected = definition.areBodiesCollidable;
@@ -89,7 +90,8 @@ namespace ime {
                                       utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
 
         userData_ = definition.userData;
-        world->getInternalWorld()->CreateJoint(b2Definition);
+        joint_ = dynamic_cast<b2DistanceJoint*>(world->getInternalWorld()->CreateJoint(b2Definition));
+        IME_ASSERT(joint_, "Internal error: Failed to cast to b2DistanceJoint")
 
         // Cleanup
         delete b2Definition;

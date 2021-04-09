@@ -119,15 +119,15 @@ inline const typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(P
 }
 
 template <typename T>
-inline bool ObjectContainer<T>::removeByTag(const std::string& tag) {
-    return removeIf([&tag](const constObjectPtr object) {
+inline void ObjectContainer<T>::removeByTag(const std::string& tag) {
+    removeIf([&tag](const constObjectPtr object) {
         return object->getTag() == tag;
     });
 }
 
 template <typename T>
-inline bool ObjectContainer<T>::removeById(unsigned int id) {
-    return removeIf([id](const constObjectPtr object) {
+inline void ObjectContainer<T>::removeById(unsigned int id) {
+    removeIf([id](const constObjectPtr object) {
         return object->getObjectId() == id;
     });
 }

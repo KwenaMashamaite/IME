@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Separator.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/SeparatorLine.hpp>
 
 namespace ime::ui {
@@ -37,7 +37,7 @@ namespace ime::ui {
         return Ptr(new Separator());
     }
 
-    Separator::Ptr Separator::copy() {
+    Separator::Ptr Separator::copy() const {
         return std::static_pointer_cast<Separator>(clone());
     }
 

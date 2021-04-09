@@ -621,7 +621,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Widget();
+            ~Widget() override;
 
         protected:
             /**

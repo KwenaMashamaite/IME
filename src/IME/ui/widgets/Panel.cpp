@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Panel.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Panel.hpp>
 
 namespace ime::ui {
@@ -39,7 +39,7 @@ namespace ime::ui {
         return Panel::Ptr(new Panel(width, height));
     }
 
-    Panel::Ptr Panel::copy() {
+    Panel::Ptr Panel::copy() const {
         return std::static_pointer_cast<Panel>(clone());
     }
 

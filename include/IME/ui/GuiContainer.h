@@ -309,7 +309,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(Widget::Ptr widget,
+            bool addWidget(const Widget::Ptr& widget,
                 const std::string& widgetName);
 
             /**
@@ -439,7 +439,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetForward(Widget::Ptr widget);
+            size_t moveWidgetForward(const Widget::Ptr& widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -447,7 +447,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            size_t moveWidgetBackward(Widget::Ptr widget);
+            size_t moveWidgetBackward(const Widget::Ptr& widget);
 
             /**
              * @brief Destructor

@@ -28,9 +28,15 @@
 #include "IME/graphics/Window.h"
 
 namespace ime {
-    void SceneManager::pushScene(std::shared_ptr<Scene> scene, bool enterScene) {
-        IME_ASSERT(scene, "Cannot add nullptr as a state");
-        IME_ASSERT(!scene->isManaged_, R"(Scene )" + scene->getTag() + R"( is already owned by a scene manager)");
+    namespace {
+        // Iterations recommended by Box2d
+        const unsigned int VELOCITY_ITERATIONS = 8;
+        const unsigned int POSITION_ITERATIONS = 3;
+    }
+
+    void SceneManager::pushScene(Scene::Ptr scene, bool enterScene) {
+        IME_ASSERT(scene, "Cannot add nullptr as a state")
+        IME_ASSERT(!scene->isManaged_, R"(Scene )" + scene->getTag() + R"( is already owned by a scene manager)")
         if (!scenes_.empty()) {
             prevScene_ = scenes_.top();
             if (scenes_.top()->isEntered()) {
@@ -173,9 +179,9 @@ namespace ime {
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
 
             if (fixedUpdate && scene->world_->isFixedStep()) {
-                scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
+                scene->world_->update(deltaTime * scene->getTimescale(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
             } else if (!fixedUpdate && !scene->world_->isFixedStep())
-                scene->world_->update(deltaTime * scene->getTimescale(), 8, 3);
+                scene->world_->update(deltaTime * scene->getTimescale(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
             scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
@@ -189,12 +195,12 @@ namespace ime {
                 scene->tileMap_->update(deltaTime);
 
             //Update game objects - By default, the game object updates its sprite animation
-            scene->gameObjects().forEach([&scene, &deltaTime](GameObject::Ptr gameObject) {
+            scene->gameObjects().forEach([&scene, &deltaTime](const GameObject::Ptr& gameObject) {
                 gameObject->update(deltaTime * scene->getTimescale());
             });
 
             // Update sprite animations
-            scene->sprites().forEach([&scene, &deltaTime](Sprite::Ptr sprite) {
+            scene->sprites().forEach([&scene, &deltaTime](const Sprite::Ptr& sprite) {
                 sprite->updateAnimation(deltaTime * scene->getTimescale());
             });
 

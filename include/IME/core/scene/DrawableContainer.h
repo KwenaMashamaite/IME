@@ -59,7 +59,7 @@ namespace ime {
          * Note that the container keeps the pointer so there's no need to
          * keep your pointer after adding the drawable object
          */
-        void add(std::shared_ptr<T> drawable, unsigned int renderOrder = 0u,
+        void add(std::shared_ptr<T> drawable, int renderOrder = 0u,
             const std::string& renderLayer = "default");
 
     private:

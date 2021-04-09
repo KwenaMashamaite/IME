@@ -23,12 +23,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/tilemap/RandomGridMover.h"
-#include "IME/graphics/Tile.h"
 #include "IME/utility/Utils.h"
 
 namespace ime {
     RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject::Ptr target) :
-        GridMover(Type::Random, tileMap, target),
+        GridMover(Type::Random, tileMap, std::move(target)),
         currDirection_(Unknown),
         prevDirection_(Unknown),
         movementStarted_{false},
@@ -106,7 +105,7 @@ namespace ime {
 
     void RandomGridMover::setNonDiagonalMoveOnly(bool nonDiagMoveOnly) {
         if (nonDiagMoveOnly) {
-            IME_ASSERT(isNonDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement");
+            IME_ASSERT(isNonDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement")
         }
         isDiagonalMoveEnabled_ = !nonDiagMoveOnly;
     }
@@ -117,7 +116,7 @@ namespace ime {
 
     void RandomGridMover::setDiagonalMoveOnly(bool diagonalMoveOnly) {
         if (diagonalMoveOnly) {
-            IME_ASSERT(isDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement");
+            IME_ASSERT(isDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement")
         }
         isNonDiagonalMoveEnabled_ = !diagonalMoveOnly;
     }
@@ -176,7 +175,7 @@ namespace ime {
 
     void RandomGridMover::enableAdvancedMovement(bool enable) {
         if (!isAdvance_ && enable) {
-            IME_ASSERT(targetGridMover_.getTarget(), "Cannot enable advanced movement without a target");
+            IME_ASSERT(targetGridMover_.getTarget(), "Cannot enable advanced movement without a target")
             if (isTargetMoving())
                 switchToAdvanced_ = true;
             else {

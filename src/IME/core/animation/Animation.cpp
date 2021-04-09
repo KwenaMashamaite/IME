@@ -29,11 +29,10 @@ namespace ime {
     namespace {
         // If the frame rate or the duration of the animation is unspecified,
         // it is set to this value
-        static const auto defaultFrameRate = 24u;
+        const auto defaultFrameRate = 24u;
     }
 
-    Animation::Animation(const std::string& name, const SpriteSheet& spriteSheet,
-             Time duration) :
+    Animation::Animation(const std::string& name, const SpriteSheet&  spriteSheet, Time duration) :
          name_{name},
          spriteSheet_{spriteSheet},
          duration_{duration},
@@ -132,8 +131,7 @@ namespace ime {
         return isHiddenOnComplete_;
     }
 
-    void Animation::addFrames(Index startPos, unsigned int numOfFrames, FrameArrangement arrangement)
-    {
+    void Animation::addFrames(Index startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
         auto newFrames = std::vector<Frame>{};
         if (arrangement == FrameArrangement::Horizontal)
             newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, (startPos.colm + static_cast<int>(numOfFrames)) - 1});
@@ -216,7 +214,7 @@ namespace ime {
         frames_.clear();
     }
 
-    void Animation::finishOnFrame(unsigned int index) {
+    void Animation::finishOnFrame(int index) {
         if (hasFrameAtIndex(index))
             completionFrame_ = index;
     }
@@ -226,8 +224,8 @@ namespace ime {
     }
 
     void Animation::finishOnLastFrame() {
-        // We don't use frames_.size() - 1 here because more frames may be added
-        // after this function is called
+        // We don't use frames_.size() - 1 here because frames may be added or
+        // removed after this function is called
         completionFrame_ = -1;
     }
 

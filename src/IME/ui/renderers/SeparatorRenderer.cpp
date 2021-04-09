@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/renderers/SeparatorRenderer.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Renderers/SeparatorLineRenderer.hpp>
 
 namespace ime::ui {

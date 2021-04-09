@@ -92,7 +92,7 @@ namespace ime {
              *
              * @see clone
              */
-            Label::Ptr copy();
+            Label::Ptr copy() const;
 
             /**
              * @brief Get the labels renderer
@@ -216,6 +216,11 @@ namespace ime {
              * @return The type of the widget
              */
             std::string getWidgetType() const override;
+
+            /**
+             * @brief Destructor
+             */
+            ~Label() override;
 
         private:
             /**

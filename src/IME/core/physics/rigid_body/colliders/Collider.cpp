@@ -24,10 +24,8 @@
 
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include "IME/core/physics/rigid_body/Body.h"
-#include "../../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_fixture.h>
-#include <box2d/b2_polygon_shape.h>
-#include <box2d/b2_settings.h>
 
 namespace ime {
     Collider::Collider(Collider::Type type) :
@@ -70,7 +68,7 @@ namespace ime {
     }
 
     void Collider::setBody(Body::Ptr body) {
-        IME_ASSERT(body, "A body attached to a collider cannot be a nullptr");
+        IME_ASSERT(body, "A body attached to a collider cannot be a nullptr")
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
         b2FixtureDefinition->density = 1.0f;
@@ -136,7 +134,7 @@ namespace ime {
     }
 
     void Collider::setDensity(float density) {
-        IME_ASSERT(density >= 0, "A collider cannot have a negative density");
+        IME_ASSERT(density >= 0, "A collider cannot have a negative density")
         fixture_->SetDensity(density);
         body_->getInternalBody()->ResetMassData();
         emitChange(Property{"density", density});

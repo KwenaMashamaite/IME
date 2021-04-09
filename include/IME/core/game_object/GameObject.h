@@ -338,7 +338,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void emitCollisionEvent(const std::string& event, GameObject::Ptr other);
+        void emitCollisionEvent(const std::string& event, const GameObject::Ptr& other);
 
         /**
          * @brief Destructor

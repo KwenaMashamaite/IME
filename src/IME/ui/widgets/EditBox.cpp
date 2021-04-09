@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/EditBox.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/EditBox.hpp>
 
 namespace ime::ui {
     class EditBox::EditBoxImpl {
     public:
-        EditBoxImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit EditBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
             editbox_{std::static_pointer_cast<tgui::EditBox>(widget)}
         {}
         
@@ -74,7 +74,7 @@ namespace ime::ui {
         return Ptr(new EditBox(defaultText));
     }
 
-    EditBox::Ptr EditBox::copy() {
+    EditBox::Ptr EditBox::copy() const {
         return std::static_pointer_cast<EditBox>(clone());
     }
 

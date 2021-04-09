@@ -72,7 +72,7 @@ namespace ime {
              * @brief Create a copy of this widget
              * @return A copy of this widget
              */
-            ToggleButton::Ptr copy();
+            ToggleButton::Ptr copy() const;
 
             /**
              * @brief Get the buttons renderer
@@ -134,7 +134,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~ToggleButton();
+            ~ToggleButton() override;
 
         private:
             /**

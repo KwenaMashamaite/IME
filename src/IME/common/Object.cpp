@@ -26,7 +26,7 @@
 
 namespace ime {
     namespace {
-        auto static objectIdCounter = 0u;
+        auto objectIdCounter = 0u;
     }
 
     Object::Object() :

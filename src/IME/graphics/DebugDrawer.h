@@ -100,7 +100,7 @@ namespace ime {
             /**
             * @brief Destructor
             */
-            ~DebugDrawer();
+            ~DebugDrawer() override;
 
         private:
             Window& window_; //!< Debug render window

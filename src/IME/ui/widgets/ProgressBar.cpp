@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/ProgressBar.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/ProgressBar.hpp>
 
 namespace ime::ui {
     class ProgressBar::ProgressBarImpl {
     public:
-        ProgressBarImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit ProgressBarImpl(const std::shared_ptr<tgui::Widget>& widget) :
             progressBar_{std::static_pointer_cast<tgui::ProgressBar>(widget)}
         {}
 
@@ -70,7 +70,7 @@ namespace ime::ui {
         return Ptr(new ProgressBar(text));
     }
 
-    ProgressBar::Ptr ProgressBar::copy() {
+    ProgressBar::Ptr ProgressBar::copy() const {
         return std::static_pointer_cast<ProgressBar>(clone());
     }
 

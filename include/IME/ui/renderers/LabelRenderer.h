@@ -264,7 +264,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~LabelRenderer();
+            ~LabelRenderer() override;
 
         private:
             tgui::LabelRenderer* labelRenderer_; //!< Pointer to third party renderer

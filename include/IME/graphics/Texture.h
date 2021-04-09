@@ -59,7 +59,7 @@ namespace ime {
          *
          * @see getMaximumSize
          */
-        Texture(const std::string& filename, const UIntRect& area = UIntRect());
+        explicit Texture(const std::string& filename, const UIntRect& area = UIntRect());
 
         /**
          * @brief Get the size of the texture

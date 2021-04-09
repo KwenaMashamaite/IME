@@ -159,16 +159,16 @@ namespace ime {
          * @brief Get the number of event listeners currently registered to
          *        an event
          * @param event Event to get number of event listeners for
-         * @return The number of event listeners registered to an event or -1
+         * @return The number of event listeners registered to an event or 0
          *         if no such event exists
          */
-        int getNumOfEventListenersFor(const std::string& event) const;
+        std::size_t getEventListenerCount(const std::string& event) const;
 
         /**
          * @brief Get the current number of created events
          * @return Current umber of events
          */
-        int getNumberOfEvents() const;
+        std::size_t getEventsCount() const;
 
         /**
          * @brief Check if an event has a certain event listener

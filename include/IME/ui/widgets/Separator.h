@@ -75,7 +75,7 @@ namespace ime {
              *
              * @see clone
              */
-            Separator::Ptr copy();
+            Separator::Ptr copy() const;
 
             /**
              * @brief Get the separators renderer
@@ -110,7 +110,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Separator() = default;
+            ~Separator() override = default;
 
         private:
             /**

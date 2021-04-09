@@ -119,7 +119,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~AABB();
+        ~AABB() override;
 
     private:
         b2AABB* aabb_; //!< Internal AABB

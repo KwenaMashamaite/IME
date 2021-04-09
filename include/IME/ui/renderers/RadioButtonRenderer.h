@@ -601,7 +601,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~RadioButtonRenderer();
+            ~RadioButtonRenderer() override;
 
         private:
             tgui::RadioButtonRenderer* buttonRenderer_; //!< Pointer to third party button

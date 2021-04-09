@@ -24,9 +24,8 @@
 
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/Window.h"
-#include "../utility/Helpers.h"
-#include "WindowImpl.h"
-#include "IME/core/resources/ResourceManager.h"
+#include "IME/utility/Helpers.h"
+#include "IME/graphics/WindowImpl.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 

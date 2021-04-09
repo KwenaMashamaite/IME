@@ -206,7 +206,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Music();
+            ~Music() override;
 
         private:
             struct Impl;

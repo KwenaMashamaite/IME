@@ -76,7 +76,7 @@ namespace ime {
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(Widget::Ptr widget, const std::string& name);
+            bool addWidget(const Widget::Ptr& widget, const std::string& name);
             
             /**
              * @brief Get access to a widget in the container
@@ -139,14 +139,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToFront(Widget::Ptr widget);
+            void moveWidgetToFront(const Widget::Ptr& widget);
 
             /**
              * @brief Place a widget behind all other widgets, to the back
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToBack(Widget::Ptr widget);
+            void moveWidgetToBack(const Widget::Ptr& widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -154,7 +154,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetForward(Widget::Ptr widget);
+            std::size_t moveWidgetForward(const Widget::Ptr& widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -162,7 +162,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetBackward(Widget::Ptr widget);
+            std::size_t moveWidgetBackward(const Widget::Ptr& widget);
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -213,7 +213,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~WidgetContainer();
+            ~WidgetContainer() override;
 
         private:
             class WidgetContainerImpl;

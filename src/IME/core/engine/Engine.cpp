@@ -37,10 +37,10 @@ namespace ime {
                 return;
             else if (!settings.hasProperty(setting)) {
                 settings.addProperty({setting, std::forward<T>(defaultValue)});
-                IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)");
+                IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)")
             } else {
                 settings.setValue<T>(setting, std::forward<T>(defaultValue));
-                IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)");
+                IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)")
             }
         }
     }
@@ -50,7 +50,7 @@ namespace ime {
     {
         //@TODO - Fix engine throwing std::bad_cast during initialization
         //        when constructed with this constructor
-        settings_ = std::move(settings);
+        settings_ = settings;
     }
 
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
@@ -76,7 +76,7 @@ namespace ime {
     }
 
     void Engine::loadSettings() {
-        settings_ = utility::ConfigFileParser().parse(settingFile_);
+        settings_ = utility::ConfigFileParser::parse(settingFile_);
     }
 
     void Engine::processSettings() {
@@ -142,12 +142,12 @@ namespace ime {
 
     void Engine::run() {
         if (isRunning_) {
-            IME_PRINT_WARNING("Engine cannot be rerun while it is running, stop it first then call 'run' again");
+            IME_PRINT_WARNING("Engine cannot be rerun while it is running, stop it first then call 'run' again")
             return;
         }
 
-        IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized");
-        IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states");
+        IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized")
+        IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states")
 
         // Initialize scenes that were added to the engine before it was ran. Scenes
         // that are added while the engine is running are initialized before they are
@@ -208,7 +208,7 @@ namespace ime {
     }
 
     void Engine::pushScene(std::shared_ptr<Scene> scene, Callback<> callback) {
-        IME_ASSERT(scene, "A scene pushed to the engine cannot be a nullptr");
+        IME_ASSERT(scene, "A scene pushed to the engine cannot be a nullptr")
         if (!isRunning_)
             sceneManager_.pushScene(std::move(scene));
         else

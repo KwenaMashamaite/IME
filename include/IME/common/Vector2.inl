@@ -38,12 +38,12 @@ inline Vector2<T>::Vector2(const Vector2<U>& vector) :
 
 template <typename T>
 inline float Vector2<T>::magnitude() const {
-    return sqrt(pow(x, 2) + pow(y, 2));
+    return static_cast<float>(std::sqrt(std::pow(x, 2.0f) + std::pow(y, 2.0f)));
 }
 
 template <typename T>
 inline float Vector2<T>::dot(const Vector2<T>& otherVec) const {
-    return x * otherVec.x + y * otherVec.y;
+    return static_cast<float>(x * otherVec.x + y * otherVec.y);
 }
 
 template <typename T>

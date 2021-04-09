@@ -23,14 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/TabsContainer.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/TabContainer.hpp>
 #include <unordered_map>
 
 namespace ime::ui {
     class TabsContainer::TabsContainerImpl {
     public:
-        TabsContainerImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit TabsContainerImpl(const std::shared_ptr<tgui::Widget>& widget) :
             tabContainer_{std::static_pointer_cast<tgui::TabContainer>(widget)}
         {}
 
@@ -73,7 +73,7 @@ namespace ime::ui {
         return Ptr(new TabsContainer(width, height));
     }
 
-    TabsContainer::Ptr TabsContainer::copy() {
+    TabsContainer::Ptr TabsContainer::copy() const {
         return std::static_pointer_cast<TabsContainer>(clone());
     }
 

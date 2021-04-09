@@ -25,7 +25,7 @@
 #include "IME/core/input/Mouse.h"
 #include "IME/core/event/Event.h"
 #include "IME/graphics/Window.h"
-#include "../../graphics/WindowImpl.h"
+#include "IME/graphics/WindowImpl.h"
 #include <SFML/Window/Mouse.hpp>
 
 namespace ime::input {

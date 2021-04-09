@@ -73,7 +73,7 @@ namespace ime {
              *
              * @see clone
              */
-            RadioButton::Ptr copy();
+            RadioButton::Ptr copy() const;
 
             /**
              * @brief Get the buttons renderer
@@ -148,7 +148,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~RadioButton();
+            ~RadioButton() override;
 
         private:
             /**

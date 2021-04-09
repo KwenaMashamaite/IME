@@ -73,7 +73,7 @@ namespace ime {
              *
              * @see clone
              */
-            CheckBox::Ptr copy();
+            CheckBox::Ptr copy() const;
 
             /**
              * @brief Get the checkboxes renderer
@@ -150,7 +150,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~CheckBox();
+            ~CheckBox() override;
 
         private:
             /**

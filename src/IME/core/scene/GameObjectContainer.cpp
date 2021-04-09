@@ -29,16 +29,16 @@ namespace ime {
         renderLayers_{renderLayers}
     {}
 
-    void GameObjectContainer::add(GameObject::Ptr gameObject, unsigned int renderOrder,
+    void GameObjectContainer::add(GameObject::Ptr gameObject, int renderOrder,
         const std::string &renderLayer)
     {
         add("none", std::move(gameObject), renderOrder, renderLayer);
     }
 
     void GameObjectContainer::add(const std::string &group, GameObject::Ptr gameObject,
-        unsigned int renderOrder, const std::string &renderLayer)
+        int renderOrder, const std::string &renderLayer)
     {
-        IME_ASSERT(gameObject, "Cannot add nullptr to a GameObjectContainer");
+        IME_ASSERT(gameObject, "Cannot add nullptr to a GameObjectContainer")
         renderLayers_.get().add(gameObject->getSprite(), renderOrder, renderLayer);
         addObject(std::move(gameObject), group);
     }

@@ -32,10 +32,6 @@ namespace ime {
         }
     }
 
-    GridMover::GridMover(TileMap& tilemap, GameObject::Ptr gameObject) :
-        GridMover(Type::Manual, tilemap, gameObject)
-    {}
-
     GridMover::GridMover(Type type, TileMap &tileMap, GameObject::Ptr target) :
         type_{type},
         tileMap_(tileMap),
@@ -45,8 +41,12 @@ namespace ime {
         prevTile_{tileMap.getTileSize(), Vector2f{0, 0}},
         isMoving_{false}
     {
-        setTarget(target);
+        setTarget(std::move(target));
     }
+
+    GridMover::GridMover(TileMap& tilemap, GameObject::Ptr gameObject) :
+        GridMover(Type::Manual, tilemap, std::move(gameObject))
+    {}
 
     std::string GridMover::getClassType() const {
         return "GridMover";
@@ -56,9 +56,9 @@ namespace ime {
         if (target_ == target)
             return;
         else if (target) {
-            IME_ASSERT(target->hasRigidBody(), "Game objects controlled by a grid mover must have a rigid body attached to them");
-            IME_ASSERT(target->getRigidBody()->getType() == Body::Type::Kinematic, "A grid mover can only control game objects with a Body::Type::Kinematic rigid body");
-            IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover");
+            IME_ASSERT(target->hasRigidBody(), "Game objects controlled by a grid mover must have a rigid body attached to them")
+            IME_ASSERT(target->getRigidBody()->getType() == Body::Type::Kinematic, "A grid mover can only control game objects with a Body::Type::Kinematic rigid body")
+            IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover")
 
             if (target_)
                 teleportTargetToDestination();
@@ -105,10 +105,10 @@ namespace ime {
     }
 
     bool GridMover::requestDirectionChange(const Direction& newDir) {
-        IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first");
+        IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first")
 
         if (!isSupportedDirection(newDir)) {
-            IME_PRINT_WARNING("Direction not changed - A grid mover only works with these directions: W, NW, N, NE, E, SE, S, SW");
+            IME_PRINT_WARNING("Direction not changed - A grid mover only works with these directions: W, NW, N, NE, E, SE, S, SW")
             return false;
         }
 
@@ -127,17 +127,14 @@ namespace ime {
 
     void GridMover::update(Time deltaTime) {
         if (target_) {
-            IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover");
-            IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover");
-            IME_ASSERT(target_->getRigidBody()->getType() == Body::Type::Kinematic, "The targets rigid body was changed from Body::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body");
+            IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
+            IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover")
+            IME_ASSERT(target_->getRigidBody()->getType() == Body::Type::Kinematic, "The targets rigid body was changed from Body::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body")
 
             if (!isTargetMoving() && targetDirection_ != Unknown) {
                 setTargetTile();
 
-                // Prevent target from moving to a tile that results in a collision
-                if (handleGridBorderCollision())
-                    return;
-                else if (target_->isCollidable() && (handleSolidTileCollision() || handleObstacleCollision()))
+                if (handleGridBorderCollision() || (target_->isCollidable() && (handleSolidTileCollision() || handleObstacleCollision())))
                     return;
 
                 currentDirection_ = targetDirection_;
@@ -189,7 +186,7 @@ namespace ime {
 
     std::pair<bool, GameObject::Ptr> GridMover::targetTileHasObstacle() {
         GameObject::Ptr obstacle;
-        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](GameObject::Ptr child) {
+        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](const GameObject::Ptr& child) {
             if (child->getType() == GameObject::Type::Obstacle && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
@@ -227,7 +224,7 @@ namespace ime {
     }
 
     void GridMover::onDestinationReached() {
-        tileMap_.forEachChildInTile(targetTile_, [this](GameObject::Ptr gameObject) {
+        tileMap_.forEachChildInTile(targetTile_, [this](const GameObject::Ptr& gameObject) {
             if (target_->isCollidable() && gameObject->isCollidable()) {
                 switch (gameObject->getType()) {
                     case GameObject::Type::Player:
@@ -323,7 +320,7 @@ namespace ime {
     }
 
     void GridMover::onTargetTileReset(Callback<Tile> callback) {
-        eventEmitter_.addEventListener("targetTileReset", callback);
+        eventEmitter_.addEventListener("targetTileReset", std::move(callback));
     }
 
     bool GridMover::removeEventListener(const std::string &event, int id) {

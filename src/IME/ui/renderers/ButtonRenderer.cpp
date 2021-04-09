@@ -24,7 +24,7 @@
 
 #include "IME/ui/renderers/ButtonRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Renderers/ButtonRenderer.hpp>
 
 namespace ime::ui {

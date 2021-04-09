@@ -23,13 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/Tabs.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Tabs.hpp>
 
 namespace ime::ui {
     class Tabs::TabsImpl {
     public:
-        TabsImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit TabsImpl(const std::shared_ptr<tgui::Widget>& widget) :
             tabs_{std::static_pointer_cast<tgui::Tabs>(widget)}
         {}
 
@@ -69,7 +69,7 @@ namespace ime::ui {
         return Ptr(new Tabs());
     }
 
-    Tabs::Ptr Tabs::copy() {
+    Tabs::Ptr Tabs::copy() const {
         return std::static_pointer_cast<Tabs>(clone());
     }
 

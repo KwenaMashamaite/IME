@@ -24,13 +24,13 @@
 
 #include "IME/ui/widgets/Picture.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "WidgetImpl.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Widgets/Picture.hpp>
 
 namespace ime::ui {
     class Picture::PictureImpl {
     public:
-        PictureImpl(std::shared_ptr<tgui::Widget> widget) :
+        explicit PictureImpl(const std::shared_ptr<tgui::Widget>& widget) :
             picture_{std::static_pointer_cast<tgui::Picture>(widget)}
         {}
 
@@ -93,7 +93,7 @@ namespace ime::ui {
         return Ptr(new Picture());
     }
 
-    Picture::Ptr Picture::copy() {
+    Picture::Ptr Picture::copy() const {
         return std::static_pointer_cast<Picture>(clone());
     }
 

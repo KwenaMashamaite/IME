@@ -59,7 +59,7 @@ namespace ime {
          * @note The container keeps the pointer so there is no need to keep
          * your pointer after the game object is added
          */
-        void add(GameObject::Ptr gameObject, unsigned int renderOrder = 0u,
+        void add(GameObject::Ptr gameObject, int renderOrder = 0u,
              const std::string& renderLayer = "default");
 
         /**
@@ -81,7 +81,7 @@ namespace ime {
          * your pointer after the game object is added
          */
         void add(const std::string& group, GameObject::Ptr gameObject,
-             unsigned int renderOrder = 0u, const std::string& renderLayer = "default");
+             int renderOrder = 0u, const std::string& renderLayer = "default");
 
     private:
         std::reference_wrapper<RenderLayerContainer> renderLayers_;

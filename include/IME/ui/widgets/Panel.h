@@ -86,7 +86,7 @@ namespace ime {
              *
              * @see clone
              */
-            Panel::Ptr copy();
+            Panel::Ptr copy() const;
 
             /**
              * @brief Get the panels renderer
@@ -121,7 +121,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Panel() = default;
+            ~Panel() override = default;
 
         private:
             /**

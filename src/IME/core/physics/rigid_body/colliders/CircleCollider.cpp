@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/colliders/CircleCollider.h"
-#include "../../../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <box2d/b2_circle_shape.h>
 
 namespace ime {

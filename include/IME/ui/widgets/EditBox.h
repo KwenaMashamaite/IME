@@ -73,7 +73,7 @@ namespace ime {
              *
              * @see clone
              */
-            EditBox::Ptr copy();
+            EditBox::Ptr copy() const;
 
             /**
              * @brief Get the labels renderer
@@ -217,7 +217,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~EditBox();
+            ~EditBox() override;
 
         private:
             /**

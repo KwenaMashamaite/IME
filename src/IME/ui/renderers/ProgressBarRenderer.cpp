@@ -25,7 +25,7 @@
 #include "IME/ui/renderers/ProgressBarRenderer.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
-#include "../../utility/Helpers.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Renderers/ProgressBarRenderer.hpp>
 
 namespace ime::ui {

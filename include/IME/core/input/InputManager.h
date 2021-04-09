@@ -48,7 +48,7 @@ namespace ime {
              *
              * This function checks the state of the key in real time
              */
-            bool isKeyPressed(Keyboard::Key key) const;
+            static bool isKeyPressed(Keyboard::Key key) ;
 
             /**
              * @brief Add an event listener to a key up event
@@ -107,7 +107,7 @@ namespace ime {
              *
              * This function checks the state of a mouse button in real time
              */
-            bool isMouseDown(Mouse::Button button) const;
+            static bool isMouseDown(Mouse::Button button) ;
 
             /**
              * @brief Add an event listener to a mouse button up event

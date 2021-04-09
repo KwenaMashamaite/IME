@@ -193,7 +193,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~ScrollablePanelRenderer();
+            ~ScrollablePanelRenderer() override;
 
         private:
             tgui::ScrollablePanelRenderer* panelRenderer_; //!< The internal renderer

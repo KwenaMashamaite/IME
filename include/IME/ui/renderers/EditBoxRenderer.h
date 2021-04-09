@@ -469,7 +469,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~EditBoxRenderer();
+            ~EditBoxRenderer() override;
 
         private:
             tgui::EditBoxRenderer* editBoxRenderer_; //!< Pointer to third party edit box renderer

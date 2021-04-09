@@ -74,7 +74,7 @@ namespace ime {
              *
              * @see clone
              */
-            MenuBar::Ptr copy();
+            MenuBar::Ptr copy() const;
 
             /**
              * @brief Make a copy of this widget
@@ -358,7 +358,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~MenuBar();
+            ~MenuBar() override;
 
         private:
             /**

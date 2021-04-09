@@ -331,7 +331,7 @@ namespace ime {
         template <typename T>
         class WidgetImpl : public IWidgetImpl {
         public:
-            WidgetImpl(std::shared_ptr<T> widget) :
+            explicit WidgetImpl(std::shared_ptr<T> widget) :
                 widget_{std::move(widget)}
             {}
 
@@ -368,7 +368,7 @@ namespace ime {
             }
 
             void setRenderer(ui::IWidgetRenderer::Ptr renderer) override {
-                IME_ASSERT(renderer, "Cannot set nullptr as renderer");
+                IME_ASSERT(renderer, "Cannot set nullptr as renderer")
                 renderer_ = std::move(renderer);
                 renderer_->setInternalPtr(widget_->getRenderer());
                 widget_->setRenderer(renderer_->getInternalPtr()->getData());
@@ -531,7 +531,7 @@ namespace ime {
                 return widget_;
             }
 
-            ~WidgetImpl() = default;
+            ~WidgetImpl() override = default;
 
         private:
             std::shared_ptr<T> widget_; //!< Pointer to third party widget

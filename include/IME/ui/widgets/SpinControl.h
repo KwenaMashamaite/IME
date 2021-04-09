@@ -77,7 +77,7 @@ namespace ime {
              *
              * @see clone
              */
-            SpinControl::Ptr copy();
+            SpinControl::Ptr copy() const;
 
             /**
              * @brief Get the spin controls renderer
@@ -199,7 +199,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~SpinControl();
+            ~SpinControl() override;
 
         private:
             /**
@@ -210,7 +210,7 @@ namespace ime {
              * @param decimal The number of decimal places to display
              * @param step The increment value
              */
-            SpinControl(float minValue = 0.0f, float maxValue = 10.0f,
+            explicit SpinControl(float minValue = 0.0f, float maxValue = 10.0f,
                 float initialValue = 0.0f, unsigned int decimal = 0, float step = 1.0f);
 
         private:

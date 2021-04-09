@@ -84,7 +84,7 @@ namespace ime {
              * @brief Create a copy this widget
              * @return The new vertical layout widget
              */
-            VerticalLayout::Ptr copy();
+            VerticalLayout::Ptr copy() const;
 
             /**
              * @brief Get the layout renderer
@@ -117,7 +117,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            void insertWidget(std::size_t index, Widget::Ptr widget,
+            void insertWidget(std::size_t index, const Widget::Ptr& widget,
                 const std::string &name) override;
 
             /**
@@ -155,7 +155,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            bool setRatio(Widget::Ptr widget, float ratio) override;
+            bool setRatio(const Widget::Ptr& widget, float ratio) override;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -173,7 +173,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            float getRatio(Widget::Ptr widget) const override;
+            float getRatio(const Widget::Ptr& widget) const override;
 
             /**
              * @brief Get the ratio of a widget at a certain index
@@ -198,7 +198,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~VerticalLayout();
+            ~VerticalLayout() override;
 
         private:
             /**

@@ -388,7 +388,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~TabsRenderer();
+            ~TabsRenderer() override;
 
         private:
             tgui::TabsRenderer* tabsRenderer_; //!< Pointer to third party tabs renderer

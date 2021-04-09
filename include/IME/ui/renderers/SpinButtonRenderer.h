@@ -265,7 +265,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            virtual ~SpinButtonRenderer();
+            ~SpinButtonRenderer() override;
 
         private:
             tgui::SpinButtonRenderer* renderer_;

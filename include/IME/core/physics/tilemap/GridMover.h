@@ -358,7 +358,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~GridMover() = default;
+        ~GridMover() override = default;
 
     private:
         /**

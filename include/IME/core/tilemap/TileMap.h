@@ -57,7 +57,7 @@ namespace ime {
          * @brief Set the physics simulation
          * @param physicsSimulation The simulation to be set
          *
-         * @warning This function is intednded for internal use only
+         * @warning This function is intended for internal use only
          */
         void setPhysicsSimulation(std::shared_ptr<World> physicsSimulation);
 
@@ -317,7 +317,7 @@ namespace ime {
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTileWithId(char id, Callback<Tile&> callback);
+        void forEachTileWithId(char id, const Callback<Tile&>& callback);
 
         /**
          * @brief Execute a callback on all tiles except tiles with a
@@ -325,13 +325,13 @@ namespace ime {
          * @param id Id of the tiles to be ignored
          * @param callback Function to be executed
          */
-        void forEachTileExcept(char id, Callback<Tile&> callback);
+        void forEachTileExcept(char id, const Callback<Tile&>& callback);
 
         /**
          * @brief Execute a callback on all the tiles of the tilemap
          * @param callback Function to execute for each tile
          */
-        void forEachTile(Callback<Tile&> callback);
+        void forEachTile(const Callback<Tile&>& callback);
 
         /**
          * @brief Execute a callback function on each tile in a range
@@ -341,7 +341,7 @@ namespace ime {
          *
          * @note Only horizontal ranges are supported
          */
-        void forEachTileInRange(Index startPos, Index endPos, Callback<Tile&> callback);
+        void forEachTileInRange(Index startPos, Index endPos, const Callback<Tile&>& callback);
 
         /**
          * @brief Get the tilemap render layers
@@ -452,7 +452,7 @@ namespace ime {
          * @param child Child to search for in the tilemap
          * @return True if the tilemap has the child, otherwise false
          */
-        bool hasChild(GameObject::Ptr child);
+        bool hasChild(const GameObject::Ptr& child);
 
         /**
          * @brief Remove a child from a tile
@@ -490,7 +490,7 @@ namespace ime {
          * @return True if the child was removed or false if the child does
          *         not exist in the grid
          */
-        bool removeChild(GameObject::Ptr child);
+        bool removeChild(const GameObject::Ptr& child);
 
         /**
          * @brief Remove children from the grid using a condition
@@ -500,7 +500,7 @@ namespace ime {
          * All children for which @a callback returns true are removed
          * from the grid
          */
-        void removeChildrenIf(std::function<bool(GameObject::Ptr)> callback);
+        void removeChildrenIf(const std::function<bool(const GameObject::Ptr&)>& callback);
 
         /**
          * @brief Remove all the visitors of a tile
@@ -536,7 +536,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject::Ptr child, Index index);
+        void moveChild(const GameObject::Ptr& child, Index index);
 
         /**
          * @brief Move child to a different tile
@@ -548,7 +548,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject::Ptr child, const Tile& tile);
+        void moveChild(const GameObject::Ptr& child, const Tile& tile);
 
         /**
          * @brief Get the tile occupied by a child of the tilemap
@@ -558,7 +558,7 @@ namespace ime {
          *
          * An invalid tile has a negative index
          */
-        Tile& getTileOccupiedByChild(GameObject::Ptr child);
+        Tile& getTileOccupiedByChild(const GameObject::Ptr& child);
 
         /**
          * @brief Check if tile is occupied or not
@@ -599,7 +599,7 @@ namespace ime {
          * @brief Execute a callback for each child in the tilemap
          * @param callback Function to execute
          */
-        void forEachChild(Callback<GameObject::Ptr> callback);
+        void forEachChild(const Callback<const GameObject::Ptr&>& callback);
 
         /**
          * @brief Execute a callback for each child in a tile
@@ -610,7 +610,7 @@ namespace ime {
          * child being the occupant of the tile. The callback will be ignored
          * if the specified index is invalid or the tile is not occupied
          */
-        void forEachChildInTile(const Tile& tile, Callback<GameObject::Ptr> callback);
+        void forEachChildInTile(const Tile& tile, const Callback<const GameObject::Ptr&>& callback);
 
         /**
          * @brief Get the number of occupants in a tile

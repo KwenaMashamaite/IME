@@ -74,7 +74,7 @@ namespace ime {
              *
              * @see clone
              */
-            Button::Ptr copy();
+            Button::Ptr copy() const;
 
             /**
              * @brief Get the buttons renderer
@@ -124,7 +124,7 @@ namespace ime {
             /**
              * @brief Destructor
              */
-            ~Button();
+            ~Button() override;
 
         private:
             /**

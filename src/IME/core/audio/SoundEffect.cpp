@@ -119,7 +119,7 @@ namespace ime::audio {
         }
 
         std::string getType() override {
-            return "SoundEffect";;
+            return "SoundEffect";
         }
 
     private:
@@ -136,6 +136,7 @@ namespace ime::audio {
     {}
 
     SoundEffect::SoundEffect(const SoundEffect& other) :
+        Audio(other),
         pImpl_{std::make_unique<Impl>(*other.pImpl_)}
     {}
 

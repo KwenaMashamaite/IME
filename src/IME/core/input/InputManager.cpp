@@ -25,8 +25,8 @@
 #include "IME/core/input/InputManager.h"
 
 namespace ime::input {
-    bool InputManager::isKeyPressed(Keyboard::Key key) const {
-        return keyboard_.isKeyPressed(key);
+    bool InputManager::isKeyPressed(Keyboard::Key key) {
+        return input::Keyboard::isKeyPressed(key);
     }
 
     int InputManager::onKeyUp(Callback<Keyboard::Key> callback) {
@@ -45,8 +45,8 @@ namespace ime::input {
         return keyboard_.unsubscribe(event, id);
     }
 
-    bool InputManager::isMouseDown(Mouse::Button button) const {
-        return mouse_.isButtonPressed(button);
+    bool InputManager::isMouseDown(Mouse::Button button) {
+        return input::Mouse::isButtonPressed(button);
     }
 
     int InputManager::onMouseUp(Callback<Mouse::Button, int, int> callback) {

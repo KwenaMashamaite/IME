@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/ui/widgets/WidgetContainer.h"
-#include "../../utility/Helpers.h"
-#include "WidgetImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Container.hpp>
 
 namespace ime::ui {
@@ -33,14 +33,14 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class WidgetContainer::WidgetContainerImpl {
     public:
-        WidgetContainerImpl(std::shared_ptr<tgui::Widget> widget) {
-            IME_ASSERT(widget, "A widget container cannot be a nullptr");
+        explicit WidgetContainerImpl(const std::shared_ptr<tgui::Widget>& widget) {
+            IME_ASSERT(widget, "A widget container cannot be a nullptr")
             tguiContainer_ = std::dynamic_pointer_cast<tgui::Container>(widget);
-            IME_ASSERT(tguiContainer_, "A non container widget derived from WidgetContainer, change to Widget");
+            IME_ASSERT(tguiContainer_, "A non container widget derived from WidgetContainer, change to Widget")
         }
 
-        bool addWidget(ui::Widget::Ptr widget, const std::string &name)  {
-            IME_ASSERT(widget, "Cannot add nullptr to a GUI container");
+        bool addWidget(const ui::Widget::Ptr& widget, const std::string &name)  {
+            IME_ASSERT(widget, "Cannot add nullptr to a GUI container")
             if (widgets_.insert({name, widget}).second) {
                 tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
                 return true;
@@ -75,19 +75,19 @@ namespace ime::ui {
             widgets_.clear();
         }
 
-        void moveWidgetToFront(ui::Widget::Ptr widget)  {
+        void moveWidgetToFront(const ui::Widget::Ptr& widget)  {
             tguiContainer_->moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        void moveWidgetToBack(ui::Widget::Ptr widget)  {
+        void moveWidgetToBack(const ui::Widget::Ptr& widget)  {
             tguiContainer_->moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetForward(ui::Widget::Ptr widget)  {
+        size_t moveWidgetForward(const ui::Widget::Ptr& widget)  {
             return tguiContainer_->moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetBackward(ui::Widget::Ptr widget)  {
+        size_t moveWidgetBackward(const ui::Widget::Ptr& widget)  {
             return tguiContainer_->moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
@@ -142,8 +142,8 @@ namespace ime::ui {
     WidgetContainer::WidgetContainer(WidgetContainer&&) noexcept = default;
     WidgetContainer &WidgetContainer::operator=(WidgetContainer&&) noexcept = default;
 
-    bool WidgetContainer::addWidget(Widget::Ptr widget, const std::string &name) {
-        return pimpl_->addWidget(std::move(widget), name);
+    bool WidgetContainer::addWidget(const Widget::Ptr& widget, const std::string &name) {
+        return pimpl_->addWidget(widget, name);
     }
 
     Widget::Ptr WidgetContainer::getWidget(const std::string &name) const {
@@ -162,20 +162,20 @@ namespace ime::ui {
         pimpl_->removeAllWidgets();
     }
 
-    void WidgetContainer::moveWidgetToFront(Widget::Ptr widget) {
-        pimpl_->moveWidgetToFront(std::move(widget));
+    void WidgetContainer::moveWidgetToFront(const Widget::Ptr& widget) {
+        pimpl_->moveWidgetToFront(widget);
     }
 
-    void WidgetContainer::moveWidgetToBack(Widget::Ptr widget) {
-        pimpl_->moveWidgetToBack(std::move(widget));
+    void WidgetContainer::moveWidgetToBack(const Widget::Ptr& widget) {
+        pimpl_->moveWidgetToBack(widget);
     }
 
-    std::size_t WidgetContainer::moveWidgetForward(Widget::Ptr widget) {
-        return pimpl_->moveWidgetForward(std::move(widget));
+    std::size_t WidgetContainer::moveWidgetForward(const Widget::Ptr& widget) {
+        return pimpl_->moveWidgetForward(widget);
     }
 
-    std::size_t WidgetContainer::moveWidgetBackward(Widget::Ptr widget) {
-        return pimpl_->moveWidgetBackward(std::move(widget));
+    std::size_t WidgetContainer::moveWidgetBackward(const Widget::Ptr& widget) {
+        return pimpl_->moveWidgetBackward(widget);
     }
 
     Widget::Ptr WidgetContainer::getFocusedWidget() const {
