@@ -82,6 +82,30 @@ namespace ime {
         pImpl_{std::make_unique<Impl>(filename, area)}
     {}
 
+    Texture::Texture(const Texture& other) :
+        pImpl_{std::make_unique<Impl>(*other.pImpl_)}
+    {}
+
+    Texture &Texture::operator=(const Texture& rhs) {
+        if (this != &rhs) {
+            pImpl_ = std::make_unique<Impl>(*rhs.pImpl_);
+        }
+
+        return *this;
+    }
+
+    Texture::Texture(Texture&& rhs) noexcept :
+        pImpl_{std::move(rhs.pImpl_)}
+    {}
+
+    Texture& Texture::operator=(Texture&& rhs) noexcept {
+        if (this != &rhs) {
+            pImpl_ = std::move(rhs.pImpl_);
+        }
+
+        return *this;
+    }
+
     Vector2u Texture::getSize() const {
         return pImpl_->getSize();
     }

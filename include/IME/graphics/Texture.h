@@ -62,6 +62,26 @@ namespace ime {
         explicit Texture(const std::string& filename, const UIntRect& area = UIntRect());
 
         /**
+         * @brief Copy constructor
+         */
+        Texture(const Texture&);
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Texture& operator=(const Texture&);
+
+        /**
+         * @brief Move constructor
+         */
+        Texture(Texture&&) noexcept;
+
+        /**
+         * @brief Move assignment operator
+         */
+        Texture& operator=(Texture&&) noexcept;
+
+        /**
          * @brief Get the size of the texture
          * @return The size of the texture in pixels
          */
