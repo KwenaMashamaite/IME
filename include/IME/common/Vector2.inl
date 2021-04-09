@@ -54,8 +54,8 @@ inline float Vector2<T>::distanceTo(const Vector2<T>& otherVec) const {
 
 template <typename T>
 inline float Vector2<T>::angleTo(const Vector2<T>& otherVec) const {
-    static const auto PI = 3.14159265358979323846f;
-    return (acos(dot(otherVec) / magnitude() * otherVec.magnitude()) * 180.0f) / PI;
+    static const auto PI = 3.1415926f;
+    return ((static_cast<float>(acos(dot(otherVec))) / magnitude() * otherVec.magnitude()) * 180.0f) / PI;
 }
 
 template <typename T>

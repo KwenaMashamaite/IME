@@ -30,8 +30,8 @@
 namespace ime {
     Scene::Scene() :
         engine_{nullptr},
-        entityContainer_{renderLayers_},
         cache_{nullptr},
+        entityContainer_{renderLayers_},
         shapeContainer_{renderLayers_},
         spriteContainer_{renderLayers_},
         timescale_{1.0f},
