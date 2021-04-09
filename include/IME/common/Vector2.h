@@ -85,6 +85,12 @@ namespace ime {
          * @return The angle between this vector and @a otherVect
          */
         float angleTo(const Vector2<T>& otherVec) const;
+
+        /**
+         * @brief Get the unit vector of this vector
+         * @return This vector as a unit vector
+         */
+        Vector2<T> asUnitVector() const;
         
         // Member data
         T x; //!< X coordinate of the vector
