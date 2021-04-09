@@ -38,7 +38,7 @@ set(IME_SRC
     core/physics/rigid_body/AABB.cpp
     core/physics/tilemap/GridMover.cpp
     core/physics/tilemap/TargetGridMover.cpp
-    core/physics/tilemap/KeyboardControlledGridMover.cpp
+    core/physics/tilemap/KeyboardGridMover.cpp
     core/physics/tilemap/RandomGridMover.cpp
     core/physics/ContactListener.cpp
     core/physics/World.cpp

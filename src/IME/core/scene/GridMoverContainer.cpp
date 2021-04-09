@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/GridMoverContainer.h"
-#include "IME/core/physics/tilemap/KeyboardControlledGridMover.h"
+#include "IME/core/physics/tilemap/KeyboardGridMover.h"
 
 namespace ime {
     void GridMoverContainer::update(Time deltaTime) {
@@ -35,7 +35,7 @@ namespace ime {
     void GridMoverContainer::handleEvent(Event event) {
         forEach([&event](const GridMover::Ptr& gridMover) {
             if (gridMover->getType() == GridMover::Type::KeyboardControlled)
-                std::static_pointer_cast<KeyboardControlledGridMover>(gridMover)->handleEvent(event);
+                std::static_pointer_cast<KeyboardGridMover>(gridMover)->handleEvent(event);
         });
     }
 }

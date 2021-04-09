@@ -40,19 +40,19 @@ namespace ime {
     };
 
     /**
-     * @brief Class that performs grid based movement on an entity using the
-     *        keyboard as a movement trigger
+     * @brief Moves a GameObject in the grid using the keyboard as a movement
+     *        trigger
      */
-    class IME_API KeyboardControlledGridMover : public GridMover {
+    class IME_API KeyboardGridMover : public GridMover {
     public:
-        using Ptr = std::shared_ptr<KeyboardControlledGridMover>; //!< Shared grid mover pointer
+        using Ptr = std::shared_ptr<KeyboardGridMover>; //!< Shared grid mover pointer
 
         /**
          * @brief Constructor
          * @param tileMap Grid to move target in
          * @param target Target to be moved in the grid
          */
-        explicit KeyboardControlledGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
+        explicit KeyboardGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
 
         /**
          * @brief Get the name of this class

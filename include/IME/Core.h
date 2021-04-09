@@ -62,7 +62,7 @@
 #include "IME/core/physics/rigid_body/joints/JointDefinition.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/core/physics/tilemap/GridMover.h"
-#include "IME/core/physics/tilemap/KeyboardControlledGridMover.h"
+#include "IME/core/physics/tilemap/KeyboardGridMover.h"
 #include "IME/core/physics/tilemap/RandomGridMover.h"
 #include "IME/core/physics/tilemap/TargetGridMover.h"
 #include "IME/core/physics/ContactListener.h"
