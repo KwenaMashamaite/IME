@@ -204,6 +204,7 @@ namespace ime {
         pImpl_{std::make_unique<SpriteImpl>(*other.pImpl_)}
     {
         pImpl_->setTexture(other.getTexture());
+        setTextureRect(other.getTextureRect());
         pImpl_->setAnimationTarget(*this);
     }
 
