@@ -89,6 +89,7 @@ namespace ime {
         if (!world_->isLocked()) {
             collider->setBody(shared_from_this());
             colliders_.insert({collider->getObjectId(), collider});
+            emit("attachCollider");
         } else {
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback");
         }
@@ -105,6 +106,7 @@ namespace ime {
             if (colliders_.find(id) != colliders_.end()) {
                 body_->DestroyFixture(colliders_[id]->fixture_.get());
                 colliders_.erase(id);
+                emit("removeCollider");
             }
         } else {
             IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback");
@@ -117,6 +119,7 @@ namespace ime {
             if (utility::findIn(colliders_, collider->getObjectId())) {
                 body_->DestroyFixture(colliders_[collider->getObjectId()]->fixture_.get());
                 colliders_.erase(collider->getObjectId());
+                emit("removeCollider");
             }
         } else {
             IME_PRINT_WARNING("Operation ignored: removeCollider() called inside a world callback");
@@ -374,10 +377,12 @@ namespace ime {
 
     void Body::onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback) {
         onContactBegin_ = std::move(callback);
+        emit("collisionStart");
     }
 
     void Body::onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback) {
         onContactEnd_ = std::move(callback);
+        emit("collisionEnd");
     }
 
     void Body::emitCollisionEvent(const std::string &event, Body::Ptr other) {

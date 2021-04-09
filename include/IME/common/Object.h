@@ -136,6 +136,25 @@ namespace ime {
          * @param callback The function to be executed when the property changes
          * @return The unique id of the event listener
          *
+         * A property change event is triggered by any function that begins
+         * with @a set, where the the text after @a set is the name of the
+         * property. For example, for the setTag function, the property that
+         * the function modifies is @a Tag.
+         *
+         * Note that when adding a property change event listener, the name of
+         * the property must be in lowercase:
+         *
+         * @code
+         * // Prints the tag of the player object to the console everytime it changes
+         * player.onPropertyChange("tag", [](const Property& property) {
+         *      cout << "New tag: " <<  property.getValue<std::string>() << endl;
+         * });
+         *
+         * ...
+         * //Sets tag = "player1" and invokes event listener(s)
+         * player.setTag("player1");
+         * @endcode
+         *
          * Unlike onPropertyChange(const Callback&) you can add multiple event
          * listeners to the same property using this function. However you must
          * store the unique id of the event listener if you wish to remove it
@@ -160,6 +179,36 @@ namespace ime {
          * @see onPropertyChange(std::string, Callback)
          */
         void onPropertyChange(const Callback<Property>& callback);
+
+        /**
+         * @brief Add an event listener to an event
+         * @param event The name of the event to add an an event listener to
+         * @param callback The function to be executed when the event takes place
+         * @return The unique identification number of the event listener
+         *
+         * Unlike onPropertyChange, this function registers event listeners
+         * to events that occur when something happens to the object, or when
+         * the object does something (action events). Usually the name of the
+         * event/action is the name of the function:
+         *
+         * @code
+         * // Add event listeners to the object
+         * object.onEvent("attachRigidBody", [] {
+         *     std::cout << "Rigid body attached to object << std::endl;
+         * });
+         *
+         * object.onEvent("removeRigidBody", [] {
+         *     std::cout << "Rigid body removed from object << std::endl;
+         * });
+         *
+         * // Invokes event listener(s)
+         * object.attachRigidBody(body);
+         * object.removeRigidBody();
+         * @endcode
+         *
+         * @see onPropertyChange and unsubscribe
+         */
+        int onEvent(const std::string& event, const Callback<>& callback);
 
         /**
          * @brief Remove an event listener from an event
@@ -243,8 +292,23 @@ namespace ime {
          *
          * This function will invoke all the event listeners of the specified
          * property
+         *
+         * @see emit
          */
         void emitChange(const Property& property);
+
+        /**
+         * @brief Dispatch an action event
+         * @param event The name of the event to be dispatched
+         *
+         * This function will invoke all event listeners of the specified
+         * event. The function should be used for events that represent an
+         * action, rather than those that represent a property change
+         * (Use emitChange for that)
+         *
+         * @see emitChange
+         */
+        void emit(const std::string& event);
 
     private:
         unsigned int id_;           //!< The id of the object

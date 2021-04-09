@@ -173,6 +173,8 @@ namespace ime {
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
         body_->setRotation(transform_.getRotation());
+
+        emit("attachRigidBody");
     }
 
     Body::Ptr &GameObject::getRigidBody() {
@@ -187,15 +189,19 @@ namespace ime {
         if (body_) {
             body_->getWorld()->destroyBody(body_);
             body_.reset();
+
+            emit("removeRigidBody");
         }
     }
 
     void GameObject::onCollisionStart(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         onContactBegin_ = std::move(callback);
+        emit("collisionStart");
     }
 
     void GameObject::onCollisionEnd(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
         onContactEnd_ = std::move(callback);
+        emit("collisionEnd");
     }
 
     bool GameObject::hasRigidBody() const {

@@ -70,6 +70,10 @@ namespace ime {
         return eventEmitter_.on(property + "Change", callback);
     }
 
+    int Object::onEvent(const std::string &event, const Callback<> &callback) {
+        return eventEmitter_.on(event, callback);
+    }
+
     void Object::onPropertyChange(const Callback<Property> &callback) {
         onPropertyChange_ = callback;
     }
@@ -98,6 +102,10 @@ namespace ime {
         eventEmitter_.emit(property.getName() + "Change", property);
         if (onPropertyChange_)
             onPropertyChange_(property);
+    }
+
+    void Object::emit(const std::string &event) {
+        eventEmitter_.emit(event);
     }
 
     Object::~Object() {
