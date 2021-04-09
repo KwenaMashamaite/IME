@@ -113,7 +113,6 @@ namespace ime {
         }
 
         if (!isTargetMoving() && targetDirection_ == Unknown) {
-            target_->getRigidBody()->setRotation(newDir.angleTo(Right));
             targetDirection_ = newDir;
             return true;
         }
