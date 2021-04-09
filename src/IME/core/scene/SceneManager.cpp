@@ -185,6 +185,9 @@ namespace ime {
             scene->gridMovers().update(deltaTime * scene->getTimescale());
             scene->fixedUpdate(deltaTime * scene->getTimescale());
         } else {
+            if (scene->hasTilemap_)
+                scene->tileMap_->update(deltaTime);
+
             //Update game objects - By default, the game object updates its sprite animation
             scene->gameObjects().forEach([&scene, &deltaTime](GameObject::Ptr gameObject) {
                 gameObject->update(deltaTime * scene->getTimescale());

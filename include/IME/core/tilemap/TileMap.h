@@ -619,6 +619,16 @@ namespace ime {
          */
         std::size_t getNumOfOccupants(const Tile& tile) const;
 
+        /**
+         * @internal
+         * @brief Update tilemap
+         * @param deltaTime Time passed since last update
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void update(Time deltaTime);
+
     private:
         /**
          * @brief Create an empty tilemap

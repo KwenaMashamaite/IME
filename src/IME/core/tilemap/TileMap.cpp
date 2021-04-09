@@ -341,6 +341,12 @@ namespace ime {
         return 0;
     }
 
+    void TileMap::update(Time deltaTime) {
+        forEachChild([deltaTime](GameObject::Ptr child) {
+            child->update(deltaTime);
+        });
+    }
+
     bool TileMap::removeChildFromTile(const Tile& tile, const std::shared_ptr<GameObject> &child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
