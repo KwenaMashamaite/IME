@@ -101,7 +101,8 @@ namespace ime {
     }
 
     bool Animator::addAnimation(Animation::Ptr animation) {
-        IME_ASSERT(animation, "Cannot add nullptr to animator")
+        IME_ASSERT(animation, "Animation cannot be a nullptr")
+        IME_ASSERT(animation->getFrameCount() > 0, "Cannot add animation with zero animation frames")
         return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
 
@@ -149,6 +150,7 @@ namespace ime {
         if (!animation || (currentAnimation_ && currentAnimation_ == animation))
             return;
 
+        IME_ASSERT(animation->getFrameCount() > 0, "Cannot chain animation with zero animation frames")
         addAnimation(animation);
 
         if (!currentAnimation_) {
@@ -204,6 +206,8 @@ namespace ime {
     void Animator::startAnimation(const std::string &name, bool unchain) {
         if (!hasAnimation(name))
             return;
+
+        IME_ASSERT(animations_.at(name)->getFrameCount() > 0, "Cannot start animation with zero frames")
 
         if (isPlaying_ || isPaused_)
             stop();

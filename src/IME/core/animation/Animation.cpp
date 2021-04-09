@@ -138,8 +138,7 @@ namespace ime {
         else
             newFrames = spriteSheet_.getFramesInRange(startPos, {(startPos.row + static_cast<int>(numOfFrames)) - 1, startPos.colm});
 
-        if (newFrames.empty())
-            return;
+        IME_ASSERT(!newFrames.empty(), "Failed to construct frames, either start position or number of frames is invalid")
 
         std::move(newFrames.begin(), newFrames.end(), std::back_inserter(frames_));
         calculateFrameRate(duration_, 0);
