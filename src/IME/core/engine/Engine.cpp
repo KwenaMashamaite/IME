@@ -96,21 +96,19 @@ namespace ime {
     }
 
     void Engine::initRenderTarget() {
-        auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
-        auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
         auto title = settings_.getValue<std::string>("WINDOW_TITLE");
         auto width = settings_.getValue<int>("WINDOW_WIDTH");
         auto height = settings_.getValue<int>("WINDOW_HEIGHT");
-        auto isFullscreen = settings_.getValue<bool>("FULLSCREEN");
-        if (isFullscreen || (width >= desktopWidth && height >= desktopHeight)){
+
+        IME_ASSERT(width > 0, "The width of the window cannot be negative")
+        IME_ASSERT(height > 0, "The height of the window cannot be negative")
+
+        if (settings_.getValue<bool>("FULLSCREEN")) {
+            auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
+            auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
             window_.create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
-        } else {
-            if (width > desktopWidth)
-                width = desktopWidth;
-            if (height > desktopHeight)
-                height = desktopHeight;
+        } else
             window_.create(title, width, height, Window::Style::Close);
-        }
 
         window_.setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
         window_.setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
