@@ -48,8 +48,6 @@ namespace ime {
     Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
         Engine(gameName, "")
     {
-        //@TODO - Fix engine throwing std::bad_cast during initialization
-        //        when constructed with this constructor
         settings_ = settings;
     }
 
@@ -294,8 +292,6 @@ namespace ime {
     }
 
     const PropertyContainer &Engine::getSettings() const {
-        //@TODO - Fix this function throwing std::bad_cast when called outside
-        //        the class
         return settings_;
     }
 

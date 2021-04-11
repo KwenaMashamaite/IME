@@ -62,9 +62,6 @@ namespace ime {
          * @brief Constructor
          * @param gameName Name of the game to be run by the engine
          * @param settings Engine settings
-         *
-         * @warning This function is unstable at the moment, use the constructor
-         * that loads the settings from the disk
          */
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
@@ -119,8 +116,6 @@ namespace ime {
         /**
          * @brief Get the engines settings
          * @return The engines settings
-         *
-         * @warning This function is experimental
          */
         const PropertyContainer& getSettings() const;
 
