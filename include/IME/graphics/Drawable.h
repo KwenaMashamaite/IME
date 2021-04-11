@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_IDRAWABLE_H
-#define IME_IDRAWABLE_H
+#ifndef IME_DRAWABLE_H
+#define IME_DRAWABLE_H
 
 #include "IME/Config.h"
 #include "IME/common/Object.h"
@@ -34,8 +34,21 @@ namespace ime {
     /**
      * @brief Interface for drawable objects
      */
-    class IME_API IDrawable : public Object {
+    class IME_API Drawable : public Object {
     public:
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         *
+         * Note that this function is only overridden by child classes
+         * of Object which also serve as a base class for other classes
+         *
+         * @see Object::getClassType and Object::getClassName
+         */
+        std::string getClassType() const override {
+            return "Drawable";
+        }
+
         /**
          * @brief Draw object on a render target
          * @param renderTarget Target to draw object on
@@ -44,4 +57,4 @@ namespace ime {
     };
 }
 
-#endif // IME_IDRAWABLE_H
+#endif // IME_DRAWABLE_H

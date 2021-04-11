@@ -33,7 +33,7 @@
 
 namespace ime {
     class Window;
-    class IDrawable;
+    class Drawable;
     class GameObject;
 
     /**
@@ -121,7 +121,7 @@ namespace ime {
          *
          * By default, all drawables have the same render order of 0
          */
-        void add(const IDrawable& drawable, int renderOrder = 0);
+        void add(const Drawable& drawable, int renderOrder = 0);
 
         /**
          * @internal
@@ -152,7 +152,7 @@ namespace ime {
         unsigned int index_; //!< The index of the layer in the render layer container
         bool shouldRender_;  //!< A flag indicating whether the layer should be rendered or not
 
-        std::multimap<int, std::reference_wrapper<const IDrawable>> drawables_;
+        std::multimap<int, std::reference_wrapper<const Drawable>> drawables_;
         friend class RenderLayerContainer; //!< Needs access to constructor
     };
 }

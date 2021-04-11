@@ -26,7 +26,7 @@ template<typename T>
 inline DrawableContainer<T>::DrawableContainer(RenderLayerContainer &renderLayers) :
     renderLayers_{renderLayers}
 {
-    static_assert(std::is_base_of<IDrawable, T>::value, "A DrawableContainer can only store instances of classes derived from IDrawable");
+    static_assert(std::is_base_of<Drawable, T>::value, "A DrawableContainer can only store instances of classes derived from Drawable");
 }
 
 template<typename T>

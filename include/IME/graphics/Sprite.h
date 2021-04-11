@@ -30,7 +30,7 @@
 #include "IME/common/ITransformable.h"
 #include "IME/common/Object.h"
 #include "IME/core/time/Time.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Drawable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/graphics/Texture.h"
 #include "IME/core/animation/Animator.h"
@@ -44,7 +44,7 @@ namespace ime {
      * The sprite can be static (display a single non changing texture)
      * or animated via its animator (see the getAnimator function)
      */
-    class IME_API Sprite : public ITransformable, public IDrawable {
+    class IME_API Sprite : public ITransformable, public Drawable {
     public:
         using Ptr = std::shared_ptr<Sprite>; //!< Shared sprite pointer
 

@@ -78,7 +78,7 @@ namespace ime {
         return pImpl_;
     }
 
-    void Window::draw(const IDrawable &drawable) {
+    void Window::draw(const Drawable &drawable) {
         drawable.draw(*this);
     }
 

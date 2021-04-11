@@ -38,8 +38,8 @@ namespace ime {
         return layer;
     }
 
-    void RenderLayerContainer::add(const IDrawable &drawable, int renderOrder,
-        const std::string &renderLayer)
+    void RenderLayerContainer::add(const Drawable &drawable, int renderOrder,
+                                   const std::string &renderLayer)
     {
         auto layer = findByName(renderLayer);
         if (!layer && renderLayer != "default") {

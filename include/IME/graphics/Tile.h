@@ -28,7 +28,7 @@
 #include "IME/core/tilemap/Index.h"
 #include "IME/common/Vector2.h"
 #include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Drawable.h"
 #include <unordered_map>
 #include <memory>
 
@@ -38,7 +38,7 @@ namespace ime {
     /**
      * @brief A Tilemap tile
      */
-    class IME_API Tile : public IDrawable {
+    class IME_API Tile : public Drawable {
     public:
         /**
          * @internal

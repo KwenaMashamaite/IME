@@ -26,7 +26,7 @@
 #define IME_SHAPE_H
 
 #include "IME/common/ITransformable.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Drawable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/common/Rect.h"
 #include "IME/core/physics/rigid_body/Body.h"
@@ -43,7 +43,7 @@ namespace ime {
      *
      * Some common geometric figures are squares, rectangles and triangles
      */
-    class IME_API Shape : public IDrawable, public ITransformable {
+    class IME_API Shape : public Drawable, public ITransformable {
     public:
         using Ptr = std::shared_ptr<Shape>; //!< Shared shape pointer
 

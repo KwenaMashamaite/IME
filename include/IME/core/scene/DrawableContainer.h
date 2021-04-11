@@ -26,12 +26,12 @@
 #define IME_DRAWABLECONTAINER_H
 
 #include "IME/common/ObjectContainer.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Drawable.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 
 namespace ime {
     /**
-     * @brief A container for IDrawable objects
+     * @brief A container for Drawable objects
      */
     template <typename T>
     class DrawableContainer : public ObjectContainer<T> {

@@ -206,7 +206,7 @@ namespace ime {
     }
 
     Sprite::Sprite(const Sprite& other) :
-        IDrawable(other),
+        Drawable(other),
         pImpl_{std::make_unique<SpriteImpl>(*other.pImpl_)}
     {
         pImpl_->setTexture(other.getTexture());
@@ -216,7 +216,7 @@ namespace ime {
 
     Sprite &Sprite::operator=(const Sprite& other) {
         if (this != &other) {
-            IDrawable::operator=(other);
+            Drawable::operator=(other);
             pImpl_ = std::make_unique<SpriteImpl>(*other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
@@ -229,7 +229,7 @@ namespace ime {
 
     Sprite &Sprite::operator=(Sprite&& other) noexcept {
         if (this != &other) {
-            IDrawable::operator=(std::move(other));
+            Drawable::operator=(std::move(other));
             pImpl_ = std::move(other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }

@@ -35,7 +35,7 @@ namespace ime {
     {}
 
     Shape::Shape(const Shape& other) :
-        IDrawable(other),
+        Drawable(other),
         pimpl_{other.pimpl_->clone()},
         type_{other.type_},
         body_{},
@@ -48,7 +48,7 @@ namespace ime {
     Shape &Shape::operator=(const Shape& rhs) {
         // Can't use copy-swap idiom (class is abstract)
         if (this != &rhs) {
-            IDrawable::operator=(rhs);
+            Drawable::operator=(rhs);
             pimpl_ = rhs.pimpl_->clone();
             type_ = rhs.type_;
             postStepId_ = -1;

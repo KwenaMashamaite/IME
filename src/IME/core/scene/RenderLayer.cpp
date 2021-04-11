@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/RenderLayer.h"
-#include "IME/graphics/IDrawable.h"
+#include "IME/graphics/Drawable.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/game_object/GameObject.h"
 #include <algorithm>
@@ -60,7 +60,7 @@ namespace ime {
         return index_;
     }
 
-    void RenderLayer::add(const IDrawable& drawable, int renderOrder) {
+    void RenderLayer::add(const Drawable& drawable, int renderOrder) {
         drawables_.insert({renderOrder, std::cref(drawable)});
     }
 

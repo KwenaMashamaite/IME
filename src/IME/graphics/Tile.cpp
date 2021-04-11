@@ -40,7 +40,7 @@ namespace ime {
     }
 
     Tile::Tile(const Tile& other) :
-        IDrawable(other),
+        Drawable(other),
         isCollidable_{other.isCollidable_},
         id_{other.id_},
         index_{other.index_},

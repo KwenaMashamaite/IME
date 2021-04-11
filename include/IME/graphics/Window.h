@@ -29,7 +29,7 @@
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/core/event/Event.h"
-#include "IDrawable.h"
+#include "Drawable.h"
 #include "Colour.h"
 #include <string>
 
@@ -160,7 +160,7 @@ namespace ime {
          * @brief Draw drawable on the window
          * @param drawable Object to be drawn
          */
-        void draw(const IDrawable& drawable);
+        void draw(const Drawable& drawable);
 
         /**
          * @brief Display drawn objects on the window
