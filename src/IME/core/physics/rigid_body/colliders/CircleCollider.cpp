@@ -42,6 +42,7 @@ namespace ime {
     CircleCollider &CircleCollider::operator=(const CircleCollider& rhs) {
         if (this != &rhs) {
             auto temp{rhs};
+            Collider::operator=(rhs);
             circle_ = std::move(temp.circle_);
         }
 

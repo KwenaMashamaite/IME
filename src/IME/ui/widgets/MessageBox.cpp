@@ -77,6 +77,7 @@ namespace ime::ui {
 
     MessageBox &MessageBox::operator=(const MessageBox& rhs) {
         if (this != &rhs) {
+            WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<MessageBoxImpl>(*rhs.pimpl_);
         }
 

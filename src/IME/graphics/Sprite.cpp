@@ -186,15 +186,21 @@ namespace ime {
         pImpl_{std::make_unique<SpriteImpl>(*this)}
     {}
 
-    Sprite::Sprite(const std::string &texture) : Sprite() {
+    Sprite::Sprite(const std::string &texture) :
+        Sprite()
+    {
         pImpl_->setTexture(texture);
     }
 
-    Sprite::Sprite(const Texture &texture) : Sprite() {
+    Sprite::Sprite(const Texture &texture) :
+        Sprite()
+    {
         pImpl_->setTexture(texture);
     }
 
-    Sprite::Sprite(const Texture &texture, const UIntRect &rectangle) : Sprite() {
+    Sprite::Sprite(const Texture &texture, const UIntRect &rectangle) :
+        Sprite()
+    {
         pImpl_->setTexture(texture);
         setTextureRect(rectangle);
     }
@@ -210,16 +216,20 @@ namespace ime {
 
     Sprite &Sprite::operator=(const Sprite& other) {
         if (this != &other) {
+            IDrawable::operator=(other);
             pImpl_ = std::make_unique<SpriteImpl>(*other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
         return *this;
     }
 
-    Sprite::Sprite(Sprite &&) noexcept = default;
+    Sprite::Sprite(Sprite&& other) noexcept {
+        *this = std::move(other);
+    }
 
     Sprite &Sprite::operator=(Sprite&& other) noexcept {
         if (this != &other) {
+            IDrawable::operator=(std::move(other));
             pImpl_ = std::move(other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }

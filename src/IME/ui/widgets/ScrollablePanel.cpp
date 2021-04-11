@@ -58,6 +58,7 @@ namespace ime::ui {
 
     ScrollablePanel &ScrollablePanel::operator=(const ScrollablePanel& rhs) {
         if (this != &rhs) {
+            WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<PanelImpl>(*rhs.pimpl_);
         }
 

@@ -57,6 +57,7 @@ namespace ime::ui {
 
     ProgressBar &ProgressBar::operator=(const ProgressBar& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ProgressBarImpl>(*rhs.pimpl_);
         }
 

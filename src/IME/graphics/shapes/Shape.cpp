@@ -38,15 +38,23 @@ namespace ime {
         IDrawable(other),
         pimpl_{other.pimpl_->clone()},
         type_{other.type_},
-        body_{nullptr},
+        body_{},
         postStepId_{-1}
-    {}
+    {
+        if (other.body_)
+            body_ = other.body_->copy();
+    }
 
     Shape &Shape::operator=(const Shape& rhs) {
+        // Can't use copy-swap idiom (class is abstract)
         if (this != &rhs) {
+            IDrawable::operator=(rhs);
             pimpl_ = rhs.pimpl_->clone();
             type_ = rhs.type_;
             postStepId_ = -1;
+
+            if (rhs.body_)
+                body_ = rhs.body_->copy();
         }
 
         return *this;

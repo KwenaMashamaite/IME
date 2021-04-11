@@ -58,6 +58,7 @@ namespace ime::ui {
 
     TabsContainer &TabsContainer::operator=(const TabsContainer& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<TabsContainerImpl>(*rhs.pimpl_);
         }
 

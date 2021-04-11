@@ -40,6 +40,7 @@ namespace ime {
     EdgeCollider &EdgeCollider::operator=(const EdgeCollider& rhs) {
         if (this != &rhs) {
             auto temp{rhs};
+            Collider::operator=(temp);
             edgeShape_ = std::move(temp.edgeShape_);
         }
 

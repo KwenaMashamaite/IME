@@ -78,6 +78,7 @@ namespace ime::ui {
 
     BitmapButton &BitmapButton::operator=(const BitmapButton& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
         }
 

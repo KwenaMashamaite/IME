@@ -54,6 +54,7 @@ namespace ime {
 
     CircleShape &CircleShape::operator=(const CircleShape& other) {
         if (this != &other) {
+            Shape::operator=(other);
             *pimpl_ = *other.pimpl_;
         }
 

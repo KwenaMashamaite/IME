@@ -80,6 +80,7 @@ namespace ime::ui {
 
     Picture &Picture::operator=(const Picture& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<PictureImpl>(*rhs.pimpl_);
         }
 

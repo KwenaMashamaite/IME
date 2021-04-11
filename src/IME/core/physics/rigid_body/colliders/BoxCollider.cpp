@@ -43,6 +43,7 @@ namespace ime {
     BoxCollider &BoxCollider::operator=(const BoxCollider& rhs) {
         if (this != &rhs) {
             auto temp(rhs);
+            Collider::operator=(temp);
             size_ = temp.size_;
             box_ = std::move(temp.box_);
         }

@@ -47,11 +47,9 @@ namespace ime {
         tile_{other.tile_},
         prevFillColour_{other.prevFillColour_}
     {
-        /*if (other.collider_) {
-            collider_ = std::make_shared<BoxCollider>(other.collider_->getSize());
-            collider_->getBody()->setPosition(getWorldCentre());
-            collider_->setEnable(isCollidable_);
-        }*/
+        if (other.collider_) {
+            collider_ = other.collider_->copy();
+        }
     }
 
     Tile& Tile::operator=(Tile other) {
@@ -77,6 +75,8 @@ namespace ime {
         IME_ASSERT(!collider_, "Cannot add a collider to a tile that already has one, use the removeCollider function to remove it first")
         IME_ASSERT(collider->getBody(), "A tile collider must have a rigid body attached to it")
         IME_ASSERT(collider->getBody()->getType() == Body::Type::Static, "The rigid body a tile collider is attached to must be of type Body::Type::Static")
+        IME_ASSERT(collider->getType() == Collider::Type::Box, "A tile collider must be of ime::Collider::Type::Box")
+
         collider_ = std::move(collider);
         if (collider_->getSize() < tile_.getSize() || collider_->getSize() > tile_.getSize())
             collider_->setSize(tile_.getSize());

@@ -56,6 +56,7 @@ namespace ime::ui {
 
     MenuBar &MenuBar::operator=(const MenuBar& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<MenuBarImpl>(*rhs.pimpl_);
         }
 

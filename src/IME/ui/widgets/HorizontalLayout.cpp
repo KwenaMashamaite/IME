@@ -54,6 +54,7 @@ namespace ime::ui {
 
     HorizontalLayout &HorizontalLayout::operator=(const HorizontalLayout& rhs) {
         if (this != &rhs) {
+            IBoxLayout::operator=(rhs);
             pimpl_ = std::make_unique<HorizontalLayoutImpl>(*rhs.pimpl_);
         }
 

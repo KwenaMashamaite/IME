@@ -229,7 +229,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~Camera();
+        ~Camera() override;
 
     private:
         /**

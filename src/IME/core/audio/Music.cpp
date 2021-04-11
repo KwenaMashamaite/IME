@@ -35,6 +35,11 @@ namespace ime::audio {
             song_{std::make_shared<sf::Music>()}
         {}
 
+        Impl(const Impl&) = delete;
+        const Impl& operator=(const Impl&) = delete;
+        Impl(Impl&&) noexcept = default;
+        Impl& operator=(Impl&&) noexcept = default;
+
         void setSource(const std::string &source) override {
             if (sourceFilename_ != source) {
                 song_ = ResourceManager::getInstance()->getMusic(source);

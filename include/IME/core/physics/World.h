@@ -129,6 +129,16 @@ namespace ime {
         };
 
         /**
+         * @brief Copy constructor
+         */
+        World(const World&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        World& operator=(const World&) = delete;
+
+        /**
          * @brief Create the physics simulation
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity

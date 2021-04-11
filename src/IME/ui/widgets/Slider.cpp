@@ -56,6 +56,7 @@ namespace ime::ui {
 
     Slider &Slider::operator=(const Slider& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<SliderImpl>(*rhs.pimpl_);
         }
 

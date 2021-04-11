@@ -40,6 +40,7 @@ namespace ime {
     PolygonCollider &PolygonCollider::operator=(const PolygonCollider& rhs) {
         if (this != &rhs) {
             auto temp{rhs};
+            Collider::operator=(temp);
             polygon_ = std::move(temp.polygon_);
         }
 

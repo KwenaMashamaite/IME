@@ -133,6 +133,7 @@ namespace ime::ui {
 
     WidgetContainer &WidgetContainer::operator=(const WidgetContainer& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<WidgetContainerImpl>(*rhs.pimpl_);
         }
 

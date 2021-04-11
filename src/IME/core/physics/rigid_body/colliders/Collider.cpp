@@ -45,6 +45,7 @@ namespace ime {
 
     Collider &Collider::operator=(const Collider& rhs) {
         if (this != &rhs) {
+            Object::operator=(rhs);
             type_ = rhs.type_;
             filterData_ = rhs.filterData_;
             prevCollisionBitMask_ = rhs.prevCollisionBitMask_;

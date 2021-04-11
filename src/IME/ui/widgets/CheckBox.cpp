@@ -52,6 +52,7 @@ namespace ime::ui {
 
     CheckBox &CheckBox::operator=(const CheckBox& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<CheckBoxImpl>(*rhs.pimpl_);
         }
 

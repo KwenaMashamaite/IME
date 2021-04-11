@@ -54,6 +54,7 @@ namespace ime::ui {
 
     VerticalLayout &VerticalLayout::operator=(const VerticalLayout& rhs) {
         if (this != &rhs) {
+            IBoxLayout::operator=(rhs);
             pimpl_ = std::make_unique<VerticalLayoutImpl>(*rhs.pimpl_);
         }
 

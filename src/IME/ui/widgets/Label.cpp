@@ -97,6 +97,7 @@ namespace ime::ui {
 
     Label &Label::operator=(const Label& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<LabelImpl>(*rhs.pimpl_);
         }
 

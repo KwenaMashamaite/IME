@@ -41,13 +41,14 @@ namespace ime {
         renderLayers_.create("default");
     }
 
-    Scene::Scene(Scene&& other) noexcept{
+    Scene::Scene(Scene&& other) noexcept {
         *this = std::move(other);
     }
 
     Scene &Scene::operator=(Scene&& other) noexcept {
         // We can't use a default move assignment operator because of reference members
         if (this != &other) {
+            Object::operator=(std::move(other));
             engine_ = std::move(other.engine_);
             camera_ = std::move(other.camera_);
             cache_ = std::move(other.cache_);

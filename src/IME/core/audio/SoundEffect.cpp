@@ -142,6 +142,7 @@ namespace ime::audio {
 
     SoundEffect &SoundEffect::operator=(const SoundEffect& rhs) {
         if (this != &rhs) {
+            Audio::operator=(rhs);
             auto temp{rhs};
             std::swap(pImpl_, temp.pImpl_);
         }

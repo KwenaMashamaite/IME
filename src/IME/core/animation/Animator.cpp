@@ -28,16 +28,21 @@
 #include <memory>
 
 namespace ime {
-    Animator::Animator(Sprite& target) :
+    Animator::Animator() :
         currentFrameIndex_{0},
         timescale_{1.0f},
         isPlaying_{false},
         isPaused_{false},
         hasStarted_{false},
-        target_{std::make_unique<std::reference_wrapper<Sprite>>(target)},
         cycleDirection_{Direction::Unknown},
         completedFirstAlternateCycle_{false}
     {}
+
+    Animator::Animator(Sprite &target) :
+        Animator()
+    {
+        setTarget(target);
+    }
 
     Animator::Animator(const Animator& other) :
         currentFrameIndex_{other.currentFrameIndex_},

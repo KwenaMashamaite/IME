@@ -69,8 +69,23 @@ namespace ime {
         };
 
         /**
+         * @brief Default constructor
+         *
+         * @warning When this constructor is used, you must call setTarget
+         * before using the animator, otherwise undefined behavior
+         *
+         * @see Animator(Sprite&)
+         * @see setTarget
+         */
+        Animator();
+
+        /**
          * @brief Constructor
          * @param target Sprite to animate
+         *
+         * You don't have to call setTarget when this constructor is used
+         *
+         * @see Animator
          */
         explicit Animator(Sprite& target);
 

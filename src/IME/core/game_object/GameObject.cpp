@@ -46,7 +46,6 @@ namespace ime {
         state_{other.state_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
-        eventEmitter_{other.eventEmitter_},
         transform_{other.transform_},
         sprite_{other.sprite_},
         postStepId_{other.postStepId_}
@@ -58,18 +57,10 @@ namespace ime {
 
     GameObject &GameObject::operator=(const GameObject &other) {
         if (this != &other) {
-            scene_ = other.scene_;
-            type_ = other.type_;
-            state_ = other.state_;
-            isActive_ = other.isActive_;
-            isCollidable_ = other.isCollidable_;
-            transform_ = other.transform_;
-            eventEmitter_ = other.eventEmitter_;
-            sprite_ = other.sprite_;
-
-            if (other.body_)
-                attachRigidBody(other.body_->copy());
-
+            auto temp{other};
+            Object::operator=(temp);
+            std::enable_shared_from_this<GameObject>::operator=(temp);
+            swap(temp);
             initEvents();
         }
 
@@ -77,20 +68,32 @@ namespace ime {
     }
 
     GameObject::GameObject(GameObject&& other) noexcept :
-        scene_{other.scene_},
-        type_{other.type_},
-        state_{other.state_},
-        isActive_{other.isActive_},
-        isCollidable_{other.isCollidable_},
-        eventEmitter_{std::move(other.eventEmitter_)},
-        transform_{std::move(other.transform_)},
-        sprite_{std::move(other.sprite_)},
-        postStepId_{-1}
+        scene_(other.scene_)
     {
-        if (other.body_)
-            attachRigidBody(other.body_->copy());
-
+        *this = std::move(other);
         initEvents();
+    }
+
+    GameObject &GameObject::operator=(GameObject&& rhs) noexcept {
+        // We don't want to copy event listeners of the rhs object
+        if (this != &rhs) {
+            Object::operator=(std::move(rhs));
+            std::enable_shared_from_this<GameObject>::operator=(rhs);
+            swap(rhs);
+        }
+
+        return *this;
+    }
+
+    void GameObject::swap(GameObject &other) {
+        std::swap(scene_, other.scene_);
+        std::swap(type_, other.type_);
+        std::swap(state_, other.state_);
+        std::swap(isActive_, other.isActive_);
+        std::swap(isCollidable_, other.isCollidable_);
+        std::swap(transform_, other.transform_);
+        std::swap(sprite_, other.sprite_);
+        std::swap(body_, other.body_);
     }
 
     GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {

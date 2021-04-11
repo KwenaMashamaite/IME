@@ -61,6 +61,7 @@ namespace ime::ui {
 
     EditBox &EditBox::operator=(const EditBox& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<EditBoxImpl>(*rhs.pimpl_);
         }
 

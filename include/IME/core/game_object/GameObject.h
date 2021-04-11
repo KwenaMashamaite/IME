@@ -82,7 +82,13 @@ namespace ime {
         /**
          * @brief Move assignment operator
          */
-        GameObject& operator=(GameObject&&) noexcept = default;
+        GameObject& operator=(GameObject&&) noexcept;
+
+        /**
+         * @brief Swap the game object with another game object
+         * @param other The game object to swap with this gam object
+         */
+        void swap(GameObject& other);
 
         /**
          * @brief Create a game object
@@ -357,7 +363,6 @@ namespace ime {
         int state_;                           //!< The current state of the game object
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state
-        EventEmitter eventEmitter_;           //!< Event publisher
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object

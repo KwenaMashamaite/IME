@@ -63,8 +63,9 @@ namespace ime::ui {
         pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
     {}
 
-    Button &Button::operator=(const Button & rhs) {
+    Button &Button::operator=(const Button& rhs) {
         if (this != &rhs) {
+            ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
         }
 

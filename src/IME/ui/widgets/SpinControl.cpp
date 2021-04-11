@@ -58,6 +58,7 @@ namespace ime::ui {
 
     SpinControl &SpinControl::operator=(const SpinControl& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<SpinControlImpl>(*rhs.pimpl_);
         }
 

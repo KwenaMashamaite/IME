@@ -73,6 +73,7 @@ namespace ime::ui {
 
     ChildWindow &ChildWindow::operator=(const ChildWindow& rhs) {
         if (this != &rhs) {
+            WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<ChildWindowImpl>(*rhs.pimpl_);
         }
 

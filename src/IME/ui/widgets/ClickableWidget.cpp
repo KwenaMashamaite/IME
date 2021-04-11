@@ -85,6 +85,7 @@ namespace ime::ui {
 
     ClickableWidget& ClickableWidget::operator=(const ClickableWidget& rhs) {
         if (this != &rhs) {
+            Widget::operator=(rhs);
             pimpl_ = std::make_unique<ClickableWidgetImpl>(*rhs.pimpl_);
         }
 
