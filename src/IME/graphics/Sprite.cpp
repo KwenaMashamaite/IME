@@ -36,9 +36,22 @@ namespace ime {
     struct Sprite::SpriteImpl {
         explicit SpriteImpl(Sprite& sprite) :
             isVisible_{true},
-            animator_{sprite},
-            texture_{nullptr}
+            animator_{sprite}
         {}
+
+        SpriteImpl(const SpriteImpl&) = default;
+        SpriteImpl& operator=(const SpriteImpl&) = default;
+
+        SpriteImpl(SpriteImpl&& other) noexcept {
+            *this = std::move(other);
+        }
+
+        SpriteImpl& operator=(SpriteImpl&& rhs) noexcept {
+            if (this != &rhs) {
+                swap(rhs);
+            }
+            return *this;
+        }
 
         void swap(SpriteImpl &other) {
             std::swap(sprite_, other.sprite_);
@@ -49,13 +62,12 @@ namespace ime {
         }
 
         void setTexture(const Texture &texture) {
-            texture_ = &texture;
-            if (texture_)
-                sprite_.setTexture(texture_->getInternalTexture(), true);
+            texture_ = std::make_shared<Texture>(texture);
+            sprite_.setTexture(texture_->getInternalTexture(), true);
         }
 
         void setTexture(const std::string &filename) {
-            texture_ = &ResourceManager::getInstance()->getTexture(filename);
+            texture_ = std::make_shared<Texture>(ResourceManager::getInstance()->getTexture(filename));
             sprite_.setTexture(texture_->getInternalTexture(), true);
         }
 
@@ -164,18 +176,12 @@ namespace ime {
             animator_.setTarget(target);
         }
 
-        ~SpriteImpl() {
-            // We don't call delete because the memory will be deallocated by
-            // the resource manager
-            texture_ = nullptr;
-        }
-
     private:
         sf::Sprite sprite_;           //!< Third party sprite
         bool isVisible_;              //!< Flags whether or not the sprite is visible
         Colour prevSpriteColour_;     //!< Sprite colour before it was hidden
         Animator animator_;           //!< Sprite animator
-        const Texture* texture_;      //!< Sprite texture
+        std::shared_ptr<Texture> texture_; //!< Keeps sf::Texture alive for sf::Sprite
     }; // class Impl
 
     /*-------------------------------------------------------------------------
@@ -209,28 +215,29 @@ namespace ime {
         Drawable(other),
         pImpl_{std::make_unique<SpriteImpl>(*other.pImpl_)}
     {
-        pImpl_->setTexture(other.getTexture());
-        setTextureRect(other.getTextureRect());
         pImpl_->setAnimationTarget(*this);
     }
 
     Sprite &Sprite::operator=(const Sprite& other) {
         if (this != &other) {
-            Drawable::operator=(other);
-            pImpl_ = std::make_unique<SpriteImpl>(*other.pImpl_);
+            auto temp{other};
+            std::swap(pImpl_, temp.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
         return *this;
     }
 
-    Sprite::Sprite(Sprite&& other) noexcept {
-        *this = std::move(other);
+    Sprite::Sprite(Sprite&& other) noexcept :
+        Drawable(std::move(other)),
+        pImpl_{std::move(other.pImpl_)}
+    {
+        pImpl_->setAnimationTarget(*this);
     }
 
     Sprite &Sprite::operator=(Sprite&& other) noexcept {
         if (this != &other) {
             Drawable::operator=(std::move(other));
-            pImpl_ = std::move(other.pImpl_);
+            *pImpl_ = std::move(*other.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
 

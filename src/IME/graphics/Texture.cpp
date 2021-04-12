@@ -30,6 +30,7 @@ namespace ime {
     struct Texture::Impl {
         Impl(const std::string &filename, const UIntRect &area) :
             filename_{filename},
+            texture_{std::make_shared<sf::Texture>()},
             image_{ResourceManager::getInstance()->getImage(filename)}
         {
             auto sfArea = sf::IntRect {
@@ -37,27 +38,36 @@ namespace ime {
                 static_cast<int>(area.width),static_cast<int>(area.height)
             };
 
-            texture_.loadFromImage(image_, sfArea);
+            texture_->loadFromImage(image_, sfArea);
+        }
+
+        Impl(const Impl& other) :
+            filename_{other.filename_},
+            image_{other.image_}
+        {
+            // Its expensive to copy sf::Texture, so instead we increase the
+            // reference counter of other.texture_
+            texture_ = other.texture_;
         }
 
         Vector2u getSize() const {
-            return {texture_.getSize().x, texture_.getSize().y};
+            return {texture_->getSize().x, texture_->getSize().y};
         }
 
         void setSmooth(bool smooth) {
-            texture_.setSmooth(smooth);
+            texture_->setSmooth(smooth);
         }
 
         bool isSmooth() const {
-            return texture_.isSmooth();
+            return texture_->isSmooth();
         }
 
         void setRepeated(bool repeated) {
-            texture_.setRepeated(repeated);
+            texture_->setRepeated(repeated);
         }
 
         bool isRepeated() const {
-            return texture_.isRepeated();
+            return texture_->isRepeated();
         }
 
         static unsigned int getMaximumSize() {
@@ -69,12 +79,12 @@ namespace ime {
         }
 
         const sf::Texture& getSFMLTexture() const {
-            return texture_;
+            return *texture_;
         }
 
     private:
         std::string filename_;                          //!< Name of the image file on the disk
-        sf::Texture texture_;                           //!< Third party texture
+        std::shared_ptr<sf::Texture> texture_;                           //!< Third party texture
         std::reference_wrapper<const sf::Image> image_; //!< Constructs the texture
     }; // class Impl
 
