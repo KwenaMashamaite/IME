@@ -349,8 +349,12 @@ namespace ime {
     }
 
     void TileMap::update(Time deltaTime) {
-        forEachChild([deltaTime](const GameObject::Ptr& child) {
+        forEachChild([&deltaTime](const GameObject::Ptr& child) {
             child->update(deltaTime);
+        });
+
+        sprites_.forEach([&deltaTime](const Sprite::Ptr& sprite) {
+            sprite->updateAnimation(deltaTime);
         });
     }
 
