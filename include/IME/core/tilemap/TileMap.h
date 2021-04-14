@@ -430,14 +430,25 @@ namespace ime {
          * @brief Add an entity to the tilemap
          * @param child GameObject to add to the tilemap
          * @param index Index of the tile to add the entity to
+         * @param assignLayer True to assign the game object a render layer
          * @return True if the entity has been added or false if the index is
          *         invalid or the entity already exists in the tilemap
          *
          * If the specified tile is already occupied, the child will be added
          * as a visitor of that tile. Note that @a child will always be placed
-         * at the centre point of the tile
+         * at the centre point of the tile.
+         *
+         * @note If @a assignLayer is set to true, the game object will be added
+         * to the @a default render layer and assigned a render order of @a 0.
+         * When it is set to false, it must be manually assigned to one of the
+         * tilemap's render layers, otherwise it will not be drawn on the screen
+         *
+         * @warning If the @a default render layer is removed, then @a assignLayer
+         * must always be set to @b false, otherwise undefined behavior
+         *
+         * @see renderLayers
          */
-        bool addChild(GameObject::Ptr child, Index index);
+        bool addChild(GameObject::Ptr child, Index index, bool assignLayer = true);
 
         /**
          * @brief Get the child in the tilemap with a certain id

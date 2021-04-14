@@ -271,12 +271,17 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::addChild(std::shared_ptr<GameObject> child, Index index) {
+    bool TileMap::addChild(std::shared_ptr<GameObject> child, Index index, bool assignLayer) {
         IME_ASSERT(child, "Cannot add nullptr to a tilemap")
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
             if (child->hasRigidBody())
                 child->getRigidBody()->setPosition(getTile(index).getWorldCentre());
+
+            if (assignLayer) {
+                IME_ASSERT(renderLayers_.hasLayer("default"), "The render layer 'default' was removed from the Tilemap's render layers")
+                renderLayers_.add(child->getSprite());
+            }
 
             children_[index].push_back(std::move(child));
             return true;
