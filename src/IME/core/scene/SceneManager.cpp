@@ -112,8 +112,6 @@ namespace ime {
                 scene->tileMap_->draw(renderWindow);
 
             scene->renderLayers_.render(renderWindow);
-            // Draw the gui on top of everything
-            scene->gui().draw();
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
@@ -122,6 +120,9 @@ namespace ime {
 
             renderScene(scenes_.top(), window);
             scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
+
+            // Draw the gui on top of everything
+            scenes_.top()->gui().draw();
         }
     }
 
