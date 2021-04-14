@@ -36,7 +36,9 @@ namespace ime {
     struct Sprite::SpriteImpl {
         explicit SpriteImpl(Sprite& sprite) :
             isVisible_{true},
-            animator_{sprite}
+            prevSpriteColour_{Colour::Transparent},
+            animator_{sprite},
+            texture_{std::make_shared<Texture>()}
         {}
 
         SpriteImpl(const SpriteImpl&) = default;
@@ -62,7 +64,7 @@ namespace ime {
         }
 
         void setTexture(const Texture &texture) {
-            texture_ = std::make_shared<Texture>(texture);
+            *texture_ = *std::make_shared<Texture>(texture);
             sprite_.setTexture(texture_->getInternalTexture(), true);
         }
 

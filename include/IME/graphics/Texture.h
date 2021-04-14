@@ -43,6 +43,13 @@ namespace ime {
         using Ptr = std::shared_ptr<Texture>; //!< shared texture pointer
 
         /**
+         * @brief Constructor
+         *
+         * Creates an empty texture
+         */
+        Texture();
+
+        /**
          * @brief Construct the texture
          * @param filename Filename of the image file to load
          * @param area Area of the image to load

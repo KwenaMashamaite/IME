@@ -28,6 +28,10 @@
 
 namespace ime {
     struct Texture::Impl {
+        Impl() :
+            image_{*(new sf::Image())}
+        {}
+
         Impl(const std::string &filename, const UIntRect &area) :
             filename_{filename},
             texture_{std::make_shared<sf::Texture>()},
@@ -49,6 +53,10 @@ namespace ime {
             // reference counter of other.texture_
             texture_ = other.texture_;
         }
+
+        Impl& operator=(const Impl&) = default;
+        Impl(Impl&&) noexcept = default;
+        Impl& operator=(Impl&&) noexcept = default;
 
         Vector2u getSize() const {
             return {texture_->getSize().x, texture_->getSize().y};
@@ -87,6 +95,10 @@ namespace ime {
         std::shared_ptr<sf::Texture> texture_;                           //!< Third party texture
         std::reference_wrapper<const sf::Image> image_; //!< Constructs the texture
     }; // class Impl
+
+    Texture::Texture() :
+        pImpl_{std::make_unique<Impl>()}
+    {}
 
     Texture::Texture(const std::string &filename, const UIntRect &area) :
         pImpl_{std::make_unique<Impl>(filename, area)}
