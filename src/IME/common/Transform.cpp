@@ -27,7 +27,8 @@
 
 namespace ime {
     Transform::Transform() :
-        rotation_{0.0f}
+        rotation_{0.0f},
+        scale_{1.0f, 1.0f}
     {}
 
     void Transform::setPosition(float x, float y) {
