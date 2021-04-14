@@ -140,6 +140,7 @@ namespace ime {
                 isMoving_ = true;
                 auto velocity = Vector2f{maxSpeed_.x * targetDirection_.x,maxSpeed_.y * targetDirection_.y};
                 target_->getRigidBody()->setLinearVelocity(velocity);
+                eventEmitter_.emit("moveBegin", targetTile_);
             } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
                 onDestinationReached();
@@ -273,6 +274,10 @@ namespace ime {
 
     int GridMover::onGridBorderCollision(Callback<> callback) {
         return eventEmitter_.addEventListener("gridBorderCollision", std::move(callback));
+    }
+
+    int GridMover::onMoveBegin(Callback<Tile> callback) {
+        return eventEmitter_.addEventListener("moveBegin", std::move(callback));
     }
 
     int GridMover::onAdjacentTileReached(Callback<Tile> callback) {

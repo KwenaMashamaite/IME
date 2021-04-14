@@ -222,6 +222,23 @@ namespace ime {
         int onTargetChanged(Callback<GameObject::Ptr> callback);
 
         /**
+         * @brief Add an event listener to a move begin event
+         * @param callback The function to be executed when the game object
+         *                 starts moving
+         * @return The event listeners unique identification number
+         *
+         * This event is emitted when the game object starts moving from its
+         * current tile to one of its adjacent tile. The callback is passed
+         * the tile that the game object is currently moving to
+         *
+         * @note When controlled by a grid mover, the game object will always
+         * move one tile at a time, regardless of how fast it's moving
+         *
+         * @see onAdjacentTileReached
+         */
+        int onMoveBegin(Callback<Tile> callback);
+
+        /**
          * @brief Add an event listener to an adjacent tile reached event
          * @param callback Function to execute when the target reaches its
          *        target tile
@@ -234,6 +251,8 @@ namespace ime {
          * one tile at a time, regardless of how fast the target is moving
          *
          * The callback is passed the tile the target moved to
+         *
+         * @see onMoveBegin
          */
         int onAdjacentTileReached(Callback<Tile> callback);
 
