@@ -193,7 +193,7 @@ namespace ime {
             scene->fixedUpdate(deltaTime * scene->getTimescale());
         } else {
             if (scene->hasTilemap_)
-                scene->tileMap_->update(deltaTime);
+                scene->tileMap_->update(deltaTime * scene->getTimescale());
 
             //Update game objects - By default, the game object updates its sprite animation
             scene->gameObjects().forEach([&scene, &deltaTime](const GameObject::Ptr& gameObject) {
