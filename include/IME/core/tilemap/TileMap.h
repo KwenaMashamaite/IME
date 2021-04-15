@@ -152,15 +152,6 @@ namespace ime {
         void loadFromVector(Map map);
 
         /**
-         * @brief Set whether or not a tile is collidable
-         * @param tile The tile to enable or disable collisions for
-         * @param collidable True to set collidable, otherwise false
-         *
-         * By default, a tile is not collidable
-         */
-        void setCollidable(Tile& tile, bool collidable);
-
-        /**
          * @brief Enable or disable collision for a tile at a certain location
          * @param index Location (in tiles) of the tile
          * @param isCollidable True to enable collision, otherwise false
@@ -259,7 +250,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTile(const Index& index);
+        const Tile& getTile(const Index& index);
 
         /**
          * @brief Get the tile at at certain position
@@ -270,7 +261,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTile(const Vector2f& position);
+        const Tile& getTile(const Vector2f& position);
 
         /**
          * @brief Get the tile above a certain tile
@@ -280,7 +271,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileAbove(const Tile& tile);
+        const Tile& getTileAbove(const Tile& tile);
 
         /**
          * @brief Get the tile below a certain tile
@@ -290,7 +281,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileBelow(const Tile& tile);
+        const Tile& getTileBelow(const Tile& tile);
 
         /**
          * @brief Get the tile to the left of a certain tile
@@ -300,7 +291,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile & getTileLeftOf(const Tile& tile);
+        const Tile& getTileLeftOf(const Tile& tile);
 
         /**
          * @brief Get the tile to the right of a certain tile
@@ -310,14 +301,14 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileRightOf(const Tile& tile);
+        const Tile& getTileRightOf(const Tile& tile);
 
         /**
          * @brief Execute a callback function on every tile with a certain id
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTileWithId(char id, const Callback<Tile&>& callback);
+        void forEachTileWithId(char id, const Callback<const Tile&>& callback);
 
         /**
          * @brief Execute a callback on all tiles except tiles with a
@@ -325,13 +316,13 @@ namespace ime {
          * @param id Id of the tiles to be ignored
          * @param callback Function to be executed
          */
-        void forEachTileExcept(char id, const Callback<Tile&>& callback);
+        void forEachTileExcept(char id, const Callback<const Tile&>& callback);
 
         /**
          * @brief Execute a callback on all the tiles of the tilemap
          * @param callback Function to execute for each tile
          */
-        void forEachTile(const Callback<Tile&>& callback);
+        void forEachTile(const Callback<const Tile&>& callback);
 
         /**
          * @brief Execute a callback function on each tile in a range
@@ -341,7 +332,8 @@ namespace ime {
          *
          * @note Only horizontal ranges are supported
          */
-        void forEachTileInRange(Index startPos, Index endPos, const Callback<Tile&>& callback);
+        void forEachTileInRange(Index startPos, Index endPos,
+            const Callback<const Tile&>& callback);
 
         /**
          * @brief Get the tilemap render layers
@@ -367,7 +359,7 @@ namespace ime {
          * The @a rect defines the sub-rectangle of the tileset to use
          * for texturing the tile
          */
-        void textureTile(Index index, UIntRect rect);
+        void textureTile(const Index& index, const UIntRect& rect);
 
         /**
          * @brief Apply a texture to all tiles with a certain id
@@ -381,7 +373,7 @@ namespace ime {
          *
          * @see textureTilesById(char, const Sprite&)
          */
-        void textureTilesById(char id, UIntRect rect);
+        void textureTilesById(char id, const UIntRect& rect);
 
         /**
          * @brief Apply a texture to all tiles with a certain id
@@ -423,7 +415,7 @@ namespace ime {
          *
          * Note that the sprite is added at the centre of the the tile
          */
-        void addSprite(Sprite::Ptr sprite, Index index, int renderOrder = 0,
+        void addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder = 0,
             const std::string& renderLayer = "default");
 
         /**
@@ -448,7 +440,7 @@ namespace ime {
          *
          * @see renderLayers
          */
-        bool addChild(GameObject::Ptr child, Index index, bool assignLayer = true);
+        bool addChild(GameObject::Ptr child, const Index& index, bool assignLayer = true);
 
         /**
          * @brief Get the child in the tilemap with a certain id
@@ -547,7 +539,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(const GameObject::Ptr& child, Index index);
+        void moveChild(const GameObject::Ptr& child, const Index& index);
 
         /**
          * @brief Move child to a different tile
@@ -569,7 +561,7 @@ namespace ime {
          *
          * An invalid tile has a negative index
          */
-        Tile& getTileOccupiedByChild(const GameObject::Ptr& child);
+        const Tile& getTileOccupiedByChild(const GameObject::Ptr& child);
 
         /**
          * @brief Check if tile is occupied or not
@@ -678,7 +670,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileAbove(const Index& index);
+        const Tile& getTileAbove(const Index& index);
 
         /**
          * @brief Get the tile below a tile at a given location
@@ -688,7 +680,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileBelow(const Index& index);
+        const Tile& getTileBelow(const Index& index);
 
         /**
          * @brief Get the tile to the left of a tile at a given location
@@ -698,7 +690,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileLeftOf(const Index& index);
+        const Tile& getTileLeftOf(const Index& index);
 
         /**
          * @brief Get the tile to the right of a tile at a given location
@@ -708,7 +700,22 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        Tile& getTileRightOf(const Index& index);
+        const Tile& getTileRightOf(const Index& index);
+
+        /**
+         * @brief Set whether or not a tile is collidable
+         * @param tile The tile to enable or disable collisions for
+         * @param collidable True to set collidable, otherwise false
+         *
+         * By default, a tile is not collidable
+         */
+        void setCollidable(Tile& tile, bool collidable);
+
+        /**
+         * @brief Execute a callback on all the tiles of the tilemap
+         * @param callback Function to execute for each tile
+         */
+        void forEachTile_(const Callback<Tile&>& callback);
 
     private:
         unsigned int tileSpacing_;   //!< Spacing between tiles in all directions

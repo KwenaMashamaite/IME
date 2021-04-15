@@ -84,8 +84,8 @@ namespace ime {
         collider_->getBody()->setPosition(getWorldCentre());
     }
 
-    void Tile::removeCollider(Tile::TilePassKey) {
-        setCollidable(false, {});
+    void Tile::removeCollider() {
+        setCollidable(false);
         auto body = collider_->getBody();
         body->removeColliderWithId(collider_->getObjectId());
         body->getWorld()->removeBodyById(body->getObjectId());
@@ -105,7 +105,7 @@ namespace ime {
                 static_cast<unsigned int>(tile_.getGlobalBounds().height)};
     }
 
-    void Tile::setPosition(float x, float y, TilePassKey) {
+    void Tile::setPosition(float x, float y) {
         if (getPosition() == Vector2f{x, y})
             return;
 
@@ -117,8 +117,8 @@ namespace ime {
         emitChange(Property{Property{"position", getPosition()}});
     }
 
-    void Tile::setPosition(Vector2f position, TilePassKey) {
-        setPosition(position.x, position.y, {});
+    void Tile::setPosition(Vector2f position) {
+        setPosition(position.x, position.y);
     }
 
     Vector2f Tile::getPosition() const {
@@ -134,7 +134,7 @@ namespace ime {
         return tile_.getSize() / 2.0f;
     }
 
-    void Tile::setSize(unsigned int width, unsigned int height, TilePassKey) {
+    void Tile::setSize(unsigned int width, unsigned int height) {
         if (getSize() == Vector2u{width, height})
             return;
 
@@ -148,11 +148,11 @@ namespace ime {
         emitChange(Property{"size", getSize()});
     }
 
-    void Tile::setSize(Vector2u size, TilePassKey) {
-        setSize(size.x, size.y, {});
+    void Tile::setSize(Vector2u size) {
+        setSize(size.x, size.y);
     }
 
-    void Tile::setCollidable(bool collidable, TilePassKey) {
+    void Tile::setCollidable(bool collidable) {
         if (isCollidable_ == collidable)
             return;
 
@@ -168,7 +168,7 @@ namespace ime {
         emitChange(Property{"collidable", isCollidable_});
     }
 
-    void Tile::setId(char id, TilePassKey) {
+    void Tile::setId(char id) {
         if (id_ != id) {
             id_ = id;
             emitChange(Property{"id", id_});
@@ -183,7 +183,7 @@ namespace ime {
         renderTarget.draw(tile_);
     }
 
-    void Tile::setVisible(bool visible, TilePassKey) {
+    void Tile::setVisible(bool visible) {
         if (isVisible() == visible)
             return;
 
@@ -201,8 +201,8 @@ namespace ime {
         return tile_.getFillColour() != Colour::Transparent;
     }
 
-    void Tile::toggleVisibility(TilePassKey) {
-        setVisible(!isVisible(), {});
+    void Tile::toggleVisibility() {
+        setVisible(!isVisible());
     }
 
     bool Tile::isCollidable() const {
@@ -214,7 +214,7 @@ namespace ime {
                 && (point.y >= getPosition().y && point.y <= getPosition().y + getSize().y));
     }
 
-    void Tile::setIndex(Index index, TilePassKey) {
+    void Tile::setIndex(Index index) {
         if (index_ != index) {
             index_ = index;
             emitChange(Property{"index", index_});
@@ -225,7 +225,7 @@ namespace ime {
         return index_;
     }
 
-    void Tile::setFillColour(const Colour &colour, TilePassKey) {
+    void Tile::setFillColour(const Colour &colour) {
         if (tile_.getFillColour() != colour) {
             tile_.setFillColour(colour);
             emitChange(Property{"fillColour", tile_.getFillColour()});

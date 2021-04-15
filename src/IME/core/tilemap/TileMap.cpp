@@ -37,7 +37,7 @@ namespace ime {
         sprites_{renderLayers_}
     {
         renderLayers_.create("default");
-        invalidTile_.setIndex({-1, -1}, {});
+        invalidTile_.setIndex({-1, -1});
         mapPos_ = {0, 0};
         numOfRows_ = numOfColms_ = 0u;
         if (tileWidth <= 0)
@@ -61,8 +61,8 @@ namespace ime {
 
         isVisible_ = visible;
 
-        forEachTile([=](Tile& tile) {
-            tile.setVisible(visible, {});
+        forEachTile_([visible](Tile& tile) {
+            tile.setVisible(visible);
         });
 
         if (isVisible_)
@@ -79,7 +79,7 @@ namespace ime {
         setVisible(!isVisible_);
     }
 
-    Tile& TileMap::getTile(const Vector2f &position) {
+    const Tile& TileMap::getTile(const Vector2f &position) {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
                 if (tile.contains(position))
@@ -88,19 +88,19 @@ namespace ime {
         return invalidTile_;
     }
 
-    Tile &TileMap::getTileAbove(const Tile &tile) {
+    const Tile &TileMap::getTileAbove(const Tile &tile) {
         return getTileAbove(tile.getIndex());
     }
 
-    Tile &TileMap::getTileBelow(const Tile &tile) {
+    const Tile &TileMap::getTileBelow(const Tile &tile) {
         return getTileBelow(tile.getIndex());
     }
 
-    Tile &TileMap::getTileLeftOf(const Tile &tile) {
+    const Tile &TileMap::getTileLeftOf(const Tile &tile) {
         return getTileLeftOf(tile.getIndex());
     }
 
-    Tile &TileMap::getTileRightOf(const Tile &tile) {
+    const Tile& TileMap::getTileRightOf(const Tile &tile) {
         return getTileRightOf(tile.getIndex());
     }
 
@@ -147,11 +147,10 @@ namespace ime {
             auto collider = BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)});
             auto body = physicsSim_->createBody();
             body->attachCollider(collider);
-            collider->setDensity(1.0f);
             tile.attachCollider(std::move(collider));
-            tile.setCollidable(true, {});
+            tile.setCollidable(true);
         } else
-            tile.setCollidable(collidable, {});
+            tile.setCollidable(collidable);
     }
 
     void TileMap::setPosition(int x, int y) {
@@ -162,11 +161,11 @@ namespace ime {
         for (auto i = 0u; i < tiledMap_.size(); i++) {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 if (i == 0 && j == 0)
-                    tiledMap_[i][j].setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_, {});
+                    tiledMap_[i][j].setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
                 else if (j == 0)
-                    tiledMap_[i][j].setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_}, {});
+                    tiledMap_[i][j].setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
-                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y}, {});
+                    tiledMap_[i][j].setPosition( {tiledMap_[i][j - 1].getPosition().x + tileSize_.x + tileSpacing_, tiledMap_[i][j - 1].getPosition().y});
             }
         }
     }
@@ -191,14 +190,14 @@ namespace ime {
             for (auto j = 0u; j < mapData_[i].size(); j++) {
                 auto tile = Tile(tileSize_, {-99, -99});
                 if (i == 0 && j == 0)
-                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_, {});
+                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_}, {});
+                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y}, {});
+                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
 
-                tile.setId(mapData_[i][j], {});
-                tile.setIndex({static_cast<int>(i), static_cast<int>(j)}, {});
+                tile.setId(mapData_[i][j]);
+                tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
                 row.emplace_back(tile);
             }
             tiledMap_.push_back(row);
@@ -206,21 +205,21 @@ namespace ime {
     }
 
     void TileMap::createObjectList() {
-        forEachTile([this](Tile& tile) {
+        forEachTile([this](const Tile& tile) {
             children_.emplace(tile.getIndex(), std::vector<std::shared_ptr<GameObject>>{});
         });
     }
 
     void TileMap::draw(Window &renderTarget) {
         renderTarget.draw(backgroundTile_);
-        forEachTile([&renderTarget](Tile& tile) {
+        forEachTile_([&renderTarget](Tile& tile) {
             renderTarget.draw(tile);
         });
 
         renderLayers().render(renderTarget);
     }
 
-    void TileMap::addSprite(Sprite::Ptr sprite, Index index, int renderOrder, const std::string &renderLayer) {
+    void TileMap::addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder, const std::string &renderLayer) {
         IME_ASSERT(sprite, "Sprite cannot be a nullptr")
         renderLayers_.add(*sprite, renderOrder, renderLayer);
         sprite->setPosition(getTile(index).getWorldCentre());
@@ -246,20 +245,20 @@ namespace ime {
     }
 
     void TileMap::setCollidableById(char id, bool isCollidable) {
-        forEachTile([id, isCollidable, this](Tile& tile) {
+        forEachTile_([id, isCollidable, this](Tile& tile) {
             if (tile.getId() == id)
                 setCollidable(tile, isCollidable);
         });
     }
 
     void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
-        forEachTile([id, isCollidable, this](Tile& tile) {
+        forEachTile_([id, isCollidable, this](Tile& tile) {
             if (tile.getId() != id)
                 setCollidable(tile, isCollidable);
         });
     }
 
-    Tile& TileMap::getTile(const Index &index) {
+    const Tile& TileMap::getTile(const Index &index) {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
         return invalidTile_;
@@ -271,7 +270,7 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::addChild(std::shared_ptr<GameObject> child, Index index, bool assignLayer) {
+    bool TileMap::addChild(std::shared_ptr<GameObject> child, const Index& index, bool assignLayer) {
         IME_ASSERT(child, "Cannot add nullptr to a tilemap")
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
@@ -422,7 +421,7 @@ namespace ime {
         return false;
     }
 
-    void TileMap::moveChild(const GameObject::Ptr& child, Index index) {
+    void TileMap::moveChild(const GameObject::Ptr& child, const Index& index) {
         if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
             removeChildFromTile(getTileOccupiedByChild(child), child);
             addChild(child, index);
@@ -441,7 +440,7 @@ namespace ime {
         return renderLayers_;
     }
 
-    void TileMap::textureTile(Index index, UIntRect rect) {
+    void TileMap::textureTile(const Index& index, const UIntRect& rect) {
         IME_ASSERT(!tilesets_.empty(), "Cannot texture tile with an empty tileset, set tileset to be used first");
         if (isIndexValid(index)) {
             auto sprite = Sprite(tileSet_);
@@ -450,65 +449,70 @@ namespace ime {
         }
     }
 
-    void TileMap::textureTilesById(char id, UIntRect rect) {
-        forEachTile([&](Tile& tile) {
+    void TileMap::textureTilesById(char id, const UIntRect& rect) {
+        forEachTile([id, &rect, this](const Tile& tile) {
             if (tile.getId() == id)
                 textureTile(tile.getIndex(), rect);
         });
     }
 
     void TileMap::textureTilesById(char id, const Sprite &sprite) {
-        IME_UNUSED(sprite);
-        forEachTile([&](Tile& tile) {
+        forEachTile([&sprite, id](const Tile& tile) {
             if (tile.getId() == id) {
                 //addSprite(sprite, tile.getIndex()); @TODO fix - dont know the layer to put it in
             }
         });
     }
 
-    void TileMap::forEachTile(const Callback<Tile&>& callback) {
+    void TileMap::forEachTile(const Callback<const Tile&>& callback) {
         std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
             std::for_each(row.begin(), row.end(), callback);
         });
     }
 
-    void TileMap::forEachTileWithId(char id, const Callback<Tile&>& callback) {
-        forEachTile([&callback, id](Tile& tile) {
+    void TileMap::forEachTile_(const Callback<Tile&> &callback) {
+        std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
+            std::for_each(row.begin(), row.end(), callback);
+        });
+    }
+
+    void TileMap::forEachTileWithId(char id, const Callback<const Tile&>& callback) {
+        forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() == id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileExcept(char id, const Callback<Tile&>& callback) {
-        forEachTile([&callback, id](Tile& tile) {
+    void TileMap::forEachTileExcept(char id, const Callback<const Tile&>& callback) {
+        forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() != id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileInRange(Index startPos, Index endPos, const Callback<Tile&>& callback) {
+    void TileMap::forEachTileInRange(Index startPos, Index endPos, const Callback<const Tile&>& callback) {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
                 tiledMap_[startPos.row].begin() + endPos.colm,
-                [&callback](Tile& tile) {
-                    callback(tile)
-            ;});
+                [&callback](const Tile& tile) {
+                    callback(tile);
+            });
         }
     }
 
-    Tile &TileMap::getTileAbove(const Index &index) {
+    const Tile& TileMap::getTileAbove(const Index &index) {
         return getTile(Index{index.row - 1, index.colm});
     }
 
-    Tile& TileMap::getTileBelow(const Index &index) {
+    const Tile& TileMap::getTileBelow(const Index &index) {
         return getTile(Index{index.row + 1, index.colm});
     }
 
-    Tile& TileMap::getTileLeftOf(const Index &index) {
+    const Tile& TileMap::getTileLeftOf(const Index &index) {
         return getTile(Index{index.row, index.colm - 1});
     }
 
-    Tile& TileMap::getTileRightOf(const Index &index) {
+    const Tile& TileMap::getTileRightOf(const Index &index) {
         return getTile(Index{index.row, index.colm + 1});
     }
 
@@ -524,7 +528,7 @@ namespace ime {
         return {numOfColms_, numOfRows_};
     }
 
-    Tile& TileMap::getTileOccupiedByChild(const GameObject::Ptr& child) {
+    const Tile& TileMap::getTileOccupiedByChild(const GameObject::Ptr& child) {
         return getTile(child->getTransform().getPosition());
     }
 }
