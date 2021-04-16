@@ -26,6 +26,7 @@
 #include "IME/graphics/Sprite.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <iterator>
+#include <cmath>
 
 namespace ime {
     SpriteSheet::SpriteSheet(const std::string &sourceTexture, Vector2u frameSize,
@@ -37,9 +38,10 @@ namespace ime {
         IME_ASSERT((frameSize.x >= 1 && frameSize.y >= 1), "The minimum size of a Spritesheet frame is 1x1")
 
         //Remove the spacing to get the actual number of columns and rows
-        auto numerator = getSize() - spacing_;
-        auto denominator = frameSize_ + spacing_;
-        sizeInFrames_ = ime::Vector2u{numerator.x / denominator.x, numerator.y / denominator.y};
+        Vector2f numerator{getSize() - spacing_};
+        Vector2f denominator{frameSize_ + spacing_};
+        sizeInFrames_ = ime::Vector2u{static_cast<unsigned int>(std::round(numerator.x / denominator.x)),
+                                      static_cast<unsigned int>(std::round(numerator.y / denominator.y))};
 
         auto currentPos = spacing_;
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
