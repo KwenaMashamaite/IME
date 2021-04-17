@@ -36,7 +36,7 @@ namespace ime {
     /**
      * @brief Interface for grid path finder algorithms
      */
-    class IME_API IGridPathFinder {
+    class IME_API IPathFinderStrategy {
     public:
         /**
          * @brief Find a path from a source tile to a target tile in a grid
@@ -58,7 +58,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~IGridPathFinder() = default;
+        virtual ~IPathFinderStrategy() = default;
 
     protected:
         /**

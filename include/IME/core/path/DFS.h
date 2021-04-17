@@ -25,22 +25,21 @@
 #ifndef IME_DFS_H
 #define IME_DFS_H
 
-#include "IGridPathFinder.h"
+#include "IPathFinderStrategy.h"
 #include "AdjacencyList.h"
 #include "IME/common/Vector2.h"
 
 namespace ime {
     /**
-     * @brief Class for finding the path from a source tile to a destination
-     *        tile using the Depth First Search algorithm
+     * @brief Finds a path in a TileMap using the Depth First Search algorithm
      */
-    class IME_API DFSPathFinder : public IGridPathFinder {
+    class IME_API DFS : public IPathFinderStrategy {
     public:
         /**
          * @brief Initialize the algorithm
          * @param gridSize Size of the grid
          */
-        explicit DFSPathFinder(Vector2u gridSize);
+        explicit DFS(Vector2u gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid

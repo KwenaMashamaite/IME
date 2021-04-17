@@ -27,7 +27,7 @@
 #include <algorithm>
 
 namespace ime {
-    BFSPathFinder::BFSPathFinder(Vector2u gridSize) {
+    BFS::BFS(Vector2u gridSize) {
         for (auto i = 0u; i < gridSize.y; i++) {
             auto innerVector = std::vector<bool>{};
             for (auto j = 0u; j < gridSize.x; j++)
@@ -36,7 +36,7 @@ namespace ime {
         }
     }
 
-    std::stack<Index> BFSPathFinder::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
+    std::stack<Index> BFS::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
         if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
             || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};
@@ -60,14 +60,14 @@ namespace ime {
             return std::stack<Index>{};
     }
 
-    void BFSPathFinder::reset() {
+    void BFS::reset() {
         for (auto i = 0u; i < visited_.size(); i++) {
             for (auto j = 0u; j < visited_[0].size(); j++)
                 visited_[i][j] = false;
         }
     }
 
-    void BFSPathFinder::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
+    void BFS::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
         if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than once
             return;
         else if (source.index == target) {
@@ -82,7 +82,7 @@ namespace ime {
         }
     }
 
-    std::string BFSPathFinder::getType() const {
+    std::string BFS::getType() const {
         return "BFS";
     }
 }

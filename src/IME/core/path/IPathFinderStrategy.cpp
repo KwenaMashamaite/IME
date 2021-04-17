@@ -22,10 +22,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/path/IGridPathFinder.h"
+#include "IME/core/path/IPathFinderStrategy.h"
 
 namespace ime {
-    void IGridPathFinder::backtrack(const std::vector<Node> &exploredNodes,
+    void IPathFinderStrategy::backtrack(const std::vector<Node> &exploredNodes,
         std::stack<Index> &path)
     {
         path.push(exploredNodes.back().index);

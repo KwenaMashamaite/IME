@@ -26,7 +26,7 @@
 #define IME_TARGETGRIDMOVER_H
 
 #include "IME/core/physics/tilemap/GridMover.h"
-#include "IME/core/path/IGridPathFinder.h"
+#include "IME/core/path/IPathFinderStrategy.h"
 
 namespace ime {
     /**
@@ -58,7 +58,7 @@ namespace ime {
          *
          * The default path finder is Breadth First Search
          */
-        void setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder);
+        void setPathFinder(std::unique_ptr<IPathFinderStrategy> pathFinder);
 
         /**
          * @brief Set the index of the tile the target should go to
@@ -186,7 +186,7 @@ namespace ime {
         void moveTarget();
 
     private:
-        std::unique_ptr<IGridPathFinder> pathFinder_; //!< Finds the path from the source to the target
+        std::unique_ptr<IPathFinderStrategy> pathFinder_; //!< Finds the path from the source to the target
         Index targetTileIndex_;                       //!< Index of the tile the game object wishes to go to
         std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
         bool movementStarted_;                        //!< Flags whether the target has been stopped or not

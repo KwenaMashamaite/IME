@@ -25,7 +25,7 @@
 #ifndef IME_BFS_H
 #define IME_BFS_H
 
-#include "IGridPathFinder.h"
+#include "IPathFinderStrategy.h"
 #include "AdjacencyList.h"
 #include "IME/common/Vector2.h"
 #include <queue>
@@ -33,16 +33,15 @@
 
 namespace ime {
     /**
-     * @brief Class for finding the path from a source tile to a destination
-     *        tile using the Breadth First Search algorithm
+     * @brief Finds a path in a TileMap using the Breadth First Search algorithm
      */
-    class IME_API BFSPathFinder : public IGridPathFinder {
+    class IME_API BFS : public IPathFinderStrategy {
     public:
         /**
          * @brief Initialize the algorithm
          * @param gridSize Size of the grid
          */
-        explicit BFSPathFinder(Vector2u gridSize);
+        explicit BFS(Vector2u gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid

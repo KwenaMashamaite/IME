@@ -28,7 +28,7 @@
 namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject::Ptr target) :
         GridMover(Type::Target, tileMap, std::move(target)),
-        pathFinder_(std::make_unique<BFSPathFinder>(tileMap.getSizeInTiles())),
+        pathFinder_(std::make_unique<BFS>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         movementStarted_{false},
         targetTileChangedWhileMoving_{false}
@@ -104,7 +104,7 @@ namespace ime {
             index).empty());
     }
 
-    void TargetGridMover::setPathFinder(std::unique_ptr<IGridPathFinder> pathFinder) {
+    void TargetGridMover::setPathFinder(std::unique_ptr<IPathFinderStrategy> pathFinder) {
         if (pathFinder) {
             pathFinder_ = std::move(pathFinder);
             generatePath();

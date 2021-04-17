@@ -25,7 +25,7 @@ set(IME_SRC
     core/path/AdjacencyList.cpp
     core/path/BFS.cpp
     core/path/DFS.cpp
-    core/path/IGridPathFinder.cpp
+    core/path/IPathFinderStrategy.cpp
     core/physics/rigid_body/Body.cpp
     core/physics/rigid_body/colliders/Collider.cpp
     core/physics/rigid_body/colliders/CircleCollider.cpp
