@@ -45,11 +45,6 @@ install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html
         DESTINATION ${CMAKE_INSTALL_DOCDIR}
         COMPONENT doc)
 
-# Store doc here because html files are served by github pages (No dedicated website for this project)
-install(DIRECTORY ${DOXYGEN_OUTPUT_DIR}/html
-        DESTINATION ${PROJECT_SOURCE_DIR}/docs
-        COMPONENT doc)
-
 if(DOXYGEN_HHC_PROGRAM)
     install(FILES ${DOXYGEN_OUTPUT_DIR}/ime.chm
             DESTINATION ${CMAKE_INSTALL_DOCDIR}
