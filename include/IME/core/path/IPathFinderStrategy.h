@@ -71,15 +71,12 @@ namespace ime {
 
         /**
          * @brief Generate path from the source to the target
-         * @param exploredNodes Nodes explored before the target was found
-         * @param path Vector to populate with path
-         *
-         * @warning This function will backtrack from the destination to the
-         * source in order to generate the path. As such, it assumes that the
-         * last node in the @a exploredNodes container is the target node.
-         * Therefore, it must only be called when the target was reached/found
+         * @param exploredNodes Nodes explored after algorithm termination
+         * @param target The index of the target tile in the grid
+         * @return The path from the source to the target tile if found,
+         *         otherwise an empty path
          */
-        void backtrack(const std::vector<Node>& exploredNodes, std::stack<Index>& path);
+        std::stack<Index> backtrack(const std::vector<Node>& exploredNodes, const Index& target);
     };
 }
 

@@ -27,12 +27,7 @@
 
 namespace ime {
     DFS::DFS(Vector2u gridSize) {
-        for (auto i = 0u; i < gridSize.y; i++) {
-            auto innerVector = std::vector<bool>{};
-            for (auto j = 0u; j < gridSize.x; j++)
-                innerVector.push_back(false);
-            visited_.push_back(innerVector);
-        }
+        visited_ = std::vector<std::vector<bool>>(gridSize.y, std::vector<bool>(gridSize.x, false));
     }
 
     std::stack<Index>
@@ -62,18 +57,12 @@ namespace ime {
         }
 
         reset();
-        if (exploredPath.back().index == targetTile) { //Found target
-            auto path = std::stack<Index>{};
-            backtrack(exploredPath, path);
-            return path;
-        } else
-            return std::stack<Index>{};
+        return backtrack(exploredPath, targetTile);
     }
 
     void DFS::reset() {
-        for (auto i = 0u; i < visited_.size(); i++) {
-            for (auto j = 0u; j < visited_[0].size(); j++)
-                visited_[i][j] = false;
+        for (auto& innerVec : visited_) {
+            std::fill(innerVec.begin(), innerVec.end(), false);
         }
     }
 
