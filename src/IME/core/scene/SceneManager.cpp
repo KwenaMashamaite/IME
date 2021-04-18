@@ -89,7 +89,7 @@ namespace ime {
 
     void SceneManager::clear() {
         while (!scenes_.empty())
-            popScene();
+            scenes_.pop();
     }
 
     void SceneManager::enterTopScene() const {
