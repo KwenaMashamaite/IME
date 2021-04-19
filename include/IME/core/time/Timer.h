@@ -181,17 +181,18 @@ namespace ime {
         void setTimeoutCallback(Callback<Timer&> callback);
 
         /**
-         * @brief Start the countdown
-         * @return True if the countdown was started or false if there is
-         *         no callback set or the interval is zero
+         * @brief Start the countdown/timer
          *
          * The callback function will be called when the countdown reaches
-         * zero. The countdown will not start if the interval is zero or
-         * the callback is nullptr (not set)
+         * zero
          *
          * @note This function will start the countdown if it was not started
          * or resume it if it was paused. If called while the timer is running
          * then, the timer will restart
+         *
+         * @warning This function must be called only if the interval is
+         * greater than zero and the timeout callback is set, otherwise
+         * undefined behavior
          *
          * @see setInterval, setTimeoutCallback, restart and pause
          */
@@ -261,23 +262,6 @@ namespace ime {
          * @return True if the callback was called, otherwise false
          */
         bool isDispatched() const;
-
-        /**
-         * @brief Check if the timer can be started when calling start()
-         * @return True if the timer can be started, otherwise false
-         *
-         * The timer can only be started/run if the interval is greater
-         * than zero and the callback for when the timer reaches zero
-         * has been set (setTimeoutCallback invoked with an argument
-         * that is not a nullptr).
-         *
-         * This function will return true even when the engine is already
-         * running because calling start() when the timer is running
-         * restarts it
-         *
-         * @see setTimeoutCallback and setInterval and start
-         */
-        bool canStart() const;
 
     private:
         Status status_;          //!< The current state of the timer

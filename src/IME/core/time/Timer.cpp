@@ -96,10 +96,12 @@ namespace ime {
     }
 
     void Timer::start() {
-        if (status_ != Status::Running && canStart()) {
+        IME_ASSERT(interval_ > Time::Zero, "The starting point of the timer countdown must be greater than 0")
+        IME_ASSERT(callback_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
+        if (status_ != Status::Running) {
             status_ = Status::Running;
             dispatchCount_ = 0;
-        } else if (status_ == Status::Running)
+        } else
             restart();
     }
 
@@ -152,9 +154,5 @@ namespace ime {
 
     bool Timer::isDispatched() const {
         return isDispatched_;
-    }
-
-    bool Timer::canStart() const {
-        return interval_ > Time::Zero && callback_;
     }
 }

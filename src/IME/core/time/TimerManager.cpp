@@ -26,10 +26,8 @@
 
 namespace ime {
     void TimerManager::addTimer(Timer timer) {
-        if (timer.canStart()) {
-            timer.start();
-            activeTimers_.push_back(std::move(timer));
-        }
+        timer.start();
+        activeTimers_.push_back(std::move(timer));
     }
 
     void TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
