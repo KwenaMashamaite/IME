@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
+#include "IME/common/PropertyContainer.h"
 #include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
@@ -173,6 +174,20 @@ namespace ime {
          * @return True if the game object is collidable, otherwise false
          */
         bool isCollidable() const;
+
+        /**
+         * @brief Get the user data added to game object
+         * @return The user data
+         *
+         * The user data object can be used to store additional information
+         * about the game object. For example, you may store a profile associated
+         * with the game object or when the game object was instantiated etc...
+         * You can store any type and any number of data in the user date object
+         *
+         * Note that IME does not store anything inside the user data object,
+         * it is reserved for external use only
+         */
+        PropertyContainer& getUserData();
 
         /**
          * @brief Get the name of the class the game object is instantiated from
@@ -367,6 +382,7 @@ namespace ime {
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object
         int postStepId_;                      //!< Scene post step handler id
+        PropertyContainer userData_;          //!< Used to store metadata about the object
 
         Callback<GameObject::Ptr, GameObject::Ptr> onContactBegin_; //!< Called when this game object starts colliding with another game object or vice versa
         Callback<GameObject::Ptr, GameObject::Ptr> onContactEnd_;   //!< Called when this game object stops colliding with another game object or vice versa

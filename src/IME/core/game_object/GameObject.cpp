@@ -94,6 +94,7 @@ namespace ime {
         std::swap(transform_, other.transform_);
         std::swap(sprite_, other.sprite_);
         std::swap(body_, other.body_);
+        std::swap(userData_, other.userData_);
     }
 
     GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {
@@ -149,6 +150,10 @@ namespace ime {
 
     bool GameObject::isCollidable() const {
         return isCollidable_;
+    }
+
+    PropertyContainer& GameObject::getUserData() {
+        return userData_;
     }
 
     std::string GameObject::getClassName() const {
