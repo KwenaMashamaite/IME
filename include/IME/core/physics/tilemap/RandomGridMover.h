@@ -50,60 +50,6 @@ namespace ime {
         std::string getClassName() const override;
 
         /**
-         * @brief Set whether or not the game object can move diagonally
-         * @param nonDiagMoveOnly True if the game object should move along
-         *      the x-y axis only or false to enable diagonal movement
-         *
-         * When @a nonDiagMoveOnly is set to false, the game object can move
-         * in 8 directions (W, NW, N, NE, E, SE, S, SW) and when set to true
-         * the game object moves in 4 directions only (W, N, E, S)
-         *
-         * Diagonal movement is enabled by default
-         *
-         * @warning You cannot disable both diagonal and non-diagonal (x/y axis)
-         * movement. You either have all movements, diagonal movement only or
-         * non-diagonal movement only
-         *
-         * @see setDiagonalMoveOnly
-         */
-        void setNonDiagonalMoveOnly(bool nonDiagMoveOnly);
-
-        /**
-         * @brief Check if the game object can move diagonally or not
-         * @return True if the game object can move diagonally, or false
-         *         if it is restricted to vertical and horizontal movement
-         *         only
-         *
-         * @see setNonDiagonalMoveOnly
-         */
-        bool isDiagonalMoveEnabled() const;
-
-        /**
-         * @brief Set whether or not the game object can move non-diagonally
-         * @param diagonalMoveOnly True to disable movement along the x-axis
-         *          and movement along the y-axis, otherwise false
-         *
-         * By default, non-diagonal movement (movement along the x or y axis)
-         * is enabled
-         *
-         * @warning You cannot disable both diagonal and non-diagonal (x/y axis)
-         * movement. You either have all movements, diagonal movement only or
-         * non-diagonal movement only
-         *
-         * @see setNonDiagonalMoveOnly
-         */
-        void setDiagonalMoveOnly(bool diagonalMoveOnly);
-
-        /**
-         * @brief Check whether or not the game object can move non-diagonally
-         * @return True if the game object can move non-diagonally or false
-         *         if it can only move diagonally
-         *
-         * @see setDiagonalMoveOnly
-         */
-        bool isNonDiagonalMoveEnabled() const;
-
-        /**
          * @brief Start moving the target in the grid
          *
          * This function will move the target if it hasn't been moved for the
@@ -194,8 +140,6 @@ namespace ime {
         bool isAdvance_;                  //!< Flags whether or not advanced random movement is enabled
         bool switchToAdvanced_;           //!< A flag indicating whether or not to switch to advanced movement
         bool switchToNormal_;             //!< A flag indicating whether or not to switch to default movement
-        bool isNonDiagonalMoveEnabled_;   //!< A flag indicating whether or not movement along the x or y axis is allowed
-        bool isDiagonalMoveEnabled_;       //!< A flag indicating whether or not the game object can move diagonally
         TargetGridMover targetGridMover_; //!< Handles grid movement in advance mode
     };
 }

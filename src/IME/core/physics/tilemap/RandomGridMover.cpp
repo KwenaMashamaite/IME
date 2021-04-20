@@ -34,8 +34,6 @@ namespace ime {
         isAdvance_{false},
         switchToAdvanced_{false},
         switchToNormal_{false},
-        isNonDiagonalMoveEnabled_{true},
-        isDiagonalMoveEnabled_{true},
         targetGridMover_(tileMap, target)
     {
         onTargetChanged([this](GameObject::Ptr newTarget) {
@@ -53,8 +51,8 @@ namespace ime {
                 // movement is enabled (Normal random movement uses this class while advanced
                 // random movement delegates to a TargetGridMover class).
                 newTarget->getRigidBody()->setLinearVelocity(getMaxLinearSpeed());
-                targetGridMover_.setTarget(newTarget);
             }
+            targetGridMover_.setTarget(std::move(newTarget));
         });
 
         onSolidTileCollision([this](Tile) {
@@ -103,28 +101,6 @@ namespace ime {
         return "RandomGridMover";
     }
 
-    void RandomGridMover::setNonDiagonalMoveOnly(bool nonDiagMoveOnly) {
-        if (nonDiagMoveOnly) {
-            IME_ASSERT(isNonDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement")
-        }
-        isDiagonalMoveEnabled_ = !nonDiagMoveOnly;
-    }
-
-    bool RandomGridMover::isDiagonalMoveEnabled() const {
-        return isDiagonalMoveEnabled_;
-    }
-
-    void RandomGridMover::setDiagonalMoveOnly(bool diagonalMoveOnly) {
-        if (diagonalMoveOnly) {
-            IME_ASSERT(isDiagonalMoveEnabled_, "Cannot disable both diagonal and non-diagonal movement")
-        }
-        isNonDiagonalMoveEnabled_ = !diagonalMoveOnly;
-    }
-
-    bool RandomGridMover::isNonDiagonalMoveEnabled() const {
-        return isNonDiagonalMoveEnabled_;
-    }
-
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;
@@ -149,21 +125,20 @@ namespace ime {
     }
 
     void RandomGridMover::generateNewDirection() {
-        if (!getTarget())
+        if (!getTarget() || getMovementRestriction() == GridMover::MoveRestriction::All)
             return;
 
         prevDirection_ = getDirection();
-        auto oppositeDirection = getDirection() * (- 1);
+        auto oppositeDirection = getDirection() * (-1);
         auto newDirection = Direction();
+        static auto gen_random_num_between_neg_1_and_1 = utility::createRandomNumGenerator(-1, 1);
 
-        do {
-            static auto gen_random_num_between_neg_1_and_1 = utility::createRandomNumGenerator(-1, 1);
+        while (true) {
             newDirection = {gen_random_num_between_neg_1_and_1(), gen_random_num_between_neg_1_and_1()};
-        } while ((!isDiagonalMoveEnabled_ && (newDirection.x != 0 && newDirection.y != 0))
-                || (!isNonDiagonalMoveEnabled_ && (newDirection.x == 0 || newDirection.y == 0))
-                || newDirection == oppositeDirection || newDirection == Vector2i{0, 0});
-
-        requestDirectionChange(newDirection);
+            // Prohibit going in opposite direction to prevent back and forth movement between two tiles
+            if (newDirection != oppositeDirection && requestDirectionChange(newDirection))
+                break;
+        }
     }
 
     void RandomGridMover::revertAndGenerateDirection() {

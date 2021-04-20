@@ -72,6 +72,18 @@ namespace ime {
         };
 
         /**
+         * @brief Restricts the movement of the target along axes
+         */
+        enum class MoveRestriction {
+            None,       //!< Target can move in all in all 8 directions (W, NW, N, NE, E, SE, S, SW)
+            All,        //!< Target cannot move in any direction
+            Vertical,   //!< Target can only move vertically (N or S)
+            Horizontal, //!< Target can only move horizontally (W or E)
+            Diagonal,   //!< Target can only move diagonally (NW, NE, SE, SW)
+            NonDiagonal //!< Target can only move non-diagonally (W, N, E, S)
+        };
+
+        /**
          * @brief Create a manually controlled grid mover
          * @param tilemap The grid the game object is in
          * @param gameObject The game object to be controlled by the grid mover
@@ -103,8 +115,18 @@ namespace ime {
          *         of any game object
          *
          * Note that the direction of the game object cannot be changed while
-         * it is moving to another tile. In addition, this function only works
-         * with predefined directions
+         * it is moving to another tile. This function only works with predefined
+         * directions. In addition to returning @b true for successful direction
+         * change, the function will emit a "direction" property change event.
+         * Usually property change events are only emitted by setters (functions
+         * that begin with a "set" prefix)
+         *
+         * @code
+         * gridMover.onPropertyChange("direction", [](const ime::Property& p) {
+         *      auto dir = p.getValue<ime::Direction>();
+         *     // Do something - Maybe rotate the game object in the new direction
+         * });
+         * @endcode
          *
          * @see update
          */
@@ -153,6 +175,20 @@ namespace ime {
          * @return The maximum speed of the game object
          */
         Vector2f getMaxLinearSpeed() const;
+
+        /**
+         * @brief Restrict the movement of the game object to certain directions
+         * @param moveRestriction Permitted direction of travel
+         *
+         * By default the movement restrictions is MovementRestriction::None
+         */
+        void setMovementRestriction(MoveRestriction moveRestriction);
+
+        /**
+         * @brief Get the current movement restriction of the game object
+         * @return The current movement restriction
+         */
+        MoveRestriction getMovementRestriction() const;
 
         /**
          * @brief Get the index of the adjacent tile the target is trying to reach
@@ -442,6 +478,14 @@ namespace ime {
          */
         void snapTargetToTargetTile();
 
+        /**
+         * @brief Check whether or not the target can move in a given direction
+         * @param targetDir The direction to be checked
+         * @return True if the target can make a move in the given direction,
+         *         otherwise false
+         */
+        bool isMoveValid(Direction targetDir) const;
+
     protected:
         /**
          * @brief Create a grid mover
@@ -472,6 +516,7 @@ namespace ime {
         Tile prevTile_;                //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
+        MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
     };
 }
 

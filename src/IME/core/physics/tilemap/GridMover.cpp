@@ -39,7 +39,8 @@ namespace ime {
         targetDirection_{Unknown},
         targetTile_{tileMap.getTileSize(), Vector2f{0, 0}},
         prevTile_{tileMap.getTileSize(), Vector2f{0, 0}},
-        isMoving_{false}
+        isMoving_{false},
+        moveRestrict_{MoveRestriction::None}
     {
         setTarget(std::move(target));
     }
@@ -92,6 +93,20 @@ namespace ime {
         return maxSpeed_;
     }
 
+    void GridMover::setMovementRestriction(GridMover::MoveRestriction moveRestriction) {
+        if (type_ == Type::Target && !(moveRestriction == MoveRestriction::All || moveRestriction == MoveRestriction::None)) {
+            IME_PRINT_WARNING("Cannot set movement restriction for a TargetGridMover, movement depends on path finder algorithm")
+            return;
+        }
+
+        moveRestrict_ = moveRestriction;
+        emitChange(Property{"movementRestriction", moveRestrict_});
+    }
+
+    GridMover::MoveRestriction GridMover::getMovementRestriction() const {
+        return moveRestrict_;
+    }
+
     Index GridMover::getTargetTileIndex() const {
         return targetTile_.getIndex();
     }
@@ -107,13 +122,12 @@ namespace ime {
     bool GridMover::requestDirectionChange(const Direction& newDir) {
         IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first")
 
-        if (!isSupportedDirection(newDir)) {
-            IME_PRINT_WARNING("Direction not changed - A grid mover only works with these directions: W, NW, N, NE, E, SE, S, SW")
+        if (!isMoveValid(newDir))
             return false;
-        }
 
         if (!isTargetMoving() && targetDirection_ == Unknown) {
             targetDirection_ = newDir;
+            emitChange(Property{"direction", targetDirection_});
             return true;
         }
 
@@ -159,6 +173,49 @@ namespace ime {
         tileMap_.addChild(target_, targetTile_.getIndex());
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getRigidBody()->setPosition(targetTile_.getWorldCentre());
+    }
+
+    bool GridMover::isMoveValid(Direction targetDir) const {
+        if (!isSupportedDirection(targetDir)) {
+            IME_PRINT_WARNING("Direction change ignored: Target can only move in these directions: W, NW, N, NE, E, SE, S, SW")
+            return false;
+        } else {
+            switch (moveRestrict_) {
+                case MoveRestriction::None:
+                    return true;
+                case MoveRestriction::All:
+                    IME_PRINT_WARNING("Direction change ignored: All movement restricted")
+                    return false;
+                case MoveRestriction::Vertical:
+                    if (targetDir != Up && targetDir != Down) {
+                        IME_PRINT_WARNING("Direction change ignored - Target restricted to \"vertical\" movement only")
+                        return false;
+                    }
+                    break;
+                case MoveRestriction::Horizontal:
+                    if (targetDir != Left && targetDir != Right) {
+                        IME_PRINT_WARNING("Direction change ignored - Target restricted to \"horizontal\" movement only")
+                        return false;
+                    }
+                    break;
+                case MoveRestriction::Diagonal:
+                    if (abs(targetDir.x) != 1 || abs(targetDir.y) != 1) {
+                        IME_PRINT_WARNING("Direction change ignored - Target restricted to \"diagonal\" movement only")
+                        return false;
+                    }
+                    break;
+                case MoveRestriction::NonDiagonal:
+                    if (abs(targetDir.x) == 1 && abs(targetDir.y) == 1) {
+                        IME_PRINT_WARNING("Direction change ignored - Target restricted to \"non-diagonal\" movement only")
+                        return false;
+                    }
+                    break;
+                default:
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     bool GridMover::handleSolidTileCollision() {

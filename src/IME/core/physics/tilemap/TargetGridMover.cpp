@@ -147,7 +147,7 @@ namespace ime {
     }
 
     void TargetGridMover::generatePath() {
-        if (getTarget()) {
+        if (getTarget() && getMovementRestriction() != GridMover::MoveRestriction::All) {
             auto sourceTilePos = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
             pathToTargetTile_ = pathFinder_->findPath(getGrid(), sourceTilePos, targetTileIndex_);
         }
