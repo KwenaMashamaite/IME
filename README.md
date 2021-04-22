@@ -87,7 +87,7 @@ target_link_libraries (myGame PRIVATE tgui sfml-graphics sfml-window sfml-system
 
 ## Learn
 
-* [Documentation](https://kwenamashamaite.github.io/IME/docs/v1.0.0/index.html)
+* [Documentation](https://kwenamashamaite.github.io/IME/docs/v2.0-beta/html/index.html)
 
 ## Platform
 
