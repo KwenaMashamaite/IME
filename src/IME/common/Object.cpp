@@ -108,7 +108,5 @@ namespace ime {
         eventEmitter_.emit(event);
     }
 
-    Object::~Object() {
-        eventEmitter_.emit("destruction");
-    }
+    Object::~Object() = default;
 }

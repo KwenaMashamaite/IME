@@ -387,4 +387,6 @@ namespace ime {
     bool GridMover::removeEventListener(const std::string &event, int id) {
         return eventEmitter_.removeEventListener(event, id);
     }
+
+    GridMover::~GridMover() = default;
 }

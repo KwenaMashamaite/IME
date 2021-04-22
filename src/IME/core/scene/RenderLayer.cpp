@@ -101,4 +101,8 @@ namespace ime {
             pair.second.get().draw(window);
         });
     }
+
+    RenderLayer::~RenderLayer() {
+        emit("destruction");
+    }
 }

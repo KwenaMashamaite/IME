@@ -167,6 +167,11 @@ namespace ime {
          */
         int onDestinationReached(Callback<Tile> callback);
 
+        /**
+         * @brief Destructor
+         */
+        ~TargetGridMover() override;
+
     private:
         /**
          * @brief Generates the targets new direction of motion based on the

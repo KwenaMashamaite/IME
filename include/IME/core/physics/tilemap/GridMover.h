@@ -413,7 +413,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~GridMover() override = default;
+        ~GridMover() override;
 
     private:
         /**

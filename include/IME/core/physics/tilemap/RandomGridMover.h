@@ -107,6 +107,11 @@ namespace ime {
          */
         void enableAdvancedMovement(bool enable);
 
+        /**
+         * @brief Destructor
+         */
+        ~RandomGridMover() override;
+
     private:
         /**
          * @brief Generate the targets new direction of motion

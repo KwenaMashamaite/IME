@@ -79,6 +79,26 @@ namespace ime {
             Vector2u spacing = {0, 0}, UIntRect area = {});
 
         /**
+         * @brief Copy constructor
+         */
+        SpriteSheet(const SpriteSheet&) = default;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        SpriteSheet& operator=(const SpriteSheet&) = default;
+
+        /**
+         * @brief Move constructor
+         */
+        SpriteSheet(SpriteSheet&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        SpriteSheet& operator=(SpriteSheet&&) noexcept = default;
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */
@@ -318,6 +338,11 @@ namespace ime {
          * @see getFrame(const std::string&)
          */
         bool assignAlias(Index index, const std::string& alias);
+
+        /**
+         * @brief Destructor
+         */
+        ~SpriteSheet() override;
 
     private:
         Vector2u frameSize_;    //!< The size of each frame in the spritesheet

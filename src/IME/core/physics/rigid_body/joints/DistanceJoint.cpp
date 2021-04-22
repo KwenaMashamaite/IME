@@ -192,6 +192,7 @@ namespace ime {
     }
 
     DistanceJoint::~DistanceJoint() {
+        emit("destruction");
         delete joint_;
         joint_ = nullptr;
     }

@@ -26,7 +26,6 @@
 #define IME_RENDERLAYER_H
 
 #include "IME/Config.h"
-#include "IME/utility/NonCopyable.h"
 #include "IME/common/Object.h"
 #include <memory>
 #include <map>
@@ -58,9 +57,29 @@ namespace ime {
      * A layer is not instantiated directly but rather using a
      * RenderLayerContainer
      */
-    class IME_API RenderLayer : public Object, utility::NonCopyable {
+    class IME_API RenderLayer : public Object {
     public:
         using Ptr = std::shared_ptr<RenderLayer>; //!< Shared render layer pointer
+
+        /**
+         * @brief Copy constructor
+         */
+        RenderLayer(const RenderLayer&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        RenderLayer& operator=(const RenderLayer&) = delete;
+
+        /**
+         * @brief Move constructor
+         */
+        RenderLayer(RenderLayer&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        RenderLayer& operator=(RenderLayer&&) noexcept = default;
 
         /**
          * @brief Get the name of this class
@@ -167,6 +186,11 @@ namespace ime {
          * should never be called outside of IME
          */
         void render(Window& window) const;
+
+        /**
+         * @brief Destructor
+         */
+        ~RenderLayer() override;
 
     private:
         /**

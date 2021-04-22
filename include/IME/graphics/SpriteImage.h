@@ -68,6 +68,26 @@ namespace ime {
         explicit SpriteImage(const std::string& sourceTexture, UIntRect area = {});
 
         /**
+         * @brief Copy constructor
+         */
+        SpriteImage(const SpriteImage&) = default;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        SpriteImage& operator=(const SpriteImage&) = default;
+
+        /**
+         * @brief Move constructor
+         */
+        SpriteImage(SpriteImage&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        SpriteImage& operator=(SpriteImage&&) noexcept = default;
+
+        /**
          * @brief Get the size of the sprite image in pixels
          * @return The size of the sprite image in pixels
          *
@@ -127,7 +147,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        virtual ~SpriteImage() = 0;
+        ~SpriteImage() override = 0;
 
     protected:
         /**

@@ -138,4 +138,8 @@ namespace ime {
     void KeyboardGridMover::handleEvent(Event event) {
         keyboard_.handleEvent(event);
     }
+
+    KeyboardGridMover::~KeyboardGridMover() {
+        emit("destruction");
+    }
 }

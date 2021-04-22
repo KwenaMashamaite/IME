@@ -624,6 +624,11 @@ namespace ime {
         std::unique_ptr<b2Body, Callback<b2Body*>>& getInternalBody();
         const std::unique_ptr<b2Body, Callback<b2Body*>>& getInternalBody() const;
 
+        /**
+         * @brief Destructor
+         */
+        ~Body() override;
+
     private:
         /**
          * @brief Create a body

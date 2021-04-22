@@ -100,6 +100,11 @@ namespace ime {
          */
         void handleEvent(Event event);
 
+        /**
+         * @brief Destructor
+         */
+        ~KeyboardGridMover() override;
+
     private:
         /**
          * @brief Move target in the grid

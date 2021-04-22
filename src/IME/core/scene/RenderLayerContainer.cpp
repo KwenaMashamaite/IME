@@ -240,4 +240,8 @@ namespace ime {
                 pair.second->render(window);
         });
     }
+
+    RenderLayerContainer::~RenderLayerContainer() {
+        emit("destruction");
+    }
 }

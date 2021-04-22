@@ -185,4 +185,8 @@ namespace ime {
             }
         );
     }
+
+    TargetGridMover::~TargetGridMover() {
+        emit("destruction");
+    }
 }

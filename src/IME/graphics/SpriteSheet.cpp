@@ -186,4 +186,8 @@ namespace ime {
             return aliases_.insert({alias, index}).second;
         return false;
     }
+
+    SpriteSheet::~SpriteSheet() {
+        emit("destruction");
+    }
 }

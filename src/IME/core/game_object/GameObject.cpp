@@ -254,6 +254,10 @@ namespace ime {
             }
         }));
 
+        scene_.get().onDestruction([this] {
+            scene_.get().unsubscribe_("postStep", postStepId_);
+        });
+
         transform_.onPropertyChange([this](const Property& property) {
             const auto& name = property.getName();
             if (name == "position") {
@@ -273,6 +277,6 @@ namespace ime {
     }
 
     GameObject::~GameObject() {
-        scene_.get().unsubscribe_("postStep", postStepId_);
+        emit("destruction");
     }
 }

@@ -386,4 +386,8 @@ namespace ime {
     const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() const {
         return body_;
     }
+
+    Body::~Body() {
+        emit("destruction");
+    }
 }

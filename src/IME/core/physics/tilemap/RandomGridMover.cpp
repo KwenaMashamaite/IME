@@ -188,4 +188,8 @@ namespace ime {
         else
             GridMover::update(deltaTime);
     }
+
+    RandomGridMover::~RandomGridMover() {
+        emit("destruction");
+    }
 }

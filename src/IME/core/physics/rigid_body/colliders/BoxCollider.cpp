@@ -98,6 +98,8 @@ namespace ime {
         return *box_;
     }
 
-    BoxCollider::~BoxCollider() = default;
+    BoxCollider::~BoxCollider() {
+        emit("destruction");
+    }
 }
 

@@ -192,6 +192,10 @@ namespace ime {
             if (isDebugDrawEnabled_)
                 debugDraw();
         }));
+
+        scene_.onDestruction([this] {
+            scene_.unsubscribe_("postRender", postRenderId_);
+        });
 #endif
     }
 
@@ -468,7 +472,5 @@ namespace ime {
 #endif
     }
 
-    World::~World() {
-        scene_.unsubscribe_("postRender", postRenderId_);
-    }
+    World::~World() = default;
 }

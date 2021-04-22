@@ -199,5 +199,7 @@ namespace ime {
         return pimpl_->worldCoordToWindowCoord(point);
     }
 
-    Camera::~Camera() = default;
+    Camera::~Camera() {
+        emit("destruction");
+    }
 }

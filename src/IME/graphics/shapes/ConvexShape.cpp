@@ -100,5 +100,7 @@ namespace ime {
         return {x, y};
     }
 
-    ConvexShape::~ConvexShape() = default;
+    ConvexShape::~ConvexShape() {
+        emit("destruction");
+    }
 }

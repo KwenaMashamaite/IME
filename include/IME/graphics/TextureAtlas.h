@@ -64,6 +64,26 @@ namespace ime {
         explicit TextureAtlas(const std::string& sourceTexture, UIntRect area = {});
 
         /**
+         * @brief Copy constructor
+         */
+        TextureAtlas(const TextureAtlas&) = default;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        TextureAtlas& operator=(const TextureAtlas&) = default;
+
+        /**
+         * @brief Move constructor
+         */
+        TextureAtlas(TextureAtlas&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        TextureAtlas& operator=(TextureAtlas&&) noexcept = default;
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */
@@ -84,6 +104,11 @@ namespace ime {
          * auto crate = textureAtlas.getSprite({100, 45, 32, 16});
          */
         Sprite getSprite(Frame frame);
+
+        /**
+         * @brief Destructor
+         */
+        ~TextureAtlas() override;
     };
 }
 

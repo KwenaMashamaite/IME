@@ -89,5 +89,7 @@ namespace ime {
         return {x, y};
     }
 
-    RectangleShape::~RectangleShape() = default;
+    RectangleShape::~RectangleShape() {
+        emit("destruction");
+    }
 }

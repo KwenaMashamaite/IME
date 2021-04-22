@@ -56,9 +56,29 @@ namespace ime {
      * instantiate a Scene object. Each scene instance has its own render
      * layers and a single render layer container
      */
-    class IME_API RenderLayerContainer : public Object, utility::NonCopyable {
+    class IME_API RenderLayerContainer : public Object {
     public:
         using Callback = std::function<void(const RenderLayer::Ptr&)>; //!< Callback
+
+        /**
+         * @brief Copy constructor
+         */
+        RenderLayerContainer(const RenderLayerContainer&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        RenderLayerContainer& operator=(const RenderLayerContainer&) = delete;
+
+        /**
+         * @brief Move constructor
+         */
+        RenderLayerContainer(RenderLayerContainer&&) noexcept = default;
+
+        /**
+         * @brief Move assignment operator
+         */
+        RenderLayerContainer& operator=(RenderLayerContainer&&) noexcept = default;
 
         /**
          * @brief Create a layer
@@ -319,6 +339,11 @@ namespace ime {
          * should never be called outside of IME
          */
         void render(Window& window) const;
+        
+        /**
+         * @brief Destructor
+         */
+        ~RenderLayerContainer() override;
 
     private:
         /**

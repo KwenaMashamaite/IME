@@ -39,4 +39,8 @@ namespace ime {
             return Sprite(getTexture(), frame);
         return Sprite();
     }
+
+    TextureAtlas::~TextureAtlas() {
+        emit("destruction");
+    }
 }
