@@ -61,7 +61,39 @@ namespace ime {
     }
 
     void RenderLayer::add(const Drawable& drawable, int renderOrder) {
+        if (has(drawable))
+            return;
+
         drawables_.insert({renderOrder, std::cref(drawable)});
+    }
+
+    bool RenderLayer::has(const Drawable &drawable) const {
+        return std::any_of(drawables_.begin(), drawables_.end(), [&drawable](auto& pair) {
+            return pair.second.get() == drawable;
+        });
+    }
+
+    bool RenderLayer::remove(const Drawable &drawable) {
+        for (auto& [renderOrder, interDrawable] : drawables_) {
+            if (drawable == interDrawable) {
+                auto range = drawables_.equal_range(renderOrder);
+                for (auto iter = range.first; iter != range.second; ++iter) {
+                    if (iter->second.get() == drawable) {
+                        drawables_.erase(iter);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    void RenderLayer::removeAll() {
+        drawables_.clear();
+    }
+
+    std::size_t RenderLayer::getCount() const {
+        return drawables_.size();
     }
 
     void RenderLayer::render(Window &window) const {

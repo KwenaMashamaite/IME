@@ -39,8 +39,17 @@ namespace ime {
     }
 
     void RenderLayerContainer::add(const Drawable &drawable, int renderOrder,
-                                   const std::string &renderLayer)
+        const std::string &renderLayer)
     {
+        auto found = std::find_if(layers_.begin(), layers_.end(), [&drawable](auto& pair) {
+            return pair.second->has(drawable);
+        });
+
+        if (found != layers_.end()) {
+            IME_PRINT_WARNING("drawable ignored: It already belongs to a render layer. Only one render layer per drawable is allowed");
+            return;
+        }
+
         auto layer = findByName(renderLayer);
         if (!layer && renderLayer != "default") {
             layer = findByName("default");
@@ -113,6 +122,7 @@ namespace ime {
 
     void RenderLayerContainer::removeAll() {
         layers_.clear();
+        inverseLayers_.clear();
     }
 
     void RenderLayerContainer::moveUp(unsigned int index) {
@@ -218,7 +228,7 @@ namespace ime {
         return layers_.size();
     }
 
-    void RenderLayerContainer::forEachLayer(Callback callback) {
+    void RenderLayerContainer::forEachLayer(const Callback& callback) {
         std::for_each(layers_.begin(), layers_.end(), [&callback](auto& pair) {
             callback(pair.second);
         });

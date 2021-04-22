@@ -279,7 +279,8 @@ namespace ime {
 
             if (assignLayer) {
                 IME_ASSERT(renderLayers_.hasLayer("default"), "The render layer 'default' was removed from the Tilemap's render layers")
-                renderLayers_.add(child->getSprite());
+                if (!renderLayers_.findByName("default")->has(child->getSprite()))
+                    renderLayers_.add(child->getSprite());
             }
 
             children_[index].push_back(std::move(child));

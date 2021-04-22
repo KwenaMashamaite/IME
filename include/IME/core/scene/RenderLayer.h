@@ -120,8 +120,43 @@ namespace ime {
          * drawn in the order in which they were added to the layer
          *
          * By default, all drawables have the same render order of 0
+         *
+         * @warning Th render layer keeps a reference to the drawable,
+         * therefore, it must remain alive for as long as it is used by the
+         * render layer
          */
         void add(const Drawable& drawable, int renderOrder = 0);
+
+        /**
+         * @brief Check if the render layer has a given drawable or not
+         * @param drawable The drawable to be checked
+         * @return True if the render layer has the drawable, otherwise false
+         *
+         * When a render layer "has" a drawable, it means that the drawable
+         * is rendered by that layer to the render window
+         */
+        bool has(const Drawable& drawable) const;
+
+        /**
+         * @brief Remove a drawable from the render layer
+         * @param drawable The drawable to be removed
+         * @return True if the drawable was removed, otherwise false
+         *
+         * When a drawable is removed from the render layer, it will no longer
+         * be rendered by the scene, hence it won't appear on the game window
+         */
+        bool remove(const Drawable& drawable);
+
+        /**
+         * @brief Remove all drawables from the render layer
+         */
+        void removeAll();
+
+        /**
+         * @brief Get the number of drawables rendered by the layer
+         * @return The number of drawables rendered by the layer
+         */
+        std::size_t getCount() const;
 
         /**
          * @internal

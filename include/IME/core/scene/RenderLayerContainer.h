@@ -308,7 +308,7 @@ namespace ime {
          * @brief Execute a callback for each layer in the container
          * @param callback The callback to be executed
          */
-        void forEachLayer(Callback callback);
+        void forEachLayer(const Callback& callback);
 
         /**
          * @internal
