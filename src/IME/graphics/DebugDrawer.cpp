@@ -60,8 +60,8 @@ namespace ime::priv {
                     static_cast<unsigned int>(colour.a * 255)};
         }
 
-        CircleShape createCircle(float radius, const b2Vec2& position, const b2Color& fillColour) {
-            auto circle = CircleShape(utility::metresToPixels(radius));
+        CircleShape& createCircle(float radius, const b2Vec2& position, const b2Color& fillColour) {
+            auto static circle = CircleShape(utility::metresToPixels(radius));
             circle.setOrigin(circle.getLocalBounds().width / 2.0f, circle.getLocalBounds().height / 2.0f);
             circle.setPosition(utility::metresToPixels({position.x, position.y}));
             circle.setFillColour(convertToOwnColour(fillColour));
@@ -70,8 +70,11 @@ namespace ime::priv {
             return circle;
         }
 
-        ConvexShape createPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &fillColour, const b2Color &outlineColour) {
-            auto polygon = ConvexShape(vertexCount);
+        void drawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &fillColour,
+            const b2Color &outlineColour, Window& window)
+        {
+            auto static polygon = ConvexShape();
+            polygon.setPointCount(vertexCount);
             for (auto i = 0; i < vertexCount; ++i)
                 polygon.setPoint(i, {utility::metresToPixels(vertices[i].x),
                     utility::metresToPixels(vertices[i].y)});
@@ -79,7 +82,7 @@ namespace ime::priv {
             polygon.setFillColour(convertToOwnColour(fillColour));
             polygon.setOutlineThickness(-1.0f);
             polygon.setOutlineColour(convertToOwnColour(outlineColour));
-            return polygon;
+            window.draw(polygon);
         }
     }
 
@@ -88,21 +91,21 @@ namespace ime::priv {
     {}
 
     void DebugDrawer::DrawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &colour) {
-        window_.draw(createPolygon(vertices, vertexCount, {0, 0, 0, 0}, colour));
+        drawPolygon(vertices, vertexCount, {0, 0, 0, 0}, colour, window_);
     }
 
     void DebugDrawer::DrawSolidPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &colour) {
-        window_.draw(createPolygon(vertices, vertexCount, {colour.r, colour.g, colour.b, 60.0f / 255.0f}, colour));
+        drawPolygon(vertices, vertexCount, {colour.r, colour.g, colour.b, 60.0f / 255.0f}, colour, window_);
     }
 
     void DebugDrawer::DrawCircle(const b2Vec2 &center, float radius, const b2Color &colour) {
-        auto circle = createCircle(radius, center, colour);
+        auto& circle = createCircle(radius, center, colour);
         circle.setOutlineThickness(-1.f);
         window_.draw(circle);
     }
 
     void DebugDrawer::DrawSolidCircle(const b2Vec2 &center, float radius, const b2Vec2 &axis, const b2Color &colour) {
-        auto circle = createCircle(radius, center, {colour.r, colour.g, colour.b, 60.0f / 255.0f});
+        auto& circle = createCircle(radius, center, {colour.r, colour.g, colour.b, 60.0f / 255.0f});
         circle.setOutlineThickness(1.f);
         circle.setOutlineColour(convertToOwnColour(colour));
         window_.draw(circle);
@@ -131,7 +134,9 @@ namespace ime::priv {
     }
 
     void DebugDrawer::DrawPoint(const b2Vec2 &point, float, const b2Color &colour) {
-        auto p = sf::Vertex({utility::metresToPixels(point.x), utility::metresToPixels(point.y)}, utility::convertToSFMLColour(convertToOwnColour(colour)));
+        auto p = sf::Vertex({utility::metresToPixels(point.x), utility::metresToPixels(point.y)},
+                            utility::convertToSFMLColour(convertToOwnColour(colour)));
+
         window_.getImpl()->getSFMLWindow().draw(&p, 1, sf::Points);
     }
 

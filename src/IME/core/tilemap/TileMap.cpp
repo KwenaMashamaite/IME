@@ -188,19 +188,18 @@ namespace ime {
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Tile>{};
             for (auto j = 0u; j < mapData_[i].size(); j++) {
-                auto tile = Tile(tileSize_, {-99, -99});
+                row.emplace_back(Tile(tileSize_, {-99, -99}));
                 if (i == 0 && j == 0)
-                    tile.setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
+                    row.back().setPosition(mapPos_.x + tileSpacing_, mapPos_.y + tileSpacing_);
                 else if (j == 0)
-                    tile.setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
+                    row.back().setPosition( {mapPos_.x + tileSpacing_, tiledMap_[i - 1][j].getPosition().y + tileSize_.y + tileSpacing_});
                 else
-                    tile.setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
+                    row.back().setPosition( {row[j - 1].getPosition().x + tileSize_.x + tileSpacing_, row[j - 1].getPosition().y});
 
-                tile.setId(mapData_[i][j]);
-                tile.setIndex({static_cast<int>(i), static_cast<int>(j)});
-                row.emplace_back(tile);
+                row.back().setId(mapData_[i][j]);
+                row.back().setIndex({static_cast<int>(i), static_cast<int>(j)});
             }
-            tiledMap_.push_back(row);
+            tiledMap_.push_back(std::move(row));
         }
     }
 
