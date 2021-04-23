@@ -255,7 +255,7 @@ namespace ime {
         }));
 
         scene_.get().onDestruction([this] {
-            scene_.get().unsubscribe_("postStep", postStepId_);
+            postStepId_ = -1;
         });
 
         transform_.onPropertyChange([this](const Property& property) {
@@ -277,6 +277,9 @@ namespace ime {
     }
 
     GameObject::~GameObject() {
+        if (postStepId_ != -1)
+            scene_.get().unsubscribe_("postStep", postStepId_);
+
         emit("destruction");
     }
 }

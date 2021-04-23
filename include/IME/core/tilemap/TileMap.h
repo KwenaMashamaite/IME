@@ -35,6 +35,7 @@
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
+#include "IME/core/scene/GameObjectContainer.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -51,6 +52,20 @@ namespace ime {
     class IME_API TileMap {
     public:
         using Ptr = std::shared_ptr<TileMap>; // Shared tilemap pointer
+
+        /**
+         * @internal
+         * @brief Create an empty tilemap
+         * @param tileWidth Width of each tile in the map
+         * @param tileHeight height of each tile in the map
+         *
+         * The tile map has the position (0, 0) by default
+         *
+         * This constructor is intended for internal use only
+         */
+        TileMap(unsigned int tileWidth, unsigned int tileHeight,
+                RenderLayerContainer& renderLayers,
+                GameObjectContainer& childContainer);
 
         /**
          * @internal
@@ -634,15 +649,6 @@ namespace ime {
 
     private:
         /**
-         * @brief Create an empty tilemap
-         * @param tileWidth Width of each tile in the map
-         * @param tileHeight height of each tile in the map
-         *
-         * The tile map has the position (0, 0) by default
-         */
-        TileMap(unsigned int tileWidth, unsigned int tileHeight);
-
-        /**
          * @brief Create the visual gird
          */
         void createTiledMap();
@@ -728,10 +734,11 @@ namespace ime {
         std::string tileSet_;        //!< Tileset the visual grid is constructed from
         bool isVisible_;             //!< A flag indicating whether or not the tilemap is visible
         Tile invalidTile_;           //!< Tile returned when an invalid index is provided
-        RenderLayerContainer renderLayers_;   //!< Render layers for this scene
+        RenderLayerContainer& renderLayers_;  //!< Render layers for this scene
+        GameObjectContainer& childContainer_; //!< Container for children of the grid
         SpriteContainer sprites_;    //!< Stores sprites that belong to the tilemap
         RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
-        std::unordered_map<Index, std::vector<GameObject::Ptr>> children_; //!< Children container
+        std::unordered_map<Index, std::vector<GameObject::Ptr>> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;//!< Tiles container
         std::shared_ptr<World> physicsSim_; //!< The physics simulation

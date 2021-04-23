@@ -85,7 +85,6 @@ namespace ime {
 
     private:
         std::reference_wrapper<RenderLayerContainer> renderLayers_;
-        using ObjectContainer<GameObject>::addObject;
     };
 }
 

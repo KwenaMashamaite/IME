@@ -30,13 +30,16 @@
 #include "IME/graphics/Window.h"
 
 namespace ime {
-    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight) :
+    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight,
+            RenderLayerContainer& renderLayers,
+            GameObjectContainer& childContainer) :
         tileSpacing_{1u},
         isVisible_(true),
         invalidTile_({0, 0}, {-1, -1}),
+        renderLayers_{renderLayers},
+        childContainer_{childContainer},
         sprites_{renderLayers_}
     {
-        renderLayers_.create("default");
         invalidTile_.setIndex({-1, -1});
         mapPos_ = {0, 0};
         numOfRows_ = numOfColms_ = 0u;
@@ -53,7 +56,6 @@ namespace ime {
     void TileMap::setPhysicsSimulation(std::shared_ptr<World> physicsSimulation) {
         physicsSim_ = std::move(physicsSimulation);
     }
-
 
     void TileMap::setVisible(bool visible) {
         if (isVisible_ == visible)
@@ -211,11 +213,9 @@ namespace ime {
 
     void TileMap::draw(Window &renderTarget) {
         renderTarget.draw(backgroundTile_);
-        forEachTile_([&renderTarget](Tile& tile) {
+        forEachTile([&renderTarget](const Tile& tile) {
             renderTarget.draw(tile);
         });
-
-        renderLayers().render(renderTarget);
     }
 
     void TileMap::addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder, const std::string &renderLayer) {
@@ -270,21 +270,21 @@ namespace ime {
     }
 
     bool TileMap::addChild(std::shared_ptr<GameObject> child, const Index& index, bool assignLayer) {
-        IME_ASSERT(child, "Cannot add nullptr to a tilemap")
+        IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
             if (child->hasRigidBody())
                 child->getRigidBody()->setPosition(getTile(index).getWorldCentre());
 
-            if (assignLayer) {
-                IME_ASSERT(renderLayers_.hasLayer("default"), "The render layer 'default' was removed from the Tilemap's render layers")
-                if (!renderLayers_.findByName("default")->has(child->getSprite()))
-                    renderLayers_.add(child->getSprite());
-            }
+            if (assignLayer)
+                childContainer_.add(child); // Adds child to container and its sprite to the "default" render layer
+            else
+                childContainer_.addObject(child); // Just adds child to container
 
             children_[index].push_back(std::move(child));
             return true;
         }
+
         return false;
     }
 
@@ -348,10 +348,6 @@ namespace ime {
     }
 
     void TileMap::update(Time deltaTime) {
-        forEachChild([&deltaTime](const GameObject::Ptr& child) {
-            child->update(deltaTime);
-        });
-
         sprites_.forEach([&deltaTime](const Sprite::Ptr& sprite) {
             sprite->updateAnimation(deltaTime);
         });
@@ -424,7 +420,7 @@ namespace ime {
     void TileMap::moveChild(const GameObject::Ptr& child, const Index& index) {
         if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
             removeChildFromTile(getTileOccupiedByChild(child), child);
-            addChild(child, index);
+            addChild(child, index, false);
         }
     }
 

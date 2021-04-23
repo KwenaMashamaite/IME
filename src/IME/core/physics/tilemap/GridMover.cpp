@@ -170,7 +170,7 @@ namespace ime {
         isMoving_ = false;
         targetDirection_ = Unknown;
         tileMap_.removeChildFromTile(prevTile_, target_);
-        tileMap_.addChild(target_, targetTile_.getIndex());
+        tileMap_.addChild(target_, targetTile_.getIndex(), false);
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getRigidBody()->setPosition(targetTile_.getWorldCentre());
     }

@@ -194,7 +194,7 @@ namespace ime {
         }));
 
         scene_.onDestruction([this] {
-            scene_.unsubscribe_("postRender", postRenderId_);
+            postRenderId_ = -1;
         });
 #endif
     }
@@ -472,5 +472,8 @@ namespace ime {
 #endif
     }
 
-    World::~World() = default;
+    World::~World() {
+        if (postRenderId_ != -1)
+            scene_.unsubscribe_("postRender", postRenderId_);
+    }
 }
