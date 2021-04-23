@@ -416,8 +416,11 @@ namespace ime {
         void move(Vector2f offset) override;
 
         /**
+         * @internal
          * @brief Draw object on a render target
          * @param renderTarget Target to draw object on
+         *
+         * @note This function is intended for internal use only
          */
         void draw(Window &renderTarget) const override;
 

@@ -29,19 +29,14 @@
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/core/event/Event.h"
-#include "Drawable.h"
-#include "Colour.h"
+#include "IME/graphics/Drawable.h"
+#include "IME/graphics/Colour.h"
 #include <string>
 
 namespace ime {
     namespace priv {
         class WindowImpl;
     }
-
-    class WindowPassKey : utility::NonCopyable {
-        WindowPassKey(){};
-        friend class Engine;
-    };
 
     /**
      * @brief Window that can serve as a target for 2D drawing
@@ -149,7 +144,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        bool pollEvent(Event &event, WindowPassKey);
+        bool pollEvent(Event &event);
 
         /**
          * @brief Close the window

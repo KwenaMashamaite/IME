@@ -401,8 +401,11 @@ namespace ime {
         virtual Shape::Ptr clone() const = 0;
 
         /**
+         * @internal
          * @brief Draw the shape on a render target
          * @param renderTarget Target to draw object on
+         *
+         * @note This function is intended for internal use only
          */
         void draw(Window &renderTarget) const override;
 

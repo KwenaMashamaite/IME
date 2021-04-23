@@ -50,8 +50,11 @@ namespace ime {
         }
 
         /**
+         * @internal
          * @brief Draw object on a render target
          * @param renderTarget Target to draw object on
+         *
+         * @note This function is intended for internal use only
          */
         virtual void draw(Window &renderTarget) const = 0;
     };

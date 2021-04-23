@@ -39,7 +39,6 @@
 #include "IME/graphics/TextureAtlas.h"
 #include "IME/graphics/Texture.h"
 #include "IME/graphics/Tile.h"
-#include "IME/graphics/Window.h"
 #include "IME/graphics/Drawable.h"
 
 #endif //IME_GRAPHICS_H

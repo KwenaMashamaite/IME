@@ -26,7 +26,6 @@
 #define IME_ENGINE_H
 
 #include "IME/Config.h"
-#include "IME/graphics/Window.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/input/InputManager.h"
@@ -201,10 +200,13 @@ namespace ime {
         input::InputManager& getInputManager();
 
         /**
+         * @internal
          * @brief Get access to the engines render target
          * @return The engines render target
          *
-         * @warning This function must only be called after the engine has
+         * Note that this function is intended for internal use only
+         *
+         * @warning This function must be called after the engine has
          *          been initialized
          *
          * @see initialize
@@ -298,6 +300,11 @@ namespace ime {
          */
         void onShutDown(Callback<> callback);
 
+        /**
+         * @brief Destructor
+         */
+        ~Engine();
+
     private:
         /**
          * @brief Load engine settings from the hard drive
@@ -360,7 +367,7 @@ namespace ime {
         void shutdown();
 
     private:
-        Window window_;                              //!< The engines render target
+        std::unique_ptr<Window> window_;             //!< The engines render target
         std::string gameTitle_;                      //!< The name of the game run by the engine
         std::string settingFile_;                    //!< The filename of the file that contains the engines config entries
         PropertyContainer settings_;                 //!< The engines settings

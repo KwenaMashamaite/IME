@@ -25,6 +25,7 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
+#include "IME/graphics/Window.h"
 #include <SFML/Window/VideoMode.hpp>
 
 namespace ime {
@@ -103,17 +104,18 @@ namespace ime {
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
+        window_ = std::make_unique<Window>();
         if (settings_.getValue<bool>("FULLSCREEN")) {
             auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-            window_.create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
+            window_->create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
         } else
-            window_.create(title, width, height, Window::Style::Close);
+            window_->create(title, width, height, Window::Style::Close);
 
-        window_.setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
-        window_.setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
+        window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
+        window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
         if (settings_.getValue<std::string>("WINDOW_ICON") != "OS")
-            window_.setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
+            window_->setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
     }
 
     void Engine::initResourceManager() {
@@ -127,7 +129,7 @@ namespace ime {
 
     void Engine::processEvents() {
         Event event;
-        while (window_.pollEvent(event, {})) {
+        while (window_->pollEvent(event)) {
             if (event.type == Event::Closed && onWindowClose_)
                 onWindowClose_();
 
@@ -158,7 +160,7 @@ namespace ime {
         auto const frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
         auto accumulator = Time::Zero;
         auto gameClock = Clock();
-        while (window_.isOpen() && isRunning_ && !sceneManager_.isEmpty()) {
+        while (window_->isOpen() && isRunning_ && !sceneManager_.isEmpty()) {
             deltaTime_ = gameClock.restart();
             if (onFrameStart_)
                 onFrameStart_();
@@ -192,15 +194,15 @@ namespace ime {
     }
 
     void Engine::clear() {
-        window_.clear();
+        window_->clear();
     }
 
     void Engine::render() {
-        sceneManager_.render(window_);
+        sceneManager_.render(*window_);
     }
 
     void Engine::display() {
-        window_.display();
+        window_->display();
     }
 
     void Engine::pushScene(std::shared_ptr<Scene> scene, Callback<> callback) {
@@ -254,7 +256,7 @@ namespace ime {
         eventEmitter_.emit("shutdown");
         audioManager_.stopAllAudio();
         audioManager_.removePlayedAudio();
-        window_.close();
+        window_->close();
         isInitialized_ = false;
         isRunning_ = false;
         pendingPop_ = false;
@@ -310,7 +312,7 @@ namespace ime {
     }
 
     Window &Engine::getRenderTarget() {
-        return window_;
+        return *window_;
     }
 
     void Engine::setTimeout(Time delay, ime::Callback<Timer&> callback) {
@@ -336,4 +338,6 @@ namespace ime {
     void Engine::onShutDown(Callback<> callback) {
         eventEmitter_.addEventListener("shutdown", std::move(callback));
     }
+
+    Engine::~Engine() = default;
 }
