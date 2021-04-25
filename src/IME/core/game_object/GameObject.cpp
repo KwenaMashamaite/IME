@@ -184,7 +184,7 @@ namespace ime {
         emit("attachRigidBody");
     }
 
-    Body::Ptr &GameObject::getRigidBody() {
+    const Body::Ptr &GameObject::getRigidBody() {
         return body_;
     }
 
@@ -194,21 +194,17 @@ namespace ime {
 
     void GameObject::removeRigidBody() {
         if (body_) {
-            body_->getWorld()->destroyBody(body_);
             body_.reset();
-
             emit("removeRigidBody");
         }
     }
 
-    void GameObject::onCollisionStart(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
+    void GameObject::onCollisionStart(GameObject::CollisionCallback callback) {
         onContactBegin_ = std::move(callback);
-        emit("collisionStart");
     }
 
-    void GameObject::onCollisionEnd(Callback<GameObject::Ptr, GameObject::Ptr> callback) {
+    void GameObject::onCollisionEnd(GameObject::CollisionCallback callback) {
         onContactEnd_ = std::move(callback);
-        emit("collisionEnd");
     }
 
     bool GameObject::hasRigidBody() const {
@@ -279,6 +275,9 @@ namespace ime {
     GameObject::~GameObject() {
         if (postStepId_ != -1)
             scene_.get().unsubscribe_("postStep", postStepId_);
+
+        if (body_)
+            body_->setGameObject(nullptr);
 
         emit("destruction");
     }

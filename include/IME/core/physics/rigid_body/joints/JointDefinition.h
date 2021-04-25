@@ -50,13 +50,18 @@ namespace ime {
          */
         JointDefinition();
 
+        /**
+         * @brief Destructor
+         */
+        ~JointDefinition();
+
         ////////////////////////////////////////////////////////////////////////
         // Member data
         ////////////////////////////////////////////////////////////////////////
 
         JointType type;              //!< The type of the joint defined by this definition (set automatically)
-        std::shared_ptr<Body> bodyA; //!< The first attached body
-        std::shared_ptr<Body> bodyB; //!< The second attached body
+        std::unique_ptr<Body> bodyA; //!< The first attached body
+        std::unique_ptr<Body> bodyB; //!< The second attached body
         bool areBodiesCollidable;    //!< A flag indicating whether or not the joined bodies can collide with each other
         PropertyContainer userData;  //!< May be used to store application specific Joint data
     };

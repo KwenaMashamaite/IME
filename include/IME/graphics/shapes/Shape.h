@@ -136,8 +136,8 @@ namespace ime {
          * @return The rigid body attached to the shape or a nullptr if the
          *         shape does not have a rigid body attached to it
          */
-        Body::Ptr getRigidBody();
-        Body::Ptr getRigidBody() const;
+        const Body::Ptr& getRigidBody();
+        const Body::Ptr& getRigidBody() const;
 
         /**
          * @brief Check if the the shape has a rigid body attached to it or not

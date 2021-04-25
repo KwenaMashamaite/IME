@@ -51,7 +51,7 @@ namespace ime {
     EdgeCollider &EdgeCollider::operator=(EdgeCollider &&) noexcept = default;
 
     EdgeCollider::Ptr EdgeCollider::copy() const {
-        return std::static_pointer_cast<EdgeCollider>(clone());
+        return EdgeCollider::Ptr(new EdgeCollider(*(static_cast<EdgeCollider*>(clone().get()))));
     }
 
     Collider::Ptr EdgeCollider::clone() const {
@@ -59,7 +59,7 @@ namespace ime {
     }
 
     EdgeCollider::Ptr EdgeCollider::create() {
-        return std::make_shared<EdgeCollider>();
+        return std::make_unique<EdgeCollider>();
     }
 
     std::string EdgeCollider::getClassName() const {

@@ -26,8 +26,8 @@
 #define IME_DISTANCEJOINT_H
 
 #include "IME/Config.h"
-#include "Joint.h"
-#include "JointDefinition.h"
+#include "IME/core/physics/rigid_body/joints/Joint.h"
+#include "IME/core/physics//rigid_body/joints/JointDefinition.h"
 
 class b2DistanceJoint;
 
@@ -39,7 +39,7 @@ namespace ime {
      * @return Distance joint definition
      */
     struct IME_API DistanceJointDefinition : public JointDefinition {
-        using BodyPtr = std::shared_ptr<Body>;
+        using BodyPtr = std::unique_ptr<Body>;
 
         /**
          * @brief Constructor
@@ -81,7 +81,7 @@ namespace ime {
     class IME_API DistanceJoint final : public Joint {
     public:
         using Ptr = std::shared_ptr<Joint>;
-        using BodyPtr = std::shared_ptr<Body>;
+        using BodyPtr = std::unique_ptr<Body>;
 
         /**
          * @brief Get the name of this class
@@ -175,13 +175,13 @@ namespace ime {
          * @brief Get the first body attached to ths joint
          * @return The first body attached to this joint
          */
-        BodyPtr getBodyA() override;
+        const BodyPtr& getBodyA() override;
 
         /**
          * @brief Get the second body attached to ths joint
          * @return The second body attached to this joint
          */
-        BodyPtr getBodyB() override;
+        const BodyPtr& getBodyB() override;
 
         /**
          * @brief Get the reaction force on body B at the joint anchor
@@ -244,7 +244,7 @@ namespace ime {
         DistanceJoint(const DistanceJointDefinition& definition, const std::shared_ptr<World>& world);
 
     private:
-        b2DistanceJoint* joint_;      //!< Internal joint
+        std::unique_ptr<b2DistanceJoint> joint_;  //!< Internal joint
         PropertyContainer userData_;  //!< Application specific user date
         BodyPtr bodyA_;               //!< First attached body
         BodyPtr bodyB_;               //!< Second attached body

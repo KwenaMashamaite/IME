@@ -46,11 +46,7 @@ namespace ime {
         index_{other.index_},
         tile_{other.tile_},
         prevFillColour_{other.prevFillColour_}
-    {
-        if (other.collider_) {
-            collider_ = other.collider_->copy();
-        }
-    }
+    {}
 
     Tile& Tile::operator=(Tile other) {
         swap(other);
@@ -65,35 +61,26 @@ namespace ime {
         swap(index_, other.index_);
         swap(tile_, other.tile_);
         swap(prevFillColour_, other.prevFillColour_);
-        swap(collider_, other.collider_);
     }
 
-    Tile::Tile(Tile&&) noexcept = default;
-    Tile &Tile::operator=(Tile&&) noexcept = default;
+    void Tile::attachCollider(BoxCollider::Ptr collider) {
+        IME_ASSERT(collider, "Collider must not be a nullptr")
+        IME_ASSERT(tile_.hasRigidBody(), "A physics body must be set first before attaching a collider")
 
-    void Tile::attachCollider(std::shared_ptr<BoxCollider> collider) {
-        IME_ASSERT(!collider_, "Cannot add a collider to a tile that already has one, use the removeCollider function to remove it first")
-        IME_ASSERT(collider->getBody(), "A tile collider must have a rigid body attached to it")
-        IME_ASSERT(collider->getBody()->getType() == Body::Type::Static, "The rigid body a tile collider is attached to must be of type Body::Type::Static")
-        IME_ASSERT(collider->getType() == Collider::Type::Box, "A tile collider must be of ime::Collider::Type::Box")
+        if (collider->getSize() < tile_.getSize() || collider->getSize() > tile_.getSize())
+            collider->setSize(tile_.getSize());
 
-        collider_ = std::move(collider);
-        if (collider_->getSize() < tile_.getSize() || collider_->getSize() > tile_.getSize())
-            collider_->setSize(tile_.getSize());
-
-        collider_->getBody()->setPosition(getWorldCentre());
+        tile_.getRigidBody()->attachCollider(std::move(collider));
+        isCollidable_ = true;
     }
 
     void Tile::removeCollider() {
         setCollidable(false);
-        auto body = collider_->getBody();
-        body->removeColliderWithId(collider_->getObjectId());
-        body->getWorld()->removeBodyById(body->getObjectId());
-        collider_.reset();
+        tile_.removeRigidBody();
     }
 
     bool Tile::hasCollider() const {
-        return collider_ != nullptr;
+        return tile_.hasRigidBody() ? tile_.getRigidBody()->getColliderCount() != 0: false;
     }
 
     std::string Tile::getClassName() const {
@@ -111,8 +98,8 @@ namespace ime {
 
         tile_.setPosition(x, y);
 
-        if (collider_)
-            collider_->getBody()->setPosition(getWorldCentre());
+        if (tile_.hasRigidBody())
+            tile_.getRigidBody()->setPosition(getWorldCentre());
 
         emitChange(Property{Property{"position", getPosition()}});
     }
@@ -140,9 +127,11 @@ namespace ime {
 
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
 
-        if (collider_) {
-            collider_->setSize(static_cast<float>(width), static_cast<float>(height));
-            collider_->getBody()->setPosition(getWorldCentre());
+        if (hasCollider()) {
+            tile_.getRigidBody()->forEachCollider([this, width, height](const Collider::Ptr& collider) {
+                static_cast<BoxCollider*>(collider.get())->setSize(static_cast<float>(width), static_cast<float>(height));
+                collider->getBody().setPosition(getWorldCentre());
+            });
         }
 
         emitChange(Property{"size", getSize()});
@@ -156,14 +145,12 @@ namespace ime {
         if (isCollidable_ == collidable)
             return;
 
-        if (collidable) {
-            IME_ASSERT(collider_, "Cannot set Tile as collidable without a collider, use the setCollidable function to add one")
-        }
-
+        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physics body in order to enable/disable collisions")
         isCollidable_ = collidable;
 
-        if (collider_)
-            collider_->setEnable(collidable);
+        tile_.getRigidBody()->forEachCollider([collidable](const Collider::Ptr& collider) {
+            collider->setEnable(collidable);
+        });
 
         emitChange(Property{"collidable", isCollidable_});
     }
@@ -212,6 +199,13 @@ namespace ime {
     bool Tile::contains(Vector2f point) const {
         return ((point.x >= getPosition().x && point.x <= getPosition().x + getSize().x)
                 && (point.y >= getPosition().y && point.y <= getPosition().y + getSize().y));
+    }
+
+    void Tile::setBody(Body::Ptr body) {
+        IME_ASSERT(body, "The physics body must not be a nullptr")
+        IME_ASSERT(body->getType() == Body::Type::Static, "The physics body of a tile must be of type ime::Body::Type::Static")
+        tile_.attachRigidBody(std::move(body));
+        tile_.getRigidBody()->setPosition(getWorldCentre());
     }
 
     void Tile::setIndex(Index index) {

@@ -145,12 +145,11 @@ namespace ime {
     }
 
     void TileMap::setCollidable(Tile &tile, bool collidable) {
-        if (collidable && !tile.hasCollider()) {
-            auto collider = BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)});
-            auto body = physicsSim_->createBody();
-            body->attachCollider(collider);
-            tile.attachCollider(std::move(collider));
-            tile.setCollidable(true);
+        if (tile.isCollidable() == collidable)
+            return;
+        else if (collidable && !tile.hasCollider()) {
+            tile.setBody(physicsSim_->createBody());
+            tile.attachCollider(BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)}));
         } else
             tile.setCollidable(collidable);
     }

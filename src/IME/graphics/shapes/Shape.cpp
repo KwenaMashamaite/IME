@@ -87,21 +87,23 @@ namespace ime {
                     setRotation(body_->getRotation());
                 }
             }));
+
+            body_->getWorld()->getScene().onDestruction([this] {
+                postStepId_ = -1;
+            });
         }
     }
 
     void Shape::removeRigidBody() {
-        if (body_) {
-            body_->getWorld()->destroyBody(body_);
+        if (body_)
             body_.reset();
-        }
     }
 
-    Body::Ptr Shape::getRigidBody() {
+    const Body::Ptr& Shape::getRigidBody() {
         return body_;
     }
 
-    Body::Ptr Shape::getRigidBody() const {
+    const Body::Ptr& Shape::getRigidBody() const {
         return body_;
     }
 

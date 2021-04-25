@@ -23,10 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/joints/JointDefinition.h"
+#include "IME/core/physics/rigid_body/Body.h"
 
 namespace ime {
     JointDefinition::JointDefinition() :
         areBodiesCollidable{false}
     {}
+
+    JointDefinition::~JointDefinition() = default;
 }
 

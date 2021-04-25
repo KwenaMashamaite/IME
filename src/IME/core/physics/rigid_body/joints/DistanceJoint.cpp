@@ -66,14 +66,12 @@ namespace ime {
     // DistanceJoint class stuff
     //////////////////////////////////////////////////////////////////////////
 
-    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, const World::Ptr& world) :
-        joint_{nullptr}
-    {
+    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, const World::Ptr& world) {
         IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr")
         IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr")
         IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects")
 
-        auto b2Definition = new b2DistanceJointDef();
+        auto b2Definition = std::unique_ptr<b2DistanceJointDef>();
         b2Definition->collideConnected = definition.areBodiesCollidable;
         b2Definition->type = b2JointType::e_distanceJoint;
         b2Definition->length = utility::pixelsToMetres(definition.length);
@@ -90,12 +88,8 @@ namespace ime {
                                       utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
 
         userData_ = definition.userData;
-        joint_ = dynamic_cast<b2DistanceJoint*>(world->getInternalWorld()->CreateJoint(b2Definition));
+        joint_ = std::unique_ptr<b2DistanceJoint>(dynamic_cast<b2DistanceJoint*>(world->getInternalWorld()->CreateJoint(b2Definition.get())));
         IME_ASSERT(joint_, "Internal error: Failed to cast to b2DistanceJoint")
-
-        // Cleanup
-        delete b2Definition;
-        b2Definition = nullptr;
     }
 
     std::string DistanceJoint::getClassName() const {
@@ -154,11 +148,11 @@ namespace ime {
         return JointType::Distance;
     }
 
-    Body::Ptr DistanceJoint::getBodyA() {
+    const Body::Ptr& DistanceJoint::getBodyA() {
         return bodyA_;
     }
 
-    Body::Ptr DistanceJoint::getBodyB() {
+    const Body::Ptr& DistanceJoint::getBodyB() {
         return bodyB_;
     }
 
@@ -184,16 +178,14 @@ namespace ime {
     }
 
     b2Joint *DistanceJoint::getInternalJoint() {
-        return joint_;
+        return joint_.get();
     }
 
     const b2Joint *DistanceJoint::getInternalJoint() const {
-        return joint_;
+        return joint_.get();
     }
 
     DistanceJoint::~DistanceJoint() {
         emit("destruction");
-        delete joint_;
-        joint_ = nullptr;
     }
 }

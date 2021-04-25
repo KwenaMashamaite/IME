@@ -30,14 +30,16 @@
 namespace ime {
     Collider::Collider(Collider::Type type) :
         type_{type},
-        prevCollisionBitMask_{filterData_.collisionBitMask}
+        prevCollisionBitMask_{filterData_.collisionBitMask},
+        hasRigidBody_{false}
     {}
 
     Collider::Collider(const Collider& other) :
         Object(other),
         type_{other.type_},
         filterData_{other.filterData_},
-        prevCollisionBitMask_{other.prevCollisionBitMask_}
+        prevCollisionBitMask_{other.prevCollisionBitMask_},
+        hasRigidBody_{false}
     {
         // Other member data are initialized when the collider is attached
         // to a rigid body because b2Fixture is not copy constructable
@@ -49,6 +51,7 @@ namespace ime {
             type_ = rhs.type_;
             filterData_ = rhs.filterData_;
             prevCollisionBitMask_ = rhs.prevCollisionBitMask_;
+            hasRigidBody_ = false;
 
             // Other member data are initialized when the collider is attached
             // to a rigid body because b2Fixture is not copy assignable
@@ -68,25 +71,37 @@ namespace ime {
         return type_;
     }
 
-    void Collider::setBody(Body::Ptr body) {
-        IME_ASSERT(body, "A body attached to a collider cannot be a nullptr")
+    void Collider::setBody(Body& body) {
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
         b2FixtureDefinition->density = 1.0f;
-        b2FixtureDefinition->userData.pointer = getObjectId();
+        b2FixtureDefinition->userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-        fixture_.reset(body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()));
-        body_ = std::move(body);
+        auto b2FixtureDeleter = [](b2Fixture* fixture) {
+            // The b2Fixture is destroyed in the destruction listener of body_
+            // because it's only created when the collider is attached to a
+            // body. Without this empty custom deleter, the application crashes
+            // and the reason is unknown
+        };
 
-        emitChange(Property{"body", body_});
+        body.onDestruction([this] {
+            (*body_).get().getInternalBody()->DestroyFixture(fixture_.get());
+            fixture_ = nullptr;
+        });
+
+        fixture_ = std::unique_ptr<b2Fixture, std::function<void(b2Fixture*)>>(
+            body.getInternalBody()->CreateFixture(b2FixtureDefinition.get()), std::move(b2FixtureDeleter));
+
+        body_ = std::make_unique<BodyRef>(body);
+        hasRigidBody_ = true;
     }
 
-    Body::Ptr Collider::getBody() {
-        return body_;
+    Body& Collider::getBody() {
+        return (*body_).get();
     }
 
-    const Body::Ptr& Collider::getBody() const {
-        return body_;
+    const Body& Collider::getBody() const {
+        return (*body_).get();
     }
 
     void Collider::setSensor(bool sensor) {
@@ -129,6 +144,10 @@ namespace ime {
         emitChange(Property{"enable", enable});
     }
 
+    bool Collider::isAttachedToBody() const {
+        return hasRigidBody_;
+    }
+
     bool Collider::containsPoint(Vector2f point) const {
         return fixture_->TestPoint({utility::pixelsToMetres(point.x),
             utility::pixelsToMetres(point.y)});
@@ -137,7 +156,7 @@ namespace ime {
     void Collider::setDensity(float density) {
         IME_ASSERT(density >= 0, "A collider cannot have a negative density")
         fixture_->SetDensity(density);
-        body_->getInternalBody()->ResetMassData();
+        (*body_).get().getInternalBody()->ResetMassData();
         emitChange(Property{"density", density});
     }
 

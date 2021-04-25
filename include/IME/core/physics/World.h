@@ -63,7 +63,7 @@ namespace ime {
          * or true to continue with the query until all colliders have been
          * processed
          */
-        using AABBCallback = std::function<bool(Collider::Ptr)>;
+        using AABBCallback = std::function<bool(Collider* const)>;
 
         /**
          *  Callback function passed to rayCast Function
@@ -99,7 +99,7 @@ namespace ime {
          * forth arg:  The distance from the rays starting point to the current
          *              point of intersection (fraction)
          */
-        using RayCastCallback = std::function<float(Collider::Ptr,
+        using RayCastCallback = std::function<float(Collider* const,
             Vector2f, Vector2f, float)>;
 
         /**
@@ -251,30 +251,6 @@ namespace ime {
         void createBody(const GameObjectPtr& gameObject, Body::Type type = Body::Type::Static);
 
         /**
-         * @brief Get the body by its unique identifier
-         * @param id The id of the body to retrieve
-         * @return The body with the given id or a nullptr if there is no
-         *         body with the given id in the world
-         */
-        Body::Ptr getBodyById(unsigned int id);
-
-        /**
-         * @brief Destroy a rigid body
-         * @param body The rigid body to be destroyed
-         * @return True if the body was destroyed or false if the world is
-         *         in the middle of a step or the body does not exist
-         *
-         * This function destroys all associated shapes and joints
-         *
-         * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to destroy a joint inside a callback
-         * dispatched by the world (Callbacks are dispatched during a step)
-         *
-         * @see createBody(const BodyDefinition&)
-         */
-        bool destroyBody(const Body::Ptr& body);
-
-        /**
          * @brief Create a joint
          * @param definition Definition to create a joint from
          * @return The created joint or a nullptr if this function is called
@@ -288,42 +264,6 @@ namespace ime {
          * dispatched by the world (Callbacks are dispatched during a step)
          */
         Joint::Ptr createJoint(const JointDefinition& definition);
-
-        /**
-         * @brief Destroy a joint
-         * @param joint Joint to be destroyed
-         * @return True if the joint was destroyed or false if the joint
-         *         does not exist or if this function is called inside a
-         *         world callback
-         *
-         * @note If the joined bodies were set to not collide, they may start
-         * colliding after the joint is destroyed
-         *
-         * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to destroy a joint inside a callback
-         * dispatched by the world (Callbacks are dispatched during a step)
-         *
-         * @see createJoint
-         */
-        bool destroyJoint(const Joint::Ptr& joint);
-
-        /**
-         * @brief Destroy all the bodies in the world
-         *
-         * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to create a body inside a callback
-         * dispatched by the world (Callbacks are dispatched during a step)
-         */
-        void destroyAllBodies();
-
-        /**
-         * @brief Destroy all the joints in the world
-         *
-         * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to create a joint inside a callback
-         * dispatched by the world (Callbacks are dispatched during a step)
-         */
-        void destroyAllJoints();
 
         /**
          * @brief Update the physics world
@@ -412,24 +352,6 @@ namespace ime {
          * @return True if enabled, or false if disabled
          */
         bool isSubSteppingEnabled() const;
-
-        /**
-         * @brief Execute a callback for each body in the world
-         * @param callback The function to be executed on each body
-         *
-         * The callback is passed a reference to a pointer to the body
-         * on invocation
-         */
-        void forEachBody(Callback<Body::Ptr&> callback);
-
-        /**
-         * @brief Execute a callback for each joint in the world
-         * @param callback The function to be executed on each joint
-         *
-         * The callback is passed a reference to a pointer to the joint
-         * on invocation
-         */
-        void forEachJoint(Callback<Joint::Ptr&> callback);
 
         /**
          * @brief Get the number of bodies in the world
@@ -567,17 +489,6 @@ namespace ime {
 
         /**
          * @internal
-         * @brief Remove the body with a specific id
-         * @param id The id of the body to remove
-         * @return True if the body was removed, otherwise false
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
-         */
-        bool removeBodyById(unsigned int id);
-
-        /**
-         * @internal
          * @brief Instantiate a debug drawer
          * @param renderWindow The render target for debug drawing
          *
@@ -622,8 +533,6 @@ namespace ime {
         int postRenderId_;                     //!< Post render callback id
 
         std::unique_ptr<priv::DebugDrawer> debugDrawer_;   //!< Draws physics entities when debug draw is enabled
-        std::unordered_map<int, Body::Ptr> bodies_;  //!< All bodies in this simulation
-        std::unordered_map<int, Joint::Ptr> joints_; //!< All joints in this simulation
 
         class B2ContactListener;
         std::unique_ptr<B2ContactListener> b2ContactListener_;

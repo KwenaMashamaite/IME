@@ -43,7 +43,7 @@ namespace ime {
      */
     class IME_API CircleCollider final : public Collider {
     public:
-        using Ptr = std::shared_ptr<CircleCollider>; //!< Shared collider pointer
+        using Ptr = std::unique_ptr<CircleCollider>; //!< Unique collider pointer
 
         /**
          * @brief Default constructor

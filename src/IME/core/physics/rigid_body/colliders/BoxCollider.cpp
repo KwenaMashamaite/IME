@@ -55,11 +55,11 @@ namespace ime {
     BoxCollider &BoxCollider::operator=(BoxCollider&&) noexcept = default;
 
     BoxCollider::Ptr BoxCollider::create(Vector2f size) {
-        return std::make_shared<BoxCollider>(size);
+        return std::make_unique<BoxCollider>(size);
     }
 
     BoxCollider::Ptr BoxCollider::copy() const {
-        return std::static_pointer_cast<BoxCollider>(clone());
+        return BoxCollider::Ptr(new BoxCollider(*(static_cast<BoxCollider*>(clone().get()))));
     }
 
     Collider::Ptr BoxCollider::clone() const {

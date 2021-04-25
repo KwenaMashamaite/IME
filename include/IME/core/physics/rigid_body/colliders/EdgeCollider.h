@@ -41,7 +41,7 @@ namespace ime {
      */
     class IME_API EdgeCollider : public Collider {
     public:
-        using Ptr = std::shared_ptr<EdgeCollider>; //!< Shared collider pointer
+        using Ptr = std::unique_ptr<EdgeCollider>; //!< Unique collider pointer
 
         /**
          * @brief Default constructor

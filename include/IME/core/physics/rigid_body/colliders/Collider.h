@@ -117,8 +117,7 @@ namespace ime {
      */
     class IME_API Collider : public Object {
     public:
-        using Ptr = std::shared_ptr<Collider>; //!< Shared collider pointer
-        using BodyPtr = std::shared_ptr<Body>; //!< Shared Body pointer
+        using Ptr = std::unique_ptr<Collider>; //!< Unique collider pointer
 
         /**
          * @brief The type of the collider
@@ -340,12 +339,20 @@ namespace ime {
         void setEnable(bool enable);
 
         /**
+         * @brief Check if the collider is attached to a rigid body or not
+         * @return True if it is attached to a body, otherwise false
+         *
+         * @note A collider can only be attached to a single rigid Body
+         */
+        bool isAttachedToBody() const;
+
+        /**
          * @brief Get the body the collider is attached to
          * @return The body this collider is attached to if any, otherwise a
          *         nullptr
          */
-        BodyPtr getBody();
-        const BodyPtr& getBody() const;
+        Body& getBody();
+        const Body& getBody() const;
 
         /**
          * @brief Check if the collider contains a point or not
@@ -392,7 +399,7 @@ namespace ime {
          * @brief Attach the collider ot a rigid body
          * @param body The rigid body to attach the collider to
          */
-        void setBody(BodyPtr body);
+        void setBody(Body& body);
 
         /**
          * @brief Update the colliders collision filter
@@ -400,13 +407,17 @@ namespace ime {
         void updateCollisionFilter();
 
     private:
+        using BodyRef = std::reference_wrapper<Body>;
+
         Type type_;                          //!< The type of the collider
-        std::unique_ptr<b2Fixture> fixture_; //!< Internal collider
-        BodyPtr body_;                       //!< The body this collider is attached to
-        friend class Body;                   //!< Needs access to constructor
+        std::unique_ptr<BodyRef> body_;      //!< The body this collider is attached to
         PropertyContainer userData_;         //!< Application specific collider data
         CollisionFilterData filterData_;     //!< Stores the collision filter data for the collider
         std::uint16_t prevCollisionBitMask_; //!< Previous collision bitmask before setEnable(false)
+        bool hasRigidBody_;                  //!< A flag indicating whether or not the collider is attached to a rigid body
+        friend class Body;                   //!< Needs access to constructor
+
+        std::unique_ptr<b2Fixture, std::function<void(b2Fixture*)>> fixture_; //!< Internal collider
     };
 }
 

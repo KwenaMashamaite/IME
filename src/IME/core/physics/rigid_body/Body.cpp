@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>
@@ -38,12 +39,9 @@ namespace ime {
         b2Definition->type = static_cast<b2BodyType>(bodyType);
         b2Definition->userData.pointer = getObjectId();
 
-        auto b2BodyDeleter = [this](b2Body* body) {
-            if (body != nullptr) {
-                body->GetWorld()->DestroyBody(body);
-                getWorld()->removeBodyById(body->GetUserData().pointer);
-                body = nullptr;
-            }
+        // b2Body has a private destructor
+        auto b2BodyDeleter = [](b2Body* body) {
+            body->GetWorld()->DestroyBody(body);
         };
 
         body_ = std::unique_ptr<b2Body, std::function<void(b2Body*)>>(
@@ -85,9 +83,9 @@ namespace ime {
 
     void Body::attachCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body")
-        IME_ASSERT(!collider->getBody(), "The collider is already attached to another rigid body: One body per collider")
+        IME_ASSERT(!collider->isAttachedToBody(), "The collider is already attached to another rigid body: One body per collider")
         if (!world_->isLocked()) {
-            collider->setBody(shared_from_this());
+            collider->setBody(*this);
             colliders_.insert({collider->getObjectId(), std::move(collider)});
             emit("attachCollider");
         } else {
@@ -95,16 +93,15 @@ namespace ime {
         }
     }
 
-    Collider::Ptr Body::getColliderById(unsigned int id) {
+    const Collider::Ptr& Body::getColliderById(unsigned int id) {
         if (utility::findIn(colliders_, id))
             return colliders_.at(static_cast<int>(id));
-        return nullptr;
+        return null_ptr;
     }
 
     void Body::removeColliderWithId(unsigned int id) {
         if (!world_->isLocked()) {
             if (colliders_.find(static_cast<int>(id)) != colliders_.end()) {
-                body_->DestroyFixture(colliders_[static_cast<int>(id)]->fixture_.get());
                 colliders_.erase(static_cast<int>(id));
                 emit("removeCollider");
             }
@@ -336,15 +333,19 @@ namespace ime {
         return body_->IsFixedRotation();
     }
 
-    std::shared_ptr<GameObject> Body::getGameObject() {
+    void Body::setGameObject(GameObject::Ptr gameObject) {
+        gameObject_ = std::move(gameObject);
+    }
+
+    const GameObject::Ptr& Body::getGameObject() {
         return gameObject_;
     }
 
-    std::shared_ptr<GameObject> Body::getGameObject() const {
+    const GameObject::Ptr& Body::getGameObject() const {
         return gameObject_;
     }
 
-    Body::WorldPtr Body::getWorld() {
+    const Body::WorldPtr& Body::getWorld() {
         return world_;
     }
 
@@ -356,27 +357,14 @@ namespace ime {
         return userData_;
     }
 
-    void Body::forEachCollider(std::function<void(Collider::Ptr)> callback) {
-        std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto pair) {
+    void Body::forEachCollider(const Callback<const Collider::Ptr&>& callback) {
+        std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto& pair) {
             callback(pair.second);
         });
     }
 
-    void Body::onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback) {
-        onContactBegin_ = std::move(callback);
-        emit("collisionStart");
-    }
-
-    void Body::onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback) {
-        onContactEnd_ = std::move(callback);
-        emit("collisionEnd");
-    }
-
-    void Body::emitCollisionEvent(const std::string &event, const Body::Ptr& other) {
-        if (event == "contactBegin" && onContactBegin_)
-            onContactBegin_(shared_from_this(), other);
-        else if (event == "contactEnd" && onContactEnd_)
-            onContactEnd_(shared_from_this(), other);
+    std::size_t Body::getColliderCount() const {
+        return colliders_.size();
     }
 
     std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() {

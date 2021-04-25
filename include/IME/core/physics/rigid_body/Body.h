@@ -71,11 +71,11 @@ namespace ime {
      * A body is not constructed directly, use the World::createBody function
      * to construct a rigid body
      */
-    class IME_API Body : public Object, public std::enable_shared_from_this<Body> {
+    class IME_API Body final : public Object {
     public:
-        using Ptr = std::shared_ptr<Body>; //!< Shared Body pointer
-        using ConstPtr = std::shared_ptr<const Body>; //!< Const shared world pointer
+        using Ptr = std::unique_ptr<Body>; //!< Unique body pointer
         using WorldPtr = std::shared_ptr<World>; //!< Shared World pointer
+        using GameObjectPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
 
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
@@ -146,7 +146,7 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        Collider::Ptr getColliderById(unsigned int id);
+        const Collider::Ptr& getColliderById(unsigned int id);
 
         /**
          * @brief Remove a collider with a given id from the body
@@ -534,20 +534,30 @@ namespace ime {
         bool isFixedRotation() const;
 
         /**
+         * @internal
+         * @brief Set the game object this body is attached to
+         * @param gameObject The game object this body is attached to
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        void setGameObject(GameObjectPtr gameObject);
+
+        /**
          * @brief Get the game object the body is attached to
          * @return The game object this body is attached to or a nullptr if
          *          teh body is not attached to any game object
          *
          * By default, the body is not attached to any game object
          */
-        std::shared_ptr<GameObject> getGameObject();
-        std::shared_ptr<GameObject> getGameObject() const;
+        const GameObjectPtr& getGameObject();
+        const GameObjectPtr& getGameObject() const;
 
         /**
          * @brief Get the physics world the body is in
          * @return The physics world the body is simulated in
          */
-        WorldPtr getWorld();
+        const WorldPtr& getWorld();
         const WorldPtr& getWorld() const;
 
         /**
@@ -567,51 +577,13 @@ namespace ime {
          *
          * The callback is passed a collider on invocation
          */
-        void forEachCollider(Callback<Collider::Ptr> callback);
+        void forEachCollider(const Callback<const Collider::Ptr&>& callback);
 
         /**
-         * @brief Add an event listener to a collision begin event
-         * @param callback The function to be executed when event is fired
-         *
-         * The callback function is called when two bodies begin to overlap.
-         * It is passed this body and the body that started to overlap with
-         * this body respectively. Pass nullptr to remove the callback
-         *
-         * @note A collision begin event can only occur if the body has a
-         * Collider attached to it
-         *
-         * @see setCollidable
-         * @see onCollisionEnd
+         * @brief Get the number of colliders attached to the body
+         * @return The number of colliders attached to the body
          */
-        void onCollisionStart(Callback<Body::Ptr, Body::Ptr> callback);
-
-        /**
-         * @brief Add an event listener to a collision end event
-         * @param callback The function to be executed when event is fired
-         *
-         * The callback function is called when two bodies stop overlapping.
-         * It is passed this body and the body that stopped overlapping with
-         * this body respectively. Pass nullptr to remove the callback
-         *
-         * @note A collision end event can only occur if the body has a
-         * Collider attached to it
-         *
-         * @see setCollidable
-         * @see onCollisionStart
-         */
-        void onCollisionEnd(Callback<Body::Ptr, Body::Ptr> callback);
-
-        /**
-         * @internal
-         * @brief Emit a collision event on the game object
-         * @param event Collision event to be emitted
-         * @param other The body that is colliding or ceased colliding
-         *              with this body
-         *
-         * @warning This function is intended for internal use only and should
-         * never be called outside of IME
-         */
-        void emitCollisionEvent(const std::string& event, const Body::Ptr& other);
+        std::size_t getColliderCount() const;
 
         /**
          * @internal
@@ -639,13 +611,12 @@ namespace ime {
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body
-        std::shared_ptr<GameObject> gameObject_;           //!< The game object this body is attached to
-        WorldPtr world_;                                   //!< The world the body is in
+        GameObjectPtr gameObject_;                         //!< The game object this body is attached to
+        WorldPtr world_;                                   //!< The world the body belongs to
         PropertyContainer userData_;                       //!< Application specific body data
         friend class World;                                //!< Needs access to constructor
         std::unordered_map<int, Collider::Ptr> colliders_; //!< Colliders attached to this body
-        Callback<Body::Ptr, Body::Ptr> onContactBegin_;    //!< Called when this body starts colliding with another body or vice versa
-        Callback<Body::Ptr, Body::Ptr> onContactEnd_;      //!< Called when this body stops colliding with another body or vice versa
+        const inline static Collider::Ptr null_ptr;        //!< Nullptr place holder
     };
 }
 

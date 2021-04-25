@@ -43,7 +43,7 @@ namespace ime {
      */
     class IME_API PolygonCollider final : public Collider {
     public:
-        using Ptr = std::shared_ptr<PolygonCollider>; //!< Shared polygon collider
+        using Ptr = std::unique_ptr<PolygonCollider>; //!< Unique polygon collider
 
         /**
          * @brief Default constructor

@@ -41,8 +41,7 @@ namespace ime {
      */
     class IME_API BoxCollider final : public Collider {
     public:
-        using Ptr = std::shared_ptr<BoxCollider>; //!< shred collider pointer
-        using ConstPtr = std::shared_ptr<const BoxCollider>; //!< Const shared collider pointer
+        using Ptr = std::unique_ptr<BoxCollider>; //!< Unique collider pointer
 
         /**
          * @brief Default constructor

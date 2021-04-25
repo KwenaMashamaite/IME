@@ -45,7 +45,7 @@ namespace ime {
     class IME_API Joint : public Object {
     public:
         using Ptr = std::shared_ptr<Joint>; //!< Shared joint pointer
-        using BodyPtr = std::shared_ptr<Body>; //!< Shared body pointer
+        using BodyPtr = std::unique_ptr<Body>; //!< Shared body pointer
 
         /**
          * @brief Get the name of this class
@@ -68,13 +68,13 @@ namespace ime {
          * @brief Get the first body attached to ths joint
          * @return The first body attached to this joint
          */
-        virtual BodyPtr getBodyA() = 0;
+        virtual const BodyPtr& getBodyA() = 0;
 
         /**
          * @brief Get the second body attached to this joint
          * @return The second body attached to this joint
          */
-        virtual BodyPtr getBodyB() = 0;
+        virtual const BodyPtr& getBodyB() = 0;
 
         /**
          * @brief Get the anchor point on body A in world coordinates

@@ -53,7 +53,7 @@ namespace ime {
     CircleCollider &CircleCollider::operator=(CircleCollider&&) noexcept = default;
 
     CircleCollider::Ptr CircleCollider::copy() const {
-        return std::static_pointer_cast<CircleCollider>(clone());
+        return CircleCollider::Ptr(new CircleCollider(*(static_cast<CircleCollider*>(clone().get()))));
     }
 
     Collider::Ptr CircleCollider::clone() const {
@@ -61,7 +61,7 @@ namespace ime {
     }
 
     CircleCollider::Ptr CircleCollider::create(float radius) {
-        return std::make_shared<CircleCollider>(radius);
+        return std::make_unique<CircleCollider>(radius);
     }
 
     std::string CircleCollider::getClassName() const {

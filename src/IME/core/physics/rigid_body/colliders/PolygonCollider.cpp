@@ -51,7 +51,7 @@ namespace ime {
     PolygonCollider &PolygonCollider::operator=(PolygonCollider&&) noexcept = default;
 
     PolygonCollider::Ptr PolygonCollider::copy() const {
-        return  std::static_pointer_cast<PolygonCollider>(clone());
+        return PolygonCollider::Ptr(new PolygonCollider(*(static_cast<PolygonCollider*>(clone().get()))));
     }
 
     Collider::Ptr PolygonCollider::clone() const {
@@ -59,7 +59,7 @@ namespace ime {
     }
 
     PolygonCollider::Ptr PolygonCollider::create() {
-        return std::make_shared<PolygonCollider>();
+        return std::make_unique<PolygonCollider>();
     }
 
     std::string PolygonCollider::getClassName() const {

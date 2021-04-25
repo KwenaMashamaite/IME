@@ -40,12 +40,11 @@ namespace ime {
          * @param fixture Box2d fixture to be converted
          * @return Own collider
          */
-        Collider::Ptr convertFixtureToCollider(b2Fixture* fixture, World& world) {
+        Collider* convertFixtureToCollider(b2Fixture* fixture) {
             // Every IME Collider object has an instance of a b2Fixture.
-            // When the b2Fixture is instantiated, the id of the Collider that
-            // contains it is passed as user data so that we can retrieve it later.
-            return world.getBodyById(fixture->GetBody()->GetUserData().pointer)
-                     ->getColliderById(fixture->GetUserData().pointer);
+            // When the b2Fixture is instantiated, the Collider that contains
+            // it is passed as user data to Box2d so that we can retrieve it later.
+            return reinterpret_cast<Collider*>(fixture->GetUserData().pointer);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -57,16 +56,14 @@ namespace ime {
          */
         class B2QueryCallback : public b2QueryCallback {
         public:
-            B2QueryCallback(const World::AABBCallback* callback, World& world) :
-                world_{world}
-            {
+            explicit B2QueryCallback(const World::AABBCallback* callback){
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
 
             // Called by box2d when a fixture overlaps the query AABB
             bool ReportFixture(b2Fixture *b2_fixture) override {
-                return (*callback_)(convertFixtureToCollider(b2_fixture, world_));
+                return (*callback_)(convertFixtureToCollider(b2_fixture));
             }
 
             ~B2QueryCallback() override {
@@ -74,7 +71,6 @@ namespace ime {
             }
 
         private:
-            World& world_;
             const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
         };
 
@@ -87,9 +83,7 @@ namespace ime {
          */
         class B2RayCastCallback : public b2RayCastCallback {
         public:
-            B2RayCastCallback(const World::RayCastCallback* callback, World& world) :
-                world_{world}
-            {
+            explicit B2RayCastCallback(const World::RayCastCallback* callback) {
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
@@ -99,7 +93,7 @@ namespace ime {
                 const b2Vec2 &normal, float fraction) override
             {
                 using namespace utility;
-                return (*callback_)(convertFixtureToCollider(b2_fixture, world_),
+                return (*callback_)(convertFixtureToCollider(b2_fixture),
                         {metresToPixels(point.x), metresToPixels(point.y)},
                         {metresToPixels(normal.x), metresToPixels(normal.y)},
                         fraction);
@@ -110,7 +104,6 @@ namespace ime {
             }
 
         private:
-            World& world_;
             const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
     } // anonymous namespace
@@ -122,8 +115,7 @@ namespace ime {
     // ContactListener wrapper
     class World::B2ContactListener : public b2ContactListener {
     public:
-        explicit B2ContactListener(ContactListener& contactListener, World& world) :
-            world_{world},
+        explicit B2ContactListener(ContactListener& contactListener) :
             contactListener_{contactListener}
         {}
 
@@ -149,30 +141,23 @@ namespace ime {
         }
 
     private:
-        World& world_;
         ContactListener& contactListener_;
 
         void emit(const std::string& event, b2Contact *contact) {
-            auto colliderA = convertFixtureToCollider(contact->GetFixtureA(), world_);
-            auto colliderB = convertFixtureToCollider(contact->GetFixtureB(), world_);
+            auto* colliderA = convertFixtureToCollider(contact->GetFixtureA());
+            auto* colliderB = convertFixtureToCollider(contact->GetFixtureB());
 
-            auto bodyA = colliderA->getBody();
-            auto bodyB = colliderB->getBody();
+            //contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
 
-            auto gameObjectA = bodyA->getGameObject();
-            auto gameObjectB = bodyB->getGameObject();
-
-            contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
-
-            if (bodyA && bodyB) {
-                bodyA->emitCollisionEvent(event, bodyB);
-                bodyB->emitCollisionEvent(event, bodyA);
-            }
+            auto gameObjectA = colliderA->getBody().getGameObject();
+            auto gameObjectB = colliderB->getBody().getGameObject();
 
             if (gameObjectA && gameObjectB) {
                 gameObjectA->emitCollisionEvent(event, gameObjectB);
                 gameObjectB->emitCollisionEvent(event, gameObjectA);
             }
+
+            colliderA = colliderB = nullptr;
         }
     };
 
@@ -183,7 +168,7 @@ namespace ime {
         isDebugDrawEnabled_{false},
         timescale_{1.0f}
     {
-        b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_, *this);
+        b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_);
         world_->SetContactListener(b2ContactListener_.get());
 
 #if defined(IME_DEBUG)
@@ -244,37 +229,14 @@ namespace ime {
             return nullptr;
         }
 
-        auto body = Body::Ptr(new Body(shared_from_this(), type));
-        bodies_.insert({body->getObjectId(), body});
-        return body;
+        return Body::Ptr(new Body(shared_from_this(), type));
     }
 
     void World::createBody(const GameObject::Ptr& gameObject, Body::Type type) {
         IME_ASSERT(gameObject, "Cannot attach a rigid body to a nullptr")
         auto rigidBody = createBody(type);
-        rigidBody->gameObject_ = gameObject;
+        rigidBody->setGameObject(gameObject);
         gameObject->attachRigidBody(std::move(rigidBody));
-    }
-
-    Body::Ptr World::getBodyById(unsigned int id) {
-        if (utility::findIn(bodies_, id))
-            return bodies_.at(static_cast<int>(id));
-
-        return nullptr;
-    }
-
-    bool World::destroyBody(const Body::Ptr& body) {
-        if (!world_->IsLocked()) {
-            if (utility::findIn(bodies_, body->getObjectId())) {
-                world_->DestroyBody(bodies_[static_cast<int>(body->getObjectId())]->getInternalBody().get());
-                bodies_.erase(static_cast<int>(body->getObjectId()));
-                return true;
-            }
-        } else {
-            IME_PRINT_WARNING("Operation ignored: destroyBody() called inside a world callback")
-        }
-
-        return false;
     }
 
     Joint::Ptr World::createJoint(const JointDefinition& definition) {
@@ -283,59 +245,12 @@ namespace ime {
             return nullptr;
         }
 
-        Joint::Ptr joint;
         switch (definition.type) {
             case JointType::Distance:
-                joint = Joint::Ptr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
-                break;
+                return Joint::Ptr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
             default:
                 return nullptr;
         }
-
-        joints_.insert({joint->getObjectId(), joint});
-        return joint;
-    }
-
-    bool World::destroyJoint(const Joint::Ptr& joint) {
-        if (!world_->IsLocked()) {
-            if (utility::findIn(joints_, joint->getObjectId())) {
-                world_->DestroyJoint(joints_[static_cast<int>(joint->getObjectId())]->getInternalJoint());
-                joints_.erase(static_cast<int>(joint->getObjectId()));
-                return true;
-            }
-        } else {
-            IME_PRINT_WARNING("Operation ignored: destroyJoint() called inside a world callback")
-        }
-
-        return false;
-    }
-
-    void World::destroyAllBodies() {
-        if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: removeAllBodies() called inside a world callback")
-            return;
-        }
-
-        // Destroy all bodies in box2D first
-        std::for_each(bodies_.begin(), bodies_.end(), [this] (auto pair) {
-            world_->DestroyBody(pair.second->getInternalBody().get());
-        });
-
-        bodies_.clear();
-    }
-
-    void World::destroyAllJoints() {
-        if (world_->IsLocked()) {
-            IME_PRINT_WARNING("Operation ignored: removeAllJoints() called inside a world callback")
-            return;
-        }
-
-        // Destroy all joints in box2D first
-        std::for_each(joints_.begin(), joints_.end(), [this] (auto pair) {
-            world_->DestroyJoint(pair.second->getInternalJoint());
-        });
-
-        joints_.clear();
     }
 
     void World::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
@@ -370,18 +285,6 @@ namespace ime {
         return world_->GetSubStepping();
     }
 
-    void World::forEachBody(Callback<Body::Ptr&> callback) {
-        std::for_each(bodies_.begin(), bodies_.end(), [&callback](auto pair) {
-            callback(pair.second);
-        });
-    }
-
-    void World::forEachJoint(Callback<Joint::Ptr &> callback) {
-        std::for_each(joints_.begin(), joints_.end(), [&callback](auto pair) {
-            callback(pair.second);
-        });
-    }
-
     std::size_t World::getBodyCount() const {
         return world_->GetBodyCount();
     }
@@ -398,14 +301,14 @@ namespace ime {
     void World::rayCast(const World::RayCastCallback &callback, Vector2f startPoint,
         Vector2f endPoint)
     {
-        auto queryCallback = B2RayCastCallback(&callback, *this);
+        auto queryCallback = B2RayCastCallback(&callback);
         world_->RayCast(&queryCallback,
             {utility::pixelsToMetres(startPoint.x), utility::pixelsToMetres(startPoint.y)},
             {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
     void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) {
-        auto queryCallback = B2QueryCallback(&callback, *this);
+        auto queryCallback = B2QueryCallback(&callback);
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
@@ -453,12 +356,6 @@ namespace ime {
 
     std::unique_ptr<b2World>& World::getInternalWorld() {
         return world_;
-    }
-
-    bool World::removeBodyById(unsigned int id) {
-        // This function  does not remove the internal body because
-        // it is called by the custom deleter of the internal body
-        return utility::eraseIn(bodies_, id);
     }
 
     void World::createDebugDrawer(Window &renderWindow) {

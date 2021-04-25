@@ -60,12 +60,12 @@ namespace ime {
         /**
          * @brief Move constructor
          */
-        Tile(Tile&&) noexcept;
+        Tile(Tile&&) noexcept = default;
 
         /**
          * @brief Move assignment operator
          */
-        Tile& operator=(Tile&&) noexcept;
+        Tile& operator=(Tile&&) noexcept = default;
 
         /**
          * @brief Set the position of the tile
@@ -229,6 +229,18 @@ namespace ime {
         bool contains(Vector2f point) const;
 
         /**
+         * @internal
+         * @brief Set the tiles physics body physics body
+         * @param body The physics body to set
+         *
+         * @warning A physics body is required before setting the tile as
+         * collidable, doing so without a physics body is undefined behavior
+         *
+         * @warning This function is intended for internal use only
+         */
+        void setBody(Body::Ptr body);
+
+        /**
          * @brief Add a collider to the tile
          * @param collider The collider to be added
          *
@@ -244,7 +256,7 @@ namespace ime {
          *
          * @see removeCollider and hasCollider
          */
-        void attachCollider(std::shared_ptr<BoxCollider> collider);
+        void attachCollider(std::unique_ptr<BoxCollider> collider);
 
         /**
          * @brief Remove the collider added to the tile
@@ -295,9 +307,8 @@ namespace ime {
         bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable
         char id_;               //!< Tile id
         Index index_;           //!< Position of the tile in the tilemap
-        RectangleShape tile_;   //!< Tile reset
+        RectangleShape tile_;   //!< Tile
         Colour prevFillColour_; //!< Tiles fill colour before it was hidden
-        std::shared_ptr<BoxCollider> collider_; //!< The tiles collider
     };
 }
 
