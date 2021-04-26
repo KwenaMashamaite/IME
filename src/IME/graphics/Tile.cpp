@@ -205,6 +205,7 @@ namespace ime {
         IME_ASSERT(body, "The physics body must not be a nullptr")
         IME_ASSERT(body->getType() == Body::Type::Static, "The physics body of a tile must be of type ime::Body::Type::Static")
         tile_.attachRigidBody(std::move(body));
+        tile_.setOrigin(0, 0);
         tile_.getRigidBody()->setPosition(getWorldCentre());
     }
 
