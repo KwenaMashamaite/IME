@@ -30,7 +30,7 @@ namespace ime {
         GridMover(Type::KeyboardControlled, tileMap, std::move(target)),
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
-        onAdjacentTileReached([this](Tile) {
+        onAdjacentTileReached([this](Index) {
             if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
                 requestDirectionChange(newDir);

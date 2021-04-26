@@ -40,8 +40,8 @@ namespace ime {
 
         enableAdaptiveMovement(false);
 
-        onTargetTileReset([this](Tile tile) {
-            targetTileIndex_ = tile.getIndex();
+        onTargetTileReset([this](Index index) {
+            targetTileIndex_ = index;
         });
 
         onTargetChanged([this](GameObject::Ptr newTarget) {
@@ -51,12 +51,12 @@ namespace ime {
             }
         });
 
-        onAdjacentTileReached([this](Tile) {
+        onAdjacentTileReached([this](Index) {
             if (adjacentTileHandler_)
                 adjacentTileHandler_();
         });
 
-        onSolidTileCollision([this](Tile) {
+        onTileCollision([this](Index) {
             if (getTarget()) {
                 generatePath();
                 moveTarget();
@@ -177,11 +177,11 @@ namespace ime {
         }
     }
 
-    int TargetGridMover::onDestinationReached(Callback<Tile> callback) {
+    int TargetGridMover::onDestinationReached(Callback<Index> callback) {
         return onAdjacentTileReached(
-            [this, callback = std::move(callback)](Tile tile) {
-                if (targetTileIndex_ == tile.getIndex())
-                    callback(tile);
+            [this, callback = std::move(callback)](Index index) {
+                if (targetTileIndex_ == index)
+                    callback(index);
             }
         );
     }

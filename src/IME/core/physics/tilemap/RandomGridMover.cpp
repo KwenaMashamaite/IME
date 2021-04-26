@@ -55,7 +55,7 @@ namespace ime {
             targetGridMover_.setTarget(std::move(newTarget));
         });
 
-        onSolidTileCollision([this](Tile) {
+        onTileCollision([this](Index) {
             revertAndGenerateDirection();
         });
 
@@ -63,7 +63,7 @@ namespace ime {
             revertAndGenerateDirection();
         });
 
-        onAdjacentTileReached([this](Tile) {
+        onAdjacentTileReached([this](Index) {
             if (!isAdvance_ && switchToAdvanced_) {
                 switchToAdvanced_ = false;
                 isAdvance_ = true;
@@ -80,11 +80,11 @@ namespace ime {
             revertAndGenerateDirection();
         });
 
-        targetGridMover_.onDestinationReached([this](Tile) {
+        targetGridMover_.onDestinationReached([this](Index) {
             setRandomPosition();
         });
 
-        targetGridMover_.onAdjacentTileReached([this](Tile) {
+        targetGridMover_.onAdjacentTileReached([this](Index) {
             if (isAdvance_ && switchToNormal_) {
                 switchToNormal_ = false;
                 isAdvance_ = false;

@@ -165,7 +165,7 @@ namespace ime {
          *
          * @see onAdjacentTileReached
          */
-        int onDestinationReached(Callback<Tile> callback);
+        int onDestinationReached(Callback<Index> callback);
 
         /**
          * @brief Destructor

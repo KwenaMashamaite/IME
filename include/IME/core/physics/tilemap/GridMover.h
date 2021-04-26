@@ -265,14 +265,14 @@ namespace ime {
          *
          * This event is emitted when the game object starts moving from its
          * current tile to one of its adjacent tile. The callback is passed
-         * the tile that the game object is currently moving to
+         * the index of the tile that the game object is currently moving to
          *
          * @note When controlled by a grid mover, the game object will always
          * move one tile at a time, regardless of how fast it's moving
          *
          * @see onAdjacentTileReached
          */
-        int onMoveBegin(Callback<Tile> callback);
+        int onMoveBegin(Callback<Index> callback);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
@@ -286,11 +286,11 @@ namespace ime {
          * @note When controlled by a grid mover, the target will always move
          * one tile at a time, regardless of how fast the target is moving
          *
-         * The callback is passed the tile the target moved to
+         * The callback is passed the index of the tile the target moved to
          *
          * @see onMoveBegin
          */
-        int onAdjacentTileReached(Callback<Tile> callback);
+        int onAdjacentTileReached(Callback<Index> callback);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
@@ -318,9 +318,9 @@ namespace ime {
          * internal handler prevents the target from occupying the solid tile
          * by moving it back to its previous tile after the collision
          *
-         * The callback is passed the tile the target collided with
+         * The callback is passed the index of the tile the target collided with
          */
-        int onSolidTileCollision(Callback<Tile> callback);
+        int onTileCollision(Callback<Index> callback);
 
         /**
          * @brief Add an event listener to an obstacle collision
@@ -408,7 +408,7 @@ namespace ime {
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
          */
-        void onTargetTileReset(Callback<Tile> callback);
+        void onTargetTileReset(Callback<Index> callback);
 
         /**
          * @brief Destructor
@@ -512,8 +512,8 @@ namespace ime {
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
         Direction targetDirection_;    //!< The direction in which the game object wishes to go in
         Direction currentDirection_;   //!< The current direction of the game object
-        Tile targetTile_;              //!< The grid tile the target wishes to reach
-        Tile prevTile_;                //!< Tile target was in before moving to adjacent tile
+        const Tile* targetTile_;       //!< The grid tile the target wishes to reach
+        const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object

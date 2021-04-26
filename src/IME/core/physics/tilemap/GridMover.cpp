@@ -37,8 +37,8 @@ namespace ime {
         tileMap_(tileMap),
         maxSpeed_{Vector2f {0, 0}},
         targetDirection_{Unknown},
-        targetTile_{tileMap.getTileSize(), Vector2f{0, 0}},
-        prevTile_{tileMap.getTileSize(), Vector2f{0, 0}},
+        targetTile_{nullptr},
+        prevTile_{nullptr},
         isMoving_{false},
         moveRestrict_{MoveRestriction::None}
     {
@@ -67,7 +67,7 @@ namespace ime {
             auto velocity = target->getRigidBody()->getLinearVelocity();
             maxSpeed_ = {std::abs(velocity.x), std::abs(velocity.y)};
             target->getRigidBody()->setLinearVelocity({0, 0});
-            targetTile_ = tileMap_.getTile(target->getTransform().getPosition());
+            targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
             target_ = std::move(target);
         } else
             target_ = target;
@@ -108,7 +108,7 @@ namespace ime {
     }
 
     Index GridMover::getTargetTileIndex() const {
-        return targetTile_.getIndex();
+        return targetTile_->getIndex();
     }
 
     TileMap &GridMover::getGrid() {
@@ -154,7 +154,7 @@ namespace ime {
                 isMoving_ = true;
                 auto velocity = Vector2f{maxSpeed_.x * targetDirection_.x,maxSpeed_.y * targetDirection_.y};
                 target_->getRigidBody()->setLinearVelocity(velocity);
-                eventEmitter_.emit("moveBegin", targetTile_);
+                eventEmitter_.emit("moveBegin", targetTile_->getIndex());
             } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
                 onDestinationReached();
@@ -169,10 +169,10 @@ namespace ime {
     void GridMover::snapTargetToTargetTile() {
         isMoving_ = false;
         targetDirection_ = Unknown;
-        tileMap_.removeChildFromTile(prevTile_, target_);
-        tileMap_.addChild(target_, targetTile_.getIndex(), false);
+        tileMap_.removeChildFromTile(*prevTile_, target_);
+        tileMap_.addChild(target_, targetTile_->getIndex(), false);
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
-        target_->getRigidBody()->setPosition(targetTile_.getWorldCentre());
+        target_->getRigidBody()->setPosition(targetTile_->getWorldCentre());
     }
 
     bool GridMover::isMoveValid(Direction targetDir) const {
@@ -219,12 +219,12 @@ namespace ime {
     }
 
     bool GridMover::handleSolidTileCollision() {
-        if (targetTile_.isCollidable()) {
+        if (targetTile_->isCollidable()) {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
-            eventEmitter_.emit("solidTileCollision", hitTile);
+            eventEmitter_.emit("solidTileCollision", hitTile->getIndex());
             return true;
         }
         return false;
@@ -243,7 +243,7 @@ namespace ime {
 
     std::pair<bool, GameObject::Ptr> GridMover::targetTileHasObstacle() {
         GameObject::Ptr obstacle;
-        tileMap_.forEachChildInTile(targetTile_, [&obstacle, this](const GameObject::Ptr& child) {
+        tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](const GameObject::Ptr& child) {
             if (child->getType() == GameObject::Type::Obstacle && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
@@ -254,7 +254,7 @@ namespace ime {
 
     bool GridMover::handleGridBorderCollision() {
         //A tile outside the grid bounds has the index {-1, -1}
-        if (targetTile_.getIndex().row < 0 || targetTile_.getIndex().colm < 0) {
+        if (targetTile_->getIndex().row < 0 || targetTile_->getIndex().colm < 0) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
@@ -265,7 +265,7 @@ namespace ime {
     }
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
-        auto distanceToTile = target_->getTransform().getPosition().distanceTo(targetTile_.getWorldCentre());
+        auto distanceToTile = target_->getTransform().getPosition().distanceTo(targetTile_->getWorldCentre());
         auto distanceMoved = target_->getRigidBody()->getLinearVelocity() * deltaTime.asSeconds();
 
         // Horizontally movement
@@ -281,7 +281,7 @@ namespace ime {
     }
 
     void GridMover::onDestinationReached() {
-        tileMap_.forEachChildInTile(targetTile_, [this](const GameObject::Ptr& gameObject) {
+        tileMap_.forEachChildInTile(*targetTile_, [this](const GameObject::Ptr& gameObject) {
             if (target_->isCollidable() && gameObject->isCollidable()) {
                 switch (gameObject->getType()) {
                     case GameObject::Type::Player:
@@ -298,34 +298,34 @@ namespace ime {
                 }
             }
         });
-        eventEmitter_.emit("adjacentTileReached", targetTile_);
+        eventEmitter_.emit("adjacentTileReached", targetTile_->getIndex());
     }
 
     void GridMover::setTargetTile() {
         prevTile_ = targetTile_;
         if (targetDirection_ == Left)
-            targetTile_ = tileMap_.getTileLeftOf(targetTile_);
+            targetTile_ = &tileMap_.getTileLeftOf(*targetTile_);
         else if (targetDirection_ == UpLeft)
-            targetTile_ = tileMap_.getTileAbove(tileMap_.getTileLeftOf(targetTile_));
+            targetTile_ = &tileMap_.getTileAbove(tileMap_.getTileLeftOf(*targetTile_));
         else if (targetDirection_ == Up)
-            targetTile_ = tileMap_.getTileAbove(targetTile_);
+            targetTile_ = &tileMap_.getTileAbove(*targetTile_);
         else if (targetDirection_ == UpRight)
-            targetTile_ = tileMap_.getTileAbove(tileMap_.getTileRightOf(targetTile_));
+            targetTile_ = &tileMap_.getTileAbove(tileMap_.getTileRightOf(*targetTile_));
         else if (targetDirection_ == Right)
-            targetTile_ = tileMap_.getTileRightOf(targetTile_);
+            targetTile_ = &tileMap_.getTileRightOf(*targetTile_);
         else if (targetDirection_ == DownRight)
-            targetTile_ = tileMap_.getTileBelow(tileMap_.getTileRightOf(targetTile_));
+            targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileRightOf(*targetTile_));
         else if (targetDirection_ == Down)
-            targetTile_ = tileMap_.getTileBelow(targetTile_);
+            targetTile_ = &tileMap_.getTileBelow(*targetTile_);
         else if (targetDirection_ == DownLeft)
-            targetTile_ = tileMap_.getTileBelow(tileMap_.getTileLeftOf(targetTile_));
+            targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileLeftOf(*targetTile_));
     }
 
     int GridMover::onTargetChanged(Callback<GameObject::Ptr> callback) {
         return eventEmitter_.addEventListener("targetChange", std::move(callback));
     }
 
-    int GridMover::onSolidTileCollision(Callback<Tile> callback) {
+    int GridMover::onTileCollision(Callback<Index> callback) {
         return eventEmitter_.addEventListener("solidTileCollision", std::move(callback));
     }
 
@@ -333,11 +333,11 @@ namespace ime {
         return eventEmitter_.addEventListener("gridBorderCollision", std::move(callback));
     }
 
-    int GridMover::onMoveBegin(Callback<Tile> callback) {
+    int GridMover::onMoveBegin(Callback<Index> callback) {
         return eventEmitter_.addEventListener("moveBegin", std::move(callback));
     }
 
-    int GridMover::onAdjacentTileReached(Callback<Tile> callback) {
+    int GridMover::onAdjacentTileReached(Callback<Index> callback) {
         return eventEmitter_.addEventListener("adjacentTileReached", std::move(callback));
     }
 
@@ -372,15 +372,15 @@ namespace ime {
     }
 
     void GridMover::resetTargetTile() {
-        if (target_ && !isTargetMoving() && targetTile_.getIndex()
+        if (target_ && !isTargetMoving() && targetTile_->getIndex()
             != tileMap_.getTileOccupiedByChild(target_).getIndex())
         {
-            targetTile_ = tileMap_.getTileOccupiedByChild(target_);
+            targetTile_ = &tileMap_.getTileOccupiedByChild(target_);
             eventEmitter_.emit("targetTileReset", targetTile_);
         }
     }
 
-    void GridMover::onTargetTileReset(Callback<Tile> callback) {
+    void GridMover::onTargetTileReset(Callback<Index> callback) {
         eventEmitter_.addEventListener("targetTileReset", std::move(callback));
     }
 
@@ -388,5 +388,8 @@ namespace ime {
         return eventEmitter_.removeEventListener(event, id);
     }
 
-    GridMover::~GridMover() = default;
+    GridMover::~GridMover() {
+        prevTile_ = nullptr;
+        targetTile_ = nullptr;
+    }
 }
