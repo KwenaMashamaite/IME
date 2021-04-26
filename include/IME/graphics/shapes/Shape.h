@@ -427,9 +427,10 @@ namespace ime {
 
     private:
         std::unique_ptr<priv::IShapeImpl> pimpl_;
-        Type type_;      //!< The type of this shape
-        Body::Ptr body_; //!< The shapes rigid body
-        int postStepId_; //!< Scene post step handler id
+        Type type_;              //!< The type of this shape
+        Body::Ptr body_;         //!< The shapes rigid body
+        int postStepId_;         //!< Scene post step handler id
+        int destructionId_;      //!< Scene destruction listener id
     };
 }
 

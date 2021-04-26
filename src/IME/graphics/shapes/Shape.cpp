@@ -31,7 +31,8 @@ namespace ime {
     Shape::Shape(std::unique_ptr<priv::IShapeImpl> impl, Type type) :
         pimpl_{std::move(impl)},
         type_{type},
-        postStepId_{-1}
+        postStepId_{-1},
+        destructionId_{-1}
     {}
 
     Shape::Shape(const Shape& other) :
@@ -39,22 +40,27 @@ namespace ime {
         pimpl_{other.pimpl_->clone()},
         type_{other.type_},
         body_{},
-        postStepId_{-1}
+        postStepId_{-1},
+        destructionId_{-1}
     {
         if (other.body_)
-            body_ = other.body_->copy();
+            attachRigidBody(other.body_->copy());
     }
 
     Shape &Shape::operator=(const Shape& rhs) {
-        // Can't use copy-swap idiom (class is abstract)
         if (this != &rhs) {
             Drawable::operator=(rhs);
             pimpl_ = rhs.pimpl_->clone();
             type_ = rhs.type_;
-            postStepId_ = -1;
 
-            if (rhs.body_)
-                body_ = rhs.body_->copy();
+            if (!body_) {
+                if (rhs.body_)
+                    attachRigidBody(rhs.body_->copy());
+                else {
+                    postStepId_ = -1;
+                    destructionId_ = -1;
+                }
+            }
         }
 
         return *this;
@@ -79,24 +85,43 @@ namespace ime {
         body_->setPosition(getPosition());
         body_->setRotation(getRotation());
 
-        // Synchronize the shape with its rigid body
-        if (postStepId_ == -1) {
+        // Synchronize the shape's transform with that of its rigid body
+        if (body_->getType() == Body::Type::Dynamic) {
             postStepId_ = body_->getWorld()->getScene().on_("postStep", Callback<Time>([this](Time) {
-                if (body_) {
-                    setPosition(body_->getPosition());
-                    setRotation(body_->getRotation());
-                }
+                setPosition(body_->getPosition());
+                setRotation(body_->getRotation());
             }));
 
-            body_->getWorld()->getScene().onDestruction([this] {
-                postStepId_ = -1;
+            destructionId_ = body_->getWorld()->getScene().onDestruction([this] {
+                postStepId_ = destructionId_ = -1;
+            });
+
+            onDestruction([this] {
+                if (destructionId_ != -1 && body_) {
+                    body_->getWorld()->getScene().removeDestructionListener(destructionId_);
+                    destructionId_ = -1;
+                }
+            });
+        } else {
+            onPropertyChange([this](const Property& property) {
+                if (body_) {
+                    if (property.getName() == "position")
+                        body_->setPosition(property.getValue<Vector2f>());
+                    else if (property.getName() == "rotation")
+                        body_->setRotation(property.getValue<float>());
+                }
             });
         }
     }
 
     void Shape::removeRigidBody() {
-        if (body_)
+        if (body_) {
+            if (body_->getType() == Body::Type::Dynamic) {
+                body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
+                postStepId_ = -1;
+            }
             body_.reset();
+        }
     }
 
     const Body::Ptr& Shape::getRigidBody() {
@@ -223,7 +248,10 @@ namespace ime {
     }
 
     Shape::~Shape() {
-        if (postStepId_ != -1 && body_)
+        if (postStepId_ != -1)
             body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
+
+        if (destructionId_ != -1)
+            body_->getWorld()->getScene().removeDestructionListener(destructionId_);
     }
 }
