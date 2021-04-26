@@ -304,7 +304,6 @@ namespace ime {
         ~Tile() override;
 
     private:
-        bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable
         char id_;               //!< Tile id
         Index index_;           //!< Position of the tile in the tilemap
         RectangleShape tile_;   //!< Tile

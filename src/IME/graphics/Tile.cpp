@@ -29,7 +29,6 @@
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
-        isCollidable_{false},
         id_{'\0'},
         index_{-1, -1},
         tile_({static_cast<float>(size.x), static_cast<float>(size.y)})
@@ -41,7 +40,6 @@ namespace ime {
 
     Tile::Tile(const Tile& other) :
         Drawable(other),
-        isCollidable_{other.isCollidable_},
         id_{other.id_},
         index_{other.index_},
         tile_{other.tile_},
@@ -56,7 +54,6 @@ namespace ime {
     void Tile::swap(Tile &other) {
         using std::swap;
 
-        swap(isCollidable_, other.isCollidable_);
         swap(id_, other.id_);
         swap(index_, other.index_);
         swap(tile_, other.tile_);
@@ -71,7 +68,6 @@ namespace ime {
             collider->setSize(tile_.getSize());
 
         tile_.getRigidBody()->attachCollider(std::move(collider));
-        isCollidable_ = true;
     }
 
     void Tile::removeCollider() {
@@ -142,17 +138,13 @@ namespace ime {
     }
 
     void Tile::setCollidable(bool collidable) {
-        if (isCollidable_ == collidable)
+        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physics body in order to enable/disable collisions")
+
+        if (tile_.getRigidBody()->isEnabled() == collidable)
             return;
 
-        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physics body in order to enable/disable collisions")
-        isCollidable_ = collidable;
-
-        tile_.getRigidBody()->forEachCollider([collidable](const Collider::Ptr& collider) {
-            collider->setEnable(collidable);
-        });
-
-        emitChange(Property{"collidable", isCollidable_});
+        tile_.getRigidBody()->setEnabled(collidable);
+        emitChange(Property{"collidable", collidable});
     }
 
     void Tile::setId(char id) {
@@ -193,7 +185,7 @@ namespace ime {
     }
 
     bool Tile::isCollidable() const {
-        return isCollidable_;
+        return hasCollider() ? tile_.getRigidBody()->isEnabled() : false;
     }
 
     bool Tile::contains(Vector2f point) const {
