@@ -36,6 +36,7 @@
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
+#include "IME/core/tilemap/TileMapRender.h"
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -77,26 +78,14 @@ namespace ime {
         void setPhysicsSimulation(std::shared_ptr<World> physicsSimulation);
 
         /**
-         * @brief Show or hide the tilemap
-         * @param visible True to show or false to hide the tilemap
+         * @brief Get the tilemaps renderer
+         * @return The tilemaps renderer
          *
-         * By default, the tilemap is visible
+         * The renderer gives access to functions that determine how the
+         * tilemap is displayed. It allows you to manipulate things such
+         * as the tile colour, grid line colour etc...
          */
-        void setVisible(bool visible);
-
-        /**
-         * @brief Check if the tilemap is visible or not
-         * @return True if the tilemap is visible, otherwise false
-         */
-        bool isVisible() const;
-
-        /**
-         * @brief Toggle the visibility of the tilemap
-         *
-         * This function will show the tilemap if it is currently visible
-         * or hide it if its currently visible
-         */
-        void toggleVisibility();
+        TileMapRenderer& getRenderer();
 
         /**
          * @brief Set the position of the tile map
@@ -723,6 +712,12 @@ namespace ime {
          */
         void forEachTile_(const Callback<Tile&>& callback);
 
+        /**
+         * @brief Update the tilemap when a render property changes
+         * @param property The render property that changed
+         */
+        void onRenderChange(const Property& property);
+
     private:
         unsigned int tileSpacing_;   //!< Spacing between tiles in all directions
         Vector2u tileSize_;          //!< The Size of each tile
@@ -732,8 +727,8 @@ namespace ime {
         unsigned int numOfColms_;    //!< The height of the tilemap in tiles
         Map mapData_;                //!< Map data used to identify different tiles
         std::string tileSet_;        //!< Tileset the visual grid is constructed from
-        bool isVisible_;             //!< A flag indicating whether or not the tilemap is visible
         Tile invalidTile_;           //!< Tile returned when an invalid index is provided
+        TileMapRenderer renderer_;   //!< Determines the look of the grid
         RenderLayerContainer& renderLayers_;  //!< Render layers for this scene
         GameObjectContainer& childContainer_; //!< Container for children of the grid
         SpriteContainer sprites_;    //!< Stores sprites that belong to the tilemap

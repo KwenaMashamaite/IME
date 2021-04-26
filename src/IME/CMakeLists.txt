@@ -51,6 +51,7 @@ set(IME_SRC
     core/tilemap/Index.cpp
     core/tilemap/TileMap.cpp
     core/tilemap/TileMapParser.cpp
+    core/tilemap/TileMapRenderer.cpp
     core/time/Clock.cpp
     core/time/Timer.cpp
     core/time/TimerManager.cpp

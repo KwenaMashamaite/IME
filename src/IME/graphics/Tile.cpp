@@ -33,7 +33,7 @@ namespace ime {
         index_{-1, -1},
         tile_({static_cast<float>(size.x), static_cast<float>(size.y)})
     {
-        tile_.setFillColour({36, 37, 38, 255});
+        tile_.setFillColour(Colour::White);
         prevFillColour_ = tile_.getFillColour();
         tile_.setPosition(position);
     }

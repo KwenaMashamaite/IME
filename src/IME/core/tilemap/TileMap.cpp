@@ -34,7 +34,6 @@ namespace ime {
             RenderLayerContainer& renderLayers,
             GameObjectContainer& childContainer) :
         tileSpacing_{1u},
-        isVisible_(true),
         invalidTile_({0, 0}, {-1, -1}),
         renderLayers_{renderLayers},
         childContainer_{childContainer},
@@ -50,35 +49,19 @@ namespace ime {
             tileHeight = 8;
 
         tileSize_ = Vector2u{tileWidth, tileHeight};
-        backgroundTile_.setFillColour(Colour::Grey);
+
+        backgroundTile_.setFillColour(renderer_.getGridLineColour());
+        renderer_.onPropertyChange([this](const Property& property){
+            onRenderChange(property);
+        });
     }
 
     void TileMap::setPhysicsSimulation(std::shared_ptr<World> physicsSimulation) {
         physicsSim_ = std::move(physicsSimulation);
     }
 
-    void TileMap::setVisible(bool visible) {
-        if (isVisible_ == visible)
-            return;
-
-        isVisible_ = visible;
-
-        forEachTile_([visible](Tile& tile) {
-            tile.setVisible(visible);
-        });
-
-        if (isVisible_)
-            backgroundTile_.setFillColour(Colour::Grey);
-        else
-            backgroundTile_.setFillColour(ime::Colour::Transparent);
-    }
-
-    bool TileMap::isVisible() const {
-        return isVisible_;
-    }
-
-    void TileMap::toggleVisibility() {
-        setVisible(!isVisible_);
+    TileMapRenderer &TileMap::getRenderer() {
+        return renderer_;
     }
 
     const Tile& TileMap::getTile(const Vector2f &position) {
@@ -152,6 +135,11 @@ namespace ime {
             tile.attachCollider(BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)}));
         } else
             tile.setCollidable(collidable);
+
+        if (collidable)
+            tile.setFillColour(renderer_.getCollidableTileColour());
+        else
+            tile.setFillColour(renderer_.getTileColour());
     }
 
     void TileMap::setPosition(int x, int y) {
@@ -199,6 +187,8 @@ namespace ime {
 
                 row.back().setId(mapData_[i][j]);
                 row.back().setIndex({static_cast<int>(i), static_cast<int>(j)});
+                row.back().setVisible(renderer_.isVisible());
+                row.back().setFillColour(renderer_.getTileColour());
             }
             tiledMap_.push_back(std::move(row));
         }
@@ -525,5 +515,30 @@ namespace ime {
 
     const Tile& TileMap::getTileOccupiedByChild(const GameObject::Ptr& child) {
         return getTile(child->getTransform().getPosition());
+    }
+
+    void TileMap::onRenderChange(const Property &property) {
+        if (property.getName() == "visible") {
+            auto visible = property.getValue<bool>();
+            forEachTile_([visible](Tile& tile) {
+                tile.setVisible(visible);
+            });
+
+            if (visible)
+                backgroundTile_.setFillColour(renderer_.getGridLineColour());
+            else
+                backgroundTile_.setFillColour(ime::Colour::Transparent);
+        } else if (property.getName() == "tileColour") {
+            forEachTile_([&property](Tile& tile) {
+                if (!tile.isCollidable())
+                    tile.setFillColour(property.getValue<Colour>());
+            });
+        } else if (property.getName() == "collidableTileColour") {
+            forEachTile_([&property](Tile& tile) {
+                if (tile.isCollidable())
+                    tile.setFillColour(property.getValue<Colour>());
+            });
+        } else if (property.getName() == "gridLineColour")
+            backgroundTile_.setFillColour(property.getValue<Colour>());
     }
 }
