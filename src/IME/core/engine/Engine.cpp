@@ -68,6 +68,7 @@ namespace ime {
         processSettings();
         initResourceManager();
         initRenderTarget();
+        gui_.setTarget(*window_);
 
         eventDispatcher_ = EventDispatcher::instance();
         onWindowClose_ = [this]{quit();};
@@ -133,6 +134,7 @@ namespace ime {
             if (event.type == Event::Closed && onWindowClose_)
                 onWindowClose_();
 
+            gui_.handleEvent(event);
             inputManager_.handleEvent(event);
             sceneManager_.handleEvent(event);
         }
@@ -199,6 +201,7 @@ namespace ime {
 
     void Engine::render() {
         sceneManager_.render(*window_);
+        gui_.draw();
     }
 
     void Engine::display() {
@@ -285,6 +288,10 @@ namespace ime {
 
     Time Engine::getElapsedTime() const {
         return elapsedTime_;
+    }
+
+    ui::GuiContainer &Engine::getGui() {
+        return gui_;
     }
 
     ResourceManager &Engine::getResourceManager() {

@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/audio/AudioManager.h"
+#include "IME/ui/GuiContainer.h"
 #include "IME/core/input/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/core/time/TimerManager.h"
@@ -180,6 +181,16 @@ namespace ime {
          * shutdown
          */
         Time getElapsedTime() const;
+
+        /**
+         * @brief Get the global gui
+         * @return The global gui
+         *
+         * Unlike a Scene level gui, this gui is not destroyed when the scene
+         * is destroyed, but rather when the engine is shutdown. It may be
+         * used when the same UI is required across multiple scenes
+         */
+        ui::GuiContainer& getGui();
 
         /**
          * @brief Get the global resource manager
@@ -388,6 +399,7 @@ namespace ime {
         Callback<> onFrameEnd_;                      //!< A Function called at the end of the current frame
         EventEmitter eventEmitter_;                  //!< Emits engine events to interested parties
         TimerManager timerManager_;                  //!< Manages global timers
+        ui::GuiContainer gui_;                       //!< Global gui
 
         std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
