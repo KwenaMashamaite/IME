@@ -114,6 +114,35 @@ namespace ime {
         bool isRunning() const;
 
         /**
+         * @brief Pause or resume the engine
+         * @param pause True to pause the engine or false to resume it
+         *
+         * When the engine is paused, it keeps running, this means that the
+         * isRunning() function will return true if the engine was started.
+         * However, the current scene will not receive time updates. This
+         * effectively pauses all time dependent operations such as animations,
+         * physics, movements, time-based callbacks and so on... The same
+         * effect can be achieved by setting the scenes timescale to 0. The
+         * difference between the two is that the latter invokes the scenes
+         * update functions with a delta time of ime::Time::Zero whilst the
+         * former does not invoke the update functions at all.
+         *
+         * Note that events are dispatched when the engine is paused, thus
+         * user input is not blocked
+         *
+         * By default the engine is not paused
+         */
+        void setPause(bool pause);
+
+        /**
+         * @brief Check if then engine is paused or not
+         * @return True if paused, otherwise false
+         *
+         * @see setPause
+         */
+        bool isPaused() const;
+
+        /**
          * @brief Get the engines settings
          * @return The engines settings
          */
@@ -347,6 +376,12 @@ namespace ime {
         void processEvents();
 
         /**
+         * @brief Pre-update current frame
+         * @param deltaTime Time passed since last pre-update
+         */
+        void preUpdate(Time deltaTime);
+
+        /**
          * @brief Update current frame
          * @param deltaTime Time passed since last frame update
          */
@@ -385,7 +420,7 @@ namespace ime {
         bool isSettingsLoadedFromFile_;              //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
         bool isInitialized_;                         //!< A flag indicating whether or not the engine has been initialized
         bool isRunning_;                             //!< A flag indicating whether or not the engine is running
-        Time deltaTime_;                             //!< The time taken for each game frame to complete
+        bool isPaused_;                              //!< A flag indicating whether or not the engine is paused
         Time elapsedTime_;                           //!< The time passed since the engine started running
         SceneManager sceneManager_;                  //!< The games scene manager
         audio::AudioManager audioManager_;           //!< The games global audio manager

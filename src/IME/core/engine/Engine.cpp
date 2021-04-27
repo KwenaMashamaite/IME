@@ -58,6 +58,7 @@ namespace ime {
         isSettingsLoadedFromFile_(!settingsFile.empty() && settingsFile != "default"),
         isInitialized_{false},
         isRunning_{false},
+        isPaused_{false},
         pendingPop_{false}
     {}
 
@@ -159,30 +160,23 @@ namespace ime {
 
         isRunning_ = true;
         sceneManager_.enterTopScene();
-        auto const frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
-        auto accumulator = Time::Zero;
-        auto gameClock = Clock();
+        Time deltaTime;
+        Clock gameClock;
         while (window_->isOpen() && isRunning_ && !sceneManager_.isEmpty()) {
-            deltaTime_ = gameClock.restart();
+            deltaTime = gameClock.restart();
             if (onFrameStart_)
                 onFrameStart_();
 
-            sceneManager_.preUpdate(deltaTime_);
+            preUpdate(deltaTime);
             processEvents();
-
-            accumulator += deltaTime_;
-            while (accumulator >= frameTime) {
-                sceneManager_.fixedUpdate(frameTime);
-                accumulator -= frameTime;
-            }
-
-            update(deltaTime_);
+            update(deltaTime);
             clear();
             render();
             display();
             postFrameUpdate();
-            elapsedTime_ += deltaTime_;
+            elapsedTime_ += deltaTime;
         }
+
         shutdown();
     }
 
@@ -190,7 +184,28 @@ namespace ime {
         isRunning_ = false;
     }
 
+    void Engine::preUpdate(Time deltaTime) {
+        if (isPaused_)
+            return;
+
+        sceneManager_.preUpdate(deltaTime);
+    }
+
     void Engine::update(Time deltaTime) {
+        if (isPaused_)
+            return;
+
+        auto const static frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
+        auto static accumulator = Time::Zero;
+
+        // Fixed update
+        accumulator += deltaTime;
+        while (accumulator >= frameTime) {
+            sceneManager_.fixedUpdate(frameTime);
+            accumulator -= frameTime;
+        }
+
+        // Normal update
         timerManager_.update(deltaTime);
         sceneManager_.update(deltaTime);
     }
@@ -284,6 +299,14 @@ namespace ime {
 
     bool Engine::isRunning() const {
         return isRunning_;
+    }
+
+    void Engine::setPause(bool pause) {
+        isPaused_ = pause;
+    }
+
+    bool Engine::isPaused() const {
+        return isPaused_;
     }
 
     Time Engine::getElapsedTime() const {
