@@ -383,6 +383,7 @@ namespace ime {
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object
         int postStepId_;                      //!< Scene post step handler id
+        int destructionId_;                   //!< Scene destruction listener id
         PropertyContainer userData_;          //!< Used to store metadata about the object
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa

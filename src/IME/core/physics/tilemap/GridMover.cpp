@@ -172,7 +172,7 @@ namespace ime {
         tileMap_.removeChildFromTile(*prevTile_, target_);
         tileMap_.addChild(target_, targetTile_->getIndex(), false);
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
-        target_->getRigidBody()->setPosition(targetTile_->getWorldCentre());
+        target_->getTransform().setPosition(targetTile_->getWorldCentre());
     }
 
     bool GridMover::isMoveValid(Direction targetDir) const {

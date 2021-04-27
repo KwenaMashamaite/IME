@@ -33,7 +33,8 @@ namespace ime {
         state_{-1},
         isActive_{true},
         isCollidable_{true},
-        postStepId_{-1}
+        postStepId_{-1},
+        destructionId_{-1}
     {
         initEvents();
     }
@@ -48,9 +49,11 @@ namespace ime {
         isCollidable_{other.isCollidable_},
         transform_{other.transform_},
         sprite_{other.sprite_},
-        postStepId_{other.postStepId_}
+        postStepId_{-1},
+        destructionId_{-1}
     {
         initEvents();
+
         if (other.hasRigidBody())
             attachRigidBody(other.body_->copy());
     }
@@ -95,6 +98,8 @@ namespace ime {
         std::swap(sprite_, other.sprite_);
         std::swap(body_, other.body_);
         std::swap(userData_, other.userData_);
+        std::swap(postStepId_, other.postStepId_);
+        std::swap(destructionId_, other.destructionId_);
     }
 
     GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {
@@ -175,7 +180,7 @@ namespace ime {
 
     void GameObject::attachRigidBody(Body::Ptr body) {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity")
-        IME_ASSERT(!body_, "Entity already has a rigid body attached, remove it first before attaching another one")
+        IME_ASSERT(!body_, "Game object already has a rigid body attached, remove it first before attaching another one")
         body_ = std::move(body);
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
@@ -250,13 +255,16 @@ namespace ime {
             }
         }));
 
-        scene_.get().onDestruction([this] {
-            postStepId_ = -1;
+        destructionId_ = scene_.get().onDestruction([this] {
+            postStepId_ = destructionId_ = -1;
         });
 
         transform_.onPropertyChange([this](const Property& property) {
             const auto& name = property.getName();
             if (name == "position") {
+                if (body_)
+                    body_->setPosition(transform_.getPosition());
+
                 sprite_.setPosition(transform_.getPosition());
                 emitChange(Property{name, transform_.getPosition()});
             } else if (name == "origin") {
@@ -266,6 +274,9 @@ namespace ime {
                 sprite_.setScale(transform_.getScale());
                 emitChange(Property{name, transform_.getScale()});
             } else if (name == "rotation") {
+                if (body_)
+                    body_->setRotation(transform_.getRotation());
+
                 sprite_.setRotation(transform_.getRotation());
                 emitChange(Property{name, transform_.getRotation()});
             }
@@ -275,6 +286,9 @@ namespace ime {
     GameObject::~GameObject() {
         if (postStepId_ != -1)
             scene_.get().unsubscribe_("postStep", postStepId_);
+
+        if (destructionId_ != -1)
+            scene_.get().removeDestructionListener(destructionId_);
 
         if (body_)
             body_->setGameObject(nullptr);
