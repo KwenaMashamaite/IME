@@ -32,7 +32,8 @@ namespace ime {
         pimpl_{std::move(impl)},
         type_{type},
         postStepId_{-1},
-        destructionId_{-1}
+        destructionId_{-1},
+        propertyChangeId_{-1}
     {}
 
     Shape::Shape(const Shape& other) :
@@ -41,7 +42,8 @@ namespace ime {
         type_{other.type_},
         body_{},
         postStepId_{-1},
-        destructionId_{-1}
+        destructionId_{-1},
+        propertyChangeId_{-1}
     {
         if (other.body_)
             attachRigidBody(other.body_->copy());
@@ -59,6 +61,7 @@ namespace ime {
                 else {
                     postStepId_ = -1;
                     destructionId_ = -1;
+                    propertyChangeId_ = -1;
                 }
             }
         }
@@ -103,7 +106,7 @@ namespace ime {
                 }
             });
         } else {
-            onPropertyChange([this](const Property& property) {
+            propertyChangeId_ = onPropertyChange([this](const Property& property) {
                 if (body_) {
                     if (property.getName() == "position")
                         body_->setPosition(property.getValue<Vector2f>());
@@ -119,7 +122,11 @@ namespace ime {
             if (body_->getType() == Body::Type::Dynamic) {
                 body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
                 postStepId_ = -1;
+            } else {
+                unsubscribe("propertyChange", propertyChangeId_);
+                propertyChangeId_ = -1;
             }
+
             body_.reset();
         }
     }

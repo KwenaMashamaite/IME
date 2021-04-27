@@ -70,12 +70,12 @@ namespace ime {
         return eventEmitter_.on(property + "Change", callback);
     }
 
-    int Object::onEvent(const std::string &event, const Callback<> &callback) {
-        return eventEmitter_.on(event, callback);
+    int Object::onPropertyChange(const Callback<Property> &callback) {
+        return eventEmitter_.on("propertyChange", callback);
     }
 
-    void Object::onPropertyChange(const Callback<Property> &callback) {
-        onPropertyChange_ = callback;
+    int Object::onEvent(const std::string &event, const Callback<> &callback) {
+        return eventEmitter_.on(event, callback);
     }
 
     bool Object::unsubscribe(const std::string &event, int id) {
@@ -100,8 +100,7 @@ namespace ime {
 
     void Object::emitChange(const Property &property) {
         eventEmitter_.emit(property.getName() + "Change", property);
-        if (onPropertyChange_)
-            onPropertyChange_(property);
+        eventEmitter_.emit("propertyChange", property);
     }
 
     void Object::emit(const std::string &event) {

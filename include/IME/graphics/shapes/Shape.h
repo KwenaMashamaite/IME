@@ -431,6 +431,7 @@ namespace ime {
         Body::Ptr body_;         //!< The shapes rigid body
         int postStepId_;         //!< Scene post step handler id
         int destructionId_;      //!< Scene destruction listener id
+        int propertyChangeId_;   //!< Object property change handler id
     };
 }
 

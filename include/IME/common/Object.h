@@ -155,12 +155,10 @@ namespace ime {
          * player.setTag("player1");
          * @endcode
          *
-         * Unlike onPropertyChange(const Callback&) you can add multiple event
-         * listeners to the same property using this function. However you must
-         * store the unique id of the event listener if you wish to remove it
-         * at a later time
+         * Unlike onPropertyChange(const Callback<Property>&), this function
+         * adds an event listener to a specific property change event
          *
-         * @see unsubscribe and onPropertyChange(Callback)
+         * @see unsubscribe and onPropertyChange(const Callback<Property>&)
          */
         int onPropertyChange(const std::string& property,
             const Callback<Property>& callback);
@@ -170,15 +168,13 @@ namespace ime {
          * @param callback The function to be executed when the property changes
          * @return The unique id of the event listener
          *
-         * Note that only one callback function may be registered with this
-         * function. This means that adding a new event listener overwrites
-         * the previous event listener. To remove the callback, pass a nullptr
-         * as an argument. The function may be useful if you want to write
-         * the logic for property changes in one function.
+         * This function adds a callback to any property change event. When
+         * unsubscribing an event listener from this event, pass
+         * @a "propertyChange" as the name of the event
          *
-         * @see onPropertyChange(std::string, Callback)
+         * @see onPropertyChange(const std::string&, const Callback<Property>&)
          */
-        void onPropertyChange(const Callback<Property>& callback);
+        int onPropertyChange(const Callback<Property>& callback);
 
         /**
          * @brief Add an event listener to an event
@@ -314,7 +310,6 @@ namespace ime {
         unsigned int id_;           //!< The id of the object
         std::string tag_;           //!< Object's tag
         EventEmitter eventEmitter_; //!< Dispatch object events
-        Callback<Property> onPropertyChange_;
     };
 }
 
