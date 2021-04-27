@@ -371,7 +371,8 @@ namespace ime {
                 IME_ASSERT(renderer, "Cannot set nullptr as renderer")
                 renderer_ = std::move(renderer);
                 renderer_->setInternalPtr(widget_->getRenderer());
-                widget_->setRenderer(renderer_->getInternalPtr()->getData());
+                if (renderer_->getInternalPtr())
+                    widget_->setRenderer(renderer_->getInternalPtr()->getData());
             }
 
             ui::IWidgetRenderer::Ptr getRenderer() const override {
