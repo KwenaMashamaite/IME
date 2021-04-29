@@ -26,6 +26,7 @@
 #define IME_COLOUR_H
 
 #include "IME/Config.h"
+#include <string>
 
 namespace ime {
     /**
@@ -70,18 +71,39 @@ namespace ime {
         Colour(unsigned int r, unsigned int g, unsigned int b, unsigned alpha = 255);
 
         /**
+         * @brief Construct colour from hex code
+         * @param colour The colour in hex code
+         *
+         * The format of the hex code is #rrggbb or #rrggbbaa where:
+         *
+         * 1. rr is the red component
+         * 2. gg is the green component
+         * 3. bb is the blue component
+         * 4. aa is the alpha component
+         *
+         * For the #rrggbb format, the alpha component is implicitly set to FF.
+         * Note that the hex colour code must begin with a '#' symbol
+         *
+         * @code
+         * auto colour = Colour("#ff0000")
+         * auto colour = Colour("#ff000b4")
+         * @endcode
+         */
+        explicit Colour(const std::string& colour);
+
+        /**
          * @brief Check if a colour is the same as this colour
          * @param rhs Right operand
          * @return True if the colours are the same, otherwise false
          */
-        bool operator==(const Colour& rhs);
+        bool operator==(const Colour& rhs) const;
 
         /**
          * @brief Check if a colour is not the same as this colour
          * @param rhs Right operand
          * @return True if the colours are not the same, otherwise false
          */
-        bool operator!=(const Colour& rhs);
+        bool operator!=(const Colour& rhs) const;
 
         // Colour components
         unsigned int red = 0;        //!< Red component

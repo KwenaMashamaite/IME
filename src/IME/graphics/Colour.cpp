@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Colour.h"
+#include <algorithm>
 
 namespace ime {
     const Colour Colour::Black{0, 0, 0, 255};
@@ -52,14 +53,28 @@ namespace ime {
         opacity = alpha;
     }
 
-    bool Colour::operator==(const Colour &rhs) {
+    Colour::Colour(const std::string &colour) {
+        IME_ASSERT((colour.length() == 7 || colour.length() == 9) , "Hex code must either be 7 or 9 characters long including the '#' sign")
+        IME_ASSERT(colour.front() == '#', "Hex code must begin with a '#' sign")
+
+        red = std::stoi(colour.substr(1, 2), nullptr, 16);
+        green = std::stoi(colour.substr(3, 2), nullptr, 16);
+        blue = std::stoi(colour.substr(5, 2), nullptr, 16);
+
+        if (colour.length() == 7)
+            opacity = 255;
+        else
+            opacity = std::stoi(colour.substr(7, 2), nullptr, 16);
+    }
+
+    bool Colour::operator==(const Colour &rhs) const {
         return red == rhs.red
             && green == rhs.green
             && blue == rhs.blue
             && opacity == rhs.opacity;
     }
 
-    bool Colour::operator!=(const Colour &rhs) {
+    bool Colour::operator!=(const Colour &rhs) const {
         return !(*this == rhs);
     }
 }
