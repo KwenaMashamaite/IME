@@ -55,11 +55,8 @@ namespace ime {
          * render layers, however you must make sure that the layer you specify
          * during a call to this function already exists otherwise undefined
          * behavior
-         *
-         * @note The container keeps the pointer so there is no need to keep
-         * your pointer after the game object is added
          */
-        void add(GameObject::Ptr gameObject, int renderOrder = 0u,
+        GameObject* add(GameObject::Ptr gameObject, int renderOrder = 0u,
              const std::string& renderLayer = "default");
 
         /**
@@ -76,15 +73,13 @@ namespace ime {
          * render layers, however you must make sure that the layer you specify
          * during a call to this function already exists otherwise undefined
          * behavior
-         *
-         * @note The container keeps the pointer so there is no need to keep
-         * your pointer after the game object is added
          */
-        void add(const std::string& group, GameObject::Ptr gameObject,
+        GameObject* add(const std::string& group, GameObject::Ptr gameObject,
              int renderOrder = 0u, const std::string& renderLayer = "default");
 
     private:
         std::reference_wrapper<RenderLayerContainer> renderLayers_;
+        using ObjectContainer<GameObject>::addObject;
     };
 }
 

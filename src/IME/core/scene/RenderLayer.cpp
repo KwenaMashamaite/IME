@@ -64,21 +64,27 @@ namespace ime {
         if (has(drawable))
             return;
 
-        drawables_.insert({renderOrder, std::cref(drawable)});
+        auto handlerId = drawable.onDestruction([this, drawableRef = std::cref(drawable)] {
+            remove(drawableRef);
+        });
+
+        drawables_.insert({renderOrder, std::pair{std::cref(drawable), handlerId}});
     }
 
     bool RenderLayer::has(const Drawable &drawable) const {
         return std::any_of(drawables_.begin(), drawables_.end(), [&drawable](auto& pair) {
-            return pair.second.get() == drawable;
+            return pair.second.first.get() == drawable;
         });
     }
 
     bool RenderLayer::remove(const Drawable &drawable) {
         for (auto& [renderOrder, interDrawable] : drawables_) {
-            if (drawable == interDrawable) {
+            if (drawable == interDrawable.first) {
                 auto range = drawables_.equal_range(renderOrder);
                 for (auto iter = range.first; iter != range.second; ++iter) {
-                    if (iter->second.get() == drawable) {
+                    auto& [drawableRef, destructionId] = iter->second;
+                    if (drawableRef.get() == drawable) {
+                        drawableRef.get().removeDestructionListener(destructionId);
                         drawables_.erase(iter);
                         return true;
                     }
@@ -89,6 +95,7 @@ namespace ime {
     }
 
     void RenderLayer::removeAll() {
+        removeDestructionHandlers();
         drawables_.clear();
     }
 
@@ -98,11 +105,18 @@ namespace ime {
 
     void RenderLayer::render(Window &window) const {
         std::for_each(drawables_.begin(), drawables_.end(), [&window](auto& pair) {
-            pair.second.get().draw(window);
+            pair.second.first.get().draw(window);
+        });
+    }
+
+    void RenderLayer::removeDestructionHandlers() {
+        std::for_each(drawables_.begin(), drawables_.end(), [](auto& pair) {
+            pair.second.first.get().removeDestructionListener(pair.second.second);
         });
     }
 
     RenderLayer::~RenderLayer() {
         emit("destruction");
+        removeDestructionHandlers();
     }
 }

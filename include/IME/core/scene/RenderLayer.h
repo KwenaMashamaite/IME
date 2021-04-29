@@ -205,14 +205,21 @@ namespace ime {
          */
         void setIndex(unsigned int index);
 
+        /**
+         * @brief Remove destruction handlers registered on the drawable
+         */
+        void removeDestructionHandlers();
+
         using Object::setTag;
 
     private:
-        unsigned int index_; //!< The index of the layer in the render layer container
-        bool shouldRender_;  //!< A flag indicating whether the layer should be rendered or not
-
-        std::multimap<int, std::reference_wrapper<const Drawable>> drawables_;
+        unsigned int index_;               //!< The index of the layer in the render layer container
+        bool shouldRender_;                //!< A flag indicating whether the layer should be rendered or not
         friend class RenderLayerContainer; //!< Needs access to constructor
+
+        using DrawableRef = std::reference_wrapper<const Drawable>;
+        using DrawableIdPair = std::pair<DrawableRef, int>;
+        std::multimap<int, DrawableIdPair> drawables_; //!< Stores a drawable along with its render order
     };
 }
 

@@ -34,7 +34,7 @@ namespace ime {
      */
     class IME_API TargetGridMover : public GridMover {
     public:
-        using Ptr = std::shared_ptr<TargetGridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<TargetGridMover>; //!< Shared grid mover pointer
 
         /**
          * @brief Create a random grid mover object
@@ -44,7 +44,7 @@ namespace ime {
          * @warning The tilemap must be loaded before constructing this
          * grid mover
          */
-        explicit TargetGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
+        explicit TargetGridMover(TileMap &tileMap, GameObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

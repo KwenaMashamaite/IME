@@ -241,6 +241,7 @@ namespace ime {
          * @see removeDestructionListener
          */
         int onDestruction(const Callback<>& callback);
+        int onDestruction(const Callback<>& callback) const;
 
         /**
          * @brief Remove a destruction listener form the object
@@ -249,6 +250,7 @@ namespace ime {
          *         the listener with the given id does not exist
          */
         bool removeDestructionListener(int id);
+        bool removeDestructionListener(int id) const;
 
         /**
          * @brief Check if two objects are the same object or not
@@ -307,9 +309,9 @@ namespace ime {
         void emit(const std::string& event);
 
     private:
-        unsigned int id_;           //!< The id of the object
-        std::string tag_;           //!< Object's tag
-        EventEmitter eventEmitter_; //!< Dispatch object events
+        unsigned int id_;                   //!< The id of the object
+        std::string tag_;                   //!< Object's tag
+        mutable EventEmitter eventEmitter_; //!< Dispatch object events
     };
 }
 

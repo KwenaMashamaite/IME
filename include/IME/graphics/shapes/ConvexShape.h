@@ -35,7 +35,7 @@ namespace ime {
      */
     class IME_API ConvexShape : public Shape {
     public:
-        using Ptr = std::shared_ptr<ConvexShape>; //!< Shared shape pointer
+        using Ptr = std::unique_ptr<ConvexShape>; //!< Shared shape pointer
 
         /**
          * @brief Default constructor

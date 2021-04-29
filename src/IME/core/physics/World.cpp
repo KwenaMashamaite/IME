@@ -149,8 +149,8 @@ namespace ime {
 
             //contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
 
-            auto gameObjectA = colliderA->getBody().getGameObject();
-            auto gameObjectB = colliderB->getBody().getGameObject();
+            auto* gameObjectA = colliderA->getBody().getGameObject();
+            auto* gameObjectB = colliderB->getBody().getGameObject();
 
             if (gameObjectA && gameObjectB) {
                 gameObjectA->emitCollisionEvent(event, gameObjectB);
@@ -158,6 +158,7 @@ namespace ime {
             }
 
             colliderA = colliderB = nullptr;
+            gameObjectA = gameObjectB = nullptr;
         }
     };
 
@@ -229,14 +230,7 @@ namespace ime {
             return nullptr;
         }
 
-        return Body::Ptr(new Body(shared_from_this(), type));
-    }
-
-    void World::createBody(const GameObject::Ptr& gameObject, Body::Type type) {
-        IME_ASSERT(gameObject, "Cannot attach a rigid body to a nullptr")
-        auto rigidBody = createBody(type);
-        rigidBody->setGameObject(gameObject);
-        gameObject->attachRigidBody(std::move(rigidBody));
+        return Body::Ptr(new Body(this, type));
     }
 
     Joint::Ptr World::createJoint(const JointDefinition& definition) {
@@ -247,7 +241,7 @@ namespace ime {
 
         switch (definition.type) {
             case JointType::Distance:
-                return Joint::Ptr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), shared_from_this()));
+                return Joint::Ptr(new DistanceJoint(static_cast<const DistanceJointDefinition&>(definition), this));
             default:
                 return nullptr;
         }

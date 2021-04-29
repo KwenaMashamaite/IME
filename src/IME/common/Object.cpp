@@ -86,7 +86,15 @@ namespace ime {
         return eventEmitter_.addEventListener("destruction", callback);
     }
 
+    int Object::onDestruction(const Callback<> &callback) const {
+        return eventEmitter_.addEventListener("destruction", callback);
+    }
+
     bool Object::removeDestructionListener(int id) {
+        return eventEmitter_.removeEventListener("destruction", id);
+    }
+
+    bool Object::removeDestructionListener(int id) const {
         return eventEmitter_.removeEventListener("destruction", id);
     }
 

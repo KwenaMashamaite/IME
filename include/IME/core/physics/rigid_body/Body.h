@@ -74,8 +74,6 @@ namespace ime {
     class IME_API Body final : public Object {
     public:
         using Ptr = std::unique_ptr<Body>; //!< Unique body pointer
-        using WorldPtr = std::shared_ptr<World>; //!< Shared World pointer
-        using GameObjectPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
 
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
@@ -127,16 +125,21 @@ namespace ime {
         /**
          * @brief Attach a collider to the body
          * @param collider The collider to be attached to the body
+         * @return Pointer to the collider after it is attached to the body
+         *         or a nullptr if the function is called inside a world
+         *         callback
          *
          * Note that a body may have more than one collider. However a
-         * collider can only be attached to one rigid body. All colliders
-         * attached to the body are destroyed when the body is destroyed
+         * collider can only be attached to one rigid body
+         *
+         * @note All colliders attached to the body are destroyed when the
+         * body is destroyed
          *
          * By default, the body has no collider attached to it
          *
          * @warning This function is locked during callbacks
          */
-        void attachCollider(Collider::Ptr collider);
+        Collider* attachCollider(Collider::Ptr collider);
 
         /**
          * @brief Get a collider by its id
@@ -146,7 +149,8 @@ namespace ime {
          *
          * @warning This function is locked during callbacks
          */
-        const Collider::Ptr& getColliderById(unsigned int id);
+        Collider* getColliderById(unsigned int id);
+        const Collider* getColliderById(unsigned int id) const;
 
         /**
          * @brief Remove a collider with a given id from the body
@@ -541,7 +545,7 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          */
-        void setGameObject(GameObjectPtr gameObject);
+        void setGameObject(GameObject* gameObject);
 
         /**
          * @brief Get the game object the body is attached to
@@ -550,15 +554,15 @@ namespace ime {
          *
          * By default, the body is not attached to any game object
          */
-        const GameObjectPtr& getGameObject();
-        const GameObjectPtr& getGameObject() const;
+        GameObject* getGameObject();
+        const GameObject* getGameObject() const;
 
         /**
          * @brief Get the physics world the body is in
          * @return The physics world the body is simulated in
          */
-        const WorldPtr& getWorld();
-        const WorldPtr& getWorld() const;
+        World* getWorld();
+        const World* getWorld() const;
 
         /**
          * @brief Get the user data added to this body
@@ -607,16 +611,15 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        Body(const WorldPtr& world, Type bodyType);
+        Body(World* world, Type bodyType);
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body
-        GameObjectPtr gameObject_;                         //!< The game object this body is attached to
-        WorldPtr world_;                                   //!< The world the body belongs to
+        GameObject* gameObject_;                           //!< The game object this body is attached to
+        World* world_;                                   //!< The world the body belongs to
         PropertyContainer userData_;                       //!< Application specific body data
         friend class World;                                //!< Needs access to constructor
         std::unordered_map<int, Collider::Ptr> colliders_; //!< Colliders attached to this body
-        const inline static Collider::Ptr null_ptr;        //!< Nullptr place holder
     };
 }
 

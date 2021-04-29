@@ -58,7 +58,8 @@ namespace ime {
      */
     class IME_API GridMover : public Object {
     public:
-        using Ptr = std::shared_ptr<GridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<GridMover>; //!< Shared grid mover pointer
+        using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Called when collision takes place
 
         /**
          * @brief Types of grid movers
@@ -94,7 +95,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit GridMover(TileMap& tilemap, GameObject::Ptr gameObject = nullptr);
+        explicit GridMover(TileMap& tilemap, GameObject* gameObject = nullptr);
 
         /**
          * @brief Get the name of this class
@@ -106,6 +107,12 @@ namespace ime {
          * @see Object::getClassType and Object::getClassName
          */
         std::string getClassType() const override;
+
+        /**
+         * @brief Get the name of this class
+         * @return The name of this class
+         */
+        std::string getClassName() const override;
 
         /**
          * @brief Change the direction of the game object
@@ -147,14 +154,14 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must exist in
          * the grid prior to function call
          */
-        void setTarget(GameObject::Ptr target);
+        void setTarget(GameObject* target);
 
         /**
          * @brief Get access to the controlled entity
          * @return The controlled entity, or a nullptr if there is no entity to
          *         control
          */
-        GameObject::Ptr getTarget() const;
+        GameObject* getTarget() const;
 
         /**
          * @brief Set the maximum linear speed of the game object
@@ -255,7 +262,7 @@ namespace ime {
          * @param callback Function to execute when the target changes
          * @return The event listeners identification number
          */
-        int onTargetChanged(Callback<GameObject::Ptr> callback);
+        int onTargetChanged(const Callback<GameObject*>& callback);
 
         /**
          * @brief Add an event listener to a move begin event
@@ -272,7 +279,7 @@ namespace ime {
          *
          * @see onAdjacentTileReached
          */
-        int onMoveBegin(Callback<Index> callback);
+        int onMoveBegin(const Callback<Index>& callback);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
@@ -290,7 +297,7 @@ namespace ime {
          *
          * @see onMoveBegin
          */
-        int onAdjacentTileReached(Callback<Index> callback);
+        int onAdjacentTileReached(const Callback<Index>& callback);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
@@ -305,7 +312,7 @@ namespace ime {
          * however, it may be overridden since the internal handler is called
          * first before alerting external handlers
          */
-        int onGridBorderCollision(Callback<> callback);
+        int onGridBorderCollision(const Callback<>& callback);
 
         /**
          * @brief Add an event listener to a tile collision event
@@ -320,7 +327,7 @@ namespace ime {
          *
          * The callback is passed the index of the tile the target collided with
          */
-        int onTileCollision(Callback<Index> callback);
+        int onTileCollision(const Callback<Index>& callback);
 
         /**
          * @brief Add an event listener to an obstacle collision
@@ -336,7 +343,7 @@ namespace ime {
          * The callback is passed the target as the first argument and the
          * obstacle it collided with as the second argument
          */
-        int onObstacleCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
+        int onObstacleCollision(const CollisionCallback& callback);
 
         /**
          * @brief Add an event listener to a collectable collision event
@@ -347,7 +354,7 @@ namespace ime {
          * in the grid. The callback is passed the target as the first argument
          * and the collectable it collided with as the second argument
          */
-        int onCollectableCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
+        int onCollectableCollision(const CollisionCallback& callback);
 
         /**
          * @brief Add an event listener to an enemy collision event
@@ -358,7 +365,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the enemy it collided with as the second argument
          */
-        int onEnemyCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
+        int onEnemyCollision(const CollisionCallback& callback);
 
         /**
          * @brief Add an event listener to a player collision event
@@ -369,7 +376,7 @@ namespace ime {
          * grid. The callback is passed the target as the first argument and
          * the player it collided with as the second argument
          */
-        int onPlayerCollision(Callback<GameObject::Ptr, GameObject::Ptr> callback);
+        int onPlayerCollision(const CollisionCallback& callback);
 
         /**
          * @brief Remove a collision handler
@@ -408,7 +415,7 @@ namespace ime {
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
          */
-        void onTargetTileReset(Callback<Index> callback);
+        void onTargetTileReset(const Callback<Index>& callback);
 
         /**
          * @brief Destructor
@@ -471,7 +478,7 @@ namespace ime {
          *         and the second is a pointer to the first encountered obstacle
          *         in the target tile or a nullptr if the first element is false
          */
-        std::pair<bool, GameObject::Ptr> targetTileHasObstacle();
+        std::pair<bool, GameObject*> targetTileHasObstacle();
 
         /**
          * @brief Perfectly align target with the target destination
@@ -503,12 +510,12 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must be placed
          * in the grid prior to instantiation of this class
          */
-        GridMover(Type type, TileMap &tileMap, GameObject::Ptr target);
+        GridMover(Type type, TileMap &tileMap, GameObject* target);
 
     private:
         Type type_;                    //!< The type of the grid mover
         TileMap& tileMap_;             //!< Grid to move entity in
-        GameObject::Ptr target_;       //!< Target to be moved in the grid
+        GameObject* target_;           //!< Target to be moved in the grid
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
         Direction targetDirection_;    //!< The direction in which the game object wishes to go in
         Direction currentDirection_;   //!< The current direction of the game object
@@ -517,6 +524,7 @@ namespace ime {
         EventEmitter eventEmitter_;    //!< Collision event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
+        int targetDestructionId_;      //!< Target destruction handler id
     };
 }
 

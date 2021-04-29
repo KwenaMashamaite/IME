@@ -41,7 +41,6 @@ namespace ime {
 
     GameObject::GameObject(const GameObject &other) :
         Object(other),
-        std::enable_shared_from_this<GameObject>(other),
         scene_{other.scene_},
         type_{other.type_},
         state_{other.state_},
@@ -62,7 +61,6 @@ namespace ime {
         if (this != &other) {
             auto temp{other};
             Object::operator=(temp);
-            std::enable_shared_from_this<GameObject>::operator=(temp);
             swap(temp);
             initEvents();
         }
@@ -81,7 +79,6 @@ namespace ime {
         // We don't want to copy event listeners of the rhs object
         if (this != &rhs) {
             Object::operator=(std::move(rhs));
-            std::enable_shared_from_this<GameObject>::operator=(rhs);
             swap(rhs);
         }
 
@@ -103,11 +100,11 @@ namespace ime {
     }
 
     GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {
-        return std::make_shared<GameObject>(scene, type);
+        return std::make_unique<GameObject>(scene, type);
     }
 
     GameObject::Ptr GameObject::copy() const {
-        return std::make_shared<GameObject>(*this);
+        return std::make_unique<GameObject>(*this);
     }
 
     void GameObject::setState(int state) {
@@ -182,6 +179,7 @@ namespace ime {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity")
         IME_ASSERT(!body_, "Game object already has a rigid body attached, remove it first before attaching another one")
         body_ = std::move(body);
+        body_->setGameObject(this);
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
         body_->setRotation(transform_.getRotation());
@@ -189,12 +187,12 @@ namespace ime {
         emit("attachRigidBody");
     }
 
-    const Body::Ptr &GameObject::getRigidBody() {
-        return body_;
+    Body* GameObject::getRigidBody() {
+        return body_.get();
     }
 
-    const Body::Ptr &GameObject::getRigidBody() const {
-        return body_;
+    const Body* GameObject::getRigidBody() const {
+        return body_.get();
     }
 
     void GameObject::removeRigidBody() {
@@ -240,11 +238,11 @@ namespace ime {
         sprite_.updateAnimation(deltaTime);
     }
 
-    void GameObject::emitCollisionEvent(const std::string &event, const GameObject::Ptr& other) {
+    void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
         if (event == "contactBegin" && onContactBegin_)
-            onContactBegin_(shared_from_this(), other);
+            onContactBegin_(this, other);
         else if (event == "contactEnd" && onContactEnd_)
-            onContactEnd_(shared_from_this(), other);
+            onContactEnd_(this, other);
     }
 
     void GameObject::initEvents() {

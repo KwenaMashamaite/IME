@@ -27,28 +27,30 @@
 #include "IME/core/physics/World.h"
 #include "IME/graphics/Window.h"
 
-namespace ime {
+namespace ime::priv {
     namespace {
         // Iterations recommended by Box2d
         const unsigned int VELOCITY_ITERATIONS = 8;
         const unsigned int POSITION_ITERATIONS = 3;
     }
 
+    SceneManager::SceneManager() :
+        prevScene_{nullptr}
+    {}
+
     void SceneManager::pushScene(Scene::Ptr scene, bool enterScene) {
-        IME_ASSERT(scene, "Cannot add nullptr as a state")
-        IME_ASSERT(!scene->isManaged_, R"(Scene )" + scene->getTag() + R"( is already owned by a scene manager)")
+        IME_ASSERT(scene, "Scene must not be a nullptr")
         if (!scenes_.empty()) {
-            prevScene_ = scenes_.top();
+            prevScene_ = scenes_.top().get();
             if (scenes_.top()->isEntered()) {
                 scenes_.top()->onPause();
             }
         }
 
-        scene->isManaged_ = true;
-        scenes_.push(scene);
-        if (enterScene && !scene->isEntered()) {
-            scene->isEntered_ = true;
-            scene->onEnter();
+        scenes_.push(std::move(scene));
+        if (enterScene && !scenes_.top()->isEntered()) {
+            scenes_.top()->isEntered_ = true;
+            scenes_.top()->onEnter();
         }
     }
 
@@ -60,7 +62,7 @@ namespace ime {
 
         // Call onExit() after removing state from container because onExit may
         // push a scene and the new scene will be removed instead of this one
-        auto poppedScene = scenes_.top();
+        auto poppedScene = std::move(scenes_.top());
         scenes_.pop();
 
         if (poppedScene->isEntered())
@@ -68,9 +70,9 @@ namespace ime {
 
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
-                auto currentScene = scenes_.top();
+                auto currentScene = std::move(scenes_.top());
                 scenes_.pop();
-                prevScene_ = scenes_.top();
+                prevScene_ = scenes_.top().get();
                 scenes_.push(std::move(currentScene));
             }
 
@@ -107,18 +109,19 @@ namespace ime {
     }
 
     void SceneManager::render(Window &window) {
-        auto static renderScene = [](ScenePtr& scene, Window& renderWindow) {
+        auto static renderScene = [](const Scene* scene, Window& renderWindow) {
             if (scene->hasTilemap_)
                 scene->tileMap_->draw(renderWindow);
 
             scene->renderLayers_.render(renderWindow);
+            scene = nullptr;
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause())
                 renderScene(prevScene_, window);
 
-            renderScene(scenes_.top(), window);
+            renderScene(scenes_.top().get(), window);
             scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
 
             // Draw the gui on top of everything
@@ -148,10 +151,16 @@ namespace ime {
     }
 
     void SceneManager::forEachScene(const Callback<const SceneManager::ScenePtr&>& callback) {
-        auto scenesCopy = scenes_; //Intentional shallow copy
-        while (!scenesCopy.empty()) {
-            callback(scenesCopy.top());
-            scenesCopy.pop();
+        std::stack<Scene::Ptr> temp;
+        while (!scenes_.empty()) {
+            callback(scenes_.top());
+            temp.push(std::move(scenes_.top()));
+            scenes_.pop();
+        }
+
+        while (!temp.empty()) {
+            scenes_.push(std::move(temp.top()));
+            temp.pop();
         }
     }
 
@@ -162,7 +171,7 @@ namespace ime {
         if (!scenes_.top()->isEntered())
             return;
 
-        auto scene = scenes_.top();
+        auto& scene = scenes_.top();
         scene->timerManager_.preUpdate();
         scene->timerManager_.update(deltaTime * scene->getTimescale());
         scene->audioManager_.removePlayedAudio();
@@ -196,12 +205,12 @@ namespace ime {
                 scene->tileMap_->update(deltaTime * scene->getTimescale());
 
             //Update game objects - By default, the game object updates its sprite animation
-            scene->gameObjects().forEach([&scene, &deltaTime](const GameObject::Ptr& gameObject) {
+            scene->gameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
                 gameObject->update(deltaTime * scene->getTimescale());
             });
 
             // Update sprite animations
-            scene->sprites().forEach([&scene, &deltaTime](const Sprite::Ptr& sprite) {
+            scene->sprites().forEach([&scene, &deltaTime](Sprite* sprite) {
                 sprite->updateAnimation(deltaTime * scene->getTimescale());
             });
 
@@ -214,5 +223,9 @@ namespace ime {
             // Normal update is always called after fixed update: fixedUpdate -> update -> postUpdate
             scene->postUpdate(deltaTime * scene->getTimescale());
         }
+    }
+
+    SceneManager::~SceneManager() {
+        prevScene_ = nullptr;
     }
 }

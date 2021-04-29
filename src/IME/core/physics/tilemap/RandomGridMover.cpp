@@ -26,8 +26,8 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject::Ptr target) :
-        GridMover(Type::Random, tileMap, std::move(target)),
+    RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject* target) :
+        GridMover(Type::Random, tileMap, target),
         currDirection_(Unknown),
         prevDirection_(Unknown),
         movementStarted_{false},
@@ -36,7 +36,7 @@ namespace ime {
         switchToNormal_{false},
         targetGridMover_(tileMap, target)
     {
-        onTargetChanged([this](GameObject::Ptr newTarget) {
+        onTargetChanged([this](GameObject* newTarget) {
             if (newTarget) {
                 prevDirection_ = currDirection_;
                 if (movementStarted_)
@@ -52,14 +52,14 @@ namespace ime {
                 // random movement delegates to a TargetGridMover class).
                 newTarget->getRigidBody()->setLinearVelocity(getMaxLinearSpeed());
             }
-            targetGridMover_.setTarget(std::move(newTarget));
+            targetGridMover_.setTarget(newTarget);
         });
 
         onTileCollision([this](Index) {
             revertAndGenerateDirection();
         });
 
-        onObstacleCollision([this](GameObject::Ptr , GameObject::Ptr) {
+        onObstacleCollision([this](GameObject* , GameObject*) {
             revertAndGenerateDirection();
         });
 
@@ -130,11 +130,14 @@ namespace ime {
 
         prevDirection_ = getDirection();
         auto oppositeDirection = getDirection() * (-1);
-        auto newDirection = Direction();
+        Direction newDirection;
         static auto gen_random_num_between_neg_1_and_1 = utility::createRandomNumGenerator(-1, 1);
 
         while (true) {
             newDirection = {gen_random_num_between_neg_1_and_1(), gen_random_num_between_neg_1_and_1()};
+            if (newDirection == Unknown)
+                continue;
+
             // Prohibit going in opposite direction to prevent back and forth movement between two tiles
             if (newDirection != oppositeDirection && requestDirectionChange(newDirection))
                 break;

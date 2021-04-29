@@ -65,15 +65,15 @@ namespace ime {
     CircleShape &CircleShape::operator=(CircleShape &&) noexcept = default;
 
     CircleShape::Ptr CircleShape::create(float radius) {
-        return std::make_shared<CircleShape>(radius);
+        return std::make_unique<CircleShape>(radius);
     }
 
     CircleShape::Ptr CircleShape::copy() const {
-        return std::static_pointer_cast<CircleShape>(clone());
+        return CircleShape::Ptr(static_cast<CircleShape*>(clone().release()));
     }
 
     Shape::Ptr CircleShape::clone() const {
-        return std::make_shared<CircleShape>(*this);
+        return std::make_unique<CircleShape>(*this);
     }
 
     std::string CircleShape::getClassName() const {

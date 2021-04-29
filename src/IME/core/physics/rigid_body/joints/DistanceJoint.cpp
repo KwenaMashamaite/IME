@@ -44,15 +44,13 @@ namespace ime {
         type = JointType::Distance;
     }
 
-    void DistanceJointDefinition::join(DistanceJointDefinition::BodyPtr body1,
-        DistanceJointDefinition::BodyPtr body2, Vector2f anchorA, Vector2f anchorB)
-    {
+    void DistanceJointDefinition::join(Body* body1, Body* body2, Vector2f anchorA, Vector2f anchorB) {
         IME_ASSERT(body1, "Two bodies are needed for a joint to occur, Body A is a nullptr")
         IME_ASSERT(body2, "Two bodies are needed for a joint to occur, Body B is a nullptr")
         IME_ASSERT(body1 != body2, "Cannot self join, bodies to be joined must be different objects")
 
-        bodyA = std::move(body1);
-        bodyB = std::move(body2);
+        bodyA = body1;
+        bodyB = body2;
         bodyALocalAnchorPoint = bodyA->getLocalPoint(anchorA);
         bodyBLocalAnchorPoint = bodyB->getLocalPoint(anchorB);
 
@@ -66,7 +64,7 @@ namespace ime {
     // DistanceJoint class stuff
     //////////////////////////////////////////////////////////////////////////
 
-    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, const World::Ptr& world) {
+    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, World* world) {
         IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr")
         IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr")
         IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects")
@@ -87,9 +85,11 @@ namespace ime {
         b2Definition->localAnchorB = {utility::pixelsToMetres(definition.bodyBLocalAnchorPoint.x),
                                       utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
 
-        userData_ = definition.userData;
         joint_ = std::unique_ptr<b2DistanceJoint>(dynamic_cast<b2DistanceJoint*>(world->getInternalWorld()->CreateJoint(b2Definition.get())));
         IME_ASSERT(joint_, "Internal error: Failed to cast to b2DistanceJoint")
+        bodyA_ = definition.bodyA;
+        bodyB_ = definition.bodyB;
+        userData_ = definition.userData;
     }
 
     std::string DistanceJoint::getClassName() const {
@@ -148,11 +148,19 @@ namespace ime {
         return JointType::Distance;
     }
 
-    const Body::Ptr& DistanceJoint::getBodyA() {
+    Body* DistanceJoint::getBodyA() {
         return bodyA_;
     }
 
-    const Body::Ptr& DistanceJoint::getBodyB() {
+    const Body* DistanceJoint::getBodyA() const {
+        return bodyA_;
+    }
+
+    Body* DistanceJoint::getBodyB() {
+        return bodyB_;
+    }
+
+    const Body* DistanceJoint::getBodyB() const {
         return bodyB_;
     }
 

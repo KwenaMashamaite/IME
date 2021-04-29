@@ -27,15 +27,15 @@
 
 namespace ime {
     void GridMoverContainer::update(Time deltaTime) {
-        forEach([&deltaTime](const GridMover::Ptr& gridMover) {
+        forEach([&deltaTime](GridMover* gridMover) {
             gridMover->update(deltaTime);
         });
     }
 
     void GridMoverContainer::handleEvent(Event event) {
-        forEach([&event](const GridMover::Ptr& gridMover) {
+        forEach([&event](GridMover* gridMover) {
             if (gridMover->getType() == GridMover::Type::KeyboardControlled)
-                std::static_pointer_cast<KeyboardGridMover>(gridMover)->handleEvent(event);
+                static_cast<KeyboardGridMover*>(gridMover)->handleEvent(event);
         });
     }
 }

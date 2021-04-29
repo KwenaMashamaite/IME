@@ -45,7 +45,7 @@ namespace ime {
      */
     class IME_API Shape : public Drawable, public ITransformable {
     public:
-        using Ptr = std::shared_ptr<Shape>; //!< Shared shape pointer
+        using Ptr = std::unique_ptr<Shape>; //!< Shared shape pointer
 
         /**
          * @brief The types of shapes

@@ -25,6 +25,7 @@
 #include "IME/core/engine/Engine.h"
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
+#include "IME/core/scene/SceneManager.h"
 #include "IME/graphics/Window.h"
 #include <SFML/Window/VideoMode.hpp>
 
@@ -59,6 +60,7 @@ namespace ime {
         isInitialized_{false},
         isRunning_{false},
         isPaused_{false},
+        sceneManager_{std::make_unique<priv::SceneManager>()},
         pendingPop_{false}
     {}
 
@@ -137,7 +139,7 @@ namespace ime {
 
             gui_.handleEvent(event);
             inputManager_.handleEvent(event);
-            sceneManager_.handleEvent(event);
+            sceneManager_->handleEvent(event);
         }
     }
 
@@ -148,21 +150,21 @@ namespace ime {
         }
 
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized")
-        IME_ASSERT(!sceneManager_.isEmpty(), "Failed to start engine because it has no states")
+        IME_ASSERT(!sceneManager_->isEmpty(), "Failed to start engine because it has no states")
 
         // Initialize scenes that were added to the engine before it was ran. Scenes
         // that are added while the engine is running are initialized before they are
         // pushed to the scene manager whilst scenes that are added before the engine
         // ran are immediately added to the scene manager and await late initialization
-        sceneManager_.forEachScene([this](const Scene::Ptr& scene) {
+        sceneManager_->forEachScene([this](const Scene::Ptr& scene) {
             scene->init(*this);
         });
 
         isRunning_ = true;
-        sceneManager_.enterTopScene();
+        sceneManager_->enterTopScene();
         Time deltaTime;
         Clock gameClock;
-        while (window_->isOpen() && isRunning_ && !sceneManager_.isEmpty()) {
+        while (window_->isOpen() && isRunning_ && !sceneManager_->isEmpty()) {
             deltaTime = gameClock.restart();
             if (onFrameStart_)
                 onFrameStart_();
@@ -188,7 +190,7 @@ namespace ime {
         if (isPaused_)
             return;
 
-        sceneManager_.preUpdate(deltaTime);
+        sceneManager_->preUpdate(deltaTime);
     }
 
     void Engine::update(Time deltaTime) {
@@ -201,13 +203,13 @@ namespace ime {
         // Fixed update
         accumulator += deltaTime;
         while (accumulator >= frameTime) {
-            sceneManager_.fixedUpdate(frameTime);
+            sceneManager_->fixedUpdate(frameTime);
             accumulator -= frameTime;
         }
 
         // Normal update
         timerManager_.update(deltaTime);
-        sceneManager_.update(deltaTime);
+        sceneManager_->update(deltaTime);
     }
 
     void Engine::clear() {
@@ -215,7 +217,7 @@ namespace ime {
     }
 
     void Engine::render() {
-        sceneManager_.render(*window_);
+        sceneManager_->render(*window_);
         gui_.draw();
     }
 
@@ -223,17 +225,17 @@ namespace ime {
         window_->display();
     }
 
-    void Engine::pushScene(std::shared_ptr<Scene> scene, Callback<> callback) {
+    void Engine::pushScene(Scene::Ptr scene, Callback<> callback) {
         IME_ASSERT(scene, "A scene pushed to the engine cannot be a nullptr")
         if (!isRunning_)
-            sceneManager_.pushScene(std::move(scene));
+            sceneManager_->pushScene(std::move(scene));
         else
             scenesPendingPush_.push({std::move(scene), std::move(callback)});
     }
 
     void Engine::popScene() {
         if (!isRunning_)
-            sceneManager_.popScene();
+            sceneManager_->popScene();
         else
             pendingPop_ = true;
     }
@@ -245,22 +247,21 @@ namespace ime {
         // Note: Always check pending pop first before pending pushes
         if (pendingPop_) {
             pendingPop_ = false;
-            sceneManager_.popScene();
+            sceneManager_->popScene();
         }
 
         while (!scenesPendingPush_.empty()) {
-            auto scene = scenesPendingPush_.front().first;
-            scene->init(*this);
+            scenesPendingPush_.front().first->init(*this);
 
             if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
-                sceneManager_.pushScene(std::move(scene), true);
+                sceneManager_->pushScene(std::move(scenesPendingPush_.front().first), true);
                 if (auto& callback = scenesPendingPush_.front().second; callback)
                     callback();
 
                 scenesPendingPush_.pop();
                 break;
             } else {
-                sceneManager_.pushScene(std::move(scene));
+                sceneManager_->pushScene(std::move(scenesPendingPush_.front().first));
                 scenesPendingPush_.pop();
             }
         }
@@ -283,7 +284,7 @@ namespace ime {
         gameTitle_.clear();
         settingFile_.clear();
         settings_.clear();
-        sceneManager_.clear();
+        sceneManager_->clear();
         timerManager_.clear();
         dataSaver_.clear();
         resourceManager_.reset();

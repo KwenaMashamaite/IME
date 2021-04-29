@@ -46,10 +46,14 @@
 #include <vector>
 
 namespace ime {
-    // Forward declarations
     class Engine;
     class Window;
     class World;
+
+    /// @internal
+    namespace priv {
+       class SceneManager;
+    }
 
     /**
      * @brief Abstract base class for game scenes
@@ -78,7 +82,7 @@ namespace ime {
      */
     class IME_API Scene : public Object, utility::NonCopyable {
     public:
-        using Ptr = std::shared_ptr<Scene>; //!< Shared Scene pointer
+        using Ptr = std::unique_ptr<Scene>; //!< Unique Scene pointer
 
         /**
          * @brief Constructor
@@ -582,7 +586,7 @@ namespace ime {
 
     private:
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        std::shared_ptr<World> world_;        //!< Physics simulation
+        std::unique_ptr<World> world_;        //!< Physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
         EventEmitter eventEmitter_;           //!< scene level event dispatcher
@@ -593,12 +597,11 @@ namespace ime {
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
-        bool isManaged_;                      //!< A flag indicating whether or not this scene has been added to a scene manager
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
-        friend class SceneManager;            //!< Pre updates the scene
+        friend class priv::SceneManager;      //!< Pre updates the scene
 
         std::unique_ptr<std::reference_wrapper<Engine>> engine_;   //!< A reference to the game engine
         std::unique_ptr<SpriteContainer> spriteContainer_;         //!< Stores sprites that belong to the scene

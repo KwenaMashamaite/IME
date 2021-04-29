@@ -31,7 +31,9 @@
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(const World::Ptr& world, Type bodyType) {
+    Body::Body(World* world, Type bodyType) :
+        gameObject_{nullptr}
+    {
         IME_ASSERT(world, "Cannot construct body from a nullptr")
         world_ = world;
 
@@ -81,22 +83,28 @@ namespace ime {
         return "Body";
     }
 
-    void Body::attachCollider(Collider::Ptr collider) {
+    Collider* Body::attachCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body")
         IME_ASSERT(!collider->isAttachedToBody(), "The collider is already attached to another rigid body: One body per collider")
         if (!world_->isLocked()) {
             collider->setBody(*this);
-            colliders_.insert({collider->getObjectId(), std::move(collider)});
+            auto insertionPair = colliders_.insert({collider->getObjectId(), std::move(collider)}).first;
             emit("attachCollider");
+            return insertionPair->second.get();
         } else {
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback")
+            return nullptr;
         }
     }
 
-    const Collider::Ptr& Body::getColliderById(unsigned int id) {
+    Collider* Body::getColliderById(unsigned int id) {
+        return const_cast<Collider*>(std::as_const(*this).getColliderById(id));
+    }
+
+    const Collider* Body::getColliderById(unsigned int id) const {
         if (utility::findIn(colliders_, id))
-            return colliders_.at(static_cast<int>(id));
-        return null_ptr;
+            return colliders_.at(static_cast<int>(id)).get();
+        return nullptr;
     }
 
     void Body::removeColliderWithId(unsigned int id) {
@@ -333,23 +341,23 @@ namespace ime {
         return body_->IsFixedRotation();
     }
 
-    void Body::setGameObject(GameObject::Ptr gameObject) {
-        gameObject_ = std::move(gameObject);
+    void Body::setGameObject(GameObject* gameObject) {
+        gameObject_ = gameObject;
     }
 
-    const GameObject::Ptr& Body::getGameObject() {
+    GameObject* Body::getGameObject() {
         return gameObject_;
     }
 
-    const GameObject::Ptr& Body::getGameObject() const {
+    const GameObject* Body::getGameObject() const {
         return gameObject_;
     }
 
-    const Body::WorldPtr& Body::getWorld() {
+    World* Body::getWorld() {
         return world_;
     }
 
-    const Body::WorldPtr &Body::getWorld() const {
+    const World* Body::getWorld() const {
         return world_;
     }
 
@@ -377,5 +385,6 @@ namespace ime {
 
     Body::~Body() {
         emit("destruction");
+        gameObject_ = nullptr;
     }
 }

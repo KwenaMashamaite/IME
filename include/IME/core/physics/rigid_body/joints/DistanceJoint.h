@@ -39,8 +39,6 @@ namespace ime {
      * @return Distance joint definition
      */
     struct IME_API DistanceJointDefinition : public JointDefinition {
-        using BodyPtr = std::unique_ptr<Body>;
-
         /**
          * @brief Constructor
          */
@@ -55,7 +53,7 @@ namespace ime {
          *
          * The minimum and maximum lengths are set to the rest length
          */
-        void join(BodyPtr bodyA, BodyPtr bodyB, Vector2f anchorA, Vector2f anchorB);
+        void join(Body* bodyA, Body* bodyB, Vector2f anchorA, Vector2f anchorB);
 
         ////////////////////////////////////////////////////////////////////////
         // Member data
@@ -80,8 +78,7 @@ namespace ime {
      */
     class IME_API DistanceJoint final : public Joint {
     public:
-        using Ptr = std::shared_ptr<Joint>;
-        using BodyPtr = std::unique_ptr<Body>;
+        using Ptr = std::unique_ptr<Joint>; //!< Unique joint pointer
 
         /**
          * @brief Get the name of this class
@@ -175,13 +172,15 @@ namespace ime {
          * @brief Get the first body attached to ths joint
          * @return The first body attached to this joint
          */
-        const BodyPtr& getBodyA() override;
+        Body* getBodyA() override;
+        const Body* getBodyA() const override;
 
         /**
          * @brief Get the second body attached to ths joint
          * @return The second body attached to this joint
          */
-        const BodyPtr& getBodyB() override;
+        Body* getBodyB() override;
+        const Body* getBodyB() const override;
 
         /**
          * @brief Get the reaction force on body B at the joint anchor
@@ -241,14 +240,14 @@ namespace ime {
          * mistaken for the body origin when using this function
          * (use Body::getWorldCentre when not sure about the origin)
          */
-        DistanceJoint(const DistanceJointDefinition& definition, const std::shared_ptr<World>& world);
+        DistanceJoint(const DistanceJointDefinition& definition, World* world);
 
     private:
         std::unique_ptr<b2DistanceJoint> joint_;  //!< Internal joint
-        PropertyContainer userData_;  //!< Application specific user date
-        BodyPtr bodyA_;               //!< First attached body
-        BodyPtr bodyB_;               //!< Second attached body
-        friend class World;           //!< Needs access to constructor
+        PropertyContainer userData_;              //!< Application specific user date
+        Body* bodyA_;                             //!< First attached body
+        Body* bodyB_;                             //!< Second attached body
+        friend class World;                       //!< Needs access to constructor
     };
 }
 

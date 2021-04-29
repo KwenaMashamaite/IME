@@ -64,15 +64,15 @@ namespace ime {
     ConvexShape &ConvexShape::operator=(ConvexShape &&) noexcept = default;
 
     ConvexShape::Ptr ConvexShape::create(std::size_t pointCount) {
-        return std::make_shared<ConvexShape>(pointCount);
+        return std::make_unique<ConvexShape>(pointCount);
     }
 
     ConvexShape::Ptr ConvexShape::copy() const {
-        return std::static_pointer_cast<ConvexShape>(clone());
+        return ConvexShape::Ptr(static_cast<ConvexShape*>(clone().release()));
     }
 
     Shape::Ptr ConvexShape::clone() const {
-        return std::make_shared<ConvexShape>(*this);
+        return std::make_unique<ConvexShape>(*this);
     }
 
     std::string ConvexShape::getClassName() const {

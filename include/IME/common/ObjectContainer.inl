@@ -28,85 +28,82 @@ inline ObjectContainer<T>::ObjectContainer() {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::addObject(ObjectPtr object, const std::string& group) {
-    IME_ASSERT(object, "Cannot add a nullptr to an object container");
-
-    // Prevent duplicates in the container
-    if (findById(object->getObjectId())) {
-        IME_PRINT_WARNING("Object ignored, it already exists in the container");
-        return;
-    }
+inline T* ObjectContainer<T>::addObject(ObjectPtr object, const std::string& group) {
+    IME_ASSERT(object, "Object added to a container cannot be a nullptr");
 
     if (group == "none") {
         objects_.push_back(std::move(object));
+        return objects_.back().get();
     } else {
         if (hasGroup(group))
-            groups_.at(group)->addObject(std::move(object));
+            return groups_.at(group)->addObject(std::move(object));
         else {
-            createGroup(group).addObject(std::move(object));
+            return createGroup(group).addObject(std::move(object));
         }
     }
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByTag(const std::string& tag) {
-    return std::as_const(*this).findByTag(tag);
+inline T* ObjectContainer<T>::findByTag(const std::string& tag) {
+    return const_cast<T*>(std::as_const(*this).findByTag(tag));
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findByTag(const std::string& tag) const {
-    return findIf([&tag](const constObjectPtr object) {
+inline const T* ObjectContainer<T>::findByTag(const std::string& tag) const {
+    return findIf([&tag](const T* object) {
         return object->getTag() == tag;
     });
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<U> ObjectContainer<T>::findByTag(const std::string& tag) {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByTag(tag));
+inline U* ObjectContainer<T>::findByTag(const std::string& tag) {
+    return dynamic_cast<U*>(const_cast<T*>(std::as_const(*this).findByTag(tag)));
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<const U> ObjectContainer<T>::findByTag(const std::string& tag) const {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findByTag(tag));
+inline const U* ObjectContainer<T>::findByTag(const std::string& tag) const {
+    return dynamic_cast<U*>(const_cast<T*>(std::as_const(*this).findByTag(tag)));
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) {
-    return std::as_const(*this).findById(id);
+inline T* ObjectContainer<T>::findById(unsigned int id) {
+    return const_cast<T*>(std::as_const(*this).findById(id));
 }
 
 template<typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findById(unsigned int id) const {
-    return findIf([id](const constObjectPtr object) {
+inline const T* ObjectContainer<T>::findById(unsigned int id) const {
+    return findIf([id](const T* object) {
         return object->getObjectId() == id;
     });
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<U> ObjectContainer<T>::findById(unsigned int id) {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findById(id));
+inline U* ObjectContainer<T>::findById(unsigned int id) {
+    return dynamic_cast<U*>(const_cast<T*>(std::as_const(*this).findById(id)));
 }
 
 template <typename T>
 template <typename U>
-inline std::shared_ptr<const U> ObjectContainer<T>::findById(unsigned int id) const {
-    return std::dynamic_pointer_cast<U>(std::as_const(*this).findById(id));
+inline const U* ObjectContainer<T>::findById(unsigned int id) const {
+    return dynamic_cast<const U*>(std::as_const(*this).findById(id));
 }
 
 template <typename T>
-inline typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(Predicate predicate) {
-    return std::as_const(*this).findIf(predicate);
+inline T* ObjectContainer<T>::findIf(const Predicate& predicate) {
+    return const_cast<T*>(std::as_const(*this).findIf(predicate));
 }
 
 template <typename T>
-inline const typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(Predicate predicate) const {
-    auto found = std::find_if(objects_.begin(), objects_.end(), predicate);
+inline const T* ObjectContainer<T>::findIf(const Predicate& predicate) const {
+    auto found = std::find_if(objects_.begin(), objects_.end(), [&predicate](const ObjectPtr& uniquePtr) {
+        return predicate(uniquePtr.get());
+    });
 
     if (found != objects_.end())
-        return *found;
+        return found->get();
 
     // Perform recursive search
     for (const auto& group : groups_) {
@@ -120,26 +117,28 @@ inline const typename ObjectContainer<T>::ObjectPtr ObjectContainer<T>::findIf(P
 
 template <typename T>
 inline void ObjectContainer<T>::removeByTag(const std::string& tag) {
-    removeIf([&tag](const constObjectPtr object) {
+    removeIf([&tag](const T* object) {
         return object->getTag() == tag;
     });
 }
 
 template <typename T>
 inline void ObjectContainer<T>::removeById(unsigned int id) {
-    removeIf([id](const constObjectPtr object) {
+    removeIf([id](const T* object) {
         return object->getObjectId() == id;
     });
 }
 
 template <typename T>
-inline bool ObjectContainer<T>::remove(ObjectPtr object) {
+inline bool ObjectContainer<T>::remove(T* object) {
     if (object == nullptr)
         return false;
 
-    if (auto found = std::find(objects_.begin(), objects_.end(), object); found != objects_.end()) {
-        objects_.erase(found);
-        return true;
+    for (auto iter = objects_.begin(); iter != objects_.end(); ++iter) {
+        if ((*iter)->getObjectId() == object->getObjectId()) {
+            objects_.erase(iter);
+            return true;
+        }
     }
 
     // Perform recursive remove
@@ -153,8 +152,10 @@ inline bool ObjectContainer<T>::remove(ObjectPtr object) {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::removeIf(Predicate predicate) {
-    objects_.erase(std::remove_if(objects_.begin(), objects_.end(), predicate), objects_.end());
+inline void ObjectContainer<T>::removeIf(const Predicate& predicate) {
+    objects_.erase(std::remove_if(objects_.begin(), objects_.end(), [&predicate](const ObjectPtr& uniquePtr) {
+        return predicate(uniquePtr.get());
+    }), objects_.end());
 
     // Perform recursive remove
     for (const auto& group : groups_)
@@ -168,13 +169,17 @@ inline void ObjectContainer<T>::removeAll() {
 
 template <typename T>
 inline std::size_t ObjectContainer<T>::getCount() const {
-    return objects_.size();
+    auto count = 0;
+    for (const auto& group : groups_)
+        count += group.second->getCount();
+
+    return objects_.size() + count;
 }
 
 template <typename T>
 inline ObjectContainer<T>& ObjectContainer<T>::createGroup(const std::string& name) {
     IME_ASSERT(!hasGroup(name), "The group \"" + name + "\" already exists in the container");
-    return *(groups_.insert({name, std::make_shared<ObjectContainer<T>>()}).first->second);
+    return *(groups_.insert({name, std::make_unique<ObjectContainer<T>>()}).first->second);
 }
 
 template <typename T>
@@ -204,12 +209,24 @@ inline void ObjectContainer<T>::removeAllGroups() {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::forEach(Callback<ObjectPtr> callback) {
-    std::for_each(objects_.begin(), objects_.end(), callback);
+inline void ObjectContainer<T>::forEach(const Callback<T*>& callback) {
+    forEachNotInGroup(callback);
+
+    // Recursively apply callback
+    std::for_each(groups_.begin(), groups_.end(), [&callback] (auto& pair) {
+        pair.second->forEach(callback);
+    });
 }
 
 template <typename T>
-inline void ObjectContainer<T>::forEachInGroup(const std::string& name, Callback<ObjectPtr> callback) {
+inline void ObjectContainer<T>::forEachInGroup(const std::string& name, const Callback<T*>& callback) {
     if (hasGroup(name))
-        groups_.at(name)->forEach(std::move(callback));
+        groups_.at(name)->forEach(callback);
+}
+
+template <typename T>
+inline void ObjectContainer<T>::forEachNotInGroup(const Callback<T*>& callback) {
+    std::for_each(objects_.begin(), objects_.end(), [&callback](const std::unique_ptr<T>& uniquePtr) {
+        callback(uniquePtr.get());
+    });
 }

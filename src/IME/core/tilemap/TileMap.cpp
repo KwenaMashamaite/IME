@@ -31,12 +31,10 @@
 
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight,
-            RenderLayerContainer& renderLayers,
-            GameObjectContainer& childContainer) :
+            RenderLayerContainer& renderLayers) :
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
         renderLayers_{renderLayers},
-        childContainer_{childContainer},
         sprites_{renderLayers_}
     {
         invalidTile_.setIndex({-1, -1});
@@ -56,8 +54,8 @@ namespace ime {
         });
     }
 
-    void TileMap::setPhysicsSimulation(std::shared_ptr<World> physicsSimulation) {
-        physicsSim_ = std::move(physicsSimulation);
+    void TileMap::setPhysicsSimulation(World* physicsSimulation) {
+        physicsSim_ = physicsSimulation;
     }
 
     TileMapRenderer &TileMap::getRenderer() {
@@ -196,7 +194,7 @@ namespace ime {
 
     void TileMap::createObjectList() {
         forEachTile([this](const Tile& tile) {
-            children_.emplace(tile.getIndex(), std::vector<std::shared_ptr<GameObject>>{});
+            children_.emplace(tile.getIndex(), std::vector<GameObject*>{});
         });
     }
 
@@ -258,26 +256,25 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::addChild(std::shared_ptr<GameObject> child, const Index& index, bool assignLayer) {
+    bool TileMap::addChild(GameObject* child, const Index& index) {
         IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
             if (child->hasRigidBody())
                 child->getRigidBody()->setPosition(getTile(index).getWorldCentre());
 
-            if (assignLayer)
-                childContainer_.add(child); // Adds child to container and its sprite to the "default" render layer
-            else
-                childContainer_.addObject(child); // Just adds child to container
+            child->onDestruction([this, id = child->getObjectId()]{
+                removeChildWithId(id);
+            });
 
-            children_[index].push_back(std::move(child));
+            children_[index].push_back(child);
             return true;
         }
 
         return false;
     }
 
-    bool TileMap::hasChild(const GameObject::Ptr& child) {
+    bool TileMap::hasChild(const GameObject* child) {
         if (!child)
             return false;
 
@@ -289,7 +286,7 @@ namespace ime {
         return false;
     }
 
-    std::shared_ptr<GameObject> TileMap::getChildWithId(std::size_t id) const {
+    GameObject* TileMap::getChildWithId(std::size_t id) const {
         for (const auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id)
@@ -306,25 +303,25 @@ namespace ime {
         return children_.at(tile.getIndex()).size() > 1;
     }
 
-    std::shared_ptr<GameObject> TileMap::getOccupant(const Tile& tile) {
+    GameObject* TileMap::getOccupant(const Tile& tile) {
         if (isTileOccupied(tile))
             return children_[tile.getIndex()].front();
         return nullptr;
     }
 
-    void TileMap::forEachChild(const Callback<const GameObject::Ptr&>& callback) {
+    void TileMap::forEachChild(const Callback<GameObject*>& callback) {
         std::for_each(children_.begin(), children_.end(), [&callback](auto& childList) {
             std::for_each(childList.second.begin(), childList.second.end(),
-                [&callback] (const GameObject::Ptr& child) {
+                [&callback] (GameObject* child) {
                     callback(child);
             });
         });
     }
 
-    void TileMap::forEachChildInTile(const Tile& tile, const Callback<const GameObject::Ptr&>& callback) {
+    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) {
         if (isTileOccupied(tile)) {
             std::for_each(children_[tile.getIndex()].begin(), children_[tile.getIndex()].end(),
-                [&callback](const GameObject::Ptr& child) {
+                [&callback](GameObject* child) {
                     callback(child)
             ;});
         }
@@ -337,12 +334,12 @@ namespace ime {
     }
 
     void TileMap::update(Time deltaTime) {
-        sprites_.forEach([&deltaTime](const Sprite::Ptr& sprite) {
+        sprites_.forEach([&deltaTime](Sprite* sprite) {
             sprite->updateAnimation(deltaTime);
         });
     }
 
-    bool TileMap::removeChildFromTile(const Tile& tile, const GameObject::Ptr& child) {
+    bool TileMap::removeChildFromTile(const Tile& tile, GameObject* child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
                 return removeOccupant(tile);
@@ -376,13 +373,13 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::removeChild(const GameObject::Ptr& child) {
+    bool TileMap::removeChild(GameObject* child) {
         if (!child)
             return false;
         return removeChildWithId(child->getObjectId());
     }
 
-    void TileMap::removeChildrenIf(const std::function<bool(const GameObject::Ptr&)>& callback) {
+    void TileMap::removeChildrenIf(const std::function<bool(GameObject*)>& callback) {
         for (auto& childList : children_)
             childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(), callback), childList.second.end());
     }
@@ -391,9 +388,9 @@ namespace ime {
         if (!tileHasVisitors(tile))
             return false;
         else {
-            auto occupant = std::move(children_[tile.getIndex()].front());
+            auto occupant = children_[tile.getIndex()].front();
             children_[tile.getIndex()].clear();
-            children_[tile.getIndex()].push_back(std::move(occupant));
+            children_[tile.getIndex()].push_back(occupant);
             return true;
         }
     }
@@ -406,14 +403,14 @@ namespace ime {
         return false;
     }
 
-    void TileMap::moveChild(const GameObject::Ptr& child, const Index& index) {
+    void TileMap::moveChild(GameObject* child, const Index& index) {
         if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
             removeChildFromTile(getTileOccupiedByChild(child), child);
-            addChild(child, index, false);
+            addChild(child, index);
         }
     }
 
-    void TileMap::moveChild(const GameObject::Ptr& child, const Tile &tile) {
+    void TileMap::moveChild(GameObject* child, const Tile &tile) {
         moveChild(child, tile.getIndex());
     }
 
@@ -513,7 +510,7 @@ namespace ime {
         return {numOfColms_, numOfRows_};
     }
 
-    const Tile& TileMap::getTileOccupiedByChild(const GameObject::Ptr& child) {
+    const Tile& TileMap::getTileOccupiedByChild(GameObject* child) {
         return getTile(child->getTransform().getPosition());
     }
 

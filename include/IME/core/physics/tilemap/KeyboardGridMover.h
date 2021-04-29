@@ -52,7 +52,7 @@ namespace ime {
          * @param tileMap Grid to move target in
          * @param target Target to be moved in the grid
          */
-        explicit KeyboardGridMover(TileMap &tileMap, GameObject::Ptr target = nullptr);
+        explicit KeyboardGridMover(TileMap &tileMap, GameObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

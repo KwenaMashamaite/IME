@@ -77,7 +77,7 @@ namespace ime {
         b2FixtureDefinition->density = 1.0f;
         b2FixtureDefinition->userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-        auto b2FixtureDeleter = [](b2Fixture* fixture) {
+        auto b2FixtureDeleter = [](b2Fixture*) {
             // The b2Fixture is destroyed in the destruction listener of body_
             // because it's only created when the collider is attached to a
             // body. Without this empty custom deleter, the application crashes

@@ -55,11 +55,8 @@ namespace ime {
          * render layers, however you must make sure that the layer you specify
          * during a call to this function already exists otherwise undefined
          * behavior
-         *
-         * Note that the container keeps the pointer so there's no need to
-         * keep your pointer after adding the drawable object
          */
-        void add(std::shared_ptr<T> drawable, int renderOrder = 0u,
+        T* add(std::unique_ptr<T> drawable, int renderOrder = 0u,
             const std::string& renderLayer = "default");
 
     private:

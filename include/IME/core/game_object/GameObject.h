@@ -41,11 +41,11 @@ namespace ime {
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
      */
-    class IME_API GameObject : public Object, public std::enable_shared_from_this<GameObject> {
+    class IME_API GameObject : public Object {
     public:
-        using Ptr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
+        using Ptr = std::unique_ptr<GameObject>; //!< Shared GameObject pointer
         using BodyPtr = std::unique_ptr<Body>;   //!< Unique Body pointer
-        using CollisionCallback = Callback<const GameObject::Ptr&, const GameObject::Ptr&>; //!< Collision callback
+        using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Collision callback
 
         /**
          * @brief The type of the GameObject
@@ -243,8 +243,8 @@ namespace ime {
          * @brief Get the game objects physics body
          * @return The game objects physics body if any, otherwise a nullptr
          */
-        const BodyPtr& getRigidBody();
-        const BodyPtr& getRigidBody() const;
+        Body* getRigidBody();
+        const Body* getRigidBody() const;
 
         /**
          * @brief Remove a rigid body from the game object
@@ -360,7 +360,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void emitCollisionEvent(const std::string& event, const GameObject::Ptr& other);
+        void emitCollisionEvent(const std::string& event, GameObject* other);
 
         /**
          * @brief Destructor

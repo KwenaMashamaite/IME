@@ -42,6 +42,7 @@ namespace ime {
     class GameObject; //!< GameObject class forward declaration
     class Window;     //!< Window class forward declaration
 
+    /// @internal
     namespace priv {
         class DebugDrawer;
     }
@@ -50,10 +51,9 @@ namespace ime {
      * @brief The World is responsible for creating, managing, colliding and
      *        updating all of the bodies within it
      */
-    class IME_API World : public std::enable_shared_from_this<World> {
+    class IME_API World final {
     public:
-        using Ptr = std::shared_ptr<World>;  //!< Shared World pointer
-        using GameObjectPtr = std::shared_ptr<GameObject>; //!< Shared GameObject pointer
+        using Ptr = std::unique_ptr<World>;  //!< Unique World pointer
 
         /**
          * Callback function passed to queryAABB function
@@ -235,20 +235,6 @@ namespace ime {
          * dispatched by the world (Callbacks are dispatched during a step)
          */
         Body::Ptr createBody(Body::Type type = Body::Type::Static);
-
-        /**
-         * @brief Create a body and attach it to a game object
-         * @param gameObject The game object to attach the body to
-         * @param type The type of the body to be created
-         *
-         * By default, this function creates a static body
-         *
-         * @note If the world is in the middle of a step, the body will not
-         * be created. This usually means you should not attempt to create a
-         * body inside a callback dispatched by the world (Callbacks are
-         * dispatched during a step)
-         */
-        void createBody(const GameObjectPtr& gameObject, Body::Type type = Body::Type::Static);
 
         /**
          * @brief Create a joint

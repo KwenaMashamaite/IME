@@ -33,13 +33,18 @@
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/core/scene/SceneManager.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
 #include "IME/utility/NonCopyable.h"
 #include <queue>
 
 namespace ime {
+
+    /// @internal
+    namespace priv {
+        class SceneManager;
+    }
+
     /**
      * @brief Runs the main loop
      */
@@ -422,7 +427,7 @@ namespace ime {
         bool isRunning_;                             //!< A flag indicating whether or not the engine is running
         bool isPaused_;                              //!< A flag indicating whether or not the engine is paused
         Time elapsedTime_;                           //!< The time passed since the engine started running
-        SceneManager sceneManager_;                  //!< The games scene manager
+        std::unique_ptr<priv::SceneManager> sceneManager_; //!< The games scene manager
         audio::AudioManager audioManager_;           //!< The games global audio manager
         input::InputManager inputManager_;           //!< The games global input manager
         ResourceManager::Ptr resourceManager_;       //!< The games global resource manager

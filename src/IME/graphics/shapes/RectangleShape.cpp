@@ -64,15 +64,15 @@ namespace ime {
     RectangleShape &RectangleShape::operator=(RectangleShape &&) noexcept = default;
 
     RectangleShape::Ptr RectangleShape::create(const Vector2f &size) {
-        return std::make_shared<RectangleShape>(size);
+        return std::make_unique<RectangleShape>(size);
     }
 
     RectangleShape::Ptr RectangleShape::copy() const {
-        return std::static_pointer_cast<RectangleShape>(clone());
+        return RectangleShape::Ptr(static_cast<RectangleShape*>(clone().release()));
     }
 
     Shape::Ptr RectangleShape::clone() const {
-        return std::make_shared<RectangleShape>(*this);
+        return std::make_unique<RectangleShape>(*this);
     }
 
     std::string RectangleShape::getClassName() const {

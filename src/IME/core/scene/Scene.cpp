@@ -29,7 +29,6 @@
 namespace ime {
     Scene::Scene() :
         timescale_{1.0f},
-        isManaged_{false},
         isEntered_{false},
         isVisibleWhenPaused_{false},
         hasPhysicsSim_{false},
@@ -65,12 +64,10 @@ namespace ime {
             shapeContainer_ = std::move(other.shapeContainer_);
             tileMap_ = std::move(other.tileMap_);
             timescale_ = other.timescale_;
-            isManaged_ = other.isManaged_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasTilemap_ = other.hasTilemap_;
             isEntered_ = false;
-            isManaged_ = false;
         }
 
         return *this;
@@ -185,8 +182,8 @@ namespace ime {
     }
 
     void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
-        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, renderLayers(), gameObjects());
-        tileMap_->setPhysicsSimulation(world_);
+        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, renderLayers());
+        tileMap_->setPhysicsSimulation(world_.get());
         hasTilemap_ = true;
     }
 

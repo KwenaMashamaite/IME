@@ -147,7 +147,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~SpriteImage() override = 0;
+        ~SpriteImage() override;
 
     protected:
         /**
