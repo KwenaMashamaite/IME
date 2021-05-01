@@ -124,9 +124,9 @@ namespace ime {
         tile_.setSize({static_cast<float>(width), static_cast<float>(height)});
 
         if (hasCollider()) {
-            tile_.getRigidBody()->forEachCollider([this, width, height](const Collider::Ptr& collider) {
-                static_cast<BoxCollider*>(collider.get())->setSize(static_cast<float>(width), static_cast<float>(height));
-                collider->getBody().setPosition(getWorldCentre());
+            tile_.getRigidBody()->forEachCollider([this, width, height](Collider* collider) {
+                static_cast<BoxCollider*>(collider)->setSize(static_cast<float>(width), static_cast<float>(height));
+                collider->getBody()->setPosition(getWorldCentre());
             });
         }
 

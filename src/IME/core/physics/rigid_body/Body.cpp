@@ -87,7 +87,7 @@ namespace ime {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body")
         IME_ASSERT(!collider->isAttachedToBody(), "The collider is already attached to another rigid body: One body per collider")
         if (!world_->isLocked()) {
-            collider->setBody(*this);
+            collider->setBody(this);
             auto insertionPair = colliders_.insert({collider->getObjectId(), std::move(collider)}).first;
             emit("attachCollider");
             return insertionPair->second.get();
@@ -365,9 +365,9 @@ namespace ime {
         return userData_;
     }
 
-    void Body::forEachCollider(const Callback<const Collider::Ptr&>& callback) {
+    void Body::forEachCollider(const Callback<Collider*>& callback) {
         std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto& pair) {
-            callback(pair.second);
+            callback(pair.second.get());
         });
     }
 

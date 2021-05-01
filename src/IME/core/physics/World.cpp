@@ -24,7 +24,6 @@
 
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/graphics/DebugDrawer.h"
 #include "IME/core/scene/Scene.h"
@@ -56,7 +55,7 @@ namespace ime {
          */
         class B2QueryCallback : public b2QueryCallback {
         public:
-            explicit B2QueryCallback(const World::AABBCallback* callback){
+            explicit B2QueryCallback(const AABBCallback* callback){
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
@@ -71,7 +70,7 @@ namespace ime {
             }
 
         private:
-            const World::AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
+            const AABBCallback* callback_; //!< Invoked for every fixture that overlaps the query AABB
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -83,7 +82,7 @@ namespace ime {
          */
         class B2RayCastCallback : public b2RayCastCallback {
         public:
-            explicit B2RayCastCallback(const World::RayCastCallback* callback) {
+            explicit B2RayCastCallback(const RayCastCallback* callback) {
                 IME_ASSERT(callback, "Cannot create b2Callback from a nullptr")
                 callback_ = callback;
             }
@@ -104,7 +103,7 @@ namespace ime {
             }
 
         private:
-            const World::RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
+            const RayCastCallback* callback_; //!< Invoked for each fixture that collides with the ray
         };
     } // anonymous namespace
 
@@ -115,10 +114,6 @@ namespace ime {
     // ContactListener wrapper
     class World::B2ContactListener : public b2ContactListener {
     public:
-        explicit B2ContactListener(ContactListener& contactListener) :
-            contactListener_{contactListener}
-        {}
-
         // Called by Box2d when two fixtures begin to overlap
         void BeginContact(b2Contact *contact) override {
             emit("contactBegin", contact);
@@ -129,36 +124,24 @@ namespace ime {
             emit("contactEnd", contact);
         }
 
-        // Called by Box2d after collision detection, but before collision resolution
-        // may be called multiple times per time step per contact due to continuous collision detection
+        // Called by Box2d after collision detection, but before collision
+        // resolution. May be called multiple times per time step per contact
+        // due to continuous collision detection. Note that the function is not
+        // called if the body that the fixture is attached to is not awake
+        // or when the body is awake but the fixture is a sensor
         void PreSolve(b2Contact *contact, const b2Manifold*) override {
-            emit("preSolve", contact);
-        }
-
-        // Called by box2d after collision resolution
-        void PostSolve(b2Contact *contact, const b2ContactImpulse*) override {
-            emit("postSolve", contact);
+            emit("contactStay", contact);
         }
 
     private:
-        ContactListener& contactListener_;
+        // Emit contact events
+        static void emit(const std::string& event, b2Contact *contact) {
+            auto colliderA = convertFixtureToCollider(contact->GetFixtureA());
+            auto colliderB = convertFixtureToCollider(contact->GetFixtureB());
 
-        void emit(const std::string& event, b2Contact *contact) {
-            auto* colliderA = convertFixtureToCollider(contact->GetFixtureA());
-            auto* colliderB = convertFixtureToCollider(contact->GetFixtureB());
-
-            //contactListener_.eventEmitter_.emit(event, colliderA, colliderB);
-
-            auto* gameObjectA = colliderA->getBody().getGameObject();
-            auto* gameObjectB = colliderB->getBody().getGameObject();
-
-            if (gameObjectA && gameObjectB) {
-                gameObjectA->emitCollisionEvent(event, gameObjectB);
-                gameObjectB->emitCollisionEvent(event, gameObjectA);
-            }
-
+            colliderA->emitContact(event, colliderB);
+            colliderB->emitContact(event, colliderA);
             colliderA = colliderB = nullptr;
-            gameObjectA = gameObjectB = nullptr;
         }
     };
 
@@ -169,7 +152,7 @@ namespace ime {
         isDebugDrawEnabled_{false},
         timescale_{1.0f}
     {
-        b2ContactListener_ = std::make_unique<B2ContactListener>(contactListener_);
+        b2ContactListener_ = std::make_unique<B2ContactListener>();
         world_->SetContactListener(b2ContactListener_.get());
 
 #if defined(IME_DEBUG)
@@ -292,7 +275,7 @@ namespace ime {
         return world_->IsLocked();
     }
 
-    void World::rayCast(const World::RayCastCallback &callback, Vector2f startPoint,
+    void World::rayCast(const RayCastCallback &callback, Vector2f startPoint,
         Vector2f endPoint)
     {
         auto queryCallback = B2RayCastCallback(&callback);
@@ -301,13 +284,9 @@ namespace ime {
             {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
-    void World::queryAABB(const World::AABBCallback& callback, const AABB &aabb) {
+    void World::queryAABB(const AABBCallback& callback, const AABB &aabb) {
         auto queryCallback = B2QueryCallback(&callback);
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
-    }
-
-    ContactListener &World::getContactListener() {
-        return contactListener_;
     }
 
     Scene &World::getScene() {
@@ -326,11 +305,11 @@ namespace ime {
         return isDebugDrawEnabled_;
     }
 
-    World::DebugDrawerFilter &World::getDebugDrawerFilter() {
+    DebugDrawerFilter &World::getDebugDrawerFilter() {
         return debugDrawerFilter_;
     }
 
-    const World::DebugDrawerFilter &World::getDebugDrawerFilter() const {
+    const DebugDrawerFilter &World::getDebugDrawerFilter() const {
         return debugDrawerFilter_;
     }
 
@@ -364,7 +343,9 @@ namespace ime {
     }
 
     World::~World() {
+#if defined(IME_DEBUG)
         if (postRenderId_ != -1)
             scene_.unsubscribe_("postRender", postRenderId_);
+#endif
     }
 }

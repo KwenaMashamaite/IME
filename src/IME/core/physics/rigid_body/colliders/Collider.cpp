@@ -24,12 +24,14 @@
 
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_fixture.h>
 
 namespace ime {
     Collider::Collider(Collider::Type type) :
         type_{type},
+        body_{nullptr},
         prevCollisionBitMask_{filterData_.collisionBitMask},
         hasRigidBody_{false}
     {}
@@ -37,6 +39,7 @@ namespace ime {
     Collider::Collider(const Collider& other) :
         Object(other),
         type_{other.type_},
+        body_{nullptr},
         filterData_{other.filterData_},
         prevCollisionBitMask_{other.prevCollisionBitMask_},
         hasRigidBody_{false}
@@ -51,6 +54,7 @@ namespace ime {
             type_ = rhs.type_;
             filterData_ = rhs.filterData_;
             prevCollisionBitMask_ = rhs.prevCollisionBitMask_;
+            body_ = nullptr;
             hasRigidBody_ = false;
 
             // Other member data are initialized when the collider is attached
@@ -71,7 +75,8 @@ namespace ime {
         return type_;
     }
 
-    void Collider::setBody(Body& body) {
+    void Collider::setBody(Body* body) {
+        IME_ASSERT(body, "Body must not be a nullptr")
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
         b2FixtureDefinition->density = 1.0f;
@@ -84,24 +89,24 @@ namespace ime {
             // and the reason is unknown
         };
 
-        body.onDestruction([this] {
-            (*body_).get().getInternalBody()->DestroyFixture(fixture_.get());
+        body->onDestruction([this] {
+            body_->getInternalBody()->DestroyFixture(fixture_.get());
             fixture_ = nullptr;
         });
 
         fixture_ = std::unique_ptr<b2Fixture, std::function<void(b2Fixture*)>>(
-            body.getInternalBody()->CreateFixture(b2FixtureDefinition.get()), std::move(b2FixtureDeleter));
+            body->getInternalBody()->CreateFixture(b2FixtureDefinition.get()), std::move(b2FixtureDeleter));
 
-        body_ = std::make_unique<BodyRef>(body);
+        body_ = body;
         hasRigidBody_ = true;
     }
 
-    Body& Collider::getBody() {
-        return (*body_).get();
+    Body* Collider::getBody() {
+        return body_;
     }
 
-    const Body& Collider::getBody() const {
-        return (*body_).get();
+    const Body* Collider::getBody() const {
+        return body_;
     }
 
     void Collider::setSensor(bool sensor) {
@@ -156,7 +161,7 @@ namespace ime {
     void Collider::setDensity(float density) {
         IME_ASSERT(density >= 0, "A collider cannot have a negative density")
         fixture_->SetDensity(density);
-        (*body_).get().getInternalBody()->ResetMassData();
+        body_->getInternalBody()->ResetMassData();
         emitChange(Property{"density", density});
     }
 
@@ -193,6 +198,38 @@ namespace ime {
 
     PropertyContainer &Collider::getUserData() {
         return userData_;
+    }
+
+    void Collider::onContactBegin(const Collider::CollisionCallback &callback) {
+        onContactBegin_ = callback;
+    }
+
+    void Collider::onContactEnd(const Collider::CollisionCallback &callback) {
+        onContactEnd_ = callback;
+    }
+
+    void Collider::onContactStay(const Collider::CollisionCallback &callback) {
+        onContactStay_ = callback;
+    }
+
+    void Collider::emitContact(const std::string &event, Collider *other) {
+        if (this == other)
+            return;
+
+        if (event == "contactBegin" && onContactBegin_)
+            onContactBegin_(this, other);
+        else if (event == "contactEnd" && onContactEnd_)
+            onContactEnd_(this, other);
+        else if (event == "contactStay" && onContactStay_)
+            onContactStay_(this, other);
+
+        auto gameObjectA = body_->getGameObject();
+        auto gameObjectB = other->getBody()->getGameObject();
+        if (gameObjectA && gameObjectB) {
+            gameObjectA->emitCollisionEvent(event, gameObjectB);
+        }
+
+        gameObjectA = gameObjectB = nullptr;
     }
 
     void Collider::updateCollisionFilter() {

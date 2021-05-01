@@ -22,34 +22,37 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/ContactListener.h"
+#ifndef IME_DEBUGDRAWERFILTER_H
+#define IME_DEBUGDRAWERFILTER_H
+
+#include "IME/Config.h"
 
 namespace ime {
-    int ContactListener::onContactBegin(Callback<Collider::Ptr, Collider::Ptr> callback) {
-        return eventEmitter_.on("contactBegin", std::move(callback));
-    }
+    /**
+     * @brief Controls the filter flags of the debug drawer
+     *
+     * The flags determine what gets rendered by the debug drawer
+     */
+    struct IME_API DebugDrawerFilter {
+        /**
+         * @brief Constructor
+         */
+        DebugDrawerFilter() :
+            drawAABB{false},
+            drawShapes{true},
+            drawJoints{false},
+            drawCentreOfMass{false}
+        {}
 
-    int ContactListener::onContactEnd(Callback<Collider::Ptr, Collider::Ptr> callback) {
-        return eventEmitter_.on("contactEnd", std::move(callback));
-    }
+        //////////////////////////////////////////////////////////////////////
+        // Member data
+        //////////////////////////////////////////////////////////////////////
 
-    int ContactListener::onPreSolve(Callback<Collider::Ptr, Collider::Ptr> callback) {
-        return eventEmitter_.on("preSolve", std::move(callback));
-    }
-
-    int ContactListener::onPostSolve(Callback<Collider::Ptr, Collider::Ptr> callback) {
-        return eventEmitter_.on("postSolve", std::move(callback));
-    }
-
-    bool ContactListener::unsubscribe(int callbackId) {
-        if (eventEmitter_.removeEventListener("contactBegin", callbackId)
-            || eventEmitter_.removeEventListener("contactEnd", callbackId)
-            || eventEmitter_.removeEventListener("preSolve", callbackId)
-            || eventEmitter_.removeEventListener("postSolve", callbackId))
-        {
-            return true;
-        }
-
-        return false;
-    }
+        bool drawAABB;          //!< A flag indicating whether or not to draw rigid body AABB
+        bool drawShapes;        //!< A flag indicating whether or not to draw rigid body shapes/colliders
+        bool drawJoints;        //!< A flag indicating whether or not to draw joint
+        bool drawCentreOfMass;  //!< A flag indicating whether or not to draw rigid body centre of mass
+    };
 }
+
+#endif //IME_DEBUGDRAWERFILTER_H

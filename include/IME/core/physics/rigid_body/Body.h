@@ -581,7 +581,7 @@ namespace ime {
          *
          * The callback is passed a collider on invocation
          */
-        void forEachCollider(const Callback<const Collider::Ptr&>& callback);
+        void forEachCollider(const Callback<Collider*>& callback);
 
         /**
          * @brief Get the number of colliders attached to the body

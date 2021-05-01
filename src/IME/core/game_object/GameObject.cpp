@@ -134,7 +134,7 @@ namespace ime {
         if (isCollidable_ != isCollidable) {
             isCollidable_ = isCollidable;
             if (body_) {
-                body_->forEachCollider([isCollidable](const Collider::Ptr& collider) {
+                body_->forEachCollider([isCollidable](Collider* collider) {
                     if (isCollidable)
                         collider->resetCollisionFilterData();
                     else
@@ -202,12 +202,16 @@ namespace ime {
         }
     }
 
-    void GameObject::onCollisionStart(GameObject::CollisionCallback callback) {
-        onContactBegin_ = std::move(callback);
+    void GameObject::onCollisionStart(const CollisionCallback& callback) {
+        onContactBegin_ = callback;
     }
 
-    void GameObject::onCollisionEnd(GameObject::CollisionCallback callback) {
-        onContactEnd_ = std::move(callback);
+    void GameObject::onCollisionEnd(const CollisionCallback& callback) {
+        onContactEnd_ = callback;
+    }
+
+    void GameObject::onCollisionStay(const CollisionCallback &callback) {
+        onContactStay_ = callback;
     }
 
     bool GameObject::hasRigidBody() const {
@@ -239,10 +243,15 @@ namespace ime {
     }
 
     void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
+        if (this == other)
+            return;
+
         if (event == "contactBegin" && onContactBegin_)
             onContactBegin_(this, other);
         else if (event == "contactEnd" && onContactEnd_)
             onContactEnd_(this, other);
+        else if (event == "contactStay" && onContactStay_)
+            onContactStay_(this, other);
     }
 
     void GameObject::initEvents() {

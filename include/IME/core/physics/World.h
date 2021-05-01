@@ -30,8 +30,8 @@
 #include "IME/core/time/Time.h"
 #include "IME/core/physics/rigid_body/Body.h"
 #include "IME/core/physics/rigid_body/AABB.h"
+#include "IME/core/physics/DebugDrawerFilter.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
-#include "IME/core/physics/ContactListener.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -39,7 +39,6 @@
 class b2World;
 
 namespace ime {
-    class GameObject; //!< GameObject class forward declaration
     class Window;     //!< Window class forward declaration
 
     /// @internal
@@ -48,85 +47,58 @@ namespace ime {
     }
 
     /**
+     * Callback function passed to queryAABB function
+     *
+     * The callback is called for every collider that overlaps the query
+     * AABB. The callback must return false to terminate the query early
+     * or true to continue with the query until all colliders have been
+     * processed
+     */
+    using AABBCallback = std::function<bool(Collider* const)>;
+
+    /**
+     *  Callback function passed to rayCast Function
+     *
+     *  The callback is called for every collider that the ray collides
+     *  with. The callback controls how the ray proceeds by the value
+     *  it returns:
+     *
+     *  i)  -1: Ignore the current collider and continue with the ray casting.
+     *          The collider will be filtered. That is, the ray cast will
+     *          proceed as if the collider does not exist
+     *
+     *  ii)  0: Terminate the ray cast immediately
+     *
+     *  iii) 1: Don't clip the ray and continue. By default the ray is
+     *          clipped if it collides with a collider. When 1 is returned
+     *          the ray will continue as if it did not hit anything
+     *
+     *  iv) fraction : The fraction is provided to the callback when it is
+     *                 called. If it is returned, then the ray will be
+     *                 clipped to the current point of intersection.
+     *
+     * The value returned by the callback function allow you to ray cast
+     * any collider, ray cast all colliders, or ray cast the closest collider.
+     *
+     * The argument list of the callback is as follows:
+     *
+     * first arg:  The collider that is currently colliding with the ray
+     * second arg: The point of initial intersection (There may be more
+     *             than one intersection depending on the value returned
+     *             by the callback)
+     * third arg:  The normal vector (rotation) at the point of intersection
+     * forth arg:  The distance from the rays starting point to the current
+     *              point of intersection (fraction)
+     */
+    using RayCastCallback = std::function<float(Collider* const, Vector2f, Vector2f, float)>;
+
+    /**
      * @brief The World is responsible for creating, managing, colliding and
      *        updating all of the bodies within it
      */
     class IME_API World final {
     public:
         using Ptr = std::unique_ptr<World>;  //!< Unique World pointer
-
-        /**
-         * Callback function passed to queryAABB function
-         *
-         * The callback is called for every collider that overlaps the query
-         * AABB. The callback must return false to terminate the query early
-         * or true to continue with the query until all colliders have been
-         * processed
-         */
-        using AABBCallback = std::function<bool(Collider* const)>;
-
-        /**
-         *  Callback function passed to rayCast Function
-         *
-         *  The callback is called for every collider that the ray collides
-         *  with. The callback controls how the ray proceeds by the value
-         *  it returns:
-         *
-         *  i)  -1: Ignore the current collider and continue with the ray casting.
-         *          The collider will be filtered. That is, the ray cast will
-         *          proceed as if the collider does not exist
-         *
-         *  ii)  0: Terminate the ray cast immediately
-         *
-         *  iii) 1: Don't clip the ray and continue. By default the ray is
-         *          clipped if it collides with a collider. When 1 is returned
-         *          the ray will continue as if it did not hit anything
-         *
-         *  iv) fraction : The fraction is provided to the callback when it is
-         *                 called. If it is returned, then the ray will be
-         *                 clipped to the current point of intersection.
-         *
-         * The value returned by the callback function allow you to ray cast
-         * any shape, ray cast all shapes, or ray cast the closest shape.
-         *
-         * The argument list of the callback is as follows:
-         *
-         * first arg:  The collider that is currently colliding with the ray
-         * second arg: The point of initial intersection (There may be more
-         *             than one intersection depending on the value returned
-         *             by the callback)
-         * third arg:  The normal vector (rotation) at the point of intersection
-         * forth arg:  The distance from the rays starting point to the current
-         *              point of intersection (fraction)
-         */
-        using RayCastCallback = std::function<float(Collider* const,
-            Vector2f, Vector2f, float)>;
-
-        /**
-         * @brief Controls the filter flags of the debug drawer
-         *
-         * The flags determine what gets rendered by the debug drawer
-         */
-        struct DebugDrawerFilter {
-            /**
-             * @brief Constructor
-             */
-            DebugDrawerFilter() :
-                drawAABB{false},
-                drawShapes{true},
-                drawJoints{false},
-                drawCentreOfMass{false}
-            {}
-
-            //////////////////////////////////////////////////////////////////////
-            // Member data
-            //////////////////////////////////////////////////////////////////////
-
-            bool drawAABB;          //!< A flag indicating whether or not to draw rigid body AABB
-            bool drawShapes;        //!< A flag indicating whether or not to draw rigid body shapes/colliders
-            bool drawJoints;        //!< A flag indicating whether or not to draw joint
-            bool drawCentreOfMass;  //!< A flag indicating whether or not to draw rigid body centre of mass
-        };
 
         /**
          * @brief Copy constructor
@@ -401,12 +373,6 @@ namespace ime {
         void queryAABB(const AABBCallback& callback, const AABB& aabb);
 
         /**
-         * @brief Get the contact listener
-         * @return The contact listener
-         */
-        ContactListener& getContactListener();
-
-        /**
          * @brief Get the scene the simulation belongs to
          * @return The scene this simulation belongs to
          */
@@ -421,16 +387,16 @@ namespace ime {
          * will render all the bodies it contains using geometric shapes such
          * as circles and rectangles (Depending on the type of colliders on
          * the bodies). By default, the simulation will only render the shapes
-         * of the rigid bodies, however you can use the getDebugDrawFilter
-         * to control what gets rendered by the debug drawer.
+         * of the rigid bodies, however you can use the getDebugDrawerFilter()
+         * function to control what gets rendered by the debug drawer.
          *
          * Debug drawing is useful in many different ways. For instance say
          * you have a rigid body attached to a game object and when the game
          * object collides with a wall, the game object sprite always enters
          * the wall by half of its size due to a origin mismatched between
          * the sprite and the rigid body. In this case enabling debug draw
-         * and drawing the sprite will point out the problem immediately,
-         * saving you a lot of debugging time.
+         * will point out the problem immediately, saving you a lot of debugging
+         * time.
          *
          * Be default, debug drawing is disabled
          *
@@ -454,6 +420,10 @@ namespace ime {
          *
          * The returned data may be manipulated to set what is rendered by
          * the debug drawer
+         *
+         * @code
+         * world.getDebugDrawerFilter().drawAABB = true; // Draw bounding boxes
+         * @endcode
          *
          * @see enableDebugDraw
          */
@@ -514,14 +484,12 @@ namespace ime {
         bool fixedTimeStep_;                   //!< A flag indicating whether updates are fixed or variable
         bool isDebugDrawEnabled_;              //!< A flag indicating whether or not debug drawing is enabled
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
-        ContactListener contactListener_;      //!< Listens for contact between colliders and alerts interested parties
         DebugDrawerFilter debugDrawerFilter_;  //!< Control what gets renders by the debug drawer
         int postRenderId_;                     //!< Post render callback id
 
-        std::unique_ptr<priv::DebugDrawer> debugDrawer_;   //!< Draws physics entities when debug draw is enabled
-
         class B2ContactListener;
-        std::unique_ptr<B2ContactListener> b2ContactListener_;
+        std::unique_ptr<B2ContactListener> b2ContactListener_; //!< Listens for collider contacts and notifies interested parties
+        std::unique_ptr<priv::DebugDrawer> debugDrawer_;       //!< Draws physics entities when debug draw is enabled
     };
 }
 

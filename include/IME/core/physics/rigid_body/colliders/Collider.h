@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/PropertyContainer.h"
 #include "IME/common/Object.h"
+#include <functional>
 #include <memory>
 
 class b2Shape;
@@ -118,6 +119,7 @@ namespace ime {
     class IME_API Collider : public Object {
     public:
         using Ptr = std::unique_ptr<Collider>; //!< Unique collider pointer
+        using CollisionCallback = std::function<void(Collider*, Collider*)>;
 
         /**
          * @brief The type of the collider
@@ -257,7 +259,7 @@ namespace ime {
         float getRestitutionThreshold() const;
 
         /**
-         * @brief Set if the collider is a sensor or not
+         * @brief Set whether or not the collider acts as a sensor
          * @param sensor True to set as sensor, otherwise false
          *
          * A sensor detects a collision but does not generate a collision
@@ -265,10 +267,10 @@ namespace ime {
          * colliders overlap. You can flag any collider as being a sensor.
          * Sensors may be attached to static, kinematic, or dynamic bodies. 
          * Remember that you may have multiple colliders per body and you 
-         * can have any mix of sensors and non-sensor colliders. Also, sensors 
-         * only form contacts when at least one body is dynamic, so you will 
-         * not get a contact for kinematic versus kinematic, kinematic versus 
-         * static, or static versus static
+         * can have any mix of sensors and non-sensor colliders. However,
+         * sensors only form contacts when at least one body is dynamic,
+         * therefore, you will not get a contact for kinematic versus
+         * kinematic, kinematic versus static, or static versus static
          *
          * By default, the collider is not a sensor
          */
@@ -351,8 +353,8 @@ namespace ime {
          * @return The body this collider is attached to if any, otherwise a
          *         nullptr
          */
-        Body& getBody();
-        const Body& getBody() const;
+        Body* getBody();
+        const Body* getBody() const;
 
         /**
          * @brief Check if the collider contains a point or not
@@ -366,6 +368,83 @@ namespace ime {
          * @return The user data
          */
         PropertyContainer& getUserData();
+
+        /**
+         * @brief Add an event listener to a collision start event
+         * @param callback The function to be executed when this collider
+         *                 starts overlapping with another collider
+         *
+         * Note that the callback is called when the colliders come into
+         * contact and not when they remain in contact. In other words
+         * it is called once per interaction. On invocation, the callback
+         * is passed this collider and the collider that it started overlapping
+         * with respectively. In addition, only one event listener may be
+         * registered to this event, subsequent event listeners overwrite the
+         * current one. Pass nullptr to remove the current event listener
+         *
+         * @note The callback is invoked for sensor and non-sensor colliders
+         *
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see onContactEnd, onContactStay and setSensor
+         */
+        void onContactBegin(const CollisionCallback& callback);
+
+        /**
+         * @brief Add an event listener to a collision end event
+         * @param callback The function to be executed when the event is fired
+         *
+         * The callback is called when this collider stops overlapping with
+         * another collider. The callback is passed this collider and the
+         * collider it stopped overlapping with respectively. Note that only
+         * only one event listener may be registered to this event, subsequent
+         * event listeners overwrite the current one. Pass nullptr to remove
+         * the current event listener
+         *
+         * @note The callback is invoked for sensor and non-sensor colliders
+         *
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see onContactBegin, onContactStay and setSensor
+         */
+        void onContactEnd(const CollisionCallback& callback);
+
+        /**
+         * @brief Add an event listener to a contact stay event
+         * @param callback The function to be executed when the event is fired
+         *
+         * The callback is called while this collider remains in contact with
+         * another collider. On invocation, the callback is passed this collider
+         * and the collider its currently overlapping with respectively.
+         *
+         * Note that only one event listener may be registered to this event,
+         * subsequent event listeners overwrite the current one. Pass nullptr
+         * to remove the current event listener
+         *
+         * @note The callback is only invoked for non-sensor contacts. That is,
+         * if one of the two colliders in contact is a sensor, the on stay
+         * event will not be triggered. The event is also not triggered if the
+         * body the collider is attached to is not awake
+         *
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see onContactBegin, onContactEnd and setSensor
+         */
+        void onContactStay(const CollisionCallback& callback);
+
+        /**
+         * @internal
+         * @brief Emit a contact event
+         * @param event The contact event to be emitted
+         * @param other The collider that triggered the event
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void emitContact(const std::string& event, Collider* other);
 
         /**
          * @brief Destructor
@@ -399,7 +478,7 @@ namespace ime {
          * @brief Attach the collider ot a rigid body
          * @param body The rigid body to attach the collider to
          */
-        void setBody(Body& body);
+        void setBody(Body* body);
 
         /**
          * @brief Update the colliders collision filter
@@ -407,14 +486,15 @@ namespace ime {
         void updateCollisionFilter();
 
     private:
-        using BodyRef = std::reference_wrapper<Body>;
-
         Type type_;                          //!< The type of the collider
-        std::unique_ptr<BodyRef> body_;      //!< The body this collider is attached to
+        Body* body_;                         //!< The body this collider is attached to
         PropertyContainer userData_;         //!< Application specific collider data
         CollisionFilterData filterData_;     //!< Stores the collision filter data for the collider
         std::uint16_t prevCollisionBitMask_; //!< Previous collision bitmask before setEnable(false)
         bool hasRigidBody_;                  //!< A flag indicating whether or not the collider is attached to a rigid body
+        CollisionCallback onContactBegin_;   //!< Function called when the collider starts overlapping with another collider
+        CollisionCallback onContactEnd_;     //!< Function called when the collider ceases overlapping with another collider
+        CollisionCallback onContactStay_;    //!< Function called while the collider remains in contact with another collider
         friend class Body;                   //!< Needs access to constructor
 
         std::unique_ptr<b2Fixture, std::function<void(b2Fixture*)>> fixture_; //!< Internal collider

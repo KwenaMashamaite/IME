@@ -273,19 +273,21 @@ namespace ime {
          * nullptr to remove the current callback
          *
          * A collision begin handler may be registered on the game object or on
-         * the rigid body attached to the game object or on both. However, it
-         * is advised to register the handler on either the game object or the
-         * rigid Body because registering the handler on both objects will result
-         * in the handler being executed twice each time the event is fired
+         * the collider that is attached to the game objects rigid body or on
+         * both. However, exercise caution as registering the same handler on
+         * both objects will result in the handler being executed twice each
+         * time the event is fired
          *
          * @note A collision begin event can only occur if the game object has a
          * rigid body attached to it and the rigid body has a Collider attached
          * to it
          *
-         * @see attachRigidBody
-         * @see onCollisionEnd
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see attachRigidBody, onCollisionStay and onCollisionEnd
          */
-        void onCollisionStart(CollisionCallback callback);
+        void onCollisionStart(const CollisionCallback& callback);
 
         /**
          * @brief Add an event listener to a collision end event
@@ -297,20 +299,47 @@ namespace ime {
          * respectively. Pass nullptr to remove the current callback.
          *
          * A collision end handler may be registered on the game object or on
-         * the rigid body attached to the game object or on both. However, it
-         * is advised to register the handler on either the game object or the
-         * rigid Body because registering the handler on both objects will
-         * result in the handler being executed twice each time the event is
-         * fired
+         * the collider that is attached to the game objects rigid body or on
+         * both. However, exercise caution as registering the same handler on
+         * both objects will result in the handler being executed twice each
+         * time the event is fired
          *
          * @note A collision end event can only occur if the game object has a
          * rigid body attached to it and the rigid body has a Collider attached
          * to it
          *
-         * @see attachRigidBody
-         * @see onCollisionStart
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see attachRigidBody, onCollisionStart and onCollisionStay
          */
-        void onCollisionEnd(CollisionCallback callback);
+        void onCollisionEnd(const CollisionCallback& callback);
+
+        /**
+         * @brief Add an event listener to a collision stay event
+         * @param callback The function to be executed when event is fired
+         *
+         * The callback function is called while this game object remains in
+         * contact with another game object. The callback is passed this game
+         * object and the game object that is currently in contact with this
+         * game object respectively. Pass nullptr to remove the current callback
+         *
+         * A collision stay handler may be registered on the game object or on
+         * the collider that is attached to the game objects rigid body or on
+         * both. However, exercise caution as registering the same handler on
+         * both objects will result in the handler being executed twice each
+         * time the event is fired
+         *
+         * @note A collision stay event can only occur if the game object has
+         * a rigid body attached to it and the rigid body is awake and has a
+         * Collider attached to it that is not a sensor
+         *
+         * @warning Don't keep the pointers passed to the callback, they are
+         * invalidated when the callback execution terminates
+         *
+         * @see attachRigidBody, onCollisionStart and onCollisionEnd
+         */
+        void onCollisionStay(const CollisionCallback& callback);
 
         /**
          * @brief Get the game objects transform
@@ -354,8 +383,7 @@ namespace ime {
          * @internal
          * @brief Emit a collision event on the game object
          * @param event Collision event to be emitted
-         * @param other The game object that is colliding or ceased colliding
-         *              with this game object
+         * @param other The game object that triggered the event
          *
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
@@ -386,6 +414,7 @@ namespace ime {
         int destructionId_;                   //!< Scene destruction listener id
         PropertyContainer userData_;          //!< Used to store metadata about the object
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
+        CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa
     };
 }
