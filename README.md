@@ -34,7 +34,7 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/latest/download/IME-1.0.0.zip). 
+The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.0-beta.7). 
 In addition, IME has dependencies on other libraries that must be downloaded.
 
 - Download [SFML 2.5.1](https://github.com/KwenaMashamaite/IME/releases/latest/download/SFML-2.5.1.zip)
