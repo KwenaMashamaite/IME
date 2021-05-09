@@ -115,6 +115,25 @@ namespace ime {
         void init(Engine& engine);
 
         /**
+         * @brief Initialize scene
+         *
+         * This function is called by the game engine when this class is ready
+         * to be used. It is called once after the constructor but before
+         * onEnter(). Note that IME scene functions cannot be called in the
+         * constructor, doing so is undefined behavior. Thus, this function is
+         * intended for situation where IME scene functions need to be accessed
+         * before the scene is entered. In addition, unlike onEnter(), this
+         * function is called after the scene is pushed to the engine. This
+         * means that it will be invoked regardless of the running state of
+         * the engine
+         *
+         * Note that IME will never put anything inside this function,
+         * therefore you don't have to call the base class method in your
+         * implementation
+         */
+        virtual void onInit() {};
+
+        /**
          * @brief Enter the scene
          *
          * This function will be called by the game engine when the scene
@@ -135,9 +154,9 @@ namespace ime {
          * global input manager found in the Engine. The function is called
          * once per frame
          *
-         * Note that IME will never put anything inside this function,
-         * therefore you don't have to call the base class method in your
-         * implementation
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore you don't have to call the base class
+         * method in your implementation
          */
         virtual void handleEvent(Event event) {IME_UNUSED(event);};
 

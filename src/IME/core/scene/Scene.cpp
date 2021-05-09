@@ -78,6 +78,7 @@ namespace ime {
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
         cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
         guiContainer_.setTarget(engine.getRenderTarget());
+        onInit();
     }
 
     bool Scene::unsubscribe_(const std::string &event, int id) {
