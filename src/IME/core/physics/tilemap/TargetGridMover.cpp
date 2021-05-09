@@ -31,29 +31,38 @@ namespace ime {
         pathFinder_(std::make_unique<BFS>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         movementStarted_{false},
-        targetTileChangedWhileMoving_{false}
+        targetTileChangedWhileMoving_{false},
+        isAdaptiveMoveEnabled_{false}
     {
         IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
 
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
-        enableAdaptiveMovement(false);
+        setAdaptiveMoveEnable(false);
 
         onTargetTileReset([this](Index index) {
             targetTileIndex_ = index;
         });
 
-        onTargetChanged([this](GameObject* newTarget) {
-            if (newTarget && movementStarted_) {
+        onPropertyChange("target", [this](const Property& property) {
+            if (property.getValue<GameObject*>() && movementStarted_) {
                 generatePath();
                 moveTarget();
             }
         });
 
-        onAdjacentTileReached([this](Index) {
-            if (adjacentTileHandler_)
-                adjacentTileHandler_();
+        onAdjacentMoveEnd([this](ime::Index) {
+            if (isAdaptiveMoveEnabled_) {
+                generatePath();
+            } else {
+                if (targetTileChangedWhileMoving_) {
+                    targetTileChangedWhileMoving_ = false;
+                    generatePath();
+                }
+            }
+
+            moveTarget();
         });
 
         onTileCollision([this](Index) {
@@ -63,11 +72,9 @@ namespace ime {
             }
         });
 
-        onObstacleCollision([this](GameObject* movedTarget, GameObject*) {
-            if (movedTarget) {
-                generatePath();
-                moveTarget();
-            }
+        onGameObjectCollision(GameObject::Type::Obstacle, [this](GameObject*, GameObject*) {
+            generatePath();
+            moveTarget();
         });
     }
 
@@ -95,6 +102,11 @@ namespace ime {
 
     const std::stack<Index> &TargetGridMover::getPath() const {
         return pathToTargetTile_;
+    }
+
+    void TargetGridMover::clearPath() {
+        while (!pathToTargetTile_.empty())
+            pathToTargetTile_.pop();
     }
 
     bool TargetGridMover::isDestinationReachable(Index index) {
@@ -160,30 +172,23 @@ namespace ime {
         }
     }
 
-    void TargetGridMover::enableAdaptiveMovement(bool isAdaptive) {
-        if (isAdaptive) {
-            adjacentTileHandler_ = [this]{
-                generatePath();
-                moveTarget();
-            };
-        } else {
-            adjacentTileHandler_ = [this] {
-                if (targetTileChangedWhileMoving_) {
-                    targetTileChangedWhileMoving_ = false;
-                    generatePath();
-                }
-                moveTarget();
-            };
-        }
+    void TargetGridMover::setAdaptiveMoveEnable(bool enable) {
+        if (isAdaptiveMoveEnabled_ == enable)
+            return;
+
+        isAdaptiveMoveEnabled_ = enable;
+        emitChange(Property{"adaptiveMoveEnable", isAdaptiveMoveEnabled_});
+    }
+
+    bool TargetGridMover::isAdaptiveMoveEnabled() const {
+        return isAdaptiveMoveEnabled_;
     }
 
     int TargetGridMover::onDestinationReached(Callback<Index> callback) {
-        return onAdjacentTileReached(
-            [this, callback = std::move(callback)](Index index) {
-                if (targetTileIndex_ == index)
-                    callback(index);
-            }
-        );
+        return onAdjacentMoveEnd([this, callback = std::move(callback)](Index index) {
+            if (targetTileIndex_ == index)
+                callback(index);
+        });
     }
 
     TargetGridMover::~TargetGridMover() {

@@ -97,6 +97,17 @@ namespace ime {
         const std::stack<Index>& getPath() const;
 
         /**
+         * @brief Clear the current path of the target
+         *
+         * If the target is currently en route on this path, it will stop
+         * when it gets to its currently targeted adjacent tile. In addition,
+         * if the targets movement was stopped while he was moving to an
+         * adjacent tile and is resumed after the path is cleared the target
+         * will resume the move to an adjacent tile and stop thereafter
+         */
+        void clearPath();
+
+        /**
          * @brief Check whether or not a destination is reachable
          * @param index Destination to be checked
          * @return True if the destination is reachable from the targets
@@ -133,24 +144,32 @@ namespace ime {
         void stopMovement();
 
         /**
-         * @brief Adaptively avoid solid tiles and obstacles
-         * @param isAdaptive True to enable, otherwise false
+         * @brief Enable or disable adaptive movement
+         * @param enable True to enable, otherwise false
          *
-         * When enabled, the target will adaptively avoid collisions with
-         * solid tiles and obstacles. The targets path is updated every
-         * time it moves from one tile to the next. This makes the target
-         * aware of tile state changes as they happen
+         * This function affects how the target behaves when its current path
+         * to a destination tile is blocked by a solid tile or an obstacle.
          *
-         * When disabled, the target will continue moving in its current
-         * path to the destination until it either collides with something
-         * or reaches the destination. The targets path is updated each
-         * time the destination changes. Therefore if it remains fixed the
-         * target will not know of any tile state changes until it gets to
-         * that tile
+         * When smart move is enabled, the target immediately attempts to find
+         * another path to its destination, in other words it can see ahead.
+         * When smart move is disabled the target will continue to move along
+         * the blocked path until it gets to the roadblock. Only then will it
+         * attempt to find another path
          *
-         * Adaptive movement is disabled by default
+         * Note that if the grid is static, its advised to keep adaptive move
+         * disabled for performance reasons
+         *
+         * By default, adaptive movement is disabled
          */
-        void enableAdaptiveMovement(bool isAdaptive);
+        void setAdaptiveMoveEnable(bool enable);
+
+        /**
+         * @brief Check if adaptive movement is enabled or not
+         * @return True if enabled, otherwise false
+         *
+         * @see setAdaptiveMoveEnable
+         */
+        bool isAdaptiveMoveEnabled() const;
 
         /**
          * @brief Add an event listener to a destination reached event
@@ -163,7 +182,7 @@ namespace ime {
          * The callback is passed the destination tile of the target after it
          * reaches it
          *
-         * @see onAdjacentTileReached
+         * @see onAdjacentMoveEnd
          */
         int onDestinationReached(Callback<Index> callback);
 
@@ -196,7 +215,7 @@ namespace ime {
         std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
         bool movementStarted_;                        //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion
-        Callback<> adjacentTileHandler_;              //!< Function executed every time target reaches adjacent tile
+        bool isAdaptiveMoveEnabled_;                  //!< A flag indicating whether or not adaptive movement is enabled
     };
 }
 

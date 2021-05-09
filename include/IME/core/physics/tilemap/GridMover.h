@@ -89,9 +89,10 @@ namespace ime {
          * @param tilemap The grid the game object is in
          * @param gameObject The game object to be controlled by the grid mover
          *
-         * @warning You may omit the game object if you want to set it later,
-         * However if the target is provided @a gameObject != nullptr, then
-         * it must be placed in the grid prior to instantiation of this class
+         * @warning If @a gameObject is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a gameObject
+         * is given, it must be in the grid prior to constructor call, otherwise
+         * the grid mover construction will fail
          *
          * @see setTarget
          */
@@ -151,8 +152,9 @@ namespace ime {
          *
          * Provide nullptr as argument to remove current target
          *
-         * @warning if the target is not a nullptr, then it must exist in
-         * the grid prior to function call
+         * @warning if the @a target is not a @a nullptr, then it must exist
+         * in the grid and have a rigid Body of time Body::Type::Kinematic
+         * attached to it prior to function call
          */
         void setTarget(GameObject* target);
 
@@ -218,6 +220,7 @@ namespace ime {
          * @return The grid in which the target is being moved in
          */
         TileMap& getGrid();
+        const TileMap& getGrid() const;
 
         /**
          * @brief Check if target is moving or not
@@ -232,23 +235,6 @@ namespace ime {
         bool isTargetMoving() const;
 
         /**
-         * @brief Update entity movement in the grid
-         * @param deltaTime Time passed since movement was last updated
-         *
-         * The target can only move one tile at a time and cannot be instructed
-         * to move to another tile while it is currently moving to one of its
-         * adjacent tiles. After it reaching it's target tile it stops moving
-         * until instructed to move again. Therefore if the target is to be
-         * moved multiple tiles, the request to change direction must be made
-         * immediately after the target reaches its destination
-         *
-         * @see onAdjacentTileReached and requestDirectionChange
-         *
-         * @warning The target will never move if this function is never called
-         */
-        virtual void update(Time deltaTime);
-
-        /**
          * @brief Force the target to reach it's destination
          *
          * The destination in this context is always the adjacent tile the
@@ -256,13 +242,6 @@ namespace ime {
          * target is not moving towards any tile
          */
         void teleportTargetToDestination();
-
-        /**
-         * @brief Add an event listener to a target change event
-         * @param callback Function to execute when the target changes
-         * @return The event listeners identification number
-         */
-        int onTargetChanged(const Callback<GameObject*>& callback);
 
         /**
          * @brief Add an event listener to a move begin event
@@ -277,9 +256,9 @@ namespace ime {
          * @note When controlled by a grid mover, the game object will always
          * move one tile at a time, regardless of how fast it's moving
          *
-         * @see onAdjacentTileReached
+         * @see onAdjacentMoveEnd
          */
-        int onMoveBegin(const Callback<Index>& callback);
+        int onAdjacentMoveBegin(const Callback<Index>& callback);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
@@ -295,9 +274,9 @@ namespace ime {
          *
          * The callback is passed the index of the tile the target moved to
          *
-         * @see onMoveBegin
+         * @see onAdjacentMoveBegin
          */
-        int onAdjacentTileReached(const Callback<Index>& callback);
+        int onAdjacentMoveEnd(const Callback<Index>& callback);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
@@ -311,6 +290,8 @@ namespace ime {
          * it occupied before the collision. This behaviour is not removable,
          * however, it may be overridden since the internal handler is called
          * first before alerting external handlers
+         *
+         * @see unsubscribe
          */
         int onGridBorderCollision(const Callback<>& callback);
 
@@ -326,81 +307,37 @@ namespace ime {
          * by moving it back to its previous tile after the collision
          *
          * The callback is passed the index of the tile the target collided with
+         *
+         * @see unsubscribe
          */
         int onTileCollision(const Callback<Index>& callback);
 
         /**
-         * @brief Add an event listener to an obstacle collision
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
+         * @brief Add an event listener to a an actor collision
+         * @param type The type of game object to listen for collisions with
+         * @param callback The function to be executed when the collision take place
+         * @return The event listeners unique identifier
          *
-         * This event is emitted when the target collides with an obstacle
-         * in the grid. By default the event is handled internally before
-         * its emitted to the outside. The internal handler prevents the
-         * target from occupying the same tile as the obstacle by moving it
-         * back to its previous tile after the collision
+         * The callback is invoked when the target collides with another game
+         * object of type @a type. On invocation it is passed the target and
+         * the game object it collided with respectively.
          *
-         * The callback is passed the target as the first argument and the
-         * obstacle it collided with as the second argument
+         * @note A grid mover registers a collision between two game objects
+         * only when they occupy the same tile. For contact based collisions
+         * use rigid Body physics
+         *
+         * @see unsubscribe
          */
-        int onObstacleCollision(const CollisionCallback& callback);
+        int onGameObjectCollision(GameObject::Type type, const CollisionCallback& callback);
+        int onGameObjectCollision(const CollisionCallback& callback);
 
         /**
-         * @brief Add an event listener to a collectable collision event
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with a collectable
-         * in the grid. The callback is passed the target as the first argument
-         * and the collectable it collided with as the second argument
+         * @brief Remove an event listener from the grid movers event list
+         * @param handlerId The unique identification number of the listener
+         * @return True if the event listener was removed or false if no such
+         *         listener exist in the grid movers event list
          */
-        int onCollectableCollision(const CollisionCallback& callback);
-
-        /**
-         * @brief Add an event listener to an enemy collision event
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with an enemy in the
-         * grid. The callback is passed the target as the first argument and
-         * the enemy it collided with as the second argument
-         */
-        int onEnemyCollision(const CollisionCallback& callback);
-
-        /**
-         * @brief Add an event listener to a player collision event
-         * @param callback Function to execute when the collision takes place
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with a player in the
-         * grid. The callback is passed the target as the first argument and
-         * the player it collided with as the second argument
-         */
-        int onPlayerCollision(const CollisionCallback& callback);
-
-        /**
-         * @brief Remove a collision handler
-         * @param id Identification number of the handler
-         * @return True if the handler was removed or false if no such handler
-         *         exits
-         *
-         * The identification number is the number returned when an event
-         * listener was added to a collision event
-         */
-        bool removeCollisionHandler(int id);
-
-        /**
-         * @brief Remove an event listener from an event
-         * @param event Name of the event to remove event listener from
-         * @param id Identification number of the event listener
-         * @return True if the event listener was removed or false if the
-         *         given event does not have an event listener with the
-         *         given id
-         *
-         * The identification number is the number returned when an event
-         * listener was added to an events
-         */
-        bool removeEventListener(const std::string& event, int id);
+        bool unsubscribe(int handlerId);
 
         /**
          * @internal
@@ -416,6 +353,26 @@ namespace ime {
          * @param callback Function to execute when the target tile is reset
          */
         void onTargetTileReset(const Callback<Index>& callback);
+
+        /**
+         * @internal
+         * @brief Update entity movement in the grid
+         * @param deltaTime Time passed since movement was last updated
+         *
+         * The target can only move one tile at a time and cannot be instructed
+         * to move to another tile while it is currently moving to one of its
+         * adjacent tiles. After it reaching it's target tile it stops moving
+         * until instructed to move again. Therefore if the target is to be
+         * moved multiple tiles, the request to change direction must be made
+         * immediately after the target reaches its destination
+         *
+         * @warning The target will never move if this function is never called
+         *
+         * @note This function is intended for internal use only
+         *
+         * @see onAdjacentMoveEnd and requestDirectionChange
+         */
+        virtual void update(Time deltaTime);
 
         /**
          * @brief Destructor

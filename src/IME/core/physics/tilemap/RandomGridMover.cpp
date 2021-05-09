@@ -31,46 +31,40 @@ namespace ime {
         currDirection_(Unknown),
         prevDirection_(Unknown),
         movementStarted_{false},
-        isAdvance_{false},
-        switchToAdvanced_{false},
+        isSmartMoveEnabled_{false},
+        switchToSmartMove_{false},
         switchToNormal_{false},
-        targetGridMover_(tileMap, target)
+        smartMover_(tileMap, target)
     {
-        onTargetChanged([this](GameObject* newTarget) {
-            if (newTarget) {
+        smartMover_.setMaxLinearSpeed(getMaxLinearSpeed());
+
+        onPropertyChange("target", [this](const Property& property) {
+            if (auto* newTarget = property.getValue<GameObject*>(); newTarget) {
                 prevDirection_ = currDirection_;
+                smartMover_.setTarget(newTarget);
+                smartMover_.setMaxLinearSpeed(getMaxLinearSpeed());
+
                 if (movementStarted_)
                     generateNewDirection();
-                // A grid mover sets the velocity of the target to zero after receiving
-                // it so that it can be set when it is time to move the target.
-                //
-                // The RandomGrid mover will set the velocity of the target to zero
-                // (before emitting a "targetChange" event). So we need to set it back so that
-                // the TargetGridMover can also initialize properly, otherwise it will initialize
-                // with a move velocity of zero and the target will not move when advanced
-                // movement is enabled (Normal random movement uses this class while advanced
-                // random movement delegates to a TargetGridMover class).
-                newTarget->getRigidBody()->setLinearVelocity(getMaxLinearSpeed());
             }
-            targetGridMover_.setTarget(newTarget);
         });
 
         onTileCollision([this](Index) {
             revertAndGenerateDirection();
         });
 
-        onObstacleCollision([this](GameObject* , GameObject*) {
+        onGameObjectCollision(GameObject::Type::Obstacle, [this](GameObject*, GameObject*) {
             revertAndGenerateDirection();
         });
 
-        onAdjacentTileReached([this](Index) {
-            if (!isAdvance_ && switchToAdvanced_) {
-                switchToAdvanced_ = false;
-                isAdvance_ = true;
-                targetGridMover_.resetTargetTile();
+        onAdjacentMoveEnd([this](Index) {
+            if (switchToSmartMove_) {
+                switchToSmartMove_ = false;
+                isSmartMoveEnabled_ = true;
+                smartMover_.resetTargetTile();
                 setRandomPosition();
-                targetGridMover_.startMovement();
-            } else if (movementStarted_ && !isAdvance_) {
+                smartMover_.startMovement();
+            } else if (movementStarted_) {
                 resetTargetTile();
                 generateNewDirection();
             }
@@ -80,21 +74,19 @@ namespace ime {
             revertAndGenerateDirection();
         });
 
-        targetGridMover_.onDestinationReached([this](Index) {
+        smartMover_.onDestinationReached([this](Index) {
             setRandomPosition();
         });
 
-        targetGridMover_.onAdjacentTileReached([this](Index) {
-            if (isAdvance_ && switchToNormal_) {
+        smartMover_.onAdjacentMoveEnd([this](Index) {
+            if (switchToNormal_) {
                 switchToNormal_ = false;
-                isAdvance_ = false;
+                isSmartMoveEnabled_ = false;
                 resetTargetTile();
                 if (movementStarted_)
                     generateNewDirection();
             }
         });
-
-        enableAdvancedMovement(false);
     }
 
     std::string RandomGridMover::getClassName() const {
@@ -104,8 +96,8 @@ namespace ime {
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;
-            if (isAdvance_)
-                targetGridMover_.startMovement();
+            if (isSmartMoveEnabled_)
+                smartMover_.startMovement();
             else
                 generateNewDirection();
         }
@@ -113,13 +105,13 @@ namespace ime {
 
     void RandomGridMover::stopMovement() {
         movementStarted_ = false;
-        if (isAdvance_)
-            targetGridMover_.stopMovement();
+        if (isSmartMoveEnabled_)
+            smartMover_.stopMovement();
     }
 
     Index RandomGridMover::getTargetTileIndex() const {
-        if (isAdvance_)
-            return targetGridMover_.getTargetTileIndex();
+        if (isSmartMoveEnabled_)
+            return smartMover_.getTargetTileIndex();
 
         return GridMover::getTargetTileIndex();
     }
@@ -151,26 +143,30 @@ namespace ime {
         }
     }
 
-    void RandomGridMover::enableAdvancedMovement(bool enable) {
-        if (!isAdvance_ && enable) {
-            IME_ASSERT(targetGridMover_.getTarget(), "Cannot enable advanced movement without a target")
+    void RandomGridMover::setSmartMoveEnable(bool enable) {
+        if (!isSmartMoveEnabled_ && enable) {
+            IME_ASSERT(smartMover_.getTarget(), "Cannot enable advanced movement without a target")
             if (isTargetMoving())
-                switchToAdvanced_ = true;
+                switchToSmartMove_ = true;
             else {
-                isAdvance_ = true;
-                targetGridMover_.resetTargetTile();
+                isSmartMoveEnabled_ = true;
+                smartMover_.resetTargetTile();
                 setRandomPosition();
                 if (movementStarted_)
-                    targetGridMover_.startMovement();
+                    smartMover_.startMovement();
             }
-        } else if (isAdvance_ && !enable) {
-            if (targetGridMover_.isTargetMoving())
+        } else if (isSmartMoveEnabled_ && !enable) {
+            if (smartMover_.isTargetMoving())
                 switchToNormal_ = true;
             else {
-                isAdvance_ = false;
+                isSmartMoveEnabled_ = false;
                 resetTargetTile();
             }
         }
+    }
+
+    bool RandomGridMover::isSmartMoveEnabled() const {
+        return isSmartMoveEnabled_;
     }
 
     void RandomGridMover::setRandomPosition() {
@@ -180,14 +176,14 @@ namespace ime {
         Index newDestination;
         do {
             newDestination = Index{generateRandomRow(), generateRandomColm()};
-        } while(!targetGridMover_.isDestinationReachable(newDestination));
+        } while(!smartMover_.isDestinationReachable(newDestination));
 
-        targetGridMover_.setDestination(newDestination);
+        smartMover_.setDestination(newDestination);
     }
 
     void RandomGridMover::update(Time deltaTime) {
-        if (isAdvance_)
-            targetGridMover_.update(deltaTime);
+        if (isSmartMoveEnabled_)
+            smartMover_.update(deltaTime);
         else
             GridMover::update(deltaTime);
     }

@@ -39,7 +39,7 @@ namespace ime {
         /**
          * @brief Create a random grid mover object
          * @param tileMap Grid to move target in
-         * @param target GameObject to be moved in the grid
+         * @param target Game object to be moved in the grid
          */
         explicit RandomGridMover(TileMap &tileMap, GameObject* target = nullptr);
 
@@ -81,6 +81,29 @@ namespace ime {
         Index getTargetTileIndex() const override;
 
         /**
+         * @brief Enable or disable smart random movement
+         * @param enable True to enable or false to disable
+         *
+         * In smart mode, the target can get itself out of a dead end. As a
+         * result the no reversing direction rule is overridden. Note for
+         * large grids or grids that have a lot of accessible tiles, smart
+         * mode may have an impact on performance
+         *
+         * @note In smart mode, the target cannot move diagonally
+         *
+         * By default smart mode is disabled
+         */
+        void setSmartMoveEnable(bool enable);
+
+        /**
+         * @brief Check if smart mode is enabled or not
+         * @return True if enabled, otherwise false
+         *
+         * @see setSmartMoveEnable
+         */
+        bool isSmartMoveEnabled() const;
+
+        /**
          * @internal
          * @brief Update the game object movement in the grid
          * @param deltaTime Time passed since movement was last updated
@@ -89,23 +112,6 @@ namespace ime {
          * never be called outside of IME
          */
         void update(Time deltaTime) override;
-
-        /**
-         * @brief Enable or disable advanced random movement
-         * @param enable True to enable or false to disable
-         *
-         * In advanced mode, instead of choosing a random adjacent tile, a
-         * random tile is anywhere in the grid is selected and the target
-         * advances to that tile. A new random tile is generated after the
-         * target reaches the current destination tile and so on. This
-         * prevents the stop and go movement. However this is expensive
-         * and the game may slow down depending on the size of the tilemap
-         *
-         * Advanced movement is disabled at by default
-         *
-         * @warning This function is experimental
-         */
-        void enableAdvancedMovement(bool enable);
 
         /**
          * @brief Destructor
@@ -121,7 +127,7 @@ namespace ime {
         /**
          * @brief Set a random position to go to in the grid
          *
-         * This function is only valid when in advance mode
+         * This function is only valid when in smart mode
          */
         void setRandomPosition();
 
@@ -139,13 +145,13 @@ namespace ime {
         void revertAndGenerateDirection();
 
     private:
-        Direction currDirection_;         //!< Keeps track of the targets previous direction
-        Direction prevDirection_;         //!< Keeps track of the targets previous direction
-        bool movementStarted_;            //!< Tracks whether the target movement has been initiated or not
-        bool isAdvance_;                  //!< Flags whether or not advanced random movement is enabled
-        bool switchToAdvanced_;           //!< A flag indicating whether or not to switch to advanced movement
-        bool switchToNormal_;             //!< A flag indicating whether or not to switch to default movement
-        TargetGridMover targetGridMover_; //!< Handles grid movement in advance mode
+        Direction currDirection_;    //!< Keeps track of the targets previous direction
+        Direction prevDirection_;    //!< Keeps track of the targets previous direction
+        bool movementStarted_;       //!< A flag indicating whether or not movement has been started
+        bool isSmartMoveEnabled_;    //!< A flag indicating whether or not smart mode is enabled
+        bool switchToSmartMove_;     //!< A flag indicating whether or not to switch to smart movement
+        bool switchToNormal_;        //!< A flag indicating whether or not to switch to default movement
+        TargetGridMover smartMover_; //!< Handles grid movement in smart mode
     };
 }
 
