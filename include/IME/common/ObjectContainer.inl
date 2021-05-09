@@ -165,6 +165,7 @@ inline void ObjectContainer<T>::removeIf(const Predicate& predicate) {
 template <typename T>
 inline void ObjectContainer<T>::removeAll() {
     objects_.clear();
+    groups_.clear();
 }
 
 template <typename T>
