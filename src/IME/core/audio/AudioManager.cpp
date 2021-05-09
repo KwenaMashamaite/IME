@@ -35,7 +35,7 @@ namespace ime::audio {
         isMuted_(false)
     {}
 
-    void AudioManager::play(Type audioType, const std::string &filename, bool isLooped) {
+    Audio* AudioManager::play(Type audioType, const std::string &filename) {
         std::unique_ptr<Audio> audio;
         if (audioType == Type::Music) {
             audio = std::make_unique<Music>();
@@ -44,10 +44,11 @@ namespace ime::audio {
             audio = std::make_unique<SoundEffect>();
             audio->setVolume(sfxVolume_);
         }
-        audio->setLoop(isLooped);
+
         audio->setSource(filename);
         audio->play();
         playingAudio_.push_back(std::move(audio));
+        return playingAudio_.back().get();
     }
 
     void AudioManager::setVolumeFor(Type audioType, float volume) {

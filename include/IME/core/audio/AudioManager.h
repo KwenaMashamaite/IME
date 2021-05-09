@@ -86,13 +86,19 @@ namespace ime {
              * @param filename Filename of the audio to play
              * @param isLooped True if audio should be looped, otherwise false
              * @throws FileNotFound if the audio file cannot be found on the disk
+             * @return Pointer to the audio file after it starts playing
              *
              * The audio files are played in a separate thread. This means
              * that, the main thread is not blocked and other audio file may
              * be played simultaneously.
+             *
+             * Note that the returned pointer may be used to manipulate properties
+             * of the audio file such as volume, pitch, loop state etc. However,
+             * it must not be kept alive as it will be invalidated when the
+             * audio file stops playing. Trying to access the audio file after
+             * it has stopped playing is undefined behavior
              */
-            void play(Type audioType, const std::string &filename,
-                  bool isLooped = false);
+            Audio* play(Type audioType, const std::string &filename);
 
             /**
              * @brief Set the volume for an audio type
