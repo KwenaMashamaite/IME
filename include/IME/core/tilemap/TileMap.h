@@ -253,7 +253,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTile(const Index& index);
+        const Tile& getTile(const Index& index) const;
 
         /**
          * @brief Get the tile at at certain position
@@ -264,7 +264,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTile(const Vector2f& position);
+        const Tile& getTile(const Vector2f& position) const;
 
         /**
          * @brief Get the tile above a certain tile
@@ -274,7 +274,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileAbove(const Tile& tile);
+        const Tile& getTileAbove(const Tile& tile) const;
 
         /**
          * @brief Get the tile below a certain tile
@@ -284,7 +284,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileBelow(const Tile& tile);
+        const Tile& getTileBelow(const Tile& tile) const;
 
         /**
          * @brief Get the tile to the left of a certain tile
@@ -294,7 +294,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileLeftOf(const Tile& tile);
+        const Tile& getTileLeftOf(const Tile& tile) const;
 
         /**
          * @brief Get the tile to the right of a certain tile
@@ -304,14 +304,14 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileRightOf(const Tile& tile);
+        const Tile& getTileRightOf(const Tile& tile) const;
 
         /**
          * @brief Execute a callback function on every tile with a certain id
          * @param id Id of the tile
          * @param callback Function to execute
          */
-        void forEachTileWithId(char id, const Callback<const Tile&>& callback);
+        void forEachTileWithId(char id, const Callback<const Tile&>& callback) const;
 
         /**
          * @brief Execute a callback on all tiles except tiles with a
@@ -319,13 +319,13 @@ namespace ime {
          * @param id Id of the tiles to be ignored
          * @param callback Function to be executed
          */
-        void forEachTileExcept(char id, const Callback<const Tile&>& callback);
+        void forEachTileExcept(char id, const Callback<const Tile&>& callback) const;
 
         /**
          * @brief Execute a callback on all the tiles of the tilemap
          * @param callback Function to execute for each tile
          */
-        void forEachTile(const Callback<const Tile&>& callback);
+        void forEachTile(const Callback<const Tile&>& callback) const;
 
         /**
          * @brief Execute a callback function on each tile in a range
@@ -336,7 +336,7 @@ namespace ime {
          * @note Only horizontal ranges are supported
          */
         void forEachTileInRange(Index startPos, Index endPos,
-            const Callback<const Tile&>& callback);
+            const Callback<const Tile&>& callback) const;
 
         /**
          * @brief Get the tilemap render layers
@@ -402,7 +402,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void draw(Window &renderTarget);
+        void draw(Window &renderTarget) const;
 
         /**
          * @brief Add a sprite to the tilemap
@@ -456,7 +456,7 @@ namespace ime {
          * @return True if the child was removed or false if the child is not
          *         in the specified tile
          */
-        bool removeChildFromTile(const Tile& tile, GameObject* child);
+        bool removeChildFromTile(const Tile& tile, const GameObject* child);
 
         /**
          * @brief Remove an occupant of a tile
@@ -485,7 +485,7 @@ namespace ime {
          * @return True if the child was removed or false if the child does
          *         not exist in the grid
          */
-        bool removeChild(GameObject* child);
+        bool removeChild(const GameObject* child);
 
         /**
          * @brief Remove children from the grid using a condition
@@ -553,7 +553,7 @@ namespace ime {
          *
          * An invalid tile has a negative index
          */
-        const Tile& getTileOccupiedByChild(GameObject* child);
+        const Tile& getTileOccupiedByChild(const GameObject* child) const;
 
         /**
          * @brief Check if tile is occupied or not
@@ -594,7 +594,7 @@ namespace ime {
          * @brief Execute a callback for each child in the tilemap
          * @param callback Function to execute
          */
-        void forEachChild(const Callback<GameObject*>& callback);
+        void forEachChild(const Callback<GameObject*>& callback) const;
 
         /**
          * @brief Execute a callback for each child in a tile
@@ -605,7 +605,7 @@ namespace ime {
          * child being the occupant of the tile. The callback will be ignored
          * if the specified index is invalid or the tile is not occupied
          */
-        void forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback);
+        void forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) const;
 
         /**
          * @brief Get the number of occupants in a tile
@@ -653,7 +653,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileAbove(const Index& index);
+        const Tile& getTileAbove(const Index& index) const;
 
         /**
          * @brief Get the tile below a tile at a given location
@@ -663,7 +663,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileBelow(const Index& index);
+        const Tile& getTileBelow(const Index& index) const;
 
         /**
          * @brief Get the tile to the left of a tile at a given location
@@ -673,7 +673,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileLeftOf(const Index& index);
+        const Tile& getTileLeftOf(const Index& index) const;
 
         /**
          * @brief Get the tile to the right of a tile at a given location
@@ -683,7 +683,7 @@ namespace ime {
          *
          * A tile is invalid if it has a negative index
          */
-        const Tile& getTileRightOf(const Index& index);
+        const Tile& getTileRightOf(const Index& index) const;
 
         /**
          * @brief Set whether or not a tile is collidable

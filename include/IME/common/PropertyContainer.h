@@ -116,7 +116,7 @@ namespace ime {
          *
          * The callback is passed the property on each invocation
          */
-        void forEachProperty(const Callback<Property&>& callback);
+        void forEachProperty(const Callback<Property&>& callback) const;
 
         /**
          * @brief Remove all the stored properties from the container

@@ -365,7 +365,7 @@ namespace ime {
         return userData_;
     }
 
-    void Body::forEachCollider(const Callback<Collider*>& callback) {
+    void Body::forEachCollider(const Callback<Collider*>& callback) const {
         std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto& pair) {
             callback(pair.second.get());
         });

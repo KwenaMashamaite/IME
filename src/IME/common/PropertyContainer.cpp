@@ -55,7 +55,7 @@ namespace ime {
         return properties_.find(name) != properties_.end();
     }
 
-    void PropertyContainer::forEachProperty(const Callback<Property&>& callback) {
+    void PropertyContainer::forEachProperty(const Callback<Property&>& callback) const {
         std::for_each(properties_.begin(), properties_.end(), [&callback](auto property) {
             callback(property.second);
         });

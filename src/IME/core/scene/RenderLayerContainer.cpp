@@ -228,7 +228,7 @@ namespace ime {
         return layers_.size();
     }
 
-    void RenderLayerContainer::forEachLayer(const Callback& callback) {
+    void RenderLayerContainer::forEachLayer(const Callback& callback) const {
         std::for_each(layers_.begin(), layers_.end(), [&callback](auto& pair) {
             callback(pair.second);
         });

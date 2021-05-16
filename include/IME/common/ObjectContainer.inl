@@ -210,7 +210,7 @@ inline void ObjectContainer<T>::removeAllGroups() {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::forEach(const Callback<T*>& callback) {
+inline void ObjectContainer<T>::forEach(const Callback<T*>& callback) const {
     forEachNotInGroup(callback);
 
     // Recursively apply callback
@@ -220,13 +220,13 @@ inline void ObjectContainer<T>::forEach(const Callback<T*>& callback) {
 }
 
 template <typename T>
-inline void ObjectContainer<T>::forEachInGroup(const std::string& name, const Callback<T*>& callback) {
+inline void ObjectContainer<T>::forEachInGroup(const std::string& name, const Callback<T*>& callback) const {
     if (hasGroup(name))
         groups_.at(name)->forEach(callback);
 }
 
 template <typename T>
-inline void ObjectContainer<T>::forEachNotInGroup(const Callback<T*>& callback) {
+inline void ObjectContainer<T>::forEachNotInGroup(const Callback<T*>& callback) const {
     std::for_each(objects_.begin(), objects_.end(), [&callback](const std::unique_ptr<T>& uniquePtr) {
         callback(uniquePtr.get());
     });

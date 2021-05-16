@@ -300,7 +300,7 @@ namespace ime {
          *
          * @see forEachInGroup and forEachInGroup
          */
-        void forEach(const Callback<T*>& callback);
+        void forEach(const Callback<T*>& callback) const;
 
         /**
          * @brief Execute a callback for each object in a group
@@ -319,7 +319,7 @@ namespace ime {
          *
          * @see forEach and forEachNotInGroup
          */
-        void forEachInGroup(const std::string& name, const Callback<T*>& callback);
+        void forEachInGroup(const std::string& name, const Callback<T*>& callback) const;
 
         /**
          * @brief Apply a callback to all objects that do not belong to a group
@@ -328,7 +328,7 @@ namespace ime {
          *
          * @see forEach and forEachInGroup
          */
-        void forEachNotInGroup(const Callback<T*>& callback);
+        void forEachNotInGroup(const Callback<T*>& callback) const;
 
         /**
          * @brief Destructor

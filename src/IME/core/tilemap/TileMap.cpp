@@ -35,7 +35,8 @@ namespace ime {
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
         renderLayers_{renderLayers},
-        sprites_{renderLayers_}
+        sprites_{renderLayers_},
+        physicsSim_{nullptr}
     {
         invalidTile_.setIndex({-1, -1});
         mapPos_ = {0, 0};
@@ -62,7 +63,7 @@ namespace ime {
         return renderer_;
     }
 
-    const Tile& TileMap::getTile(const Vector2f &position) {
+    const Tile& TileMap::getTile(const Vector2f &position) const {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows)
                 if (tile.contains(position))
@@ -71,19 +72,19 @@ namespace ime {
         return invalidTile_;
     }
 
-    const Tile &TileMap::getTileAbove(const Tile &tile) {
+    const Tile &TileMap::getTileAbove(const Tile &tile) const {
         return getTileAbove(tile.getIndex());
     }
 
-    const Tile &TileMap::getTileBelow(const Tile &tile) {
+    const Tile &TileMap::getTileBelow(const Tile &tile) const {
         return getTileBelow(tile.getIndex());
     }
 
-    const Tile &TileMap::getTileLeftOf(const Tile &tile) {
+    const Tile &TileMap::getTileLeftOf(const Tile &tile) const {
         return getTileLeftOf(tile.getIndex());
     }
 
-    const Tile& TileMap::getTileRightOf(const Tile &tile) {
+    const Tile& TileMap::getTileRightOf(const Tile &tile) const {
         return getTileRightOf(tile.getIndex());
     }
 
@@ -198,7 +199,7 @@ namespace ime {
         });
     }
 
-    void TileMap::draw(Window &renderTarget) {
+    void TileMap::draw(Window &renderTarget) const {
         renderTarget.draw(backgroundTile_);
         forEachTile([&renderTarget](const Tile& tile) {
             renderTarget.draw(tile);
@@ -244,7 +245,7 @@ namespace ime {
         });
     }
 
-    const Tile& TileMap::getTile(const Index &index) {
+    const Tile& TileMap::getTile(const Index &index) const {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
         return invalidTile_;
@@ -309,7 +310,7 @@ namespace ime {
         return nullptr;
     }
 
-    void TileMap::forEachChild(const Callback<GameObject*>& callback) {
+    void TileMap::forEachChild(const Callback<GameObject*>& callback) const {
         std::for_each(children_.begin(), children_.end(), [&callback](auto& childList) {
             std::for_each(childList.second.begin(), childList.second.end(),
                 [&callback] (GameObject* child) {
@@ -318,9 +319,9 @@ namespace ime {
         });
     }
 
-    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) {
+    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) const {
         if (isTileOccupied(tile)) {
-            std::for_each(children_[tile.getIndex()].begin(), children_[tile.getIndex()].end(),
+            std::for_each(children_.at(tile.getIndex()).begin(), children_.at(tile.getIndex()).end(),
                 [&callback](GameObject* child) {
                     callback(child)
             ;});
@@ -339,7 +340,7 @@ namespace ime {
         });
     }
 
-    bool TileMap::removeChildFromTile(const Tile& tile, GameObject* child) {
+    bool TileMap::removeChildFromTile(const Tile& tile, const GameObject* child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
                 return removeOccupant(tile);
@@ -373,7 +374,7 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::removeChild(GameObject* child) {
+    bool TileMap::removeChild(const GameObject* child) {
         if (!child)
             return false;
         return removeChildWithId(child->getObjectId());
@@ -446,7 +447,7 @@ namespace ime {
         });
     }
 
-    void TileMap::forEachTile(const Callback<const Tile&>& callback) {
+    void TileMap::forEachTile(const Callback<const Tile&>& callback) const {
         std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
             std::for_each(row.begin(), row.end(), callback);
         });
@@ -458,21 +459,21 @@ namespace ime {
         });
     }
 
-    void TileMap::forEachTileWithId(char id, const Callback<const Tile&>& callback) {
+    void TileMap::forEachTileWithId(char id, const Callback<const Tile&>& callback) const {
         forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() == id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileExcept(char id, const Callback<const Tile&>& callback) {
+    void TileMap::forEachTileExcept(char id, const Callback<const Tile&>& callback) const {
         forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() != id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileInRange(Index startPos, Index endPos, const Callback<const Tile&>& callback) {
+    void TileMap::forEachTileInRange(Index startPos, Index endPos, const Callback<const Tile&>& callback) const {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
                 tiledMap_[startPos.row].begin() + endPos.colm,
@@ -482,19 +483,19 @@ namespace ime {
         }
     }
 
-    const Tile& TileMap::getTileAbove(const Index &index) {
+    const Tile& TileMap::getTileAbove(const Index &index) const {
         return getTile(Index{index.row - 1, index.colm});
     }
 
-    const Tile& TileMap::getTileBelow(const Index &index) {
+    const Tile& TileMap::getTileBelow(const Index &index) const {
         return getTile(Index{index.row + 1, index.colm});
     }
 
-    const Tile& TileMap::getTileLeftOf(const Index &index) {
+    const Tile& TileMap::getTileLeftOf(const Index &index) const {
         return getTile(Index{index.row, index.colm - 1});
     }
 
-    const Tile& TileMap::getTileRightOf(const Index &index) {
+    const Tile& TileMap::getTileRightOf(const Index &index) const {
         return getTile(Index{index.row, index.colm + 1});
     }
 
@@ -510,7 +511,7 @@ namespace ime {
         return {numOfColms_, numOfRows_};
     }
 
-    const Tile& TileMap::getTileOccupiedByChild(GameObject* child) {
+    const Tile& TileMap::getTileOccupiedByChild(const GameObject* child) const {
         return getTile(child->getTransform().getPosition());
     }
 
