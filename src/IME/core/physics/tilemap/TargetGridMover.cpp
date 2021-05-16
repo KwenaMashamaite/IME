@@ -24,12 +24,17 @@
 
 #include "IME/core/physics/tilemap/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
+#include "IME/graphics/shapes/RectangleShape.h"
+#include "IME/graphics/Window.h"
+#include "IME/utility/Utils.h"
 
 namespace ime {
     TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject* target) :
         GridMover(Type::Target, tileMap, target),
         pathFinder_(std::make_unique<BFS>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
+        pathColour_{utility::generateRandomColour()},
+        renderPath_{false},
         movementStarted_{false},
         targetTileChangedWhileMoving_{false},
         isAdaptiveMoveEnabled_{false}
@@ -189,6 +194,35 @@ namespace ime {
             if (targetTileIndex_ == index)
                 callback(index);
         });
+    }
+
+    void TargetGridMover::setPathViewEnable(bool showPath) {
+        renderPath_ = showPath;
+    }
+
+    bool TargetGridMover::isPathViewEnabled() const {
+        return renderPath_;
+    }
+
+    void TargetGridMover::renderPath(Window &window) const {
+        if (renderPath_) {
+            auto path = pathToTargetTile_;
+            path.push(getTargetTileIndex());
+            while (!path.empty()) {
+                auto index = path.top();
+                path.pop();
+                auto gridTileSize = getGrid().getTileSize();
+                static auto shape = RectangleShape();
+                shape.setSize({static_cast<float>(gridTileSize.x), static_cast<float>(gridTileSize.y)});
+                shape.setPosition(getGrid().getTile(index).getPosition());
+                if (!path.empty())
+                    shape.setFillColour(pathColour_);
+                else
+                    shape.setFillColour(Colour::Green);
+
+                window.draw(shape);
+            }
+        }
     }
 
     TargetGridMover::~TargetGridMover() {

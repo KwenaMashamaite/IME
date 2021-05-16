@@ -29,6 +29,8 @@
 #include "IME/core/path/IPathFinderStrategy.h"
 
 namespace ime {
+    class Window;
+
     /**
      * @brief Class for moving a game object to a specific position in the grid
      */
@@ -187,6 +189,29 @@ namespace ime {
         int onDestinationReached(Callback<Index> callback);
 
         /**
+         * @brief Set whether or not the targets path should be shown or not
+         * @param showPath True to show path, otherwise false
+         *
+         * By default, the path is not shown
+         */
+        void setPathViewEnable(bool showPath);
+
+        /**
+         * @brief Check if the targets path is shown or not
+         * @return True if path view is enabled, otherwise false
+         *
+         * @see setPathViewEnable
+         */
+        bool isPathViewEnabled() const;
+
+        /**
+         * @internal
+         * @brief Render the targets path
+         * @param window Window to render path on
+         */
+        void renderPath(Window& window) const;
+
+        /**
          * @brief Destructor
          */
         ~TargetGridMover() override;
@@ -213,6 +238,8 @@ namespace ime {
         std::unique_ptr<IPathFinderStrategy> pathFinder_; //!< Finds the path from the source to the target
         Index targetTileIndex_;                       //!< Index of the tile the game object wishes to go to
         std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
+        Colour pathColour_;                           //!< The colour of the targets path when rendered
+        bool renderPath_;                             //!< A flag indicating whether or not to render the targets path
         bool movementStarted_;                        //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion
         bool isAdaptiveMoveEnabled_;                  //!< A flag indicating whether or not adaptive movement is enabled

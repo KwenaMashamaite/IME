@@ -32,6 +32,8 @@
 #include "IME/core/time/Time.h"
 
 namespace ime {
+    class Window;
+
     /**
      * @brief A container for GridMover objects
      */
@@ -56,6 +58,16 @@ namespace ime {
          * should never be called outside of IME
          */
         void handleEvent(Event event);
+
+        /**
+         * @internal
+         * @brief Render the grid movers path
+         * @param window Window to render path on
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
+         */
+        void render(Window& window) const;
     };
 }
 
