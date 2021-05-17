@@ -123,9 +123,16 @@ namespace ime {
 
     void TargetGridMover::setPathFinder(std::unique_ptr<IPathFinderStrategy> pathFinder) {
         if (pathFinder) {
+            if (pathFinder_ && pathFinder_->getType() == pathFinder->getType())
+                return;
+
             pathFinder_ = std::move(pathFinder);
-            generatePath();
-            moveTarget();
+            if (isTargetMoving())
+                targetTileChangedWhileMoving_ = true; // Generate path using new path finder when target stops
+            else {
+                generatePath();
+                moveTarget();
+            }
         }
     }
 
