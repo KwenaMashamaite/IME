@@ -158,8 +158,17 @@ namespace ime {
             newDirection = Up;
         else if (Index{currentPosIndex.row + 1, currentPosIndex.colm} == nextPos)
             newDirection = Down;
+        else if (Index{currentPosIndex.row - 1, currentPosIndex.colm - 1} == nextPos)
+            newDirection = UpLeft;
+        else if (Index{currentPosIndex.row - 1, currentPosIndex.colm + 1} == nextPos)
+            newDirection = UpRight;
+        else if (Index{currentPosIndex.row + 1, currentPosIndex.colm - 1} == nextPos)
+            newDirection = DownLeft;
+        else if (Index{currentPosIndex.row + 1, currentPosIndex.colm + 1} == nextPos)
+            newDirection = DownRight;
         else
-            newDirection = Unknown;
+            return; // Unsupported direction
+
         requestDirectionChange(newDirection);
     }
 
