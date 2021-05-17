@@ -29,6 +29,33 @@
 #include <SFML/Window/Mouse.hpp>
 
 namespace ime::input {
+    std::string Mouse::buttonToString(Mouse::Button button) {
+        switch (button) {
+            case Button::Left:          return "Left";
+            case Button::Right:         return "Right";
+            case Button::Middle:        return "Middle";
+            case Button::XButton1:      return "XButton1";
+            case Button::XButton2:      return "XButton2";
+        }
+    }
+
+    Mouse::Button Mouse::stringToButton(const std::string &button) {
+        if (button == "Left")
+            return Button::Left;
+        else if (button == "Right")
+            return Button::Right;
+        else if (button == "Middle")
+            return Button::Middle;
+        else if (button == "XButton1")
+            return Button::XButton1;
+        else if (button == "XButton2")
+            return Button::XButton2;
+        else {
+            std::cerr << button << " is not a valid mouse button" << std::endl;
+            exit(-2);
+        }
+    }
+
     bool Mouse::isButtonPressed(Button button){
         return sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button));
     }

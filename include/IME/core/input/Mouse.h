@@ -73,6 +73,30 @@ namespace ime {
             };
 
             /**
+             * @brief Convert an enum Button value to its string representation
+             * @param button The button to be converted
+             * @return The given button as a string
+             *
+             * The returned string is the same as the enum value, that is, if
+             * @a button is Button::Left then the function will return "Left"
+             */
+            static std::string buttonToString(Button button);
+
+            /**
+             * @brief Convert a string representation of a button to enum value
+             * @param button The button to be converted
+             * @return The given key as an enum key value
+             *
+             * The returned enum button value is the same as the string value,
+             * that is, if @a button is "Left" then the function will return
+             * Button::Left
+             *
+             * @warning If the given string is not convertible to an enum button
+             * value, them the program will exit with an error
+             */
+            static Button stringToButton(const std::string& button);
+
+            /**
             * @brief Check if a mouse button is pressed or not
             * @param button Mouse button to be checked
             * @return True if a mouse button is pressed, otherwise false
