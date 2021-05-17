@@ -30,7 +30,6 @@
 #include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
 #include "IME/core/tilemap/Index.h"
-#include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/core/scene/RenderLayerContainer.h"
@@ -44,6 +43,13 @@
 
 namespace ime {
     using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
+
+    class GameObject;
+
+    /// @internal
+    namespace priv {
+        class Window;
+    }
 
     /**
      * @brief Class for creating a visual 2D grid.
@@ -402,7 +408,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void draw(Window &renderTarget) const;
+        void draw(priv::Window &renderTarget) const;
 
         /**
          * @brief Add a sprite to the tilemap

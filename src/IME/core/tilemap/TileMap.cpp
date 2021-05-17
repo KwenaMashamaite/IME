@@ -27,6 +27,7 @@
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/World.h"
+#include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/Window.h"
 
 namespace ime {
@@ -199,7 +200,7 @@ namespace ime {
         });
     }
 
-    void TileMap::draw(Window &renderTarget) const {
+    void TileMap::draw(priv::Window &renderTarget) const {
         renderTarget.draw(backgroundTile_);
         forEachTile([&renderTarget](const Tile& tile) {
             renderTarget.draw(tile);

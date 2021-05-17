@@ -31,9 +31,13 @@
 #include <map>
 
 namespace ime {
-    class Window;
     class Drawable;
     class GameObject;
+
+    /// @internal
+    namespace priv {
+        class Window;
+    }
 
     /**
      * @brief A layer for drawable entities
@@ -185,7 +189,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void render(Window& window) const;
+        void render(priv::Window& window) const;
 
         /**
          * @brief Destructor

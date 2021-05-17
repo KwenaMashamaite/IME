@@ -38,7 +38,7 @@ namespace ime::ui {
     public:
         GuiContainerImpl() = default;
 
-        explicit GuiContainerImpl(Window &window) :
+        explicit GuiContainerImpl(priv::Window &window) :
             sfmlGui_{window.getImpl()->getSFMLWindow()}
         {}
 
@@ -99,7 +99,7 @@ namespace ime::ui {
             widgets_.clear();
         }
 
-        void setTarget(Window &window) {
+        void setTarget(priv::Window &window) {
             sfmlGui_.setTarget(window.getImpl()->getSFMLWindow());
         }
 
@@ -229,7 +229,7 @@ namespace ime::ui {
         pimpl_{std::make_unique<GuiContainerImpl>()}
     {}
 
-    GuiContainer::GuiContainer(Window &window) :
+    GuiContainer::GuiContainer(priv::Window &window) :
         pimpl_{std::make_unique<GuiContainerImpl>(window)}
     {}
 
@@ -285,7 +285,7 @@ namespace ime::ui {
         pimpl_->removeAllWidgets();
     }
 
-    void GuiContainer::setTarget(Window &window) {
+    void GuiContainer::setTarget(priv::Window &window) {
         pimpl_->setTarget(window);
     }
 

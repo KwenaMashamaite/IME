@@ -124,7 +124,7 @@ namespace ime {
                     sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
         }
 
-        void draw(Window &renderTarget) const {
+        void draw(priv::Window &renderTarget) const {
             renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
         }
 
@@ -332,7 +332,7 @@ namespace ime {
         return pImpl_->getGlobalBounds();
     }
 
-    void Sprite::draw(Window &renderTarget) const {
+    void Sprite::draw(priv::Window &renderTarget) const {
         pImpl_->draw(renderTarget);
     }
 

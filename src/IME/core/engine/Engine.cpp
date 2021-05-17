@@ -108,13 +108,13 @@ namespace ime {
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
-        window_ = std::make_unique<Window>();
+        window_ = std::make_unique<priv::Window>();
         if (settings_.getValue<bool>("FULLSCREEN")) {
             auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-            window_->create(title, desktopWidth, desktopHeight, Window::Style::Fullscreen);
+            window_->create(title, desktopWidth, desktopHeight, priv::Window::Style::Fullscreen);
         } else
-            window_->create(title, width, height, Window::Style::Close);
+            window_->create(title, width, height, priv::Window::Style::Close);
 
         window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
         window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
@@ -342,7 +342,7 @@ namespace ime {
         return inputManager_;
     }
 
-    Window &Engine::getRenderTarget() {
+    priv::Window &Engine::getRenderTarget() {
         return *window_;
     }
 

@@ -234,7 +234,7 @@ namespace ime {
         });
     }
 
-    void RenderLayerContainer::render(Window &window) const {
+    void RenderLayerContainer::render(priv::Window &window) const {
         std::for_each(layers_.begin(), layers_.end(), [&window](auto& pair) {
             if (pair.second->isDrawable())
                 pair.second->render(window);

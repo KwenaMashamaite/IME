@@ -43,6 +43,7 @@ namespace ime {
     /// @internal
     namespace priv {
         class SceneManager;
+        class Window;
     }
 
     /**
@@ -256,7 +257,7 @@ namespace ime {
          *
          * @see initialize
          */
-        Window& getRenderTarget();
+        priv::Window& getRenderTarget();
 
         /**
          * @brief Schedule a callback to be executed after a delay
@@ -418,7 +419,7 @@ namespace ime {
         void shutdown();
 
     private:
-        std::unique_ptr<Window> window_;             //!< The engines render target
+        std::unique_ptr<priv::Window> window_;       //!< The engines render target
         std::string gameTitle_;                      //!< The name of the game run by the engine
         std::string settingFile_;                    //!< The filename of the file that contains the engines config entries
         PropertyContainer settings_;                 //!< The engines settings

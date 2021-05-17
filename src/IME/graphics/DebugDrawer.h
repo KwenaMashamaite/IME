@@ -28,9 +28,9 @@
 #include <box2d/b2_draw.h>
 
 namespace ime {
-    class Window;
-
     namespace priv {
+        class Window;
+
         /**
         * @brief Debug draws physics entities (bodies, joints, AABB's etc...)
         */

@@ -33,7 +33,11 @@
 #include <memory>
 
 namespace ime {
-    class Window;
+
+    /// @internal
+    namespace priv {
+        class Window;
+    }
 
     /**
      * @brief A 2D camera that defines what region is shown on screen in a Scene
@@ -236,7 +240,7 @@ namespace ime {
          * @brief Construct the camera from a rectangle
          * @param rectangle The rectangle defining the zone to display
          */
-        explicit Camera(Window& window);
+        explicit Camera(priv::Window& window);
 
     private:
         class CameraImpl;

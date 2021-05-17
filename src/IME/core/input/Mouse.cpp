@@ -68,11 +68,11 @@ namespace ime::input {
         return {sf::Mouse::getPosition().x, sf::Mouse::getPosition().y};
     }
 
-    void Mouse::setPosition(const Vector2i &position, const Window &window) {
+    void Mouse::setPosition(const Vector2i &position, const priv::Window &window) {
         sf::Mouse::setPosition({position.x, position.y}, window.getImpl()->getSFMLWindow());
     }
 
-    Vector2i Mouse::getPosition(const Window &window) {
+    Vector2i Mouse::getPosition(const priv::Window &window) {
         return {sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).x, sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).y};
     }
 

@@ -34,6 +34,7 @@
 
 namespace ime {
 
+    /// @internal
     namespace priv {
         class IShapeImpl;
     }
@@ -407,7 +408,7 @@ namespace ime {
          *
          * @note This function is intended for internal use only
          */
-        void draw(Window &renderTarget) const override;
+        void draw(priv::Window &renderTarget) const override;
 
         /**
          * @brief Destructor

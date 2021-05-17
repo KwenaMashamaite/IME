@@ -290,7 +290,7 @@ namespace ime {
          *
          * @note This function is intended for internal use only
          */
-        void draw(Window &renderTarget) const override;
+        void draw(priv::Window &renderTarget) const override;
 
         /**
          * @brief Swap the contents of this tile with that of another tile

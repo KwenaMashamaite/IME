@@ -34,7 +34,11 @@
 #include <memory>
 
 namespace ime {
-    class Window;
+
+    /// @internal
+    namespace priv {
+        class Window;
+    }
 
     namespace ui {
         /**
@@ -69,7 +73,7 @@ namespace ime {
              *
              * @see setTarget
              */
-            explicit GuiContainer(Window& window);
+            explicit GuiContainer(priv::Window& window);
 
             /**
              * @brief Copy constructor
@@ -190,10 +194,14 @@ namespace ime {
             unsigned int getTextSize() const;
 
             /**
+             * @internal
              * @brief Set the target on which the gui should be drawn
              * @param window Render target that will be used by the gui
+             *
+             * @warning This function is intended for internal use and should
+             * never be called outside of IME
              */
-            void setTarget(Window& window);
+            void setTarget(priv::Window& window);
 
             /**
              * @brief Check if the target on which the gui should be drawn is

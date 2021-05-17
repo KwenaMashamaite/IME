@@ -31,7 +31,11 @@
 
 namespace ime {
     class Event;  //!< Event class forward declaration
-    class Window; //!< Window class forward declaration
+
+    /// @internal
+    namespace priv {
+        class Window; //!< Window class forward declaration
+    }
 
     /**
      * @brief Mouse events
@@ -132,7 +136,7 @@ namespace ime {
              * This function sets the current position of the mouse
              * cursor, relative to the given window
              */
-            static void setPosition(const Vector2i& position, const Window& window);
+            static void setPosition(const Vector2i& position, const priv::Window& window);
 
             /**
              * @brief Get the current position of the mouse in window coordinates
@@ -142,7 +146,7 @@ namespace ime {
              * This function returns the current position of the mouse
              * cursor, relative to the given window
              */
-            static Vector2i getPosition(const Window& window);
+            static Vector2i getPosition(const priv::Window& window);
 
             /**
              * @brief Add an event listener to a mouse button up event

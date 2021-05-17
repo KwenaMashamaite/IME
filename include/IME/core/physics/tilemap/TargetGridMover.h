@@ -29,7 +29,11 @@
 #include "IME/core/path/IPathFinderStrategy.h"
 
 namespace ime {
-    class Window;
+
+    /// @internal
+    namespace priv {
+        class Window;
+    }
 
     /**
      * @brief Class for moving a game object to a specific position in the grid
@@ -209,7 +213,7 @@ namespace ime {
          * @brief Render the targets path
          * @param window Window to render path on
          */
-        void renderPath(Window& window) const;
+        void renderPath(priv::Window& window) const;
 
         /**
          * @brief Destructor

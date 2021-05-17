@@ -33,10 +33,11 @@
 
 namespace ime {
     class Scene;
-    class Window;
 
     /// @internal
     namespace priv {
+        class Window;
+
         /**
          * @brief Manages game scenes
          *
@@ -155,7 +156,7 @@ namespace ime {
              * @brief Render the current scene
              * @param window The window to render the scene on
              */
-            void render(Window& window);
+            void render(priv::Window& window);
 
             /**
              * @brief Update the scene manager

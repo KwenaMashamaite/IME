@@ -39,11 +39,11 @@
 class b2World;
 
 namespace ime {
-    class Window;     //!< Window class forward declaration
 
     /// @internal
     namespace priv {
         class DebugDrawer;
+        class Window;
     }
 
     /**
@@ -456,7 +456,7 @@ namespace ime {
          *
          * @see enableDebugDraw
          */
-        void createDebugDrawer(Window& renderWindow);
+        void createDebugDrawer(priv::Window& renderWindow);
 
         /**
          * @brief Destructor

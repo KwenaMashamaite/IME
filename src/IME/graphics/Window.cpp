@@ -25,7 +25,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/graphics/WindowImpl.h"
 
-namespace ime {
+namespace ime::priv {
     Window::Window() :
         pImpl_{std::make_unique<priv::WindowImpl>()}
     {}

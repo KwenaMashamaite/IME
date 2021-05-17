@@ -47,7 +47,6 @@
 
 namespace ime {
     class Engine;
-    class Window;
     class World;
 
     /// @internal

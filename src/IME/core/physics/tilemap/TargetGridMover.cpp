@@ -213,7 +213,7 @@ namespace ime {
         return renderPath_;
     }
 
-    void TargetGridMover::renderPath(Window &window) const {
+    void TargetGridMover::renderPath(priv::Window &window) const {
         if (renderPath_) {
             auto path = pathToTargetTile_;
             path.push(getTargetTileIndex());

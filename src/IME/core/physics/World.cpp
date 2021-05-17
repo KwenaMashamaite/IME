@@ -156,7 +156,7 @@ namespace ime {
         world_->SetContactListener(b2ContactListener_.get());
 
 #if defined(IME_DEBUG)
-        using WindowRef = std::reference_wrapper<Window>;
+        using WindowRef = std::reference_wrapper<priv::Window>;
         postRenderId_ = scene_.on_("postRender", ime::Callback<WindowRef>([this](WindowRef) {
             if (isDebugDrawEnabled_)
                 debugDraw();
@@ -331,7 +331,7 @@ namespace ime {
         return world_;
     }
 
-    void World::createDebugDrawer(Window &renderWindow) {
+    void World::createDebugDrawer(priv::Window &renderWindow) {
 #if defined(IME_DEBUG)
         if (!debugDrawer_) {
             debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);

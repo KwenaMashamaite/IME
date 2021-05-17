@@ -158,7 +158,7 @@ namespace ime {
         return id_;
     }
 
-    void Tile::draw(Window &renderTarget) const {
+    void Tile::draw(priv::Window &renderTarget) const {
         renderTarget.draw(tile_);
     }
 

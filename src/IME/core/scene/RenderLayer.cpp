@@ -103,7 +103,7 @@ namespace ime {
         return drawables_.size();
     }
 
-    void RenderLayer::render(Window &window) const {
+    void RenderLayer::render(priv::Window &window) const {
         std::for_each(drawables_.begin(), drawables_.end(), [&window](auto& pair) {
             pair.second.first.get().draw(window);
         });

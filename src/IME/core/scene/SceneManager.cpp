@@ -108,8 +108,8 @@ namespace ime::priv {
         return scenes_.empty();
     }
 
-    void SceneManager::render(Window &window) {
-        auto static renderScene = [](const Scene* scene, Window& renderWindow) {
+    void SceneManager::render(priv::Window &window) {
+        auto static renderScene = [](const Scene* scene, priv::Window& renderWindow) {
             if (scene->hasTilemap_) {
                 scene->tileMap_->draw(renderWindow);
                 scene->gridMovers_.render(renderWindow);
