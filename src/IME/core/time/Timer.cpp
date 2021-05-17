@@ -96,7 +96,6 @@ namespace ime {
     }
 
     void Timer::start() {
-        IME_ASSERT(interval_ > Time::Zero, "The starting point of the timer countdown must be greater than 0")
         IME_ASSERT(callback_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
         if (status_ != Status::Running) {
             status_ = Status::Running;
@@ -133,7 +132,7 @@ namespace ime {
     }
 
     void Timer::update(Time deltaTime) {
-        if (status_ != Status::Running || remainingDuration_ <= Time::Zero)
+        if (status_ != Status::Running || remainingDuration_ < Time::Zero)
             return;
 
         remainingDuration_ -= deltaTime;
