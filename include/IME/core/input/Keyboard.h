@@ -167,6 +167,30 @@ namespace ime {
             Keyboard();
 
             /**
+             * @brief Convert an enum Key value to its string representation
+             * @param key The key to be converted
+             * @return The given key as a string
+             *
+             * The returned string is the same as the enum value, that is, if
+             * @a key is Key::Space then the function will return "Space"
+             */
+            static std::string keyToString(Key key);
+
+            /**
+             * @brief Convert a string representation of a key to its enum value
+             * @param key The key to be converted
+             * @return The given key as an enum key value
+             *
+             * The returned enum key value is the same as the string value,
+             * that is, if @a key is "Space" then the function will return
+             * Key::Space
+             *
+             * @warning If the given string is not convertible to an enum key
+             * value, them the program will exit with an error
+             */
+            static Key stringToKey(const std::string& key);
+
+            /**.
              * @brief Check if a key is pressed or not
              * @param key Key to be checked
              * @return True if the key is pressed or false if it not pressed
@@ -233,8 +257,9 @@ namespace ime {
             void handleEvent(Event event);
 
         private:
-            EventEmitter eventEmitter_; //!< Event publisher
+            EventEmitter eventEmitter_;             //!< Event publisher
             std::unordered_map<int, bool> wasDown_; //!< The state of a key in the previous frame
+            inline static std::unordered_map<std::string, Key> stringKeyPairs_{};
         };
     }
 
