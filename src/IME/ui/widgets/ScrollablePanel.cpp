@@ -44,29 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<ScrollablePanelRenderer>());
         setAsContainer(true);
-
-        pimpl_->panel_->onDoubleClick([this](tgui::Vector2f mousePos) {
-            emit("doubleClick");
-            emit("doubleClick", mousePos.x, mousePos.y);
-        });
+        initEvents();
     }
 
     ScrollablePanel::ScrollablePanel(const ScrollablePanel& other) :
         WidgetContainer(other),
         pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     ScrollablePanel &ScrollablePanel::operator=(const ScrollablePanel& rhs) {
         if (this != &rhs) {
             WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    ScrollablePanel::ScrollablePanel(ScrollablePanel &&) noexcept = default;
-    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel &&) noexcept = default;
+    ScrollablePanel::ScrollablePanel(ScrollablePanel&& other) noexcept :
+        WidgetContainer(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     ScrollablePanel::Ptr ScrollablePanel::create(const std::string &width,
         const std::string &height, Vector2f contentSize)
@@ -140,6 +151,13 @@ namespace ime::ui {
 
     std::string ScrollablePanel::getWidgetType() const {
         return "ScrollablePanel";
+    }
+
+    void ScrollablePanel::initEvents() {
+        pimpl_->panel_->onDoubleClick([this](tgui::Vector2f mousePos) {
+            emit("doubleClick");
+            emit("doubleClick", mousePos.x, mousePos.y);
+        });
     }
 
     ScrollablePanel::~ScrollablePanel() = default;

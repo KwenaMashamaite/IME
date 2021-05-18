@@ -226,6 +226,11 @@ namespace ime {
              */
             explicit EditBox(const std::string& defaultText = "");
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class EditBoxImpl;
             std::unique_ptr<EditBoxImpl> pimpl_;

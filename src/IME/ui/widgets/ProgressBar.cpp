@@ -44,28 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<ProgressBarRenderer>());
         pimpl_->progressBar_->setText(text);
-
-        pimpl_->progressBar_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
+        initEvents();
     }
 
     ProgressBar::ProgressBar(const ProgressBar& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     ProgressBar &ProgressBar::operator=(const ProgressBar& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    ProgressBar::ProgressBar(ProgressBar &&) noexcept = default;
-    ProgressBar &ProgressBar::operator=(ProgressBar &&) noexcept = default;
+    ProgressBar::ProgressBar(ProgressBar&& other) noexcept :
+        ClickableWidget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    ProgressBar &ProgressBar::operator=(ProgressBar&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     ProgressBar::Ptr ProgressBar::create(const std::string& text) {
         return Ptr(new ProgressBar(text));
@@ -134,6 +146,12 @@ namespace ime::ui {
 
     std::string ProgressBar::getWidgetType() const {
         return "ProgressBar";
+    }
+
+    void ProgressBar::initEvents() {
+        pimpl_->progressBar_->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
     }
 
     ProgressBar::~ProgressBar() = default;

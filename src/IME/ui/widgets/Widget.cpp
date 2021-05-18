@@ -29,55 +29,42 @@ namespace ime::ui {
     Widget::Widget(std::unique_ptr<priv::IWidgetImpl> impl) :
         pimpl_{std::move(impl)}
     {
-        auto widget = pimpl_->getInternalPtr();
-
-        widget->onMouseEnter([this]{
-            emit("mouseEnter");
-        });
-        
-        widget->onMouseLeave([this]{
-            emit("mouseLeave");
-        });
-        
-        widget->onFocus([this]{
-            emit("focus");
-        });
-
-        widget->onUnfocus([this]{
-            emit("unfocus");
-        });
-        
-        widget->onAnimationFinish([this]{
-            emit("animationFinish");
-        });
-
-        widget->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
-
-        widget->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
-        });
+        initEvents();
     }
 
     Widget::Widget(const Widget& other) :
         pimpl_{other.pimpl_->clone()},
         eventEmitter_{other.eventEmitter_},
         isContainer_{other.isContainer_}
-    {}
+    {
+        initEvents();
+    }
 
     Widget &Widget::operator=(const Widget& rhs) {
         if (this != &rhs) {
             pimpl_ = rhs.pimpl_->clone();
             eventEmitter_ = rhs.eventEmitter_;
             isContainer_ = rhs.isContainer_;
+            initEvents();
         }
 
         return *this;
     }
 
-    Widget::Widget(Widget&&) noexcept = default;
-    Widget &Widget::operator=(Widget&&) noexcept = default;
+    Widget::Widget(Widget&& other) noexcept {
+        *this = std::move(other);
+    }
+
+    Widget &Widget::operator=(Widget&& other) noexcept {
+        if (this != &other) {
+            pimpl_ = std::move(other.pimpl_);
+            eventEmitter_ = std::move(other.eventEmitter_);
+            isContainer_ = other.isContainer_;
+            initEvents();
+        }
+
+        return *this;
+    }
 
     void Widget::setRenderer(IWidgetRenderer::Ptr renderer) {
         pimpl_->setRenderer(std::move(renderer));
@@ -253,6 +240,38 @@ namespace ime::ui {
 
     const std::shared_ptr<void> Widget::getInternalPtr() const {
         return pimpl_->getInternalPtr();
+    }
+
+    void Widget::initEvents() {
+        auto widget = pimpl_->getInternalPtr();
+
+        widget->onMouseEnter([this]{
+            emit("mouseEnter");
+        });
+
+        widget->onMouseLeave([this]{
+            emit("mouseLeave");
+        });
+
+        widget->onFocus([this]{
+            emit("focus");
+        });
+
+        widget->onUnfocus([this]{
+            emit("unfocus");
+        });
+
+        widget->onAnimationFinish([this]{
+            emit("animationFinish");
+        });
+
+        widget->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
+
+        widget->onPositionChange([this](tgui::Vector2f newPos) {
+            emit("positionChange", newPos.x, newPos.y);
+        });
     }
 
     Widget::~Widget() = default;

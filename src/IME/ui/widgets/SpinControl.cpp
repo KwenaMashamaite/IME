@@ -45,28 +45,40 @@ namespace ime::ui {
             pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<SpinButtonRenderer>());
-
-        pimpl_->spinControl_->onValueChange([this](float value) {
-            emit("valueChange", value);
-        });
+        initEvents();
     }
 
     SpinControl::SpinControl(const SpinControl& other) :
         Widget(other),
         pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     SpinControl &SpinControl::operator=(const SpinControl& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
             pimpl_ = std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    SpinControl::SpinControl(SpinControl &&) noexcept = default;
-    SpinControl &SpinControl::operator=(SpinControl &&) noexcept = default;
+    SpinControl::SpinControl(SpinControl&& other) noexcept :
+        Widget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    SpinControl &SpinControl::operator=(SpinControl&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     SpinControl::Ptr SpinControl::create(float minValue, float maxValue,
         float initialValue, unsigned int decimal, float step) 
@@ -132,6 +144,12 @@ namespace ime::ui {
 
     std::string SpinControl::getWidgetType() const {
         return "SpinControl";
+    }
+
+    void SpinControl::initEvents() {
+        pimpl_->spinControl_->onValueChange([this](float value) {
+            emit("valueChange", value);
+        });
     }
 
     SpinControl::~SpinControl() = default;

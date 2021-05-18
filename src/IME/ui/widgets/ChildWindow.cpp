@@ -44,44 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<ChildWindowRenderer>());
         setAsContainer(true);
-
-        pimpl_->window_->onClose([this]{
-            emit("closed");
-        });
-
-        pimpl_->window_->onMinimize([this]{
-            emit("minimize");
-        });
-
-        pimpl_->window_->onMaximize([this]{
-            emit("maximize");
-        });
-
-        pimpl_->window_->onEscapeKeyPress([this]{
-            emit("escapeKeyPress");
-        });
-
-        pimpl_->window_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
+        initEvents();
     }
 
     ChildWindow::ChildWindow(const ChildWindow& other) :
         WidgetContainer(other),
         pimpl_{std::make_unique<ChildWindowImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     ChildWindow &ChildWindow::operator=(const ChildWindow& rhs) {
         if (this != &rhs) {
             WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<ChildWindowImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    ChildWindow::ChildWindow(ChildWindow &&) noexcept = default;
-    ChildWindow &ChildWindow::operator=(ChildWindow &&) noexcept = default;
+    ChildWindow::ChildWindow(ChildWindow&& other) noexcept :
+        WidgetContainer(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    ChildWindow &ChildWindow::operator=(ChildWindow&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     ChildWindow::Ptr ChildWindow::create(const std::string& title, unsigned int titleButtons) {
         return ChildWindow::Ptr(new ChildWindow(title, titleButtons));
@@ -189,6 +185,28 @@ namespace ime::ui {
 
     std::string ChildWindow::getWidgetType() const {
         return "ChildWindow";
+    }
+
+    void ChildWindow::initEvents() {
+        pimpl_->window_->onClose([this]{
+            emit("closed");
+        });
+
+        pimpl_->window_->onMinimize([this]{
+            emit("minimize");
+        });
+
+        pimpl_->window_->onMaximize([this]{
+            emit("maximize");
+        });
+
+        pimpl_->window_->onEscapeKeyPress([this]{
+            emit("escapeKeyPress");
+        });
+
+        pimpl_->window_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
     }
 
     ChildWindow::~ChildWindow() = default;

@@ -213,6 +213,11 @@ namespace ime {
             explicit SpinControl(float minValue = 0.0f, float maxValue = 10.0f,
                 float initialValue = 0.0f, unsigned int decimal = 0, float step = 1.0f);
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class SpinControlImpl;
             std::unique_ptr<SpinControlImpl> pimpl_;

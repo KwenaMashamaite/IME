@@ -68,29 +68,40 @@ namespace ime::ui {
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<ButtonRenderer>());
-
-        pimpl_->getPtr()->onToggle([this](bool checkedStatus) {
-            emit("toggle");
-            emit("toggle", checkedStatus);
-        });
+        initEvents();
     }
 
     ToggleButton::ToggleButton(const ToggleButton& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     ToggleButton &ToggleButton::operator=(const ToggleButton& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    ToggleButton::ToggleButton(ToggleButton &&) noexcept = default;
-    ToggleButton &ToggleButton::operator=(ToggleButton &&) noexcept = default;
+    ToggleButton::ToggleButton(ToggleButton&& other) noexcept :
+        ClickableWidget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    ToggleButton &ToggleButton::operator=(ToggleButton&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     ToggleButton::Ptr ToggleButton::create(const std::string &text, bool checked) {
         return ToggleButton::Ptr(new ToggleButton(text, checked));
@@ -130,6 +141,13 @@ namespace ime::ui {
 
     std::string ToggleButton::getWidgetType() const {
         return "ToggleButton";
+    }
+
+    void ToggleButton::initEvents() {
+        pimpl_->getPtr()->onToggle([this](bool checkedStatus) {
+            emit("toggle");
+            emit("toggle", checkedStatus);
+        });
     }
 
     ToggleButton::~ToggleButton() = default;

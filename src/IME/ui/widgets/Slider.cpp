@@ -43,28 +43,40 @@ namespace ime::ui {
         pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<SliderRenderer>());
-
-        pimpl_->slider_->onValueChange([this](float newValue) {
-            emit("valueChange", newValue);
-        });
+        initEvents();
     }
 
     Slider::Slider(const Slider &other) :
         Widget(other),
         pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     Slider &Slider::operator=(const Slider& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
             pimpl_ = std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    Slider::Slider(Slider &&) noexcept = default;
-    Slider &Slider::operator=(Slider &&) noexcept = default;
+    Slider::Slider(Slider&& other) noexcept :
+        Widget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    Slider &Slider::operator=(Slider&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    };
 
     Slider::Ptr Slider::create(float minimum, float maximum) {
         return Ptr(new Slider(minimum, maximum));
@@ -144,6 +156,12 @@ namespace ime::ui {
 
     std::string Slider::getWidgetType() const {
         return "Slider";
+    }
+
+    void Slider::initEvents() {
+        pimpl_->slider_->onValueChange([this](float newValue) {
+            emit("valueChange", newValue);
+        });
     }
 
     Slider::~Slider() = default;

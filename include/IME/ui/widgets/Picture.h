@@ -202,6 +202,11 @@ namespace ime {
              */
             Picture(const std::string& filename, UIntRect frame, bool transparentTexture = true);
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class PictureImpl;
             std::unique_ptr<PictureImpl> pimpl_;

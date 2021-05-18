@@ -45,6 +45,63 @@ namespace ime::ui {
         Widget(std::move(widgetImpl)),
         pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        initEvents();
+    }
+
+    ClickableWidget::ClickableWidget(const ClickableWidget& other) :
+        Widget(other),
+        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
+    {
+        initEvents();
+    }
+
+    ClickableWidget& ClickableWidget::operator=(const ClickableWidget& rhs) {
+        if (this != &rhs) {
+            Widget::operator=(rhs);
+            pimpl_ = std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
+        }
+
+        return *this;
+    }
+
+    ClickableWidget::ClickableWidget(ClickableWidget && other) noexcept :
+        Widget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&rhs) noexcept {
+        if (this != &rhs) {
+            Widget::operator=(std::move(rhs));
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    };
+
+    void ClickableWidget::setEnabled(bool isEnable) {
+        pimpl_->widget_->setEnabled(isEnable);
+    }
+
+    bool ClickableWidget::isEnabled() const {
+        return pimpl_->widget_->isEnabled();
+    }
+
+    void ClickableWidget::toggleEnabled() {
+        setEnabled(!isEnabled());
+    }
+
+    void ClickableWidget::setFocused(bool isFocused) {
+        pimpl_->widget_->setFocused(isFocused);
+    }
+
+    bool ClickableWidget::isFocused() const {
+        return pimpl_->widget_->isFocused();
+    }
+
+    void ClickableWidget::initEvents() {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){
             emit("click");
@@ -76,43 +133,6 @@ namespace ime::ui {
             emit("rightClick");
             emit("rightClick", mousePos.x, mousePos.y);
         });
-    }
-
-    ClickableWidget::ClickableWidget(const ClickableWidget& other) :
-        Widget(other),
-        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
-
-    ClickableWidget& ClickableWidget::operator=(const ClickableWidget& rhs) {
-        if (this != &rhs) {
-            Widget::operator=(rhs);
-            pimpl_ = std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
-        }
-
-        return *this;
-    }
-
-    ClickableWidget::ClickableWidget(ClickableWidget &&) noexcept = default;
-    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&) noexcept = default;
-
-    void ClickableWidget::setEnabled(bool isEnable) {
-        pimpl_->widget_->setEnabled(isEnable);
-    }
-
-    bool ClickableWidget::isEnabled() const {
-        return pimpl_->widget_->isEnabled();
-    }
-
-    void ClickableWidget::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
-    void ClickableWidget::setFocused(bool isFocused) {
-        pimpl_->widget_->setFocused(isFocused);
-    }
-
-    bool ClickableWidget::isFocused() const {
-        return pimpl_->widget_->isFocused();
     }
 
     ClickableWidget::~ClickableWidget() = default;

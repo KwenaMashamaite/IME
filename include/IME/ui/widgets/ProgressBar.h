@@ -216,6 +216,11 @@ namespace ime {
              */
             explicit ProgressBar(const std::string& text = "");
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class ProgressBarImpl;
             std::unique_ptr<ProgressBarImpl> pimpl_;

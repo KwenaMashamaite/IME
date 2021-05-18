@@ -157,6 +157,11 @@ namespace ime {
              */
             explicit RadioButton(const std::string &buttonText = "");
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class ButtonImpl;
             std::unique_ptr<ButtonImpl> pimpl_;

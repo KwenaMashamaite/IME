@@ -336,6 +336,11 @@ namespace ime {
              */
             MessageBox();
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class MessageBoxImpl;
             std::unique_ptr<MessageBoxImpl> pimpl_;

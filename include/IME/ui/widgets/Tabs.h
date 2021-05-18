@@ -349,6 +349,11 @@ namespace ime {
              */
             Tabs();
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class TabsImpl;
             std::unique_ptr<TabsImpl> pimpl_;

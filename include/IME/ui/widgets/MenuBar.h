@@ -366,6 +366,11 @@ namespace ime {
              */
             MenuBar();
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class MenuBarImpl;
             std::unique_ptr<MenuBarImpl> pimpl_;

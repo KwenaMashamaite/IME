@@ -44,48 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<MessageBoxRenderer>());
         setAsContainer(true);
-
-        pimpl_->messageBox_->onButtonPress([this](const tgui::String& buttonCaption) {
-            emit("buttonPress", buttonCaption.toStdString());
-        });
-
-        pimpl_->messageBox_->onClose([this]{
-            emit("closed");
-        });
-
-        pimpl_->messageBox_->onMinimize([this]{
-            emit("minimize");
-        });
-
-        pimpl_->messageBox_->onMaximize([this]{
-            emit("maximize");
-        });
-
-        pimpl_->messageBox_->onEscapeKeyPress([this]{
-            emit("escapeKeyPress");
-        });
-
-        pimpl_->messageBox_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
-        });
+        initEvents();
     }
 
     MessageBox::MessageBox(const MessageBox& other) :
         WidgetContainer(other),
         pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     MessageBox &MessageBox::operator=(const MessageBox& rhs) {
         if (this != &rhs) {
             WidgetContainer::operator=(rhs);
             pimpl_ = std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    MessageBox::MessageBox(MessageBox &&) noexcept = default;
-    MessageBox &MessageBox::operator=(MessageBox &&) noexcept = default;
+    MessageBox::MessageBox(MessageBox&& other) noexcept :
+        WidgetContainer(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    MessageBox &MessageBox::operator=(MessageBox&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     MessageBox::Ptr MessageBox::create(const std::string& title, const std::string& text,
         const std::initializer_list<std::string>& buttons)
@@ -214,6 +206,32 @@ namespace ime::ui {
 
     std::string MessageBox::getWidgetType() const {
         return "MessageBox";
+    }
+
+    void MessageBox::initEvents() {
+        pimpl_->messageBox_->onButtonPress([this](const tgui::String& buttonCaption) {
+            emit("buttonPress", buttonCaption.toStdString());
+        });
+
+        pimpl_->messageBox_->onClose([this]{
+            emit("closed");
+        });
+
+        pimpl_->messageBox_->onMinimize([this]{
+            emit("minimize");
+        });
+
+        pimpl_->messageBox_->onMaximize([this]{
+            emit("maximize");
+        });
+
+        pimpl_->messageBox_->onEscapeKeyPress([this]{
+            emit("escapeKeyPress");
+        });
+
+        pimpl_->messageBox_->onSizeChange([this](tgui::Vector2f newSize) {
+            emit("sizeChange", newSize.x, newSize.y);
+        });
     }
 
     MessageBox::~MessageBox() = default;

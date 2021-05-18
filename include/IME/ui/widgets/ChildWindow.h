@@ -323,6 +323,11 @@ namespace ime {
             explicit ChildWindow(const std::string& title = "",
                 unsigned int titleButtons = TitleButton::Close);
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class ChildWindowImpl;
             std::unique_ptr<ChildWindowImpl> pimpl_;

@@ -238,6 +238,11 @@ namespace ime {
             explicit ScrollablePanel(const std::string& width = "100%",
                 const std::string& height = "100%", Vector2f contentSize = {0, 0});
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class PanelImpl;
             std::unique_ptr<PanelImpl> pimpl_;

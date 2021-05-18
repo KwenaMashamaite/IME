@@ -44,11 +44,7 @@ namespace ime::ui {
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<PictureRenderer>());
-
-        pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
-            emit("doubleClick");
-            emit("doubleClick", mousePos.x, mousePos.y);
-        });
+        initEvents();
     }
 
     Picture::Picture(const std::string &filename, bool transparentTexture) :
@@ -58,11 +54,7 @@ namespace ime::ui {
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<PictureRenderer>());
-
-        pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
-            emit("doubleClick");
-            emit("doubleClick", mousePos.x, mousePos.y);
-        });
+        initEvents();
     }
 
     Picture::Picture(const std::string &filename, UIntRect frame, bool transparentTexture) :
@@ -76,19 +68,34 @@ namespace ime::ui {
     Picture::Picture(const Picture& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     Picture &Picture::operator=(const Picture& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    Picture::Picture(Picture &&) noexcept = default;
-    Picture &Picture::operator=(Picture &&) noexcept = default;
+    Picture::Picture(Picture&& other) noexcept :
+        ClickableWidget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    Picture &Picture::operator=(Picture&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     Picture::Ptr Picture::create() {
         return Picture::Ptr(new Picture());
@@ -131,6 +138,13 @@ namespace ime::ui {
 
     std::string Picture::getWidgetType() const {
         return "Picture";
+    }
+
+    void Picture::initEvents() {
+        pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
+            emit("doubleClick");
+            emit("doubleClick", mousePos.x, mousePos.y);
+        });
     }
 
     Picture::~Picture() = default;

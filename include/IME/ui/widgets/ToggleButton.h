@@ -144,6 +144,11 @@ namespace ime {
             */
             explicit ToggleButton(const std::string& text = "", bool checked = false);
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class ButtonImpl;
             std::unique_ptr<ButtonImpl> pimpl_;

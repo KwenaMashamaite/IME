@@ -255,6 +255,11 @@ namespace ime {
             explicit TabsContainer(const std::string& width = "100%",
                 const std::string& height = "100%");
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class TabsContainerImpl;
             std::unique_ptr<TabsContainerImpl> pimpl_;

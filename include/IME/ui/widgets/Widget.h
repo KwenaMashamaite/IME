@@ -649,6 +649,12 @@ namespace ime {
             void setAsContainer(bool container);
 
         private:
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
+        private:
             std::unique_ptr<priv::IWidgetImpl> pimpl_;
             EventEmitter eventEmitter_; //!< Widgets event publisher
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer

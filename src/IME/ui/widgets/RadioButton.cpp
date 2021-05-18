@@ -44,36 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<RadioButtonRenderer>());
         pimpl_->button_->setText(buttonText);
-
-        pimpl_->button_->onCheck([this]{
-            emit("check");
-        });
-
-        pimpl_->button_->onUncheck([this]{
-            emit("uncheck");
-        });
-
-        pimpl_->button_->onChange([this](bool checked) {
-            emit("checkedChanged", checked);
-        });
+        initEvents();
     }
 
     RadioButton::RadioButton(const RadioButton& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     RadioButton &RadioButton::operator=(const RadioButton& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    RadioButton::RadioButton(RadioButton &&) noexcept = default;
-    RadioButton &RadioButton::operator=(RadioButton &&) noexcept = default;
+    RadioButton::RadioButton(RadioButton&& other) noexcept :
+        ClickableWidget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    RadioButton &RadioButton::operator=(RadioButton&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     RadioButton::Ptr RadioButton::create(const std::string &text) {
         return Ptr(new RadioButton(text));
@@ -122,6 +126,20 @@ namespace ime::ui {
 
     std::string RadioButton::getWidgetType() const {
         return "RadioButton";
+    }
+
+    void RadioButton::initEvents() {
+        pimpl_->button_->onCheck([this]{
+            emit("check");
+        });
+
+        pimpl_->button_->onUncheck([this]{
+            emit("uncheck");
+        });
+
+        pimpl_->button_->onChange([this](bool checked) {
+            emit("checkedChanged", checked);
+        });
     }
 
     RadioButton::~RadioButton() = default;

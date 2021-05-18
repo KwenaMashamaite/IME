@@ -43,28 +43,40 @@ namespace ime::ui {
         pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<TabsRenderer>());
-
-        pimpl_->tabs_->onTabSelect([this](const tgui::String& item){
-            emit("select", item.toStdString());
-        });
+        initEvents();
     }
 
     Tabs::Tabs(const Tabs& other) :
         Widget(other),
         pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     Tabs &Tabs::operator=(const Tabs& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
             pimpl_ = std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    Tabs::Tabs(Tabs &&) noexcept = default;
-    Tabs &Tabs::operator=(Tabs &&) noexcept = default;
+    Tabs::Tabs(Tabs&& other) noexcept :
+        Widget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    Tabs &Tabs::operator=(Tabs&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     Tabs::Ptr Tabs::create() {
         return Ptr(new Tabs());
@@ -184,6 +196,12 @@ namespace ime::ui {
 
     std::string Tabs::getWidgetType() const {
         return "Tabs";
+    }
+
+    void Tabs::initEvents() {
+        pimpl_->tabs_->onTabSelect([this](const tgui::String& item){
+            emit("select", item.toStdString());
+        });
     }
 
     Tabs::~Tabs() = default;

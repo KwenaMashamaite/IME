@@ -106,6 +106,12 @@ namespace ime {
             ~ClickableWidget() override;
 
         private:
+            /**
+             * @brief Initialize the widgets events
+             */
+            void initEvents();
+
+        private:
             struct ClickableWidgetImpl;
             std::unique_ptr<ClickableWidgetImpl> pimpl_;
         };

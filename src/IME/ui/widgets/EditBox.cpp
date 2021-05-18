@@ -44,32 +44,40 @@ namespace ime::ui {
     {
         setRenderer(std::make_unique<EditBoxRenderer>());
         pimpl_->editbox_->setDefaultText(defaultText);
-
-        pimpl_->editbox_->onTextChange([this](const tgui::String& text) {
-            emit("textEnter", text.toStdString());
-        });
-
-        pimpl_->editbox_->onReturnKeyPress([this](const tgui::String& text) {
-            emit("enterKeyPress", text.toStdString());
-        });
+        initEvents();
     }
 
     EditBox::EditBox(const EditBox & other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     EditBox &EditBox::operator=(const EditBox& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    EditBox::EditBox(EditBox &&) noexcept = default;
-    EditBox &EditBox::operator=(EditBox &&) noexcept = default;
+    EditBox::EditBox(EditBox&& other) noexcept :
+        ClickableWidget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    EditBox &EditBox::operator=(EditBox&& rhs) noexcept {
+        if (this !=  &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     EditBox::Ptr EditBox::create(const std::string& defaultText) {
         return Ptr(new EditBox(defaultText));
@@ -149,6 +157,16 @@ namespace ime::ui {
 
     std::string EditBox::getWidgetType() const {
         return "EditBox";
+    }
+
+    void EditBox::initEvents() {
+        pimpl_->editbox_->onTextChange([this](const tgui::String& text) {
+            emit("textEnter", text.toStdString());
+        });
+
+        pimpl_->editbox_->onReturnKeyPress([this](const tgui::String& text) {
+            emit("enterKeyPress", text.toStdString());
+        });
     }
 
     EditBox::~EditBox() = default;

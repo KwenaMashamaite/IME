@@ -43,28 +43,40 @@ namespace ime::ui {
         pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setRenderer(std::make_unique<MenuBarRenderer>());
-
-        pimpl_->menuBar->onMenuItemClick([this] (const tgui::String& menuItem) {
-            emit("menuItemClick", menuItem.toStdString());
-        });
+        initEvents();
     }
 
     MenuBar::MenuBar(const MenuBar& other) :
         Widget(other),
         pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        initEvents();
+    }
 
     MenuBar &MenuBar::operator=(const MenuBar& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
             pimpl_ = std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
     }
 
-    MenuBar::MenuBar(MenuBar &&) noexcept = default;
-    MenuBar &MenuBar::operator=(MenuBar &&) noexcept = default;
+    MenuBar::MenuBar(MenuBar&& other) noexcept :
+        Widget(std::move(other))
+    {
+        *this = std::move(other);
+    }
+
+    MenuBar &MenuBar::operator=(MenuBar&& rhs) noexcept {
+        if (this != &rhs) {
+            pimpl_ = std::move(rhs.pimpl_);
+            initEvents();
+        }
+
+        return *this;
+    }
 
     MenuBar::Ptr MenuBar::create() {
         return MenuBar::Ptr(new MenuBar());;
@@ -177,6 +189,12 @@ namespace ime::ui {
 
     std::string MenuBar::getWidgetType() const {
         return "MenuBar";
+    }
+
+    void MenuBar::initEvents() {
+        pimpl_->menuBar->onMenuItemClick([this] (const tgui::String& menuItem) {
+            emit("menuItemClick", menuItem.toStdString());
+        });
     }
 
     MenuBar::~MenuBar() = default;

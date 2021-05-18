@@ -242,6 +242,11 @@ namespace ime {
              */
             explicit Slider(float minValue = 0, float maxValue = 10);
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class SliderImpl;
             std::unique_ptr<SliderImpl> pimpl_;
