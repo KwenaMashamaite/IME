@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API Picture : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<Picture>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const Picture>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<Picture>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const Picture>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -120,8 +120,8 @@ namespace ime {
              *
              * @see getRenderer
              */
-            PictureRenderer::Ptr getRenderer();
-            const PictureRenderer::Ptr getRenderer() const;
+            PictureRenderer* getRenderer();
+            const PictureRenderer* getRenderer() const;
 
             /**
              * @brief Set whether or not the picture ignores mouse events

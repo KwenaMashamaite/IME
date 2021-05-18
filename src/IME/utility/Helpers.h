@@ -224,9 +224,8 @@ namespace ime {
         * @param widgetName Name of the widget to search for
         * @return Pointer to the widget if found, otherwise a nullptr
         */
-        extern std::shared_ptr<ui::Widget> findRecursively(
-            const std::unordered_map<std::string, std::shared_ptr<ui::Widget>>& container,
-            const std::string& widgetName);
+        extern ui::Widget* findRecursively(const std::unordered_map<std::string,
+            std::unique_ptr<ui::Widget>>& container, const std::string& widgetName);
 
         #include "Helpers.inl"
     }

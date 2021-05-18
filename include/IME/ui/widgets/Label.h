@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API Label : public Widget {
         public:
-            using Ptr = std::shared_ptr<Label>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const Label>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<Label>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const Label>; //!< const unique widget pointer
 
             /**
              * @brief The horizontal text alignment
@@ -104,8 +104,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            LabelRenderer::Ptr getRenderer();
-            const LabelRenderer::Ptr getRenderer() const;
+            LabelRenderer* getRenderer();
+            const LabelRenderer* getRenderer() const;
 
             /**
              * @brief Set the text displayed on the label

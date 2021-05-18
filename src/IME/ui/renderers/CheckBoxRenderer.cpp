@@ -358,6 +358,10 @@ namespace ime::ui {
         return checkBoxRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr CheckBoxRenderer::clone() const {
+        return std::make_unique<CheckBoxRenderer>(*this);
+    }
+
     void CheckBoxRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         checkBoxRenderer_ = dynamic_cast<tgui::CheckBoxRenderer*>(renderer);
     }

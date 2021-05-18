@@ -33,24 +33,51 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class WidgetContainer::WidgetContainerImpl {
     public:
-        explicit WidgetContainerImpl(const std::shared_ptr<tgui::Widget>& widget) {
+        explicit WidgetContainerImpl(tgui::Widget* widget) {
             IME_ASSERT(widget, "A widget container cannot be a nullptr")
-            tguiContainer_ = std::dynamic_pointer_cast<tgui::Container>(widget);
+            tguiContainer_ = dynamic_cast<tgui::Container*>(widget);
             IME_ASSERT(tguiContainer_, "A non container widget derived from WidgetContainer, change to Widget")
         }
 
-        bool addWidget(const ui::Widget::Ptr& widget, const std::string &name)  {
-            IME_ASSERT(widget, "Cannot add nullptr to a GUI container")
-            if (widgets_.insert({name, widget}).second) {
-                tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
-                return true;
+        /// The shallow copy is intentional because the implementation and the
+        /// base class must operate on the same third party widget. @param other
+        /// is a copied version of the argument passed to the copy constructor
+        /// of ime::WidgetContainer, therefore no additional copies are required
+        WidgetContainerImpl(const WidgetContainerImpl& other) :
+            tguiContainer_{static_cast<tgui::Container*>(other.tguiContainer_)}
+        {
+            for (const auto& [name, widget] : other.widgets_) {
+                widgets_.insert({name, widget->clone()});
             }
-            return false;
         }
 
-        ui::Widget::Ptr getWidget(const std::string &name) const  {
+        WidgetContainerImpl& operator=(const WidgetContainerImpl& impl) {
+            if (this != &impl) {
+                auto temp{impl};
+                std::swap(tguiContainer_, temp.tguiContainer_);
+                std::swap(widgets_, temp.widgets_);
+            }
+
+            return *this;
+        }
+
+        WidgetContainerImpl(WidgetContainerImpl&&) noexcept = default;
+        WidgetContainerImpl& operator=(WidgetContainerImpl&&) noexcept = default;
+
+        Widget* addWidget(Widget::Ptr widget, const std::string &name)  {
+            IME_ASSERT(widget, "Cannot add nullptr to a WidgetContainer")
+            auto [iter, inserted] = widgets_.insert({name, std::move(widget)});
+            if (inserted) {
+                tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(iter->second->getInternalPtr()), name);
+                return iter->second.get();
+            }
+
+            return nullptr;
+        }
+
+        ui::Widget* getWidget(const std::string &name) const  {
             if (utility::findIn(widgets_, name))
-                return widgets_.at(name);
+                return widgets_.at(name).get();
             return utility::findRecursively(widgets_, name);
         }
 
@@ -63,10 +90,10 @@ namespace ime::ui {
             return false;
         }
 
-        ui::Widget::Ptr getWidgetAtPosition(Vector2f pos) const  {
+        ui::Widget* getWidgetAtPosition(Vector2f pos) const  {
             auto widget = tguiContainer_->getWidgetAtPosition({pos.x, pos.y});
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
@@ -75,33 +102,33 @@ namespace ime::ui {
             widgets_.clear();
         }
 
-        void moveWidgetToFront(const ui::Widget::Ptr& widget)  {
+        void moveWidgetToFront(const ui::Widget* widget)  {
             tguiContainer_->moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        void moveWidgetToBack(const ui::Widget::Ptr& widget)  {
+        void moveWidgetToBack(const ui::Widget* widget)  {
             tguiContainer_->moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetForward(const ui::Widget::Ptr& widget)  {
+        size_t moveWidgetForward(const ui::Widget* widget)  {
             return tguiContainer_->moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetBackward(const ui::Widget::Ptr& widget)  {
+        size_t moveWidgetBackward(const ui::Widget* widget)  {
             return tguiContainer_->moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        ui::Widget::Ptr getFocusedWidget() const  {
+        ui::Widget* getFocusedWidget() const  {
             auto widget = tguiContainer_->getFocusedChild();
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
-        ui::Widget::Ptr getFocusedLeaf() const  {
+        ui::Widget* getFocusedLeaf() const  {
             auto widget = tguiContainer_->getFocusedLeaf();
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
@@ -113,28 +140,38 @@ namespace ime::ui {
             return tguiContainer_->focusPreviousWidget(recursive);
         }
 
+        std::size_t getCount() const {
+            return widgets_.size();
+        }
+
+        void forEach(const Callback<Widget*>& callback) const {
+            std::for_each(widgets_.begin(), widgets_.end(), [&callback](auto& pair) {
+                callback(pair.second.get());
+            });
+        }
+
     private:
-        std::shared_ptr<tgui::Container> tguiContainer_;
+        tgui::Container* tguiContainer_;
         std::unordered_map<std::string, Widget::Ptr> widgets_;
     }; // class WidgetContainerImpl
 
     //////////////////////////////////////////////////////////////////////////
-    // Widget container class delegation
+    // WidgetContainer class delegation
     //////////////////////////////////////////////////////////////////////////
     WidgetContainer::WidgetContainer(std::unique_ptr<priv::IWidgetImpl> widgetImpl) :
         Widget(std::move(widgetImpl)),
-        pimpl_{std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     WidgetContainer::WidgetContainer(const WidgetContainer& other) :
         Widget(other),
-        pimpl_{std::make_unique<WidgetContainerImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     WidgetContainer &WidgetContainer::operator=(const WidgetContainer& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<WidgetContainerImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -143,15 +180,15 @@ namespace ime::ui {
     WidgetContainer::WidgetContainer(WidgetContainer&&) noexcept = default;
     WidgetContainer &WidgetContainer::operator=(WidgetContainer&&) noexcept = default;
 
-    bool WidgetContainer::addWidget(const Widget::Ptr& widget, const std::string &name) {
-        return pimpl_->addWidget(widget, name);
+    Widget* WidgetContainer::addWidget(Widget::Ptr widget, const std::string &name) {
+        return pimpl_->addWidget(std::move(widget), name);
     }
 
-    Widget::Ptr WidgetContainer::getWidget(const std::string &name) const {
+    Widget* WidgetContainer::getWidget(const std::string &name) const {
         return pimpl_->getWidget(name);
     }
 
-    Widget::Ptr WidgetContainer::getWidgetAtPosition(Vector2f pos) const {
+    Widget* WidgetContainer::getWidgetAtPosition(Vector2f pos) const {
         return pimpl_->getWidgetAtPosition(pos);
     }
 
@@ -163,32 +200,40 @@ namespace ime::ui {
         pimpl_->removeAllWidgets();
     }
 
-    void WidgetContainer::moveWidgetToFront(const Widget::Ptr& widget) {
+    void WidgetContainer::moveWidgetToFront(const Widget* widget) {
         pimpl_->moveWidgetToFront(widget);
     }
 
-    void WidgetContainer::moveWidgetToBack(const Widget::Ptr& widget) {
+    void WidgetContainer::moveWidgetToBack(const Widget* widget) {
         pimpl_->moveWidgetToBack(widget);
     }
 
-    std::size_t WidgetContainer::moveWidgetForward(const Widget::Ptr& widget) {
+    std::size_t WidgetContainer::moveWidgetForward(const Widget* widget) {
         return pimpl_->moveWidgetForward(widget);
     }
 
-    std::size_t WidgetContainer::moveWidgetBackward(const Widget::Ptr& widget) {
+    std::size_t WidgetContainer::moveWidgetBackward(const Widget* widget) {
         return pimpl_->moveWidgetBackward(widget);
     }
 
-    Widget::Ptr WidgetContainer::getFocusedWidget() const {
+    Widget* WidgetContainer::getFocusedWidget() const {
         return pimpl_->getFocusedWidget();
     }
 
-    Widget::Ptr WidgetContainer::getFocusedLeaf() const {
+    Widget* WidgetContainer::getFocusedLeaf() const {
         return pimpl_->getFocusedLeaf();
     }
 
     bool WidgetContainer::focusPreviousWidget(bool recursive) {
         return pimpl_->focusPreviousWidget(recursive);
+    }
+
+    std::size_t WidgetContainer::getCount() const {
+        return pimpl_->getCount();
+    }
+
+    void WidgetContainer::forEach(const Callback<Widget*> &callback) const {
+        pimpl_->forEach(callback);
     }
 
     bool WidgetContainer::focusNextWidget(bool recursive) {

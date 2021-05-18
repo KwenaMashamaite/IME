@@ -44,35 +44,35 @@ namespace ime {
         }
     } // namespace utility
 
-    std::string bindLeft(std::shared_ptr<ui::Widget> widget){
+    std::string bindLeft(ui::Widget* widget){
         return tgui::bindLeft(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindTop(std::shared_ptr<ui::Widget> widget) {
+    std::string bindTop(ui::Widget* widget) {
         return tgui::bindTop(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindWidth(std::shared_ptr<ui::Widget> widget) {
+    std::string bindWidth(ui::Widget* widget) {
         return tgui::bindWidth(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindHeight(std::shared_ptr<ui::Widget> widget) {
+    std::string bindHeight(ui::Widget* widget) {
         return tgui::bindHeight(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindRight(std::shared_ptr<ui::Widget> widget) {
+    std::string bindRight(ui::Widget* widget) {
         return tgui::bindRight(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindBottom(std::shared_ptr<ui::Widget> widget) {
+    std::string bindBottom(ui::Widget* widget) {
         return tgui::bindBottom(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindPosition(std::shared_ptr<ui::Widget> widget) {
+    std::string bindPosition(ui::Widget* widget) {
         return tgui::bindPosition(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 
-    std::string bindSize(std::shared_ptr<ui::Widget> widget) {
+    std::string bindSize(ui::Widget* widget) {
         return tgui::bindSize(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr())).toString().toStdString();
     }
 

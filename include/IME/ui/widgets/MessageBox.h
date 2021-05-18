@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API MessageBox : public WidgetContainer {
         public:
-            using Ptr = std::shared_ptr<MessageBox>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const MessageBox>; //!< Shared constant widget pointer
+            using Ptr = std::unique_ptr<MessageBox>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const MessageBox>; //!< Unique constant widget pointer
 
             /**
              * @brief Title alignments, possible options for the setTitleAlignment function
@@ -113,8 +113,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            MessageBoxRenderer::Ptr getRenderer();
-            const MessageBoxRenderer::Ptr getRenderer() const;
+            MessageBoxRenderer* getRenderer();
+            const MessageBoxRenderer* getRenderer() const;
 
             /**
              * @brief Set the text displayed by the message box

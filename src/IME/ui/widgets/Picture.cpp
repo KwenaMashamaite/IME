@@ -30,20 +30,20 @@
 namespace ime::ui {
     class Picture::PictureImpl {
     public:
-        explicit PictureImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            picture_{std::static_pointer_cast<tgui::Picture>(widget)}
+        explicit PictureImpl(tgui::Widget* widget) :
+            picture_{static_cast<tgui::Picture*>(widget)}
         {}
 
-        std::shared_ptr<tgui::Picture> picture_;
+        tgui::Picture* picture_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
     
     Picture::Picture() :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Picture>>(tgui::Picture::create())),
-        pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<PictureRenderer>());
+        setRenderer(std::make_unique<PictureRenderer>());
 
         pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
             emit("doubleClick");
@@ -55,9 +55,9 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Picture>>(
             tgui::Picture::create(ime::ResourceManager::getInstance()->getTexture(filename).getInternalTexture(),
             transparentTexture))),
-        pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<PictureRenderer>());
+        setRenderer(std::make_unique<PictureRenderer>());
 
         pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
             emit("doubleClick");
@@ -75,13 +75,13 @@ namespace ime::ui {
 
     Picture::Picture(const Picture& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<PictureImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     Picture &Picture::operator=(const Picture& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<PictureImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -91,11 +91,11 @@ namespace ime::ui {
     Picture &Picture::operator=(Picture &&) noexcept = default;
 
     Picture::Ptr Picture::create() {
-        return Ptr(new Picture());
+        return Picture::Ptr(new Picture());
     }
 
     Picture::Ptr Picture::copy() const {
-        return std::static_pointer_cast<Picture>(clone());
+        return Picture::Ptr(static_cast<Picture*>(clone().release()));
     }
 
     Picture::Ptr Picture::create(const std::string &filename, bool transparentTexture) {
@@ -108,12 +108,12 @@ namespace ime::ui {
         return Ptr(new Picture(filename, frame, transparentTexture));
     }
 
-    std::shared_ptr<PictureRenderer> Picture::getRenderer() {
-        return std::static_pointer_cast<PictureRenderer>(Widget::getRenderer());
+    PictureRenderer* Picture::getRenderer() {
+        return static_cast<PictureRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<PictureRenderer> Picture::getRenderer() const {
-        return std::static_pointer_cast<PictureRenderer>(Widget::getRenderer());
+    const PictureRenderer* Picture::getRenderer() const {
+        return static_cast<const PictureRenderer*>(Widget::getRenderer());
     }
 
     void Picture::ignoreMouseEvents(bool ignore) {
@@ -125,7 +125,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr Picture::clone() const {
-        return std::make_shared<Picture>(*this);
+        return std::make_unique<Picture>(*this);
 
     }
 

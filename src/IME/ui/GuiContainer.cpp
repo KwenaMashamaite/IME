@@ -25,8 +25,8 @@
 #include "IME/ui/GuiContainer.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
-#include "../utility/Helpers.h"
-#include "../graphics/WindowImpl.h"
+#include "IME/utility/Helpers.h"
+#include "IME/graphics/WindowImpl.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
 
@@ -103,10 +103,10 @@ namespace ime::ui {
             sfmlGui_.setTarget(window.getImpl()->getSFMLWindow());
         }
 
-        Widget::Ptr getWidgetBelowMouseCursor(Vector2f mousePos) const {
+        Widget* getWidgetBelowMouseCursor(Vector2f mousePos) const {
             auto widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
@@ -134,19 +134,20 @@ namespace ime::ui {
             sfmlGui_.requestMouseCursor(static_cast<tgui::Cursor::Type>(cursorType));
         }
 
-        bool addWidget(const Widget::Ptr& widget, const std::string &widgetName)
-        {
-            IME_ASSERT(widget, "Cannot add nullptr to a GUI container")
-            if (widgets_.insert({widgetName, widget}).second) {
-                sfmlGui_.add(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), widgetName);
-                return true;
+        Widget* addWidget(Widget::Ptr widget, const std::string &widgetName) {
+            IME_ASSERT(widget, "Cannot add nullptr to a GuiContainer")
+            auto [iter, inserted] = widgets_.insert({widgetName, std::move(widget)});
+            if (inserted) {
+                sfmlGui_.add(std::static_pointer_cast<tgui::Widget>(iter->second->getInternalPtr()), widgetName);
+                return iter->second.get();
             }
-            return false;
+
+            return nullptr;
         }
 
-        Widget::Ptr getWidget(const std::string &widgetName) const {
+        Widget* getWidget(const std::string &widgetName) const {
             if (utility::findIn(widgets_, widgetName))
-                return widgets_.at(widgetName);
+                return widgets_.at(widgetName).get();
             return utility::findRecursively(widgets_, widgetName);
         }
 
@@ -159,24 +160,24 @@ namespace ime::ui {
             return false;
         }
 
-        Widget::Ptr getFocusedWidget() const {
+        Widget* getFocusedWidget() const {
             auto widget = sfmlGui_.getFocusedChild();
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
-        Widget::Ptr getFocusedLeaf() const {
+        Widget* getFocusedLeaf() const {
             auto widget = sfmlGui_.getFocusedLeaf();
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
-        Widget::Ptr getWidgetAtPosition(Vector2f pos) const {
+        Widget* getWidgetAtPosition(Vector2f pos) const {
             auto widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString());
+                return widgets_.at(widget->getWidgetName().toStdString()).get();
             return nullptr;
         }
 
@@ -188,19 +189,19 @@ namespace ime::ui {
             return sfmlGui_.focusPreviousWidget(recursive);
         }
 
-        void moveWidgetToFront(const Widget::Ptr &widget) {
+        void moveWidgetToFront(const Widget* widget) {
             sfmlGui_.moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        void moveWidgetToBack(const Widget::Ptr &widget) {
+        void moveWidgetToBack(const Widget* widget) {
             sfmlGui_.moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetForward(const Widget::Ptr& widget) {
+        size_t moveWidgetForward(const Widget* widget) {
             return sfmlGui_.moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
-        size_t moveWidgetBackward(const Widget::Ptr& widget) {
+        size_t moveWidgetBackward(const Widget* widget) {
             return sfmlGui_.moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
@@ -289,7 +290,7 @@ namespace ime::ui {
         pimpl_->setTarget(window);
     }
 
-    Widget::Ptr GuiContainer::getWidgetBelowMouseCursor(Vector2f mousePos) const {
+    Widget* GuiContainer::getWidgetBelowMouseCursor(Vector2f mousePos) const {
         return pimpl_->getWidgetBelowMouseCursor(mousePos);
     }
 
@@ -317,13 +318,11 @@ namespace ime::ui {
         pimpl_->requestMouseCursor(cursorType);
     }
 
-    bool GuiContainer::addWidget(const Widget::Ptr& widget,
-         const std::string &widgetName)
-    {
-        return pimpl_->addWidget(widget, widgetName);
+    Widget* GuiContainer::addWidget(Widget::Ptr widget, const std::string &widgetName) {
+        return pimpl_->addWidget(std::move(widget), widgetName);
     }
 
-    Widget::Ptr GuiContainer::getWidget(const std::string &widgetName) const {
+    Widget* GuiContainer::getWidget(const std::string &widgetName) const {
         return pimpl_->getWidget(widgetName);
     }
 
@@ -331,15 +330,15 @@ namespace ime::ui {
         return pimpl_->removeWidget(widget);
     }
 
-    Widget::Ptr GuiContainer::getFocusedWidget() const {
+    Widget* GuiContainer::getFocusedWidget() const {
         return pimpl_->getFocusedWidget();
     }
 
-    Widget::Ptr GuiContainer::getFocusedLeaf() const {
+    Widget* GuiContainer::getFocusedLeaf() const {
         return pimpl_->getFocusedLeaf();
     }
 
-    Widget::Ptr GuiContainer::getWidgetAtPosition(Vector2f pos) const {
+    Widget* GuiContainer::getWidgetAtPosition(Vector2f pos) const {
         return pimpl_->getWidgetAtPosition(pos);
     }
 
@@ -351,19 +350,19 @@ namespace ime::ui {
         return pimpl_->focusPreviousWidget(recursive);
     }
 
-    void GuiContainer::moveWidgetToFront(const Widget::Ptr &widget) {
+    void GuiContainer::moveWidgetToFront(const Widget* widget) {
         pimpl_->moveWidgetToFront(widget);
     }
 
-    void GuiContainer::moveWidgetToBack(const Widget::Ptr &widget) {
+    void GuiContainer::moveWidgetToBack(const Widget* widget) {
         pimpl_->moveWidgetToBack(widget);
     }
 
-    size_t GuiContainer::moveWidgetForward(const Widget::Ptr& widget) {
+    size_t GuiContainer::moveWidgetForward(const Widget* widget) {
         return pimpl_->moveWidgetForward(widget);
     }
 
-    size_t GuiContainer::moveWidgetBackward(const Widget::Ptr& widget) {
+    size_t GuiContainer::moveWidgetBackward(const Widget* widget) {
         return pimpl_->moveWidgetBackward(widget);
     }
 

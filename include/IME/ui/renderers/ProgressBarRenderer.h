@@ -231,6 +231,12 @@ namespace ime {
             bool isTransparentTextureIgnored() const override;
 
             /**
+             * @brief Create a copy of the render
+             * @return A copy of the render
+             */
+            IWidgetRenderer::Ptr clone() const override;
+
+            /**
              * @internal
              * @brief Set the pointer to the third party renderer
              * @param renderer The third party

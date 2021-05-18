@@ -28,9 +28,9 @@
 
 namespace ime::ui {
     struct ClickableWidget::ClickableWidgetImpl {
-        explicit ClickableWidgetImpl(const std::shared_ptr<tgui::Widget>& widget) {
+        explicit ClickableWidgetImpl(tgui::Widget* widget) {
             IME_ASSERT(widget, "A clickable widget cannot be instantiated from a nullptr")
-            widget_ = std::dynamic_pointer_cast<tgui::ClickableWidget>(widget);
+            widget_ = dynamic_cast<tgui::ClickableWidget*>(widget);
             IME_ASSERT(widget_, "A non clickable widget derived from ClickableWidget, change to Widget")
         }
 
@@ -38,12 +38,12 @@ namespace ime::ui {
         // Member data
         //////////////////////////////////////////////////////////////////////
 
-        std::shared_ptr<tgui::ClickableWidget> widget_;
+        tgui::ClickableWidget* widget_;
     };
 
     ClickableWidget::ClickableWidget(std::unique_ptr<priv::IWidgetImpl> widgetImpl) :
         Widget(std::move(widgetImpl)),
-        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){
@@ -80,13 +80,13 @@ namespace ime::ui {
 
     ClickableWidget::ClickableWidget(const ClickableWidget& other) :
         Widget(other),
-        pimpl_{std::make_unique<ClickableWidgetImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     ClickableWidget& ClickableWidget::operator=(const ClickableWidget& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<ClickableWidgetImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<ClickableWidgetImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;

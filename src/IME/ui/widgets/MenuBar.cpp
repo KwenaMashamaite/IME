@@ -29,20 +29,20 @@
 namespace ime::ui {
     class MenuBar::MenuBarImpl {
     public:
-        explicit MenuBarImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            menuBar{std::static_pointer_cast<tgui::MenuBar>(widget)}
+        explicit MenuBarImpl(tgui::Widget* widget) :
+            menuBar{static_cast<tgui::MenuBar*>(widget)}
         {}
 
-        std::shared_ptr<tgui::MenuBar> menuBar;
+        tgui::MenuBar* menuBar;
     };
 
     ////////////////////////////////////////////////////////////////////////////
 
     MenuBar::MenuBar() :
         Widget(std::make_unique<priv::WidgetImpl<tgui::MenuBar>>(tgui::MenuBar::create())),
-        pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<MenuBarRenderer>());
+        setRenderer(std::make_unique<MenuBarRenderer>());
 
         pimpl_->menuBar->onMenuItemClick([this] (const tgui::String& menuItem) {
             emit("menuItemClick", menuItem.toStdString());
@@ -51,13 +51,13 @@ namespace ime::ui {
 
     MenuBar::MenuBar(const MenuBar& other) :
         Widget(other),
-        pimpl_{std::make_unique<MenuBarImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     MenuBar &MenuBar::operator=(const MenuBar& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<MenuBarImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -71,19 +71,19 @@ namespace ime::ui {
     }
 
     MenuBar::Ptr MenuBar::copy() const {
-        return std::static_pointer_cast<MenuBar>(clone());
+        return MenuBar::Ptr(static_cast<MenuBar*>(clone().release()));
     }
 
     Widget::Ptr MenuBar::clone() const {
-        return std::make_shared<MenuBar>(*this);
+        return std::make_unique<MenuBar>(*this);
     }
 
-    MenuBarRenderer::Ptr MenuBar::getRenderer() {
-        return std::static_pointer_cast<MenuBarRenderer>(Widget::getRenderer());
+    MenuBarRenderer* MenuBar::getRenderer() {
+        return static_cast<MenuBarRenderer*>(Widget::getRenderer());
     }
 
-    const MenuBarRenderer::Ptr MenuBar::getRenderer() const {
-        return std::static_pointer_cast<MenuBarRenderer>(Widget::getRenderer());
+    const MenuBarRenderer* MenuBar::getRenderer() const {
+        return static_cast<const MenuBarRenderer*>(Widget::getRenderer());
     }
 
     void MenuBar::addMenu(const std::string &text) {

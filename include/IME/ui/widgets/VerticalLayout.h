@@ -40,8 +40,8 @@ namespace ime {
          */
         class IME_API VerticalLayout : public IBoxLayout {
         public:
-            using Ptr = std::shared_ptr<VerticalLayout>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const VerticalLayout>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<VerticalLayout>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const VerticalLayout>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -96,8 +96,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-             BoxLayoutRenderer::Ptr getRenderer();
-             const BoxLayoutRenderer::Ptr getRenderer() const;
+             BoxLayoutRenderer* getRenderer();
+             const BoxLayoutRenderer* getRenderer() const;
 
             /**
              * @brief Get the type of the layout
@@ -117,7 +117,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            void insertWidget(std::size_t index, const Widget::Ptr& widget,
+            void insertWidget(std::size_t index, Widget* widget,
                 const std::string &name) override;
 
             /**
@@ -155,7 +155,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            bool setRatio(const Widget::Ptr& widget, float ratio) override;
+            bool setRatio(Widget* widget, float ratio) override;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -173,7 +173,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            float getRatio(const Widget::Ptr& widget) const override;
+            float getRatio(const Widget* widget) const override;
 
             /**
              * @brief Get the ratio of a widget at a certain index

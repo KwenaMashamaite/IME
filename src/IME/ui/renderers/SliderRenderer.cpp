@@ -150,6 +150,10 @@ namespace ime::ui {
         return sliderRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr SliderRenderer::clone() const {
+        return std::make_unique<SliderRenderer>(*this);
+    }
+
     void SliderRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         sliderRenderer_ = dynamic_cast<tgui::SliderRenderer*>(renderer);
     }

@@ -64,6 +64,10 @@ namespace ime::ui {
         pictureRenderer_ = dynamic_cast<tgui::PictureRenderer*>(renderer);
     }
 
+    IWidgetRenderer::Ptr PictureRenderer::clone() const {
+        return std::make_unique<PictureRenderer>(*this);
+    }
+
     tgui::WidgetRenderer *PictureRenderer::getInternalPtr() {
         return pictureRenderer_;
     }

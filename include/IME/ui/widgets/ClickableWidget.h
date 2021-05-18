@@ -37,7 +37,7 @@ namespace ime {
          */
         class IME_API ClickableWidget : public Widget {
         public:
-            using Ptr = std::shared_ptr<ClickableWidget>; //!< Shared widget pointer
+            using Ptr = std::unique_ptr<ClickableWidget>; //!< Unique widget pointer
 
             /**
              * @internal

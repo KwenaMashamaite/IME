@@ -29,6 +29,8 @@
 #include "IME/common/ITransformable.h"
 #include <TGUI/Widget.hpp>
 #include <TGUI/Renderers/WidgetRenderer.hpp>
+#include <TGUI/Widgets/TabContainer.hpp>
+#include <TGUI/Widgets/SpinControl.hpp>
 
 namespace ime {
     namespace priv {
@@ -72,7 +74,7 @@ namespace ime {
              *
              * @see setRenderer
              */
-            virtual ui::IWidgetRenderer::Ptr getRenderer() const = 0;
+            virtual ui::IWidgetRenderer* getRenderer() const = 0;
 
             /**
              * @brief Set the position of the widget relative to the
@@ -338,13 +340,13 @@ namespace ime {
             WidgetImpl(const WidgetImpl& other) :
                 widget_{std::make_shared<T>(*other.widget_)}
             {
-                setRenderer(other.getRenderer());
+                setRenderer(other.getRenderer()->clone());
             }
 
             WidgetImpl& operator=(const WidgetImpl& rhs) {
                 if (this != &rhs) {
                     widget_ = rhs.widget_;
-                    setRenderer(rhs.getRenderer());
+                    setRenderer(rhs.getRenderer()->clone());
                 }
 
                 return *this;
@@ -370,13 +372,28 @@ namespace ime {
             void setRenderer(ui::IWidgetRenderer::Ptr renderer) override {
                 IME_ASSERT(renderer, "Cannot set nullptr as renderer")
                 renderer_ = std::move(renderer);
-                renderer_->setInternalPtr(widget_->getRenderer());
+
+                // tgui::SpinControl and tgui::TabContainer have two different renderers, so
+                // they are sort of special cases to this function. Since IME only supports
+                // one renderer per widget we will have to choose one and leave out the other
+                // (The left out part will have its default look unchangeable). For tgui::SpinControl
+                // we choose to use the renderer for tgui::SpinButton part of the control.
+                // For tgui::TabContainer, we choose the renderer for the tgui::Tabs part.
+                if (auto* tabContainer = dynamic_cast<tgui::TabContainer*>(widget_.get()); tabContainer) {
+                    renderer_->setInternalPtr(tabContainer->getTabsRenderer());
+                    return;
+                } else if (auto* spinControl = dynamic_cast<tgui::SpinControl*>(widget_.get()); spinControl) {
+                    renderer_->setInternalPtr(spinControl->getSpinButtonRenderer());
+                    return;
+                } else
+                    renderer_->setInternalPtr(widget_->getRenderer());
+
                 if (renderer_->getInternalPtr())
                     widget_->setRenderer(renderer_->getInternalPtr()->getData());
             }
 
-            ui::IWidgetRenderer::Ptr getRenderer() const override {
-                return renderer_;
+            ui::IWidgetRenderer* getRenderer() const override {
+                return renderer_.get();
             }
 
             void setTextSize(unsigned int charSize) override {

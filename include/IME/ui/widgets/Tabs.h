@@ -87,8 +87,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            TabsRenderer::Ptr getRenderer();
-            const TabsRenderer::Ptr getRenderer() const;
+            TabsRenderer* getRenderer();
+            const TabsRenderer* getRenderer() const;
 
             /**
              * @brief Set whether or not the tabs auto-size

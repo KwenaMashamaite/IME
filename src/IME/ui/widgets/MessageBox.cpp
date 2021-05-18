@@ -29,20 +29,20 @@
 namespace ime::ui {
     class MessageBox::MessageBoxImpl {
     public:
-        explicit MessageBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            messageBox_{std::static_pointer_cast<tgui::MessageBox>(widget)}
+        explicit MessageBoxImpl(tgui::Widget* widget) :
+            messageBox_{static_cast<tgui::MessageBox*>(widget)}
         {}
 
-        std::shared_ptr<tgui::MessageBox> messageBox_;
+        tgui::MessageBox* messageBox_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
 
     MessageBox::MessageBox() :
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::MessageBox>>(tgui::MessageBox::create())),
-        pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<MessageBoxRenderer>());
+        setRenderer(std::make_unique<MessageBoxRenderer>());
         setAsContainer(true);
 
         pimpl_->messageBox_->onButtonPress([this](const tgui::String& buttonCaption) {
@@ -72,13 +72,13 @@ namespace ime::ui {
 
     MessageBox::MessageBox(const MessageBox& other) :
         WidgetContainer(other),
-        pimpl_{std::make_unique<MessageBoxImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     MessageBox &MessageBox::operator=(const MessageBox& rhs) {
         if (this != &rhs) {
             WidgetContainer::operator=(rhs);
-            pimpl_ = std::make_unique<MessageBoxImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -101,19 +101,19 @@ namespace ime::ui {
     }
 
     MessageBox::Ptr MessageBox::copy() const {
-        return std::static_pointer_cast<MessageBox>(clone());
+        return MessageBox::Ptr(static_cast<MessageBox*>(clone().release()));
     }
 
     Widget::Ptr MessageBox::clone() const {
-        return std::make_shared<MessageBox>(*this);
+        return std::make_unique<MessageBox>(*this);
     }
 
-    MessageBoxRenderer::Ptr MessageBox::getRenderer() {
-        return std::static_pointer_cast<MessageBoxRenderer>(Widget::getRenderer());
+    MessageBoxRenderer* MessageBox::getRenderer() {
+        return static_cast<MessageBoxRenderer*>(Widget::getRenderer());
     }
 
-    const MessageBoxRenderer::Ptr MessageBox::getRenderer() const {
-        return std::static_pointer_cast<MessageBoxRenderer>(Widget::getRenderer());
+    const MessageBoxRenderer* MessageBox::getRenderer() const {
+        return static_cast<const MessageBoxRenderer*>(Widget::getRenderer());
     }
 
     void MessageBox::setText(const std::string &text) {

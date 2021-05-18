@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API RadioButton : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<RadioButton>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const RadioButton>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<RadioButton>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const RadioButton>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -83,8 +83,8 @@ namespace ime {
              * button is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
              */
-            RadioButtonRenderer::Ptr getRenderer();
-            const RadioButtonRenderer::Ptr getRenderer() const;
+            RadioButtonRenderer* getRenderer();
+            const RadioButtonRenderer* getRenderer() const;
 
             /**
              * @brief Allow or disallow the button to be checked by clicking

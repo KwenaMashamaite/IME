@@ -119,6 +119,10 @@ namespace ime::ui {
         return menuBarRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr MenuBarRenderer::clone() const {
+        return std::make_unique<MenuBarRenderer>(*this);
+    }
+
     void MenuBarRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         menuBarRenderer_ = dynamic_cast<tgui::MenuBarRenderer*>(renderer);
     }

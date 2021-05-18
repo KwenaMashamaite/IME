@@ -32,9 +32,28 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class Label::LabelImpl {
     public:
-        explicit LabelImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            label_{std::static_pointer_cast<tgui::Label>(widget)}
+        explicit LabelImpl(tgui::Widget* widget) :
+            label_{static_cast<tgui::Label*>(widget)}
         {}
+
+        /// The shallow copy is intentional because the implementation and the
+        /// base class must operate on the same third party widget. @param other
+        /// is a copied version of the argument passed to the copy constructor
+        /// of ime::Label, therefore no additional copies are required
+        LabelImpl(const LabelImpl& other) :
+            label_{static_cast<tgui::Label*>(other.label_)}
+        {}
+
+        LabelImpl& operator=(const LabelImpl& rhs) {
+            if (this == &rhs) {
+                label_ = rhs.label_;
+            }
+
+            return *this;
+        }
+
+        LabelImpl(LabelImpl&&) noexcept = default;
+        LabelImpl& operator=(LabelImpl&&) noexcept = default;
 
         void setText(const std::string &text) {
             label_->setText(text);
@@ -77,28 +96,28 @@ namespace ime::ui {
         }
 
     private:
-        std::shared_ptr<tgui::Label> label_;
+        tgui::Label* label_;
     }; // class LabelImpl
 
     //////////////////////////////////////////////////////////////////////////
-    // Label delegation
+    // Label class delegation
     //////////////////////////////////////////////////////////////////////////
     Label::Label(const std::string &text) :
         Widget(std::make_unique<priv::WidgetImpl<tgui::Label>>(tgui::Label::create(text))),
-        pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<LabelRenderer>());
+        setRenderer(std::make_unique<LabelRenderer>());
     }
 
     Label::Label(const Label& other) :
         Widget(other),
-        pimpl_{std::make_unique<LabelImpl>(*other.pimpl_)}{
-    }
+        pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
+    {}
 
     Label &Label::operator=(const Label& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<LabelImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -112,15 +131,15 @@ namespace ime::ui {
     }
 
     Label::Ptr Label::copy() const {
-        return std::static_pointer_cast<Label>(clone());
+        return Label::Ptr(static_cast<Label*>(clone().release()));
     }
 
-    std::shared_ptr<LabelRenderer> Label::getRenderer() {
-        return std::static_pointer_cast<LabelRenderer>(Widget::getRenderer());
+    LabelRenderer* Label::getRenderer() {
+        return static_cast<LabelRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<LabelRenderer> Label::getRenderer() const {
-        return std::static_pointer_cast<LabelRenderer>(Widget::getRenderer());
+    const LabelRenderer* Label::getRenderer() const {
+        return static_cast<const LabelRenderer*>(Widget::getRenderer());
     }
 
     void Label::setText(const std::string &text) {
@@ -164,7 +183,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr Label::clone() const {
-        return std::make_shared<Label>(*this);
+        return std::make_unique<Label>(*this);
     }
 
     std::string Label::getWidgetType() const {

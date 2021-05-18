@@ -83,11 +83,11 @@ namespace ime::ui {
         pimpl_->setRenderer(std::move(renderer));
     }
 
-    ui::IWidgetRenderer::Ptr Widget::getRenderer() {
+    IWidgetRenderer* Widget::getRenderer() {
         return pimpl_->getRenderer();
     }
 
-    const ui::IWidgetRenderer::Ptr Widget::getRenderer() const {
+    const IWidgetRenderer* Widget::getRenderer() const {
         return pimpl_->getRenderer();
     }
 

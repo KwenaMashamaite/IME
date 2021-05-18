@@ -43,7 +43,7 @@ namespace ime {
          */
         class IME_API MenuBarRenderer : public IWidgetRenderer {
         public:
-            using Ptr = std::shared_ptr<MenuBarRenderer>; //!< Shared renderer pointer
+            using Ptr = std::unique_ptr<MenuBarRenderer>; //!< Shared renderer pointer
 
             /**
              * @brief Set the background colour of the menu bar
@@ -204,6 +204,12 @@ namespace ime {
              * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
+
+            /**
+             * @brief Create a copy of the render
+             * @return A copy of the render
+             */
+            IWidgetRenderer::Ptr clone() const override;
 
             /**
              * @internal

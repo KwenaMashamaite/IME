@@ -29,20 +29,20 @@
 namespace ime::ui {
     class EditBox::EditBoxImpl {
     public:
-        explicit EditBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            editbox_{std::static_pointer_cast<tgui::EditBox>(widget)}
+        explicit EditBoxImpl(tgui::Widget* widget) :
+            editbox_{static_cast<tgui::EditBox*>(widget)}
         {}
         
-        std::shared_ptr<tgui::EditBox> editbox_;
+        tgui::EditBox* editbox_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
     
     EditBox::EditBox(const std::string& defaultText) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::EditBox>>(tgui::EditBox::create())),
-        pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<EditBoxRenderer>());
+        setRenderer(std::make_unique<EditBoxRenderer>());
         pimpl_->editbox_->setDefaultText(defaultText);
 
         pimpl_->editbox_->onTextChange([this](const tgui::String& text) {
@@ -56,13 +56,13 @@ namespace ime::ui {
 
     EditBox::EditBox(const EditBox & other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<EditBoxImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     EditBox &EditBox::operator=(const EditBox& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<EditBoxImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -76,15 +76,15 @@ namespace ime::ui {
     }
 
     EditBox::Ptr EditBox::copy() const {
-        return std::static_pointer_cast<EditBox>(clone());
+        return EditBox::Ptr(static_cast<EditBox*>(clone().release()));
     }
 
-    std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() {
-        return std::static_pointer_cast<EditBoxRenderer>(Widget::getRenderer());
+    EditBoxRenderer* EditBox::getRenderer() {
+        return static_cast<EditBoxRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<EditBoxRenderer> EditBox::getRenderer() const {
-        return std::static_pointer_cast<EditBoxRenderer>(Widget::getRenderer());
+    const EditBoxRenderer* EditBox::getRenderer() const {
+        return static_cast<const EditBoxRenderer*>(Widget::getRenderer());
     }
 
     void EditBox::setText(const std::string &content) {
@@ -144,7 +144,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr EditBox::clone() const {
-        return std::make_shared<EditBox>(*this);
+        return std::make_unique<EditBox>(*this);
     }
 
     std::string EditBox::getWidgetType() const {

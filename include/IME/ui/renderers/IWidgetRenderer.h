@@ -72,7 +72,7 @@ namespace ime {
          */
         class IME_API IWidgetRenderer {
         public:
-            using Ptr = std::shared_ptr<IWidgetRenderer>; //!< Shared renderer pointer
+            using Ptr = std::unique_ptr<IWidgetRenderer>; //!< Unique renderer pointer
 
             /**
              * @brief Set the opacity of the widget
@@ -147,6 +147,12 @@ namespace ime {
              * should never be called under any circumstance
              */
             virtual void setInternalPtr(tgui::WidgetRenderer *renderer) = 0;
+
+            /**
+             * @brief Clone the renderer
+             * @return A clone of this renderer
+             */
+            virtual IWidgetRenderer::Ptr clone() const = 0;
 
             /**
              * @internal

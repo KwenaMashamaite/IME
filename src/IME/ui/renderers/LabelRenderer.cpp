@@ -142,6 +142,10 @@ namespace ime::ui {
         return labelRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr LabelRenderer::clone() const {
+        return std::make_unique<LabelRenderer>(*this);
+    }
+
     void LabelRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         labelRenderer_ = dynamic_cast<tgui::LabelRenderer *>(renderer);
     }

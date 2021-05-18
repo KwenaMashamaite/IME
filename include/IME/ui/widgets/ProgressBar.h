@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API ProgressBar : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<ProgressBar>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const ProgressBar>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<ProgressBar>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const ProgressBar>; //!< Const unique widget pointer
 
             /**
              * @brief Determines in which direction the progress bar is filled
@@ -96,8 +96,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ProgressBarRenderer::Ptr getRenderer();
-            const ProgressBarRenderer::Ptr getRenderer() const;
+            ProgressBarRenderer* getRenderer();
+            const ProgressBarRenderer* getRenderer() const;
 
             /**
              * @brief Set a minimum value

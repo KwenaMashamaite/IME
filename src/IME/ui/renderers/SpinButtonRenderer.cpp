@@ -135,6 +135,10 @@ namespace ime::ui {
         return renderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr SpinButtonRenderer::clone() const {
+        return std::make_unique<SpinButtonRenderer>(*this);
+    }
+
     void SpinButtonRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         renderer_ = dynamic_cast<tgui::SpinButtonRenderer*>(renderer);
     }

@@ -29,20 +29,20 @@
 namespace ime::ui {
     class ScrollablePanel::PanelImpl {
     public:
-        explicit PanelImpl(const std::shared_ptr<tgui::Widget>& widget) :
-           panel_{std::static_pointer_cast<tgui::ScrollablePanel>(widget)}
+        explicit PanelImpl(tgui::Widget* widget) :
+           panel_{static_cast<tgui::ScrollablePanel*>(widget)}
         {}
 
-        std::shared_ptr<tgui::ScrollablePanel> panel_;
+        tgui::ScrollablePanel* panel_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
 
     ScrollablePanel::ScrollablePanel(const std::string &width, const std::string &height, Vector2f contentSize) :
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ScrollablePanel>>(tgui::ScrollablePanel::create({width.c_str(), height.c_str()}, {contentSize.x, contentSize.y}))),
-        pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::shared_ptr<ScrollablePanelRenderer>());
+        setRenderer(std::make_unique<ScrollablePanelRenderer>());
         setAsContainer(true);
 
         pimpl_->panel_->onDoubleClick([this](tgui::Vector2f mousePos) {
@@ -53,13 +53,13 @@ namespace ime::ui {
 
     ScrollablePanel::ScrollablePanel(const ScrollablePanel& other) :
         WidgetContainer(other),
-        pimpl_{std::make_unique<PanelImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     ScrollablePanel &ScrollablePanel::operator=(const ScrollablePanel& rhs) {
         if (this != &rhs) {
             WidgetContainer::operator=(rhs);
-            pimpl_ = std::make_unique<PanelImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -75,15 +75,15 @@ namespace ime::ui {
     }
 
     ScrollablePanel::Ptr ScrollablePanel::copy() const {
-        return std::static_pointer_cast<ScrollablePanel>(clone());
+        return ScrollablePanel::Ptr(static_cast<ScrollablePanel*>(clone().release()));
     }
 
-    ScrollablePanelRenderer::Ptr ScrollablePanel::getRenderer() {
-        return std::static_pointer_cast<ScrollablePanelRenderer>(Widget::getRenderer());
+    ScrollablePanelRenderer* ScrollablePanel::getRenderer() {
+        return static_cast<ScrollablePanelRenderer*>(Widget::getRenderer());
     }
 
-    const ScrollablePanelRenderer::Ptr ScrollablePanel::getRenderer() const {
-        return std::static_pointer_cast<ScrollablePanelRenderer>(Widget::getRenderer());
+    const ScrollablePanelRenderer* ScrollablePanel::getRenderer() const {
+        return static_cast<const ScrollablePanelRenderer*>(Widget::getRenderer());
     }
 
     void ScrollablePanel::setContentSize(Vector2f size) {
@@ -135,7 +135,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr ScrollablePanel::clone() const {
-        return std::make_shared<ScrollablePanel>(*this);
+        return std::make_unique<ScrollablePanel>(*this);
     }
 
     std::string ScrollablePanel::getWidgetType() const {

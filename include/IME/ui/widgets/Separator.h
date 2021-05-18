@@ -87,8 +87,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SeparatorRenderer::Ptr getRenderer();
-            const SeparatorRenderer::Ptr getRenderer() const;
+            SeparatorRenderer* getRenderer();
+            const SeparatorRenderer* getRenderer() const;
 
             /**
              * @brief Make a copy of this widget

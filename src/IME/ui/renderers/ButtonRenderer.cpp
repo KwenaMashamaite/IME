@@ -295,6 +295,10 @@ namespace ime::ui {
         return buttonRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr ButtonRenderer::clone() const {
+        return std::make_unique<ButtonRenderer>(*this);
+    }
+
     void ButtonRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         buttonRenderer_ = dynamic_cast<tgui::ButtonRenderer*>(renderer);
     }

@@ -76,6 +76,10 @@ namespace ime::ui {
         return boxLayoutRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr BoxLayoutRenderer::clone() const {
+        return std::make_unique<BoxLayoutRenderer>(*this);
+    }
+
     void BoxLayoutRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         boxLayoutRenderer_ = dynamic_cast<tgui::BoxLayoutRenderer*>(renderer);
     }

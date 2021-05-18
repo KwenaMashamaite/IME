@@ -43,7 +43,7 @@ namespace ime {
          */
         class IME_API TabsRenderer : public IWidgetRenderer {
         public:
-            using Ptr = std::shared_ptr<TabsRenderer>; //!< Shared renderer pointer
+            using Ptr = std::unique_ptr<TabsRenderer>; //!< Unique renderer pointer
 
             /**
              * @brief Change the size of the widget borders
@@ -364,6 +364,12 @@ namespace ime {
              * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
+
+            /**
+             * @brief Create a copy of the render
+             * @return A copy of the render
+             */
+            IWidgetRenderer::Ptr clone() const override;
 
             /**
              * @internal

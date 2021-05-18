@@ -30,7 +30,7 @@ namespace ime::ui {
     Separator::Separator() :
         Widget(std::make_unique<priv::WidgetImpl<tgui::SeparatorLine>>(tgui::SeparatorLine::create()))
     {
-        setRenderer(std::make_shared<SeparatorRenderer>());
+        setRenderer(std::make_unique<SeparatorRenderer>());
     }
 
     Separator::Ptr Separator::create() {
@@ -38,19 +38,19 @@ namespace ime::ui {
     }
 
     Separator::Ptr Separator::copy() const {
-        return std::static_pointer_cast<Separator>(clone());
+        return Separator::Ptr(static_cast<Separator*>(clone().release()));
     }
 
-    std::shared_ptr<SeparatorRenderer> Separator::getRenderer() {
-        return std::static_pointer_cast<SeparatorRenderer>(Widget::getRenderer());
+    SeparatorRenderer* Separator::getRenderer() {
+        return static_cast<SeparatorRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<SeparatorRenderer> Separator::getRenderer() const {
-        return std::static_pointer_cast<SeparatorRenderer>(Widget::getRenderer());
+    const SeparatorRenderer* Separator::getRenderer() const {
+        return static_cast<const SeparatorRenderer*>(Widget::getRenderer());
     }
 
     Widget::Ptr Separator::clone() const {
-        return std::make_shared<Separator>(*this);
+        return std::make_unique<Separator>(*this);
     }
 
     std::string Separator::getWidgetType() const {

@@ -170,6 +170,10 @@ namespace ime::ui {
         return windowRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr ChildWindowRenderer::clone() const {
+        return std::make_unique<ChildWindowRenderer>(*this);
+    }
+
     void ChildWindowRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         windowRenderer_ = dynamic_cast<tgui::ChildWindowRenderer*>(renderer);
     }

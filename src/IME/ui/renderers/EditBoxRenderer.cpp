@@ -294,6 +294,10 @@ namespace ime::ui {
         return editBoxRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr EditBoxRenderer::clone() const {
+        return std::make_unique<EditBoxRenderer>(*this);
+    }
+
     void EditBoxRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         editBoxRenderer_ = dynamic_cast<tgui::EditBoxRenderer*>(renderer);
     }

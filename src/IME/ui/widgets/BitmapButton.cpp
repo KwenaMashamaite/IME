@@ -33,8 +33,8 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class BitmapButton::ButtonImpl {
     public:
-        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            button_{std::static_pointer_cast<tgui::BitmapButton>(widget)}
+        explicit ButtonImpl(tgui::Widget* widget) :
+            button_{static_cast<tgui::BitmapButton*>(widget)}
         {}
 
         void setText(const std::string &text) {
@@ -58,7 +58,7 @@ namespace ime::ui {
         }
 
     private:
-        std::shared_ptr<tgui::BitmapButton> button_;
+        tgui::BitmapButton* button_;
     }; // class bitmap button
 
     //////////////////////////////////////////////////////////////////////////
@@ -66,20 +66,20 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     BitmapButton::BitmapButton(const std::string &buttonText) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::BitmapButton>>(tgui::BitmapButton::create(buttonText))),
-        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<ButtonRenderer>());
+        setRenderer(std::make_unique<ButtonRenderer>());
     }
 
     BitmapButton::BitmapButton(const BitmapButton& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     BitmapButton &BitmapButton::operator=(const BitmapButton& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -93,15 +93,15 @@ namespace ime::ui {
     }
 
     BitmapButton::Ptr BitmapButton::copy() const {
-        return std::static_pointer_cast<BitmapButton>(clone());
+        return BitmapButton::Ptr(static_cast<BitmapButton*>(clone().release()));
     }
 
-    std::shared_ptr<ButtonRenderer> BitmapButton::getRenderer() {
-        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
+    ButtonRenderer* BitmapButton::getRenderer() {
+        return static_cast<ButtonRenderer*>(Widget::getRenderer());
     }
 
-    const ButtonRenderer::Ptr BitmapButton::getRenderer() const {
-        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
+    const ButtonRenderer* BitmapButton::getRenderer() const {
+        return static_cast<const ButtonRenderer*>(Widget::getRenderer());
     }
 
     void BitmapButton::setText(const std::string &text) {
@@ -125,7 +125,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr BitmapButton::clone() const {
-        return std::make_shared<BitmapButton>(*this);
+        return std::make_unique<BitmapButton>(*this);
     }
 
     std::string BitmapButton::getWidgetType() const {

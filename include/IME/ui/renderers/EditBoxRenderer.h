@@ -43,8 +43,6 @@ namespace ime {
          */
         class IME_API EditBoxRenderer : public IWidgetRenderer {
         public:
-            using Ptr = std::shared_ptr<EditBoxRenderer>; //!< Shared renderer pointer
-
             /**
              * @brief Set the text style
              * @param style Style to set
@@ -445,6 +443,12 @@ namespace ime {
              * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
+
+            /**
+             * @brief Create a copy of the render
+             * @return A copy of the render
+             */
+            IWidgetRenderer::Ptr clone() const override;
 
             /**
              * @internal

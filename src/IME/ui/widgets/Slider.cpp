@@ -29,20 +29,20 @@
 namespace ime::ui {
     class Slider::SliderImpl {
     public:
-        explicit SliderImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            slider_{std::static_pointer_cast<tgui::Slider>(widget)}
+        explicit SliderImpl(tgui::Widget* widget) :
+            slider_{static_cast<tgui::Slider*>(widget)}
         {}
 
-        std::shared_ptr<tgui::Slider> slider_;
+        tgui::Slider* slider_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
 
     Slider::Slider(float minValue, float maxValue) :
         Widget(std::make_unique<priv::WidgetImpl<tgui::Slider>>(tgui::Slider::create(minValue, maxValue))),
-        pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<SliderRenderer>());
+        setRenderer(std::make_unique<SliderRenderer>());
 
         pimpl_->slider_->onValueChange([this](float newValue) {
             emit("valueChange", newValue);
@@ -51,13 +51,13 @@ namespace ime::ui {
 
     Slider::Slider(const Slider &other) :
         Widget(other),
-        pimpl_{std::make_unique<SliderImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     Slider &Slider::operator=(const Slider& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<SliderImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<SliderImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -71,15 +71,15 @@ namespace ime::ui {
     }
 
     Slider::Ptr Slider::copy() const {
-        return std::static_pointer_cast<Slider>(clone());
+        return Slider::Ptr(static_cast<Slider*>(clone().release()));
     }
 
-    std::shared_ptr<SliderRenderer> Slider::getRenderer() {
-        return std::static_pointer_cast<SliderRenderer>(Widget::getRenderer());
+    SliderRenderer* Slider::getRenderer() {
+        return static_cast<SliderRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<SliderRenderer> Slider::getRenderer() const {
-        return std::static_pointer_cast<SliderRenderer>(Widget::getRenderer());
+    const SliderRenderer* Slider::getRenderer() const {
+        return static_cast<const SliderRenderer*>(Widget::getRenderer());
     }
 
     void Slider::setMinimumValue(float minValue) {
@@ -139,7 +139,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr Slider::clone() const {
-        return std::make_shared<Slider>(*this);
+        return std::make_unique<Slider>(*this);
     }
 
     std::string Slider::getWidgetType() const {

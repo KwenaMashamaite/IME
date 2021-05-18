@@ -39,8 +39,8 @@ namespace ime {
          */
         class IME_API ChildWindow : public WidgetContainer {
         public:
-            using Ptr = std::shared_ptr<ChildWindow>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const ChildWindow>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<ChildWindow>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const ChildWindow>; //!< Const unique widget pointer
 
             /**
              * @brief Title alignments, possible options for the setTitleAlignment function
@@ -108,8 +108,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ChildWindowRenderer::Ptr getRenderer();
-            const ChildWindowRenderer::Ptr getRenderer() const;
+            ChildWindowRenderer* getRenderer();
+            const ChildWindowRenderer* getRenderer() const;
 
             /**
              * @brief Set the client size of the child window

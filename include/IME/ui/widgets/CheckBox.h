@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API CheckBox : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<CheckBox>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const CheckBox>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<CheckBox>; //!< Unique widget pointer
+            using ConstPtr = std::shared_ptr<const CheckBox>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -85,8 +85,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            CheckBoxRenderer::Ptr getRenderer();
-            const CheckBoxRenderer::Ptr getRenderer() const;
+            CheckBoxRenderer* getRenderer();
+            const CheckBoxRenderer* getRenderer() const;
 
             /**
              * @brief Allow or disallow the checkbox to be checked by clicking

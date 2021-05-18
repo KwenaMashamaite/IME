@@ -179,6 +179,10 @@ namespace ime::ui {
         return messageBoxRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr MessageBoxRenderer::clone() const {
+        return std::make_unique<MessageBoxRenderer>(*this);
+    }
+
     void MessageBoxRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         messageBoxRenderer_ = dynamic_cast<tgui::MessageBoxRenderer*>(renderer);
     }

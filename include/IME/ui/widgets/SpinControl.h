@@ -36,8 +36,8 @@ namespace ime {
          */
         class IME_API SpinControl : public Widget {
         public:
-            using Ptr = std::shared_ptr<SpinControl>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const SpinControl>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<SpinControl>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const SpinControl>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -89,8 +89,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SpinButtonRenderer::Ptr getSpinButtonRenderer();
-            const SpinButtonRenderer::Ptr getSpinButtonRenderer() const;
+            SpinButtonRenderer* getSpinButtonRenderer();
+            const SpinButtonRenderer* getSpinButtonRenderer() const;
 
             /**
              * @brief Set a minimum value for the spin control

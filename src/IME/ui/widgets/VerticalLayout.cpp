@@ -30,32 +30,32 @@
 namespace ime::ui {
     class VerticalLayout::VerticalLayoutImpl {
     public:
-        explicit VerticalLayoutImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            layout_{std::static_pointer_cast<tgui::VerticalLayout>(widget)}
+        explicit VerticalLayoutImpl(tgui::Widget* widget) :
+            layout_{static_cast<tgui::VerticalLayout*>(widget)}
         {}
 
-        std::shared_ptr<tgui::VerticalLayout> layout_;
+        tgui::VerticalLayout* layout_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
 
     VerticalLayout::VerticalLayout(const std::string& width, const std::string& height) :
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::VerticalLayout>>(tgui::VerticalLayout::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<BoxLayoutRenderer>());
+        setRenderer(std::make_unique<BoxLayoutRenderer>());
         setAsContainer(true);
     }
 
     VerticalLayout::VerticalLayout(const VerticalLayout& other) :
         IBoxLayout(other),
-        pimpl_{std::make_unique<VerticalLayoutImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     VerticalLayout &VerticalLayout::operator=(const VerticalLayout& rhs) {
         if (this != &rhs) {
             IBoxLayout::operator=(rhs);
-            pimpl_ = std::make_unique<VerticalLayoutImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -69,24 +69,22 @@ namespace ime::ui {
     }
 
     VerticalLayout::Ptr VerticalLayout::copy() const {
-        return std::static_pointer_cast<VerticalLayout>(clone());
+        return VerticalLayout::Ptr(static_cast<VerticalLayout*>(clone().release()));
     }
 
-    BoxLayoutRenderer::Ptr VerticalLayout::getRenderer() {
-        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    BoxLayoutRenderer* VerticalLayout::getRenderer() {
+        return static_cast<BoxLayoutRenderer*>(Widget::getRenderer());
     }
 
-    const BoxLayoutRenderer::Ptr VerticalLayout::getRenderer() const {
-        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    const BoxLayoutRenderer* VerticalLayout::getRenderer() const {
+        return static_cast<const BoxLayoutRenderer*>(Widget::getRenderer());
     }
 
     std::string VerticalLayout::getWidgetType() const {
         return "HorizontalLayout";
     }
 
-    void VerticalLayout::insertWidget(std::size_t index, const Widget::Ptr& widget,
-        const std::string &name)
-    {
+    void VerticalLayout::insertWidget(std::size_t index, Widget* widget, const std::string &name) {
         pimpl_->layout_->insert(index, std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
     }
 
@@ -102,7 +100,7 @@ namespace ime::ui {
         pimpl_->layout_->insertSpace(index, ratio);
     }
 
-    bool VerticalLayout::setRatio(const Widget::Ptr& widget, float ratio) {
+    bool VerticalLayout::setRatio(Widget* widget, float ratio) {
         return pimpl_->layout_->setRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), ratio);
     }
 
@@ -110,7 +108,7 @@ namespace ime::ui {
         return pimpl_->layout_->setRatio(index, ratio);
     }
 
-    float VerticalLayout::getRatio(const Widget::Ptr& widget) const {
+    float VerticalLayout::getRatio(const Widget* widget) const {
         return pimpl_->layout_->getRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
     }
 
@@ -119,7 +117,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr VerticalLayout::clone() const {
-        return std::make_shared<VerticalLayout>(*this);
+        return std::make_unique<VerticalLayout>(*this);
     }
 
     VerticalLayout::~VerticalLayout() = default;

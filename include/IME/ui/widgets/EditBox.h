@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API EditBox : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<EditBox>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const EditBox>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<EditBox>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const EditBox>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -83,8 +83,8 @@ namespace ime {
              * widget is displayed. It allows you to manipulate things such
              * as the background colour, text colour, border colour etc...
              */
-            EditBoxRenderer::Ptr getRenderer();
-            const EditBoxRenderer::Ptr getRenderer() const;
+            EditBoxRenderer* getRenderer();
+            const EditBoxRenderer* getRenderer() const;
 
             /**
              * @brief Set the text inside the edit box

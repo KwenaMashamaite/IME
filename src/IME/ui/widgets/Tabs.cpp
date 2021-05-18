@@ -29,20 +29,20 @@
 namespace ime::ui {
     class Tabs::TabsImpl {
     public:
-        explicit TabsImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            tabs_{std::static_pointer_cast<tgui::Tabs>(widget)}
+        explicit TabsImpl(tgui::Widget* widget) :
+            tabs_{static_cast<tgui::Tabs*>(widget)}
         {}
 
-        std::shared_ptr<tgui::Tabs> tabs_;
+        tgui::Tabs* tabs_;
     }; // class TabsImpl
 
     ////////////////////////////////////////////////////////////////////////////
 
     Tabs::Tabs() :
         Widget(std::make_unique<priv::WidgetImpl<tgui::Tabs>>(tgui::Tabs::create())),
-        pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<TabsRenderer>());
+        setRenderer(std::make_unique<TabsRenderer>());
 
         pimpl_->tabs_->onTabSelect([this](const tgui::String& item){
             emit("select", item.toStdString());
@@ -51,13 +51,13 @@ namespace ime::ui {
 
     Tabs::Tabs(const Tabs& other) :
         Widget(other),
-        pimpl_{std::make_unique<TabsImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     Tabs &Tabs::operator=(const Tabs& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<TabsImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -71,15 +71,15 @@ namespace ime::ui {
     }
 
     Tabs::Ptr Tabs::copy() const {
-        return std::static_pointer_cast<Tabs>(clone());
+        return Tabs::Ptr(static_cast<Tabs*>(clone().release()));
     }
 
-    std::shared_ptr<TabsRenderer> Tabs::getRenderer() {
-        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
+    TabsRenderer* Tabs::getRenderer() {
+        return static_cast<TabsRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<TabsRenderer> Tabs::getRenderer() const {
-        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
+    const TabsRenderer* Tabs::getRenderer() const {
+        return static_cast<const TabsRenderer*>(Widget::getRenderer());
     }
 
     void Tabs::setAutoSize(bool autoSize) {
@@ -179,7 +179,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr Tabs::clone() const {
-        return std::make_shared<Tabs>(*this);
+        return std::make_unique<Tabs>(*this);
     }
 
     std::string Tabs::getWidgetType() const {

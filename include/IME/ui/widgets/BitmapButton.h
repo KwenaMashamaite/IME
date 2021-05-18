@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API BitmapButton : public ClickableWidget {
         public:
-            using Ptr = std::shared_ptr<BitmapButton>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const BitmapButton>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<BitmapButton>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const BitmapButton>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -86,8 +86,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ButtonRenderer::Ptr getRenderer();
-            const ButtonRenderer::Ptr getRenderer() const;
+            ButtonRenderer* getRenderer();
+            const ButtonRenderer* getRenderer() const;
 
             /**
              * @brief Set the text displayed on the button

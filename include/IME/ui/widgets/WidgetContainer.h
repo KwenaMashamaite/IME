@@ -37,7 +37,7 @@ namespace ime {
          */
         class IME_API WidgetContainer : public Widget {
         public:
-            using Ptr = std::shared_ptr<WidgetContainer>; //!< Shared IContainer pointer
+            using Ptr = std::unique_ptr<WidgetContainer>; //!< Unique IContainer pointer
 
             /**
              * @internal
@@ -70,13 +70,13 @@ namespace ime {
              * @brief Add a widget to the container
              * @param widget Widget to be added
              * @param name Unique Name of the widget
-             * @return True if the widget was added to the container or false
-             *         if the container already has a widget with the same name
-             *         as the specified widget name
+             * @return Pointer to the widget if it was added to the container
+             *         or nullptr if the container already has a widget with
+             *         the same name as the specified widget name
              *
              * The name of the widget must not contain whitespaces
              */
-            bool addWidget(const Widget::Ptr& widget, const std::string& name);
+            Widget* addWidget(Widget::Ptr widget, const std::string& name);
             
             /**
              * @brief Get access to a widget in the container
@@ -89,7 +89,7 @@ namespace ime {
              * children of it, but when none of the child widgets match the 
              * given name, a recursive search will be performed.
              */
-            Widget::Ptr getWidget(const std::string& name) const;
+            Widget* getWidget(const std::string& name) const;
 
             /**
              * @brief Get access to a widget in the container
@@ -108,8 +108,8 @@ namespace ime {
              * cannot be casted to the desired type
              */
             template<class T>
-            std::shared_ptr<T> getWidget(const std::string& name) const {
-                return std::dynamic_pointer_cast<T>(getWidget(name));
+            T* getWidget(const std::string& name) const {
+                return dynamic_cast<T*>(getWidget(name));
             }
 
             /**
@@ -119,7 +119,7 @@ namespace ime {
              * @return Pointer to the widget at the specified position or a
              *         nullptr if there is no widget at that position
              */
-            Widget::Ptr getWidgetAtPosition(Vector2f pos) const;
+            Widget* getWidgetAtPosition(Vector2f pos) const;
 
             /**
              * @brief Remove a widget from the container
@@ -139,14 +139,14 @@ namespace ime {
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToFront(const Widget::Ptr& widget);
+            void moveWidgetToFront(const Widget* widget);
 
             /**
              * @brief Place a widget behind all other widgets, to the back
              *        of the z-order
              * @param widget The widget that should be moved to the front
              */
-            void moveWidgetToBack(const Widget::Ptr& widget);
+            void moveWidgetToBack(const Widget* widget);
 
             /**
              * @brief Place a widget one step forward in the z-order
@@ -154,7 +154,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetForward(const Widget::Ptr& widget);
+            std::size_t moveWidgetForward(const Widget* widget);
 
             /**
              * @brief Place a widget one step backwards in the z-order
@@ -162,7 +162,7 @@ namespace ime {
              * @return New index in the widgets list (one higher than the old
              *         index or the same if the widget was already in front),
              */
-            std::size_t moveWidgetBackward(const Widget::Ptr& widget);
+            std::size_t moveWidgetBackward(const Widget* widget);
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -175,7 +175,7 @@ namespace ime {
              *
              * @see getFocusedLeaf
              */
-            Widget::Ptr getFocusedWidget() const;
+            Widget* getFocusedWidget() const;
 
             /**
              * @brief Get the currently focused widget inside the container
@@ -190,7 +190,7 @@ namespace ime {
              *
              * @see getFocusedWidget
              */
-            Widget::Ptr getFocusedLeaf() const;
+            Widget* getFocusedLeaf() const;
 
             /**
              * @brief Focus the next widget in the container
@@ -209,6 +209,21 @@ namespace ime {
              * @return True if the next widget was focused, otherwise false
              */
             bool focusPreviousWidget(bool recursive = true);
+
+            /**
+             * @brief Get the number of widgets in the container
+             * @return The number of widgets in the container
+             *
+             * Note that child widgets that are also containers are only
+             * counted as one
+             */
+            std::size_t getCount() const;
+
+            /**
+             * @brief Apply a callback to each widget in the container
+             * @param callback The function to be applied
+             */
+            void forEach(const Callback<Widget*>& callback) const;
 
             /**
              * @brief Destructor

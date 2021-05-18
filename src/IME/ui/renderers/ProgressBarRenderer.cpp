@@ -128,6 +128,10 @@ namespace ime::ui {
         return progressBarRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr ProgressBarRenderer::clone() const {
+        return std::make_unique<ProgressBarRenderer>(*this);
+    }
+
     void ProgressBarRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         progressBarRenderer_ = dynamic_cast<tgui::ProgressBarRenderer*>(renderer);
     }

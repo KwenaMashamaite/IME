@@ -357,6 +357,10 @@ namespace ime::ui {
         return buttonRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr RadioButtonRenderer::clone() const {
+        return std::make_unique<RadioButtonRenderer>(*this);
+    }
+
     void RadioButtonRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         buttonRenderer_ = dynamic_cast<tgui::RadioButtonRenderer*>(renderer);
     }

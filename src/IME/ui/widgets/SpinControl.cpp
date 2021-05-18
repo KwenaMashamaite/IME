@@ -29,11 +29,11 @@
 namespace ime::ui {
     class SpinControl::SpinControlImpl {
     public:
-        explicit SpinControlImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            spinControl_{std::static_pointer_cast<tgui::SpinControl>(widget)}
+        explicit SpinControlImpl(tgui::Widget* widget) :
+            spinControl_{static_cast<tgui::SpinControl*>(widget)}
         {}
 
-        std::shared_ptr<tgui::SpinControl> spinControl_;
+        tgui::SpinControl* spinControl_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,9 @@ namespace ime::ui {
         unsigned int decimal, float step) :
             Widget(std::make_unique<priv::WidgetImpl<tgui::SpinControl>>(
                 tgui::SpinControl::create(minValue, maxValue, initialValue, decimal, step))),
-            pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+            pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<SpinButtonRenderer>());
+        setRenderer(std::make_unique<SpinButtonRenderer>());
 
         pimpl_->spinControl_->onValueChange([this](float value) {
             emit("valueChange", value);
@@ -53,13 +53,13 @@ namespace ime::ui {
 
     SpinControl::SpinControl(const SpinControl& other) :
         Widget(other),
-        pimpl_{std::make_unique<SpinControlImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     SpinControl &SpinControl::operator=(const SpinControl& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<SpinControlImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -75,15 +75,15 @@ namespace ime::ui {
     }
 
     SpinControl::Ptr SpinControl::copy() const {
-        return std::static_pointer_cast<SpinControl>(clone());
+        return SpinControl::Ptr(static_cast<SpinControl*>(clone().release()));
     }
 
-    SpinButtonRenderer::Ptr SpinControl::getSpinButtonRenderer() {
-        return std::static_pointer_cast<SpinButtonRenderer>(Widget::getRenderer());
+    SpinButtonRenderer* SpinControl::getSpinButtonRenderer() {
+        return static_cast<SpinButtonRenderer*>(Widget::getRenderer());
     }
 
-    const SpinButtonRenderer::Ptr SpinControl::getSpinButtonRenderer() const {
-        return std::static_pointer_cast<SpinButtonRenderer>(Widget::getRenderer());
+    const SpinButtonRenderer* SpinControl::getSpinButtonRenderer() const {
+        return static_cast<const SpinButtonRenderer*>(Widget::getRenderer());
     }
 
     void SpinControl::setMinimumValue(float minValue) {
@@ -127,7 +127,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr SpinControl::clone() const {
-        return std::make_shared<SpinControl>(*this);
+        return std::make_unique<SpinControl>(*this);
     }
 
     std::string SpinControl::getWidgetType() const {

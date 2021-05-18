@@ -225,6 +225,10 @@ namespace ime::ui {
         return tabsRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr TabsRenderer::clone() const {
+        return std::make_unique<TabsRenderer>(*this);
+    }
+
     void TabsRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         tabsRenderer_ = dynamic_cast<tgui::TabsRenderer*>(renderer);
     }

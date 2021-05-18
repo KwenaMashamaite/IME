@@ -97,8 +97,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            MenuBarRenderer::Ptr getRenderer();
-            const MenuBarRenderer::Ptr getRenderer() const;
+            MenuBarRenderer* getRenderer();
+            const MenuBarRenderer* getRenderer() const;
 
             /**
              * @brief Add a new menu

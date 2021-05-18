@@ -38,8 +38,8 @@ namespace ime {
          */
         class IME_API Panel : public WidgetContainer {
         public:
-            using Ptr = std::shared_ptr<Panel>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const Panel>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<Panel>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const Panel>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -98,8 +98,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            PanelRenderer::Ptr getRenderer();
-            const PanelRenderer::Ptr getRenderer() const;
+            PanelRenderer* getRenderer();
+            const PanelRenderer* getRenderer() const;
 
             /**
              * @brief Make a copy of this widget

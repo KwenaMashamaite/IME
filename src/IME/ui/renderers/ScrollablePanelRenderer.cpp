@@ -97,6 +97,10 @@ namespace ime::ui {
         return panelRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr ScrollablePanelRenderer::clone() const {
+        return std::make_unique<ScrollablePanelRenderer>(*this);
+    }
+
     void ScrollablePanelRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         panelRenderer_ = dynamic_cast<tgui::ScrollablePanelRenderer*>(renderer);
     }

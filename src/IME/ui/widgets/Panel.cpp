@@ -31,7 +31,7 @@ namespace ime::ui {
     Panel::Panel(const std::string& width, const std::string& height) :
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::Panel>>(tgui::Panel::create({width.c_str(), height.c_str()})))
     {
-        setRenderer(std::make_shared<PanelRenderer>());
+        setRenderer(std::make_unique<PanelRenderer>());
         setAsContainer(true);
     }
 
@@ -40,19 +40,19 @@ namespace ime::ui {
     }
 
     Panel::Ptr Panel::copy() const {
-        return std::static_pointer_cast<Panel>(clone());
+        return Panel::Ptr(static_cast<Panel*>(clone().release()));
     }
 
-    std::shared_ptr<PanelRenderer> Panel::getRenderer() {
-        return std::static_pointer_cast<PanelRenderer>(Widget::getRenderer());
+    PanelRenderer* Panel::getRenderer() {
+        return static_cast<PanelRenderer*>(Widget::getRenderer());
     }
 
-    const PanelRenderer::Ptr Panel::getRenderer() const {
-        return std::static_pointer_cast<PanelRenderer>(Widget::getRenderer());
+    const PanelRenderer* Panel::getRenderer() const {
+        return static_cast<const PanelRenderer*>(Widget::getRenderer());
     }
 
     Widget::Ptr Panel::clone() const {
-        return std::make_shared<Panel>(*this);
+        return std::make_unique<Panel>(*this);
     }
 
     std::string Panel::getWidgetType() const {

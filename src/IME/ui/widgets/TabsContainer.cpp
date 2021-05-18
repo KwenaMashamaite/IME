@@ -30,21 +30,42 @@
 namespace ime::ui {
     class TabsContainer::TabsContainerImpl {
     public:
-        explicit TabsContainerImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            tabContainer_{std::static_pointer_cast<tgui::TabContainer>(widget)}
+        explicit TabsContainerImpl(tgui::Widget* widget) :
+            tabContainer_{static_cast<tgui::TabContainer*>(widget)}
         {}
 
-        std::shared_ptr<tgui::TabContainer> tabContainer_;
-        std::unordered_map<std::size_t, Panel::Ptr> panel_;
+        TabsContainerImpl(const TabsContainerImpl& other) :
+            tabContainer_{static_cast<tgui::TabContainer*>(other.tabContainer_)}
+        {
+            for (const auto& [index, panel] : other.panels_) {
+                panels_.insert({index, panel->copy()});
+            }
+        }
+
+        TabsContainerImpl& operator=(const TabsContainerImpl& rhs) {
+            if (this != &rhs) {
+                auto temp{rhs};
+                std::swap(tabContainer_, temp.tabContainer_);
+                std::swap(panels_, temp.panels_);
+            }
+
+            return *this;
+        }
+
+        TabsContainerImpl(TabsContainerImpl&&) noexcept = default;
+        TabsContainerImpl& operator=(TabsContainerImpl&&) noexcept = default;
+
+        tgui::TabContainer* tabContainer_;
+        std::unordered_map<std::size_t, Panel::Ptr> panels_; //!< Stores a panel with its index
     }; // class WidgetContainerImpl
 
     ////////////////////////////////////////////////////////////////////////////
     
     TabsContainer::TabsContainer(const std::string& width, const std::string& height) :
         Widget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<TabsRenderer>());
+        setRenderer(std::make_unique<TabsRenderer>());
         
         pimpl_->tabContainer_->onSelectionChanged([this](int index){
             emit("selectionChange", index);
@@ -53,13 +74,13 @@ namespace ime::ui {
 
     TabsContainer::TabsContainer(const TabsContainer& other) :
         Widget(other),
-        pimpl_{std::make_unique<TabsContainerImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     TabsContainer &TabsContainer::operator=(const TabsContainer& rhs) {
         if (this != &rhs) {
             Widget::operator=(rhs);
-            pimpl_ = std::make_unique<TabsContainerImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -75,68 +96,65 @@ namespace ime::ui {
     }
 
     TabsContainer::Ptr TabsContainer::copy() const {
-        return std::static_pointer_cast<TabsContainer>(clone());
+        return TabsContainer::Ptr(static_cast<TabsContainer*>(clone().release()));
     }
 
-    std::shared_ptr<TabsRenderer> TabsContainer::getRenderer() {
-        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
+    TabsRenderer* TabsContainer::getRenderer() {
+        return static_cast<TabsRenderer*>(Widget::getRenderer());
     }
     
-    const std::shared_ptr<TabsRenderer> TabsContainer::getRenderer() const {
-        return std::static_pointer_cast<TabsRenderer>(Widget::getRenderer());
+    const TabsRenderer* TabsContainer::getRenderer() const {
+        return static_cast<const TabsRenderer*>(Widget::getRenderer());
     }
 
     void TabsContainer::setTabsHeight(float height) {
         pimpl_->tabContainer_->setTabsHeight(height);
     }
 
-    void TabsContainer::addPanel(std::shared_ptr<Panel> panel,
-        const std::string &text, bool select)
-    {
+    Panel* TabsContainer::addPanel(Panel::Ptr panel, const std::string &text, bool select) {
         IME_ASSERT(panel, "Cannot add nullptr to a TabsContainer");
-        pimpl_->panel_.insert({pimpl_->tabContainer_->getPanelCount() + 1, panel});
+        auto [iter, inserted] = pimpl_->panels_.insert({pimpl_->tabContainer_->getPanelCount() + 1, std::move(panel)});
+        IME_UNUSED(inserted);
+
         pimpl_->tabContainer_->addPanel(
-            std::static_pointer_cast<tgui::Panel>(std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())),
+            std::static_pointer_cast<tgui::Panel>(std::static_pointer_cast<tgui::Widget>(iter->second->getInternalPtr())),
             text, select);
+
+        return iter->second.get();
     }
 
-    bool TabsContainer::insertPanel(std::shared_ptr<Panel> panel,
-        const std::string &text, std::size_t index, bool select)
+    bool TabsContainer::insertPanel(Panel::Ptr panel, const std::string &text,
+        std::size_t index, bool select)
     {
         //@TODO Open up space for the new widget because in our container because
         // If the index is not at end, then a widget already exists with
         // the given index and an our unordered_map will deny the insertion
         // event though insertion in the third party container succeeds
-        if (pimpl_->tabContainer_->insertPanel(std::static_pointer_cast<tgui::Panel>(
-            std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())), text, index, select))
-        {
-            if (pimpl_->panel_.insert({getIndex(panel), panel}).second)
-                return true;
-            else {
-                removePanel(panel);
-                return false;
-            }
-        }
+        IME_UNUSED(panel);
+        IME_UNUSED(text);
+        IME_UNUSED(index);
+        IME_UNUSED(select);
+
         return false;
     }
 
-    void TabsContainer::removePanel(std::shared_ptr<Panel> panel) {
+    void TabsContainer::removePanel(Panel* panel) {
         auto panelCount = pimpl_->tabContainer_->getPanelCount();
         auto panelIndex = getIndex(panel);
         pimpl_->tabContainer_->removePanel(std::static_pointer_cast<tgui::Panel>(
             std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())));
 
         if (pimpl_->tabContainer_->getPanelCount() == panelCount - 1)
-            pimpl_->panel_.erase(panelIndex);
+            pimpl_->panels_.erase(panelIndex);
     }
 
     void TabsContainer::select(std::size_t index) {
         pimpl_->tabContainer_->select(index);
     }
 
-    std::shared_ptr<Panel> TabsContainer::getSelected() {
+    Panel* TabsContainer::getSelected() {
         if (pimpl_->tabContainer_->getSelected())
-            return pimpl_->panel_[pimpl_->tabContainer_->getSelectedIndex()];
+            return pimpl_->panels_[pimpl_->tabContainer_->getSelectedIndex()].get();
         return nullptr;
     }
 
@@ -144,7 +162,7 @@ namespace ime::ui {
         return pimpl_->tabContainer_->getPanelCount();
     }
 
-    int TabsContainer::getIndex(std::shared_ptr<Panel> panel) {
+    int TabsContainer::getIndex(const Panel* panel) {
         return pimpl_->tabContainer_->getIndex(std::static_pointer_cast<tgui::Panel>(
             std::static_pointer_cast<tgui::Widget>(panel->getInternalPtr())));
     }
@@ -153,9 +171,9 @@ namespace ime::ui {
         return pimpl_->tabContainer_->getSelectedIndex();
     }
 
-    std::shared_ptr<Panel> TabsContainer::getPanel(int index) {
-        if (pimpl_->panel_.find(index) != pimpl_->panel_.end())
-            return pimpl_->panel_[index];
+    Panel* TabsContainer::getPanel(int index) const {
+        if (pimpl_->panels_.find(index) != pimpl_->panels_.end())
+            return pimpl_->panels_.at(index).get();
         return nullptr;
     }
 
@@ -168,7 +186,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr TabsContainer::clone() const {
-        return std::make_shared<TabsContainer>(*this);
+        return std::make_unique<TabsContainer>(*this);
     }
 
     std::string TabsContainer::getWidgetType() const {

@@ -29,20 +29,20 @@
 namespace ime::ui {
     class ProgressBar::ProgressBarImpl {
     public:
-        explicit ProgressBarImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            progressBar_{std::static_pointer_cast<tgui::ProgressBar>(widget)}
+        explicit ProgressBarImpl(tgui::Widget* widget) :
+            progressBar_{static_cast<tgui::ProgressBar*>(widget)}
         {}
 
-        std::shared_ptr<tgui::ProgressBar> progressBar_;
+        tgui::ProgressBar* progressBar_;
     };
 
     ////////////////////////////////////////////////////////////////////////////
     
     ProgressBar::ProgressBar(const std::string& text) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::ProgressBar>>(tgui::ProgressBar::create())),
-        pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<ProgressBarRenderer>());
+        setRenderer(std::make_unique<ProgressBarRenderer>());
         pimpl_->progressBar_->setText(text);
 
         pimpl_->progressBar_->onPositionChange([this](tgui::Vector2f newPos) {
@@ -52,13 +52,13 @@ namespace ime::ui {
 
     ProgressBar::ProgressBar(const ProgressBar& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<ProgressBarImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     ProgressBar &ProgressBar::operator=(const ProgressBar& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<ProgressBarImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -72,15 +72,15 @@ namespace ime::ui {
     }
 
     ProgressBar::Ptr ProgressBar::copy() const {
-        return std::static_pointer_cast<ProgressBar>(clone());
+        return ProgressBar::Ptr(static_cast<ProgressBar*>(clone().release()));
     }
 
-    std::shared_ptr<ProgressBarRenderer> ProgressBar::getRenderer() {
-        return std::static_pointer_cast<ProgressBarRenderer>(Widget::getRenderer());
+    ProgressBarRenderer* ProgressBar::getRenderer() {
+        return static_cast<ProgressBarRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<ProgressBarRenderer> ProgressBar::getRenderer() const {
-        return std::static_pointer_cast<ProgressBarRenderer>(Widget::getRenderer());
+    const ProgressBarRenderer* ProgressBar::getRenderer() const {
+        return static_cast<const ProgressBarRenderer*>(Widget::getRenderer());
     }
 
     void ProgressBar::setMinimumValue(unsigned int minValue) {
@@ -129,7 +129,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr ProgressBar::clone() const {
-        return std::make_shared<ProgressBar>(*this);
+        return std::make_unique<ProgressBar>(*this);
     }
 
     std::string ProgressBar::getWidgetType() const {

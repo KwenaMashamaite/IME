@@ -63,6 +63,10 @@ namespace ime::ui {
         return separatorRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr SeparatorRenderer::clone() const {
+        return std::make_unique<SeparatorRenderer>(*this);
+    }
+
     void SeparatorRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         separatorRenderer_ = dynamic_cast<tgui::SeparatorLineRenderer*>(renderer);
     }

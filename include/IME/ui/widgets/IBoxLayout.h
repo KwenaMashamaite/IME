@@ -36,8 +36,6 @@ namespace ime {
          */
         class IME_API IBoxLayout : public WidgetContainer {
         public:
-            using Ptr = std::shared_ptr<IBoxLayout>; //!< Shared widget pointer
-
             /**
              * @internal
              * @brief Constructor
@@ -57,7 +55,7 @@ namespace ime {
              * @note If @a index is too high, the widget will simply be
              * added at the end of the list
              */
-            virtual void insertWidget(std::size_t index, const Widget::Ptr& widget,
+            virtual void insertWidget(std::size_t index, Widget* widget,
                 const std::string& widgetName) = 0;
 
             /**
@@ -94,7 +92,7 @@ namespace ime {
              * @return True if the widget was valid and the ratio was changed,
              *          or false if the widget was not found
              */
-            virtual bool setRatio(const Widget::Ptr& widget, float ratio) = 0;
+            virtual bool setRatio(Widget* widget, float ratio) = 0;
 
             /**
              * @brief Set the ratio of a widget at a certain index
@@ -112,7 +110,7 @@ namespace ime {
              * @return The ratio of the widget or 0 when the widget was not
              *         found
              */
-            virtual float getRatio(const Widget::Ptr& widget) const = 0;
+            virtual float getRatio(const Widget* widget) const = 0;
 
             /**
              * @brief Get the ratio of a widget at a certain index

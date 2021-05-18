@@ -89,6 +89,10 @@ namespace ime::ui {
         return panelRenderer_->getTransparentTexture();
     }
 
+    IWidgetRenderer::Ptr PanelRenderer::clone() const {
+        return std::make_unique<PanelRenderer>(*this);
+    }
+
     void PanelRenderer::setInternalPtr(tgui::WidgetRenderer *renderer) {
         panelRenderer_ = dynamic_cast<tgui::PanelRenderer*>(renderer);
     }

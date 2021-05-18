@@ -32,8 +32,8 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     class ToggleButton::ButtonImpl {
     public:
-        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            button_{std::static_pointer_cast<tgui::ToggleButton>(widget)}
+        explicit ButtonImpl(tgui::Widget* widget) :
+            button_{static_cast<tgui::ToggleButton*>(widget)}
         {}
 
         void setText(const std::string &text) {
@@ -52,12 +52,12 @@ namespace ime::ui {
             return button_->isDown();
         }
 
-        std::shared_ptr<tgui::ToggleButton> getPtr() {
+        tgui::ToggleButton* getPtr() {
             return button_;
         }
 
     private:
-        std::shared_ptr<tgui::ToggleButton> button_;
+        tgui::ToggleButton* button_;
     };
 
     //////////////////////////////////////////////////////////////////////////
@@ -65,9 +65,9 @@ namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
     ToggleButton::ToggleButton(const std::string &buttonText, bool checked) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::ToggleButton>>(tgui::ToggleButton::create(buttonText, checked))),
-        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<ButtonRenderer>());
+        setRenderer(std::make_unique<ButtonRenderer>());
 
         pimpl_->getPtr()->onToggle([this](bool checkedStatus) {
             emit("toggle");
@@ -77,13 +77,13 @@ namespace ime::ui {
 
     ToggleButton::ToggleButton(const ToggleButton& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     ToggleButton &ToggleButton::operator=(const ToggleButton& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -97,15 +97,15 @@ namespace ime::ui {
     }
 
     ToggleButton::Ptr ToggleButton::copy() const {
-        return std::static_pointer_cast<ToggleButton>(clone());
+        return ToggleButton::Ptr(static_cast<ToggleButton*>(clone().release()));
     }
 
-    std::shared_ptr<ButtonRenderer> ToggleButton::getRenderer() {
-        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
+    ButtonRenderer* ToggleButton::getRenderer() {
+        return static_cast<ButtonRenderer*>(Widget::getRenderer());
     }
 
-    const ButtonRenderer::Ptr ToggleButton::getRenderer() const {
-        return std::static_pointer_cast<ButtonRenderer>(Widget::getRenderer());
+    const ButtonRenderer* ToggleButton::getRenderer() const {
+        return static_cast<const ButtonRenderer*>(Widget::getRenderer());
     }
 
     void ToggleButton::setText(const std::string &text) {
@@ -125,7 +125,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr ToggleButton::clone() const {
-        return std::make_shared<ToggleButton>(*this);
+        return std::make_unique<ToggleButton>(*this);
     }
 
     std::string ToggleButton::getWidgetType() const {

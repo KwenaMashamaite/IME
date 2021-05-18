@@ -29,20 +29,20 @@
 namespace ime::ui {
     class RadioButton::ButtonImpl {
     public:
-        explicit ButtonImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            button_{std::static_pointer_cast<tgui::RadioButton>(widget)}
+        explicit ButtonImpl(tgui::Widget* widget) :
+            button_{static_cast<tgui::RadioButton*>(widget)}
         {}
 
-        std::shared_ptr<tgui::RadioButton> button_;
+        tgui::RadioButton* button_;
     }; // class ButtonImpl
 
     ////////////////////////////////////////////////////////////////////////////
 
     RadioButton::RadioButton(const std::string &buttonText) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::RadioButton>>(tgui::RadioButton::create())),
-        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<RadioButtonRenderer>());
+        setRenderer(std::make_unique<RadioButtonRenderer>());
         pimpl_->button_->setText(buttonText);
 
         pimpl_->button_->onCheck([this]{
@@ -60,13 +60,13 @@ namespace ime::ui {
 
     RadioButton::RadioButton(const RadioButton& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<ButtonImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     RadioButton &RadioButton::operator=(const RadioButton& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<ButtonImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -80,15 +80,15 @@ namespace ime::ui {
     }
 
     RadioButton::Ptr RadioButton::copy() const {
-        return std::static_pointer_cast<RadioButton>(clone());
+        return RadioButton::Ptr(static_cast<RadioButton*>(clone().release()));
     }
 
-    std::shared_ptr<RadioButtonRenderer> RadioButton::getRenderer() {
-        return std::static_pointer_cast<RadioButtonRenderer>(Widget::getRenderer());
+    RadioButtonRenderer* RadioButton::getRenderer() {
+        return static_cast<RadioButtonRenderer*>(Widget::getRenderer());
     }
 
-    const std::shared_ptr<RadioButtonRenderer> RadioButton::getRenderer() const {
-        return std::static_pointer_cast<RadioButtonRenderer>(Widget::getRenderer());
+    const RadioButtonRenderer* RadioButton::getRenderer() const {
+        return static_cast<const RadioButtonRenderer*>(Widget::getRenderer());
     }
 
     void RadioButton::setTextClickable(bool acceptTextClick) {
@@ -116,7 +116,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr RadioButton::clone() const {
-        return std::make_shared<RadioButton>(*this);
+        return std::make_unique<RadioButton>(*this);
 
     }
 

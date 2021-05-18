@@ -278,18 +278,15 @@ namespace ime::utility {
         return tguiFont;
     }
 
-    std::shared_ptr<ui::Widget> findRecursively(
-        const std::unordered_map<std::string, std::shared_ptr<ui::Widget>>& widgets,
-        const std::string &widgetName)
+    ui::Widget* findRecursively(const std::unordered_map<std::string,
+        std::unique_ptr<ui::Widget>>& widgets, const std::string &widgetName)
     {
         for (const auto& widget : widgets) {
             if (widget.second->isContainer()) {
-                auto container = std::static_pointer_cast<ui::WidgetContainer>(widget.second);
-                if (container) {
-                    auto widgetInContainer = container->getWidget(widgetName);
-                    if (widgetInContainer)
-                        return widgetInContainer;
-                }
+                auto* container = static_cast<ui::WidgetContainer*>(widget.second.get());
+                auto* widgetInContainer = container->getWidget(widgetName);
+                if (widgetInContainer)
+                    return widgetInContainer;
             }
         }
 

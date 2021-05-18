@@ -29,31 +29,31 @@
 namespace ime::ui {
     class CheckBox::CheckBoxImpl {
     public:
-        explicit CheckBoxImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            checkbox_{std::static_pointer_cast<tgui::CheckBox>(widget)}
+        explicit CheckBoxImpl(tgui::Widget* widget) :
+            checkbox_{static_cast<tgui::CheckBox*>(widget)}
         {}
         
-        std::shared_ptr<tgui::CheckBox> checkbox_;
+        tgui::CheckBox* checkbox_;
     }; // class WidgetContainerImpl
 
 
 ////////////////////////////////////////////////////////////////////////////////
     CheckBox::CheckBox(const std::string &text) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::CheckBox>>(tgui::CheckBox::create(text))),
-        pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<CheckBoxRenderer>());
+        setRenderer(std::make_unique<CheckBoxRenderer>());
     }
 
     CheckBox::CheckBox(const CheckBox& other) :
         ClickableWidget(other),
-        pimpl_{std::make_unique<CheckBoxImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     CheckBox &CheckBox::operator=(const CheckBox& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
-            pimpl_ = std::make_unique<CheckBoxImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -67,15 +67,15 @@ namespace ime::ui {
     }
 
     CheckBox::Ptr CheckBox::copy() const {
-        return std::static_pointer_cast<CheckBox>(clone());
+        return CheckBox::Ptr(static_cast<CheckBox*>(clone().release()));
     }
 
-    std::shared_ptr<CheckBoxRenderer> CheckBox::getRenderer() {
-        return std::static_pointer_cast<CheckBoxRenderer>(Widget::getRenderer());
+    CheckBoxRenderer* CheckBox::getRenderer() {
+        return static_cast<CheckBoxRenderer*>(Widget::getRenderer());
     }
 
-    const CheckBoxRenderer::Ptr CheckBox::getRenderer() const {
-        return std::static_pointer_cast<CheckBoxRenderer>(Widget::getRenderer());
+    const CheckBoxRenderer* CheckBox::getRenderer() const {
+        return static_cast<const CheckBoxRenderer*>(Widget::getRenderer());
     }
     
     void CheckBox::setText(const std::string &content) {
@@ -103,7 +103,7 @@ namespace ime::ui {
     }
 
     Widget::Ptr CheckBox::clone() const {
-        return std::make_shared<CheckBox>(*this);
+        return std::make_unique<CheckBox>(*this);
     }
 
     std::string CheckBox::getWidgetType() const {

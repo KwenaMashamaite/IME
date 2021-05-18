@@ -30,32 +30,32 @@
 namespace ime::ui {
     class HorizontalLayout::HorizontalLayoutImpl {
     public:
-        explicit HorizontalLayoutImpl(const std::shared_ptr<tgui::Widget>& widget) :
-            layout_{std::static_pointer_cast<tgui::HorizontalLayout>(widget)}
+        explicit HorizontalLayoutImpl(tgui::Widget* widget) :
+            layout_{static_cast<tgui::HorizontalLayout*>(widget)}
         {}
 
-        std::shared_ptr<tgui::HorizontalLayout> layout_;
+        tgui::HorizontalLayout* layout_;
     };
     
     ////////////////////////////////////////////////////////////////////////////
     
     HorizontalLayout::HorizontalLayout(const std::string& width, const std::string& height) :
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::HorizontalLayout>>(tgui::HorizontalLayout::create({width.c_str(), height.c_str()}))),
-        pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()))}
+        pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
-        setRenderer(std::make_shared<BoxLayoutRenderer>());
+        setRenderer(std::make_unique<BoxLayoutRenderer>());
         setAsContainer(true);
     }
 
     HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
         IBoxLayout(other),
-        pimpl_{std::make_unique<HorizontalLayoutImpl>(*other.pimpl_)}
+        pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {}
 
     HorizontalLayout &HorizontalLayout::operator=(const HorizontalLayout& rhs) {
         if (this != &rhs) {
             IBoxLayout::operator=(rhs);
-            pimpl_ = std::make_unique<HorizontalLayoutImpl>(*rhs.pimpl_);
+            pimpl_ = std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
         }
 
         return *this;
@@ -71,28 +71,26 @@ namespace ime::ui {
     }
 
     HorizontalLayout::Ptr HorizontalLayout::copy() const {
-        return std::static_pointer_cast<HorizontalLayout>(clone());
+        return HorizontalLayout::Ptr(static_cast<HorizontalLayout*>(clone().release()));
     }
 
     Widget::Ptr HorizontalLayout::clone() const {
-        return std::make_shared<HorizontalLayout>(*this);
+        return std::make_unique<HorizontalLayout>(*this);
     }
 
     std::string HorizontalLayout::getWidgetType() const {
         return "HorizontalLayout";
     }
 
-    BoxLayoutRenderer::Ptr HorizontalLayout::getRenderer() {
-        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    BoxLayoutRenderer* HorizontalLayout::getRenderer() {
+        return static_cast<BoxLayoutRenderer*>(Widget::getRenderer());
     }
 
-    const BoxLayoutRenderer::Ptr HorizontalLayout::getRenderer() const {
-        return std::static_pointer_cast<BoxLayoutRenderer>(Widget::getRenderer());
+    const BoxLayoutRenderer* HorizontalLayout::getRenderer() const {
+        return static_cast<const BoxLayoutRenderer*>(Widget::getRenderer());
     }
 
-    void HorizontalLayout::insertWidget(std::size_t index,
-        const Widget::Ptr& widget, const std::string &name)
-    {
+    void HorizontalLayout::insertWidget(std::size_t index, Widget* widget, const std::string &name) {
         pimpl_->layout_->insert(index, std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), name);
     }
 
@@ -108,7 +106,7 @@ namespace ime::ui {
         pimpl_->layout_->insertSpace(index, ratio);
     }
 
-    bool HorizontalLayout::setRatio(const Widget::Ptr& widget, float ratio) {
+    bool HorizontalLayout::setRatio(Widget* widget, float ratio) {
         return pimpl_->layout_->setRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()), ratio);
     }
 
@@ -116,7 +114,7 @@ namespace ime::ui {
         return pimpl_->layout_->setRatio(index, ratio);
     }
 
-    float HorizontalLayout::getRatio(const Widget::Ptr& widget) const {
+    float HorizontalLayout::getRatio(const Widget* widget) const {
         return pimpl_->layout_->getRatio(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
     }
 

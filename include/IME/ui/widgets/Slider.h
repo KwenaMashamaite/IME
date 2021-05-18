@@ -37,8 +37,8 @@ namespace ime {
          */
         class IME_API Slider : public Widget {
         public:
-            using Ptr = std::shared_ptr<Slider>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const Slider>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<Slider>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const Slider>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -86,8 +86,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            SliderRenderer::Ptr getRenderer();
-            const SliderRenderer::Ptr getRenderer() const;
+            SliderRenderer* getRenderer();
+            const SliderRenderer* getRenderer() const;
 
             /**
              * @brief Set a minimum value for the slider

@@ -34,8 +34,8 @@ namespace ime {
          */
         class IME_API ScrollablePanel : public WidgetContainer {
         public:
-            using Ptr = std::shared_ptr<ScrollablePanel>; //!< Shared widget pointer
-            using ConstPtr = std::shared_ptr<const ScrollablePanel>; //!< const shared widget pointer
+            using Ptr = std::unique_ptr<ScrollablePanel>; //!< Unique widget pointer
+            using ConstPtr = std::unique_ptr<const ScrollablePanel>; //!< Const unique widget pointer
 
             /**
              * @brief Copy constructor
@@ -99,8 +99,8 @@ namespace ime {
              *
              * @see setRenderer
              */
-            ScrollablePanelRenderer::Ptr getRenderer();
-            const ScrollablePanelRenderer::Ptr getRenderer() const;
+            ScrollablePanelRenderer* getRenderer();
+            const ScrollablePanelRenderer* getRenderer() const;
 
             /**
              * @brief Set the size available for child widgets

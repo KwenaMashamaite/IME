@@ -42,7 +42,7 @@ namespace ime {
          */
         class IME_API BoxLayoutRenderer : public IWidgetRenderer {
         public:
-            using Ptr = std::shared_ptr<BoxLayoutRenderer>; //!< Shared renderer pointer
+            using Ptr = std::unique_ptr<BoxLayoutRenderer>; //!< Unique renderer pointer
 
             /**
              * @brief Set the size of the padding
@@ -131,6 +131,12 @@ namespace ime {
              * @see ignoreTransparentTexture
              */
             bool isTransparentTextureIgnored() const override;
+
+            /**
+             * @brief Create a copy of the render
+             * @return A copy of the render
+             */
+            IWidgetRenderer::Ptr clone() const override;
 
             /**
              * @internal
