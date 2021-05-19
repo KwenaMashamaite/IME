@@ -24,7 +24,7 @@
 
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 
 namespace ime {
     GameObject::GameObject(Scene& scene, Type type) :

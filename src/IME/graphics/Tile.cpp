@@ -25,7 +25,7 @@
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Window.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
@@ -62,7 +62,7 @@ namespace ime {
 
     void Tile::attachCollider(BoxCollider::Ptr collider) {
         IME_ASSERT(collider, "Collider must not be a nullptr")
-        IME_ASSERT(tile_.hasRigidBody(), "A physics body must be set first before attaching a collider")
+        IME_ASSERT(tile_.hasRigidBody(), "A physWorld body must be set first before attaching a collider")
 
         if (collider->getSize() < tile_.getSize() || collider->getSize() > tile_.getSize())
             collider->setSize(tile_.getSize());
@@ -138,7 +138,7 @@ namespace ime {
     }
 
     void Tile::setCollidable(bool collidable) {
-        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physics body in order to enable/disable collisions")
+        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physWorld body in order to enable/disable collisions")
 
         if (tile_.getRigidBody()->isEnabled() == collidable)
             return;
@@ -194,8 +194,8 @@ namespace ime {
     }
 
     void Tile::setBody(RigidBody::Ptr body) {
-        IME_ASSERT(body, "The physics body must not be a nullptr")
-        IME_ASSERT(body->getType() == RigidBody::Type::Static, "The physics body of a tile must be of type ime::RigidBody::Type::Static")
+        IME_ASSERT(body, "The physWorld body must not be a nullptr")
+        IME_ASSERT(body->getType() == RigidBody::Type::Static, "The physWorld body of a tile must be of type ime::RigidBody::Type::Static")
         tile_.attachRigidBody(std::move(body));
         tile_.setOrigin(0, 0);
         tile_.getRigidBody()->setPosition(getWorldCentre());

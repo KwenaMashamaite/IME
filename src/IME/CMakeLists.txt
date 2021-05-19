@@ -40,7 +40,7 @@ set(IME_SRC
     core/physics/tilemap/TargetGridMover.cpp
     core/physics/tilemap/KeyboardGridMover.cpp
     core/physics/tilemap/RandomGridMover.cpp
-    core/physics/World.cpp
+    core/physics/PhysicsWorld.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
     core/scene/RenderLayer.cpp

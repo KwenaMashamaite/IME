@@ -24,14 +24,14 @@
 
 #include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/game_object/GameObject.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_world.h>
 
 namespace ime {
-    RigidBody::RigidBody(World* world, Type bodyType) :
+    RigidBody::RigidBody(PhysicsWorld* world, Type bodyType) :
         gameObject_{nullptr}
     {
         IME_ASSERT(world, "Cannot construct body from a nullptr")
@@ -353,11 +353,11 @@ namespace ime {
         return gameObject_;
     }
 
-    World* RigidBody::getWorld() {
+    PhysicsWorld* RigidBody::getWorld() {
         return world_;
     }
 
-    const World* RigidBody::getWorld() const {
+    const PhysicsWorld* RigidBody::getWorld() const {
         return world_;
     }
 

@@ -24,7 +24,7 @@
 
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 #include "IME/graphics/Window.h"
 
 namespace ime::priv {

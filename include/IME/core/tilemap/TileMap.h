@@ -80,7 +80,7 @@ namespace ime {
          *
          * @warning This function is intended for internal use only
          */
-        void setPhysicsSimulation(World* physicsSimulation);
+        void setPhysicsSimulation(PhysicsWorld* physicsSimulation);
 
         /**
          * @brief Get the tilemaps renderer
@@ -729,7 +729,7 @@ namespace ime {
         std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;//!< Tiles container
-        World* physicsSim_; //!< The physics simulation
+        PhysicsWorld* physicsSim_; //!< The physics simulation
 
         friend class Scene;
     };

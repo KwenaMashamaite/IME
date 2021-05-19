@@ -47,7 +47,7 @@
 
 namespace ime {
     class Engine;
-    class World;
+    class PhysicsWorld;
 
     /// @internal
     namespace priv {
@@ -393,9 +393,9 @@ namespace ime {
          *
          * @warning Do not keep the returned reference
          *
-         * @see createWorld
+         * @see createPhysWorld
          */
-        World& physics();
+        PhysicsWorld& physWorld();
 
         /**
          * @brief Get the scenes grid mover container
@@ -582,9 +582,9 @@ namespace ime {
          * This function should be called by scenes that require a physics
          * simulation
          *
-         * @see physics
+         * @see physWorld
          */
-        void createWorld(Vector2f gravity);
+        void createPhysWorld(Vector2f gravity);
 
         /**
          * @brief Create tilemap instance
@@ -604,7 +604,7 @@ namespace ime {
 
     private:
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        std::unique_ptr<World> world_;        //!< Physics simulation
+        std::unique_ptr<PhysicsWorld> world_; //!< Physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
         EventEmitter eventEmitter_;           //!< scene level event dispatcher

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/graphics/DebugDrawer.h"
@@ -112,7 +112,7 @@ namespace ime {
     ////////////////////////////////////////////////////////////////////////////
 
     // ContactListener wrapper
-    class World::B2ContactListener : public b2ContactListener {
+    class PhysicsWorld::B2ContactListener : public b2ContactListener {
     public:
         // Called by Box2d when two fixtures begin to overlap
         void BeginContact(b2Contact *contact) override {
@@ -145,7 +145,7 @@ namespace ime {
         }
     };
 
-    World::World(Scene& scene, Vector2f gravity) :
+    PhysicsWorld::PhysicsWorld(Scene& scene, Vector2f gravity) :
         scene_{scene},
         world_{std::make_unique<b2World>(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
@@ -168,46 +168,46 @@ namespace ime {
 #endif
     }
 
-    World::Ptr World::create(Scene &scene, Vector2f gravity) {
-        return World::Ptr(new World(scene, gravity));
+    PhysicsWorld::Ptr PhysicsWorld::create(Scene &scene, Vector2f gravity) {
+        return PhysicsWorld::Ptr(new PhysicsWorld(scene, gravity));
     }
 
-    void World::setGravity(Vector2f gravity) {
+    void PhysicsWorld::setGravity(Vector2f gravity) {
         world_->SetGravity({gravity.x, gravity.y});
     }
 
-    Vector2f World::getGravity() const {
+    Vector2f PhysicsWorld::getGravity() const {
         return {world_->GetGravity().x, world_->GetGravity().x};
     }
 
-    void World::setTimescale(float timescale) {
+    void PhysicsWorld::setTimescale(float timescale) {
         if (timescale < 0)
             timescale_ = 0.0f;
         else
             timescale_ = timescale;
     }
 
-    float World::getTimescale() const {
+    float PhysicsWorld::getTimescale() const {
         return timescale_;
     }
 
-    void World::enableContinuousPhysics(bool enable) {
+    void PhysicsWorld::enableContinuousPhysics(bool enable) {
         world_->SetContinuousPhysics(enable);
     }
 
-    bool World::isContinuousPhysicsEnabled() const {
+    bool PhysicsWorld::isContinuousPhysicsEnabled() const {
         return world_->GetContinuousPhysics();
     }
 
-    void World::setFixedStep(bool fixed) {
+    void PhysicsWorld::setFixedStep(bool fixed) {
         fixedTimeStep_ = fixed;
     }
 
-    bool World::isFixedStep() const {
+    bool PhysicsWorld::isFixedStep() const {
         return fixedTimeStep_;
     }
 
-    RigidBody::Ptr World::createBody(RigidBody::Type type) {
+    RigidBody::Ptr PhysicsWorld::createBody(RigidBody::Type type) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback")
             return nullptr;
@@ -216,7 +216,7 @@ namespace ime {
         return RigidBody::Ptr(new RigidBody(this, type));
     }
 
-    Joint::Ptr World::createJoint(const JointDefinition& definition) {
+    Joint::Ptr PhysicsWorld::createJoint(const JointDefinition& definition) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback")
             return nullptr;
@@ -230,52 +230,52 @@ namespace ime {
         }
     }
 
-    void World::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
+    void PhysicsWorld::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
         world_->Step(timeStep.asSeconds() * timescale_, static_cast<int32>(velocityIterations), static_cast<int32>(positionIterations));
     }
 
-    void World::autoClearForceBuffer(bool autoClear) {
+    void PhysicsWorld::autoClearForceBuffer(bool autoClear) {
         world_->SetAutoClearForces(autoClear);
     }
 
-    bool World::isForceBufferAutoCleared() const {
+    bool PhysicsWorld::isForceBufferAutoCleared() const {
         return world_->GetAutoClearForces();
     }
 
-    void World::clearForces() {
+    void PhysicsWorld::clearForces() {
         world_->ClearForces();
     }
 
-    void World::allowSleep(bool sleep) {
+    void PhysicsWorld::allowSleep(bool sleep) {
         world_->SetAllowSleeping(sleep);
     }
 
-    bool World::isSleepingAllowed() const {
+    bool PhysicsWorld::isSleepingAllowed() const {
         return world_->GetAllowSleeping();
     }
 
-    void World::enableSubStepping(bool subStep) {
+    void PhysicsWorld::enableSubStepping(bool subStep) {
         world_->SetSubStepping(subStep);
     }
 
-    bool World::isSubSteppingEnabled() const {
+    bool PhysicsWorld::isSubSteppingEnabled() const {
         return world_->GetSubStepping();
     }
 
-    std::size_t World::getBodyCount() const {
+    std::size_t PhysicsWorld::getBodyCount() const {
         return world_->GetBodyCount();
     }
 
-    std::size_t World::getJointCount() const {
+    std::size_t PhysicsWorld::getJointCount() const {
         return world_->GetJointCount();
     }
 
 
-    bool World::isLocked() const {
+    bool PhysicsWorld::isLocked() const {
         return world_->IsLocked();
     }
 
-    void World::rayCast(const RayCastCallback &callback, Vector2f startPoint,
+    void PhysicsWorld::rayCast(const RayCastCallback &callback, Vector2f startPoint,
         Vector2f endPoint)
     {
         auto queryCallback = B2RayCastCallback(&callback);
@@ -284,16 +284,16 @@ namespace ime {
             {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
-    void World::queryAABB(const AABBCallback& callback, const AABB &aabb) {
+    void PhysicsWorld::queryAABB(const AABBCallback& callback, const AABB &aabb) {
         auto queryCallback = B2QueryCallback(&callback);
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
-    Scene &World::getScene() {
+    Scene &PhysicsWorld::getScene() {
         return scene_;
     }
 
-    void World::enableDebugDraw(bool enable) {
+    void PhysicsWorld::enableDebugDraw(bool enable) {
 #if defined(IME_DEBUG)
         isDebugDrawEnabled_ = enable;
 #else
@@ -301,19 +301,19 @@ namespace ime {
 #endif
     }
 
-    bool World::isDebugDrawEnabled() const {
+    bool PhysicsWorld::isDebugDrawEnabled() const {
         return isDebugDrawEnabled_;
     }
 
-    DebugDrawerFilter &World::getDebugDrawerFilter() {
+    DebugDrawerFilter &PhysicsWorld::getDebugDrawerFilter() {
         return debugDrawerFilter_;
     }
 
-    const DebugDrawerFilter &World::getDebugDrawerFilter() const {
+    const DebugDrawerFilter &PhysicsWorld::getDebugDrawerFilter() const {
         return debugDrawerFilter_;
     }
 
-    void World::debugDraw() {
+    void PhysicsWorld::debugDraw() {
         IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one")
 
         // Reset the flags in case of a change since last step
@@ -327,11 +327,11 @@ namespace ime {
         world_->DebugDraw();
     }
 
-    std::unique_ptr<b2World>& World::getInternalWorld() {
+    std::unique_ptr<b2World>& PhysicsWorld::getInternalWorld() {
         return world_;
     }
 
-    void World::createDebugDrawer(priv::Window &renderWindow) {
+    void PhysicsWorld::createDebugDrawer(priv::Window &renderWindow) {
 #if defined(IME_DEBUG)
         if (!debugDrawer_) {
             debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);
@@ -342,7 +342,7 @@ namespace ime {
 #endif
     }
 
-    World::~World() {
+    PhysicsWorld::~PhysicsWorld() {
 #if defined(IME_DEBUG)
         if (postRenderId_ != -1)
             scene_.unsubscribe_("postRender", postRenderId_);

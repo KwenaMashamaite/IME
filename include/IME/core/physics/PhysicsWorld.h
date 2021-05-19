@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_WORLD_H
-#define IME_WORLD_H
+#ifndef IME_PHYSICSWORLD_H
+#define IME_PHYSICSWORLD_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
@@ -93,22 +93,22 @@ namespace ime {
     using RayCastCallback = std::function<float(Collider* const, Vector2f, Vector2f, float)>;
 
     /**
-     * @brief The World is responsible for creating, managing, colliding and
-     *        updating all of the bodies within it
+     * @brief The physics world is responsible for creating, managing, colliding
+     *        and updating all of the bodies within it
      */
-    class IME_API World final {
+    class IME_API PhysicsWorld final {
     public:
-        using Ptr = std::unique_ptr<World>;  //!< Unique World pointer
+        using Ptr = std::unique_ptr<PhysicsWorld>;  //!< Unique World pointer
 
         /**
          * @brief Copy constructor
          */
-        World(const World&) = delete;
+        PhysicsWorld(const PhysicsWorld&) = delete;
 
         /**
          * @brief Copy assignment operator
          */
-        World& operator=(const World&) = delete;
+        PhysicsWorld& operator=(const PhysicsWorld&) = delete;
 
         /**
          * @brief Create the physics simulation
@@ -118,7 +118,7 @@ namespace ime {
          *
          * @note This class does not keep a reference to the created object
          */
-        static World::Ptr create(Scene& scene, Vector2f gravity);
+        static PhysicsWorld::Ptr create(Scene& scene, Vector2f gravity);
 
         /**
          * @brief Change the gravity of the world
@@ -461,7 +461,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~World();
+        ~PhysicsWorld();
 
     private:
         /**
@@ -469,7 +469,7 @@ namespace ime {
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity
          */
-        World(Scene& scene, Vector2f gravity);
+        PhysicsWorld(Scene& scene, Vector2f gravity);
 
         /**
          * @brief Draw physics entities
@@ -493,4 +493,4 @@ namespace ime {
     };
 }
 
-#endif //IME_WORLD_H
+#endif //IME_PHYSICSWORLD_H

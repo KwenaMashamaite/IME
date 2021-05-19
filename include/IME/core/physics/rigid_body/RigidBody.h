@@ -38,7 +38,7 @@
 class b2Body;
 
 namespace ime {
-    class World;
+    class PhysicsWorld;
     class Scene;
     class GameObject;
 
@@ -561,8 +561,8 @@ namespace ime {
          * @brief Get the physics world the body is in
          * @return The physics world the body is simulated in
          */
-        World* getWorld();
-        const World* getWorld() const;
+        PhysicsWorld* getWorld();
+        const PhysicsWorld* getWorld() const;
 
         /**
          * @brief Get the user data added to this body
@@ -611,14 +611,14 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        RigidBody(World* world, Type bodyType);
+        RigidBody(PhysicsWorld* world, Type bodyType);
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body
         GameObject* gameObject_;                           //!< The game object this body is attached to
-        World* world_;                                   //!< The world the body belongs to
+        PhysicsWorld* world_;                              //!< The world the body belongs to
         PropertyContainer userData_;                       //!< Application specific body data
-        friend class World;                                //!< Needs access to constructor
+        friend class PhysicsWorld;                         //!< Needs access to constructor
         std::unordered_map<int, Collider::Ptr> colliders_; //!< Colliders attached to this body
     };
 }

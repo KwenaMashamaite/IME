@@ -24,7 +24,7 @@
 
 #include "IME/core/scene/Scene.h"
 #include "IME/core/engine/Engine.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 
 namespace ime {
     Scene::Scene() :
@@ -120,7 +120,7 @@ namespace ime {
         return *camera_;
     }
 
-    World& Scene::physics() {
+    PhysicsWorld& Scene::physWorld() {
         return *world_;
     }
 
@@ -176,8 +176,8 @@ namespace ime {
         return *spriteContainer_;
     }
 
-    void Scene::createWorld(Vector2f gravity) {
-        world_ = World::create(*this, gravity);
+    void Scene::createPhysWorld(Vector2f gravity) {
+        world_ = PhysicsWorld::create(*this, gravity);
         world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
     }

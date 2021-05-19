@@ -65,7 +65,7 @@
 #include "IME/core/physics/tilemap/KeyboardGridMover.h"
 #include "IME/core/physics/tilemap/RandomGridMover.h"
 #include "IME/core/physics/tilemap/TargetGridMover.h"
-#include "IME/core/physics/World.h"
+#include "IME/core/physics/PhysicsWorld.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/scene/DrawableContainer.h"
