@@ -30,7 +30,7 @@ namespace ime::priv {
         pImpl_{std::make_unique<priv::WindowImpl>()}
     {}
 
-    void Window::create(const std::string& title, unsigned int width, unsigned int height, Style style) {
+    void Window::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
         pImpl_->create(title, width, height, style);
     }
 

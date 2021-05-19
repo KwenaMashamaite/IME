@@ -34,8 +34,8 @@ namespace ime::priv {
         isInstantiated_ = true;
     }
 
-    void WindowImpl::create(const std::string& title, unsigned int width, unsigned int height, Window::Style style) {
-        window_.create(sf::VideoMode(width, height), title, static_cast<unsigned int>(style));
+    void WindowImpl::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
+        window_.create(sf::VideoMode(width, height), title, static_cast<sf::Uint32>(style));
     }
 
     void WindowImpl::setIcon(const std::string &filename) {

@@ -114,7 +114,7 @@ namespace ime {
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
             window_->create(title, desktopWidth, desktopHeight, priv::Window::Style::Fullscreen);
         } else
-            window_->create(title, width, height, priv::Window::Style::Close);
+            window_->create(title, width, height, priv::Window::Style::Default);
 
         window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
         window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));

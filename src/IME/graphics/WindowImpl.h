@@ -66,7 +66,7 @@ namespace ime {
              * the program will be terminated prematurely
              */
             void create(const std::string &title, unsigned int width,
-                unsigned int height, Window::Style style = Window::Style::Default);
+                unsigned int height, Uint32 style = Window::Style::Default);
 
             /**
              * @brief Change the window's icon

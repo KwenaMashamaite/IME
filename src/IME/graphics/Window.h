@@ -45,7 +45,7 @@ namespace ime {
             /**
              * @brief Window styles
              */
-            enum class Style {
+            enum Style {
                 None = 0,                           //!< No border / title bar (this flag and all others are mutually exclusive)
                 Titlebar = 1 << 0,                  //!< Title bar + fixed border
                 Resize = 1 << 1,                    //!< Title bar + resizable border + maximize button
@@ -84,7 +84,7 @@ namespace ime {
              * the program will be terminated prematurely
              */
             void create(const std::string &title, unsigned int width,
-                unsigned int height, Style style = Style::Default);
+                unsigned int height, Uint32 style = Style::Default);
 
             /**
              * @brief Change the window's icon
