@@ -238,7 +238,7 @@ namespace ime {
          *
          * @warning This function is intended for internal use only
          */
-        void setBody(Body::Ptr body);
+        void setBody(RigidBody::Ptr body);
 
         /**
          * @brief Add a collider to the tile

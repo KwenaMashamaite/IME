@@ -175,7 +175,7 @@ namespace ime {
         return type_;
     }
 
-    void GameObject::attachRigidBody(Body::Ptr body) {
+    void GameObject::attachRigidBody(RigidBody::Ptr body) {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to an entity")
         IME_ASSERT(!body_, "Game object already has a rigid body attached, remove it first before attaching another one")
         body_ = std::move(body);
@@ -187,11 +187,11 @@ namespace ime {
         emit("attachRigidBody");
     }
 
-    Body* GameObject::getRigidBody() {
+    RigidBody* GameObject::getRigidBody() {
         return body_.get();
     }
 
-    const Body* GameObject::getRigidBody() const {
+    const RigidBody* GameObject::getRigidBody() const {
         return body_.get();
     }
 

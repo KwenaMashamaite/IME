@@ -67,15 +67,15 @@ namespace ime {
          * @brief Get the first body attached to ths joint
          * @return The first body attached to this joint
          */
-        virtual Body* getBodyA() = 0;
-        virtual const Body* getBodyA() const = 0;
+        virtual RigidBody* getBodyA() = 0;
+        virtual const RigidBody* getBodyA() const = 0;
 
         /**
          * @brief Get the second body attached to this joint
          * @return The second body attached to this joint
          */
-        virtual Body* getBodyB()= 0;
-        virtual const Body* getBodyB() const = 0;
+        virtual RigidBody* getBodyB()= 0;
+        virtual const RigidBody* getBodyB() const = 0;
 
         /**
          * @brief Get the anchor point on body A in world coordinates

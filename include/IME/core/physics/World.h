@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/core/time/Time.h"
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/physics/rigid_body/AABB.h"
 #include "IME/core/physics/DebugDrawerFilter.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
@@ -206,7 +206,7 @@ namespace ime {
          * means you should not attempt to create a body inside a callback
          * dispatched by the world (Callbacks are dispatched during a step)
          */
-        Body::Ptr createBody(Body::Type type = Body::Type::Static);
+        RigidBody::Ptr createBody(RigidBody::Type type = RigidBody::Type::Static);
 
         /**
          * @brief Create a joint

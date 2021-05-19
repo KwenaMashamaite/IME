@@ -29,7 +29,7 @@
 #include "IME/graphics/Drawable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/common/Rect.h"
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include <memory>
 
 namespace ime {
@@ -121,7 +121,7 @@ namespace ime {
          *
          * @see removeRigidBody
          */
-        void attachRigidBody(Body::Ptr body);
+        void attachRigidBody(RigidBody::Ptr body);
 
         /**
          * @brief Remove a rigid body from the shape
@@ -137,8 +137,8 @@ namespace ime {
          * @return The rigid body attached to the shape or a nullptr if the
          *         shape does not have a rigid body attached to it
          */
-        const Body::Ptr& getRigidBody();
-        const Body::Ptr& getRigidBody() const;
+        const RigidBody::Ptr& getRigidBody();
+        const RigidBody::Ptr& getRigidBody() const;
 
         /**
          * @brief Check if the the shape has a rigid body attached to it or not
@@ -429,7 +429,7 @@ namespace ime {
     private:
         std::unique_ptr<priv::IShapeImpl> pimpl_;
         Type type_;              //!< The type of this shape
-        Body::Ptr body_;         //!< The shapes rigid body
+        RigidBody::Ptr body_;    //!< The shapes rigid body
         int postStepId_;         //!< Scene post step handler id
         int destructionId_;      //!< Scene destruction listener id
         int propertyChangeId_;   //!< Object property change handler id

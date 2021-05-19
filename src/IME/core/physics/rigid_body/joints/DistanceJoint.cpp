@@ -24,7 +24,7 @@
 
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/physics/World.h"
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_world.h>
@@ -44,7 +44,7 @@ namespace ime {
         type = JointType::Distance;
     }
 
-    void DistanceJointDefinition::join(Body* body1, Body* body2, Vector2f anchorA, Vector2f anchorB) {
+    void DistanceJointDefinition::join(RigidBody* body1, RigidBody* body2, Vector2f anchorA, Vector2f anchorB) {
         IME_ASSERT(body1, "Two bodies are needed for a joint to occur, Body A is a nullptr")
         IME_ASSERT(body2, "Two bodies are needed for a joint to occur, Body B is a nullptr")
         IME_ASSERT(body1 != body2, "Cannot self join, bodies to be joined must be different objects")
@@ -148,19 +148,19 @@ namespace ime {
         return JointType::Distance;
     }
 
-    Body* DistanceJoint::getBodyA() {
+    RigidBody* DistanceJoint::getBodyA() {
         return bodyA_;
     }
 
-    const Body* DistanceJoint::getBodyA() const {
+    const RigidBody* DistanceJoint::getBodyA() const {
         return bodyA_;
     }
 
-    Body* DistanceJoint::getBodyB() {
+    RigidBody* DistanceJoint::getBodyB() {
         return bodyB_;
     }
 
-    const Body* DistanceJoint::getBodyB() const {
+    const RigidBody* DistanceJoint::getBodyB() const {
         return bodyB_;
     }
 

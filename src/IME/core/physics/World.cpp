@@ -207,13 +207,13 @@ namespace ime {
         return fixedTimeStep_;
     }
 
-    Body::Ptr World::createBody(Body::Type type) {
+    RigidBody::Ptr World::createBody(RigidBody::Type type) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback")
             return nullptr;
         }
 
-        return Body::Ptr(new Body(this, type));
+        return RigidBody::Ptr(new RigidBody(this, type));
     }
 
     Joint::Ptr World::createJoint(const JointDefinition& definition) {

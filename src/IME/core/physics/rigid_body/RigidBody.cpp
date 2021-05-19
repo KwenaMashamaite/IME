@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/physics/World.h"
 #include "IME/utility/Helpers.h"
@@ -31,7 +31,7 @@
 #include <box2d/b2_world.h>
 
 namespace ime {
-    Body::Body(World* world, Type bodyType) :
+    RigidBody::RigidBody(World* world, Type bodyType) :
         gameObject_{nullptr}
     {
         IME_ASSERT(world, "Cannot construct body from a nullptr")
@@ -50,10 +50,10 @@ namespace ime {
             world_->getInternalWorld()->CreateBody(b2Definition.get()), std::move(b2BodyDeleter));
     }
 
-    Body::Body(Body&&) noexcept = default;
-    Body &Body::operator=(Body &&) noexcept = default;
+    RigidBody::RigidBody(RigidBody&&) noexcept = default;
+    RigidBody &RigidBody::operator=(RigidBody &&) noexcept = default;
 
-    Body::Ptr Body::copy() const {
+    RigidBody::Ptr RigidBody::copy() const {
         auto body = world_->createBody(getType());
 
         // b2Body does not have any public constructors, so we use setters to simulate a copy
@@ -79,11 +79,11 @@ namespace ime {
         return body;
     }
 
-    std::string Body::getClassName() const {
+    std::string RigidBody::getClassName() const {
         return "Body";
     }
 
-    Collider* Body::attachCollider(Collider::Ptr collider) {
+    Collider* RigidBody::attachCollider(Collider::Ptr collider) {
         IME_ASSERT(collider, "Cannot attach a nullptr to a rigid body")
         IME_ASSERT(!collider->isAttachedToBody(), "The collider is already attached to another rigid body: One body per collider")
         if (!world_->isLocked()) {
@@ -97,17 +97,17 @@ namespace ime {
         }
     }
 
-    Collider* Body::getColliderById(unsigned int id) {
+    Collider* RigidBody::getColliderById(unsigned int id) {
         return const_cast<Collider*>(std::as_const(*this).getColliderById(id));
     }
 
-    const Collider* Body::getColliderById(unsigned int id) const {
+    const Collider* RigidBody::getColliderById(unsigned int id) const {
         if (utility::findIn(colliders_, id))
             return colliders_.at(static_cast<int>(id)).get();
         return nullptr;
     }
 
-    void Body::removeColliderWithId(unsigned int id) {
+    void RigidBody::removeColliderWithId(unsigned int id) {
         if (!world_->isLocked()) {
             if (colliders_.find(static_cast<int>(id)) != colliders_.end()) {
                 colliders_.erase(static_cast<int>(id));
@@ -118,18 +118,18 @@ namespace ime {
         }
     }
 
-    void Body::setPosition(Vector2f position) {
+    void RigidBody::setPosition(Vector2f position) {
         body_->SetTransform(
             {utility::pixelsToMetres(position.x), utility::pixelsToMetres(position.y)},
             body_->GetAngle());
         emitChange(Property{"position", position});
     }
 
-    Vector2f Body::getPosition() const {
+    Vector2f RigidBody::getPosition() const {
         return utility::metresToPixels({body_->GetPosition().x, body_->GetPosition().y});
     }
 
-    void Body::setRotation(float angle) {
+    void RigidBody::setRotation(float angle) {
         if (isFixedRotation())
             return;
 
@@ -137,74 +137,74 @@ namespace ime {
         emitChange(Property{"rotation", angle});
     }
 
-    float Body::getRotation() const {
+    float RigidBody::getRotation() const {
         return utility::radToDeg(body_->GetAngle());
     }
 
-    Vector2f Body::getWorldCenter() const {
+    Vector2f RigidBody::getWorldCenter() const {
         return utility::metresToPixels({body_->GetWorldCenter().x, body_->GetWorldCenter().y});
     }
 
-    Vector2f Body::getLocalCenter() const {
+    Vector2f RigidBody::getLocalCenter() const {
         return {utility::metresToPixels(body_->GetLocalCenter().x),
                 utility::metresToPixels(body_->GetLocalCenter().y)};
     }
 
-    void Body::setLinearVelocity(Vector2f velocity) {
+    void RigidBody::setLinearVelocity(Vector2f velocity) {
         body_->SetLinearVelocity({utility::pixelsToMetres(velocity.x), utility::pixelsToMetres(velocity.y)});
         emitChange(Property{"linearVelocity", velocity});
     }
 
-    Vector2f Body::getLinearVelocity() const {
+    Vector2f RigidBody::getLinearVelocity() const {
         return {utility::metresToPixels(body_->GetLinearVelocity().x), utility::metresToPixels(body_->GetLinearVelocity().y)};
     }
 
-    void Body::setAngularVelocity(float degrees) {
+    void RigidBody::setAngularVelocity(float degrees) {
         body_->SetAngularVelocity(utility::degToRad(degrees));
         emitChange(Property{"angularVelocity",  degrees});
     }
 
-    float Body::getAngularVelocity() const {
+    float RigidBody::getAngularVelocity() const {
         return utility::radToDeg(body_->GetAngularVelocity());
     }
 
-    void Body::applyForce(Vector2f force, Vector2f point, bool wake) {
+    void RigidBody::applyForce(Vector2f force, Vector2f point, bool wake) {
         body_->ApplyForce({force.x, force.y},
             {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
-    void Body::applyForceToCenter(Vector2f force, bool wake) {
+    void RigidBody::applyForceToCenter(Vector2f force, bool wake) {
         body_->ApplyForceToCenter({force.x, force.y}, wake);
     }
 
-    void Body::applyTorque(float torque, bool wake) {
+    void RigidBody::applyTorque(float torque, bool wake) {
         body_->ApplyTorque(torque, wake);
     }
 
-    void Body::applyLinearImpulse(Vector2f impulse, Vector2f point, bool wake) {
+    void RigidBody::applyLinearImpulse(Vector2f impulse, Vector2f point, bool wake) {
         body_->ApplyLinearImpulse({impulse.x, impulse.y},
             {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
-    void Body::applyLinearImpulseToCenter(Vector2f impulse, bool wake) {
+    void RigidBody::applyLinearImpulseToCenter(Vector2f impulse, bool wake) {
         body_->ApplyLinearImpulseToCenter({impulse.x, impulse.y}, wake);
     }
 
-    void Body::applyAngularImpulse(float impulse, bool wake) {
+    void RigidBody::applyAngularImpulse(float impulse, bool wake) {
         body_->ApplyAngularImpulse(impulse, wake);
     }
 
-    float Body::getMass() const {
+    float RigidBody::getMass() const {
         return body_->GetMass();
     }
 
-    float Body::getInertia() const {
+    float RigidBody::getInertia() const {
         return body_->GetInertia();
     }
 
-    Vector2f Body::getWorldPoint(Vector2f localPoint) const {
+    Vector2f RigidBody::getWorldPoint(Vector2f localPoint) const {
         auto worldPoint = body_->GetWorldPoint({utility::pixelsToMetres(localPoint.x),
             utility::pixelsToMetres(localPoint.y)});
 
@@ -212,7 +212,7 @@ namespace ime {
                 utility::metresToPixels(worldPoint.y)};
     }
 
-    Vector2f Body::getWorldRotation(Vector2f localVector) const {
+    Vector2f RigidBody::getWorldRotation(Vector2f localVector) const {
         auto worldVector = body_->GetWorldVector({utility::pixelsToMetres(localVector.x),
             utility::pixelsToMetres(localVector.y)});
 
@@ -220,7 +220,7 @@ namespace ime {
                 utility::radToDeg(worldVector.y)};
     }
 
-    Vector2f Body::getLocalPoint(Vector2f worldPoint) const {
+    Vector2f RigidBody::getLocalPoint(Vector2f worldPoint) const {
         auto localPoint = body_->GetLocalPoint({utility::pixelsToMetres(worldPoint.x),
             utility::pixelsToMetres(worldPoint.y)});
 
@@ -228,7 +228,7 @@ namespace ime {
                 utility::metresToPixels(localPoint.y)};
     }
 
-    Vector2f Body::getLocalRotation(Vector2f worldVector) const {
+    Vector2f RigidBody::getLocalRotation(Vector2f worldVector) const {
         auto localVector = body_->GetLocalVector({utility::pixelsToMetres(worldVector.x),
             utility::pixelsToMetres(worldVector.y)});
 
@@ -236,48 +236,48 @@ namespace ime {
                 utility::radToDeg(localVector.y)};
     }
 
-    Vector2f Body::getLinearVelocityFromWorldPoint(Vector2f worldPoint) const {
+    Vector2f RigidBody::getLinearVelocityFromWorldPoint(Vector2f worldPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(worldPoint.x),
             utility::pixelsToMetres(worldPoint.y)});
 
         return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
-    Vector2f Body::getLinearVelocityFromLocalPoint(Vector2f localPoint) const {
+    Vector2f RigidBody::getLinearVelocityFromLocalPoint(Vector2f localPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(localPoint.x),
             utility::pixelsToMetres(localPoint.y)});
 
         return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
-    void Body::setLinearDamping(float damping) {
+    void RigidBody::setLinearDamping(float damping) {
         body_->SetLinearDamping(damping);
         emitChange(Property{"linearDamping", damping});
     }
 
-    float Body::getLinearDamping() const {
+    float RigidBody::getLinearDamping() const {
         return body_->GetLinearDamping();
     }
 
-    void Body::setAngularDamping(float damping) {
+    void RigidBody::setAngularDamping(float damping) {
         body_->SetAngularDamping(damping);
         emitChange(Property{"angularDamping", damping});
     }
 
-    float Body::getAngularDamping() const {
+    float RigidBody::getAngularDamping() const {
         return body_->GetAngularDamping();
     }
 
-    void Body::setGravityScale(float scale) {
+    void RigidBody::setGravityScale(float scale) {
         body_->SetGravityScale(scale);
         emitChange(Property{"gravityScale", scale});
     }
 
-    float Body::getGravityScale() const {
+    float RigidBody::getGravityScale() const {
         return body_->GetGravityScale();
     }
 
-    void Body::setType(Type type) {
+    void RigidBody::setType(Type type) {
         if (world_->isLocked()) {
             IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback")
             return;
@@ -287,38 +287,38 @@ namespace ime {
         emitChange(Property{"type", type});
     }
 
-    Body::Type Body::getType() const {
+    RigidBody::Type RigidBody::getType() const {
         return static_cast<Type>(body_->GetType());
     }
 
-    void Body::setFastBody(bool fast) {
+    void RigidBody::setFastBody(bool fast) {
         body_->SetBullet(fast);
         emitChange(Property{"fastBody", fast});
     }
 
-    bool Body::isFastBody() const {
+    bool RigidBody::isFastBody() const {
         return body_->IsBullet();
     }
 
-    void Body::setSleepingAllowed(bool sleeps) {
+    void RigidBody::setSleepingAllowed(bool sleeps) {
         body_->SetSleepingAllowed(sleeps);
         emitChange(Property{"sleepingAllowed", sleeps});
     }
 
-    bool Body::isSleepingAllowed() const {
+    bool RigidBody::isSleepingAllowed() const {
         return body_->IsSleepingAllowed();
     }
 
-    void Body::setAwake(bool awake) {
+    void RigidBody::setAwake(bool awake) {
         body_->SetAwake(awake);
         emitChange(Property{"awake", awake});
     }
 
-    bool Body::isAwake() const {
+    bool RigidBody::isAwake() const {
         return body_->IsAwake();
     }
 
-    void Body::setEnabled(bool enable) {
+    void RigidBody::setEnabled(bool enable) {
         if (world_->isLocked()) {
             IME_PRINT_WARNING("Operation ignored: setEnabled() called inside a world callback")
             return;
@@ -328,62 +328,62 @@ namespace ime {
         emitChange(Property{"enable", enable});
     }
 
-    bool Body::isEnabled() const {
+    bool RigidBody::isEnabled() const {
         return body_->IsEnabled();
     }
 
-    void Body::setFixedRotation(bool rotate) {
+    void RigidBody::setFixedRotation(bool rotate) {
         body_->SetFixedRotation(rotate);
         emitChange(Property{"fixedRotation", rotate});
     }
 
-    bool Body::isFixedRotation() const {
+    bool RigidBody::isFixedRotation() const {
         return body_->IsFixedRotation();
     }
 
-    void Body::setGameObject(GameObject* gameObject) {
+    void RigidBody::setGameObject(GameObject* gameObject) {
         gameObject_ = gameObject;
     }
 
-    GameObject* Body::getGameObject() {
+    GameObject* RigidBody::getGameObject() {
         return gameObject_;
     }
 
-    const GameObject* Body::getGameObject() const {
+    const GameObject* RigidBody::getGameObject() const {
         return gameObject_;
     }
 
-    World* Body::getWorld() {
+    World* RigidBody::getWorld() {
         return world_;
     }
 
-    const World* Body::getWorld() const {
+    const World* RigidBody::getWorld() const {
         return world_;
     }
 
-    PropertyContainer &Body::getUserData() {
+    PropertyContainer &RigidBody::getUserData() {
         return userData_;
     }
 
-    void Body::forEachCollider(const Callback<Collider*>& callback) const {
+    void RigidBody::forEachCollider(const Callback<Collider*>& callback) const {
         std::for_each(colliders_.begin(), colliders_.end(), [&callback](auto& pair) {
             callback(pair.second.get());
         });
     }
 
-    std::size_t Body::getColliderCount() const {
+    std::size_t RigidBody::getColliderCount() const {
         return colliders_.size();
     }
 
-    std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() {
+    std::unique_ptr<b2Body, std::function<void(b2Body*)>>& RigidBody::getInternalBody() {
         return body_;
     }
 
-    const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& Body::getInternalBody() const {
+    const std::unique_ptr<b2Body, std::function<void(b2Body*)>>& RigidBody::getInternalBody() const {
         return body_;
     }
 
-    Body::~Body() {
+    RigidBody::~RigidBody() {
         emit("destruction");
         gameObject_ = nullptr;
     }

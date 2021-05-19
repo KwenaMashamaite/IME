@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/game_object/GameObject.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_fixture.h>
@@ -75,7 +75,7 @@ namespace ime {
         return type_;
     }
 
-    void Collider::setBody(Body* body) {
+    void Collider::setBody(RigidBody* body) {
         IME_ASSERT(body, "Body must not be a nullptr")
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
@@ -101,11 +101,11 @@ namespace ime {
         hasRigidBody_ = true;
     }
 
-    Body* Collider::getBody() {
+    RigidBody* Collider::getBody() {
         return body_;
     }
 
-    const Body* Collider::getBody() const {
+    const RigidBody* Collider::getBody() const {
         return body_;
     }
 

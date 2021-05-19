@@ -33,7 +33,7 @@ class b2DistanceJoint;
 
 namespace ime {
     class World;
-    class Body;
+    class RigidBody;
 
     /**
      * @return Distance joint definition
@@ -53,7 +53,7 @@ namespace ime {
          *
          * The minimum and maximum lengths are set to the rest length
          */
-        void join(Body* bodyA, Body* bodyB, Vector2f anchorA, Vector2f anchorB);
+        void join(RigidBody* bodyA, RigidBody* bodyB, Vector2f anchorA, Vector2f anchorB);
 
         ////////////////////////////////////////////////////////////////////////
         // Member data
@@ -172,15 +172,15 @@ namespace ime {
          * @brief Get the first body attached to ths joint
          * @return The first body attached to this joint
          */
-        Body* getBodyA() override;
-        const Body* getBodyA() const override;
+        RigidBody* getBodyA() override;
+        const RigidBody* getBodyA() const override;
 
         /**
          * @brief Get the second body attached to ths joint
          * @return The second body attached to this joint
          */
-        Body* getBodyB() override;
-        const Body* getBodyB() const override;
+        RigidBody* getBodyB() override;
+        const RigidBody* getBodyB() const override;
 
         /**
          * @brief Get the reaction force on body B at the joint anchor
@@ -245,8 +245,8 @@ namespace ime {
     private:
         std::unique_ptr<b2DistanceJoint> joint_;  //!< Internal joint
         PropertyContainer userData_;              //!< Application specific user date
-        Body* bodyA_;                             //!< First attached body
-        Body* bodyB_;                             //!< Second attached body
+        RigidBody* bodyA_;                        //!< First attached body
+        RigidBody* bodyB_;                        //!< Second attached body
         friend class World;                       //!< Needs access to constructor
     };
 }

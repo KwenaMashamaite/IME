@@ -193,9 +193,9 @@ namespace ime {
                 && (point.y >= getPosition().y && point.y <= getPosition().y + getSize().y));
     }
 
-    void Tile::setBody(Body::Ptr body) {
+    void Tile::setBody(RigidBody::Ptr body) {
         IME_ASSERT(body, "The physics body must not be a nullptr")
-        IME_ASSERT(body->getType() == Body::Type::Static, "The physics body of a tile must be of type ime::Body::Type::Static")
+        IME_ASSERT(body->getType() == RigidBody::Type::Static, "The physics body of a tile must be of type ime::RigidBody::Type::Static")
         tile_.attachRigidBody(std::move(body));
         tile_.setOrigin(0, 0);
         tile_.getRigidBody()->setPosition(getWorldCentre());

@@ -36,7 +36,7 @@ class b2Shape;
 class b2Fixture;
 
 namespace ime {
-    class Body;
+    class RigidBody;
 
     /**
      * @brief Holds collision filtering data for a collider
@@ -353,8 +353,8 @@ namespace ime {
          * @return The body this collider is attached to if any, otherwise a
          *         nullptr
          */
-        Body* getBody();
-        const Body* getBody() const;
+        RigidBody* getBody();
+        const RigidBody* getBody() const;
 
         /**
          * @brief Check if the collider contains a point or not
@@ -478,7 +478,7 @@ namespace ime {
          * @brief Attach the collider ot a rigid body
          * @param body The rigid body to attach the collider to
          */
-        void setBody(Body* body);
+        void setBody(RigidBody* body);
 
         /**
          * @brief Update the colliders collision filter
@@ -487,7 +487,7 @@ namespace ime {
 
     private:
         Type type_;                          //!< The type of the collider
-        Body* body_;                         //!< The body this collider is attached to
+        RigidBody* body_;                    //!< The body this collider is attached to
         PropertyContainer userData_;         //!< Application specific collider data
         CollisionFilterData filterData_;     //!< Stores the collision filter data for the collider
         std::uint16_t prevCollisionBitMask_; //!< Previous collision bitmask before setEnable(false)
@@ -495,7 +495,7 @@ namespace ime {
         CollisionCallback onContactBegin_;   //!< Function called when the collider starts overlapping with another collider
         CollisionCallback onContactEnd_;     //!< Function called when the collider ceases overlapping with another collider
         CollisionCallback onContactStay_;    //!< Function called while the collider remains in contact with another collider
-        friend class Body;                   //!< Needs access to constructor
+        friend class RigidBody;              //!< Needs access to constructor
 
         std::unique_ptr<b2Fixture, std::function<void(b2Fixture*)>> fixture_; //!< Internal collider
     };

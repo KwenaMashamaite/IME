@@ -26,7 +26,7 @@ set(IME_SRC
     core/path/BFS.cpp
     core/path/DFS.cpp
     core/path/IPathFinderStrategy.cpp
-    core/physics/rigid_body/Body.cpp
+    core/physics/rigid_body/RigidBody.cpp
     core/physics/rigid_body/colliders/Collider.cpp
     core/physics/rigid_body/colliders/CircleCollider.cpp
     core/physics/rigid_body/colliders/PolygonCollider.cpp

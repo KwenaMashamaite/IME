@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_BODY_H
-#define IME_BODY_H
+#ifndef IME_RIGIDBODY_H
+#define IME_RIGIDBODY_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
@@ -71,9 +71,9 @@ namespace ime {
      * A body is not constructed directly, use the World::createBody function
      * to construct a rigid body
      */
-    class IME_API Body final : public Object {
+    class IME_API RigidBody final : public Object {
     public:
-        using Ptr = std::unique_ptr<Body>; //!< Unique body pointer
+        using Ptr = std::unique_ptr<RigidBody>; //!< Unique body pointer
 
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
@@ -90,22 +90,22 @@ namespace ime {
         /**
          * @brief Copy constructor
          */
-        Body(const Body&) = delete;
+        RigidBody(const RigidBody&) = delete;
 
         /**
          * @brief Copy assignment operator
          */
-        Body& operator=(const Body&) = delete;
+        RigidBody& operator=(const RigidBody&) = delete;
 
         /**
          * @brief Move constructor
          */
-        Body(Body&&) noexcept;
+        RigidBody(RigidBody&&) noexcept;
 
         /**
          * @brief Move assignment operator
          */
-        Body& operator=(Body&&) noexcept;
+        RigidBody& operator=(RigidBody&&) noexcept;
 
         /**
          * @brief Create a copy of the rigid body
@@ -114,7 +114,7 @@ namespace ime {
          * @note The user data of this object will not be copied and the copy
          * will not be attached to a game object
          */
-        Body::Ptr copy() const;
+        RigidBody::Ptr copy() const;
 
         /**
          * @brief Get the name of this class
@@ -603,7 +603,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~Body() override;
+        ~RigidBody() override;
 
     private:
         /**
@@ -611,7 +611,7 @@ namespace ime {
          * @param definition The definition of the body
          * @param world The world the body is in
          */
-        Body(World* world, Type bodyType);
+        RigidBody(World* world, Type bodyType);
 
     private:
         std::unique_ptr<b2Body, Callback<b2Body*>> body_;  //!< Internal rigid body
@@ -623,4 +623,4 @@ namespace ime {
     };
 }
 
-#endif //IME_BODY_H
+#endif //IME_RIGIDBODY_H

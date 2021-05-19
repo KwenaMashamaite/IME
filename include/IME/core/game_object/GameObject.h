@@ -35,8 +35,9 @@
 #include <stack>
 
 namespace ime {
-    class Body;  //!< Rigid body class forward declaration
-    class Scene; //!< Scene class forward declaration
+
+    class RigidBody;  //!< Rigid body class forward declaration
+    class Scene;      //!< Scene class forward declaration
 
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
@@ -44,7 +45,7 @@ namespace ime {
     class IME_API GameObject : public Object {
     public:
         using Ptr = std::unique_ptr<GameObject>; //!< Shared GameObject pointer
-        using BodyPtr = std::unique_ptr<Body>;   //!< Unique Body pointer
+        using BodyPtr = std::unique_ptr<RigidBody>;   //!< Unique Body pointer
         using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Collision callback
 
         /**
@@ -243,8 +244,8 @@ namespace ime {
          * @brief Get the game objects physics body
          * @return The game objects physics body if any, otherwise a nullptr
          */
-        Body* getRigidBody();
-        const Body* getRigidBody() const;
+        RigidBody* getRigidBody();
+        const RigidBody* getRigidBody() const;
 
         /**
          * @brief Remove a rigid body from the game object

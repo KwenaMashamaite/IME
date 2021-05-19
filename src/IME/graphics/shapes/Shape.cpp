@@ -80,7 +80,7 @@ namespace ime {
         return type_;
     }
 
-    void Shape::attachRigidBody(Body::Ptr body) {
+    void Shape::attachRigidBody(RigidBody::Ptr body) {
         IME_ASSERT(body, "Invalid rigid body, cannot attach a nullptr to a shape")
         IME_ASSERT(!body_, "Shape already has a rigid body attached, remove it first before attaching another one")
         body_ = std::move(body);
@@ -89,7 +89,7 @@ namespace ime {
         body_->setRotation(getRotation());
 
         // Synchronize the shape's transform with that of its rigid body
-        if (body_->getType() == Body::Type::Dynamic) {
+        if (body_->getType() == RigidBody::Type::Dynamic) {
             postStepId_ = body_->getWorld()->getScene().on_("postStep", Callback<Time>([this](Time) {
                 setPosition(body_->getPosition());
                 setRotation(body_->getRotation());
@@ -119,7 +119,7 @@ namespace ime {
 
     void Shape::removeRigidBody() {
         if (body_) {
-            if (body_->getType() == Body::Type::Dynamic) {
+            if (body_->getType() == RigidBody::Type::Dynamic) {
                 body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
                 postStepId_ = -1;
             } else {
@@ -131,11 +131,11 @@ namespace ime {
         }
     }
 
-    const Body::Ptr& Shape::getRigidBody() {
+    const RigidBody::Ptr& Shape::getRigidBody() {
         return body_;
     }
 
-    const Body::Ptr& Shape::getRigidBody() const {
+    const RigidBody::Ptr& Shape::getRigidBody() const {
         return body_;
     }
 

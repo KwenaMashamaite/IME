@@ -52,7 +52,7 @@
 #include "IME/core/path/BFS.h"
 #include "IME/core/path/DFS.h"
 #include "IME/core/physics/rigid_body/AABB.h"
-#include "IME/core/physics/rigid_body/Body.h"
+#include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/physics/rigid_body/colliders/Collider.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/rigid_body/colliders/CircleCollider.h"

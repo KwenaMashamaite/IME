@@ -30,7 +30,7 @@
 #include <memory>
 
 namespace ime {
-    class Body;
+    class RigidBody;
 
     /**
      * @brief The types of joints
@@ -60,8 +60,8 @@ namespace ime {
         ////////////////////////////////////////////////////////////////////////
 
         JointType type;              //!< The type of the joint defined by this definition (set automatically)
-        Body* bodyA;                 //!< The first attached body
-        Body* bodyB;                 //!< The second attached body
+        RigidBody* bodyA;            //!< The first attached body
+        RigidBody* bodyB;            //!< The second attached body
         bool areBodiesCollidable;    //!< A flag indicating whether or not the joined bodies can collide with each other
         PropertyContainer userData;  //!< May be used to store application specific Joint data
     };
