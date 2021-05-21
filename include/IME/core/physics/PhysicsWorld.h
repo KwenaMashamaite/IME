@@ -404,13 +404,13 @@ namespace ime {
          * in debug mode, calling this function when IME is linked to in
          * release mode has no effect
          */
-        void enableDebugDraw(bool enable);
+        void setDebugDrawEnable(bool enable);
 
         /**
          * @brief Check if debug draw is enabled or not
          * @return True if debug draw is enabled, otherwise false
          *
-         * @see enableDebugDraw
+         * @see setDebugDrawEnable
          */
         bool isDebugDrawEnabled() const;
 
@@ -425,7 +425,7 @@ namespace ime {
          * world.getDebugDrawerFilter().drawAABB = true; // Draw bounding boxes
          * @endcode
          *
-         * @see enableDebugDraw
+         * @see setDebugDrawEnable
          */
         DebugDrawerFilter& getDebugDrawerFilter();
         const DebugDrawerFilter& getDebugDrawerFilter() const;
@@ -454,7 +454,7 @@ namespace ime {
          * @warning This function is intended for internal use and should
          * never be called outside of IME
          *
-         * @see enableDebugDraw
+         * @see setDebugDrawEnable
          */
         void createDebugDrawer(priv::Window& renderWindow);
 
@@ -474,7 +474,7 @@ namespace ime {
         /**
          * @brief Draw physics entities
          *
-         * @see enableDebugDraw
+         * @see setDebugDrawEnable
          */
         void debugDraw();
 

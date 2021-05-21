@@ -293,7 +293,7 @@ namespace ime {
         return scene_;
     }
 
-    void PhysicsWorld::enableDebugDraw(bool enable) {
+    void PhysicsWorld::setDebugDrawEnable(bool enable) {
 #if defined(IME_DEBUG)
         isDebugDrawEnabled_ = enable;
 #else
