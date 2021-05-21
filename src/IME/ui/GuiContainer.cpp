@@ -190,18 +190,22 @@ namespace ime::ui {
         }
 
         void moveWidgetToFront(const Widget* widget) {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             sfmlGui_.moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         void moveWidgetToBack(const Widget* widget) {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             sfmlGui_.moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         size_t moveWidgetForward(const Widget* widget) {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             return sfmlGui_.moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         size_t moveWidgetBackward(const Widget* widget) {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             return sfmlGui_.moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
@@ -364,6 +368,22 @@ namespace ime::ui {
 
     size_t GuiContainer::moveWidgetBackward(const Widget* widget) {
         return pimpl_->moveWidgetBackward(widget);
+    }
+
+    void GuiContainer::moveWidgetToFront(const std::string &widget) {
+        moveWidgetToFront(getWidget(widget));
+    }
+
+    void GuiContainer::moveWidgetToBack(const std::string &widget) {
+        moveWidgetToBack(getWidget(widget));
+    }
+
+    size_t GuiContainer::moveWidgetForward(const std::string &widget) {
+        return moveWidgetForward(getWidget(widget));
+    }
+
+    size_t GuiContainer::moveWidgetBackward(const std::string &widget) {
+        return moveWidgetBackward(getWidget(widget));
     }
 
     void GuiContainer::setTextSize(unsigned int size) {

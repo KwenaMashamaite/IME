@@ -103,18 +103,22 @@ namespace ime::ui {
         }
 
         void moveWidgetToFront(const ui::Widget* widget)  {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             tguiContainer_->moveWidgetToFront(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         void moveWidgetToBack(const ui::Widget* widget)  {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             tguiContainer_->moveWidgetToBack(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         size_t moveWidgetForward(const ui::Widget* widget)  {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             return tguiContainer_->moveWidgetForward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
         size_t moveWidgetBackward(const ui::Widget* widget)  {
+            IME_ASSERT(widget, "Widget to be moved cannot be a nullptr")
             return tguiContainer_->moveWidgetBackward(std::static_pointer_cast<tgui::Widget>(widget->getInternalPtr()));
         }
 
@@ -214,6 +218,22 @@ namespace ime::ui {
 
     std::size_t WidgetContainer::moveWidgetBackward(const Widget* widget) {
         return pimpl_->moveWidgetBackward(widget);
+    }
+
+    void WidgetContainer::moveWidgetToFront(const std::string &widget) {
+        moveWidgetToFront(getWidget(widget));
+    }
+
+    void WidgetContainer::moveWidgetToBack(const std::string &widget) {
+        moveWidgetToBack(getWidget(widget));
+    }
+
+    size_t WidgetContainer::moveWidgetForward(const std::string &widget) {
+        return moveWidgetForward(getWidget(widget));
+    }
+
+    size_t WidgetContainer::moveWidgetBackward(const std::string &widget) {
+        return moveWidgetBackward(getWidget(widget));
     }
 
     Widget* WidgetContainer::getFocusedWidget() const {

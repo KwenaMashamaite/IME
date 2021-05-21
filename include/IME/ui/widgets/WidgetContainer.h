@@ -165,6 +165,34 @@ namespace ime {
             std::size_t moveWidgetBackward(const Widget* widget);
 
             /**
+             * @brief Place a widget before all other widgets to the front
+             * @param widget The widget to be moved to the front
+             */
+            void moveWidgetToFront(const std::string& widget);
+
+            /**
+             * @brief Place a widget behind all other widgets
+             * @param widget The widget to be moved to the back
+             */
+            void moveWidgetToBack(const std::string& widget);
+
+            /**
+             * @brief Place a widget one step forward in the z-order
+             * @param widget The widget that should be moved one step forward
+             * @return New index in the widgets list (one higher than the old
+             *         index or the same if the widget was already in front),
+             */
+            size_t moveWidgetForward(const std::string& widget);
+
+            /**
+             * @brief Place a widget one step backwards in the z-order
+             * @param widget The widget that should be moved one step backward
+             * @return New index in the widgets list (one higher than the old
+             *         index or the same if the widget was already in front),
+             */
+            size_t moveWidgetBackward(const std::string& widget);
+
+            /**
              * @brief Get the currently focused widget inside the container
              * @return Pointer to the focused child widget or a nullptr if none
              *         of the widgets are currently focused
