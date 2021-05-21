@@ -92,6 +92,35 @@ namespace ime {
             Widget* getWidget(const std::string& name) const;
 
             /**
+             * @brief Add a widget to the gui
+             * @param widget The widget to be added
+             * @param widgetName Unique name of the widget
+             * @return Pointer to the widget if it was added to the container
+             *         or a premature program exit if a widget with the same
+             *         name as @a widgetName already exist in the container
+             *
+             * This function that will return the widget pointer already casted
+             * to the desired type:
+             *
+             * @code
+             * using ime::ui;
+             * // Here the type of lblGreeting is deduced to Widget*
+             * auto* lblGreeting = gui.addWidget(Label::create("Hi there"), "lblGreeting");
+             *
+             * // Here the type of lblGreeting is deduced to Label*
+             * auto* lblGreeting = gui.addWidget<Label>(Label::create("Hi there"), "lblGreeting");
+             * @endcode
+             *
+             * @warning This function will return a nullptr if the argument
+             * @a widget is not convertible to T. In addition @a widgetName
+             * must be unique
+             */
+            template<typename T>
+            T* addWidget(Widget::Ptr widget, const std::string& widgetName) {
+                return dynamic_cast<T*>(addWidget(std::move(widget), widgetName));
+            }
+
+            /**
              * @brief Get access to a widget in the container
              * @param name Name of the widget to get access to
              * @return Pointer to the specified widget or nullptr if the

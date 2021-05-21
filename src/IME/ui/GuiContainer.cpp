@@ -22,6 +22,21 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+/*-----------------------------------------------------------------------------
+ It pains me deeply that most of the code in this file is a duplicate of
+ ime::ui::WidgetContainer implementation :( . The problem is that an ime::ui::GuiContainer
+ is supposed to contain any instances of ime::ui::Widget that the user creates
+ without itself being a Widget. Another problem is that the this class and the
+ ime::ui::GuiContainer class both delegate to third party instances of unrelated
+ types whose functionality is similar. So I can't contain an ime::ui::WidgetContainer
+ in this class and delegate to it nor can i use private inheritance as the result
+ would not be as intended.
+
+ Please don't shoot me when you see how awful the copy and paste is. There must
+ be a way around this and I will find it. As soon as I do I will remove this
+ disgusting thing I've done here. Bare with me as I add 1 and 1 together
+ -----------------------------------------------------------------------------*/
+
 #include "IME/ui/GuiContainer.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
@@ -29,6 +44,7 @@
 #include "IME/graphics/WindowImpl.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
+#include <iostream>
 
 namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
@@ -142,7 +158,8 @@ namespace ime::ui {
                 return iter->second.get();
             }
 
-            return nullptr;
+            std::cerr << "IME ERROR: A widget with the name \"" + widgetName + "\" already exists in the container, widget names must be unique";
+            exit(-3); //@TODO - Replace magic number with error code
         }
 
         Widget* getWidget(const std::string &widgetName) const {

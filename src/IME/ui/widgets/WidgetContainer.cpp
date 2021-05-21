@@ -26,6 +26,7 @@
 #include "IME/utility/Helpers.h"
 #include "IME/ui/widgets/WidgetImpl.h"
 #include <TGUI/Container.hpp>
+#include <iostream>
 
 namespace ime::ui {
     //////////////////////////////////////////////////////////////////////////
@@ -72,7 +73,8 @@ namespace ime::ui {
                 return iter->second.get();
             }
 
-            return nullptr;
+            std::cerr << "IME ERROR: A widget with the name \"" + name + "\" already exists in the container, widget names must be unique";
+            exit(-3); //@TODO - Replace magic number with error code
         }
 
         ui::Widget* getWidget(const std::string &name) const  {
