@@ -79,7 +79,7 @@ namespace ime::ui {
         }
 
         return *this;
-    };
+    }
 
     void ClickableWidget::setEnabled(bool isEnable) {
         pimpl_->widget_->setEnabled(isEnable);

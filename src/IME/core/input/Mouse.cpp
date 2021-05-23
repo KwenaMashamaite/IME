@@ -36,6 +36,7 @@ namespace ime::input {
             case Button::Middle:        return "Middle";
             case Button::XButton1:      return "XButton1";
             case Button::XButton2:      return "XButton2";
+            default:                    return "Unknown";
         }
     }
 

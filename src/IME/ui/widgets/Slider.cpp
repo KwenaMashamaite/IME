@@ -76,7 +76,7 @@ namespace ime::ui {
         }
 
         return *this;
-    };
+    }
 
     Slider::Ptr Slider::create(float minimum, float maximum) {
         return Ptr(new Slider(minimum, maximum));
