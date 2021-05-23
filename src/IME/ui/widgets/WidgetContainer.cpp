@@ -46,11 +46,7 @@ namespace ime::ui {
         /// of ime::WidgetContainer, therefore no additional copies are required
         WidgetContainerImpl(const WidgetContainerImpl& other) :
             tguiContainer_{static_cast<tgui::Container*>(other.tguiContainer_)}
-        {
-            for (const auto& [name, widget] : other.widgets_) {
-                widgets_.insert({name, widget->clone()});
-            }
-        }
+        {}
 
         WidgetContainerImpl& operator=(const WidgetContainerImpl& impl) {
             if (this != &impl) {
@@ -156,9 +152,11 @@ namespace ime::ui {
             });
         }
 
+        // Temporarily made public so it can be copied in WidgetContainer copy constructor
+        std::unordered_map<std::string, Widget::Ptr> widgets_;
+
     private:
         tgui::Container* tguiContainer_;
-        std::unordered_map<std::string, Widget::Ptr> widgets_;
     }; // class WidgetContainerImpl
 
     //////////////////////////////////////////////////////////////////////////
@@ -172,7 +170,11 @@ namespace ime::ui {
     WidgetContainer::WidgetContainer(const WidgetContainer& other) :
         Widget(other),
         pimpl_{std::make_unique<WidgetContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        for (const auto& [name, widget] : other.pimpl_->widgets_) {
+            pimpl_->widgets_.insert({name, widget->clone()});
+        }
+    }
 
     WidgetContainer &WidgetContainer::operator=(const WidgetContainer& rhs) {
         if (this != &rhs) {
