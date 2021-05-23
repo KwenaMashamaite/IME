@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/path/IPathFinderStrategy.h"
+#include "IME/core/physics/grid/path/IPathFinderStrategy.h"
 
 namespace ime {
     std::stack<Index> IPathFinderStrategy::backtrack(const std::vector<Node> &exploredNodes, const Index& targetTile)

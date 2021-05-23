@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/path/DFS.h"
+#include "IME/core/physics/grid/path/DFS.h"
 #include "IME/core/tilemap/TileMap.h"
 
 namespace ime {

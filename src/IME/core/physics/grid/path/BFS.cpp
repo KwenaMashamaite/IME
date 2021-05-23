@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/path/BFS.h"
+#include "IME/core/physics/grid/path/BFS.h"
 #include "IME/core/tilemap/TileMap.h"
 #include <algorithm>
 

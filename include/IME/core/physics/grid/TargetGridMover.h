@@ -26,7 +26,7 @@
 #define IME_TARGETGRIDMOVER_H
 
 #include "IME/core/physics/grid/GridMover.h"
-#include "IME/core/path/IPathFinderStrategy.h"
+#include "IME/core/physics/grid/path/IPathFinderStrategy.h"
 
 namespace ime {
 

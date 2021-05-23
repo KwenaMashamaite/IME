@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/path/AdjacencyList.h"
+#include "IME/core/physics/grid/path/AdjacencyList.h"
 #include "IME/core/tilemap/TileMap.h"
 
 namespace ime {

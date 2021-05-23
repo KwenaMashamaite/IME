@@ -22,10 +22,10 @@ set(IME_SRC
     core/input/InputManager.cpp
     core/resources/ResourceManager.cpp
     core/resources/ResourceHolder.cpp
-    core/path/AdjacencyList.cpp
-    core/path/BFS.cpp
-    core/path/DFS.cpp
-    core/path/IPathFinderStrategy.cpp
+    core/physics/grid/path/AdjacencyList.cpp
+    core/physics/grid/path/BFS.cpp
+    core/physics/grid/path/DFS.cpp
+    core/physics/grid/path/IPathFinderStrategy.cpp
     core/physics/rigid_body/RigidBody.cpp
     core/physics/rigid_body/colliders/Collider.cpp
     core/physics/rigid_body/colliders/CircleCollider.cpp
