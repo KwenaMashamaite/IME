@@ -313,22 +313,21 @@ namespace ime {
         int onTileCollision(const Callback<Index>& callback);
 
         /**
-         * @brief Add an event listener to a an actor collision
-         * @param type The type of game object to listen for collisions with
+         * @brief Add an event listener to a game object collision
          * @param callback The function to be executed when the collision take place
          * @return The event listeners unique identifier
          *
          * The callback is invoked when the target collides with another game
-         * object of type @a type. On invocation it is passed the target and
+         * object. On invocation, the callback it is passed the target and
          * the game object it collided with respectively.
          *
          * @note A grid mover registers a collision between two game objects
-         * only when they occupy the same tile. For contact based collisions
-         * use rigid Body physics
+         * only when they occupy the same tile. That is, a collision will not
+         * be raised when the two game objects start overlapping. For contact
+         * based collision detection use RigidBody physics
          *
          * @see unsubscribe
          */
-        int onGameObjectCollision(GameObject::Type type, const CollisionCallback& callback);
         int onGameObjectCollision(const CollisionCallback& callback);
 
         /**

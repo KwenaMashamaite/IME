@@ -77,9 +77,11 @@ namespace ime {
             }
         });
 
-        onGameObjectCollision(GameObject::Type::Obstacle, [this](GameObject*, GameObject*) {
-            generatePath();
-            moveTarget();
+        onGameObjectCollision([this](GameObject*, GameObject* other) {
+            if (other->isObstacle()) {
+                generatePath();
+                moveTarget();
+            }
         });
     }
 

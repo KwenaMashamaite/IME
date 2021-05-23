@@ -27,10 +27,10 @@
 #include "IME/core/physics/PhysicsWorld.h"
 
 namespace ime {
-    GameObject::GameObject(Scene& scene, Type type) :
+    GameObject::GameObject(Scene& scene) :
         scene_{scene},
-        type_{type},
         state_{-1},
+        isObstacle_{false},
         isActive_{true},
         isCollidable_{true},
         postStepId_{-1},
@@ -42,8 +42,8 @@ namespace ime {
     GameObject::GameObject(const GameObject &other) :
         Object(other),
         scene_{other.scene_},
-        type_{other.type_},
         state_{other.state_},
+        isObstacle_{other.isObstacle_},
         isActive_{other.isActive_},
         isCollidable_{other.isCollidable_},
         transform_{other.transform_},
@@ -87,8 +87,8 @@ namespace ime {
 
     void GameObject::swap(GameObject &other) {
         std::swap(scene_, other.scene_);
-        std::swap(type_, other.type_);
         std::swap(state_, other.state_);
+        std::swap(isObstacle_, other.isObstacle_);
         std::swap(isActive_, other.isActive_);
         std::swap(isCollidable_, other.isCollidable_);
         std::swap(transform_, other.transform_);
@@ -99,8 +99,8 @@ namespace ime {
         std::swap(destructionId_, other.destructionId_);
     }
 
-    GameObject::Ptr GameObject::create(Scene &scene, GameObject::Type type) {
-        return std::make_unique<GameObject>(scene, type);
+    GameObject::Ptr GameObject::create(Scene &scene) {
+        return std::make_unique<GameObject>(scene);
     }
 
     GameObject::Ptr GameObject::copy() const {
@@ -166,13 +166,16 @@ namespace ime {
         return "GameObject";
     }
 
-    void GameObject::setType(GameObject::Type type) {
-        type_ = type;
-        emitChange(Property{"type", type_});
+    void GameObject::setAsObstacle(bool isObstacle) {
+        if (isObstacle_ == isObstacle)
+            return;
+
+        isObstacle_ = isObstacle;
+        emitChange(Property{"asObstacle", isObstacle_});
     }
 
-    GameObject::Type GameObject::getType() const {
-        return type_;
+    bool GameObject::isObstacle() const {
+        return isObstacle_;
     }
 
     void GameObject::attachRigidBody(RigidBody::Ptr body) {

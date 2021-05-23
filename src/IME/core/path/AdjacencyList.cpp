@@ -30,7 +30,7 @@ namespace ime {
         bool tileHasObstacle(TileMap& grid, Index index) {
             auto hasObstacle = false;
             grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GameObject* child) {
-                if (child->getType() == GameObject::Type::Obstacle && child->isCollidable()) {
+                if (child->isObstacle() && child->isCollidable()) {
                     hasObstacle = true;
                     return;
                 }

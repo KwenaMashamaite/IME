@@ -53,8 +53,9 @@ namespace ime {
             revertAndGenerateDirection();
         });
 
-        onGameObjectCollision(GameObject::Type::Obstacle, [this](GameObject*, GameObject*) {
-            revertAndGenerateDirection();
+        onGameObjectCollision([this](GameObject*, GameObject* other) {
+            if (other->isObstacle())
+                revertAndGenerateDirection();
         });
 
         onAdjacentMoveEnd([this](Index) {

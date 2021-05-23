@@ -49,22 +49,11 @@ namespace ime {
         using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Collision callback
 
         /**
-         * @brief The type of the GameObject
-         */
-        enum class Type {
-            Unknown = -1, //!< Unknown object
-            Player = 0,   //!< Player object
-            Enemy,        //!< Enemy object
-            Collectable,  //!< Collectable object
-            Obstacle,     //!< Obstacle object
-        };
-
-        /**
          * @brief Construct the game object
          * @param scene The scene this game object belongs to
          * @param type Type of the game object
          */
-        explicit GameObject(Scene& scene, Type type = Type::Unknown);
+        explicit GameObject(Scene& scene);
 
         /**
          * @brief Copy constructor
@@ -97,7 +86,7 @@ namespace ime {
          * @brief Create a game object
          * @return The created game object
          */
-        static GameObject::Ptr create(Scene& scene, Type type = Type::Unknown);
+        static GameObject::Ptr create(Scene& scene);
 
         /**
          * @brief Create a copy of the game object
@@ -106,18 +95,26 @@ namespace ime {
         GameObject::Ptr copy() const;
 
         /**
-         * @brief Set the type of the game object
-         * @param type Type to set
+         * @brief Set whether or not the game object is an obstacle
+         * @param isObstacle True if it is an obstacle, otherwise false
          *
-         * The new type will overwrite the previous type
+         * Note that this property only affects grid based physics (see GridMover)
+         * When an object is an obstacle and its collidable state is true, then
+         * other game objects cannot overlap with it. A collision event will be
+         * raised when another game object attempts to occupy the same cell as
+         * the obstacle. However, the two object will not visually overlap
+         *
+         * By default, the game object is not an obstacle
          */
-        void setType(Type type);
+        void setAsObstacle(bool isObstacle);
 
         /**
-         * @brief Get the type of the game object
-         * @return The type of the game object
+         * @brief Check if the object is an obstacle or not
+         * @return True if object is an obstacle, otherwise false
+         *
+         * @see setAsObstacle
          */
-        Type getType() const;
+        bool isObstacle() const;
 
         /**
          * @brief Set current state
@@ -404,8 +401,8 @@ namespace ime {
 
     private:
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
-        Type type_;                           //!< The type of the game object
         int state_;                           //!< The current state of the game object
+        bool isObstacle_;                     //!< A flag indicating whether or not the object is an obstacle
         bool isActive_;                       //!< Active state
         bool isCollidable_;                   //!< Collidable state
         Transform transform_;                 //!< The objects transform

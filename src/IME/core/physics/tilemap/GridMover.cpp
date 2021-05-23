@@ -264,7 +264,7 @@ namespace ime {
     std::pair<bool, GameObject*> GridMover::targetTileHasObstacle() {
         GameObject* obstacle = nullptr;
         tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
-            if (child->getType() == GameObject::Type::Obstacle && child->isCollidable() && child != target_) {
+            if (child->isObstacle() && child->isCollidable() && child != target_) {
                 obstacle = child;
                 return;
             }
@@ -305,10 +305,8 @@ namespace ime {
             if (gameObject == target_) // Prevent Self collision
                 return;
 
-            if (target_->isCollidable() && gameObject->isCollidable()) {
-                if (gameObject->getType() != GameObject::Type::Obstacle) // Handled elsewhere
-                    eventEmitter_.emit("gameObjectCollision", target_, gameObject);
-            }
+            if (target_->isCollidable() && gameObject->isCollidable())
+                eventEmitter_.emit("gameObjectCollision", target_, gameObject);
         });
 
         eventEmitter_.emit("adjacentMoveEnd", targetTile_->getIndex());
@@ -336,13 +334,6 @@ namespace ime {
 
     int GridMover::onTileCollision(const Callback<Index>& callback) {
         return eventEmitter_.addEventListener("solidTileCollision", callback);
-    }
-
-    int GridMover::onGameObjectCollision(GameObject::Type type, const GridMover::CollisionCallback &callback) {
-        return onGameObjectCollision([type, callback](GameObject* objectA, GameObject* objectB) {
-            if (objectB->getType() == type)
-                callback(objectA, objectB);
-        });
     }
 
     int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback) {
