@@ -36,10 +36,10 @@ set(IME_SRC
     core/physics/rigid_body/joints/JointDefinition.cpp
     core/physics/rigid_body/joints/DistanceJoint.cpp
     core/physics/rigid_body/AABB.cpp
-    core/physics/tilemap/GridMover.cpp
-    core/physics/tilemap/TargetGridMover.cpp
-    core/physics/tilemap/KeyboardGridMover.cpp
-    core/physics/tilemap/RandomGridMover.cpp
+    core/physics/grid/GridMover.cpp
+    core/physics/grid/TargetGridMover.cpp
+    core/physics/grid/KeyboardGridMover.cpp
+    core/physics/grid/RandomGridMover.cpp
     core/physics/PhysicsWorld.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp

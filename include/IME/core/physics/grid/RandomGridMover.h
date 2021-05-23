@@ -25,8 +25,8 @@
 #ifndef IME_RANDOMGRIDMOVER_H
 #define IME_RANDOMGRIDMOVER_H
 
-#include "IME/core/physics/tilemap/GridMover.h"
-#include "IME/core/physics/tilemap/TargetGridMover.h"
+#include "IME/core/physics/grid/GridMover.h"
+#include "IME/core/physics/grid/TargetGridMover.h"
 
 namespace ime {
     /**

@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/GridMoverContainer.h"
-#include "IME/core/physics/tilemap/KeyboardGridMover.h"
-#include "IME/core/physics/tilemap/TargetGridMover.h"
+#include "IME/core/physics/grid/KeyboardGridMover.h"
+#include "IME/core/physics/grid/TargetGridMover.h"
 
 namespace ime {
     void GridMoverContainer::update(Time deltaTime) {

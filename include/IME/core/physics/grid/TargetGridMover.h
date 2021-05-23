@@ -25,7 +25,7 @@
 #ifndef IME_TARGETGRIDMOVER_H
 #define IME_TARGETGRIDMOVER_H
 
-#include "IME/core/physics/tilemap/GridMover.h"
+#include "IME/core/physics/grid/GridMover.h"
 #include "IME/core/path/IPathFinderStrategy.h"
 
 namespace ime {

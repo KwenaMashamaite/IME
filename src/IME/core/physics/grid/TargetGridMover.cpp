@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/tilemap/TargetGridMover.h"
+#include "IME/core/physics/grid/TargetGridMover.h"
 #include "IME/core/path/BFS.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/graphics/Window.h"
