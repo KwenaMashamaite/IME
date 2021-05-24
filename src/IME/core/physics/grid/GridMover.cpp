@@ -41,6 +41,7 @@ namespace ime {
         targetTile_{nullptr},
         prevTile_{nullptr},
         isMoving_{false},
+        isMoveFrozen_{false},
         moveRestrict_{MoveRestriction::None},
         targetDestructionId_{-1}
     {
@@ -133,6 +134,22 @@ namespace ime {
         return moveRestrict_;
     }
 
+    void GridMover::setMovementFreeze(bool freeze) {
+        if (isMoveFrozen_ != freeze) {
+            isMoveFrozen_ = freeze;
+            if (!isMoveFrozen_ && isMoving_)
+                target_->getRigidBody()->setLinearVelocity(maxSpeed_);
+            else
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+
+            emitChange(Property{"movementFreeze", isMoveFrozen_});
+        }
+    }
+
+    bool GridMover::isMovementFrozen() const {
+        return isMoveFrozen_;
+    }
+
     Index GridMover::getTargetTileIndex() const {
         return targetTile_->getIndex();
     }
@@ -169,7 +186,7 @@ namespace ime {
     }
 
     void GridMover::update(Time deltaTime) {
-        if (target_) {
+        if (target_ && !isMoveFrozen_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
             IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover")
             IME_ASSERT(target_->getRigidBody()->getType() == RigidBody::Type::Kinematic, "The targets rigid body was changed from ime::RigidBody::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body")

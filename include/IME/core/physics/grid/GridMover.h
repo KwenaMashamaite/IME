@@ -190,6 +190,8 @@ namespace ime {
          * @param moveRestriction Permitted direction of travel
          *
          * By default the movement restrictions is MovementRestriction::None
+         *
+         * @see setMovementFreeze
          */
         void setMovementRestriction(MoveRestriction moveRestriction);
 
@@ -198,6 +200,32 @@ namespace ime {
          * @return The current movement restriction
          */
         MoveRestriction getMovementRestriction() const;
+
+        /**
+         * @brief Freeze or unfreeze the targets movement
+         * @param freeze True to freeze movement or false to unfreeze
+         *
+         * This function achieves the same thing as setMovementRestriction().
+         * The difference is when the function is called while the target is
+         * moving. setMovementRestriction(true) will prevent the target from
+         * moving further after the targets gets to its targeted tile whilst
+         * setMovementFreeze(true) will immediately prevent the target from
+         * moving further. This means that the target can temporarily be in
+         * between grid tiles
+         *
+         * By default, the targets movement is not frozen
+         *
+         * @see setMovementRestriction
+         */
+        void setMovementFreeze(bool freeze);
+
+        /**
+         * @brief Check if the targets movement is frozen or not
+         * @return True if movement is frozen otherwise false
+         *
+         * @see setMovementFreeze
+         */
+        bool isMovementFrozen() const;
 
         /**
          * @brief Get the index of the adjacent tile the target is trying to reach
@@ -479,6 +507,7 @@ namespace ime {
         const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
+        bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
         int targetDestructionId_;      //!< Target destruction handler id
     };
