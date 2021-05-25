@@ -36,7 +36,7 @@
 #include <unordered_map>
 
 namespace ime {
-    class Sprite; //!< Sprite class forward declaration
+    class Sprite;
 
     /**
      * @brief An ImageSprite which contains images of the same size arranged in

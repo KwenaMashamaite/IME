@@ -32,7 +32,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window; //!< Window class forward declaration
+        class Window;
     }
 
     /**

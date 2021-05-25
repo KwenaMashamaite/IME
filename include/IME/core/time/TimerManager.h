@@ -34,6 +34,9 @@
 namespace ime {
     /**
      * @brief Manages multiple Timer instances
+     *
+     * This class is not meant to be instantiated directly, use ime::Scene::timer
+     * or ime::Engine::setTimeout and ime::Engine::setInterval
      */
     class IME_API TimerManager {
     public:

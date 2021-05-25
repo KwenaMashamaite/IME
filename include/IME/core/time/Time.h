@@ -147,7 +147,7 @@ namespace ime {
     IME_API Time hours(Int64 hours);
 
     /**
-     * @relates
+     * @relates Time
      * @brief Overload of == operator to compare two time values
      * @param left Left operand (a time)
      * @param right Right operand (a time)
@@ -213,7 +213,7 @@ namespace ime {
      * @brief Overload of binary + operator to add two time values
      * @param left Left operand (a time)
      * @param right Right operand (a time)
-     * @return The sum of @left and @right
+     * @return The sum of @a left and @a right
      */
     IME_API Time operator +(Time left, Time right);
 
@@ -222,7 +222,7 @@ namespace ime {
      * @brief Overload of binary += operator to add/assign two time values
      * @param left Left operand (a time)
      * @param right Right operand (a time)
-     * @return The sum of @left and @right
+     * @return The sum of @a left and @a right
      */
     IME_API Time& operator +=(Time& left, Time right);
 

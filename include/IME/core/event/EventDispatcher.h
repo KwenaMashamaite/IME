@@ -34,46 +34,6 @@ namespace ime {
     /**
      * @brief A singleton class that creates a communication interface between
      *        separate parts of a program through event dispatching
-     *
-     * The global event emitter is available to anything class that needs
-     * it (class, function etc..). Its responsibility is to decouple classes
-     * from one another. You can emit a signal and anyone listening for that
-     * signal will pick it up without knowing and caring where the signal came
-     * from. Here is a simple example:
-     *
-     * @code
-     * // main.cpp
-     *
-     * // We subscribe to a loading event that will be dispatched by some scene
-     * // we don't know or care about, we are just interested in knowing that
-     * // resource loading is complete
-     * EventDispatcher::instance()->onEvent("loadingComplete", Callback<>([&engine] {
-     *    engine.popScene();                // Remove the scene that emitted the event
-     *    engine.pushScene(gameplayScene);  // Start the gameplay scene
-     * }));
-     *
-     * engine.pushScene(loadingScene);
-     * engine.run();
-     *
-     * // LoadingScene.cpp
-     * // ...
-     * // The caller does not need to keep asking the loading scene if it has
-     * // finished loading the game assets, the scene lets everyone whose is
-     * // interested know when it is done without knowing and caring who they are
-     *
-     * EventDispatcher::instance::dispatchEvent("loadingComplete");
-     *
-     * @endcode
-     *
-     * @note This classes instance is accessible from anywhere withing the
-     * program, however the instance is destroyed when the last pointer to it
-     * goes out of scope. This means that all event listeners that have been
-     * registered will be destroyed and a call to dispatchEvent will not do
-     * anything. Therefore there must be at least one pointer to the class
-     * instance that keeps it alive for as long as its being used. The Engine
-     * keeps an instance alive for as long as it is running, therefore you
-     * should use the global dispatcher only when the engine is running or keep
-     * an instance alive yourself
      */
     class IME_API EventDispatcher {
     public:
@@ -132,7 +92,7 @@ namespace ime {
         EventDispatcher() = default;
 
     private:
-        EventDispatcher::Ptr instance_;             //!< The only class instance
+        EventDispatcher::Ptr instance_;  //!< The only class instance
         EventEmitter eventEmitter_;      //!< Event publisher
         inline static std::mutex mutex_; //!< Synchronization primitive
     };
@@ -140,4 +100,48 @@ namespace ime {
     #include "IME/core/event/EventDispatcher.inl"
 }
 
-#endif
+#endif //EventDispatcher_H
+
+/**
+ * @class ime::EventDispatcher
+ * @ingroup core
+ *
+ * The global event emitter is available to anything class that needs
+ * it (class, function etc..). Its responsibility is to decouple classes
+ * from one another. You can emit a signal and anyone listening for that
+ * signal will pick it up without knowing and caring where the signal came
+ * from. Here is a simple example:
+ *
+ * @code
+ * // main.cpp
+ *
+ * // We subscribe to a loading event that will be dispatched by some scene
+ * // we don't know or care about, we are just interested in knowing that
+ * // resource loading is complete
+ * EventDispatcher::instance()->onEvent("loadingComplete", Callback<>([&engine] {
+ *    engine.popScene();                // Remove the scene that emitted the event
+ *    engine.pushScene(gameplayScene);  // Start the gameplay scene
+ * }));
+ *
+ * engine.pushScene(loadingScene);
+ * engine.run();
+ *
+ * // LoadingScene.cpp
+ * // ...
+ * // The caller does not need to keep asking the loading scene if it has
+ * // finished loading the game assets, the scene lets everyone whose is
+ * // interested know when it is done without knowing and caring who they are
+ *
+ * EventDispatcher::instance::dispatchEvent("loadingComplete");
+ * @endcode
+ *
+ * @note This classes instance is accessible from anywhere withing the
+ * program, however the instance is destroyed when the last pointer to it
+ * goes out of scope. This means that all event listeners that have been
+ * registered will be destroyed and a call to dispatchEvent will not do
+ * anything. Therefore there must be at least one pointer to the class
+ * instance that keeps it alive for as long as its being used. The Engine
+ * keeps an instance alive for as long as it is running, therefore you
+ * should use the global dispatcher only when the engine is running or keep
+ * an instance alive yourself
+ */

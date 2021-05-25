@@ -43,7 +43,7 @@ namespace ime {
         return false;
     }
 
-    std::size_t PropertyContainer::getSize() const {
+    std::size_t PropertyContainer::getCount() const {
         return properties_.size();
     }
 

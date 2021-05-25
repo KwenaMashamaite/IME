@@ -80,7 +80,7 @@ namespace ime {
     }
 
     std::string RigidBody::getClassName() const {
-        return "Body";
+        return "RigidBody";
     }
 
     Collider* RigidBody::attachCollider(Collider::Ptr collider) {

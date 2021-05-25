@@ -110,7 +110,7 @@ namespace ime {
             /**
              * @brief Set the background image of the menu bar
              * @param filename The filename of the image to set
-             * @throws
+             * @throws FileNotFound if @a filename cannot be found on the disk
              * 
              * When this image is set, the background colour property will be
              * ignored

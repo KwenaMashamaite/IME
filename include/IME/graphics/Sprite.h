@@ -46,7 +46,7 @@ namespace ime {
      */
     class IME_API Sprite : public ITransformable, public Drawable {
     public:
-        using Ptr = std::unique_ptr<Sprite>; //!< Shared sprite pointer
+        using Ptr = std::unique_ptr<Sprite>; //!< Unique sprite pointer
 
         /**
          * @brief Construct an empty sprite

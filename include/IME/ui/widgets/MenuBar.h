@@ -108,7 +108,7 @@ namespace ime {
 
             /**
              * @brief Add new menus
-             * @param text The menus to be added
+             * @param menus The menus to be added
              *
              * The menus are created in the given order
              *

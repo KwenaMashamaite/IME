@@ -38,13 +38,7 @@ namespace ime {
     using Callback = std::function<void(Args...)>; //!< Event listener
 
     /**
-     * @brief Class for creating and publishing events
-     *
-     * @note There is no function for creating an event. Events are
-     * created when a listener/callback is added for the first time.
-     * All Subsequent event listeners will be added to the created
-     * event. Events are not fired automatically, a call to the emit
-     * function must be made to fire an event and notify event listeners
+     * @brief Create and publish events
      */
     class IME_API EventEmitter {
     public:

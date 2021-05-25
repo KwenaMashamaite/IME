@@ -34,23 +34,15 @@
 namespace ime {
     namespace audio {
         /**
-         * @brief Types of audio files managed by the audio manager
+         * @brief Types of audio files played by the audio manager
          */
         enum class Type {
-            Sfx,    //!< Sound Effects
-            Music   //!< Music
+            Sfx,    //!< Sound Effects (Short audio clips, loaded in memory)
+            Music   //!< Music (Long audio clips, streamed directly from the drive)
         };
 
         /**
-         * @brief Class for managing audio
-         *
-         * This class allows us to play multiple audio files at the same time.
-         * This class can play multiple sound effects at the same time as one
-         * music file. Playing another music file while there is a music file
-         * playing will replace it. Each audio file is played in a separate
-         * thread
-         *
-         * @see Music and SoundEffect
+         * @brief Manages audio playback
          */
         class IME_API AudioManager {
         public:
@@ -82,8 +74,7 @@ namespace ime {
             /**
              * @brief Play an audio file
              * @param audioType Type of the audio file to play
-             * @param filename Filename of the audio to play
-             * @param isLooped True if audio should be looped, otherwise false
+             * @param filename The filename of the audio to play
              * @throws FileNotFound if the audio file cannot be found on the disk
              * @return Pointer to the audio file after it starts playing
              *
@@ -101,17 +92,18 @@ namespace ime {
 
             /**
              * @brief Set the volume for an audio type
-             * @param audioType Type of the audio file to set volume for
-             * @param volume Volume to set, in the range (mute) 0 <= volume <= 100 (max)
+             * @param audioType The audio type to set the volume for
+             * @param volume Volume to set, in the range 0 <= volume <= 100
+             *               where 0 is mute and 100 is maximum volume
              *
              * The default volume is 100 (max) for all audio types
              */
-            void setVolumeFor(Type audioType, float volume);
+            void setVolume(Type audioType, float volume);
 
             /**
              * @brief Get the volume of an audio type
-             * @param audioType Type of the audio to get volume for
-             * @return The volume for a given audio type
+             * @param audioType The audio type to get the volume for
+             * @return The current volume for audio files of the specified type
              */
             float getVolumeFor(Type audioType) const;
 
@@ -119,83 +111,107 @@ namespace ime {
              * @brief Set the maximum volume for all audio types
              * @param volume The new maximum volume
              *
-             * This function will overwrite the previous volume The
-             * maximum volume for all audio players is 100 by default
+             * By default, the maximum volume for all audio types is 100 (max)
              *
              * @see adjustMasterVolume
              */
             void setMasterVolume(float volume);
 
             /**
-             * @brief Offset the maximum volume for all audio players
-             * @param offset Volume offset
+             * @brief Offset the master volume
+             * @param offset The value to offset the volume by
              *
-             * This function will add/subtract to/from the current volume
+             * A positive offset increases the master volume whilst a negative
+             * offset decreases it. Note that the master volume cannot be lower
+             * that zero (min) or higher than 100 (max)
              *
              * @see setMasterVolume
              */
             void adjustMasterVolume(float offset);
 
             /**
-             * @brief Get the maximum volume for all audio players
-             * @return The maximum volume for all audio players
+             * @brief Get the master volume
+             * @return The master volume
+             *
+             * @see setMasterVolume
              */
             float getMasterVolume() const;
 
             /**
-             * @brief Play all paused/stopped audio files
+             * @brief Play all paused audio files
+             *
+             * @see pauseAll and stopAll
              */
-            void playAllAudio();
+            void playAll();
 
             /**
              * @brief Pause all playing audio files
+             *
+             * @see playAll and stopAll
              */
-            void pauseAllAudio();
+            void pauseAll();
 
             /**
              * @brief Stop all playing audio files
              *
-             * Stopping an audio file (playing/paused) will reset the current
-             * playing position to the beginning
+             * @warning When an audio file is stopped (explicitly or when it
+             * reaches the end of its playback), it automatically gets removed
+             * from the audio manager. This invalidates all pointers to the
+             * audio instance
              */
-            void stopAllAudio();
+            void stopAll();
 
             /**
-             * @brief Mute or unmute all audio players
+             * @brief Mute or unmute all audio
              * @param isMuted True to mute all audio, otherwise false
              */
             void setMute(bool isMuted);
 
             /**
              * @brief Add an event listener to a mute event
-             * @param callback Function to execute when mute state changes
+             * @param callback Function to be executed audio is muted or unmuted
              */
             void onMute(Callback<bool> callback);
 
             /**
-             * @brief Add an event listener to a volume change event
-             * @param callback Function to execute when volume changes
+             * @brief Add an event listener to a master volume change event
+             * @param callback Function to be executed when the master volume changes
              */
             void onVolumeChanged(Callback<float> callback);
 
             /**
+             * @internal
              * @brief Remove audio that has finished playing
              *
-             * The number of audio that played and stopped must not be left
-             * to reach 255, otherwise an error would occur and audio will
-             * stop playing
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
              */
             void removePlayedAudio();
 
         private:
-            float masterVolume_;        //!< Maximum volume all audio players
-            float sfxVolume_;           //!< Sound effect volume
-            float musicVolume_;         //!< Music volume
-            bool isMuted_;              //!< Mute state
-            EventEmitter eventEmitter_; //!< Event emitter
+            float masterVolume_;                  //!< Maximum volume for all audio instances
+            float sfxVolume_;                     //!< Maximum volume for ime::audio::SoundEffect instances
+            float musicVolume_;                   //!< Maximum volume for ime::audio::Music instances
+            bool isMuted_;                        //!< A flag indicating whether or not audio is muted
+            EventEmitter eventEmitter_;           //!< Publishes audio manager events
             ObjectContainer<Audio> playingAudio_; //!< Playing audio container
         };
     }
 }
+
+/**
+ * @class ime::AudioManager
+ * @ingroup core
+ *
+ * ime::audio::AudioManager allows us to play multiple audio files at the same
+ * time. Each audio file is played in a separate thread.
+ *
+ * Note that ime::audio::AudioManager is not meant to be instantiated directly,
+ * each ime::Scene instance has its own audio manager which can be accessed with
+ * ime::Scene::audio. To play audio globally (Audio that keeps playing regardless
+ * of which scene is currently active) use ime::Engine::getAudioManager
+ *
+ * @see ime::audio::Music and ime::audio::SoundEffect
+ */
 
 #endif // IME_AUDIOMANAGER_H

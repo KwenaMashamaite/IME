@@ -55,39 +55,26 @@ namespace ime {
     }
 
     /**
-     * @brief Abstract base class for game scenes
-     *
-     * A scene represents a distinct state of your game, for example
-     * loading, main menu, gameplay, paused and so on. All game scenes
-     * exist in isolation and have no knowledge of each other. Only
-     * one scene can be active at a time. For example, the game cannot
-     * be in a main menu state and a gameplay state at the same time.
-     *
-     * The transition between scenes is managed using the Last In First
-     * Out (LIFO) technique (The same way std::stack works). Therefore
-     * you cannot transition between scenes at random. The order in which
-     * scenes are added to the Engine is important.
-     *
-     * For example, if while in the "gameplay" scene, you push a "pause" scene
-     * to the game engine, the "gameplay" scene will be paused (onPause called)
-     * and the "pause" scene will be entered (onEnter called on the pause scene
-     * instance) and the "pause" scene will become the active scene (gets system
-     * events, updates and rendered). If you pop the "pause" scene, the engine
-     * will destroy it (onExit called on the pause scene instance) and return
-     * to the "gameplay" scene (onResume called on the gameplay scene instance).
-     * However, if you push (transition to) another scene while in the "pause"
-     * scene, the process repeats; the "pause" scene gets paused and the the new
-     * scene becomes active)
+     * @brief An Abstract Base Class (ABC) for game scenes
      */
-    class IME_API Scene : public Object, utility::NonCopyable {
+    class IME_API Scene : public Object {
     public:
         using Ptr = std::unique_ptr<Scene>; //!< Unique Scene pointer
 
         /**
-         * @brief Constructor
-         * @param engine A reference to the game engine
+         * @brief Default Constructor
          */
         Scene();
+
+        /**
+         * @brief Copy constructor
+         */
+        Scene(const Scene&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Scene& operator=(const Scene&) = delete;
 
         /**
          * @brief Move constructor
@@ -116,7 +103,7 @@ namespace ime {
         /**
          * @brief Initialize scene
          *
-         * This function is called by the game engine when this class is ready
+         * This function is called by the game engine when the base scene is ready
          * to be used. It is called once after the constructor but before
          * onEnter(). Note that IME scene functions cannot be called in the
          * constructor, doing so is undefined behavior. Thus, this function is
@@ -154,8 +141,8 @@ namespace ime {
          * once per frame
          *
          * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore you don't have to call the base class
-         * method in your implementation
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
          */
         virtual void handleEvent(Event event) {IME_UNUSED(event);};
 
@@ -267,8 +254,8 @@ namespace ime {
         virtual void onExit() {};
 
         /**
-         * @brief Get the name of the scene
-         * @return The name of the scene
+         * @brief Get the name of this class
+         * @return The name of this class
          */
         std::string getClassName() const override;
 
@@ -325,7 +312,7 @@ namespace ime {
         /**
          * @brief Set whether or not the scene is hidden or rendered
          *        when it is paused
-         * @param True to show or false to hide
+         * @param show True to show or false to hide
          *
          * When the scene is shown on pause, it is rendered behind the
          * current active scene but it does not receive any events or
@@ -373,14 +360,14 @@ namespace ime {
         Engine &engine() const;
 
         /**
-         * @brief Get the scene camera
-         * @return The scene camera
+         * @brief Get the scene level camera
+         * @return The scene level camera
          */
         Camera& camera();
 
         /**
-         * @brief Get the physics simulation
-         * @return The physics simulation
+         * @brief Get the scene level physics simulation
+         * @return The scene level physics simulation
          *
          * The physics simulation is responsible for creating, managing,
          * colliding and updating all of the bodies within it.
@@ -390,8 +377,6 @@ namespace ime {
          * simulation is undefined behaviour. In addition, do not attempt
          * to update the simulation, it will be updated automatically by
          * the scene
-         *
-         * @warning Do not keep the returned reference
          *
          * @see createPhysWorld
          */
@@ -403,21 +388,19 @@ namespace ime {
          *
          * Note that you can use this container to store a GridMover or you
          * can use your own container. The advantage of using this container
-         * is that the grid mover is updated on your behalf
+         * is that the GridMover instance is updated on your behalf
          */
         GridMoverContainer& gridMovers();
 
         /**
-         * @brief Get the scenes event event emitter
-         * @return The scenes event event emitter
+         * @brief Get the scene level event event emitter
+         * @return The scene level event event emitter
          *
          * The event emitter is local to the scene instance. This means
          * that events registered on it are only dispatched when the
          * scene is active and de-registered when the scene is destroyed.
-         * For global events use the global event event emitter in the
-         * Engine class or the EventDispatcher
          *
-         * @warning Do not keep the returned reference
+         * @see globalEventEmitter
          */
         EventEmitter& eventEmitter();
 
@@ -438,47 +421,37 @@ namespace ime {
         EventDispatcher& globalEventEmitter();
 
         /**
-         * @brief Get the scenes input manager
-         * @return The scenes input manager
+         * @brief Get the scene level input manager
+         * @return The scene level input manager
          *
          * The input manager is local to the scene instance. This means
          * that input listeners registered on it are only invoked when
          * the scene is active and de-registered when the scene is destroyed
-         * To register global inputs, use the global input manager in the
-         * Engine class
          *
-         * @warning Do not keep the returned reference
-         *
-         * @warning Do not try to update the input manager, it will be
-         * updated internally
+         * @see ime::Engine::getInputManager
          */
         input::InputManager& input();
 
         /**
-         * @brief Get the scenes audio manager
-         * @return The scenes audio manager
+         * @brief Get the scene level audio manager
+         * @return The scene level audio manager
          *
-         * The audio manager is local the scene instance. For global audio,
-         * use the global audio manager in the Engine class
+         * The audio manager is local to the scene instance. All audio played
+         * by it is destroyed when the scene is destroyed
          *
-         * @warning Do not keep the returned reference
-         * @warning Do not try to update the audio manager, it will be
-         * updated internally
+         * @see ime::Engine::getAudioManager
          */
         audio::AudioManager& audio();
 
         /**
-         * @brief Get the scenes timer manager
-         * @return The scenes timer manager
+         * @brief Get the scene level timer manager
+         * @return The scene level timer manager
          *
          * The timer manager is local to the scene instance. This means that
          * callbacks scheduled on it will only be dispatched when the scene
          * is active
          *
-         * @warning Do not keep the returned reference
-         *
-         * @warning Do not try to update the timer manager, it will be
-         * updated internally
+         * @see ime::Engine::setTimeout and ime::Engine::setInterval
          */
         TimerManager& timer();
 
@@ -521,8 +494,8 @@ namespace ime {
         RenderLayerContainer& renderLayers();
 
         /**
-         * @brief Get the scene Tilemap
-         * @return The scene tilemap
+         * @brief Get the scene level Tilemap
+         * @return The scene level tilemap
          *
          * Note that only one tilemap can be created per scene
          *
@@ -534,13 +507,13 @@ namespace ime {
         TileMap& tilemap();
 
         /**
-         * @brief Get the scene gui container
-         * @return The scene gui container
+         * @brief Get the scene level gui container
+         * @return The scene level gui container
          *
-         * The gui container is provided here for convenience, you can
-         * manually instantiate as many gui containers as you desire.
-         * Note that the gui does not belong to any render layer and is
-         * always rendered on top
+         * The gui container is local to the scene. This means that all widgets
+         * in it are destroyed when the scene is destroyed
+         *
+         * @see ime::Engine::getGui
          */
         ui::GuiContainer& gui();
 
@@ -557,18 +530,19 @@ namespace ime {
         ShapeContainer& shapes();
 
         /**
-         * @brief Get the scene game object container
-         * @return The scene game object container
+         * @brief Get the scene level game object container
+         * @return The scene level game object container
          *
-         * This class stores game objects that belong to this scene
+         * This class stores game objects that belong to this scene. All
+         * game objects in this container are automatically updated
          *
          * @warning Do not keep the returned reference
          */
         GameObjectContainer& gameObjects();
 
         /**
-         * @brief Get the scene sprite container
-         * @return The scene sprite container
+         * @brief Get the scene level sprite container
+         * @return The scene level sprite container
          *
          * This class stores the sprites in the scene. The sprite's animator
          * will automatically be updated
@@ -576,7 +550,7 @@ namespace ime {
         SpriteContainer& sprites();
 
         /**
-         * @brief Create a physics simulation
+         * @brief Create a scene level physics simulation
          * @param gravity Acceleration of bodies in the simulation due to gravity
          *
          * This function should be called by scenes that require a physics
@@ -587,7 +561,7 @@ namespace ime {
         void createPhysWorld(Vector2f gravity);
 
         /**
-         * @brief Create tilemap instance
+         * @brief Create the scene level tilemap instance
          * @param tileWidth The width of the tilemap
          * @param tileHeight The height of the tilemap
          *
@@ -604,7 +578,7 @@ namespace ime {
 
     private:
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        std::unique_ptr<PhysicsWorld> world_; //!< Physics simulation
+        std::unique_ptr<PhysicsWorld> world_; //!< Scene level physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
         EventEmitter eventEmitter_;           //!< scene level event dispatcher
@@ -613,7 +587,7 @@ namespace ime {
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
-        std::unique_ptr<TileMap> tileMap_;    //!< Scene tilemap
+        std::unique_ptr<TileMap> tileMap_;    //!< Scene level tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
@@ -621,12 +595,55 @@ namespace ime {
         bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
         friend class priv::SceneManager;      //!< Pre updates the scene
 
-        std::unique_ptr<std::reference_wrapper<Engine>> engine_;   //!< A reference to the game engine
-        std::unique_ptr<SpriteContainer> spriteContainer_;         //!< Stores sprites that belong to the scene
-        std::unique_ptr<GameObjectContainer> entityContainer_;     //!< Stores game objects that belong to the scene
-        std::unique_ptr<ShapeContainer> shapeContainer_;           //!< Stores shapes that belong to the scene
-        std::unique_ptr<std::reference_wrapper<PropertyContainer>> cache_; //!< The global cache
+        std::unique_ptr<std::reference_wrapper<Engine>> engine_;           //!< A reference to the game engine
+        std::unique_ptr<SpriteContainer> spriteContainer_;                 //!< Stores sprites that belong to the scene
+        std::unique_ptr<GameObjectContainer> entityContainer_;             //!< Stores game objects that belong to the scene
+        std::unique_ptr<ShapeContainer> shapeContainer_;                   //!< Stores shapes that belong to the scene
+        std::unique_ptr<std::reference_wrapper<PropertyContainer>> cache_; //!< The engine level cache
     };
 }
 
 #endif // IME_SCENE_H
+
+/**
+ * @class ime::Scene
+ * @ingroup core
+ *
+ * A ime::Scene represents a distinct state of your game, for example
+ * loading, main menu, gameplay, paused and so on. All game scenes
+ * exist in isolation and have no knowledge of each other. Only
+ * one scene can be active at a time. For example, the game cannot
+ * be in a main menu state and a gameplay state at the same time.
+ *
+ * The transition between scenes is managed using the Last In First
+ * Out (LIFO) technique (The same way std::stack works). Therefore
+ * you cannot transition between scenes at random. The order in which
+ * scenes are added to the Engine is important.
+ *
+ * For example, if while in the "gameplay" scene, you push a "pause" scene
+ * to the game engine, the "gameplay" scene will be paused (onPause called)
+ * and the "pause" scene will be entered (onEnter called on the pause scene
+ * instance) and the "pause" scene will become the active scene (gets system
+ * events, updates and rendered). If you pop the "pause" scene, the engine
+ * will destroy it (onExit called on the pause scene instance) and return
+ * to the "gameplay" scene (onResume called on the gameplay scene instance).
+ * However, if you push (transition to) another scene while in the "pause"
+ * scene, the process repeats; the "pause" scene gets paused and the the new
+ * scene becomes active)
+ *
+ * Usage example:
+ * @code
+ * class StartUpScene : public ime::Scene {
+ *      void onEnter() override {
+ *          ime::ui::Label::Ptr greeting = ime::ui::Label::create("Thank you for using Infinite Motion Engine");
+ *          greeting->setOrigin(0.5f, 0.5f);
+ *          greeting->setPosition("50%", "50%");
+ *          gui().addWidget(std::move(greeting), "lblGreeting");
+ *      }
+ * }
+ *
+ * ...
+ *
+ * engine.pushScene(std::make_unique<StartUpScene>());
+ * @endcode
+ */

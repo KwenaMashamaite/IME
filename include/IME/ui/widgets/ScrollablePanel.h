@@ -134,7 +134,7 @@ namespace ime {
 
             /**
              * @brief Change the vertical scroll step
-             * @param scrollAmount The scroll step
+             * @param step The scroll step
              *
              * The vertical scroll step is how much the scroll bar moves up or
              * down when the panel is scrolled or when one of the vertical
@@ -152,7 +152,7 @@ namespace ime {
 
             /**
              * @brief Change the horizontal scroll step
-             * @param scrollAmount The new horizontal scroll step
+             * @param step The new horizontal scroll step
              *
              * The horizontal scroll step is how much the scroll bar moves
              * left or right when the panel is scrolled or when one of the

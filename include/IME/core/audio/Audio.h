@@ -230,3 +230,8 @@ namespace ime {
 }
 
 #endif // IME_AUDIO_H
+
+/**
+ * @class ime::Audio
+ * @ingroup core
+ */

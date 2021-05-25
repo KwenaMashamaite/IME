@@ -26,7 +26,7 @@
 #define IME_ANIMATOR_H
 
 #include "IME/Config.h"
-#include "Animation.h"
+#include "IME/core/animation/Animation.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
 #include <string>
@@ -37,67 +37,57 @@
 #include <queue>
 
 namespace ime {
-    class Sprite; // Sprite class forward declaration
+    class Sprite;
 
     /**
-     * @brief Class for animating sprites
-     *
-     * This class takes an Animation object and animates a sprite
-     * with the properties of the animation object. The animator
-     * can store multiple animations but only one can be played at
-     * a time. This class is usually not instantiated directly, all
-     * animatable entities internally have an animator
+     * @brief An animator for ime::Sprite
      */
     class IME_API Animator {
     public:
-        using Ptr = std::shared_ptr<Animator>;
-        using Animations = std::initializer_list<Animation::Ptr>; //!< Alias
-
         /**
-         * @brief Animation events (Triggered by the current animation)
+         * @brief Animation events
+         *
+         * These events are triggered by the current active animation
          */
         enum class Event {
-            AnimationPlay,     //!< An animation is started playing
-            AnimationStart,    //!< An animation is started animating (Fires after the start delay has expired)
-            AnimationPause,    //!< An animation is paused
-            AnimationResume,   //!< An animation is resumed
-            AnimationStop,     //!< An animation is stopped
-            AnimationComplete, //!< An animation is completed
-            AnimationRepeat,   //!< An animation is repeating
-            AnimationRestart,  //!< An animation is restarted from the beginning
-            AnimationSwitch    //!< An animation was changed while another was playing
+            AnimationPlay,     //!< Emitted when an animation is played
+            AnimationStart,    //!< Emitted when an animation starts to play (Animation may be start delayed)
+            AnimationPause,    //!< Emitted when the animation is paused
+            AnimationResume,   //!< Emitted when the animation is resumed
+            AnimationStop,     //!< Emitted when the animation is stopped
+            AnimationComplete, //!< Emitted when the animation completes playing
+            AnimationRepeat,   //!< Emitted when an animation is repeated
+            AnimationRestart,  //!< Emitted when the animation is restarted from the beginning
+            AnimationSwitch    //!< Emitted when the animation is changed to a different animation
         };
 
         /**
          * @brief Default constructor
          *
-         * @warning When this constructor is used, you must call setTarget
+         * @warning When this constructor is used, you must call setTarget()
          * before using the animator, otherwise undefined behavior
          *
-         * @see Animator(Sprite&)
          * @see setTarget
          */
         Animator();
 
         /**
          * @brief Constructor
-         * @param target Sprite to animate
+         * @param target Sprite to be animated
          *
          * You don't have to call setTarget when this constructor is used
-         *
-         * @see Animator
          */
         explicit Animator(Sprite& target);
 
         /**
-         * @brief Construct animator from an existing animator
+         * @brief Construct the animator from an existing animator
          * @param other The animator to construct this animator from
          *
          * @warning The target of @a other will not be copied because an
          * animation target can only be owned by one animator. Therefore,
          * the target to be animated will be null after construction. This
          * means that you have to initialize the target yourself by calling
-         * setTarget function
+         * the setTarget() function
          *
          * @see setTarget
          */
@@ -113,35 +103,23 @@ namespace ime {
          * @param name Name of the animation
          * @param spriteSheet The spritesheet containing the animation frames
          * @param duration The duration of the animation
-         * @return The create animation or a nullptr if an animation with
-         *         the same name already exists
+         * @return The created animation or a nullptr if an animation with
+         *         the same name already exists in the animator
          *
-         * The animation will be created and added to the Animator and
-         * a pointer to it will be returned. Therefore calling
-         * addAnimation with the returned pointer will always fail
-         * since it already exist in the animator
-         *
-         * All the frame data used by the animation will be extracted from
-         * the spritesheet. As a result, the spritesheet must already be
-         * constructed before passed it as an argument. Passing an uncreated
-         * SpriteSheet is undefined behavior
-         *
-         * By default the duration is derived from the frame rate. If the
-         * duration is specified then the frame rate will be overridden and
-         * derived from the given duration
+         * @see ime::Animation::create
          */
         Animation::Ptr createAnimation(const std::string &name,
             const SpriteSheet& spriteSheet, Time duration = Time::Zero);
 
         /**
-         * @brief Set the target to be animated
-         * @param target The target for the animations
+         * @brief Set the animation target
+         * @param target The target to be animated
          *
-         * @warning This function does not enforce the one animator per
-         * target rule. This means that if you call this function on
-         * multiple animator instances with the same argument, then @a target
-         * will be animated by multiple animators at once and the result may
-         * not be what you expect
+         * Note that this function does not enforce the one animator per
+         * target rule. This means that if you call this function on multiple
+         * animator instances with the same argument, then @a target will be
+         * animated by multiple animators at once and the result may not be
+         * what you want or expect
          */
         void setTarget(Sprite& target);
 
@@ -149,19 +127,20 @@ namespace ime {
          * @brief Set the timescale factor
          * @param timescale The new timescale factor
          *
-         * The timescale factor control the speed of the current animation
-         * For example, a timescale of 2 will make the animation twice as
-         * fast whilst a timescale of 0.5 will slow down the animation
+         * The timescale factor controls the playback speed of the current
+         * animation. For example, a timescale of 2.0f will make the animation
+         * play twice as fast, a timescale of 0.5f will make the animation
+         * play at half its normal playback speed and a timescale of 0.0f will
+         * freeze the animation. Note that if @a timescale is negative then the
+         * timescale will be set to 1.0f (real-time)
          *
-         * The timescale will be set to 1 if @a timescale is negative.
-         *
-         * By default the timescale is 1
+         * By default the timescale is 1.0f (real-time)
          */
         void setTimescale(float timescale);
 
         /**
-         * @brief Get the timescale factor of the current animation
-         * @return The timescale of the current animation
+         * @brief Get the timescale factor
+         * @return The timescale factor
          *
          * @see setTimescale
          */
@@ -169,10 +148,10 @@ namespace ime {
 
         /**
          * @brief Add an animation to the animator
-         * @param animation Animation to be added
+         * @param animation The animation to be added
          * @return True if the animation was added or false if an animation
          *         with the same name as the specified animation already
-         *         exists
+         *         exists in the animator
          */
         bool addAnimation(Animation::Ptr animation);
 
@@ -186,7 +165,7 @@ namespace ime {
          *
          * @see addAnimation
          */
-        void addAnimation(Animations animations);
+        void addAnimation(std::initializer_list<Animation::Ptr> animations);
 
         /**
          * @brief Get an animation in the animator
@@ -197,15 +176,15 @@ namespace ime {
         Animation::Ptr getAnimation(const std::string& name) const;
 
         /**
-         * @brief Get the current animation
-         * @return Pointer to the current animation if there is one, otherwise
-         *         a nullptr
+         * @brief Get the animation that's currently playing
+         * @return Pointer to the current active animation if there is one,
+         *         otherwise a nullptr
          */
-        Animation::Ptr getCurrentAnimation() const;
+        Animation::Ptr getActiveAnimation() const;
 
         /**
          * @brief Remove an animation from the animator
-         * @param name Name of the animation to be removed
+         * @param name The name of the animation to be removed
          * @return True if the animation was removed or false if it does
          *         not exist in the animator
          */
@@ -218,14 +197,14 @@ namespace ime {
 
         /**
          * @brief Check whether or not an animation exists in the animator
-         * @param animation Animation to be checked
+         * @param animation The animation to be checked
          * @return True if the animation exists, otherwise false
          */
         bool hasAnimation(const Animation::Ptr& animation) const;
 
         /**
          * @brief Check whether or not an animation exists in the animator
-         * @param name Name of the animation to be checked
+         * @param name The name of the animation to be checked
          * @return True if the animation exists, otherwise false
          */
         bool hasAnimation(const std::string& name) const;
@@ -243,8 +222,8 @@ namespace ime {
         void chainAnimation(Animation::Ptr animation);
 
         /**
-         * @brief Chain an animation to play after the current animation
-         * @param name Name of the animation to be chained
+         * @brief Chain an animation to the current animation
+         * @param name The name of the animation to be chained
          *
          * A chained animation is an animation that plays immediately after,
          * the current animation finishes. If there is no current animation
@@ -255,43 +234,42 @@ namespace ime {
         void chainAnimation(const std::string& name);
 
         /**
-         * @brief Remove an animation from a chain
-         * @param name Name of the animation to be removed
-         * @return True if the animation was removed or false if the
-         *         is there is no such chain
+         * @brief Unchain an animation from a the current animations chain
+         * @param name The name of the animation to be unchained
+         * @return True if the animation was unchained or false if the
+         *         animation is not part of the current animations chain
+         *
+         * @see chainAnimation
          */
-        bool removeChain(const std::string& name);
+        bool unchain(const std::string& name);
 
         /**
          * @brief Remove all the animations chained to the current animation
+         *
+         * @see chainAnimation and unchain
          */
         void clearAllChains();
 
         /**
-         * @brief Change the current animation
-         * @param name Name of the new animation
+         * @brief Change the current active animation
+         * @param name The name of the new animation
          * @param ignorePlaying True to ignore switch if an animation is
          *         currently playing otherwise false to switch anyway
          * @return True if the animation was switched, of false if it
-         *         does not exist
+         *         does not exist in the animator
          *
-         * This function does not start the animation, it only sets the
-         * current animation to the given animation such that when play()
-         * is called, the given animation is played.
+         * This function does not start the animation, it only sets the current
+         * active animation to the specified animation such that when play()
+         * is called, the given animation is played. To switch and immediately
+         * play an animation use the startAnimation() function
          *
-         * By default the animation will be switched whether or not there
-         * is an active animation
-         *
-         * To switch and immediately play an animation use the playAnimation
-         * function
-         *
-         * @see playAnimation
+         * @see startAnimation
          */
         bool switchAnimation(const std::string& name, bool ignorePlaying = false);
 
         /**
          * @brief Play an animation immediately
-         * @param name Name of the animation to play
+         * @param name The name of the animation to play
          * @param unchain True to clear all chained animations, or false
          *        to chained pending chains to the specified animation
          *
@@ -300,83 +278,74 @@ namespace ime {
          * animation does not exist in the animator the current animation
          * will continue playing
          *
-         * By default, animations that were pending to be chained to the
-         * previous animation will be chained to the specified animation
+         * Note that by default, animations that were pending to be chained
+         * to the active animation prior to function call will be chained to
+         * the specified animation. This property can be override by setting
+         * @a unchain to true
          *
-         * To switch the animation without playing it, use the switchAnimation
+         * To switch the animation without playing it, use the switchAnimation()
          * function
          *
-         * @see switchAnimation
+         * @see switchAnimation and chainAnimation
          */
         void startAnimation(const std::string& name, bool unchain = false);
 
         /**
          * @brief Play the current animation if any
          *
-         * This function will start playing the current animation if
-         * it was pending a start. If the animation is paused, you
-         * have to call resume to play it
+         * This function will start playing the current animation if it was
+         * pending a start. If the animation is paused, you have to call resume
+         * to play it.
          *
+         * This function has no effect if there is no active animation waiting
+         * to be played or when there is one but it is paused
          *
-         *
-         * @see pause and resume
+         * @see pause, resume, stop and isAnimationStarted
          */
         void play();
 
         /**
          * @brief Pause the current animation
          *
-         * This function will dispatch an Event::AnimationPause event
-         * if the current animation was playing
+         * @see play, resume and stop
          */
         void pause();
 
         /**
          * @brief Resume a paused animation
          *
-         * This function will dispatch an Event::AnimationResume event
-         * if the current animation was paused
+         * see play, pause and stop
          */
         void resume();
 
         /**
          * @brief Stop the current animation
          *
-         * This function will dispatch an Event::AnimationStop event if
-         * the current animation was playing. The event is dispatched
-         * whether or not the current animation was started or waiting
-         * for a delay to expire
+         * @see play, pause and resume
          */
         void stop();
 
         /**
          * @brief Restart the current animation from the beginning
-         *
-         * This function will dispatch an Event::AnimationRestart event
          */
         void restart();
 
         /**
-         * @brief Finish the current animation
-         *
-         * This function will force the current animation to complete
-         * and any chained animations will start playing
-         *
-         * This function will dispatch an Event::AnimationComplete event
+         * @brief Force the current animation to complete
          */
         void complete();
 
         /**
-         * @brief Check whether or not the current animation is playing
+         * @brief Check if an animation is playing or not
          * @return True if an animation is playing, otherwise false
          *
-         * This function will return false if there is no current
-         * animation or the animation is paused or stopped
+         * This function will return false if there is no current animation
+         * or when the animation is paused or stopped
          */
         bool isAnimationPlaying() const;
 
         /**
-         * @brief Check whether or not the current animation is paused
+         * @brief Check if the animation is paused or not
          * @return True if the animation is paused, otherwise false
          *
          * This function returns false if there is no current animation
@@ -385,29 +354,23 @@ namespace ime {
         bool isAnimationPaused() const;
 
         /**
-         * @brief Check if the current animation has started
-         * @return True if the animation has started otherwise false
+         * @brief Check if the current animation has started or not
+         * @return True if the animation has started, otherwise false
          *
-         * This function returns false if either the current animation
-         * is not playing or the animation is playing but it is still
-         * waiting for the start delay to expire
+         * Note that when play() or startAnimation() is called, the animation
+         * may not start immediately depending on whether it has a start delay
+         * or not. Therefore, isAnimationPlaying() may return true whilst this
+         * function returns false
+         *
+         * @see play and startAnimation
          */
-        bool hasAnimationStarted() const;
+        bool isAnimationStarted() const;
 
         /**
-        * @brief Update the current animation
-        * @param deltaTime Time passed since last animation update
-        */
-        void update(Time deltaTime);
-
-        /**
-         * @brief Subscribe a callback to an animation event
-         * @param event Name of the event to subscribe a callback to
-         * @param callback Function to be executed when the event is fired
-         * @return The callbacks identification number
-         *
-         * The callback id must be remembered if the callback must be
-         * removed from the event at a later time
+         * @brief Subscribe a callback to any animation event
+         * @param event The name of the event to subscribe a callback to
+         * @param callback The function to be executed when the event is fired
+         * @return The callbacks unique identification number
          *
          * The callback function is optionally passed the animation that
          * triggered the event
@@ -422,24 +385,21 @@ namespace ime {
          * @param event The event to subscribe a callback to
          * @param name The name of the animation to subscribe callback to
          * @param callback The Function to be executed when the event is fired
-         * @return The callback identification number
+         * @return The callbacks unique identification number
          *
          * This function subscribes a callback to events triggered by a
          * specific animation only. The callback will not be invoked for
-         * events triggered by animations whose name do not match @a name.
+         * events triggered by animations whose name do not match @a name
          *
          * To unsubscribe callbacks registered with this function, use the
          * unsubscribe function that removes only callbacks that were
          * subscribed to events triggered by specific animation objects
          *
-         * @note The callback id must be remembered if the callback must be
-         * removed from the event at a later time
-         *
          * The callback function is optionally passed the animation that
          * triggered the event which in this case its always the animation
-         * with the @a name
+         * specified by @a name
          *
-         * @see unsubscribe(Event, const std::string, Callback)
+         * @see unsubscribe(ime::Animator::Event, const std::string&, ime::Callback)
          */
         int on(Event event, const std::string& name, Callback<Animation::Ptr> callback);
         int on(Event event, const std::string& name, Callback<> callback);
@@ -447,7 +407,7 @@ namespace ime {
         /**
          * @brief Remove a callback from an animation event
          * @param event The event to remove the callback from
-         * @param id Identification number of the callback
+         * @param id The unique identification number of the callback
          * @return True if the callback was removed or false if the given
          *         event does not have a callback associated with the
          *         given id
@@ -458,36 +418,42 @@ namespace ime {
 
         /**
          * @brief Remove a callback from a specific animation
-         * @param event Th event to remove callback from
+         * @param event The type of event to remove the callback from
          * @param name The name of the animation to remove the callback from
-         * @param id The identification number of the callback
+         * @param id The unique identification number of the callback
          * @return True if the callback was removed or false if the given
          *         event does not have a callback associated with the
          *         given id
          *
-         * Note that this function removes only callbacks that were subscribed
-         * to animation events triggered by a specific animation. In other
-         * words, it is only applicable to callbacks that were registered
-         * using the on(Event, const std::string&, Callback) function. For
-         * other callbacks, unsubscribe using the unsubscribe(Event, int)
-         * function
-         *
-         * @see on(Event, const std::string&, Callback)
+         * Note that this function is only applicable to callbacks that were
+         * registered with on(ime::Animator::Event, const std::string&, ime::Callback)
+         * function. For other callbacks, unsubscribe using the
+         * unsubscribe(ime::Animator::Event, int) function
          */
         bool unsubscribe(Event event, const std::string& name, int id);
+
+        /**
+         * @internal
+         * @brief Update the animator
+         * @param deltaTime Time passed since last update
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+        */
+        void update(Time deltaTime);
 
     private:
         /**
          * @brief Handle a start playback request
          *
-         * This function dispatches an Event::AnimationStart event
+         * This function dispatches ime::Animator::Event::AnimationStart event
          */
         void onStart();
 
         /**
          * @brief Handle an animation complete event
          *
-         * This function dispatches an Event::AnimationComplete event
+         * This function dispatches ime::Animator::Event::AnimationComplete event
          */
         void onComplete();
 
@@ -531,7 +497,7 @@ namespace ime {
 
         /**
          * @brief Swap another animator with this animator
-         * @param other Object to be swapped with this object
+         * @param other Animator object to be swapped with this object
          */
         void swap(Animator& other);
 
@@ -542,37 +508,46 @@ namespace ime {
 
         /**
          * @brief Cycle current animation sequence
-         * @param isAlternating True if animation is  alternating, otherwise
-         *        false
+         * @param isAlternating True if animation is alternating, otherwise false
          */
         void cycle(bool isAlternating);
 
     private:
-        unsigned int currentFrameIndex_;          //!< The index of the animation frame that is currently displayed
-        Time totalTime_;                          //!< Time passed since animation was started
-        float timescale_;                         //!< Timescale factor for the current animation
-        bool isPlaying_;                          //!< Flags whether or not an animation is playing
-        bool isPaused_;                           //!< Flags whether or not an animation is paused
-        bool hasStarted_;                         //!< Flags whether or not a playing animation has started or is still waiting o a delay to expire
-        EventEmitter eventEmitter_;               //!< Publishes animation events
-        Animation::Ptr currentAnimation_;   //!< Pointer to the current animation
-        std::queue<Animation::Ptr> chains_; //!< Animations that play immediately after the current animation finishes
-
-        std::unique_ptr<std::reference_wrapper<Sprite>> target_;          //!< Sprite to be animated
+        unsigned int currentFrameIndex_;                             //!< The index of the animation frame that is currently displayed
+        Time totalTime_;                                             //!< Time passed since animation was started
+        float timescale_;                                            //!< Timescale factor for the current animation
+        bool isPlaying_;                                             //!< A flag indicating whether or not an animation is playing
+        bool isPaused_;                                              //!< A flag indicating whether or not an animation is paused
+        bool hasStarted_;                                            //!< A flag indicating whether or not a playing animation has started or is still waiting for a delay to expire
+        EventEmitter eventEmitter_;                                  //!< Publishes animation events
+        Animation::Ptr currentAnimation_;                            //!< Pointer to the current animation
+        std::queue<Animation::Ptr> chains_;                          //!< Animations that play immediately after the current animation finishes
+        std::unique_ptr<std::reference_wrapper<Sprite>> target_;     //!< Sprite to be animated
         std::unordered_map<std::string, Animation::Ptr> animations_; //!< Animations container
 
         /**
          * @brief Direction of the current animation cycle
          */
         enum class Direction {
-            Unknown,
-            Forward,
-            Backward
+            Unknown, //!< An unknown direction (No cycling takes place)
+            Forward, //!< Cycles forwards one animation frame at a time
+            Backward //!< Cycles backwards one animation frame at a time
         };
 
-        Direction cycleDirection_;
-        bool completedFirstAlternateCycle_;
+        Direction cycleDirection_;          //!< Current cycle direction
+        bool completedFirstAlternateCycle_; //!< A flag indicating whether or not the animation has completed its first cycle (For alternating animations only)
     };
 }
+
+/**
+ * @class ime::Animator
+ * @ingroup core
+ *
+ * An ime::Animator takes an ime::Animation object and animates an ime::Sprite
+ * with the properties of the ime::Animation. The animator can store multiple
+ * animations but only one can be played at a time. The animator must not be
+ * instantiated directly, a ime::Sprite is bundled with its animator which can
+ * be accessed with the ime::Sprite::getAnimator function
+ */
 
 #endif // IME_ANIMATOR_H

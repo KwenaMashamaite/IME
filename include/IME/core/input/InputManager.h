@@ -35,9 +35,8 @@ namespace ime {
         /**
          * @brief Manages keyboard and mouse inputs
          *
-         * You usually don't instantiate this class directly, you either use
-         * the input manager that is local to a Scene or the global input
-         * manager that from the Engine class
+         * This class is not meant to be instantiated directly, use
+         * ime::Scene::input or ime::Engine::getInputManager
          */
         class IME_API InputManager {
         public:
@@ -198,8 +197,12 @@ namespace ime {
             bool unsubscribe(MouseEvent event, int id);
 
             /**
+             * @internal
              * @brief Update the event manager
              * @param event Event to be handled
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
              */
             void handleEvent(Event event);
 

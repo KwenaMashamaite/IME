@@ -33,13 +33,6 @@ namespace ime {
     namespace audio {
         /**
          * @brief Stream music files from disk
-         *
-         * This class is ideal for playing long and big audio file such
-         * as background music. The audio file is not loaded in memory
-         * but rather streamed from the disk. Therefore, The file must remain
-         * accessible on the disk for as long as its being used. You can
-         * use Audio::SoundEffect to play short sounds such as gun shots
-         * and explosions
          */
         class IME_API Music final : public Audio {
         public:
@@ -214,5 +207,18 @@ namespace ime {
         };
     }
 }
+
+/**
+ * @class ime::audio::Music
+ * @ingroup core
+ *
+ * ime::audio::Music is ideal for playing long and big audio file such
+ * as background music. The audio file is not loaded in memory but rather
+ * streamed from the disk. Therefore, The file must remain accessible on
+ * the disk for as long as its being used. You can use ime::audio::SoundEffect
+ * to play short sounds such as gun shots and explosions
+ *
+ * Ideally you should instantiate ime::audio::Music and pass it to ime::Scene::audio
+ */
 
 #endif // IME_MUSIC_H

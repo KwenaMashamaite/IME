@@ -45,7 +45,7 @@ namespace ime {
      */
     class IME_API KeyboardGridMover : public GridMover {
     public:
-        using Ptr = std::shared_ptr<KeyboardGridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<KeyboardGridMover>; //!< Unique grid mover pointer
 
         /**
          * @brief Constructor
@@ -95,8 +95,12 @@ namespace ime {
         void setKeys(Key leftKey, Key rightKey, Key upKey, Key downKey);
 
         /**
+         * @internal
          * @brief Handle an event
          * @param event Event to handle
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void handleEvent(Event event);
 
@@ -126,7 +130,7 @@ namespace ime {
         MovementTrigger trigger_;           //!< Key event that triggers target movement
         int onTriggerHandlerId_;            //!< Movement trigger Handler id
         input::Keyboard keyboard_;          //!< Detects keyboard inputs
-        std::pair<bool, Direction> newDir_; //!< Flags if direction was changed during target movement
+        std::pair<bool, Direction> newDir_; //!< A flag indicating whether or not the direction was changed while target was moving
         Key goLeftKey_ = Key::Unknown;      //!< A Key when triggered moves target left
         Key goRightKey_ = Key::Unknown;     //!< A Key when triggered moves target right
         Key goUpKey_ = Key::Unknown;        //!< A Key when triggered moves target up

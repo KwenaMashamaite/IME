@@ -111,7 +111,7 @@ namespace ime {
         return animations_.insert({animation->getName(), std::move(animation)}).second;
     }
 
-    void Animator::addAnimation(Animator::Animations animations) {
+    void Animator::addAnimation(std::initializer_list<Animation::Ptr> animations) {
         std::for_each(animations.begin(), animations.end(),
             [this](const auto& animation) {
                 addAnimation(animation);
@@ -125,7 +125,7 @@ namespace ime {
         return nullptr;
     }
 
-    Animation::Ptr Animator::getCurrentAnimation() const {
+    Animation::Ptr Animator::getActiveAnimation() const {
         return currentAnimation_;
     }
 
@@ -170,7 +170,7 @@ namespace ime {
             chainAnimation(animations_.at(name));
     }
 
-    bool Animator::removeChain(const std::string &name) {
+    bool Animator::unchain(const std::string &name) {
         if (chains_.empty())
             return false;
 
@@ -289,7 +289,7 @@ namespace ime {
         return isPaused_;
     }
 
-    bool Animator::hasAnimationStarted() const {
+    bool Animator::isAnimationStarted() const {
         return hasStarted_;
     }
 
@@ -361,6 +361,12 @@ namespace ime {
     }
 
     void Animator::cycle(bool isAlternating) {
+        /// @TODO - Reduce conditional branches in this function
+        /// When I wrote this code I was very tired as it was very late in the am's
+        /// My focus was on getting it to work so code quality out the window
+        /// I intended on refactoring it later that day after getting some rest.
+        /// Well it is true what they say, "A temporary solution tends to be a
+        /// permanent one more often than not" - It's been 3 months :) as of this text
         static auto completeFirstAlternateCycle = [this] {
             completedFirstAlternateCycle_ = true;
             if (cycleDirection_ == Direction::Forward) {
@@ -450,11 +456,11 @@ namespace ime {
     }
 
     void Animator::advanceFrame() {
-
+        /// @see See cycle(bool). Code must come here after refactoring that function
     }
 
     void Animator::reverseFrame() {
-
+        /// @See cycle(bool). Code must come here after refactoring that function
     }
 
     void Animator::setCurrentFrame(Animation::Frame frame) {

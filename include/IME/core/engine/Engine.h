@@ -49,29 +49,39 @@ namespace ime {
     class ResourceManager;
 
     /**
-     * @brief Runs the main loop
+     * @brief Runs the main game loop
      */
-    class IME_API Engine : utility::NonCopyable {
+    class IME_API Engine {
     public:
         /**
          * @brief Constructor
-         * @param gameTitle Name of the game run by the engine
-         * @param settingsFile Filename of the file that contains the
-         *        engines settings
+         * @param gameTitle The name of the game run by the engine
+         * @param settingsFile Filename of the file that contains the engines
+         *                     settings
          *
-         * @a settingsFile must have the filename preceded by the path
-         * to the file. The path must be relative to the directory that
-         * contains the game executable. If @a settingsFile is left unspecified
-         * the engine will be constructed from default settings
+         * @a settingsFile must have the filename preceded by the path to the
+         * file. The path must be relative to the directory that contains the
+         * game executable. If @a settingsFile is left unspecified the engine
+         * will be constructed with default settings
          */
         explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
          * @brief Constructor
-         * @param gameName Name of the game to be run by the engine
-         * @param settings Engine settings
+         * @param gameName The name of the game to be run by the engine
+         * @param settings Settings to construct engine with
          */
         Engine(const std::string& gameName, const PropertyContainer& settings);
+
+        /**
+         * @brief Copy constructor
+         */
+        Engine(const Engine&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Engine& operator=(const Engine&) = delete;
 
         /**
          * @brief Move constructor
@@ -86,25 +96,26 @@ namespace ime {
         /**
          * @brief Initialize the engine
          *
-         * This function will perform all the necessary initialization and
-         * create the games render target, therefore calling the function
-         * getRenderTarget() prior to this function is undefined behaviour
-         *
-         * @see getRenderTarget
+         * @warning This function must be called before the engine is run()
          */
         void initialize();
 
         /**
          * @brief Start the main loop
          *
-         * @warning The engine must be initialized before it is run. In
-         * addition, there must be at least one scene added for the engine
-         * to run
+         * @warning The engine must be initialized this function is called. In
+         * addition, there must be at least one scene added to the engine for
+         * the it to run
          *
-         * @see initialize
-         * @see pushScene
+         * @see initialize and pushScene
          */
         void run();
+
+        /**
+         * @brief Check if the engine is running or not
+         * @return True if the engine is running, otherwise false
+         */
+        bool isRunning() const;
 
         /**
          * @brief Stop the engine
@@ -112,14 +123,10 @@ namespace ime {
          * This function will remove all scenes that have been added to the
          * engine and reset it's initialization state. Therefore, the engine
          * must be reinitialized before it is re-run
+         *
+         * @see initialize and run
          */
         void quit();
-
-        /**
-         * @brief Check if the engine is running or not
-         * @return True if the engine is running, otherwise false
-         */
-        bool isRunning() const;
 
         /**
          * @brief Pause or resume the engine
@@ -187,12 +194,14 @@ namespace ime {
          * @param callback Optional function to be executed after the scene
          *                 is added
          *
-         * The scene will NOT be pushed immediately but rather at the end of
-         * the current frame. Any operation performed on the engine before
-         * the end of the current frame will reflect on the current scene and
-         * not the scene to be pushed. A callback must be provided if the
-         * need to perform an operation immediately after a scene is pushed
-         * arises
+         * If the engine is running, then the scene will NOT be pushed immediately
+         * but rather at the end of the current frame. Any operation performed
+         * on the engine before the end of the current frame will reflect on
+         * the current scene and not the scene to be pushed. A callback must
+         * be provided if the need to perform an operation immediately after
+         * a scene is pushed arises. If the engine is NOT running, then the
+         * scene will be pushed immediately and the callback function is
+         * ignored
          *
          * @warning If multiple scenes are pushed to the engine in the same
          * frame, the last scene to be received before the frame end will be
@@ -205,8 +214,11 @@ namespace ime {
         /**
          * @brief Remove the current scene from the engine
          *
-         * The scene will not be removed immediately but rather at the end
-         * of the current frame
+         * If the engine is not running, the scene will be removed immediately,
+         * otherwise the scene will be removed at the end of the current frame.
+         *
+         * @note Only one scene may be removed per frame when the engine is
+         *       running
          */
         void popScene();
 
@@ -220,57 +232,48 @@ namespace ime {
         Time getElapsedTime() const;
 
         /**
-         * @brief Get the global gui
-         * @return The global gui
+         * @brief Get the engine level gui
+         * @return The engine level gui
          *
-         * Unlike a Scene level gui, this gui is not destroyed when the scene
+         * Unlike ime::Scene::gui, this gui is not destroyed when the scene
          * is destroyed, but rather when the engine is shutdown. It may be
-         * used when the same UI is required across multiple scenes
+         * useful when the same UI is required across multiple scenes. Note
+         * that this gui is rendered on top of the scene level gui
          */
         ui::GuiContainer& getGui();
 
         /**
-         * @brief Get the global resource manager
-         * @return The global resource manager
-         */
-        ResourceManager& getResourceManager();
-
-        /**
-         * @brief Get the global audio manager
-         * @return The global audio manager
+         * @brief Get the engine level audio manager
+         * @return The engine level audio manager
+         *
+         * Unlike ime::Scene::audio, this audio manager is not destroyed
+         * when the scene is destroyed, but rather when the engine is
+         * shutdown
          */
         audio::AudioManager& getAudioManager();
 
         /**
-         * @brief Get the global input manager
-         * @return The global input manager
+         * @brief Get the engine level input manager
+         * @return The engine level input manager
+         *
+         * Unlike ime::Scene::input, event listeners registered to this input
+         * manager are executed regardless of which scene is active and are
+         * only destroyed when the engine is shutdown
          */
         input::InputManager& getInputManager();
 
         /**
-         * @internal
-         * @brief Get access to the engines render target
-         * @return The engines render target
-         *
-         * Note that this function is intended for internal use only
-         *
-         * @warning This function must be called after the engine has
-         *          been initialized
-         *
-         * @see initialize
-         */
-        priv::Window& getRenderTarget();
-
-        /**
          * @brief Schedule a callback to be executed after a delay
          * @param delay Time to wait before executing the callback
-         * @param callback Function to be executed
+         * @param callback Function to be executed when the delay expires
          *
          * This function will execute a callback function once after
          * @a delay seconds. To execute a callback repeatedly every
-         * interval, checkout the setInterval function
+         * interval, use the setInterval() function
          *
-         * @note The callback is executed by a global timer
+         * Unlike ime::Scene::timer, callbacks registered to this timer
+         * are executed regardless of which scene is active and are only
+         * destroyed when the engine is shutdown or the timer has expired
          *
          * @warning The timer will be destroyed after the callback is invoked
          * or if it is externally stopped before the callback is invoked
@@ -285,16 +288,16 @@ namespace ime {
          * @param callback Function to be executed
          * @param repeatCount The number of times to repeat the interval
          *
-         * Unlike setTimeout, this function will execute a callback
+         * Unlike setTimeout(), this function will execute a callback
          * every @a delay seconds for a specified number of times while
          * the engine is running. By default the repeat counter is -1,
          * this means that the callback will repeat forever. The repetition
          * can be also be cancelled by calling setRepeat(0) on the returned
          * timer
          *
-         * @note The callback is executed by a global timer, therefore the
-         * interval will continue to execute until the engine is shutdown
-         * or the interval is stopped via the argument passed to the callback
+         * Unlike ime::Scene::timer, callbacks registered to this timer
+         * are executed regardless of which scene is active and are only
+         * destroyed when the engine is shutdown or the timer has expired
          *
          * @warning The timer will be destroyed if the timer is externally
          * stopped or the repetition is cancelled
@@ -307,24 +310,26 @@ namespace ime {
          * @brief Add an event lister to a window close event
          * @param callback Function to execute when a window close event is fired
          *
-         * The callback function will be called by the engine when a request to
-         * close the window is made by the user. The default behavior stops
+         * The callback function will be called by the engine when a request
+         * to close the window is made by the user. The default behavior stops
          * the engine and closes the render window.
          *
          * @note Only one event listener may be registered to this event. This
          * means that when a new event listener is added, the previous one is
          * removed. As a result, adding a window close event listener overwrites
-         * the default behavior
+         * the default behavior. Pass nullptr to stop the callback from being
+         * invoked
          */
         void onWindowClose(Callback<> callback);
 
         /**
          * @brief Execute a function at the start of a frame
-         * @param callback Function to execute
+         * @param callback Function to executed when a frame starts
          *
-         * Only one callback may be registered at a time. Pass nullptr to
-         * stop the callback from being invoked. By default no callback is
-         * registered
+         * @note Only one callback may be registered at a time. Pass nullptr
+         * to stop the callback from being invoked.
+         *
+         * By default no callback is registered to this event
          */
         void onFrameStart(Callback<> callback);
 
@@ -335,18 +340,32 @@ namespace ime {
          * @note Only one callback may be registered at a time. Pass nullptr
          * to stop the callback from being invoked.
          *
-         * By default, no callback is registered
+         * By default, no callback is registered to this event
          */
         void onFrameEnd(Callback<> callback);
 
         /**
-         * @brief Execute a callback before the engine is shutdown
+         * @brief Execute a callback when the engine is shut down
          * @param callback The function to be executed
          *
-         * This function is called before the engine executes its shutdown
+         * This callback is called before the engine executes its shutdown
          * sequence
          */
         void onShutDown(Callback<> callback);
+
+        /**
+         * @internal
+         * @brief Get access to the engines render target
+         * @return The engines render target
+         *
+         * @warning This function must be called after the engine has been
+         *          initialized
+         *
+         * Note that this function is intended for internal use only
+         *
+         * @see initialize
+         */
+        priv::Window& getRenderTarget();
 
         /**
          * @brief Destructor
@@ -355,8 +374,8 @@ namespace ime {
 
     private:
         /**
-         * @brief Load engine settings from the hard drive
-         * @throw InvalidArgument if the settings entries are invalid
+         * @brief Load engine settings from the disk
+         * @throws InvalidArgument if anu of settings entries are invalid
          */
         void loadSettings();
 
@@ -421,31 +440,54 @@ namespace ime {
         void shutdown();
 
     private:
-        std::unique_ptr<priv::Window> window_;       //!< The engines render target
-        std::string gameTitle_;                      //!< The name of the game run by the engine
-        std::string settingFile_;                    //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                 //!< The engines settings
-        bool isSettingsLoadedFromFile_;              //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
-        bool isInitialized_;                         //!< A flag indicating whether or not the engine has been initialized
-        bool isRunning_;                             //!< A flag indicating whether or not the engine is running
-        bool isPaused_;                              //!< A flag indicating whether or not the engine is paused
-        Time elapsedTime_;                           //!< The time passed since the engine started running
-        std::unique_ptr<priv::SceneManager> sceneManager_; //!< The games scene manager
-        audio::AudioManager audioManager_;           //!< The games global audio manager
-        input::InputManager inputManager_;           //!< The games global input manager
-        std::shared_ptr<ResourceManager> resourceManager_; //!< The games global resource manager
-        EventDispatcher::Ptr eventDispatcher_;       //!< System wide event emitter (Engine only keeps an instance alive for the application)
-        PropertyContainer dataSaver_;                //!< Holds Data that persists across scenes
-        bool pendingPop_;                            //!< A flag indicting whether or not the current scene should be popped
-        Callback<> onWindowClose_;                   //!< A Function executed when a request to close the window is received
-        Callback<> onFrameStart_;                    //!< A Function called at the start of the current frame
-        Callback<> onFrameEnd_;                      //!< A Function called at the end of the current frame
-        EventEmitter eventEmitter_;                  //!< Emits engine events to interested parties
-        TimerManager timerManager_;                  //!< Manages global timers
-        ui::GuiContainer gui_;                       //!< Global gui
+        std::unique_ptr<priv::Window> window_;             //!< The engines render target
+        std::string gameTitle_;                            //!< The name of the game run by the engine
+        std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
+        PropertyContainer settings_;                       //!< The engines settings
+        bool isSettingsLoadedFromFile_;                    //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
+        bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized
+        bool isRunning_;                                   //!< A flag indicating whether or not the engine is running
+        bool isPaused_;                                    //!< A flag indicating whether or not the engine is paused
+        Time elapsedTime_;                                 //!< The time passed since the engine started running
+        std::unique_ptr<priv::SceneManager> sceneManager_; //!< The scene manager
+        audio::AudioManager audioManager_;                 //!< The engine level audio manager
+        input::InputManager inputManager_;                 //!< The engine level input manager
+        std::shared_ptr<ResourceManager> resourceManager_; //!< The engine level resource manager
+        EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
+        PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
+        bool pendingPop_;                                  //!< A flag indicting whether or not the current scene should be popped
+        Callback<> onWindowClose_;                         //!< Optional Function executed when a request to close the window is received
+        Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
+        Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame
+        EventEmitter eventEmitter_;                        //!< Emits engine events
+        TimerManager timerManager_;                        //!< Engine level timer manager
+        ui::GuiContainer gui_;                             //!< Engine level gui
 
         std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
 }
+
+/**
+ * @class ime::Engine
+ * @ingroup core
+ *
+ * ime::Engine is the entry point of Infinite Motion Engine. It is responsible
+ * for running, updating and rendering the game world. External code interacts
+ * with the engine by pushing and popping ime::Scene at appropriate times
+ *
+ * Usage example:
+ * @code
+ * // The engine needs at least one scene in order to run
+ * class TestScene : public ime::Scene {
+ *      public:
+ *          void onEnter() override {//Init scene}
+ * };
+ *
+ * ime::Engine engine{"My awesome game"};
+ * engine.initialize();
+ * engine.pushScene(std::make_unique<TestScene>());
+ * engine.run();
+ * @endcode
+ */
 
 #endif // IME_ENGINE_H

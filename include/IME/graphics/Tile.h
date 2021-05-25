@@ -229,18 +229,6 @@ namespace ime {
         bool contains(Vector2f point) const;
 
         /**
-         * @internal
-         * @brief Set the tiles physics body physics body
-         * @param body The physics body to set
-         *
-         * @warning A physics body is required before setting the tile as
-         * collidable, doing so without a physics body is undefined behavior
-         *
-         * @warning This function is intended for internal use only
-         */
-        void setBody(RigidBody::Ptr body);
-
-        /**
          * @brief Add a collider to the tile
          * @param collider The collider to be added
          *
@@ -284,6 +272,24 @@ namespace ime {
         void toggleVisibility();
 
         /**
+         * @brief Swap the contents of this tile with that of another tile
+         * @param other The tile to swap contents with
+         */
+        void swap(Tile& other);
+
+        /**
+         * @internal
+         * @brief Set the tiles physics body physics body
+         * @param body The physics body to set
+         *
+         * @warning A physics body is required before setting the tile as
+         * collidable, doing so without a physics body is undefined behavior
+         *
+         * @warning This function is intended for internal use only
+         */
+        void setBody(RigidBody::Ptr body);
+
+        /**
          * @internal
          * @brief Draw the tile on a render target
          * @param renderTarget Render target to draw tile on
@@ -291,12 +297,6 @@ namespace ime {
          * @note This function is intended for internal use only
          */
         void draw(priv::Window &renderTarget) const override;
-
-        /**
-         * @brief Swap the contents of this tile with that of another tile
-         * @param other The tile to swap contents with
-         */
-        void swap(Tile& other);
 
         /**
          * @brief Destructor

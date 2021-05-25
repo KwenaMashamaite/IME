@@ -35,16 +35,16 @@
 
 namespace ime {
     /**
-     * @brief A container for Object instances
+     * @brief A container for ime::Object instances
      */
     template <typename T>
     class ObjectContainer {
     public:
-        using ObjectPtr = std::unique_ptr<T>; //!< Unique object pointer
-
         template <typename... Args>
-        using Callback = std::function<void(Args...)>;
-        using Predicate = std::function<bool(const T*)>;
+        using Callback = std::function<void(Args...)>;   //!< For each callback
+
+        using Predicate = std::function<bool(const T*)>; //!< Predicate callback
+        using ObjectPtr = std::unique_ptr<T>;            //!< Unique Object pointer
 
         /**
          * @brief Default constructor
@@ -73,7 +73,7 @@ namespace ime {
         
         /**
          * @brief Add an object to the container
-         * @param object object to be added
+         * @param object The object to be added
          * @param group The name of the group to add the object to
          * @return A pointer to the object after its added to the container
          *
@@ -94,7 +94,8 @@ namespace ime {
          *         could not be found in the container
          *
          * Note that this function will return the first object it finds with
-         * the the given tag
+         * the the given tag if the container has multiple objects with the
+         * same tag
          */
         T* findByTag(const std::string& tag);
         const T* findByTag(const std::string& tag) const;
@@ -107,15 +108,16 @@ namespace ime {
          *         found but it is not convertible to type U
          *
          * Note that this function will return the first object it finds with
-         * the the given tag. You can use this function to get the derived
-         * class type U if T is a base class:
+         * the the given tag if the container has multiple objects with the same
+         * tag. You can use this function to get the derived class type U if T
+         * is a base class:
          *
          * @code
-         * // The type of rectangle is std::shared_ptr<ime::Shape>
-         * auto rectangle = shapeContainer.findByTag("myRect");
+         * // The type of rectangle is ime::Shape*
+         * auto* rectangle = shapeContainer.findByTag("myRect");
          *
-         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
-         * auto rectangle2 = shapeContainer.findByTag<ime::RectangleShape>("myRect");
+         * // The type of rectangle2 is ime::RectangleShape*
+         * auto* rectangle2 = shapeContainer.findByTag<ime::RectangleShape>("myRect");
          * @endcode
          */
         template<typename U>
@@ -144,10 +146,10 @@ namespace ime {
          * a base class
          *
          * @code
-         * // The type of rectangle is std::shared_ptr<ime::Shape>
+         * // The type of rectangle is ime::Shape*
          * auto rectangle = shapeContainer.findById(4);
          *
-         * // The type of rectangle2 is std::shared_ptr<ime::RectangleShape>
+         * // The type of rectangle2 is ime::RectangleShape*
          * auto rectangle2 = shapeContainer.findById<ime::RectangleShape>(4);
          * @endcode
          */
@@ -170,7 +172,7 @@ namespace ime {
 
         /**
          * @brief Remove all objects with the given tag
-         * @param tag Tag of the objects to be removed
+         * @param tag The tag of the objects to be removed
          *
          * @warning This function will invalidate any pointer(s) to the
          * object once it is removed from the container
@@ -178,7 +180,7 @@ namespace ime {
         void removeByTag(const std::string& tag);
 
         /**
-         * @brief Remove a game object with the given id
+         * @brief Remove an object with the given id
          * @param id The id of the object to be removed
          *
          * @warning This function will invalidate any pointer(s) to the
@@ -192,8 +194,7 @@ namespace ime {
          * @return True if the object was removed or false if the object does
          *         not exist in the container
          *
-         * @warning This function will invalidate any pointer(s) to the
-         * object once it is removed from the container
+         * @warning The argument must not be a nullptr
          */
         bool remove(T* object);
 
@@ -202,8 +203,6 @@ namespace ime {
          * @param predicate A function which returns true if the object should
          *                 be removed or false if it should not be removed
          *                 from the container
-         * @return True if the objects were removed from the container or false
-         *         if no objects matched the remove condition
          *
          * Note that this function will remove all objects for which the
          * predicate return true
@@ -230,33 +229,34 @@ namespace ime {
         /**
          * @brief Create a group to add objects to
          * @param name The name of the group
+         * @return The created group
          *
          * This function is useful if you want to relate some objects and
          * refer to them as a whole using a common group name instead of
          * using a common tag name and looping though the container to find
-         * which objects have a given tag
+         * which objects have a given tag. Note that the name of the group
+         * must be unique
          *
          * @code
          * auto weapons = objectContainer.createGroup("weapons");
-         * weapons.add(knife);
-         * weapons.add(machete, 5);
-         * weapons.add(pistol, 0, "pistols");
+         * weapons.addObject(knife);
+         * weapons.addObject(machete);
+         * weapons.addObject(bat);
          * @endcode
-         *
-         * @note The name of the groups must be unique
          *
          * @see addObject
          */
         ObjectContainer<T>& createGroup(const std::string& name);
 
         /**
-         * @brief Get objects in a group
+         * @brief Get a group in the container
          * @param name The name of the group
+         * @return The requested group
          *
-         * @warning The specified group must exist first before calling this
-         * function otherwise undefined behavior
+         * @warning The specified group must exist in the container before
+         * this function is called otherwise undefined behavior
          *
-         * @see hasGroup
+         * @see createGroup and hasGroup
          */
         ObjectContainer<T>& getGroup(const std::string& name) const;
 
@@ -265,6 +265,8 @@ namespace ime {
          * @param name The name of the group to be checked
          * @return True if the container has the specified group, otherwise
          *         false
+         *
+         * @see createGroup
          */
         bool hasGroup(const std::string& name) const;
 
@@ -278,7 +280,7 @@ namespace ime {
          * from the container, therefore any pointers to the objects will be
          * invalidated
          *
-         * @see addObject and removeAllGroups
+         * @see createGroup and removeAllGroups
          */
         bool removeGroup(const std::string& name);
 
@@ -295,23 +297,26 @@ namespace ime {
         void removeAllGroups();
 
         /**
-         * @brief Execute a callback function for each object in the container
-         * @param callback The function to be executed
+         * @brief Apply a callback function to each object in the container
+         * @param callback The function to be applied to each object
          *
-         * @see forEachInGroup and forEachInGroup
+         * Note that the callback is applied to all objects, this includes
+         * those that are assigned to groups
+         *
+         * @see forEachInGroup and forEachNotInGroup
          */
         void forEach(const Callback<T*>& callback) const;
 
         /**
-         * @brief Execute a callback for each object in a group
-         * @param name The name of the group to execute callback on
-         * @param callback The function to be executed for each object in
-         *                 the group
+         * @brief Apply a callback to each object in a specific group
+         * @param name The name of the group to apply callback on
+         * @param callback The function to be applied to each object in the
+         *                 group
          *
          * This function is a shortcut for:
          *
          * @code
-         * //It's undefined behaviour to call getGroup if the group does not exist
+         * // It's undefined behaviour to call getGroup if the group does not exist
          * if (container.hasGroup(name)) {
          *     container.getGroup(name)->forEach(...);
          * }
@@ -323,8 +328,8 @@ namespace ime {
 
         /**
          * @brief Apply a callback to all objects that do not belong to a group
-         * @param callback The function to be executed for each object in not
-         *                 in a group
+         * @param callback The function to be applied to each object in the
+         *                 container that does not belong to any group
          *
          * @see forEach and forEachInGroup
          */
@@ -342,5 +347,35 @@ namespace ime {
 
     #include "IME/common/ObjectContainer.inl"
 }
+
+/**
+ * @class ime::ObjectContainer
+ * @ingroup core
+ *
+ * This class is a storage facility for any instance of ime::Object
+ *
+ * Usage Example:
+ * @code
+ * /// Suppose @a MyClass is a child of @a ime::Object like so:
+ * class AmericanDadCharacter : public ime::Object {...}
+ *
+ * /// Then we can instantiate a container for @a MyClass instances like so:
+ * auto ADCContainer = ime::ObjectContainer<AmericanDadCharacter>();
+ *
+ * // From here onwards it can be used like a normal class instance
+ * auto steve = std::make_unique<AmericanDadCharacter>();
+ * steve.setTag("Steve");
+ * ADCContainer.addObject(std::move(steve));
+ *
+ * auto stan = std::make_unique<AmericanDadCharacter>();
+ * stan.setTag("Stan");
+ * ADCContainer.addObject(std::move(stan), "Parents");
+ *
+ * ...
+ *
+ * AmericanDadCharacter* stan = ADCContainer.getGroup("Parents")->findByTag("Stan");
+ * stan->assignMission("Kill Roger");
+ * @endcode
+ */
 
 #endif //IME_OBJECTCONTAINER_H

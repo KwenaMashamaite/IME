@@ -34,7 +34,7 @@ namespace ime {
      */
     class IME_API RandomGridMover : public GridMover {
     public:
-        using Ptr = std::unique_ptr<RandomGridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<RandomGridMover>; //!< Unique grid mover pointer
 
         /**
          * @brief Create a random grid mover object

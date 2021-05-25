@@ -40,7 +40,7 @@ namespace ime {
      */
     class IME_API TargetGridMover : public GridMover {
     public:
-        using Ptr = std::unique_ptr<TargetGridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<TargetGridMover>; //!< Unique grid mover pointer
 
         /**
          * @brief Create a random grid mover object
@@ -212,6 +212,9 @@ namespace ime {
          * @internal
          * @brief Render the targets path
          * @param window Window to render path on
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void renderPath(priv::Window& window) const;
 
@@ -240,13 +243,13 @@ namespace ime {
 
     private:
         std::unique_ptr<IPathFinderStrategy> pathFinder_; //!< Finds the path from the source to the target
-        Index targetTileIndex_;                       //!< Index of the tile the game object wishes to go to
-        std::stack<Index> pathToTargetTile_;          //!< Stores the path from the current tile to the target tile
-        Colour pathColour_;                           //!< The colour of the targets path when rendered
-        bool renderPath_;                             //!< A flag indicating whether or not to render the targets path
-        bool movementStarted_;                        //!< Flags whether the target has been stopped or not
-        bool targetTileChangedWhileMoving_;           //!< Flags whether the target tile was changed while target was in motion
-        bool isAdaptiveMoveEnabled_;                  //!< A flag indicating whether or not adaptive movement is enabled
+        Index targetTileIndex_;                           //!< Index of the tile the game object wishes to go to
+        std::stack<Index> pathToTargetTile_;              //!< Stores the path from the current tile to the target tile
+        Colour pathColour_;                               //!< The colour of the targets path when rendered
+        bool renderPath_;                                 //!< A flag indicating whether or not to render the targets path
+        bool movementStarted_;                            //!< Flags whether the target has been stopped or not
+        bool targetTileChangedWhileMoving_;               //!< Flags whether the target tile was changed while target was in motion
+        bool isAdaptiveMoveEnabled_;                      //!< A flag indicating whether or not adaptive movement is enabled
     };
 }
 

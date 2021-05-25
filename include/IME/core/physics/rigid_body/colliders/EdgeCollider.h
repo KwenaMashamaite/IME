@@ -114,7 +114,7 @@ namespace ime {
          * ghost vertices (@a v0 and @a v3) and using them internally to prevent
          * internal collisions that lead to ghost collision.
          *
-         * @v1 and @v2 are the edge vertices whilst @a v0 and @a v3 are the
+         * @a v1 and @a v2 are the edge vertices whilst @a v0 and @a v3 are the
          * adjacent ghost vertices. The extra ghost vertices are used to provide
          * smooth movement across junctions.
          *

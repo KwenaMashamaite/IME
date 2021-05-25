@@ -89,8 +89,6 @@ namespace ime {
 
         /**
          * @brief Remove all resources from the resource holder
-         * @return True if all the resource were removed or false if the
-         *         resource holder is already empty
          *
          * @note The resources will only be removed from the program once they
          * are no longer being used. In other words, if the resource is currently

@@ -50,7 +50,7 @@ namespace ime::audio {
         return playingAudio_.addObject(std::move(audio));
     }
 
-    void AudioManager::setVolumeFor(Type audioType, float volume) {
+    void AudioManager::setVolume(Type audioType, float volume) {
         if (volume > masterVolume_)
             volume = masterVolume_;
 
@@ -60,19 +60,19 @@ namespace ime::audio {
             sfxVolume_ = volume;
     }
 
-    void AudioManager::playAllAudio() {
+    void AudioManager::playAll() {
         playingAudio_.forEach([](Audio* audio) {
             audio->play();
         });
     }
 
-    void AudioManager::pauseAllAudio() {
+    void AudioManager::pauseAll() {
         playingAudio_.forEach([](Audio* audio) {
             audio->pause();
         });
     }
 
-    void AudioManager::stopAllAudio() {
+    void AudioManager::stopAll() {
         playingAudio_.forEach([](Audio* audio) {
             audio->stop();
         });
@@ -145,6 +145,11 @@ namespace ime::audio {
     }
 
     void AudioManager::removePlayedAudio() {
+        // OpenAL generates an error if the number of audio files
+        // in our container gets to 255, so we'll continuously remove
+        // played audio. The engine will also crash if 255 audio files
+        // are played simultaneously (I don't know which version of OpenAL fixed
+        // this, I also don't know which version of OpenAL, SFML 2.5.1 uses)
         playingAudio_.removeIf([](const Audio* audio) {
             return audio->getStatus() == Status::Stopped;
         });

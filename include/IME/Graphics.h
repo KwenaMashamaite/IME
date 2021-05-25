@@ -42,3 +42,9 @@
 #include "IME/graphics/Drawable.h"
 
 #endif //IME_GRAPHICS_H
+
+/**
+ * @defgroup graphics Graphics Module
+ *
+ * 2D graphics module: sprites, shapes, spritesheet, ...
+ */

@@ -49,6 +49,9 @@ namespace ime {
          * in the gui container either directly (explicit addition) or
          * indirectly (added to a container widget which is then added to
          * the gui container)
+         *
+         * This class is not meant to be instantiated directly, use ime::Scene::gui
+         * or ime::Engine::getGui
          */
         class IME_API GuiContainer {
         public:
@@ -210,15 +213,6 @@ namespace ime {
              * @return True if the target is set, otherwise false
              */
             bool isTargetSet() const;
-
-            /**
-             * @brief Handle event for all contained widgets
-             * @param event Event to handle
-             *
-             * This function will pass the event to all the contained widgets
-             * such that each widget is given a chance to handle the event
-             */
-            void handleEvent(Event event);
 
             /**
              * @brief Enable tab usage
@@ -513,6 +507,19 @@ namespace ime {
              *         index or the same if the widget was already in front),
              */
             size_t moveWidgetBackward(const std::string& widget);
+
+            /**
+             * @internal
+             * @brief Handle event for all contained widgets
+             * @param event Event to handle
+             *
+             * This function will pass the event to all the contained widgets
+             * such that each widget is given a chance to handle the event
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
+             */
+            void handleEvent(Event event);
 
             /**
              * @brief Destructor

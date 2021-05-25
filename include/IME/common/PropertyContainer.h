@@ -33,7 +33,7 @@
 
 namespace ime {
     /**
-     * @brief A container for a group of properties
+     * @brief A container for ime::Property instances
      */
     class IME_API PropertyContainer {
     public:
@@ -41,21 +41,21 @@ namespace ime {
         using Callback = std::function<void(Args...)>; //!< Event listener
 
         /**
-         * @brief Add a property
-         * @param Property Property to add
+         * @brief Add a property to the container
+         * @param Property The property to be added
          * @return True if the property was added or false if a property
-         *         with the same name already exits
+         *         with the same name already exits in the container
          */
         bool addProperty(const Property &Property);
         bool addProperty(Property&&);
 
         /**
-         * @brief Set the value of a property
-         * @param name Name of the property to set value for
-         * @param value New value of the property
+         * @brief Change the value of a property
+         * @param name The name of the property to set a value for
+         * @param value The new value of the property
          *
-         * The type of @tparam T must be remembered in order to retrieve
-         * the value later
+         * Note that the type of the value of the property need not match the
+         * previous value type
          *
          * @see getValue
          */
@@ -64,7 +64,7 @@ namespace ime {
 
         /**
          * @brief Get the value of a property
-         * @param name Name of the property to get value for
+         * @param name The name of the property to get the value for
          * @throws std::bad_any_cast if the value stored by the property is
          *         not of type T
          * @return Value of a property
@@ -73,32 +73,37 @@ namespace ime {
          * T and the type of the stored value don't match. This means that
          * the property must always have a value before calling this function
          *
-         * @see propertyHasValue
-         * @see setValue
+         * @see setValue and propertyHasValue
          */
         template<typename T>
         T getValue(const std::string& name) const;
 
         /**
-         * @brief Remove a property
-         * @param name Name of the property to remove
+         * @brief Remove a property from the container
+         * @param name The name of the property to be removed
          * @return True if the property was removed or false if the specified
-         *         property doesnt exist
+         *         property doesn't exist
+         *
+         * @see addProperty
          */
         bool removeProperty(const std::string &name);
 
         /**
-         * @brief Check if container has a given property
-         * @param name Name of the property to check
-         * @return True if property exists, otherwise false
+         * @brief Check if the container has a given property
+         * @param name The name of the property to be checked
+         * @return True if the property exists or false if the container does
+         *         not have a property with the given name
+         *
+         * @see addProperty
          */
         bool hasProperty(const std::string &name) const;
 
         /**
-         * @brief Check if a property has a value or not
-         * @param name Name of the property to be checked
+         * @brief Check if a property in the container has a value or not
+         * @param name The name of the property to be checked
          * @return True if property has value or false if the property does
-         *         not have a value or does not exist
+         *         not have a value or the property does not exist in the
+         *         container
          *
          * @see hasProperty
          */
@@ -108,18 +113,16 @@ namespace ime {
          * @brief Get the number of properties in the container
          * @return The number of properties in the container
          */
-        std::size_t getSize() const;
+        std::size_t getCount() const;
 
         /**
-         * @brief Execute a callback for each property in the container
-         * @param callback The function to be executed
-         *
-         * The callback is passed the property on each invocation
+         * @brief Apply a callback to each property in the container
+         * @param callback The function to be applied
          */
         void forEachProperty(const Callback<Property&>& callback) const;
 
         /**
-         * @brief Remove all the stored properties from the container
+         * @brief Remove all properties from the container
          */
         void clear();
 
@@ -129,5 +132,22 @@ namespace ime {
 
     #include "IME/common/PropertyContainer.inl"
 }
+
+/**
+ * @class ime::PropertyContainer
+ * @ingroup core
+ *
+ * Usage example:
+ * @code
+ * ime::PropertyContainer settings;
+ * settings.addProperty(Property("masterVolume", 100.0f));
+ * settings.addProperty({"musicVolume", 80.0f});
+ * settings.addProperty({"sfxVolume"});
+ *
+ * ...
+ *
+ * settings.setValue("sfxVolume", 20.0f);
+ * @endcode
+ */
 
 #endif // IME_PROPERTYCONTAINER_H

@@ -274,7 +274,7 @@ namespace ime {
 
     void Engine::shutdown() {
         eventEmitter_.emit("shutdown");
-        audioManager_.stopAllAudio();
+        audioManager_.stopAll();
         audioManager_.removePlayedAudio();
         window_->close();
         isInitialized_ = false;
@@ -317,10 +317,6 @@ namespace ime {
 
     ui::GuiContainer &Engine::getGui() {
         return gui_;
-    }
-
-    ResourceManager &Engine::getResourceManager() {
-        return *resourceManager_;
     }
 
     const PropertyContainer &Engine::getSettings() const {

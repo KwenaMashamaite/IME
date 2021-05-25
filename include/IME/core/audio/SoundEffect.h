@@ -33,14 +33,6 @@ namespace ime {
     namespace audio {
         /**
          * @brief Play sound effects (Short audio clips)
-         *
-         * This class loads the audio file to be played in memory.
-         * Therefore, it is advised to use it with short audio files
-         * that can be quickly loaded form the disk and into the
-         * program. Example, gun shots and explosions. If long audio
-         * files are used with this class you might experience audio
-         * latency and other issues. It is advised to use Audio::Music
-         * for long sounds such as background music.
          */
         class IME_API SoundEffect final : public Audio {
         public:
@@ -213,3 +205,17 @@ namespace ime {
 }
 
 #endif // IME_SOUNDEFFECT_H
+
+/**
+ * @class ime::audio::SoundEffects
+ * @ingroup core
+ *
+ * ime::audio::SoundEffect loads the audio file to be played in memory.
+ * Therefore, it is advised to use it with short audio files that can be
+ * quickly loaded form the disk and into the program. Examples include,
+ * gun shots, explosions UI sound effects etc. If long audio files are used
+ * with this class you might experience audio latency and other related issues.
+ * It is advised to use ime::audio::Music for long sounds such as background music
+ *
+ * Ideally you should instantiate ime::audio::SoundEffect and pass it to ime::Scene::audio
+ */

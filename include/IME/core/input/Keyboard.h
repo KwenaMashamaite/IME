@@ -30,7 +30,7 @@
 #include <unordered_map>
 
 namespace ime {
-    class Event; //!< Event class forward declaration
+    class Event;
 
     /**
      * @brief Keyboard events
@@ -45,9 +45,8 @@ namespace ime {
         /**
          * @brief Captures keyboard inputs from the user
          *
-         * You usually don't instantiate this class directly, you either use
-         * the input manager that is local to a Scene or the global input
-         * manager that from the Engine class
+         * This class is not meant to be instantiated directly, use
+         * ime::Scene::input or ime::Engine::getInputManager
          */
         class IME_API Keyboard {
         public:
@@ -190,7 +189,7 @@ namespace ime {
              */
             static Key stringToKey(const std::string& key);
 
-            /**.
+            /**
              * @brief Check if a key is pressed or not
              * @param key Key to be checked
              * @return True if the key is pressed or false if it not pressed
@@ -251,8 +250,12 @@ namespace ime {
             bool unsubscribe(KeyboardEvent event, int id);
 
             /**
+             * @internal
              * @brief Handle a system event
              * @param event Event to be handled
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
              */
             void handleEvent(Event event);
 
@@ -263,8 +266,8 @@ namespace ime {
         };
     }
 
-    using Keyboard = ime::input::Keyboard;
-    using Key = ime::input::Keyboard::Key;
+    using Keyboard = ime::input::Keyboard; //!< ime::input::Keyboard alias
+    using Key = ime::input::Keyboard::Key; //!< ime::input::Keyboard::Key alias
 }
 
 #endif // IME_KEYBOARD_H

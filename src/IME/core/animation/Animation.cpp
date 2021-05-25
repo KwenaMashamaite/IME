@@ -103,7 +103,7 @@ namespace ime {
         return name_;
     }
 
-    void Animation::delayStart(Time delay) {
+    void Animation::setStartDelay(Time delay) {
         startDelay_ = delay;
     }
 

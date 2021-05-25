@@ -30,11 +30,11 @@
 #include "IME/core/event/EventEmitter.h"
 
 namespace ime {
-    class Event;  //!< Event class forward declaration
+    class Event;
 
     /// @internal
     namespace priv {
-        class Window; //!< Window class forward declaration
+        class Window;
     }
 
     /**
@@ -51,9 +51,8 @@ namespace ime {
         /**
          * @brief Captures mouse inputs from the user
          *
-         * You usually don't instantiate this class directly, you either use
-         * the input manager that is local to a Scene or the global input
-         * manager that from the Engine class
+         * This class is not meant to be instantiated directly, use
+         * ime::Scene::input or ime::Engine::getInputManager
          */
         class IME_API Mouse {
         public:
@@ -237,8 +236,12 @@ namespace ime {
             bool unsubscribe(MouseEvent event, int id);
 
             /**
+             * @internal
             * @brief Handle a system event
             * @param event Event to be handled
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
             */
             void handleEvent(Event event);
 
@@ -247,7 +250,7 @@ namespace ime {
         };
     }
 
-    using Mouse = ime::input::Mouse;
+    using Mouse = ime::input::Mouse; //!< ime::input::Mouse alias
 }
 
 #endif // IME_MOUSE_H

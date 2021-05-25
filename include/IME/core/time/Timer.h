@@ -32,6 +32,9 @@
 namespace ime {
     /**
      * @brief Execute a callback after an interval/delay
+     *
+     * This class is not meant to be instantiated directly, use ime::Scene::timer
+     * or ime::Engine::setTimeout and ime::Engine::setInterval
      */
     class IME_API Timer {
     public:
@@ -243,12 +246,6 @@ namespace ime {
         Status getStatus() const;
 
         /**
-         * @brief Update the time
-         * @param deltaTime Time passed since last update
-         */
-        void update(Time deltaTime);
-
-        /**
          * @brief Get the number of times the callback has been invoked
          * @return The number of times the callback has been invoked
          *
@@ -263,10 +260,20 @@ namespace ime {
          */
         bool isDispatched() const;
 
+        /**
+         * @internal
+         * @brief Update the time
+         * @param deltaTime Time passed since last update
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
+         */
+        void update(Time deltaTime);
+
     private:
         Status status_;          //!< The current state of the timer
         bool isDispatched_;      //!< A flag indicating whether or not the callback has been invoked
-        int repeatCount_;       //!< The number of times the timer repeats
+        int repeatCount_;        //!< The number of times the timer repeats
         int dispatchCount_;      //!< Indicates how many times the callback has been invoked
         Time interval_;          //!< Countdown starting point
         Time remainingDuration_; //!< The time remaining before the timer reaches zero

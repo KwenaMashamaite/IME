@@ -74,7 +74,7 @@ namespace ime {
          * @brief Construct colour from hex code
          * @param colour The colour in hex code
          *
-         * The format of the hex code is #rrggbb or #rrggbbaa where:
+         * The format of the hex code is "#rrggbb" or "#rrggbbaa" where:
          *
          * 1. rr is the red component
          * 2. gg is the green component

@@ -35,34 +35,31 @@
 #include <stack>
 
 namespace ime {
-
-    class RigidBody;  //!< Rigid body class forward declaration
-    class Scene;      //!< Scene class forward declaration
+    class RigidBody;
+    class Scene;
 
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
      */
     class IME_API GameObject : public Object {
     public:
-        using Ptr = std::unique_ptr<GameObject>; //!< Shared GameObject pointer
-        using BodyPtr = std::unique_ptr<RigidBody>;   //!< Unique Body pointer
+        using Ptr = std::unique_ptr<GameObject>;                      //!< Unique game object pointer
+        using BodyPtr = std::unique_ptr<RigidBody>;                   //!< Unique Body pointer
         using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Collision callback
 
         /**
-         * @brief Construct the game object
+         * @brief Constructor
          * @param scene The scene this game object belongs to
-         * @param type Type of the game object
          */
         explicit GameObject(Scene& scene);
 
         /**
          * @brief Copy constructor
-         * @param other Object to be copied
          */
-        GameObject(const GameObject& other);
+        GameObject(const GameObject&);
 
         /**
-         * @brief Assignment operator
+         * @brief Copy assignment operator
          */
         GameObject& operator=(const GameObject&);
 
@@ -78,7 +75,7 @@ namespace ime {
 
         /**
          * @brief Swap the game object with another game object
-         * @param other The game object to swap with this gam object
+         * @param other The game object to swap with this game object
          */
         void swap(GameObject& other);
 
@@ -125,7 +122,7 @@ namespace ime {
          *
          * Be default, the state is -1, which is supposed to indicate
          * that there is no state. The state property is optional and
-         * may be used if needs be. It is not used internally
+         * may be used if needs be. It is not used by IME
          */
         void setState(int state);
 
@@ -138,10 +135,6 @@ namespace ime {
         /**
          * @brief Set whether the game object is active or inactive
          * @param isActive True to set active or false to set inactive
-         *
-         * An active game object in this context refers to a game object that is
-         * in a good state, not killed or completely destroyed, whilst
-         * an inactive game object refers to one that is killed or destroyed
          */
         void setActive(bool isActive);
 
@@ -373,7 +366,8 @@ namespace ime {
          * @param deltaTime Time past since last update
          *
          * @warning When overriding this function make sure to call the base
-         * class version first in your implementation
+         * class version first in your implementation. In addition, don't
+         * invoke the overridden function, it will be called by the engine
          */
         virtual void update(Time deltaTime);
 
@@ -403,8 +397,8 @@ namespace ime {
         std::reference_wrapper<Scene> scene_; //!< The scene this game object belongs to
         int state_;                           //!< The current state of the game object
         bool isObstacle_;                     //!< A flag indicating whether or not the object is an obstacle
-        bool isActive_;                       //!< Active state
-        bool isCollidable_;                   //!< Collidable state
+        bool isActive_;                       //!< A flag indicating whether or not the game object is active
+        bool isCollidable_;                   //!< A flag indicating whether or not the game object is collidable
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object

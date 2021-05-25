@@ -713,23 +713,24 @@ namespace ime {
         void onRenderChange(const Property& property);
 
     private:
-        unsigned int tileSpacing_;   //!< Spacing between tiles in all directions
-        Vector2u tileSize_;          //!< The Size of each tile
-        Vector2u mapSizeInPixels_;   //!< The Size of the tilemap in pixels
-        Vector2f mapPos_;            //!< The Position of the tilemap in pixels
-        unsigned int numOfRows_;     //!< The width of the tilemap in tiles
-        unsigned int numOfColms_;    //!< The height of the tilemap in tiles
-        Map mapData_;                //!< Map data used to identify different tiles
-        std::string tileSet_;        //!< Tileset the visual grid is constructed from
-        Tile invalidTile_;           //!< Tile returned when an invalid index is provided
-        TileMapRenderer renderer_;   //!< Determines the look of the grid
-        RenderLayerContainer& renderLayers_;  //!< Render layers for this scene
-        SpriteContainer sprites_;    //!< Stores sprites that belong to the tilemap
-        RectangleShape backgroundTile_; //!< Dictates the background colour of the tilemap
+        unsigned int tileSpacing_;           //!< Spacing between tiles in all directions
+        Vector2u tileSize_;                  //!< The Size of each tile
+        Vector2u mapSizeInPixels_;           //!< The Size of the tilemap in pixels
+        Vector2f mapPos_;                    //!< The Position of the tilemap in pixels
+        unsigned int numOfRows_;             //!< The width of the tilemap in tiles
+        unsigned int numOfColms_;            //!< The height of the tilemap in tiles
+        Map mapData_;                        //!< Map data used to identify different tiles
+        std::string tileSet_;                //!< Tileset the visual grid is constructed from
+        Tile invalidTile_;                   //!< Tile returned when an invalid index is provided
+        TileMapRenderer renderer_;           //!< Determines the look of the grid
+        RenderLayerContainer& renderLayers_; //!< Render layers for this scene
+        SpriteContainer sprites_;            //!< Stores sprites that belong to the tilemap
+        RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
+
         std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
-        std::unordered_map<std::string, std::string> tilesets_;              //!< Tilesets container
-        std::vector<std::vector<Tile>> tiledMap_;//!< Tiles container
-        PhysicsWorld* physicsSim_; //!< The physics simulation
+        std::unordered_map<std::string, std::string> tilesets_;        //!< Tilesets container
+        std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
+        PhysicsWorld* physicsSim_;                                     //!< The physics simulation
 
         friend class Scene;
     };

@@ -30,7 +30,7 @@
 #include <optional>
 
 namespace ime {
-    class Sprite; //!< Sprite class forward declaration
+    class Sprite;
 
     /**
      * @brief A SpriteImage with no size and arrangement restrictions
@@ -102,6 +102,7 @@ namespace ime {
          *
          * @code
          * auto crate = textureAtlas.getSprite({100, 45, 32, 16});
+         * @endcode
          */
         Sprite getSprite(Frame frame);
 

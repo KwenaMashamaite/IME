@@ -58,7 +58,7 @@ namespace ime {
      */
     class IME_API GridMover : public Object {
     public:
-        using Ptr = std::unique_ptr<GridMover>; //!< Shared grid mover pointer
+        using Ptr = std::unique_ptr<GridMover>; //!< Unique grid mover pointer
         using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Called when collision takes place
 
         /**
@@ -371,6 +371,9 @@ namespace ime {
          * @brief Reset the target tile to be the same as the entity tile
          *
          * The tile can only be rest if the entity is not moving
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void resetTargetTile();
 
@@ -378,6 +381,9 @@ namespace ime {
          * @internal
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          */
         void onTargetTileReset(const Callback<Index>& callback);
 
@@ -395,7 +401,8 @@ namespace ime {
          *
          * @warning The target will never move if this function is never called
          *
-         * @note This function is intended for internal use only
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
          *
          * @see onAdjacentMoveEnd and requestDirectionChange
          */
