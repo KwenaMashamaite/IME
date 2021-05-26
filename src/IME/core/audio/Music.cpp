@@ -30,108 +30,108 @@ namespace ime::audio {
     //////////////////////////////////////////////////////////////////////////
     // Music implementation
     //////////////////////////////////////////////////////////////////////////
-    struct Music::Impl : public Audio {
-        Impl() :
+    struct Music::MusicImpl {
+        explicit MusicImpl(Music* parent) :
+            parent_{parent},
             song_{std::make_shared<sf::Music>()}
         {}
 
-        Impl(const Impl&) = delete;
-        const Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) noexcept = default;
-        Impl& operator=(Impl&&) noexcept = default;
+        MusicImpl(const MusicImpl&) = delete;
+        const MusicImpl& operator=(const MusicImpl&) = delete;
+        MusicImpl(MusicImpl&&) noexcept = default;
+        MusicImpl& operator=(MusicImpl&&) noexcept = default;
 
-        void setSource(const std::string &source) override {
+        void setSource(const std::string &source) {
             if (sourceFilename_ != source) {
                 song_ = ResourceManager::getInstance()->getMusic(source);
                 sourceFilename_ = source;
             }
         }
 
-        const std::string &getSource() const override {
+        const std::string &getSource() const {
             return sourceFilename_;
         }
 
-        void setVolume(float volume) override {
-            if (song_ && song_->getVolume() != volume
-                && (volume >=0 && volume <= 100)) {
-                if (isMuted())
-                    setMute(false);
+        void setVolume(float volume) {
+            if (song_ && song_->getVolume() != volume && (volume >= 0 && volume <= 100)) {
+                if (parent_->isMuted())
+                    parent_->setMute(false);
                 song_->setVolume(volume);
-                emit("volumeChanged", volume);
+                parent_->emitChange(Property{"volume", volume});
             }
         }
 
-        float getVolume() const override {
+        float getVolume() const {
             if (song_)
                 return song_->getVolume();
             return 100.0f; //Default volume is maximum
         }
 
-        void setPitch(float pitch) override {
+        void setPitch(float pitch) {
             if (song_)
                 song_->setPitch(pitch);
         }
 
-        float getPitch() const override {
+        float getPitch() const {
             if (song_)
                 return song_->getPitch();
             return 1;
         }
 
-        void setLoop(bool isLooped) override {
+        void setLoop(bool isLooped) {
             if (song_ && song_->getLoop() != isLooped) {
                 song_->setLoop(isLooped);
-                emit("loopChanged", isLooped);
+                parent_->emitChange(Property{"loop", isLooped});
             }
         }
 
-        bool isLooped() const override {
+        bool isLooped() const {
             if (song_)
                 return song_->getLoop();
             return false;
         }
 
-        void seek(Time position) override {
+        void seek(Time position) {
             if (song_) {
                 song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
-                emit("playingPositionChanged", position);
+                parent_->emitChange(Property{"seek", position});
             }
         }
 
-        Time getPlayingPosition() const override {
+        Time getPlayingPosition() const {
             if (song_)
                 return microseconds(song_->getPlayingOffset().asMicroseconds());
             return Time::Zero;
         }
 
-        void play() override {
+        void play() {
             if (song_) {
                 song_->play();
-                emit("playing", sourceFilename_);
+                parent_->emit("play");
             }
         }
 
-        void pause() override {
+        void pause() {
             if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
                 song_->pause();
-                emit("paused");
+                parent_->emit("pause");
             }
         }
 
-        void stop() override {
+        void stop() {
             if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
                 song_->stop();
-                emit("stopped");
+                parent_->emit("stop");
             }
         }
 
-        Time getDuration() const override {
+        Time getDuration() const {
             if (song_)
                 return microseconds(song_->getDuration().asMicroseconds());
             return Time::Zero;
         }
 
-        Status getStatus() const override {
+        Status getStatus() const {
             if (song_) {
                 switch (song_->getStatus()) {
                     case sf::Music::Status::Playing:
@@ -145,13 +145,10 @@ namespace ime::audio {
             return Status::Stopped;
         }
 
-        std::string getType() override {
-            return "Music";
-        }
-
-        ~Impl() override = default;
+        ~MusicImpl() = default;
 
     private:
+        Music* parent_;                   //!< Backward pointer
         std::shared_ptr<sf::Music> song_; //!< Music to be played
         std::string sourceFilename_;      //!< Filename of the music file being played
     }; // class Impl
@@ -161,11 +158,15 @@ namespace ime::audio {
     //////////////////////////////////////////////////////////////////////////
 
     Music::Music() :
-        pImpl_{std::make_unique<Impl>()}
+        pImpl_{std::make_unique<MusicImpl>(this)}
     {}
 
     Music::Music(Music &&) noexcept = default;
     Music &Music::operator=(Music &&) noexcept = default;
+
+    std::string Music::getClassName() const {
+        return "Music";
+    }
 
     void Music::setSource(const std::string &source) {
         pImpl_->setSource(source);
@@ -225,10 +226,6 @@ namespace ime::audio {
 
     Time Music::getPlayingPosition() const {
         return pImpl_->getPlayingPosition();
-    }
-
-    std::string Music::getType() {
-        return pImpl_->getType();
     }
 
     Music::~Music() = default;

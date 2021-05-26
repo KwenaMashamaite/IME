@@ -30,6 +30,10 @@ namespace ime::audio {
         volumeBeforeMute_(100.0f)
     {}
 
+    std::string Audio::getClassType() const {
+        return "Audio";
+    }
+
     void Audio::adjustVolume(float offset) {
         if (auto currentVolume = getVolume(); currentVolume + offset > 100.0f)
             setVolume(100.0f);
@@ -44,11 +48,11 @@ namespace ime::audio {
             isMuted_ = true;
             volumeBeforeMute_ = getVolume();
             setVolume(0.0f);
-            emit("muted");
+            emitChange(Property{"mute", true});
         } else if (!mute && isMuted_) {
             isMuted_ = false;
             setVolume(volumeBeforeMute_);
-            emit("unmuted");
+            emitChange(Property{"mute", false});
         }
     }
 

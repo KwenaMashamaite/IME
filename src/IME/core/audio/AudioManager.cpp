@@ -47,8 +47,7 @@ namespace ime::audio {
 
         audio->setSource(filename);
         audio->play();
-        playingAudio_.push_back(std::move(audio));
-        return playingAudio_.back().get();
+        return playingAudio_.addObject(std::move(audio));
     }
 
     void AudioManager::setVolumeFor(Type audioType, float volume) {
@@ -62,26 +61,32 @@ namespace ime::audio {
     }
 
     void AudioManager::playAllAudio() {
-        for (auto& audio : playingAudio_)
+        playingAudio_.forEach([](Audio* audio) {
             audio->play();
+        });
     }
 
     void AudioManager::pauseAllAudio() {
-        for (auto& audio : playingAudio_)
+        playingAudio_.forEach([](Audio* audio) {
             audio->pause();
+        });
     }
 
     void AudioManager::stopAllAudio() {
-        for (auto& audio : playingAudio_)
+        playingAudio_.forEach([](Audio* audio) {
             audio->stop();
+        });
     }
 
     void AudioManager::setMute(bool isMuted) {
         if (isMuted_ == isMuted)
             return;
         isMuted_ = isMuted;
-        for (auto& audio : playingAudio_)
+
+        playingAudio_.forEach([isMuted](Audio* audio) {
             audio->setMute(isMuted);
+        });
+
         eventEmitter_.emit("muteChanged", isMuted_);
     }
 
@@ -112,12 +117,11 @@ namespace ime::audio {
             if (sfxVolume_ > masterVolume_ || wasSfxVolumeSameAsMaster)
                 sfxVolume_ = masterVolume_;
 
-            std::for_each(playingAudio_.begin(), playingAudio_.end(),
-                [this](auto& audio) {
-                    if (audio->getType() == "Music")
-                        audio->setVolume(musicVolume_);
-                    else
-                        audio->setVolume(sfxVolume_);
+            playingAudio_.forEach([this](Audio* audio) {
+                if (audio->getClassName() == "Music")
+                    audio->setVolume(musicVolume_);
+                else if (audio->getClassName() == "SoundEffect")
+                    audio->setVolume(sfxVolume_);
             });
 
             eventEmitter_.emit("volumeChanged", masterVolume_);
@@ -141,9 +145,8 @@ namespace ime::audio {
     }
 
     void AudioManager::removePlayedAudio() {
-        playingAudio_.erase(std::remove_if(playingAudio_.begin(), playingAudio_.end(),
-            [] (std::unique_ptr<Audio>& audio) {
-                return audio->getStatus() == Status::Stopped;
-        }), playingAudio_.end());
+        playingAudio_.removeIf([](const Audio* audio) {
+            return audio->getStatus() == Status::Stopped;
+        });
     }
 }

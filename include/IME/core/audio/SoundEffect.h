@@ -70,6 +70,12 @@ namespace ime {
             SoundEffect& operator=(SoundEffect&&) noexcept;
 
             /**
+             * @brief Get the name of this class
+             * @return The name of this class
+             */
+            std::string getClassName() const override;
+
+            /**
              * @brief Set the sound effect file to be played
              * @param source Filename of an audio file
              *
@@ -195,19 +201,13 @@ namespace ime {
             Status getStatus() const override;
 
             /**
-             * @brief Get the type of the audio
-             * @return The type of the audio
-             */
-            std::string getType() override;
-
-            /**
              * @brief Destructor
              */
             ~SoundEffect() override;
 
         private:
-            struct Impl;
-            std::unique_ptr<Impl> pImpl_;
+            struct SoundEffectImpl;
+            std::unique_ptr<SoundEffectImpl> pImpl_;
         };
     }
 }

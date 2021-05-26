@@ -28,8 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/audio/Audio.h"
 #include "IME/core/event/EventEmitter.h"
-#include <vector>
-#include <memory>
+#include "IME/common/ObjectContainer.h"
 #include <string>
 
 namespace ime {
@@ -194,7 +193,7 @@ namespace ime {
             float musicVolume_;         //!< Music volume
             bool isMuted_;              //!< Mute state
             EventEmitter eventEmitter_; //!< Event emitter
-            std::vector<std::unique_ptr<Audio>> playingAudio_; //!< Playing audio container
+            ObjectContainer<Audio> playingAudio_; //!< Playing audio container
         };
     }
 }

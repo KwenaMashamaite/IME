@@ -30,83 +30,92 @@ namespace ime::audio {
     //////////////////////////////////////////////////////////////////////////
     // SoundEffect implementation
     //////////////////////////////////////////////////////////////////////////
-    struct SoundEffect::Impl : public Audio {
-        void setSource(const std::string &filename) override {
+    struct SoundEffect::SoundEffectImpl {
+        SoundEffectImpl() :
+            parent_{nullptr}
+        {}
+
+        void setParent(SoundEffect* parent) {
+            IME_ASSERT(parent, "Parent cannot be a nullptr")
+            parent_ = parent;
+        }
+
+        void setSource(const std::string &filename) {
             if (sfxName_ != filename) {
                 soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
                 sfxName_ = filename;
             }
         }
 
-        const std::string &getSource() const override {
+        const std::string &getSource() const {
             return sfxName_;
         }
 
-        void setVolume(float volume) override {
+        void setVolume(float volume) {
             if (volume != soundEffect_.getVolume()
                 && (volume >=0 && volume <= 100)) {
                 soundEffect_.setVolume(volume);
-                emit("volumeChanged", volume);
+                parent_->emitChange(Property{"volume", volume});
             }
         }
 
-        float getVolume() const override {
+        float getVolume() const {
             return soundEffect_.getVolume();
         }
 
-        void setPitch(float pitch) override {
+        void setPitch(float pitch) {
             soundEffect_.setPitch(pitch);
         }
 
-        float getPitch() const override {
+        float getPitch() const {
             return soundEffect_.getPitch();
         }
 
-        void setLoop(bool isLooped) override {
+        void setLoop(bool isLooped) {
             if (soundEffect_.getLoop() != isLooped) {
                 soundEffect_.setLoop(isLooped);
-                emit("loopChanged", isLooped);
+                parent_->emitChange(Property{"loop", isLooped});
             }
         }
 
-        bool isLooped() const override {
+        bool isLooped() const {
             return soundEffect_.getLoop();
         }
 
-        void seek(Time position) override {
+        void seek(Time position) {
             soundEffect_.setPlayingOffset(sf::microseconds(position.asMicroseconds()));
         }
 
-        Time getPlayingPosition() const override {
+        Time getPlayingPosition() const {
             return microseconds(soundEffect_.getPlayingOffset().asMicroseconds());
         }
 
-        void play() override {
+        void play() {
             soundEffect_.play();
-            emit("playing", sfxName_);
+            parent_->emit("play");
         }
 
-        void pause() override {
+        void pause() {
             if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
                 soundEffect_.pause();
-                emit("paused");
+                parent_->emit("pause");
             }
         }
 
-        void stop() override {
+        void stop() {
             if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
                 soundEffect_.stop();
-                emit("stopped");
+                parent_->emit("stop");
             }
         }
 
-        Time getDuration() const override {
+        Time getDuration() const {
             if (soundEffect_.getBuffer())
                 return microseconds(soundEffect_.getPlayingOffset().asMicroseconds());
             return Time::Zero;
         }
 
-        Status getStatus() const override {
+        Status getStatus() const {
             switch (soundEffect_.getStatus()) {
                 case sf::SoundSource::Status::Playing:
                     return Status::Playing;
@@ -118,13 +127,10 @@ namespace ime::audio {
             return Status::Stopped;
         }
 
-        std::string getType() override {
-            return "SoundEffect";
-        }
-
     private:
         sf::Sound soundEffect_; //!< Sound to be played
         std::string sfxName_;   //!< Filename of the audio source
+        SoundEffect* parent_;   //!< Backward pointer
     }; // class Impl
 
     //////////////////////////////////////////////////////////////////////////
@@ -132,13 +138,17 @@ namespace ime::audio {
     //////////////////////////////////////////////////////////////////////////
 
     SoundEffect::SoundEffect() :
-        pImpl_{std::make_unique<Impl>()}
-    {}
+        pImpl_{std::make_unique<SoundEffectImpl>()}
+    {
+        pImpl_->setParent(this);
+    }
 
     SoundEffect::SoundEffect(const SoundEffect& other) :
         Audio(other),
-        pImpl_{std::make_unique<Impl>(*other.pImpl_)}
-    {}
+        pImpl_{std::make_unique<SoundEffectImpl>(*other.pImpl_)}
+    {
+        pImpl_->setParent(this);
+    }
 
     SoundEffect &SoundEffect::operator=(const SoundEffect& rhs) {
         if (this != &rhs) {
@@ -152,6 +162,10 @@ namespace ime::audio {
 
     SoundEffect::SoundEffect(SoundEffect &&) noexcept = default;
     SoundEffect &SoundEffect::operator=(SoundEffect &&) noexcept = default;
+
+    std::string SoundEffect::getClassName() const {
+        return "SoundEffect";
+    }
 
     void SoundEffect::setSource(const std::string &filename){
         pImpl_->setSource(filename);
@@ -204,11 +218,7 @@ namespace ime::audio {
     Time SoundEffect::getPlayingPosition() const {
         return pImpl_->getPlayingPosition();
     }
-
-    std::string SoundEffect::getType() {
-        return pImpl_->getType();
-    }
-
+    
     void SoundEffect::setPitch(float pitch) {
         pImpl_->setPitch(pitch);
     }

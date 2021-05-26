@@ -69,6 +69,12 @@ namespace ime {
             Music& operator=(Music&&) noexcept;
 
             /**
+             * @brief Get the name of this class
+             * @return The name of this class
+             */
+            std::string getClassName() const override;
+
+            /**
              * @brief Set the music file to be played
              * @param source Filename of an audio file
              *
@@ -198,19 +204,13 @@ namespace ime {
             Status getStatus() const override;
 
             /**
-             * @brief Get the type of the music
-             * @return The type of the music
-             */
-            std::string getType() override;
-
-            /**
              * @brief Destructor
              */
             ~Music() override;
 
         private:
-            struct Impl;
-            std::unique_ptr<Impl> pImpl_;
+            struct MusicImpl;
+            std::unique_ptr<MusicImpl> pImpl_;
         };
     }
 }

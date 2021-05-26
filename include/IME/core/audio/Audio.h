@@ -26,6 +26,7 @@
 #define IME_AUDIO_H
 
 #include "IME/Config.h"
+#include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
 #include <string>
@@ -44,12 +45,23 @@ namespace ime {
         /**
          * @brief Abstract base class for audio
          */
-        class IME_API Audio : public EventEmitter {
+        class IME_API Audio : public Object {
         public:
             /**
              * @brief Default constructor
              */
             Audio();
+
+            /**
+             * @brief Get the name of this class
+             * @return The name of this class
+             *
+             * Note that this function is only implemented by child classes
+             * of Object which also serve as a base class for other classes
+             *
+             * @see getClassName
+             */
+            std::string getClassType() const override;
 
             /**
              * @brief Set audio source to be manipulated
@@ -209,28 +221,6 @@ namespace ime {
              * @return Current status of the audio
              */
             virtual Status getStatus() const = 0;
-
-            /**
-             * @brief Get the type of the audio
-             * @return The type of the audio
-             */
-            virtual std::string getType() = 0;
-
-            /**
-             * @brief Destructor
-             */
-            virtual ~Audio() = default;
-
-        protected:
-            /**
-             * @brief Prevent external publishing of events
-             *
-             * Only the class knows the conditions under which an event may be
-             * fired. Therefore, events must not be raised externally as this
-             * may result in events being raised at the wong time, resulting
-             * in undesired and incorrect behavior
-             */
-            using EventEmitter::emit;
 
         private:
             bool isMuted_;           //!< Mute state
