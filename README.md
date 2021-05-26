@@ -2,29 +2,29 @@
     <img src="logo.png" alt="IME Logo">
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
 # IME — Infinite Motion Engine
 
-IME is an open source state-based 2D game engine. It is written in C++17 and 
-makes use of [SFML](https://github.com/SFML/SFML) and [TGUI](https://github.com/texus/TGUI).
+IME is a state-based 2D game engine. It is built on top of [SFML](https://www.sfml-dev.org/index.php)
+using C++17
 
 ## Overview
 
-This game engine is not the next Unity or Godot. I developed it to improve my
-Object Oriented Programming (OOP) skills and my knowledge of shared libraries
-and build tools in C++. I would appreciate any constructive feedback.
+This game engine is not the next big thing. I developed it to improve my
+Object Oriented Programming (OOP) skills. Any constructive feedback is
+welcome.
 
 ## Features
- 
-* **Graphics** - Static tilemap, Sprites, GUI components (Label, Button, Checkbox, Input filed and much more)
+
+* **Graphics** - Tilemap, Animatable Sprites, 2D camera, Spritesheet
+* **GUI** - Label, Button, Checkbox, MenuBar, and much more thanks to a seamless [TGUI](https://tgui.eu/) integration
 * **Animations** - 2D animations which support both spritesheet and texture atlas
-* **Physics** - Path finding, grid based movement, collision detection using callbacks
-* **Input** - Mouse and Keyboard
+* **Physics** - Path finding, grid based movement, grid cell based collisions, [Rigid body dynamics](https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics) 
+  thanks to a seamless [Box2d](https://box2d.org/) integration, collision detection using contact callbacks: onBegin, onEnd and onStay
+* **Input** - Keyboard and Mouse support
 * **Sound** - Music and Sound effects
-* **Event system** - Javascript inspired event emitter
-* **Asset management** - Just provide the filename and path to the asset and the engine will handle the rest
-* **Time** - Execute functions after delays and intervals using callback system
+* **Event system** - Javascript inspired event system
+* **Asset management** - Automated asset management system
+* **Time** - Execute one time, repeating or infinite time-based callbacks
 
 ## Demos
 
@@ -34,70 +34,74 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.0-beta.7). 
-In addition, IME has dependencies on other libraries that must be downloaded.
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.0-beta.7).
+To use the library you must have a C++17 compliant compiler. Available binaries are compiled 
+with `GCC 10.2.0 MinGW (64-bit)` and `Microsoft Visual C++ 2019` compilers. This means that in order to use them, 
+you must have the exact compiler on your system. If you want to use different versions of the above compilers
+or a different compiler, then you have to [build](/README.md#Build) the library yourself. I have not tested different versions of GCC and 
+VC++ but as long as they support C++17, they should work just fine.
 
-- Download [SFML 2.5.1](https://github.com/KwenaMashamaite/IME/releases/latest/download/SFML-2.5.1.zip)
-- Download [TGUI 0.9.0](https://github.com/KwenaMashamaite/IME/releases/latest/download/TGUI-0.9.0.zip)
+## Installation
+
+1. Using CMake
+
+If you install IME in a known location `C:\Program Files (x86)`, you don't have to set `IME_DIR`,
+CMake will automatically find the library
+
+```cmake
+# Find IME
+set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if installed in known location
+find_package(IME 2.0.0 REQUIRED)
+
+# Link IME
+target_link_libraries (myGame PRIVATE ime)
+```
+
+Before running your game, copy the contents of `IME/bin` directory to the directory
+in which your executable resides. If your current build type is **Debug**, then copy the
+contents of `IME/bin/Debug` and if your build type is **Release** copy `IME/bin/Release`. 
+For MinGW compilers, you must also copy the contents of `IME/bin/Runtime` to your executables
+directory
 
 ##  Build
 
-1. Clone the repository
-2. Download [GCC 7.3.0 MinGW (32-bit)](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.3.0/threads-posix/dwarf/i686-7.3.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler and [CMake 3.17+](https://cmake.org/download/)
-3. Add the MinGW\bin directory to the PATH environment variable </br>
-   _You can do it using **Windows PowerShell** with the following command:_
-```shell
-$Env:Path += ";your_mingw_folder\bin"
-```
-For example, adding **_C:\mingw64\bin_** to the value of the Path environment variable:
+If you want to use IME with a different compiler, or you want to experiment with
+it and figure out how it works then you must build it yourself:
 
-```shell
-$Env:Path += ";C:\mingw64\bin"
-```
-3. Run the following commands from the project root directory:
+1. Clone the repository
+2. Download and Install [CMake](https://cmake.org/)
+3. Download and install IME's dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.1](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
+   The dependencies must have a matching compiler and architecture (e.g, If you intend to build the library with <br>
+   `Visual C++ 2017 (32-bit)`, then SFML, TGUI and Box2d binaries must all be compiled with `Visual C++ 2017 (32-bit)`
+   <br>
+   
+4. Run the following commands from the project root directory:
 
 ```shell
 mkdir build
 cd build
-cmake -G"MinGW Makefiles" ..
+cmake ..
 cmake --build .
-cmake --install . --prefix "your_install_directory"
+cmake --install . --prefix "directory_where_you_want_the_library_to_be_installed_after_build"
 ```
 
-## Installation
-
-1. Using CMake 
-   
-```cmake
-# Find SFML
-set(SFML_DIR "your_path_to_SFML_directory/lib/cmake/SFML")
-find_package(SFML 2.5.1 COMPONENTS REQUIRED system window graphics audio)
-
-# Find TGUI
-set(TGUI_DIR "your_path_to_TGUI_directory/lib/cmake/TGUI")
-find_package(TGUI 0.9.0 REQUIRED)
-
-# Find IME
-set(IME_DIR "your_path_to_IME_directory/lib/cmake/IME")
-find_package(IME 2.0.0 REQUIRED)
-
-# Link TGUI, SFML and IME
-target_link_libraries (myGame PRIVATE tgui sfml-graphics sfml-window sfml-system sfml-audio ime)
-```
+You can the leave out the installation directory and CMake will install the library to `C:\Program Files (x86)\IME`.
+However, this may require the terminal to be run with admin privileges
 
 ## Learn
 
-* [Documentation](https://kwenamashamaite.github.io/IME/docs/v2.0-beta/html/index.html)
+* [Tutorials](#) (Coming soon)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.0-beta/html/index.html)
 
 ## Platform
 
 Currently, IME only supports Windows OS
 
-## Contact
+## Developers
 
-Name: Kwena Mashamaite (Author)
+Name:  Kwena Mashamaite (Author)
 
-Email: kmash.ime@gmail.com
+Email: kwena.mashamaite1@gmail.com
  
 ## License
 
