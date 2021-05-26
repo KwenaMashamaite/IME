@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/resources/ResourceType.h"
 #include <functional>
+#include <string>
 
 namespace ime {
     /**
@@ -35,7 +36,7 @@ namespace ime {
      */
     class IME_API ResourceLoader final {
         public:
-        using FileNameList = std::initializer_list <std::string>; //!< List of filenames to be loaded
+        using FileNameList = std::initializer_list<std::string>; //!< List of filenames to be loaded
         using Callback = std::function<void(const std::string&)>; //!< Resource load completion callback
 
         /**

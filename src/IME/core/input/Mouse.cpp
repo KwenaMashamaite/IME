@@ -27,6 +27,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/graphics/WindowImpl.h"
 #include <SFML/Window/Mouse.hpp>
+#include <iostream>
 
 namespace ime::input {
     std::string Mouse::buttonToString(Mouse::Button button) {
