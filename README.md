@@ -34,11 +34,11 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.0-beta.7).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.0.0).
 To use the library you must have a C++17 compliant compiler. Available binaries are compiled 
-with `GCC 10.2.0 MinGW (64-bit)` and `Microsoft Visual C++ 2019` compilers. This means that in order to use them, 
+with `GCC 10.2.0 MinGW` and `Microsoft Visual C++ 2019` compilers. This means that in order to use them, 
 you must have the exact compiler on your system. If you want to use different versions of the above compilers
-or a different compiler, then you have to [build](/README.md#Build) the library yourself. I have not tested different versions of GCC and 
+or a different compiler, then you have to build the library yourself. I have not tested different versions of GCC and 
 VC++ but as long as they support C++17, they should work just fine.
 
 ## Installation
@@ -46,7 +46,7 @@ VC++ but as long as they support C++17, they should work just fine.
 1. Using CMake
 
 If you install IME in a known location `C:\Program Files (x86)`, you don't have to set `IME_DIR`,
-CMake will automatically find the library
+CMake will automatically find the IME library
 
 ```cmake
 # Find IME
@@ -59,9 +59,9 @@ target_link_libraries (myGame PRIVATE ime)
 
 Before running your game, copy the contents of `IME/bin` directory to the directory
 in which your executable resides. If your current build type is **Debug**, then copy the
-contents of `IME/bin/Debug` and if your build type is **Release** copy `IME/bin/Release`. 
-For MinGW compilers, you must also copy the contents of `IME/bin/Runtime` to your executables
-directory
+contents of `IME/bin/Debug` and if your build type is **Release** then copy the contents of 
+`IME/bin/Release`. For `GCC 10.2.0 MinGW` compiler, you must also copy the contents of 
+`IME/bin/Runtime` to your executables directory. 
 
 ##  Build
 
@@ -69,7 +69,7 @@ If you want to use IME with a different compiler, or you want to experiment with
 it and figure out how it works then you must build it yourself:
 
 1. Clone the repository
-2. Download and Install [CMake](https://cmake.org/)
+2. Download and Install [CMake 3.17+](https://cmake.org/)
 3. Download and install IME's dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.1](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
    The dependencies must have a matching compiler and architecture (e.g, If you intend to build the library with <br>
    `Visual C++ 2017 (32-bit)`, then SFML, TGUI and Box2d binaries must all be compiled with `Visual C++ 2017 (32-bit)`
@@ -85,13 +85,13 @@ cmake --build .
 cmake --install . --prefix "directory_where_you_want_the_library_to_be_installed_after_build"
 ```
 
-You can the leave out the installation directory and CMake will install the library to `C:\Program Files (x86)\IME`.
-However, this may require the terminal to be run with admin privileges
+You can leave out `--prefix "installation_directory"` and CMake will install the library to 
+`C:\Program Files (x86)\IME`. However, this may require the terminal to be run with admin privileges
 
 ## Learn
 
-* [Tutorials](#) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.0-beta/html/index.html)
+* [Tutorials](#Build) (Coming soon)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.0.0/html/index.html)
 
 ## Platform
 
