@@ -11,7 +11,7 @@ using C++17
 
 This game engine is not the next big thing. I developed it to improve my
 Object Oriented Programming (OOP) skills. Any constructive feedback is
-welcome.
+welcome. You can post feedback or ask me questions [here](https://github.com/KwenaMashamaite/IME/discussions/)
 
 ## Features
 
