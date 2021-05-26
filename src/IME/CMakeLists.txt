@@ -22,6 +22,7 @@ set(IME_SRC
     core/input/InputManager.cpp
     core/resources/ResourceManager.cpp
     core/resources/ResourceHolder.cpp
+    core/resources/ResourceLoader.cpp
     core/physics/grid/path/AdjacencyList.cpp
     core/physics/grid/path/BFS.cpp
     core/physics/grid/path/DFS.cpp

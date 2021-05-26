@@ -26,8 +26,8 @@
 #define IME_RESOURCEMANAGER_H
 
 #include "IME/Config.h"
-#include "IME/core/resources/ResourceHolder.h"
-#include "IME/core/audio/Music.h"
+#include "ResourceHolder.h"
+#include "IME/core/resources/ResourceType.h"
 #include <string>
 #include <initializer_list>
 #include <functional>
@@ -42,22 +42,10 @@ namespace sf {
 
 namespace ime {
     /**
-     * @brief Resource identifiers (Types of resources that can be handled
-     *        by resource manager)
-    */
-    enum class ResourceType {
-        Texture,     //!< Texture
-        Font,        //!< Font
-        Image,       //!< Image
-        SoundBuffer, //!< Sound buffer
-        Music        //!< Music
-    };
-
-    /**
      * @brief Class for loading and storing resources (textures, fonts,
      *        sound buffers, images and music)
      */
-    class IME_API ResourceManager final {
+    class ResourceManager final {
     public:
         using Ptr = std::shared_ptr<ResourceManager>; //!< Shared ResourceManager pointer
 
@@ -99,7 +87,7 @@ namespace ime {
          */
         void loadFromFile(ResourceType type,
             const std::initializer_list<std::string> &filenames,
-            Callback<const std::string&> callback = nullptr);
+            const Callback<const std::string&>& callback = nullptr);
 
         /**
          * @brief Unload a resource from the resource manager
@@ -109,6 +97,17 @@ namespace ime {
          *         resource does not exist
          */
         bool unload(ResourceType type, const std::string& filename);
+
+        /**
+         * @brief Unload all resources of a given type
+         * @param type The type of the resources to be unloaded
+         */
+        void unloadAll(ResourceType type);
+
+        /**
+         * @brief Unload all resources from the resource manager
+         */
+        void unloadAll();
 
         /**
          * @brief Set the path where resources are located on the disk

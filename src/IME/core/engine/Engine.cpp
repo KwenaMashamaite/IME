@@ -26,6 +26,7 @@
 #include "IME/core/time/Clock.h"
 #include "IME/utility/ConfigFileParser.h"
 #include "IME/core/scene/SceneManager.h"
+#include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
 #include <SFML/Window/VideoMode.hpp>
 

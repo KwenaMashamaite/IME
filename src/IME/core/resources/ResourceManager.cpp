@@ -64,8 +64,8 @@ namespace ime {
     }
 
     void ResourceManager::loadFromFile(ResourceType type,
-           const std::initializer_list<std::string>& filenames,
-            Callback<const std::string &> callback)
+        const std::initializer_list<std::string>& filenames,
+        const Callback<const std::string&>& callback)
     {
         std::for_each(filenames.begin(), filenames.end(),
             [=](const std::string& filename) {
@@ -118,6 +118,34 @@ namespace ime {
             default:
                 return false;
         }
+    }
+
+    void ResourceManager::unloadAll(ResourceType type) {
+        switch (type) {
+            case ResourceType::Texture:
+                textures_.unloadAll();
+                break;
+            case ResourceType::Font:
+                fonts_.unloadAll();
+                break;
+            case ResourceType::Image:
+                images_.unloadAll();
+                break;
+            case ResourceType::SoundBuffer:
+                soundBuffers_.unloadAll();
+                break;
+            case ResourceType::Music:
+                musicHolder_.clear();
+                break;
+        }
+    }
+
+    void ResourceManager::unloadAll() {
+        fonts_.unloadAll();
+        textures_.unloadAll();
+        images_.unloadAll();
+        soundBuffers_.unloadAll();
+        musicHolder_.clear();
     }
 
     std::string ResourceManager::getPathFor(ResourceType type) const {

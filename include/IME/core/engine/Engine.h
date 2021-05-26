@@ -26,7 +26,6 @@
 #define IME_ENGINE_H
 
 #include "IME/Config.h"
-#include "IME/core/resources/ResourceManager.h"
 #include "IME/core/audio/AudioManager.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/core/input/InputManager.h"
@@ -45,6 +44,9 @@ namespace ime {
         class SceneManager;
         class Window;
     }
+
+    /// @internal
+    class ResourceManager;
 
     /**
      * @brief Runs the main loop
@@ -431,7 +433,7 @@ namespace ime {
         std::unique_ptr<priv::SceneManager> sceneManager_; //!< The games scene manager
         audio::AudioManager audioManager_;           //!< The games global audio manager
         input::InputManager inputManager_;           //!< The games global input manager
-        ResourceManager::Ptr resourceManager_;       //!< The games global resource manager
+        std::shared_ptr<ResourceManager> resourceManager_; //!< The games global resource manager
         EventDispatcher::Ptr eventDispatcher_;       //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                //!< Holds Data that persists across scenes
         bool pendingPop_;                            //!< A flag indicting whether or not the current scene should be popped
