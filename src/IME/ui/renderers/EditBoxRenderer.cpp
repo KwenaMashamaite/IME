@@ -157,8 +157,7 @@ namespace ime::ui {
     }
 
     void EditBoxRenderer::setDisabledBackgroundColour(Colour colour) {
-        editBoxRenderer_->setBorderColorDisabled(
-            utility::convertToTGUIColour(colour));
+        editBoxRenderer_->setBackgroundColorDisabled(utility::convertToTGUIColour(colour));
     }
 
     Colour EditBoxRenderer::getDisabledBackgroundColour() const {
