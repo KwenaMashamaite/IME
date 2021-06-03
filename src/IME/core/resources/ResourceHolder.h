@@ -110,7 +110,7 @@ namespace ime {
          * @brief Get the number of resources in the resource holder
          * @return The number of resources in the resource holder
          */
-        unsigned int getSize() const;
+        std::size_t getSize() const;
 
         /**
          * @brief Check if a resource exists or not

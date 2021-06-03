@@ -183,7 +183,7 @@ namespace ime {
     }
 
     unsigned int Animation::getFrameCount() const {
-        return frames_.size();
+        return static_cast<unsigned int>(frames_.size());
     }
 
     Time Animation::getFrameTime() const {
@@ -229,7 +229,7 @@ namespace ime {
     }
 
     unsigned int Animation::getCompletionFrameIndex() const {
-        return completionFrame_ >= 0 ? completionFrame_ : frames_.size() - 1;
+        return completionFrame_ >= 0 ? completionFrame_ : static_cast<unsigned int>(frames_.size() - 1);
     }
 
     void Animation::calculateFrameRate(Time duration, unsigned int frameRate) {

@@ -70,7 +70,7 @@ std::shared_ptr<T> ResourceHolder<T>::get(const std::string &filename) {
 }
 
 template<class T>
-unsigned int ResourceHolder<T>::getSize() const {
+std::size_t ResourceHolder<T>::getSize() const {
     return resourceHolder_.size();
 }
 

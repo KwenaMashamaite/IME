@@ -120,8 +120,8 @@ namespace ime {
     }
 
     void TileMap::computeDimensions() {
-        numOfRows_ = mapData_.size();
-        numOfColms_ = mapData_[0].size();
+        numOfRows_ = static_cast<unsigned int>(mapData_.size());
+        numOfColms_ = static_cast<unsigned int>(mapData_[0].size());
         mapSizeInPixels_.x = numOfColms_ * tileSize_.y + (numOfColms_ + 1) * tileSpacing_;
         mapSizeInPixels_.y = numOfRows_ * tileSize_.x + (numOfRows_ + 1) * tileSpacing_;
         backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
