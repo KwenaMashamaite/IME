@@ -277,7 +277,7 @@ namespace ime {
     }
 
     bool GridMover::handleObstacleCollision() {
-        if (auto [found, obstacle] = targetTileHasObstacle(); found) {
+        if (GameObject* obstacle = getObstacleInTargetTile(); obstacle) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
@@ -287,7 +287,7 @@ namespace ime {
         return false;
     }
 
-    std::pair<bool, GameObject*> GridMover::targetTileHasObstacle() {
+    GameObject* GridMover::getObstacleInTargetTile() {
         GameObject* obstacle = nullptr;
         tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
             if (child->isObstacle() && child->isCollidable() && child != target_) {
@@ -295,7 +295,7 @@ namespace ime {
                 return;
             }
         });
-        return {obstacle != nullptr, obstacle};
+        return obstacle;
     }
 
     bool GridMover::handleGridBorderCollision() {

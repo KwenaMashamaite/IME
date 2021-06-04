@@ -464,12 +464,9 @@ namespace ime {
 
         /**
          * @brief Check if the target tile has any obstacle objects or not
-         * @return A pair, of which the first element is a bool that is true if
-         *         the target tile is occupied by an obstacle, otherwise false
-         *         and the second is a pointer to the first encountered obstacle
-         *         in the target tile or a nullptr if the first element is false
+         * @return Pointer to the obstacle object or a nullptr if none exists
          */
-        std::pair<bool, GameObject*> targetTileHasObstacle();
+        GameObject* getObstacleInTargetTile();
 
         /**
          * @brief Perfectly align target with the target destination
