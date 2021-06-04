@@ -90,8 +90,20 @@ namespace ime::priv {
     }
 
     void SceneManager::clear() {
+        prevScene_ = nullptr;
         while (!scenes_.empty())
             scenes_.pop();
+    }
+
+    void SceneManager::clearAllExceptActive() {
+        if (!scenes_.empty()) {
+            if (scenes_.top()->isEntered()) {
+                auto activeScene = std::move(scenes_.top());
+                clear();
+                scenes_.push(std::move(activeScene));
+            } else
+                clear();
+        }
     }
 
     void SceneManager::enterTopScene() const {

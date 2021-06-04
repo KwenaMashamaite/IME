@@ -216,11 +216,39 @@ namespace ime {
          *
          * If the engine is not running, the scene will be removed immediately,
          * otherwise the scene will be removed at the end of the current frame.
+         * Note that multiple scenes may be removed in the same frame by calling
+         * this function as many times as the number of scenes to be removed.
+         * In addition, Calling this function when the engine has no scenes
+         * has no effect
          *
-         * @note Only one scene may be removed per frame when the engine is
-         *       running
+         * @see pushScene
          */
         void popScene();
+
+        /**
+         * @brief Remove all the scenes from the engine except the current
+         *        active scene
+         *
+         * Note that if this function is called whilst the engine is NOT
+         * running, then all the scenes will be removed from the engine.
+         * Since the engine must always have at least one scene to run,
+         * scenes cannot be removed all at once while the engine is running.
+         * However you can use the following workaround to do so:
+         *
+         * @code
+         * engine.removeAllScenesExceptActive();
+         * engine.popScene(); // Remove remaining active scene at the end of the frame
+         * @endcode
+         *
+         * @see pushScene, popScene, run and quit
+         */
+        void removeAllScenesExceptActive();
+
+        /**
+         * @brief Get the number of scenes in the engine
+         * @return The number of scenes in the engine
+         */
+        std::size_t getSceneCount() const;
 
         /**
          * @brief Get the time passed since the engine was started
@@ -455,7 +483,7 @@ namespace ime {
         std::shared_ptr<ResourceManager> resourceManager_; //!< The engine level resource manager
         EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
-        bool pendingPop_;                                  //!< A flag indicting whether or not the current scene should be popped
+        int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
         Callback<> onWindowClose_;                         //!< Optional Function executed when a request to close the window is received
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame

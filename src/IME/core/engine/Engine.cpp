@@ -62,7 +62,7 @@ namespace ime {
         isRunning_{false},
         isPaused_{false},
         sceneManager_{std::make_unique<priv::SceneManager>()},
-        pendingPop_{false}
+        popCounter_{0}
     {}
 
     void Engine::initialize() {
@@ -238,7 +238,16 @@ namespace ime {
         if (!isRunning_)
             sceneManager_->popScene();
         else
-            pendingPop_ = true;
+            popCounter_++;
+    }
+
+    void Engine::removeAllScenesExceptActive() {
+        sceneManager_->clearAllExceptActive();
+        popCounter_ = 0;
+    }
+
+    std::size_t Engine::getSceneCount() const {
+        return sceneManager_->getSceneCount();
     }
 
     void Engine::postFrameUpdate() {
@@ -246,9 +255,13 @@ namespace ime {
         timerManager_.preUpdate();
 
         // Note: Always check pending pop first before pending pushes
-        if (pendingPop_) {
-            pendingPop_ = false;
+        while (popCounter_ > 0) {
+            if (sceneManager_->isEmpty()) { // Engine::PopScene called more than the number of scenes
+                popCounter_ = 0;
+                break;
+            }
             sceneManager_->popScene();
+            popCounter_--;
         }
 
         while (!scenesPendingPush_.empty()) {
@@ -279,7 +292,7 @@ namespace ime {
         window_->close();
         isInitialized_ = false;
         isRunning_ = false;
-        pendingPop_ = false;
+        popCounter_ = 0;
         isSettingsLoadedFromFile_ = false;
         elapsedTime_ = Time::Zero;
         gameTitle_.clear();

@@ -143,8 +143,23 @@ namespace ime {
 
             /**
              * @brief Destroy all scenes
+             *
+             * This function destroys all scenes regardless of their current
+             * state
+             *
+             * @see clearAllExceptActive
              */
             void clear();
+
+            /**
+             * @brief Remove all scenes except the current active scene
+             *
+             * Note that if there is no active scene (Scene at the top of
+             * the stack is not entered), then all the scenes will be removed
+             *
+             * @see clear
+             */
+            void clearAllExceptActive();
 
             /**
              * @brief Check if the scene manager is empty or not
