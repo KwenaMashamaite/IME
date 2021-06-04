@@ -262,8 +262,6 @@ namespace ime {
         IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
-            if (child->hasRigidBody())
-                child->getRigidBody()->setPosition(getTile(index).getWorldCentre());
 
             child->onDestruction([this, id = child->getObjectId()]{
                 removeChildWithId(id);
