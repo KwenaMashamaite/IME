@@ -206,7 +206,7 @@ namespace ime {
 
         private:
             std::stack<ScenePtr> scenes_; //!< Scenes container
-            const Scene* prevScene_;      //!< Pointer to the active scene before a push operation
+            Scene* prevScene_;            //!< Pointer to the active scene before a push operation
         };
     }
 }

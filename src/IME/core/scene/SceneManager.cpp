@@ -120,8 +120,10 @@ namespace ime::priv {
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
-            if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause())
+            if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
                 renderScene(prevScene_, window);
+                prevScene_->gui().draw();
+            }
 
             renderScene(scenes_.top().get(), window);
             scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
