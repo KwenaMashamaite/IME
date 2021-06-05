@@ -130,6 +130,12 @@ namespace ime {
         unsigned int getIndex() const;
 
         /**
+         * @brief Get the name of the layer
+         * @return The name of the layer
+         */
+        const std::string& getName() const;
+
+        /**
          * @brief Add a drawable to the layer
          * @param drawable The drawable to be added
          * @param renderOrder The layer level render order of the drawable
@@ -200,8 +206,9 @@ namespace ime {
         /**
          * @brief Constructor
          * @param index Index of the layer
+         * @param name The name of the layer
          */
-        explicit RenderLayer(unsigned int index);
+        RenderLayer(unsigned int index, const std::string& name);
 
         /**
          * @brief Change the index of the layer
@@ -218,6 +225,7 @@ namespace ime {
 
     private:
         unsigned int index_;               //!< The index of the layer in the render layer container
+        std::string name_;                 //!< The name of the layer
         bool shouldRender_;                //!< A flag indicating whether the layer should be rendered or not
         friend class RenderLayerContainer; //!< Needs access to constructor
 

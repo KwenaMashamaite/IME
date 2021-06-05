@@ -29,8 +29,7 @@ namespace ime {
     RenderLayer::Ptr RenderLayerContainer::create(const std::string& name) {
         IME_ASSERT(!hasLayer(name), "The render layer '" + name + "' already exists, try a different name");
         auto index = layers_.empty() ? 0 : ((*(layers_.rbegin())).first + 1);
-        auto layer = RenderLayer::Ptr(new RenderLayer(index));
-        layer->setTag(name);
+        auto layer = RenderLayer::Ptr(new RenderLayer(index, name));
 
         layers_.insert({index, layer});
         inverseLayers_.insert({name, index});
