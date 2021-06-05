@@ -146,7 +146,10 @@ namespace ime::priv {
     }
 
     void SceneManager::update(Time deltaTime) {
-        updateScene(deltaTime, false);
+        updateScene(deltaTime, scenes_.top().get(), false);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            updateScene(deltaTime, prevScene_, false);
     }
 
     void SceneManager::handleEvent(Event event) {
@@ -156,14 +159,25 @@ namespace ime::priv {
         if (!scenes_.top()->isEntered())
             return;
 
-        scenes_.top()->inputManager_.handleEvent(event);
-        scenes_.top()->guiContainer_.handleEvent(event);
-        scenes_.top()->gridMovers().handleEvent(event);
-        scenes_.top()->handleEvent(event);
+        // Update all system components of a scene
+        static auto updateSystem = [](Scene* scene, Event e) {
+            scene->inputManager_.handleEvent(e);
+            scene->guiContainer_.handleEvent(e);
+            scene->gridMovers().handleEvent(e);
+            scene->handleEvent(e);
+        };
+
+        updateSystem(scenes_.top().get(), event);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isEventUpdatedWhenPaused_)
+            updateSystem(prevScene_, event);
     }
 
     void SceneManager::fixedUpdate(Time deltaTime) {
-        updateScene(deltaTime, true);
+        updateScene(deltaTime, scenes_.top().get(), true);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            updateScene(deltaTime, prevScene_, true);
     }
 
     void SceneManager::forEachScene(const Callback<const SceneManager::ScenePtr&>& callback) {
@@ -187,18 +201,22 @@ namespace ime::priv {
         if (!scenes_.top()->isEntered())
             return;
 
-        auto& scene = scenes_.top();
-        scene->timerManager_.preUpdate();
-        scene->timerManager_.update(deltaTime * scene->getTimescale());
-        scene->audioManager_.removePlayedAudio();
-        scene->internalEmitter_.emit("preUpdate", deltaTime * scene->getTimescale());
+        static auto update = [](Scene* scene, Time dt) {
+            scene->timerManager_.preUpdate();
+            scene->timerManager_.update(dt * scene->getTimescale());
+            scene->audioManager_.removePlayedAudio();
+            scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
+        };
+
+        update(scenes_.top().get(), deltaTime);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            update(prevScene_, deltaTime);
     }
 
-    void SceneManager::updateScene(Time deltaTime, bool fixedUpdate) {
+    void SceneManager::updateScene(Time deltaTime, Scene* scene, bool fixedUpdate) {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
-
-        auto& scene = scenes_.top();
 
         // Update physics simulation
         if (scene->hasPhysicsSim_) {

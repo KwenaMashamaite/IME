@@ -213,11 +213,12 @@ namespace ime {
 
         private:
             /**
-             * @brief Update the active scene
+             * @brief Update time based components of a scene
+             * @param scene The scene to be updated
              * @param deltaTime Time passed since last update
              * @param fixedUpdate True if it's a fixed update, otherwise false
              */
-            void updateScene(Time deltaTime, bool fixedUpdate);
+            void updateScene(Time deltaTime, Scene* scene, bool fixedUpdate);
 
         private:
             std::stack<ScenePtr> scenes_; //!< Scenes container

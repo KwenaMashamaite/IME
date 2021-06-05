@@ -31,6 +31,8 @@ namespace ime {
         timescale_{1.0f},
         isEntered_{false},
         isVisibleWhenPaused_{false},
+        isTimeUpdatedWhenPaused_{false},
+        isEventUpdatedWhenPaused_{false},
         hasPhysicsSim_{false},
         hasTilemap_{false},
         spriteContainer_{std::make_unique<SpriteContainer>(renderLayers_)},
@@ -65,6 +67,8 @@ namespace ime {
             tileMap_ = std::move(other.tileMap_);
             timescale_ = other.timescale_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
+            isTimeUpdatedWhenPaused_ = other.isTimeUpdatedWhenPaused_;
+            isEventUpdatedWhenPaused_ = other.isEventUpdatedWhenPaused_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasTilemap_ = other.hasTilemap_;
             isEntered_ = false;
@@ -91,6 +95,39 @@ namespace ime {
 
     void Scene::setVisibleOnPause(bool show) {
         isVisibleWhenPaused_ = show;
+    }
+
+    void Scene::setOnPauseAction(Uint32 action) {
+        if (action & OnPauseAction::Default) {
+            isVisibleWhenPaused_ = false;
+            isEventUpdatedWhenPaused_ = false;
+            isTimeUpdatedWhenPaused_ = false;
+            return;
+        }
+
+        if (action & OnPauseAction::Show)
+            isVisibleWhenPaused_ = true;
+        else
+            isVisibleWhenPaused_ = false;
+
+        if (action & OnPauseAction::UpdateAll) {
+            isEventUpdatedWhenPaused_ = true;
+            isTimeUpdatedWhenPaused_ = true;
+            return;
+        } else {
+            isEventUpdatedWhenPaused_ = false;
+            isTimeUpdatedWhenPaused_ = false;
+        }
+
+        if (action & OnPauseAction::UpdateTime)
+            isTimeUpdatedWhenPaused_ = true;
+        else
+            isTimeUpdatedWhenPaused_ = false;
+
+        if (action & OnPauseAction::UpdateSystem)
+            isEventUpdatedWhenPaused_ = true;
+        else
+            isEventUpdatedWhenPaused_ = false;
     }
 
     bool Scene::isVisibleOnPause() const {
