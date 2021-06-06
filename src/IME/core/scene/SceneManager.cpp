@@ -161,10 +161,21 @@ namespace ime::priv {
 
         // Update all system components of a scene
         static auto updateSystem = [](Scene* scene, Event e) {
-            scene->inputManager_.handleEvent(e);
-            scene->guiContainer_.handleEvent(e);
-            scene->gridMovers().handleEvent(e);
-            scene->handleEvent(e);
+            if (scene->isInputEnabled_) {
+                scene->inputManager_.handleEvent(e);
+                scene->guiContainer_.handleEvent(e);
+                scene->gridMovers().handleEvent(e);
+                scene->handleEvent(e);
+            } else {
+                // Only pass non-input events to the scene
+                if (e.type == Event::Closed || e.type == Event::Resized
+                    || e.type == Event::MouseEntered || e.type == Event::MouseLeft
+                    || e.type == Event::LostFocus || e.type == Event::GainedFocus)
+                {
+                    scene->handleEvent(e);
+                    scene->guiContainer_.handleEvent(e);
+                }
+            }
         };
 
         updateSystem(scenes_.top().get(), event);
