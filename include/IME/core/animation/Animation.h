@@ -164,6 +164,29 @@ namespace ime {
         Time getDuration() const;
 
         /**
+         * @brief Set the timescale factor of the animation
+         * @param timescale The new timescale factor
+         *
+         * The timescale factor controls the playback speed of the animation.
+         * For example, a timescale of 2.0f will make the animation play twice
+         * as fast, a timescale of 0.5f will make the animation play at half
+         * its normal playback speed and a timescale of 0.0f will freeze the
+         * animation. Note that if @a timescale is negative then the timescale
+         * will be set to 1.0f (real-time)
+         *
+         * By default the timescale is 1.0f (real-time)
+         */
+        void setTimescale(float timescale);
+
+        /**
+         * @brief Get the timescale factor
+         * @return The timescale factor
+         *
+         * @see setTimescale
+         */
+        float getTimescale() const;
+
+        /**
          * @brief Set the frame rate playback of the animation
          * @param frameRate The frame rate to be set
          *
@@ -477,6 +500,7 @@ namespace ime {
         bool isShownOnStart_;       //!< A flag indicating whether or not the sprite is shown when the animations starts
         bool isHiddenOnComplete_;   //!< A flag indicating whether or not the sprite is hidden when the animation completes
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
+        float timescale_;           //!< Playback speed of the animation
     };
 }
 

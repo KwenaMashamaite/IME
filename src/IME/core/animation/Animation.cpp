@@ -41,7 +41,8 @@ namespace ime {
          repeatCounter_{0},
          isShownOnStart_{true},
          isHiddenOnComplete_{false},
-         completionFrame_{-1}
+         completionFrame_{-1},
+         timescale_{1.0f}
     {}
 
     std::shared_ptr<Animation> Animation::create(const std::string &name,
@@ -78,6 +79,17 @@ namespace ime {
 
     Time Animation::getDuration() const {
         return duration_;
+    }
+
+    void Animation::setTimescale(float timescale) {
+        if (timescale < 0.0f)
+            timescale_ = 1.0f;
+        else
+            timescale_ = timescale;
+    }
+
+    float Animation::getTimescale() const {
+        return timescale_;
     }
 
     void Animation::setFrameRate(unsigned int frameRate) {
