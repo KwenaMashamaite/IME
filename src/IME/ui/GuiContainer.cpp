@@ -56,7 +56,9 @@ namespace ime::ui {
 
         explicit GuiContainerImpl(priv::Window &window) :
             sfmlGui_{window.getImpl()->getSFMLWindow()}
-        {}
+        {
+            sfmlGui_.setDrawingUpdatesTime(false);
+        }
 
         void setAbsoluteViewport(const FloatRect &viewport) {
             sfmlGui_.setAbsoluteViewport({viewport.left, viewport.top,
@@ -117,6 +119,7 @@ namespace ime::ui {
 
         void setTarget(priv::Window &window) {
             sfmlGui_.setTarget(window.getImpl()->getSFMLWindow());
+            sfmlGui_.setDrawingUpdatesTime(false);
         }
 
         Widget* getWidgetBelowMouseCursor(Vector2f mousePos) const {
@@ -236,6 +239,10 @@ namespace ime::ui {
 
         bool isTargetSet() const {
             return sfmlGui_.getTarget() != nullptr;
+        }
+
+        void update(Time deltaTime) {
+            sfmlGui_.updateTime(tgui::Duration(deltaTime.asMilliseconds()));
         }
 
     private:
@@ -413,6 +420,10 @@ namespace ime::ui {
 
     bool GuiContainer::isTargetSet() const {
         return pimpl_->isTargetSet();
+    }
+
+    void GuiContainer::update(ime::Time deltaTime) {
+        pimpl_->update(deltaTime);
     }
 
     GuiContainer::~GuiContainer() = default;

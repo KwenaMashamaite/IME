@@ -522,6 +522,16 @@ namespace ime {
             void handleEvent(Event event);
 
             /**
+             * @internal
+             * @brief Update the gui
+             * @param deltaTime Time passed since last gui update
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
+             */
+            void update(ime::Time deltaTime);
+
+            /**
              * @brief Destructor
              */
             ~GuiContainer();

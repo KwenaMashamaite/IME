@@ -234,6 +234,9 @@ namespace ime::priv {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
 
+        // Update gui
+        scene->guiContainer_.update(deltaTime);
+
         // Update physics simulation
         if (scene->hasPhysicsSim_) {
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
