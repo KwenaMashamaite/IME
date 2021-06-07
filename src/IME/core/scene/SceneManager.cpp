@@ -26,6 +26,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/graphics/Window.h"
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime::priv {
     namespace {
@@ -122,6 +123,10 @@ namespace ime::priv {
 
     void SceneManager::render(priv::Window &window) {
         auto static renderScene = [](const Scene* scene, priv::Window& renderWindow) {
+            // Reset the window view to that of the scene that is being rendered
+            const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(scene->camera_->getInternalView()).get();
+            renderWindow.getImpl()->getSFMLWindow().setView(view);
+
             if (scene->hasTilemap_) {
                 scene->tileMap_->draw(renderWindow);
                 scene->gridMovers_.render(renderWindow);

@@ -108,6 +108,10 @@ namespace ime {
             return {windowCoord.x, windowCoord.y};
         }
 
+        const sf::View& getSFMLView() {
+            return view;
+        }
+
     private:
         sf::RenderWindow& window_;
         sf::View view;
@@ -197,6 +201,10 @@ namespace ime {
 
     Vector2i Camera::worldCoordToWindowCoord(const Vector2f &point) const {
         return pimpl_->worldCoordToWindowCoord(point);
+    }
+
+    std::any Camera::getInternalView() {
+        return std::any{std::cref(pimpl_->getSFMLView())};
     }
 
     Camera::~Camera() {
