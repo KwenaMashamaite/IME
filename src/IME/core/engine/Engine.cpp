@@ -61,6 +61,8 @@ namespace ime {
     }
 
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
+        window_{std::make_unique<priv::Window>()},
+        windowStyle_{WindowStyle::Default},
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
         isSettingsLoadedFromFile_(!settingsFile.empty() && settingsFile != "default"),
@@ -117,13 +119,12 @@ namespace ime {
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
-        window_ = std::make_unique<priv::Window>();
-        if (settings_.getValue<bool>("FULLSCREEN")) {
+        if (settings_.getValue<bool>("FULLSCREEN") || (windowStyle_ & Fullscreen)) {
             auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-            window_->create(title, desktopWidth, desktopHeight, priv::Window::Style::Fullscreen);
+            window_->create(title, desktopWidth, desktopHeight, WindowStyle::Fullscreen);
         } else
-            window_->create(title, width, height, priv::Window::Style::Default);
+            window_->create(title, width, height, windowStyle_);
 
         window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
         window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
@@ -193,6 +194,13 @@ namespace ime {
 
     void Engine::quit() {
         isRunning_ = false;
+    }
+
+    void Engine::recreateWindow(unsigned int width, unsigned int height, Uint32 style) {
+        settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
+        settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
+        windowStyle_ |= style;
+        initRenderTarget();
     }
 
     void Engine::preUpdate(Time deltaTime) {

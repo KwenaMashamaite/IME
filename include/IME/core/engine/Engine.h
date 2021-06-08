@@ -34,7 +34,7 @@
 #include "IME/common/PrefContainer.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
-#include "IME/utility/NonCopyable.h"
+#include "IME/graphics/WindowStyles.h"
 #include <queue>
 
 namespace ime {
@@ -136,6 +136,18 @@ namespace ime {
          * @see initialize and run
          */
         void quit();
+
+        /**
+         * @brief Recreate the game window
+         * @param width The new width of the window
+         * @param height The new height of the window
+         * @param style The window style
+         *
+         * @warning This function must be called after the initial window
+         * has been created
+         */
+        void recreateWindow(unsigned int width, unsigned int height,
+            Uint32 style = WindowStyle::Default);
 
         /**
          * @brief Pause or resume the engine
@@ -486,6 +498,7 @@ namespace ime {
 
     private:
         std::unique_ptr<priv::Window> window_;             //!< The engines render target
+        Uint32 windowStyle_;                               //!< The current WindowStyle of the window
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
         PropertyContainer settings_;                       ///@deprecated Replace with configs_ in next release
