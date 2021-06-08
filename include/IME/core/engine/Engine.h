@@ -31,7 +31,7 @@
 #include "IME/core/input/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/core/time/TimerManager.h"
-#include "IME/common/PropertyContainer.h"
+#include "IME/common/PrefContainer.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
 #include "IME/utility/NonCopyable.h"
@@ -67,11 +67,20 @@ namespace ime {
         explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
+         * @deprecated This constructor will be removed in the next release
          * @brief Constructor
          * @param gameName The name of the game to be run by the engine
          * @param settings Settings to construct engine with
          */
+         [[deprecated("Use ime::Engine::Engine(const std::string&, const ime::PrefContainer&) instead.")]]
         Engine(const std::string& gameName, const PropertyContainer& settings);
+
+        /**
+         * @brief Destructor
+         * @param gameName The name of the game
+         * @param settings Settings to construct the engine with
+         */
+        Engine(const std::string& gameName, const PrefContainer& settings);
 
         /**
          * @brief Copy constructor
@@ -158,10 +167,18 @@ namespace ime {
         bool isPaused() const;
 
         /**
+         * @deprecated This function will be removed in next update
          * @brief Get the engines settings
          * @return The engines settings
          */
+         [[deprecated("Use ime::PrefContainer& getConfigs() instead.")]]
         const PropertyContainer& getSettings() const;
+
+         /**
+          * @brief Get the engines settings
+          * @return The engines settings
+          */
+         const PrefContainer& getConfigs() const;
 
         /**
          * @brief Get persistent data
@@ -471,7 +488,8 @@ namespace ime {
         std::unique_ptr<priv::Window> window_;             //!< The engines render target
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                       //!< The engines settings
+        PropertyContainer settings_;                       ///@deprecated Replace with configs_ in next release
+        PrefContainer configs_;                            //!< The engines settings
         bool isSettingsLoadedFromFile_;                    //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
         bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized
         bool isRunning_;                                   //!< A flag indicating whether or not the engine is running

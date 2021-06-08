@@ -24,7 +24,6 @@
 
 #include "IME/core/engine/Engine.h"
 #include "IME/core/time/Clock.h"
-#include "IME/utility/ConfigFileParser.h"
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
@@ -54,6 +53,13 @@ namespace ime {
         settings_ = settings;
     }
 
+    Engine::Engine(const std::string &gameName, const PrefContainer &settings) :
+        Engine(gameName, "")
+    {
+        configs_ = settings;
+        settings_ = settings.asPropertyContainer();
+    }
+
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
@@ -80,7 +86,9 @@ namespace ime {
     }
 
     void Engine::loadSettings() {
-        settings_ = utility::ConfigFileParser::parse(settingFile_);
+        auto prefContainer = PrefContainer();
+        prefContainer.load(settingFile_);
+        settings_ = prefContainer.asPropertyContainer();
     }
 
     void Engine::processSettings() {
@@ -334,6 +342,10 @@ namespace ime {
 
     const PropertyContainer &Engine::getSettings() const {
         return settings_;
+    }
+
+    const PrefContainer &Engine::getConfigs() const {
+        return configs_;
     }
 
     const std::string &Engine::getGameName() const {

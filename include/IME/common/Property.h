@@ -26,6 +26,7 @@
 #define IME_PROPERTY_H
 
 #include "IME/Config.h"
+#include "IME/core/exceptions/Exceptions.h"
 #include <string>
 #include <any>
 
@@ -82,7 +83,7 @@ namespace ime {
 
         /**
          * @brief Get the value of the property
-         * @throws std::bad_any_cast if the stored value is not of type T
+         * @throws ime::InvalidArgument if the stored value is not of type T
          * @return Value of the property
          *
          * @warning Don't call this function if the property does not have

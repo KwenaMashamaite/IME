@@ -22,34 +22,46 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_CONFIGFILEPARSER_H
-#define IME_CONFIGFILEPARSER_H
-
-#include "IME/Config.h"
-#include "IME/common/PropertyContainer.h"
-
-namespace ime {
-    namespace utility {
-        /**
-         * @deprecated This class will be removed in the next release, use ime::PrefContainer
-         * @brief Class for parsing config files
-         */
-        class IME_API ConfigFileParser {
-        public:
-            /**
-             * @deprecated ime::utility::ConfigFileParser will be removed in the
-             *             next release
-             *
-             * @brief Parse a config file
-             * @param filename Name of the config file to be parsed
-             * @return List of properties found in the config file
-             * @throws FileNotFound if the config file cannot be found on
-             *        the disk
-             */
-            [[deprecated("Use ime::PrefContainer instead.")]]
-            static PropertyContainer parse(const std::string& filename);
-        };
-    }
+template<typename T>
+Preference::Preference(const std::string& key, Type type, T value, const std::string& description) :
+    Preference(key, type, description)
+{
+    setValue(value);
 }
 
-#endif // IME_CONFIGFILEPARSER_H
+template <typename T>
+void Preference::setValue(T value) {
+    static auto throwException = [](const std::string& key, const std::string& type) {
+        throw InvalidArgument("IME Type Mismatch: The preference \"" + key + "\" can only store values of type \"" + type + "\"");
+    };
+
+    switch (type_) {
+        case Type::Bool:
+            if (!std::is_same_v<bool, T>)
+                throwException(getKey(), "bool");
+            break;
+        case Type::String:
+            if (!std::is_same_v<std::string, T> || std::is_same_v<const char*, T>)
+                    throwException(getKey(), "std::string");
+            break;
+        case Type::Int:
+            if (!std::is_same_v<int, T>)
+                throwException(getKey(), "int");
+            break;
+        case Type::Double:
+            if (!std::is_same_v<double, T>)
+                throwException(getKey(), "double");
+            break;
+        case Type::Float:
+            if (!std::is_same_v<float, T>)
+                throwException(getKey(), "float");
+            break;
+    }
+
+    property_.setValue(value);
+}
+
+template<typename T>
+T Preference::getValue() const {
+    return property_.getValue<T>();
+}

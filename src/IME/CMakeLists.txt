@@ -5,6 +5,8 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 set(IME_SRC
     common/Property.cpp
     common/PropertyContainer.cpp
+    common/Preference.cpp
+    common/PrefContainer.cpp
     common/Transform.cpp
     common/Object.cpp
     core/animation/Animation.cpp

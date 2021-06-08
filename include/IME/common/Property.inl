@@ -35,5 +35,9 @@ void Property::setValue(T&& value) {
 
 template<typename T>
 T Property::getValue() const {
-    return std::any_cast<T>(value_);
+    try {
+        return std::any_cast<T>(value_);
+    } catch(...) {
+        throw InvalidArgument("IME Type Mismatch: T in ime::Property::getValue<T>() must be the same type as the value stored by the property");
+    }
 }
