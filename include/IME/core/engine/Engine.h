@@ -76,7 +76,7 @@ namespace ime {
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
-         * @brief Destructor
+         * @brief Constructor
          * @param gameName The name of the game
          * @param settings Settings to construct the engine with
          */
@@ -190,6 +190,7 @@ namespace ime {
           * @brief Get the engines settings
           * @return The engines settings
           */
+         PrefContainer& getConfigs();
          const PrefContainer& getConfigs() const;
 
         /**

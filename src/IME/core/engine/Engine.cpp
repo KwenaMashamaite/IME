@@ -88,9 +88,8 @@ namespace ime {
     }
 
     void Engine::loadSettings() {
-        auto prefContainer = PrefContainer();
-        prefContainer.load(settingFile_);
-        settings_ = prefContainer.asPropertyContainer();
+        configs_.load(settingFile_);
+        settings_ = configs_.asPropertyContainer();
     }
 
     void Engine::processSettings() {
@@ -350,6 +349,10 @@ namespace ime {
 
     const PropertyContainer &Engine::getSettings() const {
         return settings_;
+    }
+
+    PrefContainer &Engine::getConfigs() {
+        return configs_;
     }
 
     const PrefContainer &Engine::getConfigs() const {
