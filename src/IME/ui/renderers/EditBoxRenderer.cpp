@@ -147,7 +147,7 @@ namespace ime::ui {
     }
 
     void EditBoxRenderer::setBackgroundHoverColour(Colour colour) {
-        editBoxRenderer_->setBackgroundColor(
+        editBoxRenderer_->setBackgroundColorHover(
             utility::convertToTGUIColour(colour));
     }
 
