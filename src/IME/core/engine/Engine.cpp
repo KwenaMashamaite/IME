@@ -73,6 +73,17 @@ namespace ime {
         popCounter_{0}
     {}
 
+    void Engine::setWindowStyle(Uint32 windowStyle) {
+        if (isInitialized_)
+            return;
+
+        windowStyle_ = windowStyle;
+    }
+
+    Uint32 Engine::getWindowStyle() const {
+        return windowStyle_;
+    }
+
     void Engine::initialize() {
         if (isSettingsLoadedFromFile_)
             loadSettings();

@@ -103,6 +103,32 @@ namespace ime {
         Engine& operator=(Engine&&) = delete;
 
         /**
+         * @brief Set the game window style
+         * @param windowStyle New window style (ime::WindowStyle enumeration)
+         *
+         * Note that window styles can be combined using bitwise OR combination
+         * of ime::WindowStyle enumerations. For example, to create a window
+         * that is closable and resizable, you do as follows:
+         *
+         * @code
+         * engine.setWindowStyle(ime::WindowStyle::Close | ime::WindowStyle::Resize);
+         * @endcode
+         *
+         * @note This function must be called before initialize() is called,
+         * otherwise the new window style will be ignored and the default one
+         * used instead
+         *
+         * @see initialize
+         */
+        void setWindowStyle(Uint32 windowStyle);
+
+        /**
+         * @brief Get the game window style
+         * @return The game window style
+         */
+        Uint32 getWindowStyle() const;
+
+        /**
          * @brief Initialize the engine
          *
          * @warning This function must be called before the engine is run()
