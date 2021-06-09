@@ -163,7 +163,7 @@ namespace ime {
      * In addition, the file to append data to is searched relative to the
      * game executable
      */
-    void savePref(const Preference& pref, const std::string& filename);
+    void IME_API savePref(const Preference& pref, const std::string& filename);
 }
 
 #endif //IME_PREFERENCE_H
