@@ -29,8 +29,9 @@
 #include <algorithm>
 
 namespace ime {
-    RenderLayer::RenderLayer(unsigned int index) :
+    RenderLayer::RenderLayer(unsigned int index, const std::string& name) :
         index_{index},
+        name_{name},
         shouldRender_{true}
     {}
 
@@ -58,6 +59,10 @@ namespace ime {
 
     unsigned int RenderLayer::getIndex() const {
         return index_;
+    }
+
+    const std::string &RenderLayer::getName() const {
+        return name_;
     }
 
     void RenderLayer::add(const Drawable& drawable, int renderOrder) {

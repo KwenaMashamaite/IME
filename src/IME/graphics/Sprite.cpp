@@ -386,6 +386,10 @@ namespace ime {
         return pImpl_->getAnimator();
     }
 
+    const Animator &Sprite::getAnimator() const {
+        return pImpl_->getAnimator();
+    }
+
     void Sprite::updateAnimation(Time deltaTime) {
         pImpl_->updateAnimation(deltaTime);
     }

@@ -134,6 +134,11 @@ namespace ime {
          * freeze the animation. Note that if @a timescale is negative then the
          * timescale will be set to 1.0f (real-time)
          *
+         * @note The timescale of the animator is multiplied with the timescale
+         * of the current animation. For example, if the timescale of the current
+         * animation is 2.0f and the timescale of the animator is 2.0f, then
+         * the current animation will play 4 times as fast
+         *
          * By default the timescale is 1.0f (real-time)
          */
         void setTimescale(float timescale);

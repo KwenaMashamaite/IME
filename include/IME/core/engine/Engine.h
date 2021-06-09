@@ -31,10 +31,10 @@
 #include "IME/core/input/InputManager.h"
 #include "IME/core/event/EventDispatcher.h"
 #include "IME/core/time/TimerManager.h"
-#include "IME/common/PropertyContainer.h"
+#include "IME/common/PrefContainer.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
-#include "IME/utility/NonCopyable.h"
+#include "IME/graphics/WindowStyles.h"
 #include <queue>
 
 namespace ime {
@@ -67,11 +67,20 @@ namespace ime {
         explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
+         * @deprecated This constructor will be removed in the next release
          * @brief Constructor
          * @param gameName The name of the game to be run by the engine
          * @param settings Settings to construct engine with
          */
+         [[deprecated("Use ime::Engine::Engine(const std::string&, const ime::PrefContainer&) instead.")]]
         Engine(const std::string& gameName, const PropertyContainer& settings);
+
+        /**
+         * @brief Constructor
+         * @param gameName The name of the game
+         * @param settings Settings to construct the engine with
+         */
+        Engine(const std::string& gameName, const PrefContainer& settings);
 
         /**
          * @brief Copy constructor
@@ -92,6 +101,32 @@ namespace ime {
          * @brief Move Assignment operator
          */
         Engine& operator=(Engine&&) = delete;
+
+        /**
+         * @brief Set the game window style
+         * @param windowStyle New window style (ime::WindowStyle enumeration)
+         *
+         * Note that window styles can be combined using bitwise OR combination
+         * of ime::WindowStyle enumerations. For example, to create a window
+         * that is closable and resizable, you do as follows:
+         *
+         * @code
+         * engine.setWindowStyle(ime::WindowStyle::Close | ime::WindowStyle::Resize);
+         * @endcode
+         *
+         * @note This function must be called before initialize() is called,
+         * otherwise the new window style will be ignored and the default one
+         * used instead
+         *
+         * @see initialize
+         */
+        void setWindowStyle(Uint32 windowStyle);
+
+        /**
+         * @brief Get the game window style
+         * @return The game window style
+         */
+        Uint32 getWindowStyle() const;
 
         /**
          * @brief Initialize the engine
@@ -129,6 +164,18 @@ namespace ime {
         void quit();
 
         /**
+         * @brief Recreate the game window
+         * @param width The new width of the window
+         * @param height The new height of the window
+         * @param style The window style
+         *
+         * @warning This function must be called after the initial window
+         * has been created
+         */
+        void recreateWindow(unsigned int width, unsigned int height,
+            Uint32 style = WindowStyle::Default);
+
+        /**
          * @brief Pause or resume the engine
          * @param pause True to pause the engine or false to resume it
          *
@@ -158,10 +205,19 @@ namespace ime {
         bool isPaused() const;
 
         /**
+         * @deprecated This function will be removed in next update
          * @brief Get the engines settings
          * @return The engines settings
          */
+         [[deprecated("Use ime::PrefContainer& getConfigs() instead.")]]
         const PropertyContainer& getSettings() const;
+
+         /**
+          * @brief Get the engines settings
+          * @return The engines settings
+          */
+         PrefContainer& getConfigs();
+         const PrefContainer& getConfigs() const;
 
         /**
          * @brief Get persistent data
@@ -216,11 +272,39 @@ namespace ime {
          *
          * If the engine is not running, the scene will be removed immediately,
          * otherwise the scene will be removed at the end of the current frame.
+         * Note that multiple scenes may be removed in the same frame by calling
+         * this function as many times as the number of scenes to be removed.
+         * In addition, Calling this function when the engine has no scenes
+         * has no effect
          *
-         * @note Only one scene may be removed per frame when the engine is
-         *       running
+         * @see pushScene
          */
         void popScene();
+
+        /**
+         * @brief Remove all the scenes from the engine except the current
+         *        active scene
+         *
+         * Note that if this function is called whilst the engine is NOT
+         * running, then all the scenes will be removed from the engine.
+         * Since the engine must always have at least one scene to run,
+         * scenes cannot be removed all at once while the engine is running.
+         * However you can use the following workaround to do so:
+         *
+         * @code
+         * engine.removeAllScenesExceptActive();
+         * engine.popScene(); // Remove remaining active scene at the end of the frame
+         * @endcode
+         *
+         * @see pushScene, popScene, run and quit
+         */
+        void removeAllScenesExceptActive();
+
+        /**
+         * @brief Get the number of scenes in the engine
+         * @return The number of scenes in the engine
+         */
+        std::size_t getSceneCount() const;
 
         /**
          * @brief Get the time passed since the engine was started
@@ -441,9 +525,11 @@ namespace ime {
 
     private:
         std::unique_ptr<priv::Window> window_;             //!< The engines render target
+        Uint32 windowStyle_;                               //!< The current WindowStyle of the window
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                       //!< The engines settings
+        PropertyContainer settings_;                       ///@deprecated Replace with configs_ in next release
+        PrefContainer configs_;                            //!< The engines settings
         bool isSettingsLoadedFromFile_;                    //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
         bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized
         bool isRunning_;                                   //!< A flag indicating whether or not the engine is running
@@ -455,7 +541,7 @@ namespace ime {
         std::shared_ptr<ResourceManager> resourceManager_; //!< The engine level resource manager
         EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
-        bool pendingPop_;                                  //!< A flag indicting whether or not the current scene should be popped
+        int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
         Callback<> onWindowClose_;                         //!< Optional Function executed when a request to close the window is received
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame

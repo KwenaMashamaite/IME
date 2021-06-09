@@ -433,6 +433,7 @@ namespace ime {
          * checkout the Animator class
          */
         Animator& getAnimator();
+        const Animator& getAnimator() const;
 
         /**
          * @brief Update the current animation

@@ -298,7 +298,7 @@ namespace ime {
         if (!currentAnimation_ || !isPlaying_ || isPaused_)
             return;
 
-        totalTime_ += deltaTime * timescale_;
+        totalTime_ += deltaTime * timescale_ * currentAnimation_->getTimescale();
 
         // Handle delayed start
         if (!hasStarted_) {

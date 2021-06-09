@@ -31,6 +31,7 @@
 #include "IME/common/Rect.h"
 #include "IME/common/Object.h"
 #include <memory>
+#include <any>
 
 namespace ime {
 
@@ -229,6 +230,16 @@ namespace ime {
          * (140, 25)
          */
         Vector2i worldCoordToWindowCoord(const Vector2f& point) const;
+
+        /**
+         * @internal
+         * @brief Get the internal view
+         * @return Constant Reference wrapper to the internal view
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        std::any getInternalView();
 
         /**
          * @brief Destructor

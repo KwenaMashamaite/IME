@@ -30,9 +30,23 @@
 
 namespace ime {
     /**
-     * @brief Represents a position of a tile in the tilemap
+     * @brief Represents a position TileMap Tile
      */
     struct IME_API Index {
+        /**
+         * @brief Default constructor
+         *
+         * Constructs Index with row = 0, and colm = 0
+         */
+        Index();
+
+        /**
+         * @brief Constructor
+         * @param row Y coordinate of the tile
+         * @param colm X coordinate of the tile
+         */
+        Index(int row, int colm);
+
         int row;    //!< Y coordinate of the tile
         int colm;   //!< X coordinate of the tile
     };

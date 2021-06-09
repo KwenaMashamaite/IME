@@ -62,6 +62,17 @@ namespace ime {
         using Ptr = std::unique_ptr<Scene>; //!< Unique Scene pointer
 
         /**
+         * @brief Defines what happens to the scene when it is paused
+         */
+        enum OnPauseAction {
+            Default      = 0,      //!< The scene is hidden and does not receive time and system updates
+            Show         = 1 << 0, //!< The scene is rendered behind the current active scene but does not receives time and system updates
+            UpdateTime   = 1 << 1, //!< The scene is hidden and receives time updates only (timer, physics, animation updates, etc ...)
+            UpdateSystem = 1 << 2, //!< The scene is hidden and receives system updates only (Window events, Input updates, etc ...)
+            UpdateAll    = 1 << 3  //!< The scene is hidden and receives both time and system updates
+        };
+
+        /**
          * @brief Default Constructor
          */
         Scene();
@@ -310,6 +321,7 @@ namespace ime {
 
     protected:
         /**
+         * @deprecated This function will be removed in the next release
          * @brief Set whether or not the scene is hidden or rendered
          *        when it is paused
          * @param show True to show or false to hide
@@ -322,9 +334,52 @@ namespace ime {
          *
          * By default the scene is hidden when it is paused
          *
+         * @see setOnPauseAction
+         */
+        [[deprecated("Use 'ime::Scene::setOnPauseAction(ime::Uint32)' instead.")]]
+        void setVisibleOnPause(bool show);
+
+        /**
+         * @brief Set which action is taken when the scene is paused
+         * @param action Action to be taken
+         *
+         * Mote that actions can be combined using bitwise OR combination
+         * of ime::OnPauseAction enumerations. For example, to make the
+         * scene shown behind the current active scene and receive updates,
+         * you do as follows:
+         *
+         * @code
+         * setOnPauseAction(ime::Scene::Show | ime::Scene::UpdateAll)
+         * @endcode
+         *
+         * By default the scene is hidden when it is paused and it does
+         * not receive time and system (Window events, Input, etc...)
+         * updates
+         *
          * @see onPause
          */
-        void setVisibleOnPause(bool show);
+        void setOnPauseAction(Uint32 action);
+
+        /**
+         * @brief Enable or disable scene input (keyboard, mouse, etc...)
+         * @param enable True to enable input or false to disable it
+         *
+         * Note that input handlers are not destroyed when input is disabled.
+         * Upon input re-enable, input handlers will be invoked as before
+         *
+         * By default, input is enabled
+         *
+         * @see input
+         */
+        void setInputEnable(bool enable);
+
+        /**
+         * @brief Check whether or not input is enabled for this scene
+         * @return True if input is enabled, otherwise false
+         *
+         * @see setInputEnable
+         */
+        bool isInputEnabled() const;
 
         /**
          * @brief Set the scene timescale
@@ -589,8 +644,11 @@ namespace ime {
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene level tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
+        bool isInputEnabled_;                 //!< A flag indicating whether or not the scene receives input
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
+        bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused
+        bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
         friend class priv::SceneManager;      //!< Pre updates the scene

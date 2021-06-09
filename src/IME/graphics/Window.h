@@ -31,6 +31,7 @@
 #include "IME/core/event/Event.h"
 #include "IME/graphics/Drawable.h"
 #include "IME/graphics/Colour.h"
+#include "IME/graphics/WindowStyles.h"
 #include <string>
 
 namespace ime {
@@ -42,18 +43,6 @@ namespace ime {
          */
         class IME_API Window : utility::NonCopyable {
         public:
-            /**
-             * @brief Window styles
-             */
-            enum Style {
-                None = 0,                           //!< No border / title bar (this flag and all others are mutually exclusive)
-                Titlebar = 1 << 0,                  //!< Title bar + fixed border
-                Resize = 1 << 1,                    //!< Title bar + resizable border + maximize button
-                Close = 1 << 2,                     //!< Title bar + close button
-                Fullscreen = 1 << 3,                //!< Fullscreen mode
-                Default = Titlebar | Resize | Close //!< Default window style
-            };
-
             /**
              * @brief Constructor
              *
@@ -79,12 +68,9 @@ namespace ime {
              * @param width Width of the window
              * @param height Height of the window
              * @param style Style of the window
-             *
-             * The dimensions of the window must be positive, otherwise
-             * the program will be terminated prematurely
              */
             void create(const std::string &title, unsigned int width,
-                unsigned int height, Uint32 style = Style::Default);
+                unsigned int height, Uint32 style = WindowStyle::Default);
 
             /**
              * @brief Change the window's icon

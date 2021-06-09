@@ -22,34 +22,21 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_CONFIGFILEPARSER_H
-#define IME_CONFIGFILEPARSER_H
-
-#include "IME/Config.h"
-#include "IME/common/PropertyContainer.h"
+#ifndef IME_WINDOWSTYLES_H
+#define IME_WINDOWSTYLES_H
 
 namespace ime {
-    namespace utility {
-        /**
-         * @deprecated This class will be removed in the next release, use ime::PrefContainer
-         * @brief Class for parsing config files
-         */
-        class IME_API ConfigFileParser {
-        public:
-            /**
-             * @deprecated ime::utility::ConfigFileParser will be removed in the
-             *             next release
-             *
-             * @brief Parse a config file
-             * @param filename Name of the config file to be parsed
-             * @return List of properties found in the config file
-             * @throws FileNotFound if the config file cannot be found on
-             *        the disk
-             */
-            [[deprecated("Use ime::PrefContainer instead.")]]
-            static PropertyContainer parse(const std::string& filename);
-        };
-    }
+    /**
+     * @brief Window styles
+     */
+    enum WindowStyle {
+        None = 0,                           //!< No border / title bar (this flag and all others are mutually exclusive)
+        Titlebar = 1 << 0,                  //!< Title bar + fixed border
+        Resize = 1 << 1,                    //!< Title bar + resizable border + maximize button
+        Close = 1 << 2,                     //!< Title bar + close button
+        Fullscreen = 1 << 3,                //!< Fullscreen mode
+        Default = Titlebar | Resize | Close //!< Default window style
+    };
 }
 
-#endif // IME_CONFIGFILEPARSER_H
+#endif //IME_WINDOWSTYLES_H

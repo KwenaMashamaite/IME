@@ -25,6 +25,16 @@
 #include "IME/core/tilemap/Index.h"
 
 namespace ime {
+    Index::Index() :
+        row{0},
+        colm{0}
+    {}
+
+    Index::Index(int Row, int Colm) :
+        row{Row},
+        colm{Colm}
+    {}
+
     bool operator!=(const Index &lhs, const Index &rhs) {
         return lhs.row != rhs.row || lhs.colm != rhs.colm;
     }

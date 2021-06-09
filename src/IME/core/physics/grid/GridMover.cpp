@@ -138,7 +138,7 @@ namespace ime {
         if (isMoveFrozen_ != freeze) {
             isMoveFrozen_ = freeze;
             if (!isMoveFrozen_ && isMoving_)
-                target_->getRigidBody()->setLinearVelocity(maxSpeed_);
+                target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
             else
                 target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
 
@@ -200,6 +200,17 @@ namespace ime {
                 currentDirection_ = targetDirection_;
                 isMoving_ = true;
                 target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
+
+                // Move target to target tile ahead of time
+                tileMap_.removeChildFromTile(*prevTile_, target_);
+                auto currentPosition = target_->getTransform().getPosition();
+                tileMap_.addChild(target_, targetTile_->getIndex());
+
+                // TileMap::addChild modifies the position of the target such that it's at
+                // the centre of the tile, however we don't want it to teleport, we want it
+                // to smoothly move there
+                target_->getTransform().setPosition(currentPosition);
+
                 eventEmitter_.emit("adjacentMoveBegin", targetTile_->getIndex());
             } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
@@ -215,8 +226,6 @@ namespace ime {
     void GridMover::snapTargetToTargetTile() {
         isMoving_ = false;
         targetDirection_ = Unknown;
-        tileMap_.removeChildFromTile(*prevTile_, target_);
-        tileMap_.addChild(target_, targetTile_->getIndex());
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getTransform().setPosition(targetTile_->getWorldCentre());
     }
@@ -268,7 +277,7 @@ namespace ime {
     }
 
     bool GridMover::handleObstacleCollision() {
-        if (auto [found, obstacle] = targetTileHasObstacle(); found) {
+        if (GameObject* obstacle = getObstacleInTargetTile(); obstacle) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
@@ -278,7 +287,7 @@ namespace ime {
         return false;
     }
 
-    std::pair<bool, GameObject*> GridMover::targetTileHasObstacle() {
+    GameObject* GridMover::getObstacleInTargetTile() {
         GameObject* obstacle = nullptr;
         tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
             if (child->isObstacle() && child->isCollidable() && child != target_) {
@@ -286,7 +295,7 @@ namespace ime {
                 return;
             }
         });
-        return {obstacle != nullptr, obstacle};
+        return obstacle;
     }
 
     bool GridMover::handleGridBorderCollision() {

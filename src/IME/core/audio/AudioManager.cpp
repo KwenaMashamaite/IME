@@ -46,6 +46,7 @@ namespace ime::audio {
         }
 
         audio->setSource(filename);
+        audio->setMute(isMuted_);
         audio->play();
         return playingAudio_.addObject(std::move(audio));
     }

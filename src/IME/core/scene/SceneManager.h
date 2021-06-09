@@ -143,8 +143,23 @@ namespace ime {
 
             /**
              * @brief Destroy all scenes
+             *
+             * This function destroys all scenes regardless of their current
+             * state
+             *
+             * @see clearAllExceptActive
              */
             void clear();
+
+            /**
+             * @brief Remove all scenes except the current active scene
+             *
+             * Note that if there is no active scene (Scene at the top of
+             * the stack is not entered), then all the scenes will be removed
+             *
+             * @see clear
+             */
+            void clearAllExceptActive();
 
             /**
              * @brief Check if the scene manager is empty or not
@@ -198,15 +213,16 @@ namespace ime {
 
         private:
             /**
-             * @brief Update the active scene
+             * @brief Update time based components of a scene
+             * @param scene The scene to be updated
              * @param deltaTime Time passed since last update
              * @param fixedUpdate True if it's a fixed update, otherwise false
              */
-            void updateScene(Time deltaTime, bool fixedUpdate);
+            void updateScene(Time deltaTime, Scene* scene, bool fixedUpdate);
 
         private:
             std::stack<ScenePtr> scenes_; //!< Scenes container
-            const Scene* prevScene_;      //!< Pointer to the active scene before a push operation
+            Scene* prevScene_;            //!< Pointer to the active scene before a push operation
         };
     }
 }

@@ -24,7 +24,6 @@
 
 #include "IME/core/engine/Engine.h"
 #include "IME/core/time/Clock.h"
-#include "IME/utility/ConfigFileParser.h"
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/Window.h"
@@ -54,7 +53,16 @@ namespace ime {
         settings_ = settings;
     }
 
+    Engine::Engine(const std::string &gameName, const PrefContainer &settings) :
+        Engine(gameName, "")
+    {
+        configs_ = settings;
+        settings_ = settings.asPropertyContainer();
+    }
+
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
+        window_{std::make_unique<priv::Window>()},
+        windowStyle_{WindowStyle::Default},
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
         isSettingsLoadedFromFile_(!settingsFile.empty() && settingsFile != "default"),
@@ -62,8 +70,19 @@ namespace ime {
         isRunning_{false},
         isPaused_{false},
         sceneManager_{std::make_unique<priv::SceneManager>()},
-        pendingPop_{false}
+        popCounter_{0}
     {}
+
+    void Engine::setWindowStyle(Uint32 windowStyle) {
+        if (isInitialized_)
+            return;
+
+        windowStyle_ = windowStyle;
+    }
+
+    Uint32 Engine::getWindowStyle() const {
+        return windowStyle_;
+    }
 
     void Engine::initialize() {
         if (isSettingsLoadedFromFile_)
@@ -80,7 +99,8 @@ namespace ime {
     }
 
     void Engine::loadSettings() {
-        settings_ = utility::ConfigFileParser::parse(settingFile_);
+        configs_.load(settingFile_);
+        settings_ = configs_.asPropertyContainer();
     }
 
     void Engine::processSettings() {
@@ -109,13 +129,12 @@ namespace ime {
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
-        window_ = std::make_unique<priv::Window>();
-        if (settings_.getValue<bool>("FULLSCREEN")) {
+        if (settings_.getValue<bool>("FULLSCREEN") || (windowStyle_ & Fullscreen)) {
             auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-            window_->create(title, desktopWidth, desktopHeight, priv::Window::Style::Fullscreen);
+            window_->create(title, desktopWidth, desktopHeight, WindowStyle::Fullscreen);
         } else
-            window_->create(title, width, height, priv::Window::Style::Default);
+            window_->create(title, width, height, windowStyle_);
 
         window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
         window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
@@ -187,6 +206,13 @@ namespace ime {
         isRunning_ = false;
     }
 
+    void Engine::recreateWindow(unsigned int width, unsigned int height, Uint32 style) {
+        settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
+        settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
+        windowStyle_ |= style;
+        initRenderTarget();
+    }
+
     void Engine::preUpdate(Time deltaTime) {
         if (isPaused_)
             return;
@@ -238,7 +264,16 @@ namespace ime {
         if (!isRunning_)
             sceneManager_->popScene();
         else
-            pendingPop_ = true;
+            popCounter_++;
+    }
+
+    void Engine::removeAllScenesExceptActive() {
+        sceneManager_->clearAllExceptActive();
+        popCounter_ = 0;
+    }
+
+    std::size_t Engine::getSceneCount() const {
+        return sceneManager_->getSceneCount();
     }
 
     void Engine::postFrameUpdate() {
@@ -246,9 +281,13 @@ namespace ime {
         timerManager_.preUpdate();
 
         // Note: Always check pending pop first before pending pushes
-        if (pendingPop_) {
-            pendingPop_ = false;
+        while (popCounter_ > 0) {
+            if (sceneManager_->isEmpty()) { // Engine::PopScene called more than the number of scenes
+                popCounter_ = 0;
+                break;
+            }
             sceneManager_->popScene();
+            popCounter_--;
         }
 
         while (!scenesPendingPush_.empty()) {
@@ -279,7 +318,7 @@ namespace ime {
         window_->close();
         isInitialized_ = false;
         isRunning_ = false;
-        pendingPop_ = false;
+        popCounter_ = 0;
         isSettingsLoadedFromFile_ = false;
         elapsedTime_ = Time::Zero;
         gameTitle_.clear();
@@ -321,6 +360,14 @@ namespace ime {
 
     const PropertyContainer &Engine::getSettings() const {
         return settings_;
+    }
+
+    PrefContainer &Engine::getConfigs() {
+        return configs_;
+    }
+
+    const PrefContainer &Engine::getConfigs() const {
+        return configs_;
     }
 
     const std::string &Engine::getGameName() const {

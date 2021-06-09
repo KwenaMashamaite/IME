@@ -26,6 +26,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/graphics/Window.h"
+#include "IME/graphics/WindowImpl.h"
 
 namespace ime::priv {
     namespace {
@@ -90,8 +91,20 @@ namespace ime::priv {
     }
 
     void SceneManager::clear() {
+        prevScene_ = nullptr;
         while (!scenes_.empty())
             scenes_.pop();
+    }
+
+    void SceneManager::clearAllExceptActive() {
+        if (!scenes_.empty()) {
+            if (scenes_.top()->isEntered()) {
+                auto activeScene = std::move(scenes_.top());
+                clear();
+                scenes_.push(std::move(activeScene));
+            } else
+                clear();
+        }
     }
 
     void SceneManager::enterTopScene() const {
@@ -110,6 +123,10 @@ namespace ime::priv {
 
     void SceneManager::render(priv::Window &window) {
         auto static renderScene = [](const Scene* scene, priv::Window& renderWindow) {
+            // Reset the window view to that of the scene that is being rendered
+            const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(scene->camera_->getInternalView()).get();
+            renderWindow.getImpl()->getSFMLWindow().setView(view);
+
             if (scene->hasTilemap_) {
                 scene->tileMap_->draw(renderWindow);
                 scene->gridMovers_.render(renderWindow);
@@ -120,8 +137,10 @@ namespace ime::priv {
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
-            if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause())
+            if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
                 renderScene(prevScene_, window);
+                prevScene_->gui().draw();
+            }
 
             renderScene(scenes_.top().get(), window);
             scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
@@ -132,7 +151,10 @@ namespace ime::priv {
     }
 
     void SceneManager::update(Time deltaTime) {
-        updateScene(deltaTime, false);
+        updateScene(deltaTime, scenes_.top().get(), false);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            updateScene(deltaTime, prevScene_, false);
     }
 
     void SceneManager::handleEvent(Event event) {
@@ -142,14 +164,36 @@ namespace ime::priv {
         if (!scenes_.top()->isEntered())
             return;
 
-        scenes_.top()->inputManager_.handleEvent(event);
-        scenes_.top()->guiContainer_.handleEvent(event);
-        scenes_.top()->gridMovers().handleEvent(event);
-        scenes_.top()->handleEvent(event);
+        // Update all system components of a scene
+        static auto updateSystem = [](Scene* scene, Event e) {
+            if (scene->isInputEnabled_) {
+                scene->inputManager_.handleEvent(e);
+                scene->guiContainer_.handleEvent(e);
+                scene->gridMovers().handleEvent(e);
+                scene->handleEvent(e);
+            } else {
+                // Only pass non-input events to the scene
+                if (e.type == Event::Closed || e.type == Event::Resized
+                    || e.type == Event::MouseEntered || e.type == Event::MouseLeft
+                    || e.type == Event::LostFocus || e.type == Event::GainedFocus)
+                {
+                    scene->handleEvent(e);
+                    scene->guiContainer_.handleEvent(e);
+                }
+            }
+        };
+
+        updateSystem(scenes_.top().get(), event);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isEventUpdatedWhenPaused_)
+            updateSystem(prevScene_, event);
     }
 
     void SceneManager::fixedUpdate(Time deltaTime) {
-        updateScene(deltaTime, true);
+        updateScene(deltaTime, scenes_.top().get(), true);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            updateScene(deltaTime, prevScene_, true);
     }
 
     void SceneManager::forEachScene(const Callback<const SceneManager::ScenePtr&>& callback) {
@@ -173,18 +217,25 @@ namespace ime::priv {
         if (!scenes_.top()->isEntered())
             return;
 
-        auto& scene = scenes_.top();
-        scene->timerManager_.preUpdate();
-        scene->timerManager_.update(deltaTime * scene->getTimescale());
-        scene->audioManager_.removePlayedAudio();
-        scene->internalEmitter_.emit("preUpdate", deltaTime * scene->getTimescale());
+        static auto update = [](Scene* scene, Time dt) {
+            scene->timerManager_.preUpdate();
+            scene->timerManager_.update(dt * scene->getTimescale());
+            scene->audioManager_.removePlayedAudio();
+            scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
+        };
+
+        update(scenes_.top().get(), deltaTime);
+
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+            update(prevScene_, deltaTime);
     }
 
-    void SceneManager::updateScene(Time deltaTime, bool fixedUpdate) {
+    void SceneManager::updateScene(Time deltaTime, Scene* scene, bool fixedUpdate) {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
 
-        auto& scene = scenes_.top();
+        // Update gui
+        scene->guiContainer_.update(deltaTime);
 
         // Update physics simulation
         if (scene->hasPhysicsSim_) {
