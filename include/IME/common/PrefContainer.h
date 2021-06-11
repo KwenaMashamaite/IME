@@ -28,7 +28,8 @@
 #include "IME/Config.h"
 #include "IME/common/Preference.h"
 #include "IME/common/PropertyContainer.h"
-#include <unordered_map>
+#include <vector>
+
 
 namespace ime {
     /**
@@ -43,11 +44,9 @@ namespace ime {
         /**
          * @brief Load preferences from the disk
          * @param filename The name of the file to load the preferences from
-         * @throws FileNotFound if the specified file cannot be opened for reading
+         * @throws FileNotFound If @a filename cannot be opened for reading
          *
-         * Note that preference descriptions are ignored during load. In other,
-         * words ime::Preference::getDescription will return an empty string
-         * even if the preference had a description associated with it
+         * @see save
          */
         void load(const std::string& filename);
 
@@ -109,14 +108,30 @@ namespace ime {
         /**
          * @brief Save preferences to the disk
          * @param filename The name of the file to save the preferences to
+         * @throws FileNotFound If @a filename cannot be opened for writing
+         *
+         * If @a filename is left unspecified, the engine will attempt to
+         * write the data to the same file as the load file.
          *
          * @warning This function will overwrite the file
+         *
+         * @see load
          */
         void save(const std::string& filename = "sameAsLoadFile");
 
     private:
-        std::string filename_;                              //!< The name of the file prefs were loaded from
-        std::unordered_map<std::string, Preference> prefs_; //!< Preference container
+        /**
+         * @brief Get the index of a preference in the container
+         * @param key The index of the preference with the given key
+         * @return An optional with a value of the index of the preference
+         *         with the given key or a std::nullopt if a preference with
+         *         the given key does not exist
+         */
+        std::optional<int> getIndex(const std::string& key) const;
+
+    private:
+        std::string filename_;          //!< The name of the file prefs were loaded from
+        std::vector<Preference> prefs_; //!< Preference container
     };
 }
 
