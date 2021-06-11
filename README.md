@@ -4,14 +4,13 @@
 
 # IME — Infinite Motion Engine
 
-IME is a state-based 2D game engine. It is built on top of [SFML](https://www.sfml-dev.org/index.php)
-using C++17
+IME is a framework for developing 2D games. It is built on top of [SFML](https://www.sfml-dev.org/index.php)
+using C++17. IME is state-based, this means that your game is treated as a collection of
+distinct game states that are active one at a time. For states that need to share information
+with each other, IME provides an engine level caching system which can store data of any kind
+that can be accessed by any state at any given time.
 
-## Overview
-
-This game engine is not the next big thing. I developed it to improve my
-Object Oriented Programming (OOP) skills. Any constructive feedback is
-welcome. You can post feedback or ask me questions [here](https://github.com/KwenaMashamaite/IME/discussions/)
+For feature suggestions, feedback or any questions, you can do that [here](https://github.com/KwenaMashamaite/IME/discussions/)
 
 ## Features
 
