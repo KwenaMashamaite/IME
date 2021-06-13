@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/exceptions/Exceptions.h"
+#include "IME/core/event/EventEmitter.h"
 #include <string>
 #include <any>
 
@@ -101,9 +102,33 @@ namespace ime {
          */
         bool hasValue() const;
 
+        /**
+         * @brief Subscribe a callback to a value change event
+         * @param callback The function to be executed when the value changes
+         * @return The unique identification of the callback
+         *
+         * Since the value can be of any type, the callback is passed a
+         * const pointer to the property instead of the new value, so that
+         * you can retrieve it
+         *
+         * @see getValue and unsubscribe
+         */
+        int onValueChange(const Callback<Property* const>& callback);
+
+        /**
+         * @brief Remove a callback from a value change event
+         * @param id The unique identifier of the callback
+         * @return True if the callback was removed or false a callback
+         *         with the given id does not exist
+         *
+         * @see onValueChange
+         */
+        bool unsubscribe(int id);
+
     private:
-        std::string name_; //!< Name of the property
-        std::any value_;   //!< Value of the property
+        std::string name_;      //!< Name of the property
+        std::any value_;        //!< Value of the property
+        EventEmitter emitter_;  //!< Dispatches value change events
     };
 
     #include "IME/common/Property.inl"

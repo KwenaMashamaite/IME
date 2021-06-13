@@ -122,6 +122,31 @@ namespace ime {
         void forEachProperty(const Callback<Property&>& callback) const;
 
         /**
+         * @brief Subscribe a callback to a value change event
+         * @param The name of the property to add the callback to
+         * @param callback The function to be executed when the value changes
+         * @return The unique identification of the callback
+         *
+         * Since the value can be of any type, the callback is passed a
+         * const pointer to the property instead of the new value, so that
+         * you can retrieve it
+         *
+         * @see getValue and unsubscribe
+         */
+        int onValueChange(const std::string& name, const Callback<Property* const>& callback);
+
+        /**
+         * @brief Remove a callback from a value change event
+         * @param name The name of the property to remove the callback from
+         * @param id The unique identifier of the callback
+         * @return True if the callback was removed or false a callback
+         *         with the given id does not exist
+         *
+         * @see onValueChange
+         */
+        bool unsubscribe(const std::string& name, int id);
+
+        /**
          * @brief Remove all properties from the container
          */
         void clear();

@@ -31,6 +31,7 @@ Property::Property(const std::string& name, T&& value) :
 template<typename T>
 void Property::setValue(T&& value) {
     value_.emplace<T>(std::forward<T>(value));
+    emitter_.emit("valueChange", this);
 }
 
 template<typename T>

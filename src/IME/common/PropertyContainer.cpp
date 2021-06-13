@@ -47,6 +47,22 @@ namespace ime {
         return properties_.size();
     }
 
+    int PropertyContainer::onValueChange(const std::string &name,
+        const Callback<Property *const> &callback)
+    {
+        if (hasProperty(name))
+            return properties_.at(name).onValueChange(callback);
+
+        return -1;
+    }
+
+    bool PropertyContainer::unsubscribe(const std::string &name, int id) {
+        if (hasProperty(name))
+            return properties_.at(name).unsubscribe(id);
+
+        return false;
+    }
+
     void PropertyContainer::clear() {
         properties_.clear();
     }

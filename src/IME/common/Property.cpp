@@ -36,4 +36,12 @@ namespace ime {
     bool Property::hasValue() const {
         return value_.has_value();
     }
+
+    int Property::onValueChange(const Callback<Property* const> &callback) {
+        return emitter_.addEventListener("valueChange", callback);
+    }
+
+    bool Property::unsubscribe(int id) {
+        return emitter_.removeEventListener("valueChange", id);
+    }
 }
