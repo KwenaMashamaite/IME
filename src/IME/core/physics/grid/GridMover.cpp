@@ -40,7 +40,6 @@ namespace ime {
         targetDirection_{Unknown},
         targetTile_{nullptr},
         prevTile_{nullptr},
-        isMoving_{false},
         isMoveFrozen_{false},
         moveRestrict_{MoveRestriction::None},
         targetDestructionId_{-1}
@@ -137,7 +136,7 @@ namespace ime {
     void GridMover::setMovementFreeze(bool freeze) {
         if (isMoveFrozen_ != freeze) {
             isMoveFrozen_ = freeze;
-            if (!isMoveFrozen_ && isMoving_)
+            if (!isMoveFrozen_ && isTargetMoving())
                 target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
             else
                 target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
@@ -147,7 +146,7 @@ namespace ime {
     }
 
     bool GridMover::isMovementFrozen() const {
-        return isMoveFrozen_;
+        return !isTargetMoving();
     }
 
     Index GridMover::getTargetTileIndex() const {
@@ -163,7 +162,7 @@ namespace ime {
     }
 
     bool GridMover::isTargetMoving() const {
-        return isMoving_;
+        return target_->getRigidBody()->getLinearVelocity() != Vector2f{0.0f, 0.0f};
     }
 
     bool GridMover::requestDirectionChange(const Direction& newDir) {
@@ -198,7 +197,6 @@ namespace ime {
                     return;
 
                 currentDirection_ = targetDirection_;
-                isMoving_ = true;
                 target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
 
                 // Move target to target tile ahead of time
@@ -224,7 +222,6 @@ namespace ime {
     }
 
     void GridMover::snapTargetToTargetTile() {
-        isMoving_ = false;
         targetDirection_ = Unknown;
         target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getTransform().setPosition(targetTile_->getWorldCentre());

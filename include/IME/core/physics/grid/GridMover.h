@@ -223,7 +223,7 @@ namespace ime {
          * @brief Check if the targets movement is frozen or not
          * @return True if movement is frozen otherwise false
          *
-         * @see setMovementFreeze
+         * @see setMovementFreeze and isTargetMoving
          */
         bool isMovementFrozen() const;
 
@@ -254,11 +254,10 @@ namespace ime {
          * @brief Check if target is moving or not
          * @return True if target is moving otherwise false
          *
-         * @warning This function will return false if the target is not moving
-         * or there is no target set. Therefore, the existence of the
-         * target should be checked first for accurate results
+         * @warning This function must not be called when there is no
+         * target, otherwise undefined behavior
          *
-         * @see getTarget
+         * @see setTarget, getTarget and setMovementFreeze
          */
         bool isTargetMoving() const;
 
@@ -510,7 +509,6 @@ namespace ime {
         const Tile* targetTile_;       //!< The grid tile the target wishes to reach
         const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher
-        bool isMoving_;                //!< A flag indicating whether or not the game object is moving
         bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
         int targetDestructionId_;      //!< Target destruction handler id
