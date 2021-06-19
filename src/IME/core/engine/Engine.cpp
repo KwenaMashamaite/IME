@@ -132,6 +132,11 @@ namespace ime {
         if (settings_.getValue<bool>("FULLSCREEN") || (windowStyle_ & Fullscreen)) {
             auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
             auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
+            settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
+            settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
+
+            configs_.getPref("WINDOW_WIDTH").setValue(desktopWidth);
+            configs_.getPref("WINDOW_HEIGHT").setValue(desktopHeight);
             window_->create(title, desktopWidth, desktopHeight, WindowStyle::Fullscreen);
         } else
             window_->create(title, width, height, windowStyle_);
@@ -207,9 +212,13 @@ namespace ime {
     }
 
     void Engine::recreateWindow(unsigned int width, unsigned int height, Uint32 style) {
-        settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
-        settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
         windowStyle_ |= style;
+
+        if (!(style & WindowStyle::Fullscreen)) {
+            settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
+            settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
+        }
+
         initRenderTarget();
     }
 
