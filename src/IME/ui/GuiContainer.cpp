@@ -176,8 +176,8 @@ namespace ime::ui {
                 sfmlGui_.remove(std::static_pointer_cast<tgui::Widget>(widgets_[widget]->getInternalPtr()));
                 widgets_.erase(widget);
                 return true;
-            }
-            return false;
+            } else
+                return utility::removeRecursively(widgets_, widget);
         }
 
         Widget* getFocusedWidget() const {

@@ -84,8 +84,8 @@ namespace ime::ui {
                 tguiContainer_->remove(std::static_pointer_cast<tgui::Widget>(widgets_[name]->getInternalPtr()));
                 widgets_.erase(name);
                 return true;
-            }
-            return false;
+            } else
+                return utility::removeRecursively(widgets_, name);
         }
 
         ui::Widget* getWidgetAtPosition(Vector2f pos) const  {

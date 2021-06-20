@@ -227,6 +227,17 @@ namespace ime {
         extern ui::Widget* findRecursively(const std::unordered_map<std::string,
             std::unique_ptr<ui::Widget>>& container, const std::string& widgetName);
 
+        /**
+         * @internal
+         * @brief Recursively remove a widget
+         * @param container Container to recursively remove a widget from
+         * @param widgetName Name of the widget to be removed
+         * @return True if the widget was removed or false if no other widget
+         *         contains the widget with the given name
+         */
+        extern bool removeRecursively(const std::unordered_map<std::string,
+            std::unique_ptr<ui::Widget>>& container, const std::string& widgetName);
+
         #include "Helpers.inl"
     }
 }

@@ -292,4 +292,19 @@ namespace ime::utility {
 
         return nullptr;
     }
+
+    bool removeRecursively(const std::unordered_map<std::string,
+        std::unique_ptr<ui::Widget>>& widgets, const std::string &widgetName)
+    {
+        for (const auto& widget : widgets) {
+            if (widget.second->isContainer()) {
+                auto* container = static_cast<ui::WidgetContainer*>(widget.second.get());
+                if (container->removeWidget(widgetName))
+                    return true;
+                else continue;
+            }
+        }
+
+        return false;
+    }
 }
