@@ -29,20 +29,20 @@
 namespace ime {
     struct Texture::Impl {
         Impl() :
-            image_{*(new sf::Image())}
+            image_{nullptr}
         {}
 
         Impl(const std::string &filename, const UIntRect &area) :
             filename_{filename},
             texture_{std::make_shared<sf::Texture>()},
-            image_{ResourceManager::getInstance()->getImage(filename)}
+            image_{&ResourceManager::getInstance()->getImage(filename)}
         {
             auto sfArea = sf::IntRect {
                 static_cast<int>(area.left), static_cast<int>(area.top),
                 static_cast<int>(area.width),static_cast<int>(area.height)
             };
 
-            texture_->loadFromImage(image_, sfArea);
+            texture_->loadFromImage(*image_, sfArea);
         }
 
         Impl(const Impl& other) :
@@ -90,10 +90,14 @@ namespace ime {
             return *texture_;
         }
 
+        ~Impl() {
+            image_ = nullptr;
+        }
+
     private:
-        std::string filename_;                          //!< Name of the image file on the disk
-        std::shared_ptr<sf::Texture> texture_;                           //!< Third party texture
-        std::reference_wrapper<const sf::Image> image_; //!< Constructs the texture
+        std::string filename_;                  //!< Name of the image file on the disk
+        std::shared_ptr<sf::Texture> texture_;  //!< Third party texture
+        const sf::Image* image_;                //!< Constructs the texture
     }; // class Impl
 
     Texture::Texture() :
