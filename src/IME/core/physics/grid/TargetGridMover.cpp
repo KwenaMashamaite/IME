@@ -48,6 +48,7 @@ namespace ime {
 
         onTargetTileReset([this](Index index) {
             targetTileIndex_ = index;
+            clearPath();
         });
 
         onPropertyChange("target", [this](const Property& property) {

@@ -397,8 +397,8 @@ namespace ime {
         }
     }
 
-    void GridMover::onTargetTileReset(const Callback<Index>& callback) {
-        eventEmitter_.addEventListener("targetTileReset", callback);
+    int GridMover::onTargetTileReset(const Callback<Index>& callback) {
+        return eventEmitter_.addEventListener("targetTileReset", callback);
     }
 
     GridMover::~GridMover() {

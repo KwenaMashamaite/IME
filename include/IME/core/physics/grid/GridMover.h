@@ -366,25 +366,45 @@ namespace ime {
         bool unsubscribe(int handlerId);
 
         /**
-         * @internal
          * @brief Reset the target tile to be the same as the entity tile
          *
-         * The tile can only be rest if the entity is not moving
+         * @note This function must be called every time the target is
+         * manually moved in the Tilemap so that the grid mover can register
+         * the new position of the target. If not called, the GridMover will
+         * lose control of the target and the targets movement behavior is
+         * undefined in such a case. In addition, note that the target tile
+         * can only be reset when the target is not moving. Here's an example:
          *
-         * @warning This function is intended for internal use only and
-         * should never be called outside of IME
+         * @code
+         * // Let the grid mover be responsible for moving the player object
+         * tilemap.addChild(player, ime::Index{4, 5});
+         * gridMover.setTarget(player);
+         *
+         * ...
+         *
+         * // Manually move the player to some desired position
+         * tilemap.removeChild(player);
+         * tilemap.addChild(player, ime::Index{11, 20});
+         *
+         * // Let the grid mover know that the player is no longer where it
+         * // was registered to be (The grid mover will update itself accordingly)
+         * gridMover.setMovementFreeze(true);
+         * gridMover.resetTargetTile();
+         * gridMover.setMovementFreeze(false);
+         * @endcode
+         *
+         * @see setMovementFreeze
          */
         void resetTargetTile();
 
         /**
-         * @internal
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
+         * @return The event listeners identification number
          *
-         * @warning This function is intended for internal use only and
-         * should never be called outside of IME
+         * @see resetTargetTile and unsubscribe
          */
-        void onTargetTileReset(const Callback<Index>& callback);
+        int onTargetTileReset(const Callback<Index>& callback);
 
         /**
          * @internal
