@@ -346,12 +346,16 @@ namespace ime {
          *
          * The callback is invoked when the target collides with another game
          * object. On invocation, the callback it is passed the target and
-         * the game object it collided with respectively.
+         * the game object it collided with respectively. In addition, note
+         * that the callback is invoked only if the target is active and its
+         * collision group and collision id are configured such that it can
+         * collide with other game objects (see ime::GameObject::setActive,
+         * ime::GameObject::setCollisionGroup and ime::GameObject::setCollisionId)
          *
          * @note A grid mover registers a collision between two game objects
          * only when they occupy the same tile. That is, a collision will not
          * be raised when the two game objects start overlapping. For contact
-         * based collision detection use RigidBody physics
+         * based collision detection use ime::RigidBody physics
          *
          * @see unsubscribe
          */

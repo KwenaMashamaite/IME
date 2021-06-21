@@ -32,9 +32,9 @@ namespace ime {
         state_{-1},
         isObstacle_{false},
         isActive_{true},
-        isCollidable_{true},
         postStepId_{-1},
-        destructionId_{-1}
+        destructionId_{-1},
+        collisionId_{0}
     {
         initEvents();
     }
@@ -45,11 +45,12 @@ namespace ime {
         state_{other.state_},
         isObstacle_{other.isObstacle_},
         isActive_{other.isActive_},
-        isCollidable_{other.isCollidable_},
         transform_{other.transform_},
         sprite_{other.sprite_},
         postStepId_{-1},
-        destructionId_{-1}
+        destructionId_{-1},
+        collisionGroup_{other.collisionGroup_},
+        collisionId_{other.collisionId_}
     {
         initEvents();
 
@@ -90,13 +91,14 @@ namespace ime {
         std::swap(state_, other.state_);
         std::swap(isObstacle_, other.isObstacle_);
         std::swap(isActive_, other.isActive_);
-        std::swap(isCollidable_, other.isCollidable_);
         std::swap(transform_, other.transform_);
         std::swap(sprite_, other.sprite_);
         std::swap(body_, other.body_);
         std::swap(userData_, other.userData_);
         std::swap(postStepId_, other.postStepId_);
         std::swap(destructionId_, other.destructionId_);
+        std::swap(collisionGroup_, other.collisionGroup_);
+        std::swap(collisionId_, other.collisionId_);
     }
 
     GameObject::Ptr GameObject::create(Scene &scene) {
@@ -122,6 +124,7 @@ namespace ime {
     void GameObject::setActive(bool isActive) {
         if (isActive_ == isActive)
             return;
+
         isActive_ = isActive;
 
         if (body_)
@@ -131,19 +134,7 @@ namespace ime {
     }
 
     void GameObject::setCollidable(bool isCollidable) {
-        if (isCollidable_ != isCollidable) {
-            isCollidable_ = isCollidable;
-            if (body_) {
-                body_->forEachCollider([isCollidable](Collider* collider) {
-                    if (isCollidable)
-                        collider->resetCollisionFilterData();
-                    else
-                        collider->setEnable(false);
-                });
-            }
-
-            emitChange(Property{"collidable", isCollidable_});
-        }
+        setActive(isCollidable);
     }
 
     bool GameObject::isActive() const {
@@ -151,7 +142,39 @@ namespace ime {
     }
 
     bool GameObject::isCollidable() const {
-        return isCollidable_;
+        return isActive_;
+    }
+
+    void GameObject::setCollisionId(int id) {
+        if (collisionId_ == id)
+            return;
+
+        collisionId_ = id;
+        emitChange(Property{"collisionId", collisionId_});
+    }
+
+    int GameObject::getCollisionId() const {
+        return collisionId_;
+    }
+
+    void GameObject::setCollisionGroup(const std::string &name) {
+        if (collisionGroup_ == name)
+            return;
+
+        collisionGroup_ = name;
+        emitChange(Property{"collisionGroup", collisionGroup_});
+    }
+
+    const std::string &GameObject::getCollisionGroup() const {
+        return collisionGroup_;
+    }
+
+    CollisionExcludeList &GameObject::getCollisionExcludeList() {
+        return excludeList_;
+    }
+
+    const CollisionExcludeList &GameObject::getCollisionExcludeList() const {
+        return excludeList_;
     }
 
     PropertyContainer& GameObject::getUserData() {

@@ -193,7 +193,7 @@ namespace ime {
             if (!isTargetMoving() && targetDirection_ != Unknown) {
                 setTargetTile();
 
-                if (handleGridBorderCollision() || (target_->isCollidable() && (handleSolidTileCollision() || handleObstacleCollision())))
+                if (handleGridBorderCollision() || (target_->isActive() && (handleSolidTileCollision() || handleObstacleCollision())))
                     return;
 
                 currentDirection_ = targetDirection_;
@@ -287,7 +287,7 @@ namespace ime {
     GameObject* GridMover::getObstacleInTargetTile() {
         GameObject* obstacle = nullptr;
         tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
-            if (child->isObstacle() && child->isCollidable() && child != target_) {
+            if (child->isObstacle() && child->isActive() && child != target_) {
                 obstacle = child;
                 return;
             }
@@ -324,12 +324,29 @@ namespace ime {
     }
 
     void GridMover::onDestinationReached() {
+        // Collide target with occupants of target tile
         tileMap_.forEachChildInTile(*targetTile_, [this](GameObject* gameObject) {
-            if (gameObject == target_) // Prevent Self collision
+            // Prevent Self collision
+            if (gameObject == target_)
                 return;
 
-            if (target_->isCollidable() && gameObject->isCollidable())
-                eventEmitter_.emit("gameObjectCollision", target_, gameObject);
+            // Inactive objects do not collide (collision filtering by inactivity)
+            if (!(target_->isActive() && gameObject->isActive()))
+                return;
+
+            // Objects in excluded collision group do not collide (Collision filtering by group)
+            if ((target_->getCollisionExcludeList().contains(gameObject->getCollisionGroup())) ||
+                (gameObject->getCollisionExcludeList().contains(target_->getCollisionGroup())))
+            {
+                return;
+            }
+
+            // Objects with different collision id's do not collide (collision filtering by id)
+            if (!(target_->getCollisionId() == gameObject->getCollisionId()))
+                return;
+
+            // Satisfied collision criteria, invoke collision handler
+            eventEmitter_.emit("gameObjectCollision", target_, gameObject);
         });
 
         eventEmitter_.emit("adjacentMoveEnd", targetTile_->getIndex());

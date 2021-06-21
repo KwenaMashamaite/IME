@@ -32,6 +32,7 @@
 #include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
+#include "IME/core/game_object/CollisionExcludeList.h"
 #include <stack>
 
 namespace ime {
@@ -95,13 +96,17 @@ namespace ime {
          * @brief Set whether or not the game object is an obstacle
          * @param isObstacle True if it is an obstacle, otherwise false
          *
-         * Note that this property only affects grid based physics (see GridMover)
-         * When an object is an obstacle and its collidable state is true, then
-         * other game objects cannot overlap with it. A collision event will be
-         * raised when another game object attempts to occupy the same cell as
-         * the obstacle. However, the two object will not visually overlap
+         * When the object is an obstacle and its active state is @a true
+         * (see setActive()), then other game objects cannot overlap with
+         * it. A collision event will be raised when another game object
+         * attempts to occupy the same cell as the obstacle. However, the
+         * two objects will never overlap
          *
          * By default, the game object is not an obstacle
+         *
+         * @note This function is only applicable to grid-based physics
+         * (see ime::GridMover). For ime::RigidBody physics, use
+         * ime::Collider::setSensor to toggle overlapping
          */
         void setAsObstacle(bool isObstacle);
 
@@ -133,39 +138,149 @@ namespace ime {
         int getState() const;
 
         /**
-         * @brief Set whether the game object is active or inactive
-         * @param isActive True to set active or false to set inactive
+         * @brief Set whether or not the game object is active
+         * @param isActive True to set as active or false to set as inactive
+         *
+         * Note that an inactive game object does not participate in
+         * collision detection
+         *
+         * For grid-based physics you can also disable collisions for the
+         * game object without deactivating it by simply setting its collision
+         * group or collision id to one that is not collidable with any other.
+         * The same can also be done for ime::RigidBody physics by using
+         * ime::Collider::setCollisionFilter
+         *
+         * By default, the object is active
+         *
+         * @see setCollisionGroup and setCollisionId
          */
         void setActive(bool isActive);
 
         /**
          * @brief Check if the game object is active or not
          * @return True if the game object is active, otherwise false
+         *
+         * @see setActive
          */
         bool isActive() const;
 
         /**
+         * @deprecated Since v2.1.0. It will be removed in v2.2.0
          * @brief Set whether the game object is collidable or not
          * @param collidable True to make collidable, otherwise false
          *
-         * This function has no effect if the game object does not have a
-         * physics body attached to it or if the attached physics body
-         * does not have a collider.
-         *
-         * When @a collidable is true, this function will reset the collision
-         * filter to all collisions and when @a collidable is false the function
-         * will reset the collision filter to no collisions. If the game object
-         * must collide with some game objects and ignore other game objects
-         * then it is advised to use the game objects Collider to enable or
-         * disable collisions as it gives you great flexibility
+         * @see setActive
          */
+         [[deprecated("Use ime::GameObject::setActive(bool) instead.")]]
         void setCollidable(bool collidable);
 
         /**
+         * @deprecated Since v2.1.0. It will be removed in v2.2.0
          * @brief Check if the game object is collidable or not
          * @return True if the game object is collidable, otherwise false
+         *
+         * @see isActive
          */
+         [[deprecated("Use ime::GameObject::isActive() instead.")]]
         bool isCollidable() const;
+
+        /**
+         * @brief Set the game objects collision id
+         * @param id The id to be set
+         *
+         * A collision id allows game objects to selectively collide with
+         * each other within colliding groups. Game objects with the same
+         * collision id will collide with each other, whilst game objects
+         * with different collision id's do not collide with each other.
+         *
+         * Note that "collision group" filtering takes higher precedence
+         * than "collision id" filtering. This means that regardless of
+         * how collision id's are configured, a collision will never take
+         * place if the collision group of one game object is added to the
+         * other game objects collision group exclude list (see getCollisionExcludeList())
+         *
+         * By default, the collision id is 0. This means that this game
+         * object will collide with any other game object that is not in
+         * its collision group exclude list
+         *
+         * @note This function is only applicable to grid-based physics
+         * (see ime::GridMover). For ime::RigidBody collision filtering
+         * use ime::Collider::setCollisionFilter
+         *
+         * @see setCollisionGroup and getCollisionExcludeList
+         */
+        void setCollisionId(int id);
+
+        /**
+         * @brief Get the collision id
+         * @return The collision id
+         *
+         * @see setCollisionId
+         */
+        int getCollisionId() const;
+
+        /**
+         * @brief Set the collision group this game object belongs to
+         * @param name The collision group to be set
+         *
+         * A collision group allows certain game objects to always collide
+         * or never collide with each other. When a collision group is added
+         * to the object's collision exclusion list (see getCollisionExcludeList()),
+         * the game object will never collide with game objects in that group
+         * (they will pass through each other), whereas when not added, the
+         * game object will always collide with game objects whose collision
+         * group does not appear in its exclusion list.
+         *
+         * Note that the @em active state (see setActive()) takes higher
+         * precedence than "collision group" filtering. This means that,
+         * regardless of how the collision groups are configured, a collision
+         * will never take place if the game object is inactive
+         *
+         * For example, the following code makes objects in the "Enemies"
+         * collision group to never collide with each other:
+         *
+         * @code
+         * for (auto& enemy : enemies) {
+         *      enemy.setCollisionGroup("Enemies");
+         *      enemy.getCollisionExcludeList().add("Enemies");
+         * }
+         * @endcode
+         *
+         * By default, the object does not belong to any collision group
+         * (empty sting). Therefore, it will collide with any other game
+         * object whose collision id is the same as theirs
+         *
+         * @note This function is only applicable to grid-based physics
+         * (see ime::GridMover). For ime::RigidBody physics collision
+         * filtering, use ime::Collider::setCollisionFilter
+         *
+         * @see setActive, setCollisionId and getCollisionExcludeList
+         */
+        void setCollisionGroup(const std::string& name);
+
+        /**
+         * @brief Get the collision group this object belongs to
+         * @return The game objects collision group
+         *
+         * @see setCollisionGroup
+         */
+        const std::string& getCollisionGroup() const;
+
+        /**
+         * @brief Get access to the game object's collision exclude list
+         * @return The game object's collision exclude list
+         *
+         * This list allows you to specify which game objects this game
+         * object should or should not collide with
+         *
+         * By default, the game object collides with all other objects
+         *
+         * @note This function is only applicable to grid-based physics
+         * (see ime::GridMover). For ime::RigidBody physics collision
+         * filtering use ime::Collider::setCollisionFilter
+         */
+        CollisionExcludeList& getCollisionExcludeList();
+        const CollisionExcludeList& getCollisionExcludeList() const;
 
         /**
          * @brief Get the user data added to game object
@@ -398,7 +513,6 @@ namespace ime {
         int state_;                           //!< The current state of the game object
         bool isObstacle_;                     //!< A flag indicating whether or not the object is an obstacle
         bool isActive_;                       //!< A flag indicating whether or not the game object is active
-        bool isCollidable_;                   //!< A flag indicating whether or not the game object is collidable
         Transform transform_;                 //!< The objects transform
         Sprite sprite_;                       //!< The objects visual representation
         BodyPtr body_;                        //!< The rigid body attached to this game object
@@ -408,6 +522,9 @@ namespace ime {
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
         CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa
+        CollisionExcludeList excludeList_;    //!< Stores the collision groups of game objects this game object should not collide with
+        std::string collisionGroup_;          //!< The objects collision group (collision filtering)
+        int collisionId_;                     //!< The objects collision id (collision filtering)
     };
 }
 
