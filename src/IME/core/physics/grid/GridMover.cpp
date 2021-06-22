@@ -191,7 +191,7 @@ namespace ime {
             IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover")
             IME_ASSERT(target_->getRigidBody()->getType() == RigidBody::Type::Kinematic, "The targets rigid body was changed from ime::RigidBody::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body")
 
-            if (!isTargetMoving() && targetDirection_ != Unknown) {
+            if (!isTargetMoving() && targetDirection_ != Unknown && maxSpeed_ != Vector2f{0.0f, 0.0f}) {
                 setTargetTile();
 
                 if (handleGridBorderCollision() || handleSolidTileCollision() || handleObstacleCollision())
