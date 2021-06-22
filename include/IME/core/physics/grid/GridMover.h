@@ -505,6 +505,13 @@ namespace ime {
          */
         bool isMoveValid(Direction targetDir) const;
 
+        /**
+         * @brief Check if a game object can collide with the target
+         * @param other The game object to be checked
+         * @return True if the two can collide, otherwise false
+         */
+        bool canCollide(GameObject* other) const;
+
     protected:
         /**
          * @brief Create a grid mover

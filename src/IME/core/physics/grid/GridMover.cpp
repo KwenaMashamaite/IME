@@ -194,7 +194,7 @@ namespace ime {
             if (!isTargetMoving() && targetDirection_ != Unknown) {
                 setTargetTile();
 
-                if (handleGridBorderCollision() || (target_->isActive() && (handleSolidTileCollision() || handleObstacleCollision())))
+                if (handleGridBorderCollision() || handleSolidTileCollision() || handleObstacleCollision())
                     return;
 
                 currentDirection_ = targetDirection_;
@@ -264,8 +264,32 @@ namespace ime {
         return true;
     }
 
+    bool GridMover::canCollide(GameObject* other) const {
+        // Prevent Self collision
+        if (other == target_)
+            return false;
+
+        // Inactive objects do not collide (collision filtering by inactivity)
+        if (!(target_->isActive() && other->isActive()))
+            return false;
+
+        // Objects in excluded collision group do not collide (Collision filtering by group)
+        if ((target_->getCollisionExcludeList().contains(other->getCollisionGroup())) ||
+            (other->getCollisionExcludeList().contains(target_->getCollisionGroup())))
+        {
+            return false;
+        }
+
+        // Objects with different collision id's do not collide (collision filtering by id)
+        if (!(target_->getCollisionId() == other->getCollisionId()))
+            return false;
+
+        // Satisfies collision requirement
+        return true;
+    }
+
     bool GridMover::handleSolidTileCollision() {
-        if (targetTile_->isCollidable()) {
+        if (target_->isActive() && targetTile_->isCollidable()) {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
@@ -277,13 +301,16 @@ namespace ime {
     }
 
     bool GridMover::handleObstacleCollision() {
-        if (GameObject* obstacle = getObstacleInTargetTile(); obstacle) {
+        GameObject* obstacle = getObstacleInTargetTile();
+
+        if (obstacle && canCollide(obstacle)) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("gameObjectCollision", target_, obstacle);
             return true;
         }
+
         return false;
     }
 
@@ -329,23 +356,7 @@ namespace ime {
     void GridMover::onDestinationReached() {
         // Collide target with occupants of target tile
         tileMap_.forEachChildInTile(*targetTile_, [this](GameObject* gameObject) {
-            // Prevent Self collision
-            if (gameObject == target_)
-                return;
-
-            // Inactive objects do not collide (collision filtering by inactivity)
-            if (!(target_->isActive() && gameObject->isActive()))
-                return;
-
-            // Objects in excluded collision group do not collide (Collision filtering by group)
-            if ((target_->getCollisionExcludeList().contains(gameObject->getCollisionGroup())) ||
-                (gameObject->getCollisionExcludeList().contains(target_->getCollisionGroup())))
-            {
-                return;
-            }
-
-            // Objects with different collision id's do not collide (collision filtering by id)
-            if (!(target_->getCollisionId() == gameObject->getCollisionId()))
+            if (!canCollide(gameObject))
                 return;
 
             // Satisfied collision criteria, invoke collision handler
