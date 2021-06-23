@@ -26,7 +26,7 @@
 #include "IME/core/time/Clock.h"
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include <SFML/Window/VideoMode.hpp>
 
 namespace ime {
@@ -61,7 +61,7 @@ namespace ime {
     }
 
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
-        window_{std::make_unique<priv::Window>()},
+        window_{std::make_unique<priv::RenderTarget>()},
         windowStyle_{WindowStyle::Default},
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
@@ -395,7 +395,7 @@ namespace ime {
         return inputManager_;
     }
 
-    priv::Window &Engine::getRenderTarget() {
+    priv::RenderTarget &Engine::getRenderTarget() {
         return *window_;
     }
 

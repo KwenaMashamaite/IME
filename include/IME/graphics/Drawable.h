@@ -32,7 +32,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -59,7 +59,7 @@ namespace ime {
          *
          * @note This function is intended for internal use only
          */
-        virtual void draw(priv::Window &renderTarget) const = 0;
+        virtual void draw(priv::RenderTarget &renderTarget) const = 0;
     };
 }
 

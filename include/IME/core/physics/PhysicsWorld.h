@@ -43,7 +43,7 @@ namespace ime {
     /// @internal
     namespace priv {
         class DebugDrawer;
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -456,7 +456,7 @@ namespace ime {
          *
          * @see setDebugDrawEnable
          */
-        void createDebugDrawer(priv::Window& renderWindow);
+        void createDebugDrawer(priv::RenderTarget& renderWindow);
 
         /**
          * @brief Destructor

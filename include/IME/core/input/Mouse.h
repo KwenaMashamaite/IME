@@ -34,7 +34,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -135,7 +135,7 @@ namespace ime {
              * This function sets the current position of the mouse
              * cursor, relative to the given window
              */
-            static void setPosition(const Vector2i& position, const priv::Window& window);
+            static void setPosition(const Vector2i& position, const priv::RenderTarget& window);
 
             /**
              * @brief Get the current position of the mouse in window coordinates
@@ -145,7 +145,7 @@ namespace ime {
              * This function returns the current position of the mouse
              * cursor, relative to the given window
              */
-            static Vector2i getPosition(const priv::Window& window);
+            static Vector2i getPosition(const priv::RenderTarget& window);
 
             /**
              * @brief Add an event listener to a mouse button up event

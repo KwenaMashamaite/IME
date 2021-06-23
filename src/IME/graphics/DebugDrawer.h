@@ -29,7 +29,7 @@
 
 namespace ime {
     namespace priv {
-        class Window;
+        class RenderTarget;
 
         /**
         * @brief Debug draws physics entities (bodies, joints, AABB's etc...)
@@ -40,7 +40,7 @@ namespace ime {
             * @brief Construct the debug drawer
             * @param renderWindow The window to render on
             */
-            explicit DebugDrawer(Window& renderWindow);
+            explicit DebugDrawer(RenderTarget& renderWindow);
 
             /**
             * @brief Draw a polygon
@@ -103,7 +103,7 @@ namespace ime {
             ~DebugDrawer() override;
 
         private:
-            Window& window_; //!< Debug render window
+            RenderTarget& window_; //!< Debug render window
         };
     }
 }

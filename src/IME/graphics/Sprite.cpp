@@ -23,9 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Sprite.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTargetImpl.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 
@@ -124,7 +124,7 @@ namespace ime {
                     sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
         }
 
-        void draw(priv::Window &renderTarget) const {
+        void draw(priv::RenderTarget &renderTarget) const {
             renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
         }
 
@@ -332,7 +332,7 @@ namespace ime {
         return pImpl_->getGlobalBounds();
     }
 
-    void Sprite::draw(priv::Window &renderTarget) const {
+    void Sprite::draw(priv::RenderTarget &renderTarget) const {
         pImpl_->draw(renderTarget);
     }
 

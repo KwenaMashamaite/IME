@@ -37,7 +37,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     namespace ui {
@@ -77,7 +77,7 @@ namespace ime {
              *
              * @see setTarget
              */
-            explicit GuiContainer(priv::Window& window);
+            explicit GuiContainer(priv::RenderTarget& window);
 
             /**
              * @brief Copy constructor
@@ -205,7 +205,7 @@ namespace ime {
              * @warning This function is intended for internal use and should
              * never be called outside of IME
              */
-            void setTarget(priv::Window& window);
+            void setTarget(priv::RenderTarget& window);
 
             /**
              * @brief Check if the target on which the gui should be drawn is

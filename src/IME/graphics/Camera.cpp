@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Camera.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime {
     class Camera::CameraImpl {
@@ -34,7 +34,7 @@ namespace ime {
          * @param centre The centre of the zone to display
          * @param size Size of the zone to display
          */
-        explicit CameraImpl(priv::Window& window) :
+        explicit CameraImpl(priv::RenderTarget& window) :
             window_{window.getImpl()->getSFMLWindow()},
             view{window_.getDefaultView()}
         {
@@ -119,7 +119,7 @@ namespace ime {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    Camera::Camera(priv::Window &window) :
+    Camera::Camera(priv::RenderTarget &window) :
         pimpl_{std::make_unique<CameraImpl>(window)}
     {}
 

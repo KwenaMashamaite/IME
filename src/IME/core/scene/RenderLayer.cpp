@@ -24,7 +24,7 @@
 
 #include "IME/core/scene/RenderLayer.h"
 #include "IME/graphics/Drawable.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/core/game_object/GameObject.h"
 #include <algorithm>
 
@@ -108,7 +108,7 @@ namespace ime {
         return drawables_.size();
     }
 
-    void RenderLayer::render(priv::Window &window) const {
+    void RenderLayer::render(priv::RenderTarget &window) const {
         std::for_each(drawables_.begin(), drawables_.end(), [&window](auto& pair) {
             pair.second.first.get().draw(window);
         });

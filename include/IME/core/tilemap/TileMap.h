@@ -48,7 +48,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -408,7 +408,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void draw(priv::Window &renderTarget) const;
+        void draw(priv::RenderTarget &renderTarget) const;
 
         /**
          * @brief Add a sprite to the tilemap

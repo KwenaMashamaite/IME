@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Tile.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/PhysicsWorld.h"
 
@@ -158,7 +158,7 @@ namespace ime {
         return id_;
     }
 
-    void Tile::draw(priv::Window &renderTarget) const {
+    void Tile::draw(priv::RenderTarget &renderTarget) const {
         renderTarget.draw(tile_);
     }
 

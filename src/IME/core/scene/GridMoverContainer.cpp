@@ -40,7 +40,7 @@ namespace ime {
         });
     }
 
-    void GridMoverContainer::render(priv::Window &window) const {
+    void GridMoverContainer::render(priv::RenderTarget &window) const {
         forEach([&window](GridMover* gridMover) {
             if (gridMover->getType() == GridMover::Type::Target)
                 static_cast<TargetGridMover*>(gridMover)->renderPath(window);

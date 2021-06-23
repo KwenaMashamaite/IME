@@ -46,9 +46,9 @@
 #include "IME/graphics/DebugDrawer.h"
 #include "IME/graphics/shapes/CircleShape.h"
 #include "IME/graphics/shapes/ConvexShape.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
     namespace {
@@ -71,7 +71,7 @@ namespace ime::priv {
         }
 
         void drawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &fillColour,
-            const b2Color &outlineColour, Window& window)
+            const b2Color &outlineColour, RenderTarget& window)
         {
             auto static polygon = ConvexShape();
             polygon.setPointCount(vertexCount);
@@ -86,7 +86,7 @@ namespace ime::priv {
         }
     }
 
-    DebugDrawer::DebugDrawer(Window &renderWindow) :
+    DebugDrawer::DebugDrawer(RenderTarget &renderWindow) :
         window_{renderWindow}
     {}
 

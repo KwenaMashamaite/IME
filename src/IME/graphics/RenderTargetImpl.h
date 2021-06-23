@@ -22,14 +22,14 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/resources/ResourceManager.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#ifndef IME_WINDOWIMPL_H
-#define IME_WINDOWIMPL_H
+#ifndef IME_RENDERTARGETIMPL_H
+#define IME_RENDERTARGETIMPL_H
 
 namespace ime {
     namespace ui {
@@ -44,7 +44,7 @@ namespace ime {
         /**
          * @brief Window class implementation
          */
-        class WindowImpl {
+        class RenderTargetImpl {
         public:
             /**
              * @brief Constructor
@@ -53,7 +53,7 @@ namespace ime {
              * Attempting to instantiate the class while there is an active
              * instance will terminate the program
              */
-            WindowImpl();
+            RenderTargetImpl();
 
             /**
              * @brief Create a render window
@@ -159,7 +159,7 @@ namespace ime {
              * Ensures a new Window instance can be created when an existing
              * Window instance is destroyed
              */
-            ~WindowImpl();
+            ~RenderTargetImpl();
 
         private:
             sf::RenderWindow window_;      //!< Render window
@@ -169,4 +169,4 @@ namespace ime {
     }
 }
 
-#endif //IME_WINDOWIMPL_H
+#endif //IME_RENDERTARGETIMPL_H

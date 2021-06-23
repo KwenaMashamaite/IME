@@ -39,9 +39,9 @@
 
 #include "IME/ui/GuiContainer.h"
 #include "IME/core/resources/ResourceManager.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTargetImpl.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
 #include <iostream>
@@ -54,7 +54,7 @@ namespace ime::ui {
     public:
         GuiContainerImpl() = default;
 
-        explicit GuiContainerImpl(priv::Window &window) :
+        explicit GuiContainerImpl(priv::RenderTarget &window) :
             sfmlGui_{window.getImpl()->getSFMLWindow()}
         {
             sfmlGui_.setDrawingUpdatesTime(false);
@@ -117,7 +117,7 @@ namespace ime::ui {
             widgets_.clear();
         }
 
-        void setTarget(priv::Window &window) {
+        void setTarget(priv::RenderTarget &window) {
             sfmlGui_.setTarget(window.getImpl()->getSFMLWindow());
             sfmlGui_.setDrawingUpdatesTime(false);
         }
@@ -258,7 +258,7 @@ namespace ime::ui {
         pimpl_{std::make_unique<GuiContainerImpl>()}
     {}
 
-    GuiContainer::GuiContainer(priv::Window &window) :
+    GuiContainer::GuiContainer(priv::RenderTarget &window) :
         pimpl_{std::make_unique<GuiContainerImpl>(window)}
     {}
 
@@ -314,7 +314,7 @@ namespace ime::ui {
         pimpl_->removeAllWidgets();
     }
 
-    void GuiContainer::setTarget(priv::Window &window) {
+    void GuiContainer::setTarget(priv::RenderTarget &window) {
         pimpl_->setTarget(window);
     }
 

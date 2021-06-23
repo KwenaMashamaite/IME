@@ -25,7 +25,7 @@
 #include "IME/core/physics/grid/TargetGridMover.h"
 #include "IME/core/physics/grid/path/BFS.h"
 #include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Utils.h"
 
 namespace ime {
@@ -244,7 +244,7 @@ namespace ime {
         onPathGen_ = callback;
     }
 
-    void TargetGridMover::renderPath(priv::Window &window) const {
+    void TargetGridMover::renderPath(priv::RenderTarget &window) const {
         if (renderPath_) {
             auto path = pathToTargetTile_;
             path.push(getTargetTileIndex());

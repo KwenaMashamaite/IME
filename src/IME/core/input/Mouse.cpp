@@ -24,8 +24,8 @@
 
 #include "IME/core/input/Mouse.h"
 #include "IME/core/event/Event.h"
-#include "IME/graphics/Window.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTarget.h"
+#include "IME/graphics/RenderTargetImpl.h"
 #include <SFML/Window/Mouse.hpp>
 #include <iostream>
 
@@ -70,11 +70,11 @@ namespace ime::input {
         return {sf::Mouse::getPosition().x, sf::Mouse::getPosition().y};
     }
 
-    void Mouse::setPosition(const Vector2i &position, const priv::Window &window) {
+    void Mouse::setPosition(const Vector2i &position, const priv::RenderTarget &window) {
         sf::Mouse::setPosition({position.x, position.y}, window.getImpl()->getSFMLWindow());
     }
 
-    Vector2i Mouse::getPosition(const priv::Window &window) {
+    Vector2i Mouse::getPosition(const priv::RenderTarget &window) {
         return {sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).x, sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).y};
     }
 

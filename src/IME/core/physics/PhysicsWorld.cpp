@@ -27,7 +27,7 @@
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/graphics/DebugDrawer.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 
@@ -156,7 +156,7 @@ namespace ime {
         world_->SetContactListener(b2ContactListener_.get());
 
 #if defined(IME_DEBUG)
-        using WindowRef = std::reference_wrapper<priv::Window>;
+        using WindowRef = std::reference_wrapper<priv::RenderTarget>;
         postRenderId_ = scene_.on_("postRender", ime::Callback<WindowRef>([this](WindowRef) {
             if (isDebugDrawEnabled_)
                 debugDraw();
@@ -331,7 +331,7 @@ namespace ime {
         return world_;
     }
 
-    void PhysicsWorld::createDebugDrawer(priv::Window &renderWindow) {
+    void PhysicsWorld::createDebugDrawer(priv::RenderTarget &renderWindow) {
 #if defined(IME_DEBUG)
         if (!debugDrawer_) {
             debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);

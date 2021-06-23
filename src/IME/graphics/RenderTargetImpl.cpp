@@ -22,23 +22,23 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
-    bool WindowImpl::isInstantiated_{false};
+    bool RenderTargetImpl::isInstantiated_{false};
 
-    WindowImpl::WindowImpl() :
+    RenderTargetImpl::RenderTargetImpl() :
         frameRateLimit_(0)
     {
         IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated")
         isInstantiated_ = true;
     }
 
-    void WindowImpl::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
+    void RenderTargetImpl::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
         window_.create(sf::VideoMode(width, height), title, static_cast<sf::Uint32>(style));
     }
 
-    void WindowImpl::setIcon(const std::string &filename) {
+    void RenderTargetImpl::setIcon(const std::string &filename) {
         auto currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
         try {
@@ -48,24 +48,24 @@ namespace ime::priv {
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
     }
 
-    void WindowImpl::setFramerateLimit(unsigned int framerateLimit) {
+    void RenderTargetImpl::setFramerateLimit(unsigned int framerateLimit) {
         frameRateLimit_ = framerateLimit;
         window_.setFramerateLimit(frameRateLimit_);
     }
 
-    unsigned int WindowImpl::getFramerateLimit() const {
+    unsigned int RenderTargetImpl::getFramerateLimit() const {
         return frameRateLimit_;
     }
 
-    void WindowImpl::setVsyncEnabled(bool isVsyncEnabled) {
+    void RenderTargetImpl::setVsyncEnabled(bool isVsyncEnabled) {
         window_.setVerticalSyncEnabled(isVsyncEnabled);
     }
 
-    bool WindowImpl::isOpen() const{
+    bool RenderTargetImpl::isOpen() const{
         return window_.isOpen();
     }
 
-    bool WindowImpl::pollEvent(Event& event) {
+    bool RenderTargetImpl::pollEvent(Event& event) {
         sf::Event sfmlEvent;
         auto eventPopped = window_.pollEvent(sfmlEvent);
         if (eventPopped)
@@ -73,27 +73,27 @@ namespace ime::priv {
         return eventPopped;
     }
 
-    void WindowImpl::close() {
+    void RenderTargetImpl::close() {
         window_.close();
     }
 
-    void WindowImpl::display() {
+    void RenderTargetImpl::display() {
         window_.display();
     }
 
-    void WindowImpl::clear(Colour colour) {
+    void RenderTargetImpl::clear(Colour colour) {
         window_.clear(utility::convertToSFMLColour(colour));
     }
 
-    void WindowImpl::draw(const sf::Drawable &drawable) {
+    void RenderTargetImpl::draw(const sf::Drawable &drawable) {
         window_.draw(drawable);
     }
 
-    Vector2u WindowImpl::getSize() {
+    Vector2u RenderTargetImpl::getSize() {
         return {window_.getSize().x, window_.getSize().y};
     }
 
-    WindowImpl::~WindowImpl() {
+    RenderTargetImpl::~RenderTargetImpl() {
         isInstantiated_ = false;
     }
 }

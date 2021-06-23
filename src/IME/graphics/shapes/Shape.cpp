@@ -246,7 +246,7 @@ namespace ime {
         move(offset.x, offset.y);
     }
 
-    void Shape::draw(priv::Window &renderTarget) const {
+    void Shape::draw(priv::RenderTarget &renderTarget) const {
         pimpl_->draw(renderTarget);
     }
 

@@ -37,7 +37,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -251,7 +251,7 @@ namespace ime {
          * @brief Construct the camera from a rectangle
          * @param rectangle The rectangle defining the zone to display
          */
-        explicit Camera(priv::Window& window);
+        explicit Camera(priv::RenderTarget& window);
 
     private:
         class CameraImpl;

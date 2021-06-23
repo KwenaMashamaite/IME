@@ -36,7 +36,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
     }
 
     /**
@@ -195,7 +195,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          */
-        void render(priv::Window& window) const;
+        void render(priv::RenderTarget& window) const;
 
         /**
          * @brief Destructor

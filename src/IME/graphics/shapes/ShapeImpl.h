@@ -28,8 +28,8 @@
 #include "IME/common/ITransformable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/WindowImpl.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTargetImpl.h"
+#include "IME/graphics/RenderTarget.h"
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
 
@@ -218,7 +218,7 @@ namespace ime {
              * @brief Draw the shape on a render target
              * @param renderTarget Target to draw object on
              */
-            virtual void draw(priv::Window &renderTarget) const = 0;
+            virtual void draw(priv::RenderTarget &renderTarget) const = 0;
 
             /**
              * @brief Destructor
@@ -338,7 +338,7 @@ namespace ime {
                 return {left, top, width, height};
             }
 
-            void draw(priv::Window &renderTarget) const override {
+            void draw(priv::RenderTarget &renderTarget) const override {
                 renderTarget.getImpl()->getSFMLWindow().draw(*shape_);
             }
 

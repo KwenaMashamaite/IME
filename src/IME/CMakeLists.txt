@@ -106,8 +106,8 @@ set(IME_SRC
     graphics/Sprite.cpp
     graphics/Colour.cpp
     graphics/Tile.cpp
-    graphics/Window.cpp
-    graphics/WindowImpl.cpp
+    graphics/RenderTarget.cpp
+    graphics/RenderTargetImpl.cpp
     graphics/SpriteSheet.cpp
     graphics/shapes/Shape.cpp
     graphics/shapes/RectangleShape.cpp

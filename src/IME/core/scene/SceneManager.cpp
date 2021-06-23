@@ -25,8 +25,8 @@
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
-#include "IME/graphics/Window.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTarget.h"
+#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
     namespace {
@@ -121,8 +121,8 @@ namespace ime::priv {
         return scenes_.empty();
     }
 
-    void SceneManager::render(priv::Window &window) {
-        auto static renderScene = [](const Scene* scene, priv::Window& renderWindow) {
+    void SceneManager::render(priv::RenderTarget &window) {
+        auto static renderScene = [](const Scene* scene, priv::RenderTarget& renderWindow) {
             // Reset the window view to that of the scene that is being rendered
             const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(scene->camera_->getInternalView()).get();
             renderWindow.getImpl()->getSFMLWindow().setView(view);

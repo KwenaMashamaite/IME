@@ -22,10 +22,9 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_WINDOW_H
-#define IME_WINDOW_H
+#ifndef IME_RENDERTARGET_H
+#define IME_RENDERTARGET_H
 
-#include "IME/Config.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/core/event/Event.h"
@@ -36,12 +35,12 @@
 
 namespace ime {
     namespace priv {
-        class WindowImpl;
+        class RenderTargetImpl;
 
         /**
          * @brief Window that can serve as a target for 2D drawing
          */
-        class IME_API Window : utility::NonCopyable {
+        class RenderTarget : utility::NonCopyable {
         public:
             /**
              * @brief Constructor
@@ -50,17 +49,17 @@ namespace ime {
              * Attempting to instantiate the class while there is an active
              * instance will terminate the program
              */
-            Window();
+            RenderTarget();
 
             /**
              * @brief Move constructor
              */
-            Window(Window&&) = delete;
+            RenderTarget(RenderTarget&&) = delete;
 
             /**
              * @brief Move assignment operator
              */
-            Window& operator=(Window&&) = delete;
+            RenderTarget& operator=(RenderTarget&&) = delete;
 
             /**
              * @brief Create a render window
@@ -158,7 +157,7 @@ namespace ime {
              * @brief Get the window implementation
              * @return The window implementation
              */
-            const std::unique_ptr<priv::WindowImpl>& getImpl() const;
+            const std::unique_ptr<priv::RenderTargetImpl>& getImpl() const;
 
             /**
              * @brief Destructor.
@@ -166,12 +165,12 @@ namespace ime {
              * Ensures a new Window instance can be created when an existing
              * Window instance is destroyed
              */
-            ~Window();
+            ~RenderTarget();
 
         private:
-            std::unique_ptr<priv::WindowImpl> pImpl_;
+            std::unique_ptr<priv::RenderTargetImpl> pImpl_;
         };
     }
 }
 
-#endif // IME_WINDOW_H
+#endif // IME_RENDERTARGET_H

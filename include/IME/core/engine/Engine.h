@@ -42,7 +42,7 @@ namespace ime {
     /// @internal
     namespace priv {
         class SceneManager;
-        class Window;
+        class RenderTarget;
     }
 
     /// @internal
@@ -449,7 +449,7 @@ namespace ime {
          *
          * @see initialize
          */
-        priv::Window& getRenderTarget();
+        priv::RenderTarget& getRenderTarget();
 
         /**
          * @brief Destructor
@@ -524,7 +524,7 @@ namespace ime {
         void shutdown();
 
     private:
-        std::unique_ptr<priv::Window> window_;             //!< The engines render target
+        std::unique_ptr<priv::RenderTarget> window_;       //!< The engines render target
         Uint32 windowStyle_;                               //!< The current WindowStyle of the window
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries

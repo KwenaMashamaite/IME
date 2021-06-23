@@ -28,7 +28,7 @@
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/core/game_object/GameObject.h"
-#include "IME/graphics/Window.h"
+#include "IME/graphics/RenderTarget.h"
 
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight,
@@ -200,7 +200,7 @@ namespace ime {
         });
     }
 
-    void TileMap::draw(priv::Window &renderTarget) const {
+    void TileMap::draw(priv::RenderTarget &renderTarget) const {
         renderTarget.draw(backgroundTile_);
         forEachTile([&renderTarget](const Tile& tile) {
             renderTarget.draw(tile);

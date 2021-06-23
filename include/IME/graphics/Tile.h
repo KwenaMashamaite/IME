@@ -296,7 +296,7 @@ namespace ime {
          *
          * @note This function is intended for internal use only
          */
-        void draw(priv::Window &renderTarget) const override;
+        void draw(priv::RenderTarget &renderTarget) const override;
 
         /**
          * @brief Destructor

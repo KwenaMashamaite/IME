@@ -22,65 +22,65 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/graphics/Window.h"
-#include "IME/graphics/WindowImpl.h"
+#include "IME/graphics/RenderTarget.h"
+#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
-    Window::Window() :
-        pImpl_{std::make_unique<priv::WindowImpl>()}
+    RenderTarget::RenderTarget() :
+        pImpl_{std::make_unique<priv::RenderTargetImpl>()}
     {}
 
-    void Window::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
+    void RenderTarget::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
         pImpl_->create(title, width, height, style);
     }
 
-    void Window::setIcon(const std::string &filename) {
+    void RenderTarget::setIcon(const std::string &filename) {
         pImpl_->setIcon(filename);
     }
 
-    void Window::setFramerateLimit(unsigned int framerateLimit) {
+    void RenderTarget::setFramerateLimit(unsigned int framerateLimit) {
         pImpl_->setFramerateLimit(framerateLimit);
     }
 
-    void Window::setVsyncEnabled(bool isVsyncEnabled) {
+    void RenderTarget::setVsyncEnabled(bool isVsyncEnabled) {
         pImpl_->setVsyncEnabled(isVsyncEnabled);
     }
 
-    unsigned int Window::getFramerateLimit() const {
+    unsigned int RenderTarget::getFramerateLimit() const {
         return pImpl_->getFramerateLimit();
     }
 
-    Vector2u Window::getSize() {
+    Vector2u RenderTarget::getSize() {
         return pImpl_->getSize();
     }
 
-    bool Window::isOpen() const{
+    bool RenderTarget::isOpen() const{
         return pImpl_->isOpen();
     }
 
-    bool Window::pollEvent(Event& event) {
+    bool RenderTarget::pollEvent(Event& event) {
         return pImpl_->pollEvent(event);
     }
 
-    void Window::close() {
+    void RenderTarget::close() {
         pImpl_->close();
     }
 
-    void Window::display() {
+    void RenderTarget::display() {
         pImpl_->display();
     }
 
-    void Window::clear(Colour colour) {
+    void RenderTarget::clear(Colour colour) {
         pImpl_->clear(colour);
     }
 
-    const std::unique_ptr<priv::WindowImpl> &Window::getImpl() const {
+    const std::unique_ptr<priv::RenderTargetImpl> &RenderTarget::getImpl() const {
         return pImpl_;
     }
 
-    void Window::draw(const Drawable &drawable) {
+    void RenderTarget::draw(const Drawable &drawable) {
         drawable.draw(*this);
     }
 
-    Window::~Window() = default;
+    RenderTarget::~RenderTarget() = default;
 }

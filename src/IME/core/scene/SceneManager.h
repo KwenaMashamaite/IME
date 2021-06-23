@@ -36,7 +36,7 @@ namespace ime {
 
     /// @internal
     namespace priv {
-        class Window;
+        class RenderTarget;
 
         /**
          * @brief Manages game scenes
@@ -171,7 +171,7 @@ namespace ime {
              * @brief Render the current scene
              * @param window The window to render the scene on
              */
-            void render(priv::Window& window);
+            void render(priv::RenderTarget& window);
 
             /**
              * @brief Update the scene manager
