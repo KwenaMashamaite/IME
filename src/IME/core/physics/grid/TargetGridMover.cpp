@@ -192,6 +192,9 @@ namespace ime {
         if (getTarget() && getMovementRestriction() != GridMover::MoveRestriction::All) {
             auto sourceTilePos = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
             pathToTargetTile_ = pathFinder_->findPath(getGrid(), sourceTilePos, targetTileIndex_);
+
+            if (onPathGen_)
+                onPathGen_(pathToTargetTile_);
         }
     }
 
@@ -235,6 +238,10 @@ namespace ime {
 
     bool TargetGridMover::isPathViewEnabled() const {
         return renderPath_;
+    }
+
+    void TargetGridMover::onPathGenFinish(const Callback<const std::stack<Index>&>& callback) {
+        onPathGen_ = callback;
     }
 
     void TargetGridMover::renderPath(priv::Window &window) const {

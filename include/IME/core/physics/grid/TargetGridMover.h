@@ -74,6 +74,8 @@ namespace ime {
          * the tile at index must be reachable from the targets current tile,
          * otherwise, the target will not move, since it cannot establish a
          * path to the destination
+         *
+         * @see getDestination, getPath and onPathGenFinish
          */
         void setDestination(Index index);
 
@@ -85,6 +87,8 @@ namespace ime {
          * position must be reachable from the targets current tile, otherwise
          * the target will not move since it cannot establish a path to the
          * destination
+         *
+         * @see getDestination, getPath and onPathGenFinish
          */
         void setDestination(Vector2f position);
 
@@ -209,6 +213,24 @@ namespace ime {
         bool isPathViewEnabled() const;
 
         /**
+         * @brief Add an event listener to a path generation finish event
+         * @param callback The callback to be executed when the event is raised
+         *
+         * The path generation event is triggered when the targets destination
+         * is set. If the target is currently not moving, the event will be
+         * triggered immediately. However, if the target is moving, the event
+         * will be triggered the next time the path is generated
+         *
+         * On invocation the callback is passed the generated path (which may
+         * be empty - see setDestination()). Note that, only one event listener
+         * may be registered to this event at a time. To remove the event
+         * listener, pass @a nullptr as the argument
+         *
+         * @see setPathFinder and setDestination
+         */
+        void onPathGenFinish(const Callback<const std::stack<Index>&>& callback);
+
+        /**
          * @internal
          * @brief Render the targets path
          * @param window Window to render path on
@@ -250,6 +272,7 @@ namespace ime {
         bool movementStarted_;                            //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;               //!< Flags whether the target tile was changed while target was in motion
         bool isAdaptiveMoveEnabled_;                      //!< A flag indicating whether or not adaptive movement is enabled
+        Callback<const std::stack<Index>&> onPathGen_;    //!< A function executed after path generation
     };
 }
 
