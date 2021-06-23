@@ -36,6 +36,9 @@ namespace ime {
         switchToNormal_{false},
         smartMover_(tileMap, target)
     {
+        // Invoke internal event handlers first before raising event externally
+        setHandlerIntakeAsInternal(true);
+
         smartMover_.setMaxLinearSpeed(getMaxLinearSpeed());
 
         onPropertyChange("target", [this](const Property& property) {
@@ -74,6 +77,9 @@ namespace ime {
         onGridBorderCollision([this] {
             revertAndGenerateDirection();
         });
+
+        // Register subsequent event handlers as external
+        setHandlerIntakeAsInternal(false);
 
         smartMover_.onDestinationReached([this](Index) {
             setRandomPosition();

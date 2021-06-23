@@ -23,6 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/grid/GridMover.h"
+#include <string_view>
+
+using namespace std::string_literals;
 
 namespace ime {
     namespace {
@@ -43,7 +46,8 @@ namespace ime {
         isMoving_{false},
         isMoveFrozen_{false},
         moveRestrict_{MoveRestriction::None},
-        targetDestructionId_{-1}
+        targetDestructionId_{-1},
+        isInternalHandler_{false}
     {
         setTarget(target);
     }
@@ -211,6 +215,7 @@ namespace ime {
                 // to smoothly move there
                 target_->getTransform().setPosition(currentPosition);
 
+                eventEmitter_.emit("adjacentMoveBeginInternal", targetTile_->getIndex());
                 eventEmitter_.emit("adjacentMoveBegin", targetTile_->getIndex());
             } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
                 snapTargetToTargetTile();
@@ -294,6 +299,7 @@ namespace ime {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+            eventEmitter_.emit("solidTileCollisionInternal", hitTile->getIndex());
             eventEmitter_.emit("solidTileCollision", hitTile->getIndex());
             return true;
         }
@@ -307,6 +313,7 @@ namespace ime {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+            eventEmitter_.emit("gameObjectCollisionInternal", target_, obstacle);
             eventEmitter_.emit("gameObjectCollision", target_, obstacle);
             return true;
         }
@@ -331,6 +338,7 @@ namespace ime {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+            eventEmitter_.emit("gridBorderCollisionInternal");
             eventEmitter_.emit("gridBorderCollision");
             return true;
         }
@@ -360,9 +368,11 @@ namespace ime {
                 return;
 
             // Satisfied collision criteria, invoke collision handler
+            eventEmitter_.emit("gameObjectCollisionInternal", target_, gameObject);
             eventEmitter_.emit("gameObjectCollision", target_, gameObject);
         });
 
+        eventEmitter_.emit("adjacentMoveEndInternal", targetTile_->getIndex());
         eventEmitter_.emit("adjacentMoveEnd", targetTile_->getIndex());
     }
 
@@ -387,35 +397,42 @@ namespace ime {
     }
 
     int GridMover::onTileCollision(const Callback<Index>& callback) {
-        return eventEmitter_.addEventListener("solidTileCollision", callback);
+        return eventEmitter_.addEventListener("solidTileCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
     int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback) {
-        return eventEmitter_.addEventListener("gameObjectCollision", callback);
+        return eventEmitter_.addEventListener("gameObjectCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
     int GridMover::onGridBorderCollision(const Callback<>& callback) {
-        return eventEmitter_.addEventListener("gridBorderCollision", callback);
+        return eventEmitter_.addEventListener("gridBorderCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
     int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback) {
-        return eventEmitter_.addEventListener("adjacentMoveBegin", callback);
+        return eventEmitter_.addEventListener("adjacentMoveBegin"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
     int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback) {
-        return eventEmitter_.addEventListener("adjacentMoveEnd", callback);
+        return eventEmitter_.addEventListener("adjacentMoveEnd"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
     bool GridMover::unsubscribe(int handlerId) {
-        if (eventEmitter_.removeEventListener("gameObjectCollision", handlerId)
-            || eventEmitter_.removeEventListener("adjacentMoveBegin", handlerId)
-            || eventEmitter_.removeEventListener("adjacentMoveEnd", handlerId)
-            || eventEmitter_.removeEventListener("targetTileReset", handlerId)
-            || eventEmitter_.removeEventListener("solidTileCollision", handlerId)
-            || eventEmitter_.removeEventListener("gridBorderCollision", handlerId))
+        if (eventEmitter_.removeEventListener("gameObjectCollision", handlerId) ||
+            (eventEmitter_.removeEventListener("gameObjectCollisionInternal", handlerId)) ||
+            (eventEmitter_.removeEventListener("adjacentMoveBegin", handlerId)) ||
+            (eventEmitter_.removeEventListener("adjacentMoveBeginInternal", handlerId)) ||
+            (eventEmitter_.removeEventListener("adjacentMoveEnd", handlerId)) ||
+            (eventEmitter_.removeEventListener("adjacentMoveEndInternal", handlerId)) ||
+            (eventEmitter_.removeEventListener("targetTileReset", handlerId)) ||
+            (eventEmitter_.removeEventListener("targetTileResetInternal", handlerId)) ||
+            (eventEmitter_.removeEventListener("solidTileCollision", handlerId)) ||
+            (eventEmitter_.removeEventListener("solidTileCollisionInternal", handlerId)) ||
+            (eventEmitter_.removeEventListener("gridBorderCollision", handlerId)) ||
+            (eventEmitter_.removeEventListener("gridBorderCollisionInternal", handlerId)))
         {
             return true;
         }
+
         return false;
     }
 
@@ -424,12 +441,17 @@ namespace ime {
             != tileMap_.getTileOccupiedByChild(target_).getIndex())
         {
             targetTile_ = &tileMap_.getTileOccupiedByChild(target_);
+            eventEmitter_.emit("targetTileResetInternal", targetTile_);
             eventEmitter_.emit("targetTileReset", targetTile_);
         }
     }
 
     int GridMover::onTargetTileReset(const Callback<Index>& callback) {
-        return eventEmitter_.addEventListener("targetTileReset", callback);
+        return eventEmitter_.addEventListener("targetTileReset"s + (isInternalHandler_ ? "Internal" : ""), callback);
+    }
+
+    void GridMover::setHandlerIntakeAsInternal(bool internal) {
+        isInternalHandler_ = internal;
     }
 
     GridMover::~GridMover() {

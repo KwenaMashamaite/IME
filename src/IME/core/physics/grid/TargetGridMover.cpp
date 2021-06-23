@@ -41,6 +41,9 @@ namespace ime {
     {
         IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
 
+        // Invoke internal event handlers first before raising event externally
+        setHandlerIntakeAsInternal(true);
+
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
@@ -84,6 +87,9 @@ namespace ime {
                 moveTarget();
             }
         });
+
+        // Register subsequent event handlers as external
+        setHandlerIntakeAsInternal(false);
     }
 
     std::string TargetGridMover::getClassName() const {
@@ -209,10 +215,18 @@ namespace ime {
     }
 
     int TargetGridMover::onDestinationReached(Callback<Index> callback) {
-        return onAdjacentMoveEnd([this, callback = std::move(callback)](Index index) {
+        // Make handler be invoked first before external handlers for the same event
+        setHandlerIntakeAsInternal(true);
+
+        int id = onAdjacentMoveEnd([this, callback = std::move(callback)](Index index) {
             if (targetTileIndex_ == index)
                 callback(index);
         });
+
+        // Register subsequent event handlers as external
+        setHandlerIntakeAsInternal(false);
+
+        return id;
     }
 
     void TargetGridMover::setPathViewEnable(bool showPath) {

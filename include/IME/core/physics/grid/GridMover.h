@@ -531,6 +531,20 @@ namespace ime {
          */
         GridMover(Type type, TileMap &tileMap, GameObject* target);
 
+        /**
+         * @internal
+         * @brief Set whether or not event handlers should be treated as internal
+         * @param internal True to treat handler as internal, otherwise false
+         *
+         * When @a internal is set to @a true, any event handler registered
+         * to the grid mover will be treated as an internal handler. Internal
+         * handlers are invoked before external handlers for the same event
+         *
+         * By default, all event handlers are treated as external and will
+         * be invoked in no specific order
+         */
+        void setHandlerIntakeAsInternal(bool internal);
+
     private:
         Type type_;                    //!< The type of the grid mover
         TileMap& tileMap_;             //!< Grid to move entity in
@@ -545,6 +559,7 @@ namespace ime {
         bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
         int targetDestructionId_;      //!< Target destruction handler id
+        bool isInternalHandler_;       //!< A flag indicating whether or not an event handler is internal
     };
 }
 

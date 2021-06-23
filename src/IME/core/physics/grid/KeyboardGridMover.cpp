@@ -30,6 +30,10 @@ namespace ime {
         GridMover(Type::KeyboardControlled, tileMap, target),
         trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
     {
+
+        // Invoke internal event handlers first before raising event externally
+        setHandlerIntakeAsInternal(true);
+
         onAdjacentMoveEnd([this](Index) {
             if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
@@ -40,6 +44,9 @@ namespace ime {
 
         setMovementTrigger(MovementTrigger::OnKeyDown);
         setKeys(Key::A, Key::D, Key::W, Key::S);
+
+        // Register subsequent event handlers as external
+        setHandlerIntakeAsInternal(false);
     }
 
     std::string KeyboardGridMover::getClassName() const {
