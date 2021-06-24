@@ -40,6 +40,30 @@ namespace ime {
         using Callback = std::function<void(const std::string&)>; //!< Resource load completion callback
 
         /**
+         * @brief Set the path where the engine looks when loading a resource type from disk
+         * @param type The type to set the path for
+         * @param path The new path for the resource type
+         *
+         * Note that changing the path of either ime::ResourceType::Image or
+         * ime::ResourceType::Texture changes the other
+         *
+         * @see getPath
+         */
+        static void setPath(ResourceType type, const std::string& path);
+
+        /**
+         * @brief Get the path of a resource type
+         * @param type The type to get the path for
+         * @return The path for the specified resource type type
+         *
+         * The path is where the engine looks when loading a resource of
+         * the specified type from the disk
+         *
+         * @see setPath
+         */
+        static std::string getPath(ResourceType type);
+
+        /**
          * @brief Load a resource from the disk
          * @param type Type of the resource to be loaded
          * @param filename Filename of the resource to be loaded

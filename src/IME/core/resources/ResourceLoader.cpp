@@ -30,6 +30,14 @@ namespace ime {
         return ResourceManager::getInstance()->loadFromFile(type, filename);
     }
 
+    void ResourceLoader::setPath(ResourceType type, const std::string &path) {
+        ResourceManager::getInstance()->setPathFor(type, path);
+    }
+
+    std::string ResourceLoader::getPath(ResourceType type) {
+        return ime::ResourceManager::getInstance()->getPathFor(type);
+    }
+
     void ResourceLoader::loadFromFile(ResourceType type,
         const ResourceLoader::FileNameList &filenames,
         const ResourceLoader::Callback& callback)
