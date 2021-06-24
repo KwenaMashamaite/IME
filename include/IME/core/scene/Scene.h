@@ -41,6 +41,7 @@
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
 #include "IME/core/tilemap/TileMap.h"
+#include "IME/core/physics/PhysicsIterations.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -428,10 +429,8 @@ namespace ime {
          * colliding and updating all of the bodies within it.
          *
          * @warning The physics simulation must be created first before
-         * calling this function. Calling it before creating the
-         * simulation is undefined behaviour. In addition, do not attempt
-         * to update the simulation, it will be updated automatically by
-         * the scene
+         * calling this function. Calling it before creating the creating
+         * teh simulation will lead to undefined behavior undefined behaviour
          *
          * @see createPhysWorld
          */
@@ -607,13 +606,16 @@ namespace ime {
         /**
          * @brief Create a scene level physics simulation
          * @param gravity Acceleration of bodies in the simulation due to gravity
+         * @param iterations Position and velocity iterations (see ime::PhysIterations)
          *
-         * This function should be called by scenes that require a physics
-         * simulation
+         * @note This function should only be called by scenes that require
+         * a physic simulation. If the scene only makes use of grid-based
+         * physics (see ime::GridMover) then set @a gravity and @a iterations
+         * to zero for improved performance
          *
          * @see physWorld
          */
-        void createPhysWorld(Vector2f gravity);
+        void createPhysWorld(Vector2f gravity, const PhysIterations& iterations = {3, 8});
 
         /**
          * @brief Create the scene level tilemap instance

@@ -32,6 +32,7 @@
 #include "IME/core/physics/rigid_body/AABB.h"
 #include "IME/core/physics/DebugDrawerFilter.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
+#include "IME/core/physics/PhysicsIterations.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -133,6 +134,25 @@ namespace ime {
         Vector2f getGravity() const;
 
         /**
+         * @brief Set the iterations per time-step of the world
+         * @param iterations New iterations to set
+         *
+         * By default, the position and velocity iterations are 3 and 8
+         * respectively
+         *
+         * @see ime::PhysIterations
+         */
+        void setIterations(const PhysIterations& iterations);
+
+        /**
+         * @brief Get the physics iterations per time step of the world
+         * @return The physics iterations
+         *
+         * @see setIterations
+         */
+        const PhysIterations& getIterations() const;
+
+        /**
          * @brief Set the simulation timescale
          * @param timescale The new timescale
          *
@@ -224,30 +244,17 @@ namespace ime {
         Joint::Ptr createJoint(const JointDefinition& definition);
 
         /**
+         * @internal
          * @brief Update the physics world
-         * @param timeStep The amount o time to simulate
-         * @param velocityIterations Iteration for the velocity solver
-         * @param positionIterations  Iteration for the constraint solver
+         * @param deltaTime The time passed since last update
          *
          * This function performs integration, collision detection and
-         * constraint solution. The iteration count controls how many times
-         * the constraint solver sweeps over all the contacts and joints in
-         * the world. More iteration always yields  a better simulation. But
-         * don't trade a small time step for a large iteration count. 60Hz and
-         * 10 iterations is far better than 30Hz and 20 iterations.
+         * constraint solution
          *
-         * @note There is a trade-off between performance and accuracy when
-         * selecting velocity and position iterations. Using fewer iterations
-         * increases performance but accuracy suffers. Likewise, using more
-         * iterations decreases performance but improves the quality of your
-         * simulation. The recommended velocity and position iterations are 8
-         * and 3 respectively. All iterations take place in a single step/update
-         *
-         * @note This function is called automatically by the scene and does
-         * not need to be invoked directly
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
          */
-        void update(Time timeStep, unsigned int velocityIterations,
-            unsigned int positionIterations);
+        void update(Time deltaTime);
 
         /**
          * @brief Enable or disable automatic force buffer clearance after an
@@ -486,6 +493,7 @@ namespace ime {
         float timescale_;                      //!< Controls the speed of the simulation without affecting the render fps
         DebugDrawerFilter debugDrawerFilter_;  //!< Control what gets renders by the debug drawer
         int postRenderId_;                     //!< Post render callback id
+        PhysIterations iterations_;            //!< Physics iterations per time-step
 
         class B2ContactListener;
         std::unique_ptr<B2ContactListener> b2ContactListener_; //!< Listens for collider contacts and notifies interested parties

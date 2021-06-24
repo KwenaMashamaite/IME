@@ -223,8 +223,9 @@ namespace ime {
         return *spriteContainer_;
     }
 
-    void Scene::createPhysWorld(Vector2f gravity) {
+    void Scene::createPhysWorld(Vector2f gravity, const PhysIterations& iterations) {
         world_ = PhysicsWorld::create(*this, gravity);
+        world_->setIterations(iterations);
         world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
     }

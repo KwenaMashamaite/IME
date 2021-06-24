@@ -150,7 +150,8 @@ namespace ime {
         world_{std::make_unique<b2World>(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
         isDebugDrawEnabled_{false},
-        timescale_{1.0f}
+        timescale_{1.0f},
+        iterations_{3, 8}
     {
         b2ContactListener_ = std::make_unique<B2ContactListener>();
         world_->SetContactListener(b2ContactListener_.get());
@@ -178,6 +179,14 @@ namespace ime {
 
     Vector2f PhysicsWorld::getGravity() const {
         return {world_->GetGravity().x, world_->GetGravity().x};
+    }
+
+    void PhysicsWorld::setIterations(const PhysIterations &iterations) {
+        iterations_ = iterations;
+    }
+
+    const PhysIterations &PhysicsWorld::getIterations() const {
+        return iterations_;
     }
 
     void PhysicsWorld::setTimescale(float timescale) {
@@ -230,8 +239,8 @@ namespace ime {
         }
     }
 
-    void PhysicsWorld::update(Time timeStep, unsigned int velocityIterations, unsigned int positionIterations) {
-        world_->Step(timeStep.asSeconds() * timescale_, static_cast<int32>(velocityIterations), static_cast<int32>(positionIterations));
+    void PhysicsWorld::update(Time deltaTime) {
+        world_->Step(deltaTime.asSeconds() * timescale_, static_cast<int32>(iterations_.velocity), static_cast<int32>(iterations_.position));
     }
 
     void PhysicsWorld::autoClearForceBuffer(bool autoClear) {

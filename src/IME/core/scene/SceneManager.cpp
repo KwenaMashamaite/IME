@@ -29,12 +29,6 @@
 #include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
-    namespace {
-        // Iterations recommended by Box2d
-        const unsigned int VELOCITY_ITERATIONS = 8;
-        const unsigned int POSITION_ITERATIONS = 3;
-    }
-
     SceneManager::SceneManager() :
         prevScene_{nullptr}
     {}
@@ -241,10 +235,14 @@ namespace ime::priv {
         if (scene->hasPhysicsSim_) {
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
 
+            /// This function is called by the engine for both fixed and normal
+            /// update. The only way to know which is which is via @fixedUpdate
+            /// flag (explains, this explains why the bodies of the if-else
+            /// statement below are the same
             if (fixedUpdate && scene->world_->isFixedStep()) {
-                scene->world_->update(deltaTime * scene->getTimescale(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+                scene->world_->update(deltaTime * scene->getTimescale());
             } else if (!fixedUpdate && !scene->world_->isFixedStep())
-                scene->world_->update(deltaTime * scene->getTimescale(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+                scene->world_->update(deltaTime * scene->getTimescale());
 
             scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
