@@ -114,8 +114,10 @@ namespace ime {
          * @param type Type of the resource to set path for
          * @param path New path to resources on th disk
          *
-         * The class will look for resources of the specified type in the
-         * new path when loading them
+         * The engine will look in @a path when loading resources of the
+         * specified type. Note that ime::ResourceType::Image and
+         * ime::ResourceType::Texture always have the same path, so
+         * changing either one of them changes the other
          */
         void setPathFor(ResourceType type, const std::string& path);
 

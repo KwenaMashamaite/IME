@@ -167,14 +167,13 @@ namespace ime {
 
     void ResourceManager::setPathFor(ResourceType type, const std::string& path) {
         switch (type) {
-            case ResourceType::Texture:
-                textures_.setPath(path);
-                break;
             case ResourceType::Font:
                 fonts_.setPath(path);
                 break;
+            case ResourceType::Texture:
             case ResourceType::Image:
                 images_.setPath(path);
+                textures_.setPath(path);
                 break;
             case ResourceType::SoundBuffer:
                 soundBuffers_.setPath(path);
