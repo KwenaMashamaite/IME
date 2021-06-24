@@ -38,32 +38,8 @@ namespace ime::priv {
         pImpl_->setIcon(filename);
     }
 
-    void RenderTarget::setFramerateLimit(unsigned int framerateLimit) {
-        pImpl_->setFramerateLimit(framerateLimit);
-    }
-
-    void RenderTarget::setVsyncEnabled(bool isVsyncEnabled) {
-        pImpl_->setVsyncEnabled(isVsyncEnabled);
-    }
-
-    unsigned int RenderTarget::getFramerateLimit() const {
-        return pImpl_->getFramerateLimit();
-    }
-
-    Vector2u RenderTarget::getSize() {
-        return pImpl_->getSize();
-    }
-
-    bool RenderTarget::isOpen() const{
-        return pImpl_->isOpen();
-    }
-
     bool RenderTarget::pollEvent(Event& event) {
         return pImpl_->pollEvent(event);
-    }
-
-    void RenderTarget::close() {
-        pImpl_->close();
     }
 
     void RenderTarget::display() {

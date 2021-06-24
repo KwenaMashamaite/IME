@@ -30,11 +30,17 @@
 #include <memory>
 #include <string>
 
+/// @internal
 namespace sf {
     class Texture;
 }
 
 namespace ime {
+    /// @internal
+    namespace priv {
+        class RenderTarget;
+    }
+
     /**
      * @brief Image living on the graphics card that can be used for drawing
      */
@@ -45,7 +51,9 @@ namespace ime {
         /**
          * @brief Constructor
          *
-         * Creates an empty texture
+         * Creates an empty texture of size {0, 0}
+         *
+         * @see loadFromFile
          */
         Texture();
 
@@ -60,11 +68,6 @@ namespace ime {
          * the whole image (default), leave the @a area argument unspecified.
          * If the @a area rectangle crosses the bounds of the image, it is
          * adjusted to fit the image size
-         *
-         * @note The maximum size for a texture depends on the graphics
-         * driver and can be retrieved with the getMaximumSize function
-         *
-         * @see getMaximumSize
          */
         explicit Texture(const std::string& filename, const UIntRect& area = UIntRect());
 
@@ -87,6 +90,71 @@ namespace ime {
          * @brief Move assignment operator
          */
         Texture& operator=(Texture&&) noexcept;
+
+        /**
+         * @brief Create an empty texture
+         * @param width The width of the texture
+         * @param height The height of the texture
+         * @return True if the texture was created successfully, or false
+         *         if the creation failed
+         *
+         * You can use this function if you want the texture to have a
+         * size but intend to load the image file at a later time.
+         *
+         * This function fails if the specified size is invalid. The size
+         * must be greater than zero but less than the maximum allowed
+         * size of the texture (see getMaximumSize()). If this function
+         * fails, the texture is left unchanged
+         *
+         * @see loadFromFile
+         */
+        bool create(unsigned int width, unsigned int height);
+
+        /**
+         * @brief Create an empty texture
+         * @param size The size of the texture
+         * @return True if the texture was created successfully, or false
+         *         if the creation failed
+         *
+         * You can use this function if you want the texture to have a
+         * size but intend to load the image file at a later time.
+         *
+         * This function fails if the specified size is invalid. The size
+         * must be greater than zero but less than the maximum allowed
+         * size of the texture (see getMaximumSize()). If this function
+         * fails, the texture is left unchanged
+         *
+         * @see loadFromFile
+         */
+        bool create(const Vector2u& size);
+
+        /**
+         * @brief Load the texture from an image on the disk
+         * @param filename Filename of the image file to load
+         * @param area Area of the image to load
+         * @throws FileNotFound if the @a filename cannot be found on the disk
+         *
+         * The @a area can be used to construct the texture from a sub-rectangle
+         * of the whole image. To construct the texture from the whole image
+         * (default), leave the @a area argument unspecified. If the @a area
+         * rectangle crosses the bounds of the image, it is adjusted to fit
+         * the image size
+         */
+        void loadFromFile(const std::string& filename, const UIntRect& area = UIntRect());
+
+        /**
+         * @brief Save the texture to file on disk
+         * @param filename Path of the file to save
+         * @return True if the texture was saved successfully, or false if
+         *         the texture is empty
+         *
+         * The format of the image is automatically deduced from the file
+         * extension. The supported image formats are bmp, png, tga and jpg.
+         * The destination file is overwritten if it already exists
+         *
+         * @note This function performs a slow operation
+         */
+        bool saveToFile(const std::string& filename);
 
         /**
          * @brief Get the size of the texture
@@ -159,6 +227,25 @@ namespace ime {
          * @return The filename of the image the texture was created from
          */
         const std::string& getFilename() const;
+
+        /**
+         * @internal
+         * @brief Update the texture from sub-area of the render target
+         * @param x X X offset in the texture where to copy the source window
+         * @param y Y Y offset in the texture where to copy the source window
+         *
+         * Note that the size of @a renderTarget must be less than or equal
+         * to the size of the texture. Passing a render target bigger than
+         * the texture will lead to an undefined behavior. In addition, note
+         * that this function does nothing if either the texture or the
+         * @a renderTarget  was not previously created.
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         *
+         * @see create
+         */
+        void update(const priv::RenderTarget& renderTarget, unsigned int x, unsigned int y);
 
         /**
          * @internal

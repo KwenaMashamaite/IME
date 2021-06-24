@@ -40,6 +40,7 @@
 #include "IME/graphics/Texture.h"
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/Drawable.h"
+#include "IME/graphics/Window.h"
 
 #endif //IME_GRAPHICS_H
 

@@ -69,41 +69,28 @@ namespace ime {
                 unsigned int height, Uint32 style = WindowStyle::Default);
 
             /**
+             * @brief Set the title of the window
+             * @param title The new title of the window
+             *
+             * @see getTitle
+             */
+            void setTitle(const std::string& title);
+
+            /**
+             * @brief Get the title of the window
+             * @return The title of the window
+             *
+             * @see setTitle
+             */
+            const std::string& getTitle() const;
+
+            /**
              * @brief Change the window's icon
              * @param filename Filename of the window icon to set
              *
              * The OS default icon is used by default
              */
             void setIcon(const std::string &filename);
-
-            /**
-             * @brief Set the frame rate limit of the window
-             * @param framerateLimit Frame rate limit
-             *
-             * The frame rate is not limited by default. If set, it can be
-             * disabled by providing 0 as the argument
-             */
-            void setFramerateLimit(unsigned int framerateLimit);
-
-            /**
-             * @brief Enable or disable vertical synchronization
-             * @param isVsyncEnabled True to enable Vsync or false to disable it
-             *
-             * Activating vertical synchronization will limit the number
-             * of frames displayed to the refresh rate of the monitor.
-             * This can avoid some visual artifacts, and limit the framerate
-             * to a good value (but not constant across different computers).
-             *
-             * Vertical synchronization is disabled by default.
-             */
-            void setVsyncEnabled(bool isVsyncEnabled);
-
-            /**
-             * @brief Get the frame rate limit of the window
-             * @return The frame rate limit if it has been set, otherwise -1
-             *         if the frame rate is not limited
-             */
-            unsigned int getFramerateLimit() const;
 
             /**
              * @brief Get the dimensions of the window
@@ -163,7 +150,7 @@ namespace ime {
 
         private:
             sf::RenderWindow window_;      //!< Render window
-            unsigned int frameRateLimit_;  //!< Framerate limit
+            std::string title_;                  //!< The title of the window
             static bool isInstantiated_;   //!< Instantiation state
         };
     }

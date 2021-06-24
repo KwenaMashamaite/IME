@@ -24,19 +24,58 @@
 
 #include "IME/graphics/Texture.h"
 #include "IME/core/resources/ResourceManager.h"
+#include "IME/graphics/RenderTarget.h"
+#include "IME/graphics/RenderTargetImpl.h"
 #include <SFML/Graphics/Texture.hpp>
 
 namespace ime {
     struct Texture::Impl {
         Impl() :
+            texture_{std::make_shared<sf::Texture>()},
             image_{nullptr}
         {}
 
         Impl(const std::string &filename, const UIntRect &area) :
             filename_{filename},
             texture_{std::make_shared<sf::Texture>()},
-            image_{&ResourceManager::getInstance()->getImage(filename)}
+            image_{nullptr}
         {
+            loadFromFile(filename, area);
+        }
+
+        Impl(const Impl& other) :
+            filename_{other.filename_}
+        {
+            // Its expensive to copy sf::Texture, so instead we increase the
+            // reference counter of other.texture_
+            texture_ = other.texture_;
+
+            if (texture_) {
+                // A ime::Texture created and updated with the contents of priv::ime::RenderTarget's
+                // will have a valid texture but the image_ member will be nullptr and the filename_
+                // member will be an empty string. Otherwise if it was loaded from a file, all three
+                // members will have valid values. So we suppress the exception because its not the
+                // callers fault if the image cannot be loaded and it also not an error as mentioned
+                // above
+                try {
+                    image_ = &ResourceManager::getInstance()->getImage(other.filename_);
+                } catch (const ime::FileNotFound&) {
+                    image_ = nullptr;
+                }
+            }
+        }
+
+        Impl& operator=(const Impl&) = default;
+        Impl(Impl&&) noexcept = default;
+        Impl& operator=(Impl&&) noexcept = default;
+
+        bool create(unsigned int width, unsigned int height) {
+            return texture_->create(width, height);
+        }
+
+        void loadFromFile(const std::string &filename, const UIntRect &area) {
+            image_ = &ResourceManager::getInstance()->getImage(filename);
+
             auto sfArea = sf::IntRect {
                 static_cast<int>(area.left), static_cast<int>(area.top),
                 static_cast<int>(area.width),static_cast<int>(area.height)
@@ -45,18 +84,9 @@ namespace ime {
             texture_->loadFromImage(*image_, sfArea);
         }
 
-        Impl(const Impl& other) :
-            filename_{other.filename_},
-            image_{other.image_}
-        {
-            // Its expensive to copy sf::Texture, so instead we increase the
-            // reference counter of other.texture_
-            texture_ = other.texture_;
+        bool saveToFile(const std::string &filename) {
+            return texture_->copyToImage().saveToFile(filename);
         }
-
-        Impl& operator=(const Impl&) = default;
-        Impl(Impl&&) noexcept = default;
-        Impl& operator=(Impl&&) noexcept = default;
 
         Vector2u getSize() const {
             return {texture_->getSize().x, texture_->getSize().y};
@@ -84,6 +114,13 @@ namespace ime {
 
         const std::string& getFilename() const {
             return filename_;
+        }
+
+        void update(const priv::RenderTarget &renderTarget, unsigned int x, unsigned y) {
+            if (x == 0 && y == 0)
+                texture_->update(renderTarget.getImpl()->getSFMLWindow());
+            else
+                texture_->update(renderTarget.getImpl()->getSFMLWindow(), x, y);
         }
 
         const sf::Texture& getSFMLTexture() const {
@@ -132,6 +169,22 @@ namespace ime {
         return *this;
     }
 
+    bool Texture::create(unsigned int width, unsigned int height) {
+        return pImpl_->create(width, height);
+    }
+
+    bool Texture::create(const Vector2u &size) {
+        return create(size.x, size.y);
+    }
+
+    void Texture::loadFromFile(const std::string &filename, const UIntRect &area) {
+        pImpl_->loadFromFile(filename, area);
+    }
+
+    bool Texture::saveToFile(const std::string &filename) {
+        return pImpl_->saveToFile(filename);
+    }
+
     Vector2u Texture::getSize() const {
         return pImpl_->getSize();
     }
@@ -158,6 +211,10 @@ namespace ime {
 
     const std::string &Texture::getFilename() const {
         return pImpl_->getFilename();
+    }
+
+    void Texture::update(const priv::RenderTarget &renderTarget, unsigned int x, unsigned int y) {
+        pImpl_->update(renderTarget, x, y);
     }
 
     const sf::Texture &Texture::getInternalTexture() const {

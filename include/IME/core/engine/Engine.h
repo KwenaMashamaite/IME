@@ -35,6 +35,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/time/Timer.h"
 #include "IME/graphics/WindowStyles.h"
+#include "IME/graphics/Window.h"
 #include <queue>
 
 namespace ime {
@@ -103,32 +104,6 @@ namespace ime {
         Engine& operator=(Engine&&) = delete;
 
         /**
-         * @brief Set the game window style
-         * @param windowStyle New window style (ime::WindowStyle enumeration)
-         *
-         * Note that window styles can be combined using bitwise OR combination
-         * of ime::WindowStyle enumerations. For example, to create a window
-         * that is closable and resizable, you do as follows:
-         *
-         * @code
-         * engine.setWindowStyle(ime::WindowStyle::Close | ime::WindowStyle::Resize);
-         * @endcode
-         *
-         * @note This function must be called before initialize() is called,
-         * otherwise the new window style will be ignored and the default one
-         * used instead
-         *
-         * @see initialize
-         */
-        void setWindowStyle(Uint32 windowStyle);
-
-        /**
-         * @brief Get the game window style
-         * @return The game window style
-         */
-        Uint32 getWindowStyle() const;
-
-        /**
          * @brief Initialize the engine
          *
          * @warning This function must be called before the engine is run()
@@ -162,18 +137,6 @@ namespace ime {
          * @see initialize and run
          */
         void quit();
-
-        /**
-         * @brief Recreate the game window
-         * @param width The new width of the window
-         * @param height The new height of the window
-         * @param style The window style
-         *
-         * @warning This function must be called after the initial window
-         * has been created
-         */
-        void recreateWindow(unsigned int width, unsigned int height,
-            Uint32 style = WindowStyle::Default);
 
         /**
          * @brief Pause or resume the engine
@@ -316,6 +279,15 @@ namespace ime {
         Time getElapsedTime() const;
 
         /**
+         * @brief Get access to the engines game window
+         * @return The engines game window
+         *
+         * @see initialize
+         */
+        Window& getWindow();
+        const Window& getWindow() const;
+
+        /**
          * @brief Get the engine level gui
          * @return The engine level gui
          *
@@ -391,6 +363,7 @@ namespace ime {
         void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
+         * @deprecated Since v2.1.0, will be removed in v2.2.0
          * @brief Add an event lister to a window close event
          * @param callback Function to execute when a window close event is fired
          *
@@ -404,6 +377,7 @@ namespace ime {
          * the default behavior. Pass nullptr to stop the callback from being
          * invoked
          */
+         [[deprecated("use ime::Window::onClose(const Callback&) function instead.")]]
         void onWindowClose(Callback<> callback);
 
         /**
@@ -447,7 +421,7 @@ namespace ime {
          *
          * Note that this function is intended for internal use only
          *
-         * @see initialize
+         * @see getWindow
          */
         priv::RenderTarget& getRenderTarget();
 
@@ -524,8 +498,8 @@ namespace ime {
         void shutdown();
 
     private:
-        std::unique_ptr<priv::RenderTarget> window_;       //!< The engines render target
-        Uint32 windowStyle_;                               //!< The current WindowStyle of the window
+        std::unique_ptr<priv::RenderTarget> privWindow_;   //!< The engines render target
+        std::unique_ptr<Window> window_;                   //!< Exposes parts of priv::RenderTarget through its public interface
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
         PropertyContainer settings_;                       ///@deprecated Replace with configs_ in next release
@@ -542,7 +516,6 @@ namespace ime {
         EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
-        Callback<> onWindowClose_;                         //!< Optional Function executed when a request to close the window is received
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame
         EventEmitter eventEmitter_;                        //!< Emits engine events

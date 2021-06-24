@@ -39,6 +39,13 @@ namespace ime {
 
         /**
          * @brief Window that can serve as a target for 2D drawing
+         *
+         * This class is an abstraction of ime::Window, which is externally
+         * exposed through the public api. ime::RenderTarget encapsulates
+         * third party functionality that is intended for internal only.
+         * This way we avoid polluting ime::Window with functions that the
+         * user is not supposed to call. Both ime::RenderTarget and ime::Window
+         * operate on the same third party window instance
          */
         class RenderTarget : utility::NonCopyable {
         public:
@@ -80,47 +87,6 @@ namespace ime {
             void setIcon(const std::string& filename);
 
             /**
-             * @brief Set the frame rate limit of the window
-             * @param framerateLimit Frame rate limit
-             *
-             * The frame rate is not limited by default. If set, it can be
-             * disabled by providing 0 as the argument
-             */
-            void setFramerateLimit(unsigned int framerateLimit);
-
-            /**
-             * @brief Enable or disable vertical synchronization
-             * @param isVsyncEnabled True to enable Vsync or false to disable it
-             *
-             * Activating vertical synchronization will limit the number
-             * of frames displayed to the refresh rate of the monitor.
-             * This can avoid some visual artifacts, and limit the framerate
-             * to a good value (but not constant across different computers).
-             *
-             * Vertical synchronization is disabled by default.
-             */
-            void setVsyncEnabled(bool isVsyncEnabled);
-
-            /**
-             * @brief Get the frame rate limit of the window
-             * @return The frame rate limit if it has been set, otherwise -1
-             *         if the frame rate is not limited
-             */
-            unsigned int getFramerateLimit() const;
-
-            /**
-             * @brief Get the dimensions of the window
-             * @return Dimensions of the window
-             */
-            Vector2u getSize();
-
-            /**
-             * @brief Check if the window is open or not
-             * @return true if open, false if not open
-             */
-            bool isOpen() const;
-
-            /**@internal
              * @brief Check if the event queue is empty or not.
              * @param event Event queue to be checked
              * @return true if event queue is not empty, false if it is empty
@@ -129,11 +95,6 @@ namespace ime {
              * never be called outside of IME
              */
             bool pollEvent(Event &event);
-
-            /**
-             * @brief Close the window
-             */
-            void close();
 
             /**
              * @brief Draw drawable on the window
@@ -153,7 +114,6 @@ namespace ime {
             void clear(Colour colour = Colour::Black);
 
             /**
-             * @internal
              * @brief Get the window implementation
              * @return The window implementation
              */

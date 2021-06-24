@@ -27,7 +27,6 @@
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/RenderTarget.h"
-#include <SFML/Window/VideoMode.hpp>
 
 namespace ime {
     namespace {
@@ -61,8 +60,8 @@ namespace ime {
     }
 
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
-        window_{std::make_unique<priv::RenderTarget>()},
-        windowStyle_{WindowStyle::Default},
+        privWindow_{std::make_unique<priv::RenderTarget>()},
+        window_{new Window(*privWindow_)},
         gameTitle_{gameTitle},
         settingFile_{settingsFile},
         isSettingsLoadedFromFile_(!settingsFile.empty() && settingsFile != "default"),
@@ -73,17 +72,6 @@ namespace ime {
         popCounter_{0}
     {}
 
-    void Engine::setWindowStyle(Uint32 windowStyle) {
-        if (isInitialized_)
-            return;
-
-        windowStyle_ = windowStyle;
-    }
-
-    Uint32 Engine::getWindowStyle() const {
-        return windowStyle_;
-    }
-
     void Engine::initialize() {
         if (isSettingsLoadedFromFile_)
             loadSettings();
@@ -91,10 +79,9 @@ namespace ime {
         processSettings();
         initResourceManager();
         initRenderTarget();
-        gui_.setTarget(*window_);
+        gui_.setTarget(*privWindow_);
 
         eventDispatcher_ = EventDispatcher::instance();
-        onWindowClose_ = [this]{quit();};
         isInitialized_ = true;
     }
 
@@ -116,7 +103,6 @@ namespace ime {
         setDefaultValueIfNotSet(settings_, "V_SYNC",  false);
         setDefaultValueIfNotSet(settings_, "FONTS_DIR", std::string("")); // Same directory as the executable
         setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", std::string(""));
-        setDefaultValueIfNotSet(settings_, "IMAGES_DIR", std::string(""));
         setDefaultValueIfNotSet(settings_, "SOUND_EFFECTS_DIR", std::string(""));
         setDefaultValueIfNotSet(settings_, "MUSIC_DIR", std::string(""));
     }
@@ -129,38 +115,48 @@ namespace ime {
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
-        if (settings_.getValue<bool>("FULLSCREEN") || (windowStyle_ & Fullscreen)) {
-            auto desktopWidth = static_cast<int>(sf::VideoMode::getDesktopMode().width);
-            auto desktopHeight = static_cast<int>(sf::VideoMode::getDesktopMode().height);
-            settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
-            settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
+        // Create the window
+        privWindow_->create(title, width, height, window_->getStyle());
+        window_->setFullScreen(settings_.getValue<bool>("FULLSCREEN"));
+        window_->setFrameRateLimit(settings_.getValue<int>("FPS_LIMIT"));
+        window_->setVerticalSyncEnable(settings_.getValue<bool>("V_SYNC"));
 
-            configs_.getPref("WINDOW_WIDTH").setValue(desktopWidth);
-            configs_.getPref("WINDOW_HEIGHT").setValue(desktopHeight);
-            window_->create(title, desktopWidth, desktopHeight, WindowStyle::Fullscreen);
-        } else
-            window_->create(title, width, height, windowStyle_);
-
-        window_->setFramerateLimit(settings_.getValue<int>("FPS_LIMIT"));
-        window_->setVsyncEnabled(settings_.getValue<bool>("V_SYNC"));
+        // Set the window icon
         if (settings_.getValue<std::string>("WINDOW_ICON") != "OS")
-            window_->setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
+            privWindow_->setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
+
+        // Shutdown engine when window close event is triggered
+        window_->onClose([this] {
+            quit();
+        });
+
+        // Because the window is destroyed and recreated when we enter full screen,
+        // SFML does not generate a resized event. This cause some issues with
+        // TGUI, so we associate a full screen toggle with a resize event
+        window_->onFullScreenToggle([this] {
+            Event event;
+            event.type = Event::Resized;
+            event.size.width = window_->getSize().x;
+            event.size.height = window_->getSize().y;
+            gui_.handleEvent(event);
+            sceneManager_->handleEvent(event);
+        });
     }
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
         resourceManager_->setPathFor(ResourceType::Font, settings_.getValue<std::string>("FONTS_DIR"));
         resourceManager_->setPathFor(ResourceType::Texture, settings_.getValue<std::string>("TEXTURES_DIR"));
-        resourceManager_->setPathFor(ResourceType::Image, settings_.getValue<std::string>("IMAGES_DIR"));
+        resourceManager_->setPathFor(ResourceType::Image, settings_.getValue<std::string>("TEXTURES_DIR"));
         resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValue<std::string>("SOUND_EFFECTS_DIR"));
         resourceManager_->setPathFor(ResourceType::Music, settings_.getValue<std::string>("MUSIC_DIR"));
     }
 
     void Engine::processEvents() {
         Event event;
-        while (window_->pollEvent(event)) {
-            if (event.type == Event::Closed && onWindowClose_)
-                onWindowClose_();
+        while (privWindow_->pollEvent(event)) {
+            if (event.type == Event::Closed)
+                window_->emitCloseEvent();
 
             gui_.handleEvent(event);
             inputManager_.handleEvent(event);
@@ -211,17 +207,6 @@ namespace ime {
         isRunning_ = false;
     }
 
-    void Engine::recreateWindow(unsigned int width, unsigned int height, Uint32 style) {
-        windowStyle_ |= style;
-
-        if (!(style & WindowStyle::Fullscreen)) {
-            settings_.setValue("WINDOW_WIDTH", static_cast<int>(width));
-            settings_.setValue("WINDOW_HEIGHT", static_cast<int>(height));
-        }
-
-        initRenderTarget();
-    }
-
     void Engine::preUpdate(Time deltaTime) {
         if (isPaused_)
             return;
@@ -233,7 +218,7 @@ namespace ime {
         if (isPaused_)
             return;
 
-        auto const static frameTime = seconds( 1.0f / settings_.getValue<int>("FPS_LIMIT"));
+        auto const frameTime = seconds( 1.0f / window_->getFrameRateLimit());
         auto static accumulator = Time::Zero;
 
         // Fixed update
@@ -249,16 +234,16 @@ namespace ime {
     }
 
     void Engine::clear() {
-        window_->clear();
+        privWindow_->clear(window_->getClearColour());
     }
 
     void Engine::render() {
-        sceneManager_->render(*window_);
+        sceneManager_->render(*privWindow_);
         gui_.draw();
     }
 
     void Engine::display() {
-        window_->display();
+        privWindow_->display();
     }
 
     void Engine::pushScene(Scene::Ptr scene, Callback<> callback) {
@@ -339,7 +324,6 @@ namespace ime {
         resourceManager_.reset();
         inputManager_ = input::InputManager();
         eventDispatcher_.reset();
-        onWindowClose_ = nullptr;
         onFrameEnd_ = nullptr;
         onFrameStart_ = nullptr;
 
@@ -396,7 +380,7 @@ namespace ime {
     }
 
     priv::RenderTarget &Engine::getRenderTarget() {
-        return *window_;
+        return *privWindow_;
     }
 
     void Engine::setTimeout(Time delay, ime::Callback<Timer&> callback) {
@@ -407,8 +391,16 @@ namespace ime {
         timerManager_.setInterval(delay, std::move(callback), repeatCount);
     }
 
+    Window &Engine::getWindow() {
+        return *window_;
+    }
+
+    const Window &Engine::getWindow() const {
+        return *window_;
+    }
+
     void Engine::onWindowClose(Callback<> callback) {
-        onWindowClose_ = std::move(callback);
+        window_->onClose(callback);
     }
 
     void Engine::onFrameStart(Callback<> callback) {

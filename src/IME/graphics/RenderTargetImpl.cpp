@@ -27,14 +27,14 @@
 namespace ime::priv {
     bool RenderTargetImpl::isInstantiated_{false};
 
-    RenderTargetImpl::RenderTargetImpl() :
-        frameRateLimit_(0)
+    RenderTargetImpl::RenderTargetImpl()
     {
         IME_ASSERT(!isInstantiated_, "Only a single instance of Window can be instantiated")
         isInstantiated_ = true;
     }
 
     void RenderTargetImpl::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
+        title_ = title;
         window_.create(sf::VideoMode(width, height), title, static_cast<sf::Uint32>(style));
     }
 
@@ -48,17 +48,13 @@ namespace ime::priv {
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
     }
 
-    void RenderTargetImpl::setFramerateLimit(unsigned int framerateLimit) {
-        frameRateLimit_ = framerateLimit;
-        window_.setFramerateLimit(frameRateLimit_);
+    void RenderTargetImpl::setTitle(const std::string &title) {
+        title_ = title;
+        window_.setTitle(title);
     }
 
-    unsigned int RenderTargetImpl::getFramerateLimit() const {
-        return frameRateLimit_;
-    }
-
-    void RenderTargetImpl::setVsyncEnabled(bool isVsyncEnabled) {
-        window_.setVerticalSyncEnabled(isVsyncEnabled);
+    const std::string &RenderTargetImpl::getTitle() const {
+        return title_;
     }
 
     bool RenderTargetImpl::isOpen() const{
