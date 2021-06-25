@@ -76,6 +76,7 @@ namespace ime {
          * @param texture The source texture
          * @param rectangle Sub-rectangle of the texture to assign to the sprite
          *
+         * @a texture is copied
          * This function is a shortcut for:
          *
          * @code
@@ -128,17 +129,13 @@ namespace ime {
          * @brief Set the texture of the sprite from a source texture
          * @param texture The source texture
          *
-         * The @a texture argument refers to a texture that must exist as
-         * long as the sprite uses it. Indeed, the sprite doesn't store its
-         * own copy of the texture, but rather keeps a pointer to the one
-         * that you passed to this function. If the source texture is destroyed
-         * and the sprite tries to use it, the behavior is undefined
+         * The @a texture is copied
          */
         void setTexture(const Texture& texture);
 
         /**
-         * @brief Get the name of the texture used by the sprite
-         * @return Name of the texture used by the sprite
+         * @brief Get the texture used by the sprite
+         * @return The texture used by the sprite
          */
         const Texture& getTexture() const;
 
@@ -436,11 +433,14 @@ namespace ime {
         const Animator& getAnimator() const;
 
         /**
+         * @internal
          * @brief Update the current animation
          * @param deltaTime Time passed since last animation update
          *
          * This function need only be called if the sprite is animatable
          * and not just displaying a single static image
+         *
+         * @warning This function is intended for internal use only
          */
         void updateAnimation(Time deltaTime);
 
