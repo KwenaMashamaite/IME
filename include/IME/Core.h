@@ -78,9 +78,3 @@
 #include "IME/core/time/TimerManager.h"
 
 #endif //IME_CORE_H
-
-/**
- * @defgroup core
- *
- * Core library classes
- */

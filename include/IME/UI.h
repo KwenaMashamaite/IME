@@ -53,9 +53,3 @@
 #include "IME/ui/GuiContainer.h"
 
 #endif //IME_UI_H
-
-/**
- * @defgroup ui GUI module
- *
- * Graphical User Interface module: Label, Button, CheckBox, ProgressBar, MenuBar, ...
- */

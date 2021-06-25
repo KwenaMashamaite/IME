@@ -5,58 +5,41 @@
 /// Welcome to the official IME documentation. Here you will find a detailed
 /// view of all the classes and functions. <br/>
 ///
-/// \section example Short example
+/// \section example Getting started
 /// IME is state based, which means that the game flow is controlled by pushing
-/// and popping game states at appropriate times. Here is an example, demonstrating
-/// how to start the engine. This example will display an empty screen since the
-/// state is not doing anything
+/// and popping game states at appropriate times. In IME everything lives in a
+/// ime::Scene. To get started, you must create the initial state (or scene),
+/// then create the engine and push the initial scene to it. Here are the three
+/// steps we need to do:
 ///
-/// You need to do four things to get started:
-///  1. Define a state
-///  2. Create engine settings/configurations
-///  3. Instantiate the engine and initialize it
-///  4. Push initial state and start the engine
+///     1. Create a game state
+///     2. Instantiate the game engine
+///     3. Push the initial state/scene
 ///
+/// Here is the minimal and complete code to achieve the above steps:
 ///  @code
+///  // Includes the entire IME library, you can selectively include headers
+///  // once you know whats going on
 ///  #include <IME/IME.h>
 ///
-/// // Step 1: Define a state
-/// // Define the behaviour of the game state by overriding the scene methods.
-/// // These functions will be called by the engine at specific times. Scene
-/// // methods are overridden by a need to use case, however the 'onEnter'
-/// // function must always be overridden
-/// class Demo : public ime::Scene {
+/// // Step 1: Create a game state/scene
+/// // You define the behavior of the game by overriding ime::Scene functions.
+/// // These functions will be called by the engine at appropriate times. Scene
+/// // methods are overridden by a need to use case, however overriding the
+/// // ime::Scene::onEnter function is mandatory.
+///
+/// // This scene simply displays a message at the centre of the screen
+/// class StartUpScene : public ime::Scene {
 ///   public:
 ///       void onEnter() override {
-///           // Lets create our knight object, lets call him 'destroyerOfMen"
-///           auto* knight = gameObjects().add(ime::GameObject::create(*this));
-///           knight->setTag("destroyerOfMen");
-///           knight->getSprite().setTexture("knight.png");
+///         // Greet the user
+///          auto greeting = ime::ui::Label::create("Welcome to Infinite Motion Engine");
+///          greeting->setOrigin(0.5f, 0.5f);
+///          greeting->setPosition("50%", "50%");
+///          greeting->getRenderer()->setTextColour(ime::Colour::White);
+///          gui().addWidget(std::move(greeting), "lblGreeting");
 ///
-///           // Enable physics so that our knight can move around the grid, otherwise he'll be easily ambushed
-///           auto gravity = ime::Vector2f{0, 9.8f};
-///           createPhysWorld(gravity);
-///           auto physicsBody = physWorld().createBody(ime::RigidBody::Type::Kinematic);
-///           physicsBody->setLinearVelocity(ime::Vector2f{60.0f, 60.0f});
-///           knight->attachRigidBody(std::move(physicsBody));
-///
-///           // We now create the grid in which the knight will patrol in
-///           createTilemap(40, 40); // The size of each grid block will be 40x40
-///           tilemap().construct({10, 10}, '.'); // Create a 10x10 grid
-///           tilemap().addChild(knight, ime::Index{1, 1});
-///
-///           // We want our knight to move in the direction we want using the keyboard
-///           auto gridMover = std::make_unique<ime::KeyboardGridMover>(tilemap());
-///           gridMover->setTarget(knight);
-///           gridMover->setMovementRestriction(ime::GridMover::MoveRestriction::NonDiagonal);
-///           gridMovers().addObject(std::move(gridMover));
-///
-///           // And just like that, our kingdom is protected!
-///
-///           // Lets play some medieval music for our knight to Keep his spirit up
-///           audio().play(ime::audio::Type::Music, "medievalTheme.wav");
-///
-///           // Quit the game when Esc key is pressed
+///           // Quit the game when "Esc" key is pressed
 ///           input().onKeyUp([this](ime::Key key) {
 ///                 if (key == ime::Key::Escape)
 ///                     engine().quit();
@@ -66,33 +49,29 @@
 ///
 /// int main()
 /// {
-///    // Step 2: Create engine configurations (They can also be defined in a text
-///    //         file on the disk and loaded by providing the filename to the engines
-///    //         constructor)
-///    //
-///    // All these configurations defaults so they can be left undefined.
-///    // However it's better to specify your own settings. You can add you
-///    // own entries if you wish to do so
-///    PropertyContainer settings;
-///    settings.addProperty({"WINDOW_TITLE", std::string("Demo")});
-///    settings.addProperty({"WINDOW_WIDTH", 800});
-///    settings.addProperty({"WINDOW_HEIGHT", 700});
-///    settings.addProperty({"WINDOW_ICON", std::string("assets/bitmap/icon.png")});
-///    settings.addProperty({"FULLSCREEN", false});
-///    settings.addProperty({"FPS_LIMIT", 60});
-///    settings.addProperty({"V_SYNC", true});
-///    settings.addProperty({"FONTS_DIR", std::string("assets/fonts/")});
-///    settings.addProperty({"IMAGES_DIR", std::string("assets/textures/")});
-///    settings.addProperty({"TEXTURES_DIR", std::string("assets/textures/")});
-///    settings.addProperty({"SOUND_EFFECTS_DIR", std::string("assets/soundEffects/")});
-///    settings.addProperty({"MUSIC_DIR", std::string("assets/music/")});
+///    // Step 2: Creating the game engine
 ///
-///    // Step 3: Create the engine and initialize it
-///    auto engine = ime::Engine("Demo", settings);
+///    // 2.1 - First we need to specify settings required by the engine (optional).
+///    //       If a preference entry is not given, the engine will use a default value
+///    ime::PrefContainer settings;
+///    settings.addPref({"WINDOW_TITLE", ime::Preference::Type::String, std::string("IME Demo App")});
+///    settings.addPref({"WINDOW_WIDTH", ime::Preference::Type::Int, 600});
+///    settings.addPref({"WINDOW_HEIGHT", ime::Preference::Type::Int, 600});
+///    settings.addPref({"WINDOW_ICON", ime::Preference::Type::String, std::string("assets/images/icon.png")});
+///    settings.addPref({"FULLSCREEN", ime::Preference::Type::Bool, false});
+///    settings.addPref({"FPS_LIMIT", ime::Preference::Type::Int, 60});
+///    settings.addPref({"V_SYNC", ime::Preference::Type::Bool,  true});
+///    settings.addPref({"FONTS_DIR", ime::Preference::Type::String, std::string("assets/fonts/")});
+///    settings.addPref({"TEXTURES_DIR", ime::Preference::Type::String, std::string("assets/textures/")});
+///    settings.addPref({"SOUND_EFFECTS_DIR", ime::Preference::Type::String, std::string("assets/soundEffects/")});
+///    settings.addPref({"MUSIC_DIR", ime::Preference::Type::String, std::string("assets/music/")});
+///
+///    // Step 2.2 - Instantiating the engine
+///    ime::Engine engine = ime::Engine("Name of game here", settings);
 ///    engine.initialize();
 ///
-///    // Step 4: Push the initial state and run the engine
-///    engine.pushScene(std::make_shared<Demo>());
+///    // Step 3: Push the initial state/scene and start the game loop
+///    engine.pushScene(std::make_unique<StartUpScene>());
 ///    engine.run();
 ///
 ///    return EXIT_SUCCESS;
