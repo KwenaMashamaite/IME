@@ -31,14 +31,16 @@
 namespace ime {
     namespace utility {
         /**
-         * @deprecated This class will be removed in the next release, use ime::PrefContainer
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::PrefContainer instead
+         *
          * @brief Class for parsing config files
          */
         class IME_API ConfigFileParser {
         public:
             /**
-             * @deprecated ime::utility::ConfigFileParser will be removed in the
-             *             next release
+             * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+             *             ime::PrefContainer::load instead.
              *
              * @brief Parse a config file
              * @param filename Name of the config file to be parsed
@@ -46,7 +48,7 @@ namespace ime {
              * @throws FileNotFound if the config file cannot be found on
              *        the disk
              */
-            [[deprecated("Use ime::PrefContainer instead.")]]
+            [[deprecated("Use 'void ime::PrefContainer::load(const std::string&)' instead.")]]
             static PropertyContainer parse(const std::string& filename);
         };
     }

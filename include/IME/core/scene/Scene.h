@@ -322,7 +322,9 @@ namespace ime {
 
     protected:
         /**
-         * @deprecated This function will be removed in the next release
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::Scene::setOnPauseAction instead.
+         *
          * @brief Set whether or not the scene is hidden or rendered
          *        when it is paused
          * @param show True to show or false to hide
@@ -337,7 +339,7 @@ namespace ime {
          *
          * @see setOnPauseAction
          */
-        [[deprecated("Use 'ime::Scene::setOnPauseAction(ime::Uint32)' instead.")]]
+        [[deprecated("Use 'void ime::Scene::setOnPauseAction(ime::Uint32)' instead.")]]
         void setVisibleOnPause(bool show);
 
         /**

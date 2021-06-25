@@ -68,12 +68,14 @@ namespace ime {
         explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
-         * @deprecated This constructor will be removed in the next release
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::Engine::Engine(const std::string&, const ime::PrefContainer&) instead.
+         *
          * @brief Constructor
          * @param gameName The name of the game to be run by the engine
          * @param settings Settings to construct engine with
          */
-         [[deprecated("Use ime::Engine::Engine(const std::string&, const ime::PrefContainer&) instead.")]]
+         [[deprecated("Use 'ime::Engine::Engine(const std::string&, const ime::PrefContainer&)' instead.")]]
         Engine(const std::string& gameName, const PropertyContainer& settings);
 
         /**
@@ -168,11 +170,13 @@ namespace ime {
         bool isPaused() const;
 
         /**
-         * @deprecated This function will be removed in next update
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::Engine::getConfigs instead.
+         *
          * @brief Get the engines settings
          * @return The engines settings
          */
-         [[deprecated("Use ime::PrefContainer& getConfigs() instead.")]]
+         [[deprecated("Use 'ime::PrefContainer& ime::Engine::getConfigs()' instead.")]]
         const PropertyContainer& getSettings() const;
 
          /**
@@ -363,7 +367,9 @@ namespace ime {
         void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::Window::onClose instead.
+         *
          * @brief Add an event lister to a window close event
          * @param callback Function to execute when a window close event is fired
          *
@@ -377,7 +383,7 @@ namespace ime {
          * the default behavior. Pass nullptr to stop the callback from being
          * invoked
          */
-         [[deprecated("use ime::Window::onClose(const Callback&) function instead.")]]
+         [[deprecated("use 'void ime::Window::onClose(const Callback&)' instead.")]]
         void onWindowClose(Callback<> callback);
 
         /**
@@ -502,7 +508,7 @@ namespace ime {
         std::unique_ptr<Window> window_;                   //!< Exposes parts of priv::RenderTarget through its public interface
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                       ///@deprecated Replace with configs_ in next release
+        PropertyContainer settings_;                       ///@deprecated since v2.1.0, Replace with configs_ v2.2.0
         PrefContainer configs_;                            //!< The engines settings
         bool isSettingsLoadedFromFile_;                    //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
         bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized

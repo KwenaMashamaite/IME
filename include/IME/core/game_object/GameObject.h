@@ -165,23 +165,27 @@ namespace ime {
         bool isActive() const;
 
         /**
-         * @deprecated Since v2.1.0. It will be removed in v2.2.0
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::GameObject::setActive instead
+         *
          * @brief Set whether the game object is collidable or not
          * @param collidable True to make collidable, otherwise false
          *
          * @see setActive
          */
-         [[deprecated("Use ime::GameObject::setActive(bool) instead.")]]
+         [[deprecated("Use 'void ime::GameObject::setActive(bool)' instead.")]]
         void setCollidable(bool collidable);
 
         /**
-         * @deprecated Since v2.1.0. It will be removed in v2.2.0
+         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
+         *             ime::GameObject::isActive instead.
+         *
          * @brief Check if the game object is collidable or not
          * @return True if the game object is collidable, otherwise false
          *
          * @see isActive
          */
-         [[deprecated("Use ime::GameObject::isActive() instead.")]]
+         [[deprecated("Use 'bool ime::GameObject::isActive() const' instead.")]]
         bool isCollidable() const;
 
         /**
