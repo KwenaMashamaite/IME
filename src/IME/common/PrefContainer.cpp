@@ -25,6 +25,7 @@
 #include "IME/common/PrefContainer.h"
 #include "IME/utility/DiskFileReader.h"
 #include "IME/core/exceptions/Exceptions.h"
+#include <algorithm>
 
 namespace ime {
     namespace {

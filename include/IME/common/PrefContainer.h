@@ -29,7 +29,7 @@
 #include "IME/common/Preference.h"
 #include "IME/common/PropertyContainer.h"
 #include <vector>
-
+#include <optional>
 
 namespace ime {
     /**
