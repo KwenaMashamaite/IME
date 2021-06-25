@@ -99,6 +99,7 @@ namespace ime {
          * @return A callable object, when called returns a random number in
          *         the specified range
          */
+         [[maybe_unused]]
         static auto createRandomNumGenerator(int min, int max) {
             return [distribution = std::uniform_int_distribution(min, max)]() mutable {
 #if defined(__GNUC__)
