@@ -41,19 +41,19 @@ void Preference::setValue(T value) {
                 throwException(getKey(), "bool");
             break;
         case Type::String:
-            if (!std::is_same_v<std::string, T> || std::is_same_v<const char*, T>)
-                    throwException(getKey(), "std::string");
+            if constexpr (!std::is_same_v<std::string, T> || std::is_same_v<const char*, T>)
+                throwException(getKey(), "std::string");
             break;
         case Type::Int:
-            if (!std::is_same_v<int, T>)
+            if constexpr (!std::is_same_v<int, T>)
                 throwException(getKey(), "int");
             break;
         case Type::Double:
-            if (!std::is_same_v<double, T>)
+            if constexpr (!std::is_same_v<double, T>)
                 throwException(getKey(), "double");
             break;
         case Type::Float:
-            if (!std::is_same_v<float, T>)
+            if constexpr (!std::is_same_v<float, T>)
                 throwException(getKey(), "float");
             break;
     }

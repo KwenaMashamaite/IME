@@ -170,7 +170,7 @@ inline void ObjectContainer<T>::removeAll() {
 
 template <typename T>
 inline std::size_t ObjectContainer<T>::getCount() const {
-    auto count = 0;
+    std::size_t count = 0;
     for (const auto& group : groups_)
         count += group.second->getCount();
 
