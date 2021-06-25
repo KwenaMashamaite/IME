@@ -57,16 +57,11 @@ namespace ime {
          * @brief Constructor
          * @param key The unique identifier of the preference
          * @param type The type of the value in the key-value pair
-         * @param description An optional message describing the key-value pair
          *
-         * A description is an optional short message describing what the
-         * preference is. When saved to the disk, it will be preceded by a
-         * hashtag sign (#), indicating that it is a comment
-         *
-         * Note that once set, the key and type of the preference cannot be
-         * changed later
+         * Note that once set, the @a key and @a type of the preference
+         * cannot be changed later
          */
-        Preference(const std::string& key, Type type, const std::string& description = "");
+        Preference(const std::string& key, Type type);
 
         /**
          * @brief Constructor
@@ -77,6 +72,12 @@ namespace ime {
          * @throws InvalidArgument If the type of the @a value argument does not
          *                         correspond to the type specified by @a type
          *                         argument
+         *
+         * Note that once set, the @a key and @a type cannot be changed later.
+         *
+         * A @a description is an optional short message describing what the
+         * preference is. When saved to the disk, it will be preceded by a
+         * hashtag sign (#), indicating that it is a comment
          */
         template<typename T>
         Preference(const std::string& key, Type type, T value, const std::string& description = "");

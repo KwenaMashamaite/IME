@@ -58,8 +58,7 @@ namespace ime {
         }    
     }
     
-    Preference::Preference(const std::string &key, Preference::Type type,
-            const std::string &description) :
+    Preference::Preference(const std::string &key, Preference::Type type) :
         property_{key},
         type_{type}
     {
@@ -68,8 +67,6 @@ namespace ime {
         
         if (property_.getName().find_first_of(' ') != std::string::npos)
             throw InvalidArgument("Preference key must not have whitespaces");
-
-        setDescription(description);
     }
 
     Preference::Type Preference::getType() const {

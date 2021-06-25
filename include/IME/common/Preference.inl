@@ -24,8 +24,9 @@
 
 template<typename T>
 Preference::Preference(const std::string& key, Type type, T value, const std::string& description) :
-    Preference(key, type, description)
+    Preference(key, type)
 {
+    setDescription(description);
     setValue(value);
 }
 
@@ -37,11 +38,11 @@ void Preference::setValue(T value) {
 
     switch (type_) {
         case Type::Bool:
-            if (!std::is_same_v<bool, T>)
+            if constexpr (!std::is_same_v<bool, T>)
                 throwException(getKey(), "bool");
             break;
         case Type::String:
-            if constexpr (!std::is_same_v<std::string, T> || std::is_same_v<const char*, T>)
+            if constexpr (!std::is_same_v<std::string, T> || std::is_same_v<const char*, T> || std::is_same_v<char*, T>)
                 throwException(getKey(), "std::string");
             break;
         case Type::Int:
@@ -58,7 +59,7 @@ void Preference::setValue(T value) {
             break;
     }
 
-    property_.setValue(value);
+    property_.setValue(T{value});
 }
 
 template<typename T>
