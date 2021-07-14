@@ -367,8 +367,17 @@ namespace ime {
          * @param handlerId The unique identification number of the listener
          * @return True if the event listener was removed or false if no such
          *         listener exist in the grid movers event list
+         *
+         * @see removeAllEventListeners
          */
         bool unsubscribe(int handlerId);
+
+        /**
+         * @brief Remove all registered event listeners
+         *
+         * @see unsubscribe
+         */
+        void removeAllEventListeners();
 
         /**
          * @brief Reset the target tile to be the same as the entity tile

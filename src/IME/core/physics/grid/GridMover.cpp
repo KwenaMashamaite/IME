@@ -436,6 +436,15 @@ namespace ime {
         return false;
     }
 
+    void GridMover::removeAllEventListeners() {
+        eventEmitter_.removeAllEventListeners("gameObjectCollision");
+        eventEmitter_.removeAllEventListeners("adjacentMoveBegin");
+        eventEmitter_.removeAllEventListeners("adjacentMoveEnd");
+        eventEmitter_.removeAllEventListeners("targetTileReset");
+        eventEmitter_.removeAllEventListeners("solidTileCollision");
+        eventEmitter_.removeAllEventListeners("gridBorderCollision");
+    }
+
     void GridMover::resetTargetTile() {
         if (target_ && !isTargetMoving() && targetTile_->getIndex()
             != tileMap_.getTileOccupiedByChild(target_).getIndex())

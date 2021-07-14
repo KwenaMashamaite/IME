@@ -224,8 +224,27 @@ namespace ime {
          * // Stop displaying the tag of the object when it changes
          * object.unsubscribe("tag", tagChangeId);
          * @endcode
+         *
+         * @see unsubscribeAll
          */
         bool unsubscribe(const std::string& event, int id);
+
+        /**
+         * @brief Remove all event listeners from an event
+         * @param event The name of the event to remove event listeners from
+         * @return True if all event listeners were removed or false if the
+         *         event does not exist
+         *
+         * The following example removes all the event listener of the "tag"
+         * property
+         *
+         * @code
+         * object.unsubscribeAll("tag");
+         * @endcode
+         *
+         * @see unsubscribe
+         */
+        bool unsubscribeAll(const std::string& event);
 
         /**
          * @brief Add a destruction listener

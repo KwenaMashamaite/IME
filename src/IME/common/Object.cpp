@@ -85,6 +85,13 @@ namespace ime {
             return eventEmitter_.removeEventListener(event, id);
     }
 
+    bool Object::unsubscribeAll(const std::string &event) {
+        if (eventEmitter_.removeAllEventListeners(event + "Change"))
+            return true;
+        else
+            return eventEmitter_.removeAllEventListeners(event);
+    }
+
     int Object::onDestruction(const Callback<>& callback) {
         return eventEmitter_.addEventListener("destruction", callback);
     }
