@@ -263,11 +263,13 @@ namespace ime {
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
 
-            child->onDestruction([this, id = child->getObjectId()]{
+            int destructionId = child->onDestruction([this, id = child->getObjectId()]{
                 removeChildWithId(id);
             });
 
+            destructionIds_[child->getObjectId()] = destructionId;
             children_[index].push_back(child);
+
             return true;
         }
 
@@ -346,6 +348,7 @@ namespace ime {
 
             for (auto i = 0u; i < children_[tile.getIndex()].size(); ++i) {
                 if (children_[tile.getIndex()][i] == child) {
+                    unsubscribeDestructionListener(child);
                     children_[tile.getIndex()].erase(children_[tile.getIndex()].begin() + i);
                     return true;
                 }
@@ -356,9 +359,11 @@ namespace ime {
 
     bool TileMap::removeOccupant(const Tile &tile) {
         if (isTileOccupied(tile)) {
+            unsubscribeDestructionListener(*(children_[tile.getIndex()].begin()));
             children_[tile.getIndex()].erase(children_[tile.getIndex()].begin());
             return true;
         }
+
         return false;
     }
 
@@ -366,10 +371,12 @@ namespace ime {
         for (auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id) {
+                    unsubscribeDestructionListener(*(childList.second.begin() + i));
                     childList.second.erase(childList.second.begin() + i);
                     return true;
                 }
         }
+
         return false;
     }
 
@@ -380,8 +387,16 @@ namespace ime {
     }
 
     void TileMap::removeChildrenIf(const std::function<bool(GameObject*)>& callback) {
-        for (auto& childList : children_)
-            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(), callback), childList.second.end());
+        for (auto& childList : children_) {
+            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(),
+                [this, &callback](GameObject* gameObject) {
+                    if (callback(gameObject)) {
+                        unsubscribeDestructionListener(gameObject);
+                        return true;
+                    } else
+                        return false;
+            }), childList.second.end());
+        }
     }
 
     bool TileMap::removeAllVisitors(const Tile &tile) {
@@ -389,7 +404,7 @@ namespace ime {
             return false;
         else {
             auto occupant = children_[tile.getIndex()].front();
-            children_[tile.getIndex()].clear();
+            clearVector(children_[tile.getIndex()]);
             children_[tile.getIndex()].push_back(occupant);
             return true;
         }
@@ -397,9 +412,10 @@ namespace ime {
 
     bool TileMap::removeAllChildren(const Tile &tile) {
         if (isTileOccupied(tile)) {
-            children_[tile.getIndex()].clear();
+            clearVector(children_[tile.getIndex()]);
             return true;
         }
+
         return false;
     }
 
@@ -537,5 +553,17 @@ namespace ime {
             });
         } else if (property.getName() == "gridLineColour")
             backgroundTile_.setFillColour(property.getValue<Colour>());
+    }
+
+    void TileMap::unsubscribeDestructionListener(const GameObject *child) {
+        child->removeDestructionListener(destructionIds_[child->getObjectId()]);
+        destructionIds_.erase(child->getObjectId());
+    }
+
+    void TileMap::clearVector(std::vector<GameObject *> &vector) {
+        vector.erase(std::remove_if(vector.begin(), vector.end(), [this](GameObject* gameObject) {
+            unsubscribeDestructionListener(gameObject);
+            return true;
+        }), vector.end());
     }
 }

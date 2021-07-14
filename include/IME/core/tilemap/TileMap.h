@@ -712,6 +712,18 @@ namespace ime {
          */
         void onRenderChange(const Property& property);
 
+        /**
+         * @brief Remove a destruction listener from a game object
+         * @param child The game object to remove the destruction listener from
+         */
+        void unsubscribeDestructionListener(const GameObject* child);
+
+        /**
+         * @brief Remove destruction listeners and clear vector
+         * @param vector The vector to be cleared
+         */
+        void clearVector(std::vector<GameObject*> &vector);
+
     private:
         unsigned int tileSpacing_;           //!< Spacing between tiles in all directions
         Vector2u tileSize_;                  //!< The Size of each tile
@@ -728,6 +740,7 @@ namespace ime {
         RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
 
         std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
+        std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
         std::unordered_map<std::string, std::string> tilesets_;        //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
         PhysicsWorld* physicsSim_;                                     //!< The physics simulation
