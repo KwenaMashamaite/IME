@@ -320,11 +320,17 @@ namespace ime {
         }
     }
 
-    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback) {
+    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
     }
 
-    int Animator::on(Animator::Event event, Callback<> callback) {
+    int Animator::on(Animator::Event event, Callback<> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
     }
 
@@ -332,11 +338,17 @@ namespace ime {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)), id);
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback) {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback) {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 

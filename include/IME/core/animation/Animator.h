@@ -375,6 +375,8 @@ namespace ime {
          * @brief Subscribe a callback to any animation event
          * @param event The name of the event to subscribe a callback to
          * @param callback The function to be executed when the event is fired
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The callbacks unique identification number
          *
          * The callback function is optionally passed the animation that
@@ -382,14 +384,16 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int on(Event event, Callback<Animation::Ptr> callback);
-        int on(Event event, Callback<> callback);
+        int on(Event event, Callback<Animation::Ptr> callback, bool oneTime = false);
+        int on(Event event, Callback<> callback, bool oneTime = false);
 
         /**
          * @brief Subscribe a callback to a specific animation event
          * @param event The event to subscribe a callback to
          * @param name The name of the animation to subscribe callback to
          * @param callback The Function to be executed when the event is fired
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The callbacks unique identification number
          *
          * This function subscribes a callback to events triggered by a
@@ -406,8 +410,8 @@ namespace ime {
          *
          * @see unsubscribe(ime::Animator::Event, const std::string&, ime::Callback)
          */
-        int on(Event event, const std::string& name, Callback<Animation::Ptr> callback);
-        int on(Event event, const std::string& name, Callback<> callback);
+        int on(Event event, const std::string& name, Callback<Animation::Ptr> callback, bool oneTime = false);
+        int on(Event event, const std::string& name, Callback<> callback, bool oneTime = false);
 
         /**
          * @brief Remove a callback from an animation event
