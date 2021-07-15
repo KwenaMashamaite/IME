@@ -254,7 +254,10 @@ namespace ime {
             isPlaying_ = hasStarted_ = isPaused_ = false;
             totalTime_ = Time::Zero;
             currentFrameIndex_ = 0;
-            resetCurrentFrame();
+
+            if (currentAnimation_->isCurrentFrameResetOnInterrupt())
+                resetCurrentFrame();
+
             fireEvent(Event::AnimationStop, currentAnimation_);
         }
     }

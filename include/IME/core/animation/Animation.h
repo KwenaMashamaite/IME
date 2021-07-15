@@ -310,6 +310,25 @@ namespace ime {
         bool isTargetHiddenOnCompletion() const;
 
         /**
+         * @brief Set whether or not the current animation frame is reset to
+         *        the first frame when the animation is stopped before completing
+         * @param reset True to reset the frame or false to leave it as is
+         *
+         * By default, the current frame is reset to the first frame
+         *
+         * @see isCurrentFrameResetOnInterrupt
+         */
+        void setCurrentFrameResetOnInterrupt(bool reset);
+
+        /**
+         * @brief Check if the current frame is reset or not when animation is interrupted
+         * @return True if the frame is reset on interrupt, otherwise false
+         *
+         * @see setCurrentFrameResetOnInterrupt
+         */
+        bool isCurrentFrameResetOnInterrupt() const;
+
+        /**
          * @brief Add frames from the spritesheet to the animation
          * @param startPos Position of the first frame on the spritesheet
          * @param numOfFrames Number of frames to add to the animation
@@ -499,6 +518,7 @@ namespace ime {
         int repeatCounter_;         //!< The number of times the animation is repeated before it completes
         bool isShownOnStart_;       //!< A flag indicating whether or not the sprite is shown when the animations starts
         bool isHiddenOnComplete_;   //!< A flag indicating whether or not the sprite is hidden when the animation completes
+        bool isFrameResetOnStop_;   //!< A flag indicating whether or not the current frame is reset to the first frame when animation is interrupted
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
         float timescale_;           //!< Playback speed of the animation
     };

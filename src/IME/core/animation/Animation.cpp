@@ -41,6 +41,7 @@ namespace ime {
          repeatCounter_{0},
          isShownOnStart_{true},
          isHiddenOnComplete_{false},
+         isFrameResetOnStop_{true},
          completionFrame_{-1},
          timescale_{1.0f}
     {}
@@ -141,6 +142,14 @@ namespace ime {
 
     bool Animation::isTargetHiddenOnCompletion() const {
         return isHiddenOnComplete_;
+    }
+
+    void Animation::setCurrentFrameResetOnInterrupt(bool reset) {
+        isFrameResetOnStop_ = reset;
+    }
+
+    bool Animation::isCurrentFrameResetOnInterrupt() const {
+        return isFrameResetOnStop_;
     }
 
     void Animation::addFrames(Index startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
