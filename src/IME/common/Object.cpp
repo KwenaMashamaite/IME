@@ -66,16 +66,25 @@ namespace ime {
         return "Object";
     }
 
-    int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback) {
+    int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(property + "Change", callback);
+
         return eventEmitter_.on(property + "Change", callback);
     }
 
-    int Object::onPropertyChange(const Callback<Property> &callback) {
+    int Object::onPropertyChange(const Callback<Property> &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("propertyChange", callback);
+
         return eventEmitter_.on("propertyChange", callback);
     }
 
-    int Object::onEvent(const std::string &event, const Callback<> &callback) {
-        return eventEmitter_.on(event, callback);
+    int Object::onEvent(const std::string &event, const Callback<> &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(event, callback);
+        else
+            return eventEmitter_.on(event, callback);
     }
 
     bool Object::unsubscribe(const std::string &event, int id) {

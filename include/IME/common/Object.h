@@ -138,6 +138,8 @@ namespace ime {
         /**
          * @brief Add an event listener to a specific property change event
          * @param property The name of the property to add an event listener to
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @param callback The function to be executed when the property changes
          * @return The unique id of the event listener
          *
@@ -164,11 +166,14 @@ namespace ime {
          *
          * @see unsubscribe and onPropertyChange(const ime::Callback<ime::Property>&)
          */
-        int onPropertyChange(const std::string& property, const Callback<Property>& callback);
+        int onPropertyChange(const std::string& property, const Callback<Property>& callback,
+            bool oneTime = false);
 
         /**
          * @brief Add an event listener to any property change event
          * @param callback The function to be executed when any property changes
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The unique id of the event listener
          *
          * When unsubscribing the any property change event handler, you must
@@ -176,12 +181,14 @@ namespace ime {
          *
          * @see onPropertyChange(const std::string&, const ime::Callback<ime::Property>&)
          */
-        int onPropertyChange(const Callback<Property>& callback);
+        int onPropertyChange(const Callback<Property>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to an action event
          * @param event The name of the event to add an an event listener to
          * @param callback The function to be executed when the event takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The unique identification number of the event listener
          *
          * Unlike onPropertyChange(), this function registers event listeners
@@ -206,7 +213,7 @@ namespace ime {
          *
          * @see onPropertyChange and unsubscribe
          */
-        int onEvent(const std::string& event, const Callback<>& callback);
+        int onEvent(const std::string& event, const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Remove an event listener from an event
