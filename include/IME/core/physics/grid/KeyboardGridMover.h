@@ -95,6 +95,21 @@ namespace ime {
         void setKeys(Key leftKey, Key rightKey, Key upKey, Key downKey);
 
         /**
+         * @brief Add an event listener to an input event
+         * @param callback A function which returns true if the input should be
+         *                 handled or false if the input should be ignored
+         *
+         * An input event is triggered when the grid mover receives a keyboard
+         * input that matches any one of the keys that move the target. The
+         * callback function will be passed this key when it is called. To
+         * remove the callback pass nullptr. Note that when there is no callback
+         * assigned to this event, the input will always be handled
+         *
+         * By default, there is no registered
+         */
+        void onInput(const InputCallback& callback);
+
+        /**
          * @internal
          * @brief Handle an event
          * @param event Event to handle
@@ -135,6 +150,7 @@ namespace ime {
         Key goRightKey_ = Key::Unknown;     //!< A Key when triggered moves target right
         Key goUpKey_ = Key::Unknown;        //!< A Key when triggered moves target up
         Key goDownKey_ = Key::Unknown;      //!< A Key when triggered moves target down
+        InputCallback onInput_;             //!< A function called when the grid mover receives input
     };
 }
 

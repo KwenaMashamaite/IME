@@ -75,12 +75,19 @@ namespace ime {
         goDownKey_ = downKey;
     }
 
+    void KeyboardGridMover::onInput(const KeyboardGridMover::InputCallback &callback) {
+        onInput_ = callback;
+    }
+
     void KeyboardGridMover::attachInputEventListeners() {
         if (trigger_ == MovementTrigger::None)
             return;
 
         auto moveEntity = [this](input::Keyboard::Key key) {
-            moveTarget(key);
+            if (key == goLeftKey_ || key == goRightKey_ || key == goUpKey_ || key == goDownKey_) {
+                if (!onInput_ || onInput_(key))
+                    moveTarget(key);
+            }
         };
 
         if (trigger_ == MovementTrigger::OnKeyDown)
