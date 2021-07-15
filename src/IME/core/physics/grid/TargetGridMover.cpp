@@ -97,7 +97,7 @@ namespace ime {
     }
 
     void TargetGridMover::setDestination(Index index) {
-        if (index != targetTileIndex_ && getGrid().isIndexValid(index)) {
+        if (index != targetTileIndex_) {
             targetTileIndex_ = index;
             if (getTarget()) {
                 if (isTargetMoving()) {
@@ -112,6 +112,11 @@ namespace ime {
 
     Index TargetGridMover::getDestination() const {
         return targetTileIndex_;
+    }
+
+    void TargetGridMover::resetDestination() {
+        targetTileIndex_ = Index{-1, -1};
+        clearPath();
     }
 
     const std::stack<Index> &TargetGridMover::getPath() const {

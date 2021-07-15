@@ -101,6 +101,14 @@ namespace ime {
         Index getDestination() const;
 
         /**
+         * @brief Reset the destination tile to a tile outside the bounds of the grid
+         *
+         * @note This function will clear the current path. To clear the path
+         * without resetting the destination tile see clearPath() function
+         */
+        void resetDestination();
+
+        /**
          * @brief Get the path of the target
          * @return The path of the target
          */
