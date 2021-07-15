@@ -275,6 +275,8 @@ namespace ime {
          * @brief Add an event listener to a move begin event
          * @param callback The function to be executed when the game object
          *                 starts moving
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners unique identification number
          *
          * This event is emitted when the game object starts moving from its
@@ -286,12 +288,14 @@ namespace ime {
          *
          * @see onAdjacentMoveEnd
          */
-        int onAdjacentMoveBegin(const Callback<Index>& callback);
+        int onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
          * @param callback Function to execute when the target reaches its
          *        target tile
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target moves from its current tile
@@ -304,11 +308,13 @@ namespace ime {
          *
          * @see onAdjacentMoveBegin
          */
-        int onAdjacentMoveEnd(const Callback<Index>& callback);
+        int onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
          * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target tries to go beyond the bounds
@@ -321,11 +327,13 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onGridBorderCollision(const Callback<>& callback);
+        int onGridBorderCollision(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a tile collision event
          * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target collides with a solid tile
@@ -338,11 +346,13 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onTileCollision(const Callback<Index>& callback);
+        int onTileCollision(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a game object collision
          * @param callback The function to be executed when the collision take place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners unique identifier
          *
          * The callback is invoked when the target collides with another game
@@ -360,7 +370,7 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onGameObjectCollision(const CollisionCallback& callback);
+        int onGameObjectCollision(const CollisionCallback& callback, bool oneTime = false);
 
         /**
          * @brief Remove an event listener from the grid movers event list
@@ -414,11 +424,13 @@ namespace ime {
         /**
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * @see resetTargetTile and unsubscribe
          */
-        int onTargetTileReset(const Callback<Index>& callback);
+        int onTargetTileReset(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @internal

@@ -396,23 +396,38 @@ namespace ime {
             targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileLeftOf(*targetTile_));
     }
 
-    int GridMover::onTileCollision(const Callback<Index>& callback) {
+    int GridMover::onTileCollision(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("solidTileCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("solidTileCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback) {
+    int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("gameObjectCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("gameObjectCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onGridBorderCollision(const Callback<>& callback) {
+    int GridMover::onGridBorderCollision(const Callback<>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("gridBorderCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("gridBorderCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback) {
+    int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("adjacentMoveBegin"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("adjacentMoveBegin"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback) {
+    int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("adjacentMoveEnd"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("adjacentMoveEnd"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
@@ -455,7 +470,10 @@ namespace ime {
         }
     }
 
-    int GridMover::onTargetTileReset(const Callback<Index>& callback) {
+    int GridMover::onTargetTileReset(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("targetTileReset"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("targetTileReset"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
