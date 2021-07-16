@@ -132,6 +132,15 @@ namespace ime {
             sprite_.setColor(utility::convertToSFMLColour(colour));
         }
 
+        void setOpacity(unsigned int opacity) {
+            const auto& [r, g, b, a] = sprite_.getColor();
+            sprite_.setColor(sf::Color{r, g, b, opacity < 255 ? sf::Uint8(opacity) : sf::Uint8(255)});
+        }
+
+        unsigned int getOpacity() const {
+            return sprite_.getColor().a;
+        }
+
         Colour getColour() const {
             return utility::convertFrom3rdPartyColour(sprite_.getColor());
         }
@@ -346,6 +355,14 @@ namespace ime {
 
     Colour Sprite::getColour() const {
         return pImpl_->getColour();
+    }
+
+    void Sprite::setOpacity(unsigned int opacity) {
+        pImpl_->setOpacity(opacity);
+    }
+
+    unsigned int Sprite::getOpacity() const {
+        return pImpl_->getOpacity();
     }
 
     void Sprite::setVisible(bool visible) {
