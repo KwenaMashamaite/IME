@@ -242,8 +242,34 @@ namespace ime {
          * @return The current status of the timer
          *
          * By default, the timer is stopped
+         *
+         * @see isRunning, isPaused, isStopped
          */
         Status getStatus() const;
+
+        /**
+         * @brief Check if the timer is running or not
+         * @return True if the timer is running, otherwise false
+         *
+         * @see isPaused, isStopped, getStatus
+         */
+        bool isRunning() const;
+
+        /**
+         * @brief Check if the timer is paused or not
+         * @return True if the timer is paused, otherwise false
+         *
+         * @see isRunning, isStopped, getStatus
+         */
+        bool isPaused() const;
+
+        /**
+         * @brief Check if the timer is stopped or not
+         * @return True if the timer is stopped, otherwise false
+         *
+         * @see isRunning, isPaused, getStatus
+         */
+        bool isStopped() const;
 
         /**
          * @brief Get the number of times the callback has been invoked

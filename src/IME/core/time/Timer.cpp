@@ -131,6 +131,18 @@ namespace ime {
         return status_;
     }
 
+    bool Timer::isRunning() const {
+        return status_ == Status::Running;
+    }
+
+    bool Timer::isPaused() const {
+        return status_ == Status::Paused;
+    }
+
+    bool Timer::isStopped() const {
+        return status_ == Status::Stopped;
+    }
+
     void Timer::update(Time deltaTime) {
         if (status_ != Status::Running || remainingDuration_ < Time::Zero)
             return;
