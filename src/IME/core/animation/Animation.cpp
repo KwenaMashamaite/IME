@@ -71,6 +71,17 @@ namespace ime {
         return repeatCounter_ > 0 || repeatCounter_ == -1;
     }
 
+    void Animation::setLoop(bool loop) {
+        if (loop)
+            repeatCounter_ = -1;
+        else
+            repeatCounter_ = 0;
+    }
+
+    bool Animation::isLooped() const {
+        return repeatCounter_ == -1;
+    }
+
     void Animation::setDuration(Time duration) {
         if (duration <= Time::Zero)
             setFrameRate(defaultFrameRate); // Reset to default duration

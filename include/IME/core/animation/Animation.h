@@ -116,6 +116,8 @@ namespace ime {
          *
          * By default, the animation does not repeat (repeat count is 0), it
          * plays once then completes
+         *
+         * @see setLoop
          */
         void setRepeatCount(int count);
 
@@ -140,6 +142,26 @@ namespace ime {
          * @see setRepeatCount and getRepeatCount
          */
         bool isRepeating() const;
+
+        /**
+         * @brief Set whether or not the animation should be repeated continuously
+         * @param loop True to loop animation, otherwise false
+         *
+         * This function is a simplification of setRepeatCount(). When the
+         * @a loop argument is @a true, the repeat count will be set to -1
+         * and when it is @a false, the repeat count will be set to zero
+         *
+         * @see setRepeatCount, isLooped
+         */
+        void setLoop(bool loop);
+
+        /**
+         * @brief Check if the animation is looped or not
+         * @return True if the animation is looped or false if it is not looped
+         *
+         * @see setLoop
+         */
+        bool isLooped() const;
 
         /**
          * @brief Change the duration of the animation
