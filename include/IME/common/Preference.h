@@ -89,17 +89,27 @@ namespace ime {
          *                         to the ime::Preference::Type given in the
          *                         constructor
          *
-         * @see getType
+         * @see getValue, hasValue and getType
          */
         template<typename T>
         void setValue(T value);
 
         /**
+         * @brief Check if the preference has a value or not
+         * @return True if the preference contains a value or false
+         *         if it does not contain a value
+         *
+         * @see setValue
+         */
+        bool hasValue() const;
+
+        /**
          * @brief Get the value of the preference
          * @throws InvalidArgument if @a T is not the same as the ime::Preference::Type
-         *                         given in the constructor
+         *                         given in the constructor or the preference does
+         *                         not have a value
          *
-         * @see setValue and getType
+         * @see setValue, hasValue and getType
          */
         template<typename T>
         T getValue() const;
