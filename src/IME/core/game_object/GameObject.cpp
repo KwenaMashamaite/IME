@@ -133,15 +133,7 @@ namespace ime {
         emitChange(Property{"active", isActive_});
     }
 
-    void GameObject::setCollidable(bool isCollidable) {
-        setActive(isCollidable);
-    }
-
     bool GameObject::isActive() const {
-        return isActive_;
-    }
-
-    bool GameObject::isCollidable() const {
         return isActive_;
     }
 

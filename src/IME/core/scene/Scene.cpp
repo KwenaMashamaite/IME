@@ -95,10 +95,6 @@ namespace ime {
         return "Scene";
     }
 
-    void Scene::setVisibleOnPause(bool show) {
-        isVisibleWhenPaused_ = show;
-    }
-
     void Scene::setOnPauseAction(Uint32 action) {
         if (action & OnPauseAction::Default) {
             isVisibleWhenPaused_ = false;

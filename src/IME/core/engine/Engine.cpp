@@ -31,32 +31,25 @@
 namespace ime {
     namespace {
         template <class T>
-        void setDefaultValueIfNotSet(PropertyContainer& settings,
-            const std::string& setting, T&& defaultValue)
+        void setDefaultValueIfNotSet(PrefContainer& settings, const std::string& preference,
+             PrefType  prefType , T&& defaultValue, const std::string& description)
         {
-            if (settings.hasProperty(setting) && settings.propertyHasValue(setting))
+            if (settings.hasPref(preference) && settings.getPref(preference).hasValue())
                 return;
-            else if (!settings.hasProperty(setting)) {
-                settings.addProperty({setting, std::forward<T>(defaultValue)});
-                IME_PRINT_WARNING(R"(Missing config entry ")" + setting + R"(", using default value)")
+            else if (!settings.hasPref(preference)) {
+                settings.addPref({preference, prefType, std::forward<T>(defaultValue), description});
+                IME_PRINT_WARNING(R"(Missing config entry ")" + preference + R"(", using default value)")
             } else {
-                settings.setValue<T>(setting, std::forward<T>(defaultValue));
-                IME_PRINT_WARNING(R"(Config entry ")" + setting + R"(" defined but it is not assigned any value, using default value)")
+                settings.getPref(preference).setValue<T>(std::forward<T>(defaultValue));
+                IME_PRINT_WARNING(R"(Config entry ")" + preference + R"(" defined but it is not assigned any value, using default value)")
             }
         }
-    }
-
-    Engine::Engine(const std::string &gameName, const PropertyContainer& settings) :
-        Engine(gameName, "")
-    {
-        settings_ = settings;
     }
 
     Engine::Engine(const std::string &gameName, const PrefContainer &settings) :
         Engine(gameName, "")
     {
         configs_ = settings;
-        settings_ = settings.asPropertyContainer();
     }
 
     Engine::Engine(const std::string &gameTitle, const std::string &settingsFile) :
@@ -87,43 +80,39 @@ namespace ime {
 
     void Engine::loadSettings() {
         configs_.load(settingFile_);
-        settings_ = configs_.asPropertyContainer();
     }
 
     void Engine::processSettings() {
-        setDefaultValueIfNotSet(settings_, "WINDOW_TITLE", std::string("Untitled"));
-        setDefaultValueIfNotSet(settings_, "WINDOW_ICON", std::string(""));
-        if (settings_.getValue<std::string>("WINDOW_ICON").empty())
-            settings_.setValue<std::string>("WINDOW_ICON", "OS"); //Operating System icon
-
-        setDefaultValueIfNotSet(settings_, "WINDOW_WIDTH",  600);
-        setDefaultValueIfNotSet(settings_, "WINDOW_HEIGHT", 600);
-        setDefaultValueIfNotSet(settings_, "FPS_LIMIT", 60);
-        setDefaultValueIfNotSet(settings_, "FULLSCREEN", false);
-        setDefaultValueIfNotSet(settings_, "V_SYNC",  false);
-        setDefaultValueIfNotSet(settings_, "FONTS_DIR", std::string("")); // Same directory as the executable
-        setDefaultValueIfNotSet(settings_, "TEXTURES_DIR", std::string(""));
-        setDefaultValueIfNotSet(settings_, "SOUND_EFFECTS_DIR", std::string(""));
-        setDefaultValueIfNotSet(settings_, "MUSIC_DIR", std::string(""));
+        setDefaultValueIfNotSet(configs_, "WINDOW_TITLE", PrefType::String, std::string("Untitled"), "The title of the render window");
+        setDefaultValueIfNotSet(configs_, "WINDOW_ICON", PrefType::String, std::string("OS"), "The icon of the render window");
+        setDefaultValueIfNotSet(configs_, "WINDOW_WIDTH", PrefType::Int, 600, "The width of the render window");
+        setDefaultValueIfNotSet(configs_, "WINDOW_HEIGHT", PrefType::Int, 600, "The height of the render window");
+        setDefaultValueIfNotSet(configs_, "FPS_LIMIT", PrefType::Int, 60, "The frames per second limit of the render window");
+        setDefaultValueIfNotSet(configs_, "FULLSCREEN", PrefType::Bool, false, "Indicates whether or not the render window should be created in full screen mode");
+        setDefaultValueIfNotSet(configs_, "V_SYNC", PrefType::Bool, false, "Indicates whether or not vertical synchronization should be enabled");
+        setDefaultValueIfNotSet(configs_, "FONTS_DIR", PrefType::String, std::string(""), "The directory in which fonts can be found");
+        setDefaultValueIfNotSet(configs_, "TEXTURES_DIR", PrefType::String, std::string(""), "The directory in which textures/images can be found");
+        setDefaultValueIfNotSet(configs_, "SOUND_EFFECTS_DIR", PrefType::String, std::string(""), "The directory in which sound effects can be found");
+        setDefaultValueIfNotSet(configs_, "MUSIC_DIR", PrefType::String, std::string(""), "The directory in which music can be found");
     }
 
     void Engine::initRenderTarget() {
-        auto title = settings_.getValue<std::string>("WINDOW_TITLE");
-        auto width = settings_.getValue<int>("WINDOW_WIDTH");
-        auto height = settings_.getValue<int>("WINDOW_HEIGHT");
+        auto title = configs_.getPref("WINDOW_TITLE").getValue<std::string>();
+        auto width = configs_.getPref("WINDOW_WIDTH").getValue<int>();
+        auto height = configs_.getPref("WINDOW_HEIGHT").getValue<int>();
 
         IME_ASSERT(width > 0, "The width of the window cannot be negative")
         IME_ASSERT(height > 0, "The height of the window cannot be negative")
 
         // Create the window
         privWindow_->create(title, width, height, window_->getStyle());
-        window_->setFullScreen(settings_.getValue<bool>("FULLSCREEN"));
-        window_->setFrameRateLimit(settings_.getValue<int>("FPS_LIMIT"));
-        window_->setVerticalSyncEnable(settings_.getValue<bool>("V_SYNC"));
+        window_->setFullScreen(configs_.getPref("FULLSCREEN").getValue<bool>());
+        window_->setFrameRateLimit(configs_.getPref("FPS_LIMIT").getValue<int>());
+        window_->setVerticalSyncEnable(configs_.getPref("V_SYNC").getValue<bool>());
 
         // Set the window icon
-        if (settings_.getValue<std::string>("WINDOW_ICON") != "OS")
-            privWindow_->setIcon(settings_.getValue<std::string>("WINDOW_ICON"));
+        if (configs_.getPref("WINDOW_ICON").getValue<std::string>() != "OS")
+            privWindow_->setIcon(configs_.getPref("WINDOW_ICON").getValue<std::string>());
 
         // Shutdown engine when window close event is triggered
         window_->onClose([this] {
@@ -145,11 +134,11 @@ namespace ime {
 
     void Engine::initResourceManager() {
         resourceManager_ = ResourceManager::getInstance();
-        resourceManager_->setPathFor(ResourceType::Font, settings_.getValue<std::string>("FONTS_DIR"));
-        resourceManager_->setPathFor(ResourceType::Texture, settings_.getValue<std::string>("TEXTURES_DIR"));
-        resourceManager_->setPathFor(ResourceType::Image, settings_.getValue<std::string>("TEXTURES_DIR"));
-        resourceManager_->setPathFor(ResourceType::SoundBuffer, settings_.getValue<std::string>("SOUND_EFFECTS_DIR"));
-        resourceManager_->setPathFor(ResourceType::Music, settings_.getValue<std::string>("MUSIC_DIR"));
+        resourceManager_->setPathFor(ResourceType::Font, configs_.getPref("FONTS_DIR").getValue<std::string>());
+        resourceManager_->setPathFor(ResourceType::Texture, configs_.getPref("TEXTURES_DIR").getValue<std::string>());
+        resourceManager_->setPathFor(ResourceType::Image, configs_.getPref("TEXTURES_DIR").getValue<std::string>());
+        resourceManager_->setPathFor(ResourceType::SoundBuffer, configs_.getPref("SOUND_EFFECTS_DIR").getValue<std::string>());
+        resourceManager_->setPathFor(ResourceType::Music, configs_.getPref("MUSIC_DIR").getValue<std::string>());
     }
 
     void Engine::processEvents() {
@@ -317,7 +306,7 @@ namespace ime {
         elapsedTime_ = Time::Zero;
         gameTitle_.clear();
         settingFile_.clear();
-        settings_.clear();
+        configs_.clear();
         sceneManager_->clear();
         timerManager_.clear();
         dataSaver_.clear();
@@ -349,10 +338,6 @@ namespace ime {
 
     ui::GuiContainer &Engine::getGui() {
         return gui_;
-    }
-
-    const PropertyContainer &Engine::getSettings() const {
-        return settings_;
     }
 
     PrefContainer &Engine::getConfigs() {
@@ -397,10 +382,6 @@ namespace ime {
 
     const Window &Engine::getWindow() const {
         return *window_;
-    }
-
-    void Engine::onWindowClose(Callback<> callback) {
-        window_->onClose(callback);
     }
 
     void Engine::onFrameStart(Callback<> callback) {

@@ -322,27 +322,6 @@ namespace ime {
 
     protected:
         /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::Scene::setOnPauseAction instead.
-         *
-         * @brief Set whether or not the scene is hidden or rendered
-         *        when it is paused
-         * @param show True to show or false to hide
-         *
-         * When the scene is shown on pause, it is rendered behind the
-         * current active scene but it does not receive any events or
-         * updates. Note that the scene will only be rendered if it has
-         * been entered and it is the next scene (It is the scene that
-         * will run if the current one is popped)
-         *
-         * By default the scene is hidden when it is paused
-         *
-         * @see setOnPauseAction
-         */
-        [[deprecated("Use 'void ime::Scene::setOnPauseAction(ime::Uint32)' instead.")]]
-        void setVisibleOnPause(bool show);
-
-        /**
          * @brief Set which action is taken when the scene is paused
          * @param action Action to be taken
          *
