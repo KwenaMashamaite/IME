@@ -142,7 +142,8 @@ namespace ime {
          * @param isActive True to set as active or false to set as inactive
          *
          * Note that an inactive game object does not participate in
-         * collision detection
+         * collision detection. In addition the game object's update()
+         * method will not be invoked.
          *
          * For grid-based physics you can also disable collisions for the
          * game object without deactivating it by simply setting its collision

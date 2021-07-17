@@ -257,7 +257,8 @@ namespace ime::priv {
 
             //Update game objects - By default, the game object updates its sprite animation
             scene->gameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
-                gameObject->update(deltaTime * scene->getTimescale());
+                if (gameObject->isActive())
+                    gameObject->update(deltaTime * scene->getTimescale());
             });
 
             // Update sprite animations
