@@ -189,6 +189,27 @@ namespace ime {
         return currentDirection_;
     }
 
+    std::pair<bool, GameObject*> GridMover::isBlockedInDirection(const Direction &dir) const {
+        IME_ASSERT(dir.x >= -1 && dir.x <= 1, "Invalid x direction, value must be -1, 0, or 1")
+        IME_ASSERT(dir.y >= -1 && dir.y <= 1, "Invalid y Direction, value must be -1, 0, or 1")
+        IME_ASSERT(!(dir.x == 0 && dir.y == 0), "Invalid direction, at least one value must be -1 or 1")
+
+        auto [row, colm] = targetTile_->getIndex();
+        if (tileMap_.isIndexValid(Index{row + dir.y, colm + dir.x})) {
+            const Tile& adjacentTile = tileMap_.getTile(Index{row + dir.y, colm + dir.x});
+            if (!adjacentTile.isCollidable()) {
+                GameObject* obstacle = getObstacleInTile(adjacentTile);
+
+                if (obstacle && canCollide(obstacle))
+                    return {true, obstacle};
+                else
+                    return {false, nullptr};
+            }
+        }
+
+        return {true, nullptr};
+    }
+
     void GridMover::update(Time deltaTime) {
         if (target_ && !isMoveFrozen_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
@@ -307,7 +328,7 @@ namespace ime {
     }
 
     bool GridMover::handleObstacleCollision() {
-        GameObject* obstacle = getObstacleInTargetTile();
+        GameObject* obstacle = getObstacleInTile(*targetTile_);
 
         if (obstacle && canCollide(obstacle)) {
             targetTile_ = prevTile_;
@@ -321,14 +342,15 @@ namespace ime {
         return false;
     }
 
-    GameObject* GridMover::getObstacleInTargetTile() {
+    GameObject* GridMover::getObstacleInTile(const Tile& tile) const {
         GameObject* obstacle = nullptr;
-        tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
+        tileMap_.forEachChildInTile(tile, [&obstacle, this](GameObject* child) {
             if (child->isObstacle() && child->isActive() && child != target_) {
                 obstacle = child;
                 return;
             }
         });
+
         return obstacle;
     }
 

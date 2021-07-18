@@ -141,6 +141,23 @@ namespace ime {
         bool requestDirectionChange(const Direction& newDir);
 
         /**
+         * @brief Check if the target is blocked from moving in a direction
+         * @param direction The direction to be checked
+         * @return A pair, of which the first element is a bool that is @a true
+         *         if the target is blocked or @a false if the target is not blocked
+         *         and the second element is a pointer to an obstacle game object
+         *         that is a @a nullptr when the first element is @a false or
+         *         when the first element is @a true but the target is not blocked
+         *         by a game object
+         *
+         * This function will return true if the target is blocked by a
+         * collidable tile or an obstacle (see ime::GameObject::setAsObstacle),
+         * or if a move in the given direction will place it outside the bounds
+         * of the grid
+         */
+        std::pair<bool, GameObject*> isBlockedInDirection(const Direction& direction) const;
+
+        /**
          * @brief Get the current direction of the game object
          * @return The current direction of the game object
          */
@@ -508,10 +525,11 @@ namespace ime {
         void onDestinationReached();
 
         /**
-         * @brief Check if the target tile has any obstacle objects or not
+         * @brief Get an obstacle in a tile
+         * @param tile The tile to get an obstacle from
          * @return Pointer to the obstacle object or a nullptr if none exists
          */
-        GameObject* getObstacleInTargetTile();
+        GameObject* getObstacleInTile(const Tile& tile) const;
 
         /**
          * @brief Perfectly align target with the target destination
