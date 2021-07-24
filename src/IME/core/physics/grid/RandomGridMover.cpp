@@ -28,72 +28,25 @@
 namespace ime {
     RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject* target) :
         GridMover(Type::Random, tileMap, target),
-        currDirection_(Unknown),
-        prevDirection_(Unknown),
-        movementStarted_{false},
-        isSmartMoveEnabled_{false},
-        switchToSmartMove_{false},
-        switchToNormal_{false},
-        smartMover_(tileMap, target)
+        movementStarted_{false}
     {
         // Invoke internal event handlers first before raising event externally
         setHandlerIntakeAsInternal(true);
 
-        smartMover_.setMaxLinearSpeed(getMaxLinearSpeed());
-
         onPropertyChange("target", [this](const Property& property) {
             if (auto* newTarget = property.getValue<GameObject*>(); newTarget) {
-                prevDirection_ = currDirection_;
-                smartMover_.setTarget(newTarget);
-                smartMover_.setMaxLinearSpeed(getMaxLinearSpeed());
-
                 if (movementStarted_)
                     generateNewDirection();
             }
         });
 
-        onTileCollision([this](Index) {
-            revertAndGenerateDirection();
-        });
-
-        onGameObjectCollision([this](GameObject*, GameObject* other) {
-            if (other->isObstacle())
-                revertAndGenerateDirection();
-        });
-
         onAdjacentMoveEnd([this](Index) {
-            if (switchToSmartMove_) {
-                switchToSmartMove_ = false;
-                isSmartMoveEnabled_ = true;
-                smartMover_.resetTargetTile();
-                setRandomPosition();
-                smartMover_.startMovement();
-            } else if (movementStarted_) {
-                resetTargetTile();
+           if (movementStarted_)
                 generateNewDirection();
-            }
-        });
-
-        onGridBorderCollision([this] {
-            revertAndGenerateDirection();
         });
 
         // Register subsequent event handlers as external
         setHandlerIntakeAsInternal(false);
-
-        smartMover_.onDestinationReached([this](Index) {
-            setRandomPosition();
-        });
-
-        smartMover_.onAdjacentMoveEnd([this](Index) {
-            if (switchToNormal_) {
-                switchToNormal_ = false;
-                isSmartMoveEnabled_ = false;
-                resetTargetTile();
-                if (movementStarted_)
-                    generateNewDirection();
-            }
-        });
     }
 
     std::string RandomGridMover::getClassName() const {
@@ -103,96 +56,54 @@ namespace ime {
     void RandomGridMover::startMovement() {
         if (!movementStarted_) {
             movementStarted_ = true;
-            if (isSmartMoveEnabled_)
-                smartMover_.startMovement();
-            else
-                generateNewDirection();
+            generateNewDirection();
+            emit("startMovement");
         }
     }
 
     void RandomGridMover::stopMovement() {
-        movementStarted_ = false;
-        if (isSmartMoveEnabled_)
-            smartMover_.stopMovement();
-    }
-
-    Index RandomGridMover::getTargetTileIndex() const {
-        if (isSmartMoveEnabled_)
-            return smartMover_.getTargetTileIndex();
-
-        return GridMover::getTargetTileIndex();
+        if (movementStarted_) {
+            movementStarted_ = false;
+            emit("stopMovement");
+        }
     }
 
     void RandomGridMover::generateNewDirection() {
-        if (!getTarget() || getMovementRestriction() == GridMover::MoveRestriction::All)
-            return;
+        ime::Direction reverseGhostDir = getDirection() * (-1);
 
-        prevDirection_ = getDirection();
-        auto oppositeDirection = getDirection() * (-1);
-        Direction newDirection;
-        static auto gen_random_num_between_neg_1_and_1 = utility::createRandomNumGenerator(-1, 1);
-
-        while (true) {
-            newDirection = {gen_random_num_between_neg_1_and_1(), gen_random_num_between_neg_1_and_1()};
-            if (newDirection == Unknown)
+        // Initialize possible directions
+        for (const auto& dir : {Left, Up, Right, Down}) {
+            // Prevent target from going backwards
+            if (dir == reverseGhostDir)
                 continue;
 
-            // Prohibit going in opposite direction to prevent back and forth movement between two tiles
-            if (newDirection != oppositeDirection && requestDirectionChange(newDirection))
-                break;
+            directionAttempts_.emplace_back(dir);
         }
-    }
 
-    void RandomGridMover::revertAndGenerateDirection() {
-        if (getTarget()) {
-            currDirection_ = prevDirection_;
-            generateNewDirection();
-        }
-    }
+        // Randomize the directions so that the direction the target chooses
+        // to go in is not predictable
+        auto static randomEngine = std::default_random_engine{std::random_device{}()};
+        std::shuffle(directionAttempts_.begin(), directionAttempts_.end(), randomEngine);
 
-    void RandomGridMover::setSmartMoveEnable(bool enable) {
-        if (!isSmartMoveEnabled_ && enable) {
-            IME_ASSERT(smartMover_.getTarget(), "Cannot enable advanced movement without a target")
-            if (isTargetMoving())
-                switchToSmartMove_ = true;
-            else {
-                isSmartMoveEnabled_ = true;
-                smartMover_.resetTargetTile();
-                setRandomPosition();
-                if (movementStarted_)
-                    smartMover_.startMovement();
-            }
-        } else if (isSmartMoveEnabled_ && !enable) {
-            if (smartMover_.isTargetMoving())
-                switchToNormal_ = true;
-            else {
-                isSmartMoveEnabled_ = false;
-                resetTargetTile();
-            }
-        }
-    }
-
-    bool RandomGridMover::isSmartMoveEnabled() const {
-        return isSmartMoveEnabled_;
-    }
-
-    void RandomGridMover::setRandomPosition() {
-        static auto generateRandomRow = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().y);
-        static auto generateRandomColm = utility::createRandomNumGenerator(0, getGrid().getSizeInTiles().x);
-
-        Index newDestination;
         do {
-            newDestination = Index{generateRandomRow(), generateRandomColm()};
-        } while(!smartMover_.isDestinationReachable(newDestination));
+            // Tried all possible non-reverse directions with no luck (target in stuck in a dead-end)
+            // Attempt to reverse direction and go backwards. This an exception to the no reverse
+            // direction rule. Without the exception, the target will be stuck in an infinite loop
+            if (directionAttempts_.empty()) {
+                requestDirectionChange(reverseGhostDir);
+                break;
+            }
 
-        smartMover_.setDestination(newDestination);
-    }
+            Vector2i dir = directionAttempts_.back();
+            directionAttempts_.pop_back(); // Prevent the same direction from being evaluated more than once
 
-    void RandomGridMover::update(Time deltaTime) {
-        if (isSmartMoveEnabled_)
-            smartMover_.update(deltaTime);
-        else
-            GridMover::update(deltaTime);
+            if (!isBlockedInDirection(dir).first) {
+                directionAttempts_.clear();
+                requestDirectionChange(dir);
+                break;
+            }
+
+        } while(true);
     }
 
     RandomGridMover::~RandomGridMover() {

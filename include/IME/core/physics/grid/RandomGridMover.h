@@ -26,18 +26,23 @@
 #define IME_RANDOMGRIDMOVER_H
 
 #include "IME/core/physics/grid/GridMover.h"
-#include "IME/core/physics/grid/TargetGridMover.h"
+#include <vector>
 
 namespace ime {
     /**
-     * @brief Class for moving a game object randomly in a grid
+     * @brief Moves a GameObject randomly in a TileMap
+     *
+     * Note that the target cannot move backwards because it may be
+     * stuck in a loop where it switches between the same two tiles.
+     * The only time it reverses direction is when attempting to get
+     * out of a ead-end.
      */
     class IME_API RandomGridMover : public GridMover {
     public:
         using Ptr = std::unique_ptr<RandomGridMover>; //!< Unique grid mover pointer
 
         /**
-         * @brief Create a random grid mover object
+         * @brief Constructor
          * @param tileMap Grid to move target in
          * @param target Game object to be moved in the grid
          */
@@ -71,16 +76,9 @@ namespace ime {
         void stopMovement();
 
         /**
-         * @brief Get the index of the tile the target is trying to reach
-         * @return The index of the tile the target is trying to reach
+         * @deprecated Since v2.2.0. The target can now move out of a dead-end
+         *             by default.
          *
-         * If the target it not moving towards any tiles, this function
-         * will return the index of the tile currently occupied by the
-         * target
-         */
-        Index getTargetTileIndex() const override;
-
-        /**
          * @brief Enable or disable smart random movement
          * @param enable True to enable or false to disable
          *
@@ -93,25 +91,18 @@ namespace ime {
          *
          * By default smart mode is disabled
          */
-        void setSmartMoveEnable(bool enable);
+         [[deprecated("It will be removed in v2.3.0.")]]
+        void setSmartMoveEnable(bool enable) {IME_UNUSED(enable);}
 
         /**
+         * @deprecated Since v2.2.0
          * @brief Check if smart mode is enabled or not
          * @return True if enabled, otherwise false
          *
          * @see setSmartMoveEnable
          */
-        bool isSmartMoveEnabled() const;
-
-        /**
-         * @internal
-         * @brief Update the game object movement in the grid
-         * @param deltaTime Time passed since movement was last updated
-         *
-         * @warning This function is intended for internal use only and should
-         * never be called outside of IME
-         */
-        void update(Time deltaTime) override;
+        [[deprecated("It will be removed in v2.3.0.")]]
+        bool isSmartMoveEnabled() const {return true;}
 
         /**
          * @brief Destructor
@@ -124,34 +115,9 @@ namespace ime {
          */
         void generateNewDirection();
 
-        /**
-         * @brief Set a random position to go to in the grid
-         *
-         * This function is only valid when in smart mode
-         */
-        void setRandomPosition();
-
-        /**
-         * @brief Restore previous direction and generate a new direction
-         *        of motion based on previous direction
-         *
-         * This function is intended to be used only when the target has
-         * collided with an obstacle. The target is not allowed to go in the
-         * direction opposite its current direction (180 degree turns). This
-         * prevents it from going back and forth between the same tiles instead
-         * of moving. Reverting the direction allows the target to know its
-         * correct opposite  direction
-         */
-        void revertAndGenerateDirection();
-
     private:
-        Direction currDirection_;    //!< Keeps track of the targets previous direction
-        Direction prevDirection_;    //!< Keeps track of the targets previous direction
-        bool movementStarted_;       //!< A flag indicating whether or not movement has been started
-        bool isSmartMoveEnabled_;    //!< A flag indicating whether or not smart mode is enabled
-        bool switchToSmartMove_;     //!< A flag indicating whether or not to switch to smart movement
-        bool switchToNormal_;        //!< A flag indicating whether or not to switch to default movement
-        TargetGridMover smartMover_; //!< Handles grid movement in smart mode
+        bool movementStarted_;                     //!< A flag indicating whether or not movement has been started
+        std::vector<Direction> directionAttempts_; //!< Stores directions to be attempted
     };
 }
 
