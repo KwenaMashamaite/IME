@@ -198,11 +198,11 @@ namespace ime::ui {
         return pimpl_->getMouseCursor();
     }
 
-    void Widget::showWithEffect(ShowAnimationType type, Time duration) {
+    void Widget::showWithEffect(AnimationType type, Time duration) {
         pimpl_->showWithEffect(type, duration);
     }
 
-    void Widget::hideWithEffect(ShowAnimationType type, Time duration) {
+    void Widget::hideWithEffect(AnimationType type, Time duration) {
         pimpl_->hideWithEffect(type, duration);
     }
 

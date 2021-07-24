@@ -63,21 +63,23 @@ namespace ime {
         NotAllowed              //!< Action not allowed cursor
     };
 
-    enum class ShowAnimationType {
-        Fade,          //!< Fade widget in or out
-        Scale,         //!< Shrink to the center of the widget to hide or grow from its center to show
-        SlideToRight,  //!< Slide to the right to hide or from left to show
-        SlideToLeft,   //!< Slide to the left to hide or from right to show
-        SlideToBottom, //!< Slide to the bottom to hide or from top to show
-        SlideToTop,    //!< Slide to the top to hide or from bottom to show
-
-        SlideFromLeft = SlideToRight, //!< Slide from left to show or to the right to hide
-        SlideFromRight = SlideToLeft, //!< Slide from right to show or to the left to hide
-        SlideFromTop = SlideToBottom, //!< Slide from top to show or to the bottom to hide
-        SlideFromBottom = SlideToTop  //!< Slide from bottom to show or to the top to hide
-    };
-
     namespace ui {
+        /**
+         * @brief The type of a ime::ui::Widget animation
+         */
+        enum class AnimationType {
+            Fade,                         //!< Fade widget in or out
+            Scale,                        //!< Shrink to the center of the widget to hide or grow from its center to show
+            SlideToRight,                 //!< Slide to the right to hide or from left to show
+            SlideToLeft,                  //!< Slide to the left to hide or from right to show
+            SlideToBottom,                //!< Slide to the bottom to hide or from top to show
+            SlideToTop,                   //!< Slide to the top to hide or from bottom to show
+            SlideFromLeft = SlideToRight, //!< Slide from left to show or to the right to hide
+            SlideFromRight = SlideToLeft, //!< Slide from right to show or to the left to hide
+            SlideFromTop = SlideToBottom, //!< Slide from top to show or to the bottom to hide
+            SlideFromBottom = SlideToTop  //!< Slide from bottom to show or to the top to hide
+        };
+
         /**
          * @brief Abstract base class for Graphical User Interface (GUI) elements
          */
@@ -494,7 +496,7 @@ namespace ime {
              * @see hideWithEffect
              * @see isAnimationPlaying
              */
-            void showWithEffect(ShowAnimationType type, Time duration);
+            void showWithEffect(AnimationType type, Time duration);
 
             /**
              * @brief Hide the widget with an animation
@@ -512,7 +514,7 @@ namespace ime {
              * @see showWithEffect
              * @see isAnimationPlaying
              */
-            void hideWithEffect(ShowAnimationType type, Time duration);
+            void hideWithEffect(AnimationType type, Time duration);
 
             /**
              * @brief Check whether or not an animation is currently playing
@@ -660,6 +662,11 @@ namespace ime {
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
         };
     } // namespace ui
+
+    /**
+     * @deprecated Since v2.2.0, use ime::ui::AnimationType instead
+     */
+    using ShowAnimationType [[deprecated("Use 'ime::ui::AnimationType' instead.")]] = ui::AnimationType;
 
     /**
      * @brief Bind to the x position of a widget
