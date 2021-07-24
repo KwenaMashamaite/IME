@@ -68,6 +68,7 @@ namespace ime {
             Manual,             //!< Manually triggered grid mover
             Random,             //!< Moves a game object randomly in the grid
             Target,             //!< Moves a game object to a specific tile within the grid
+            Cyclic,             //!< Moves a game object by following a closed path
             KeyboardControlled, //!< Moves a game object within the grid using the keyboard as a trigger
             Custom              //!< For classes that extend the grid mover outside of IME
         };

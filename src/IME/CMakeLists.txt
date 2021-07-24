@@ -44,6 +44,7 @@ set(IME_SRC
     core/physics/grid/TargetGridMover.cpp
     core/physics/grid/KeyboardGridMover.cpp
     core/physics/grid/RandomGridMover.cpp
+    core/physics/grid/CyclicGridMover.cpp
     core/physics/PhysicsWorld.cpp
     core/scene/Scene.cpp
     core/scene/SceneManager.cpp
