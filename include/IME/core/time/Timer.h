@@ -106,12 +106,28 @@ namespace ime {
         /**
          * @brief Get the countdown starting point
          * @return The countdown starting point
+         *
+         * @see setInterval, getElapsedTime
          */
         Time getInterval() const;
 
         /**
+         * @brief Get the time elapsed since the timer was started
+         * @return The time elapsed since the timer was started
+         *
+         * Note that the elapsed time is reset to ime::Time::Zero after each
+         * invocation of the callback or when the timer is stopped before its
+         * expiry time
+         *
+         * @see start, getInterval and getRemainingDuration
+         */
+        Time getElapsedTime() const;
+
+        /**
          * @brief Get time remaining before the timer reaches zero
          * @return The time remaining before the timer reaches zero
+         *
+         * @see getElapsedTime and getInterval
          */
         Time getRemainingDuration() const;
 

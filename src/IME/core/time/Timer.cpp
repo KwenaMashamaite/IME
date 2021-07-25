@@ -65,6 +65,10 @@ namespace ime {
         return interval_;
     }
 
+    Time Timer::getElapsedTime() const {
+        return interval_ - remainingDuration_;
+    }
+
     Time Timer::getRemainingDuration() const {
         return remainingDuration_;
     }
