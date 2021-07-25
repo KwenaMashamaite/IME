@@ -213,7 +213,7 @@ namespace ime {
          * greater than zero and the timeout callback is set, otherwise
          * undefined behavior
          *
-         * @see setInterval, setTimeoutCallback, restart and pause
+         * @see onStart, setInterval, setTimeoutCallback, restart and pause
          */
         void start();
 
@@ -226,7 +226,7 @@ namespace ime {
          * not immediately started after it has been stooped. The function
          * start must be called to restart the timer after it has been stopped
          *
-         * @see start and getRemainingDuration
+         * @see onStop, start and getRemainingDuration
          */
         void stop();
 
@@ -237,7 +237,7 @@ namespace ime {
          * function. The timer will begin the countdown from the remaining
          * duration instead of restarting from the interval
          *
-         * @see start and setInterval
+         * @see onPause, start and setInterval
          */
         void pause();
 
@@ -245,11 +245,12 @@ namespace ime {
          * @brief Restart the countdown
          *
          * Unlike stop, this function stops the timer and immediately
-         * starts it. The countdown will start from the interval. The
-         * remaining duration will also be reset to the value of the
-         * interval
+         * starts it. However, the start and stop events will not be
+         * triggered, only the restart event. The countdown will start
+         * from the interval and the remaining duration will be reset to
+         * the value of the interval
          *
-         * @see setInterval
+         * @see onRestart, setInterval
          */
         void restart();
 
@@ -303,6 +304,61 @@ namespace ime {
         bool isDispatched() const;
 
         /**
+         * @brief Add an event listener to a start event
+         * @param callback The function to be executed when the timer is started
+         *
+         * This event is triggered when the timer is started for the first
+         * time or when it is started after it was paused.
+         *
+         * By default, there is no callback registered to this event. Pass
+         * @a nullptr to remove any registered event listener. In addition,
+         * note that adding a new event listener removes the previous event
+         * listener
+         *
+         * @see start, onStop, onPause and onRestart
+         */
+        void onStart(const Callback<Timer&>& callback);
+
+        /**
+         * @brief Add an event listener to a pause event
+         * @param callback Function to be executed when the timer is paused
+         *
+         * By default, there is no callback registered to this event. Pass
+         * @a nullptr to remove any registered event listener. In addition,
+         * note that adding a new event listener removes the previous event
+         * listener
+         *
+         * @see pause, onStart, onStop and onRestart
+         */
+        void onPause(const Callback<Timer&>& callback);
+
+        /**
+         * @brief Add an event listener to a stop event
+         * @param callback Function to b execute when the timer is stopped
+         *
+         * By default, there is no callback registered to this event. Pass
+         * @a nullptr to remove any registered event listener. In addition,
+         * note that adding a new event listener removes the previous event
+         * listener
+         *
+         * @see stop, onStart, onPause and onRestart
+         */
+        void onStop(const Callback<Timer&>& callback);
+
+        /**
+         * @brief Add an event listener to a restart event
+         * @param callback Function to be executed when the timer is restarted
+         *
+         * By default, there is no callback registered to this event. Pass
+         * @a nullptr to remove any registered event listener. In addition,
+         * note that adding a new event listener removes the previous event
+         * listener
+         *
+         * @see restart, onStart, onPause and onStop
+         */
+        void onRestart(const Callback<Timer&>& callback);
+
+        /**
          * @internal
          * @brief Update the time
          * @param deltaTime Time passed since last update
@@ -313,13 +369,19 @@ namespace ime {
         void update(Time deltaTime);
 
     private:
-        Status status_;          //!< The current state of the timer
-        bool isDispatched_;      //!< A flag indicating whether or not the callback has been invoked
-        int repeatCount_;        //!< The number of times the timer repeats
-        int dispatchCount_;      //!< Indicates how many times the callback has been invoked
-        Time interval_;          //!< Countdown starting point
-        Time remainingDuration_; //!< The time remaining before the timer reaches zero
-        Callback<> callback_;    //!< Function executed when the timer reaches zero
+        Status status_;              //!< The current state of the timer
+        bool isExecutionComplete_;   //!< A flag indicating whether or not the timer has completed the callback execution
+        bool isRestarting_;          //!< A flag indicating whether or not the timer is in the middle of a restart
+        bool isDispatched_;          //!< A flag indicating whether or not the callback has been invoked
+        int repeatCount_;            //!< The number of times the timer repeats
+        int dispatchCount_;          //!< Indicates how many times the callback has been invoked
+        Time interval_;              //!< Countdown starting point
+        Time remainingDuration_;     //!< The time remaining before the timer reaches zero
+        Callback<> onTimeout_;       //!< A function executed when the countdown reaches zero
+        Callback<Timer&> onStart_;   //!< A function executed when the timer is started
+        Callback<Timer&> onPause_;   //!< A function executed when the timer is paused
+        Callback<Timer&> onStop_;    //!< A function executed when the timer is stopped
+        Callback<Timer&> onRestart_; //!< A Function executed when the timer is restarted
     };
 }
 
