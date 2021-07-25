@@ -87,7 +87,7 @@ namespace ime {
     }
 
     bool Timer::isRepeating() const {
-        return repeatCount_ > 0;
+        return repeatCount_ > 0 || repeatCount_ == -1;
     }
 
     void Timer::setTimeoutCallback(Callback<> callback) {
