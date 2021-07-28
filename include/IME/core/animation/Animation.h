@@ -173,9 +173,12 @@ namespace ime {
          * to set either the frame rate or the duration
          *
          * Note that if the specified duration is less than or equal to
-         * ime::Time::Zero, then the duration will be set to the default one
+         * ime::Time::Zero, then the duration will be set to the default
+         * one. In addition, if the specified duration results in a frame
+         * @e time of more than @a 1 second, the frame @e rate will be set
+         * to @a zero.
          *
-         * @see setFrameRate
+         * @see setFrameRate and getFrameTime
          */
         void setDuration(Time duration);
 
@@ -541,6 +544,7 @@ namespace ime {
         bool isShownOnStart_;       //!< A flag indicating whether or not the sprite is shown when the animations starts
         bool isHiddenOnComplete_;   //!< A flag indicating whether or not the sprite is hidden when the animation completes
         bool isFrameResetOnStop_;   //!< A flag indicating whether or not the current frame is reset to the first frame when animation is interrupted
+        bool isDurationDerived_;    //!< A flag indicating whether or not the duration was derived from the frame rate
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
         float timescale_;           //!< Playback speed of the animation
     };

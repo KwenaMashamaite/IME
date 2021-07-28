@@ -24,6 +24,7 @@
 
 #include "IME/core/animation/Animation.h"
 #include <iterator>
+#include <cmath>
 
 namespace ime {
     namespace {
@@ -44,7 +45,9 @@ namespace ime {
          isFrameResetOnStop_{true},
          completionFrame_{-1},
          timescale_{1.0f}
-    {}
+    {
+        isDurationDerived_ = (duration == Time::Zero);
+    }
 
     std::shared_ptr<Animation> Animation::create(const std::string &name,
         const SpriteSheet& spriteSheet, Time duration)
@@ -83,10 +86,13 @@ namespace ime {
     }
 
     void Animation::setDuration(Time duration) {
-        if (duration <= Time::Zero)
-            setFrameRate(defaultFrameRate); // Reset to default duration
-        else
+        if (duration <= Time::Zero) {
+            isDurationDerived_ = true;
+            setFrameRate(defaultFrameRate);
+        } else {
+            isDurationDerived_ = false;
             calculateFrameRate(duration, 0);
+        }
     }
 
     Time Animation::getDuration() const {
@@ -105,6 +111,8 @@ namespace ime {
     }
 
     void Animation::setFrameRate(unsigned int frameRate) {
+        isDurationDerived_ = true;
+
         if (frameRate == 0)
             calculateFrameRate(Time::Zero, defaultFrameRate); // Reset to default frame rate
         else
@@ -173,13 +181,13 @@ namespace ime {
         IME_ASSERT(!newFrames.empty(), "Failed to construct frames, either start position or number of frames is invalid")
 
         std::move(newFrames.begin(), newFrames.end(), std::back_inserter(frames_));
-        calculateFrameRate(duration_, 0);
+        calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
     }
 
     void Animation::addFrame(Index index) {
         if (auto frame = spriteSheet_.getFrame(index); frame) {
             frames_.emplace_back(*frame);
-            calculateFrameRate(duration_, 0);
+            calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }
 
@@ -188,7 +196,7 @@ namespace ime {
             addFrame(frameIndex); //Add frame at the back instead of issuing error
         else if (auto frame = spriteSheet_.getFrame(frameIndex); frame) {
             frames_.insert(frames_.begin() + index, *frame);
-            calculateFrameRate(duration_, 0);
+            calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }
 
@@ -270,12 +278,23 @@ namespace ime {
             duration_ = ime::seconds(static_cast<float>(getFrameCount()) / frameRate_);
         } else if (duration > Time::Zero && frameRate == 0) {
             duration_ = duration;
-            frameRate_ = static_cast<unsigned int>(getFrameCount() / duration.asSeconds());
+
+            float newFrameRate = getFrameCount() / duration.asSeconds();
+
+            // Frames are counted per 1 second, so we only set the frame rate if
+            // it is a whole number, otherwise it is set to zero so that the frame
+            // time is derived from the duration instead of the frame rate.
+            if (floorf(newFrameRate) == newFrameRate)
+                frameRate_ = static_cast<int>(newFrameRate);
+            else
+                frameRate_ = 0;
         } else {
             frameRate_ = frameRate;
             duration_ = ime::seconds(static_cast<float>(getFrameCount()) / frameRate);
         }
 
-        frameTime_ = frameRate_ != 0 ? ime::seconds(1.0f / frameRate_) : Time::Zero;
+        // A frame rate of zero implies that the same frame will be shown for more
+        // than 1 second, therefore we derive the frame time from the duration instead
+        frameTime_ = frameRate_ != 0 ? ime::seconds(1.0f / frameRate_) : ime::seconds(duration_.asSeconds() / getFrameCount());
     }
 }
