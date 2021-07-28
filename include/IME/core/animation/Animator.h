@@ -490,7 +490,7 @@ namespace ime {
          *
          * This function sets the frame to be displayed on the target
          */
-        void setCurrentFrame(Animation::Frame frame);
+        void setCurrentFrame(const Animation::Frame& frame);
 
         /**
          * @brief Reset the current frame to the starting frame

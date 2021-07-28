@@ -41,8 +41,22 @@ namespace ime {
             texture_{std::make_shared<Texture>()}
         {}
 
-        SpriteImpl(const SpriteImpl&) = default;
-        SpriteImpl& operator=(const SpriteImpl&) = default;
+        SpriteImpl(const SpriteImpl& other) :
+            sprite_{other.sprite_},
+            isVisible_{other.isVisible_},
+            prevSpriteColour_{other.prevSpriteColour_},
+            animator_{other.animator_},
+            texture_{std::make_shared<Texture>(*other.texture_)}
+        {}
+
+        SpriteImpl& operator=(const SpriteImpl& rhs) {
+            if (this != &rhs) {
+                auto temp{rhs};
+                swap(temp);
+            }
+
+            return *this;
+        }
 
         SpriteImpl(SpriteImpl&& other) noexcept {
             *this = std::move(other);
@@ -64,8 +78,10 @@ namespace ime {
         }
 
         void setTexture(const Texture &texture) {
-            *texture_ = *std::make_shared<Texture>(texture);
-            sprite_.setTexture(texture_->getInternalTexture(), true);
+            if (*texture_ != texture) {
+                *texture_ = *std::make_shared<Texture>(texture);
+                sprite_.setTexture(texture_->getInternalTexture(), true);
+            }
         }
 
         void setTexture(const std::string &filename) {

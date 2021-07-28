@@ -478,7 +478,7 @@ namespace ime {
         /// @See cycle(bool). Code must come here after refactoring that function
     }
 
-    void Animator::setCurrentFrame(Animation::Frame frame) {
+    void Animator::setCurrentFrame(const Animation::Frame& frame) {
         (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
         (*target_).get().setTextureRect(frame.left, frame.top, frame.width, frame.height);
     }
