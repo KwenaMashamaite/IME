@@ -76,6 +76,9 @@ namespace ime {
     }
 
     void Collider::setBody(RigidBody* body) {
+        if (body && body_ == body)
+            return;
+
         IME_ASSERT(body, "Body must not be a nullptr")
         auto b2FixtureDefinition = std::make_unique<b2FixtureDef>();
         b2FixtureDefinition->shape = &getInternalShape();
@@ -99,6 +102,8 @@ namespace ime {
 
         body_ = body;
         hasRigidBody_ = true;
+
+        emitChange(Property{"body", body_});
     }
 
     RigidBody* Collider::getBody() {
@@ -110,6 +115,9 @@ namespace ime {
     }
 
     void Collider::setSensor(bool sensor) {
+        if (isSensor() == sensor)
+            return;
+
         fixture_->SetSensor(sensor);
         emitChange(Property{"sensor", sensor});
     }
@@ -159,6 +167,9 @@ namespace ime {
     }
 
     void Collider::setDensity(float density) {
+        if (getDensity() == density)
+            return;
+
         IME_ASSERT(density >= 0, "A collider cannot have a negative density")
         fixture_->SetDensity(density);
         body_->getInternalBody()->ResetMassData();
@@ -170,6 +181,9 @@ namespace ime {
     }
 
     void Collider::setFriction(float friction) {
+        if (getFriction() == friction)
+            return;
+
         fixture_->SetFriction(friction);
         emitChange(Property{"friction", friction});
     }
@@ -179,6 +193,9 @@ namespace ime {
     }
 
     void Collider::setRestitution(float restitution) {
+        if (getRestitution() == restitution)
+            return;
+
         fixture_->SetRestitution(restitution);
         emitChange(Property{"restitution", restitution});
     }
@@ -188,6 +205,9 @@ namespace ime {
     }
 
     void Collider::setRestitutionThreshold(float threshold) {
+        if (getRestitutionThreshold() == threshold)
+            return;
+
         fixture_->SetRestitutionThreshold(threshold);
         emitChange(Property{"restitutionThreshold", threshold});
     }

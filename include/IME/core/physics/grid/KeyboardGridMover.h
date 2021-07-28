@@ -184,6 +184,22 @@ namespace ime {
         TriggerKeys triggerKeys_;           //!< Keyboard keys that control the actors direction of motion
         InputCallback onInput_;             //!< A function called when the grid mover receives input
     };
+
+    /**
+     * @brief Overload of binary operator ==
+     * @param lhs Left operand
+     * @param rhs Right operand
+     * @return True if @a lhs is equal to @a rhs
+     */
+    extern IME_API bool operator==(const TriggerKeys& lhs, const TriggerKeys& rhs);
+
+    /**
+     * @brief Overload of binary operator !=
+     * @param lhs Left operand (a vector)
+     * @param rhs Right operand (a vector)
+     * @return True if @a lhs is @e not equal to @a rhs
+     */
+    extern IME_API bool operator!=(const TriggerKeys& lhs, const TriggerKeys& rhs);
 }
 
 #endif

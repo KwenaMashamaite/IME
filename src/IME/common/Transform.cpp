@@ -32,8 +32,12 @@ namespace ime {
     {}
 
     void Transform::setPosition(float x, float y) {
+        if (position_.x == x && position_.y == y)
+            return;
+
         position_.x = x;
         position_.y = y;
+
         if (onPropertyChange_)
             onPropertyChange_(Property{"position", position_});
     }
@@ -47,7 +51,11 @@ namespace ime {
     }
 
     void Transform::setRotation(float angle) {
-        rotation_ = static_cast<float>(fmod(static_cast<double>(angle), 360));
+        float newRotation = static_cast<float>(fmod(static_cast<double>(angle), 360));
+        if (rotation_ == newRotation)
+            return;
+
+        rotation_ = newRotation;
         if (rotation_ < 0)
             rotation_ += 360.f;
 
@@ -64,6 +72,9 @@ namespace ime {
     }
 
     void Transform::setScale(float factorX, float factorY) {
+        if (scale_.x == factorX && scale_.y == factorY)
+            return;
+
         scale_.x = factorX;
         scale_.y = factorY;
 
@@ -88,6 +99,9 @@ namespace ime {
     }
 
     void Transform::setOrigin(float x, float y) {
+        if (origin_.x == x && origin_.y == y)
+            return;
+
         origin_.x = x;
         origin_.y = y;
 

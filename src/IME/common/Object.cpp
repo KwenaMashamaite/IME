@@ -50,8 +50,10 @@ namespace ime {
     }
 
     void Object::setTag(const std::string &tag) {
-        tag_ = tag;
-        emitChange(Property{"tag", tag_});
+        if (tag_ != tag) {
+            tag_ = tag;
+            emitChange(Property{"tag", tag_});
+        }
     }
 
     const std::string &Object::getTag() const {

@@ -58,6 +58,8 @@ namespace ime {
             trigger_ = trigger;
             removeInputEventListeners();
             attachInputEventListeners();
+
+            emitChange(Property{"movementTrigger", trigger});
         }
     }
 
@@ -76,7 +78,10 @@ namespace ime {
     }
 
     void KeyboardGridMover::setKeys(const TriggerKeys &triggerKeys) {
-        triggerKeys_ = triggerKeys;
+        if (triggerKeys_ != triggerKeys) {
+            triggerKeys_ = triggerKeys;
+            emitChange(Property{"keys", triggerKeys});
+        }
     }
 
     TriggerKeys &KeyboardGridMover::getTriggerKeys() {
@@ -171,4 +176,15 @@ namespace ime {
     KeyboardGridMover::~KeyboardGridMover() {
         emit("destruction");
     }
-}
+
+    bool operator==(const ime::TriggerKeys &lhs, const ime::TriggerKeys &rhs) {
+        return (lhs.leftKey == rhs.leftKey) &&
+                (lhs.rightKey == rhs.rightKey) &&
+                (lhs.upKey == rhs.upKey) &&
+                (lhs.downKey == rhs.downKey);
+    }
+
+    bool operator!=(const ime::TriggerKeys &lhs, const ime::TriggerKeys &rhs) {
+        return !(lhs == rhs);
+    }
+} //namespace ime

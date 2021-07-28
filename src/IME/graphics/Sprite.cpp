@@ -295,6 +295,9 @@ namespace ime {
     void Sprite::setTextureRect(unsigned int left, unsigned int top, unsigned int width,
         unsigned int height)
     {
+        if (auto [l, t, w, h] = getTextureRect(); l == left && t == top && w == width && h == height)
+            return;
+
         pImpl_->setTextureRect(left, top, width, height);
         emitChange(Property{"textureRect", getTextureRect()});
     }
@@ -304,6 +307,9 @@ namespace ime {
     }
 
     void Sprite::setPosition(float x, float y) {
+        if (auto [xPos, yPos] = getPosition(); xPos == x && yPos == y)
+            return;
+
         pImpl_->setPosition(x, y);
         emitChange(Property{"position", Vector2f{x, y}});
     }
@@ -313,11 +319,17 @@ namespace ime {
     }
 
     void Sprite::setRotation(float angle) {
+        if (getRotation() == angle)
+            return;
+
         pImpl_->setRotation(angle);
         emitChange(Property{"rotation", angle});
     }
 
     void Sprite::setScale(float factorX, float factorY) {
+        if (auto [x, y] = getScale(); x == factorX && y == factorY)
+            return;
+
         pImpl_->setScale(factorX, factorY);
         emitChange(Property{"scale", Vector2f{factorX, factorY}});
     }
@@ -367,7 +379,11 @@ namespace ime {
     }
 
     void Sprite::setColour(Colour colour) {
+        if (getColour() == colour)
+            return;
+
         pImpl_->setColour(colour);
+        emitChange(Property{"colour", colour});
     }
 
     Colour Sprite::getColour() const {
@@ -375,7 +391,11 @@ namespace ime {
     }
 
     void Sprite::setOpacity(unsigned int opacity) {
+        if (getOpacity() == opacity)
+            return;
+
         pImpl_->setOpacity(opacity);
+        emitChange(Property{"opacity", opacity});
     }
 
     unsigned int Sprite::getOpacity() const {
@@ -383,6 +403,9 @@ namespace ime {
     }
 
     void Sprite::setVisible(bool visible) {
+        if (isVisible() == visible)
+            return;
+
         pImpl_->setVisible(visible);
         emitChange(Property{"visible", visible});
     }
@@ -396,6 +419,9 @@ namespace ime {
     }
 
     void Sprite::setOrigin(float x, float y) {
+        if (auto [xO, yO] = getOrigin(); xO == x && yO == y)
+            return;
+
         pImpl_->setOrigin(x, y);
         emitChange(Property{"origin", Vector2f{x, y}});
     }

@@ -119,9 +119,13 @@ namespace ime {
     }
 
     void RigidBody::setPosition(Vector2f position) {
+        if (getPosition() == position)
+            return;
+
         body_->SetTransform(
             {utility::pixelsToMetres(position.x), utility::pixelsToMetres(position.y)},
             body_->GetAngle());
+
         emitChange(Property{"position", position});
     }
 
@@ -130,7 +134,7 @@ namespace ime {
     }
 
     void RigidBody::setRotation(float angle) {
-        if (isFixedRotation())
+        if (isFixedRotation() || getRotation() == angle)
             return;
 
         body_->SetTransform(body_->GetTransform().p, utility::degToRad(angle));
@@ -151,6 +155,9 @@ namespace ime {
     }
 
     void RigidBody::setLinearVelocity(Vector2f velocity) {
+        if (getLinearVelocity() == velocity)
+            return;
+
         body_->SetLinearVelocity({utility::pixelsToMetres(velocity.x), utility::pixelsToMetres(velocity.y)});
         emitChange(Property{"linearVelocity", velocity});
     }
@@ -160,6 +167,9 @@ namespace ime {
     }
 
     void RigidBody::setAngularVelocity(float degrees) {
+        if (getAngularVelocity() == degrees)
+            return;
+
         body_->SetAngularVelocity(utility::degToRad(degrees));
         emitChange(Property{"angularVelocity",  degrees});
     }
@@ -251,6 +261,9 @@ namespace ime {
     }
 
     void RigidBody::setLinearDamping(float damping) {
+        if (getLinearDamping() == damping)
+            return;
+
         body_->SetLinearDamping(damping);
         emitChange(Property{"linearDamping", damping});
     }
@@ -269,6 +282,9 @@ namespace ime {
     }
 
     void RigidBody::setGravityScale(float scale) {
+        if (getGravityScale() == scale)
+            return;
+
         body_->SetGravityScale(scale);
         emitChange(Property{"gravityScale", scale});
     }
@@ -278,6 +294,9 @@ namespace ime {
     }
 
     void RigidBody::setType(Type type) {
+        if (getType() == type)
+            return;
+
         if (world_->isLocked()) {
             IME_PRINT_WARNING("Operation ignored: setType() called inside a world callback")
             return;
@@ -292,6 +311,9 @@ namespace ime {
     }
 
     void RigidBody::setFastBody(bool fast) {
+        if (isFastBody() == fast)
+            return;
+
         body_->SetBullet(fast);
         emitChange(Property{"fastBody", fast});
     }
@@ -301,6 +323,9 @@ namespace ime {
     }
 
     void RigidBody::setSleepingAllowed(bool sleeps) {
+        if (isSleepingAllowed() == sleeps)
+            return;
+
         body_->SetSleepingAllowed(sleeps);
         emitChange(Property{"sleepingAllowed", sleeps});
     }
@@ -310,6 +335,9 @@ namespace ime {
     }
 
     void RigidBody::setAwake(bool awake) {
+        if (isAwake() == awake)
+            return;
+
         body_->SetAwake(awake);
         emitChange(Property{"awake", awake});
     }
@@ -319,6 +347,9 @@ namespace ime {
     }
 
     void RigidBody::setEnabled(bool enable) {
+        if (isEnabled() == enable)
+            return;
+
         if (world_->isLocked()) {
             IME_PRINT_WARNING("Operation ignored: setEnabled() called inside a world callback")
             return;
@@ -333,6 +364,9 @@ namespace ime {
     }
 
     void RigidBody::setFixedRotation(bool rotate) {
+        if (isFixedRotation() == rotate)
+            return;
+
         body_->SetFixedRotation(rotate);
         emitChange(Property{"fixedRotation", rotate});
     }
@@ -342,7 +376,11 @@ namespace ime {
     }
 
     void RigidBody::setGameObject(GameObject* gameObject) {
+        if (gameObject_ == gameObject)
+            return;
+
         gameObject_ = gameObject;
+        emitChange(Property{"gameObject", gameObject_});
     }
 
     GameObject* RigidBody::getGameObject() {

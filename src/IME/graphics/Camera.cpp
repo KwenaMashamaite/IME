@@ -171,6 +171,10 @@ namespace ime {
     }
 
     void Camera::setCenter(float x, float y) {
+        auto [xC, yC] = getCenter();
+        if (xC == x && yC == y)
+            return;
+
         pimpl_->setCenter(x, y);
         emitChange(Property{"centre", Vector2f{x, y}});
     }
@@ -184,6 +188,9 @@ namespace ime {
     }
 
     void Camera::setSize(float width, float height) {
+        if (auto [w, h] = getSize(); w == width && h == height)
+            return;
+
         pimpl_->setSize(width, height);
         emitChange(Property{"size", Vector2f{width, height}});
     }
@@ -197,6 +204,9 @@ namespace ime {
     }
 
     void Camera::setRotation(float angle) {
+        if (getRotation() == angle)
+            return;
+
         pimpl_->setRotation(angle);
         emitChange(Property{"rotation", angle});
     }
@@ -206,6 +216,9 @@ namespace ime {
     }
 
     void Camera::setViewport(const FloatRect &viewport) {
+        if (getViewport() == viewport)
+            return;
+
         pimpl_->setViewport(viewport);
         emitChange(Property{"viewport", viewport});
     }
@@ -247,11 +260,17 @@ namespace ime {
     }
 
     void Camera::startFollow(GameObject *gameObject, const Vector2f& offset) {
+        if (getFollowTarget() == gameObject)
+            return;
+
         pimpl_->startFollow(gameObject, offset);
         emit("startFollow");
     }
 
     void Camera::stopFollow() {
+        if (!isFollowingTarget())
+            return;
+
         pimpl_->stopFollow();
         emit("stopFollow");
     }
@@ -265,6 +284,9 @@ namespace ime {
     }
 
     void Camera::setTargetFollowOffset(const Vector2f &offset) {
+        if (getTargetFollowOffset() == offset)
+            return;
+
         pimpl_->setTargetFollowOffset(offset);
         emitChange(Property{"targetFollowOffset", offset});
     }

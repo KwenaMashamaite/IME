@@ -44,6 +44,7 @@ namespace ime::audio {
             if (sfxName_ != filename) {
                 soundEffect_.setBuffer(ResourceManager::getInstance()->getSoundBuffer(filename));
                 sfxName_ = filename;
+                parent_->emitChange(Property{"source", sfxName_});
             }
         }
 

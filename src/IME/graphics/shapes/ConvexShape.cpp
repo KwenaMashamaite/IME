@@ -80,6 +80,9 @@ namespace ime {
     }
 
     void ConvexShape::setPointCount(std::size_t count) {
+        if (getPointCount() == count)
+            return;
+
         pimpl_->polygon_->setPointCount(count);
         emitChange(Property{"pointCount", count});
     }
@@ -89,6 +92,9 @@ namespace ime {
     }
 
     void ConvexShape::setPoint(std::size_t index, const Vector2f &point) {
+        if (getPoint(index) == point)
+            return;
+
         IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds")
         pimpl_->polygon_->setPoint(index, {point.x, point.y});
         emitChange(Property{"point", index});

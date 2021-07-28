@@ -108,6 +108,9 @@ namespace ime {
     }
 
     void GridMover::setMaxLinearSpeed(Vector2f speed) {
+        if (maxSpeed_.x == std::abs(speed.x) && maxSpeed_.y == std::abs(speed.y))
+            return;
+
         if (moveRestrict_ == MoveRestriction::None || moveRestrict_ == MoveRestriction::Diagonal) {
             IME_ASSERT(maxSpeed_.x == maxSpeed_.y, "Cannot have different x and y linear speeds if target can move diagonally")
         }
@@ -121,6 +124,9 @@ namespace ime {
     }
 
     void GridMover::setMovementRestriction(GridMover::MoveRestriction moveRestriction) {
+        if (moveRestrict_ == moveRestriction)
+            return;
+
         if (type_ == Type::Target && !(moveRestriction == MoveRestriction::All || moveRestriction == MoveRestriction::None)) {
             IME_PRINT_WARNING("Cannot set movement restriction for a TargetGridMover, movement depends on path finder algorithm")
             return;

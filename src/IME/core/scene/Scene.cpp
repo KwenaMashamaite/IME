@@ -129,7 +129,11 @@ namespace ime {
     }
 
     void Scene::setInputEnable(bool enable) {
+        if (isInputEnabled_ == enable)
+            return;
+
         isInputEnabled_ = enable;
+        emitChange(Property{"inputEnable", enable});
     }
 
     bool Scene::isInputEnabled() const {
@@ -145,10 +149,15 @@ namespace ime {
     }
 
     void Scene::setTimescale(float timescale) {
+        if (timescale_ == timescale)
+            return;
+
         if (timescale < 0)
             timescale_ = 0.0f;
         else
             timescale_ = timescale;
+
+        emitChange(Property{"timescale", timescale});
     }
 
     float Scene::getTimescale() const {

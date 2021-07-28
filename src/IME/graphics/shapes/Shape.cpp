@@ -144,6 +144,9 @@ namespace ime {
     }
 
     void Shape::setFillColour(const Colour &colour) {
+        if (getFillColour() == colour)
+            return;
+
         pimpl_->setFillColour(colour);
         emitChange(Property{"fillColour", colour});
     }
@@ -153,6 +156,9 @@ namespace ime {
     }
 
     void Shape::setOutlineColour(const Colour &colour) {
+        if (getOutlineColour() == colour)
+            return;
+
         pimpl_->setOutlineColour(colour);
         emitChange(Property{"outlineColour", colour});
     }
@@ -162,6 +168,9 @@ namespace ime {
     }
 
     void Shape::setOutlineThickness(float thickness) {
+        if(getOutlineThickness() == thickness)
+            return;
+
         pimpl_->setOutlineThickness(thickness);
         emitChange(Property{"outlineThickness", thickness});
     }
@@ -179,6 +188,9 @@ namespace ime {
     }
 
     void Shape::setPosition(float x, float y) {
+        if (auto [xPos, yPos] = getPosition(); xPos == x && yPos == y)
+            return;
+
         pimpl_->setPosition(x, y);
         emitChange({"position", getPosition()});
     }
@@ -192,6 +204,9 @@ namespace ime {
     }
 
     void Shape::setRotation(float angle) {
+        if (getRotation() == angle)
+            return;
+
         pimpl_->setRotation(angle);
         emitChange(Property{"rotation", angle});
     }
@@ -205,6 +220,9 @@ namespace ime {
     }
 
     void Shape::setScale(float factorX, float factorY) {
+        if (auto [x, y] = getScale(); x == factorX && y == factorY)
+            return;
+
         pimpl_->setScale(factorX, factorY);
         emitChange(Property{"scale", getScale()});
     }
@@ -226,6 +244,9 @@ namespace ime {
     }
 
     void Shape::setOrigin(float x, float y) {
+        if (auto [xO, yO] = getScale(); xO == x && yO == y)
+            return;
+
         pimpl_->setOrigin(x, y);
         emitChange(Property{"origin", getOrigin()});
     }

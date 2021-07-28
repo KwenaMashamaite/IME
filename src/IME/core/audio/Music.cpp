@@ -45,6 +45,7 @@ namespace ime::audio {
             if (sourceFilename_ != source) {
                 song_ = ResourceManager::getInstance()->getMusic(source);
                 sourceFilename_ = source;
+                parent_->emitChange(Property{"source", sourceFilename_});
             }
         }
 
