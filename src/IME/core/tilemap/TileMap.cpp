@@ -201,10 +201,12 @@ namespace ime {
     }
 
     void TileMap::draw(priv::RenderTarget &renderTarget) const {
-        renderTarget.draw(backgroundTile_);
-        forEachTile([&renderTarget](const Tile& tile) {
-            renderTarget.draw(tile);
-        });
+        if (renderer_.isVisible()) {
+            renderTarget.draw(backgroundTile_);
+            forEachTile([&renderTarget](const Tile &tile) {
+                renderTarget.draw(tile);
+            });
+        }
     }
 
     void TileMap::addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder, const std::string &renderLayer) {

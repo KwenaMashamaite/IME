@@ -125,7 +125,8 @@ namespace ime {
         }
 
         void draw(priv::RenderTarget &renderTarget) const {
-            renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
+            if (isVisible_)
+                renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
         }
 
         void setColour(Colour colour) {
