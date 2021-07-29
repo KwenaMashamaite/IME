@@ -248,6 +248,13 @@ namespace ime {
         void update(const priv::RenderTarget& renderTarget, unsigned int x, unsigned int y);
 
         /**
+         * @brief Check if this texture is not the same as another texture
+         * @param other The texture to compare against this texture
+         * @return True if the two textures are not the same, otherwise false
+         */
+        bool operator!=(const Texture& other) const;
+
+        /**
          * @internal
          * @brief Get the internal texture
          * @return The internal texture

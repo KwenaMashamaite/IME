@@ -54,6 +54,7 @@ namespace ime {
             engine_ = std::move(other.engine_);
             camera_ = std::move(other.camera_);
             cache_ = std::move(other.cache_);
+            sCache_ = std::move(other.sCache_);
             world_ = std::move(other.world_);
             inputManager_ = std::move(other.inputManager_);
             audioManager_ = std::move(other.audioManager_);
@@ -83,6 +84,7 @@ namespace ime {
         engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
         cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
+        sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
         guiContainer_.setTarget(engine.getRenderTarget());
         onInit();
     }
@@ -93,10 +95,6 @@ namespace ime {
 
     std::string Scene::getClassName() const {
         return "Scene";
-    }
-
-    void Scene::setVisibleOnPause(bool show) {
-        isVisibleWhenPaused_ = show;
     }
 
     void Scene::setOnPauseAction(Uint32 action) {
@@ -133,7 +131,11 @@ namespace ime {
     }
 
     void Scene::setInputEnable(bool enable) {
+        if (isInputEnabled_ == enable)
+            return;
+
         isInputEnabled_ = enable;
+        emitChange(Property{"inputEnable", enable});
     }
 
     bool Scene::isInputEnabled() const {
@@ -149,10 +151,15 @@ namespace ime {
     }
 
     void Scene::setTimescale(float timescale) {
+        if (timescale_ == timescale)
+            return;
+
         if (timescale < 0)
             timescale_ = 0.0f;
         else
             timescale_ = timescale;
+
+        emitChange(Property{"timescale", timescale});
     }
 
     float Scene::getTimescale() const {
@@ -197,6 +204,10 @@ namespace ime {
 
     PropertyContainer &Scene::cache() {
         return *cache_;
+    }
+
+    PrefContainer &Scene::sCache() {
+        return *sCache_;
     }
 
     RenderLayerContainer &Scene::renderLayers() {

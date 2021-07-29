@@ -52,9 +52,6 @@ namespace ime {
      * it always moves from one cell to the next and never between grid cells.
      * The entities direction cannot be changed until it has completed it's
      * current movement.
-     *
-     * Note that the grid mover only supports orthogonal movement (left, right,
-     * up and down)
      */
     class IME_API GridMover : public Object {
     public:
@@ -68,6 +65,7 @@ namespace ime {
             Manual,             //!< Manually triggered grid mover
             Random,             //!< Moves a game object randomly in the grid
             Target,             //!< Moves a game object to a specific tile within the grid
+            Cyclic,             //!< Moves a game object by following a closed path
             KeyboardControlled, //!< Moves a game object within the grid using the keyboard as a trigger
             Custom              //!< For classes that extend the grid mover outside of IME
         };
@@ -91,8 +89,9 @@ namespace ime {
          *
          * @warning If @a gameObject is left as @a nullptr, then setTarget()
          * must be called before the grid mover is used. If the @a gameObject
-         * is given, it must be in the grid prior to constructor call, otherwise
-         * the grid mover construction will fail
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
          *
          * @see setTarget
          */
@@ -141,6 +140,23 @@ namespace ime {
         bool requestDirectionChange(const Direction& newDir);
 
         /**
+         * @brief Check if the target is blocked from moving in a direction
+         * @param direction The direction to be checked
+         * @return A pair, of which the first element is a bool that is @a true
+         *         if the target is blocked or @a false if the target is not blocked
+         *         and the second element is a pointer to an obstacle game object
+         *         that is a @a nullptr when the first element is @a false or
+         *         when the first element is @a true but the target is not blocked
+         *         by a game object
+         *
+         * This function will return true if the target is blocked by a
+         * collidable tile or an obstacle (see ime::GameObject::setAsObstacle),
+         * or if a move in the given direction will place it outside the bounds
+         * of the grid
+         */
+        std::pair<bool, GameObject*> isBlockedInDirection(const Direction& direction) const;
+
+        /**
          * @brief Get the current direction of the game object
          * @return The current direction of the game object
          */
@@ -153,8 +169,8 @@ namespace ime {
          * Provide nullptr as argument to remove current target
          *
          * @warning if the @a target is not a @a nullptr, then it must exist
-         * in the grid and have a rigid Body of time Body::Type::Kinematic
-         * attached to it prior to function call
+         * in the TileMap and must not have a RigidBody attached to it,
+         * otherwise undefined behavior
          */
         void setTarget(GameObject* target);
 
@@ -275,6 +291,8 @@ namespace ime {
          * @brief Add an event listener to a move begin event
          * @param callback The function to be executed when the game object
          *                 starts moving
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners unique identification number
          *
          * This event is emitted when the game object starts moving from its
@@ -286,12 +304,14 @@ namespace ime {
          *
          * @see onAdjacentMoveEnd
          */
-        int onAdjacentMoveBegin(const Callback<Index>& callback);
+        int onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to an adjacent tile reached event
          * @param callback Function to execute when the target reaches its
          *        target tile
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target moves from its current tile
@@ -304,11 +324,13 @@ namespace ime {
          *
          * @see onAdjacentMoveBegin
          */
-        int onAdjacentMoveEnd(const Callback<Index>& callback);
+        int onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a tilemap border collision event
          * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target tries to go beyond the bounds
@@ -321,11 +343,13 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onGridBorderCollision(const Callback<>& callback);
+        int onGridBorderCollision(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a tile collision event
          * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * This event is emitted when the target collides with a solid tile
@@ -338,11 +362,13 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onTileCollision(const Callback<Index>& callback);
+        int onTileCollision(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a game object collision
          * @param callback The function to be executed when the collision take place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners unique identifier
          *
          * The callback is invoked when the target collides with another game
@@ -360,15 +386,24 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int onGameObjectCollision(const CollisionCallback& callback);
+        int onGameObjectCollision(const CollisionCallback& callback, bool oneTime = false);
 
         /**
          * @brief Remove an event listener from the grid movers event list
          * @param handlerId The unique identification number of the listener
          * @return True if the event listener was removed or false if no such
          *         listener exist in the grid movers event list
+         *
+         * @see removeAllEventListeners
          */
         bool unsubscribe(int handlerId);
+
+        /**
+         * @brief Remove all registered event listeners
+         *
+         * @see unsubscribe
+         */
+        void removeAllEventListeners();
 
         /**
          * @brief Reset the target tile to be the same as the entity tile
@@ -405,11 +440,13 @@ namespace ime {
         /**
          * @brief Add an event listener to target tile reset event
          * @param callback Function to execute when the target tile is reset
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * @see resetTargetTile and unsubscribe
          */
-        int onTargetTileReset(const Callback<Index>& callback);
+        int onTargetTileReset(const Callback<Index>& callback, bool oneTime = false);
 
         /**
          * @internal
@@ -487,10 +524,11 @@ namespace ime {
         void onDestinationReached();
 
         /**
-         * @brief Check if the target tile has any obstacle objects or not
+         * @brief Get an obstacle in a tile
+         * @param tile The tile to get an obstacle from
          * @return Pointer to the obstacle object or a nullptr if none exists
          */
-        GameObject* getObstacleInTargetTile();
+        GameObject* getObstacleInTile(const Tile& tile) const;
 
         /**
          * @brief Perfectly align target with the target destination

@@ -127,6 +127,13 @@ namespace ime {
             return *texture_;
         }
 
+        bool operator!=(const Impl& other) const {
+            // When a texture is copied, its internal reference count is
+            // increased by one instead of making an actual copy due to
+            // performance issues
+            return texture_ != other.texture_;
+        }
+
         ~Impl() {
             image_ = nullptr;
         }
@@ -215,6 +222,10 @@ namespace ime {
 
     void Texture::update(const priv::RenderTarget &renderTarget, unsigned int x, unsigned int y) {
         pImpl_->update(renderTarget, x, y);
+    }
+
+    bool Texture::operator!=(const Texture &other) const {
+        return *pImpl_ != *(other.pImpl_);
     }
 
     const sf::Texture &Texture::getInternalTexture() const {

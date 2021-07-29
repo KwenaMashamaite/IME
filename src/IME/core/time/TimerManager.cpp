@@ -25,25 +25,26 @@
 #include "IME/core/time/TimerManager.h"
 
 namespace ime {
-    void TimerManager::addTimer(Timer timer) {
+    Timer& TimerManager::addTimer(Timer timer) {
         timer.start();
         activeTimers_.push_back(std::move(timer));
+        return activeTimers_.back();
     }
 
-    void TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
-        addTimer(Timer::create(delay, std::move(callback)));
+    Timer& TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
+        return addTimer(Timer::create(delay, std::move(callback)));
     }
 
-    void TimerManager::setTimeout(Time delay, Callback<> callback) {
-        addTimer(Timer::create(delay, std::move(callback)));
+    Timer& TimerManager::setTimeout(Time delay, Callback<> callback) {
+        return addTimer(Timer::create(delay, std::move(callback)));
     }
 
-    void TimerManager::setInterval(Time delay, Callback<Timer&> callback, int repeatCount) {
-        addTimer(Timer::create(delay, std::move(callback), repeatCount));
+    Timer& TimerManager::setInterval(Time delay, Callback<Timer&> callback, int repeatCount) {
+        return addTimer(Timer::create(delay, std::move(callback), repeatCount));
     }
 
-    void TimerManager::setInterval(Time delay, Callback<> callback, int repeatCount) {
-        addTimer(Timer::create(delay, std::move(callback), repeatCount));
+    Timer& TimerManager::setInterval(Time delay, Callback<> callback, int repeatCount) {
+        return addTimer(Timer::create(delay, std::move(callback), repeatCount));
     }
 
     void TimerManager::update(Time deltaTime) {

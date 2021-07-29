@@ -229,6 +229,9 @@ namespace ime {
     void Animator::play() {
         if (currentAnimation_ && !isPlaying_ && !isPaused_) {
             isPlaying_ = true;
+            (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
+            resetCurrentFrame();
+
             fireEvent(Event::AnimationPlay, currentAnimation_);
         }
     }
@@ -254,7 +257,10 @@ namespace ime {
             isPlaying_ = hasStarted_ = isPaused_ = false;
             totalTime_ = Time::Zero;
             currentFrameIndex_ = 0;
-            resetCurrentFrame();
+
+            if (currentAnimation_->isCurrentFrameResetOnInterrupt())
+                resetCurrentFrame();
+
             fireEvent(Event::AnimationStop, currentAnimation_);
         }
     }
@@ -317,11 +323,17 @@ namespace ime {
         }
     }
 
-    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback) {
+    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
     }
 
-    int Animator::on(Animator::Event event, Callback<> callback) {
+    int Animator::on(Animator::Event event, Callback<> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
     }
 
@@ -329,11 +341,17 @@ namespace ime {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)), id);
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback) {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback) {
+    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+
         return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
     }
 
@@ -463,8 +481,7 @@ namespace ime {
         /// @See cycle(bool). Code must come here after refactoring that function
     }
 
-    void Animator::setCurrentFrame(Animation::Frame frame) {
-        (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
+    void Animator::setCurrentFrame(const Animation::Frame& frame) {
         (*target_).get().setTextureRect(frame.left, frame.top, frame.width, frame.height);
     }
 

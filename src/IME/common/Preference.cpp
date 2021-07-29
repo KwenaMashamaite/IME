@@ -77,6 +77,10 @@ namespace ime {
         return property_.getName();
     }
 
+    bool Preference::hasValue() const {
+        return property_.hasValue();
+    }
+
     void Preference::setDescription(const std::string &description) {
         if (description.find_first_of('\n') != std::string::npos)
             throw InvalidArgument("Preference description must not be multiline");

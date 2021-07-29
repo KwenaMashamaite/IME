@@ -101,7 +101,7 @@ namespace ime {
 
     bool RenderLayerContainer::removeByIndex(unsigned int index) {
         if (isIndexValid(index)) {
-            inverseLayers_.erase(layers_[index]->getTag());
+            inverseLayers_.erase(layers_[index]->getName());
             layers_.erase(index);
             return true;
         }
@@ -212,8 +212,8 @@ namespace ime {
         layers_[layerTwoIndex]->setIndex(layerTwoIndex);
 
         // Update inverse map
-        inverseLayers_[layers_[layerOneIndex]->getTag()] = layerOneIndex;
-        inverseLayers_[layers_[layerTwoIndex]->getTag()] = layerTwoIndex;
+        inverseLayers_[layers_[layerOneIndex]->getName()] = layerOneIndex;
+        inverseLayers_[layers_[layerTwoIndex]->getName()] = layerTwoIndex;
 
         return true;
     }

@@ -24,6 +24,7 @@
 
 #include "IME/graphics/Camera.h"
 #include "IME/graphics/RenderTargetImpl.h"
+#include "IME/core/game_object/GameObject.h"
 
 namespace ime {
     class Camera::CameraImpl {
@@ -36,7 +37,9 @@ namespace ime {
          */
         explicit CameraImpl(priv::RenderTarget& window) :
             window_{window.getImpl()->getSFMLWindow()},
-            view{window_.getDefaultView()}
+            view{window_.getDefaultView()},
+            followTarget_{nullptr},
+            posChangeId_{-1}
         {
             window_.setView(view);
         }
@@ -44,6 +47,10 @@ namespace ime {
         void setCenter(float x, float y) {
             view.setCenter(x, y);
             window_.setView(view);
+        }
+
+        void setCenter(const Vector2f& position) {
+            setCenter(position.x, position.y);
         }
 
         Vector2f getCenter() const {
@@ -108,6 +115,39 @@ namespace ime {
             return {windowCoord.x, windowCoord.y};
         }
 
+        void startFollow(GameObject* gameObject, const Vector2f& offset) {
+            IME_ASSERT(gameObject, "A camera's follow target cannot be a nullptr")
+            followTarget_ = gameObject;
+            followOffset_ = offset;
+
+            posChangeId_ = gameObject->onPropertyChange("position", [this](const Property& position) {
+                setCenter(position.getValue<Vector2f>() + followOffset_);
+            });
+        }
+
+        void stopFollow() {
+            if (followTarget_) {
+                followTarget_->unsubscribe("position", posChangeId_);
+                followTarget_ = nullptr;
+            }
+        }
+
+        GameObject* getFollowTarget() const {
+            return followTarget_;
+        }
+
+        bool isFollowingTarget() const {
+            return followTarget_ != nullptr;
+        }
+
+        void setTargetFollowOffset(const Vector2f &offset) {
+            followOffset_ = offset;
+        }
+
+        const Vector2f& getTargetFollowOffset() const {
+            return followOffset_;
+        }
+
         const sf::View& getSFMLView() {
             return view;
         }
@@ -115,6 +155,9 @@ namespace ime {
     private:
         sf::RenderWindow& window_;
         sf::View view;
+        GameObject* followTarget_;  //!< The game object to be followed by the camera
+        int posChangeId_;           //!< The follow targets position change handler
+        Vector2f followOffset_;     //!< The camera's follow offset from the targets position
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -128,6 +171,10 @@ namespace ime {
     }
 
     void Camera::setCenter(float x, float y) {
+        auto [xC, yC] = getCenter();
+        if (xC == x && yC == y)
+            return;
+
         pimpl_->setCenter(x, y);
         emitChange(Property{"centre", Vector2f{x, y}});
     }
@@ -141,6 +188,9 @@ namespace ime {
     }
 
     void Camera::setSize(float width, float height) {
+        if (auto [w, h] = getSize(); w == width && h == height)
+            return;
+
         pimpl_->setSize(width, height);
         emitChange(Property{"size", Vector2f{width, height}});
     }
@@ -154,6 +204,9 @@ namespace ime {
     }
 
     void Camera::setRotation(float angle) {
+        if (getRotation() == angle)
+            return;
+
         pimpl_->setRotation(angle);
         emitChange(Property{"rotation", angle});
     }
@@ -163,6 +216,9 @@ namespace ime {
     }
 
     void Camera::setViewport(const FloatRect &viewport) {
+        if (getViewport() == viewport)
+            return;
+
         pimpl_->setViewport(viewport);
         emitChange(Property{"viewport", viewport});
     }
@@ -203,11 +259,48 @@ namespace ime {
         return pimpl_->worldCoordToWindowCoord(point);
     }
 
+    void Camera::startFollow(GameObject *gameObject, const Vector2f& offset) {
+        if (getFollowTarget() == gameObject)
+            return;
+
+        pimpl_->startFollow(gameObject, offset);
+        emit("startFollow");
+    }
+
+    void Camera::stopFollow() {
+        if (!isFollowingTarget())
+            return;
+
+        pimpl_->stopFollow();
+        emit("stopFollow");
+    }
+
+    bool Camera::isFollowingTarget() const {
+        return pimpl_->isFollowingTarget();
+    }
+
+    GameObject* Camera::getFollowTarget() const {
+        return pimpl_->getFollowTarget();
+    }
+
+    void Camera::setTargetFollowOffset(const Vector2f &offset) {
+        if (getTargetFollowOffset() == offset)
+            return;
+
+        pimpl_->setTargetFollowOffset(offset);
+        emitChange(Property{"targetFollowOffset", offset});
+    }
+
+    const Vector2f &Camera::getTargetFollowOffset() const {
+        return pimpl_->getTargetFollowOffset();
+    }
+
     std::any Camera::getInternalView() {
         return std::any{std::cref(pimpl_->getSFMLView())};
     }
 
     Camera::~Camera() {
+        stopFollow();
         emit("destruction");
     }
 }

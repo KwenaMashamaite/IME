@@ -40,8 +40,10 @@ namespace ime {
     }
 
     void RenderLayer::setDrawable(bool render) {
-        shouldRender_ = render;
-        emitChange(Property{"drawable", render});
+        if (shouldRender_ != render) {
+            shouldRender_ = render;
+            emitChange(Property{"drawable", render});
+        }
     }
 
     bool RenderLayer::isDrawable() const {
@@ -54,7 +56,6 @@ namespace ime {
 
     void RenderLayer::setIndex(unsigned int index) {
         index_ = index;
-        emitChange(Property{"index", index});
     }
 
     unsigned int RenderLayer::getIndex() const {

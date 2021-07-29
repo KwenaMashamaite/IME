@@ -246,7 +246,7 @@ namespace ime {
              * @see hideWithEffect
              * @see isAnimationPlaying
              */
-            virtual void showWithEffect(ShowAnimationType type, Time duration) = 0;
+            virtual void showWithEffect(ui::AnimationType type, Time duration) = 0;
 
             /**
              * @brief Hide the widget with an animation
@@ -264,7 +264,7 @@ namespace ime {
              * @see showWithEffect
              * @see isAnimationPlaying
              */
-            virtual void hideWithEffect(ShowAnimationType type, Time duration) = 0;
+            virtual void hideWithEffect(ui::AnimationType type, Time duration) = 0;
 
             /**
              * @brief Check whether or not an animation is currently playing
@@ -444,11 +444,11 @@ namespace ime {
                 return static_cast<CursorType>(widget_->getMouseCursor());
             }
 
-            void showWithEffect(ShowAnimationType type, Time duration) override {
+            void showWithEffect(ui::AnimationType type, Time duration) override {
                 widget_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration.asMilliseconds());
             }
 
-            void hideWithEffect(ShowAnimationType type, Time duration) override {
+            void hideWithEffect(ui::AnimationType type, Time duration) override {
                 widget_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration.asMilliseconds());
             }
 

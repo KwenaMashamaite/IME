@@ -189,6 +189,24 @@ namespace ime {
         Colour getColour() const;
 
         /**
+         * @brief Set the opacity of the sprite
+         * @param opacity The new opacity of the sprite in the range [0, 255]
+         *
+         * By default the opacity is 255
+         *
+         * @see getOpacity
+         */
+        void setOpacity(unsigned int opacity);
+
+        /**
+         * @brief Get the opacity of the sprite
+         * @return The opacity of the sprite
+         *
+         * @see setOpacity
+         */
+        unsigned int getOpacity() const;
+
+        /**
          * @brief Show or hide the sprite
          * @param visible True to show or false to hide
          *

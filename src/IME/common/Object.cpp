@@ -50,8 +50,10 @@ namespace ime {
     }
 
     void Object::setTag(const std::string &tag) {
-        tag_ = tag;
-        emitChange(Property{"tag", tag_});
+        if (tag_ != tag) {
+            tag_ = tag;
+            emitChange(Property{"tag", tag_});
+        }
     }
 
     const std::string &Object::getTag() const {
@@ -66,20 +68,39 @@ namespace ime {
         return "Object";
     }
 
-    int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback) {
+    int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(property + "Change", callback);
+
         return eventEmitter_.on(property + "Change", callback);
     }
 
-    int Object::onPropertyChange(const Callback<Property> &callback) {
+    int Object::onPropertyChange(const Callback<Property> &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("propertyChange", callback);
+
         return eventEmitter_.on("propertyChange", callback);
     }
 
-    int Object::onEvent(const std::string &event, const Callback<> &callback) {
-        return eventEmitter_.on(event, callback);
+    int Object::onEvent(const std::string &event, const Callback<> &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener(event, callback);
+        else
+            return eventEmitter_.on(event, callback);
     }
 
     bool Object::unsubscribe(const std::string &event, int id) {
-        return eventEmitter_.removeEventListener(event, id);
+        if (eventEmitter_.removeEventListener(event + "Change", id))
+            return true;
+        else
+            return eventEmitter_.removeEventListener(event, id);
+    }
+
+    bool Object::unsubscribeAll(const std::string &event) {
+        if (eventEmitter_.removeAllEventListeners(event + "Change"))
+            return true;
+        else
+            return eventEmitter_.removeAllEventListeners(event);
     }
 
     int Object::onDestruction(const Callback<>& callback) {

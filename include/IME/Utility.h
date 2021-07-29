@@ -34,6 +34,5 @@
 #include "IME/utility/DiskFileLogger.h"
 #include "IME/utility/ConsoleLogger.h"
 #include "IME/utility/NonCopyable.h"
-#include "IME/utility/ConfigFileParser.h"
 
 #endif //IME_UTILITY_H

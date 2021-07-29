@@ -41,8 +41,22 @@ namespace ime {
             texture_{std::make_shared<Texture>()}
         {}
 
-        SpriteImpl(const SpriteImpl&) = default;
-        SpriteImpl& operator=(const SpriteImpl&) = default;
+        SpriteImpl(const SpriteImpl& other) :
+            sprite_{other.sprite_},
+            isVisible_{other.isVisible_},
+            prevSpriteColour_{other.prevSpriteColour_},
+            animator_{other.animator_},
+            texture_{std::make_shared<Texture>(*other.texture_)}
+        {}
+
+        SpriteImpl& operator=(const SpriteImpl& rhs) {
+            if (this != &rhs) {
+                auto temp{rhs};
+                swap(temp);
+            }
+
+            return *this;
+        }
 
         SpriteImpl(SpriteImpl&& other) noexcept {
             *this = std::move(other);
@@ -64,8 +78,10 @@ namespace ime {
         }
 
         void setTexture(const Texture &texture) {
-            *texture_ = *std::make_shared<Texture>(texture);
-            sprite_.setTexture(texture_->getInternalTexture(), true);
+            if (*texture_ != texture) {
+                *texture_ = *std::make_shared<Texture>(texture);
+                sprite_.setTexture(texture_->getInternalTexture(), true);
+            }
         }
 
         void setTexture(const std::string &filename) {
@@ -125,11 +141,21 @@ namespace ime {
         }
 
         void draw(priv::RenderTarget &renderTarget) const {
-            renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
+            if (isVisible_)
+                renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
         }
 
         void setColour(Colour colour) {
             sprite_.setColor(utility::convertToSFMLColour(colour));
+        }
+
+        void setOpacity(unsigned int opacity) {
+            const auto& [r, g, b, a] = sprite_.getColor();
+            sprite_.setColor(sf::Color{r, g, b, opacity < 255 ? sf::Uint8(opacity) : sf::Uint8(255)});
+        }
+
+        unsigned int getOpacity() const {
+            return sprite_.getColor().a;
         }
 
         Colour getColour() const {
@@ -269,6 +295,9 @@ namespace ime {
     void Sprite::setTextureRect(unsigned int left, unsigned int top, unsigned int width,
         unsigned int height)
     {
+        if (auto [l, t, w, h] = getTextureRect(); l == left && t == top && w == width && h == height)
+            return;
+
         pImpl_->setTextureRect(left, top, width, height);
         emitChange(Property{"textureRect", getTextureRect()});
     }
@@ -278,6 +307,9 @@ namespace ime {
     }
 
     void Sprite::setPosition(float x, float y) {
+        if (auto [xPos, yPos] = getPosition(); xPos == x && yPos == y)
+            return;
+
         pImpl_->setPosition(x, y);
         emitChange(Property{"position", Vector2f{x, y}});
     }
@@ -287,11 +319,17 @@ namespace ime {
     }
 
     void Sprite::setRotation(float angle) {
+        if (getRotation() == angle)
+            return;
+
         pImpl_->setRotation(angle);
         emitChange(Property{"rotation", angle});
     }
 
     void Sprite::setScale(float factorX, float factorY) {
+        if (auto [x, y] = getScale(); x == factorX && y == factorY)
+            return;
+
         pImpl_->setScale(factorX, factorY);
         emitChange(Property{"scale", Vector2f{factorX, factorY}});
     }
@@ -341,14 +379,33 @@ namespace ime {
     }
 
     void Sprite::setColour(Colour colour) {
+        if (getColour() == colour)
+            return;
+
         pImpl_->setColour(colour);
+        emitChange(Property{"colour", colour});
     }
 
     Colour Sprite::getColour() const {
         return pImpl_->getColour();
     }
 
+    void Sprite::setOpacity(unsigned int opacity) {
+        if (getOpacity() == opacity)
+            return;
+
+        pImpl_->setOpacity(opacity);
+        emitChange(Property{"opacity", opacity});
+    }
+
+    unsigned int Sprite::getOpacity() const {
+        return pImpl_->getOpacity();
+    }
+
     void Sprite::setVisible(bool visible) {
+        if (isVisible() == visible)
+            return;
+
         pImpl_->setVisible(visible);
         emitChange(Property{"visible", visible});
     }
@@ -362,6 +419,9 @@ namespace ime {
     }
 
     void Sprite::setOrigin(float x, float y) {
+        if (auto [xO, yO] = getOrigin(); xO == x && yO == y)
+            return;
+
         pImpl_->setOrigin(x, y);
         emitChange(Property{"origin", Vector2f{x, y}});
     }

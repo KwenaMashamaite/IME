@@ -43,7 +43,7 @@ namespace ime {
         });
 
         setMovementTrigger(MovementTrigger::OnKeyDown);
-        setKeys(Key::A, Key::D, Key::W, Key::S);
+        setKeys(TriggerKeys{Key::A, Key::D, Key::W, Key::S});
 
         // Register subsequent event handlers as external
         setHandlerIntakeAsInternal(false);
@@ -58,6 +58,8 @@ namespace ime {
             trigger_ = trigger;
             removeInputEventListeners();
             attachInputEventListeners();
+
+            emitChange(Property{"movementTrigger", trigger});
         }
     }
 
@@ -69,10 +71,29 @@ namespace ime {
         input::Keyboard::Key rightKey, input::Keyboard::Key upKey,
         input::Keyboard::Key downKey)
     {
-        goLeftKey_ = leftKey;
-        goRightKey_ = rightKey;
-        goUpKey_ = upKey;
-        goDownKey_ = downKey;
+        triggerKeys_.leftKey = leftKey;
+        triggerKeys_.rightKey = rightKey;
+        triggerKeys_.upKey = upKey;
+        triggerKeys_.downKey = downKey;
+    }
+
+    void KeyboardGridMover::setKeys(const TriggerKeys &triggerKeys) {
+        if (triggerKeys_ != triggerKeys) {
+            triggerKeys_ = triggerKeys;
+            emitChange(Property{"keys", triggerKeys});
+        }
+    }
+
+    TriggerKeys &KeyboardGridMover::getTriggerKeys() {
+        return triggerKeys_;
+    }
+
+    const TriggerKeys &KeyboardGridMover::getTriggerKeys() const {
+        return triggerKeys_;
+    }
+
+    void KeyboardGridMover::onInput(const KeyboardGridMover::InputCallback &callback) {
+        onInput_ = callback;
     }
 
     void KeyboardGridMover::attachInputEventListeners() {
@@ -80,7 +101,12 @@ namespace ime {
             return;
 
         auto moveEntity = [this](input::Keyboard::Key key) {
-            moveTarget(key);
+            if (key == triggerKeys_.leftKey || key == triggerKeys_.rightKey ||
+                key == triggerKeys_.upKey || key == triggerKeys_.downKey)
+            {
+                if (!onInput_ || onInput_(key))
+                    moveTarget(key);
+            }
         };
 
         if (trigger_ == MovementTrigger::OnKeyDown)
@@ -105,35 +131,36 @@ namespace ime {
 
     void KeyboardGridMover::moveTarget(input::Keyboard::Key key) {
         Direction targetDirection;
-        if (key == goLeftKey_) {
-            if (Keyboard::isKeyPressed(goUpKey_)) //Up key + left key currently pressed
+        if (key == triggerKeys_.leftKey) {
+            if (Keyboard::isKeyPressed(triggerKeys_.upKey)) //Up key + left key currently pressed
                 targetDirection = UpLeft;
-            else if (Keyboard::isKeyPressed(goDownKey_))
+            else if (Keyboard::isKeyPressed(triggerKeys_.downKey))
                 targetDirection = DownLeft;
             else
                 targetDirection = Left;
-        } else if (key == goRightKey_) {
-            if (Keyboard::isKeyPressed(goUpKey_))
+        } else if (key == triggerKeys_.rightKey) {
+            if (Keyboard::isKeyPressed(triggerKeys_.upKey))
                 targetDirection = UpRight;
-            else if (Keyboard::isKeyPressed(goDownKey_))
+            else if (Keyboard::isKeyPressed(triggerKeys_.downKey))
                 targetDirection = DownRight;
             else
                 targetDirection = Right;
-        } else if (key == goUpKey_) {
-            if (Keyboard::isKeyPressed(goLeftKey_))
+        } else if (key == triggerKeys_.upKey) {
+            if (Keyboard::isKeyPressed(triggerKeys_.leftKey))
                 targetDirection = UpLeft;
-            else if (Keyboard::isKeyPressed(goRightKey_))
+            else if (Keyboard::isKeyPressed(triggerKeys_.rightKey))
                 targetDirection = UpRight;
             else
                 targetDirection = Up;
-        } else if (key == goDownKey_) {
-            if (Keyboard::isKeyPressed(goLeftKey_))
+        } else if (key == triggerKeys_.downKey) {
+            if (Keyboard::isKeyPressed(triggerKeys_.leftKey))
                 targetDirection = DownLeft;
-            else if (Keyboard::isKeyPressed(goRightKey_))
+            else if (Keyboard::isKeyPressed(triggerKeys_.rightKey))
                 targetDirection = DownRight;
             else
                 targetDirection = Down;
-        }
+        } else
+            return;
 
         if (getTarget() && isTargetMoving()) {
             newDir_.first = true;
@@ -149,4 +176,15 @@ namespace ime {
     KeyboardGridMover::~KeyboardGridMover() {
         emit("destruction");
     }
-}
+
+    bool operator==(const ime::TriggerKeys &lhs, const ime::TriggerKeys &rhs) {
+        return (lhs.leftKey == rhs.leftKey) &&
+                (lhs.rightKey == rhs.rightKey) &&
+                (lhs.upKey == rhs.upKey) &&
+                (lhs.downKey == rhs.downKey);
+    }
+
+    bool operator!=(const ime::TriggerKeys &lhs, const ime::TriggerKeys &rhs) {
+        return !(lhs == rhs);
+    }
+} //namespace ime

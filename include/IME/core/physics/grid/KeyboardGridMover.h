@@ -40,12 +40,23 @@ namespace ime {
     };
 
     /**
+     * @brief Keys that triggers the targets direction change
+     */
+    struct TriggerKeys {
+        Keyboard::Key leftKey;  //!< A key that moves the target to the left
+        Keyboard::Key rightKey; //!< A key that moves the target to the right
+        Keyboard::Key upKey;    //!< A key that moves the target upwards
+        Keyboard::Key downKey;  //!< A key that moves the target downwards
+    };
+
+    /**
      * @brief Moves a GameObject in the grid using the keyboard as a movement
      *        trigger
      */
     class IME_API KeyboardGridMover : public GridMover {
     public:
         using Ptr = std::unique_ptr<KeyboardGridMover>; //!< Unique grid mover pointer
+        using InputCallback = std::function<bool(Keyboard::Key)>; //!< Input callback
 
         /**
          * @brief Constructor
@@ -79,6 +90,7 @@ namespace ime {
         MovementTrigger getMovementTrigger() const;
 
         /**
+         * @deprecated Since v2.2.0. Use ime::KeyboardGridMover::setKeys(const TriggerKeys&) instead
          * @brief Set the keys to move the target in all four directions
          * @param leftKey Key to move target left on trigger
          * @param rightKey Key to move target right on trigger
@@ -92,7 +104,45 @@ namespace ime {
          *
          * @see setMovementTrigger
          */
+         [[deprecated("Use 'void ime::KeyboardGridMover::setKeys(const TriggerKeys&)' instead.")]]
         void setKeys(Key leftKey, Key rightKey, Key upKey, Key downKey);
+
+        /**
+         * @brief Set the keys to move the target
+         * @param triggerKeys The keys to set
+         *
+         * The default keys are as follows:
+         *
+         *  ime::Keyboard::Key::A = move target left,
+         *  ime::Keyboard::Key::W = move target up,
+         *  ime::Keyboard::Key::S = move target down and
+         *  ime::Keyboard::Key::D = move target right
+         *
+         * @see setMovementTrigger
+         */
+        void setKeys(const TriggerKeys& triggerKeys);
+
+        /**
+         * @brief Get the keys that move the target
+         * @return The keys that trigger the targets direction change
+         */
+        TriggerKeys& getTriggerKeys();
+        const TriggerKeys& getTriggerKeys() const;
+
+        /**
+         * @brief Add an event listener to an input event
+         * @param callback A function which returns true if the input should be
+         *                 handled or false if the input should be ignored
+         *
+         * An input event is triggered when the grid mover receives a keyboard
+         * input that matches any one of the keys that move the target. The
+         * callback function will be passed this key when it is called. To
+         * remove the callback pass nullptr. Note that when there is no callback
+         * assigned to this event, the input will always be handled
+         *
+         * By default, there is no registered
+         */
+        void onInput(const InputCallback& callback);
 
         /**
          * @internal
@@ -131,11 +181,25 @@ namespace ime {
         int onTriggerHandlerId_;            //!< Movement trigger Handler id
         input::Keyboard keyboard_;          //!< Detects keyboard inputs
         std::pair<bool, Direction> newDir_; //!< A flag indicating whether or not the direction was changed while target was moving
-        Key goLeftKey_ = Key::Unknown;      //!< A Key when triggered moves target left
-        Key goRightKey_ = Key::Unknown;     //!< A Key when triggered moves target right
-        Key goUpKey_ = Key::Unknown;        //!< A Key when triggered moves target up
-        Key goDownKey_ = Key::Unknown;      //!< A Key when triggered moves target down
+        TriggerKeys triggerKeys_;           //!< Keyboard keys that control the actors direction of motion
+        InputCallback onInput_;             //!< A function called when the grid mover receives input
     };
+
+    /**
+     * @brief Overload of binary operator ==
+     * @param lhs Left operand
+     * @param rhs Right operand
+     * @return True if @a lhs is equal to @a rhs
+     */
+    extern IME_API bool operator==(const TriggerKeys& lhs, const TriggerKeys& rhs);
+
+    /**
+     * @brief Overload of binary operator !=
+     * @param lhs Left operand (a vector)
+     * @param rhs Right operand (a vector)
+     * @return True if @a lhs is @e not equal to @a rhs
+     */
+    extern IME_API bool operator!=(const TriggerKeys& lhs, const TriggerKeys& rhs);
 }
 
 #endif

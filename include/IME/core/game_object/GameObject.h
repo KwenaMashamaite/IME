@@ -142,7 +142,8 @@ namespace ime {
          * @param isActive True to set as active or false to set as inactive
          *
          * Note that an inactive game object does not participate in
-         * collision detection
+         * collision detection. In addition the game object's update()
+         * method will not be invoked.
          *
          * For grid-based physics you can also disable collisions for the
          * game object without deactivating it by simply setting its collision
@@ -163,30 +164,6 @@ namespace ime {
          * @see setActive
          */
         bool isActive() const;
-
-        /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::GameObject::setActive instead
-         *
-         * @brief Set whether the game object is collidable or not
-         * @param collidable True to make collidable, otherwise false
-         *
-         * @see setActive
-         */
-         [[deprecated("Use 'void ime::GameObject::setActive(bool)' instead.")]]
-        void setCollidable(bool collidable);
-
-        /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::GameObject::isActive instead.
-         *
-         * @brief Check if the game object is collidable or not
-         * @return True if the game object is collidable, otherwise false
-         *
-         * @see isActive
-         */
-         [[deprecated("Use 'bool ime::GameObject::isActive() const' instead.")]]
-        bool isCollidable() const;
 
         /**
          * @brief Set the game objects collision id
@@ -457,6 +434,10 @@ namespace ime {
          *
          * The transform can be used to query or modify the game object
          * position, scale, rotation and origin
+         *
+         * @warning Do not use the ime::Transform::onPropertyChange function
+         * of the returned object, It is used internally. Use ime::Object::onPropertyChange
+         * instead, which in inherited.
          */
         Transform& getTransform();
         const Transform& getTransform() const;

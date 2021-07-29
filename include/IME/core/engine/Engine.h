@@ -68,17 +68,6 @@ namespace ime {
         explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
 
         /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::Engine::Engine(const std::string&, const ime::PrefContainer&) instead.
-         *
-         * @brief Constructor
-         * @param gameName The name of the game to be run by the engine
-         * @param settings Settings to construct engine with
-         */
-         [[deprecated("Use 'ime::Engine::Engine(const std::string&, const ime::PrefContainer&)' instead.")]]
-        Engine(const std::string& gameName, const PropertyContainer& settings);
-
-        /**
          * @brief Constructor
          * @param gameName The name of the game
          * @param settings Settings to construct the engine with
@@ -169,16 +158,6 @@ namespace ime {
          */
         bool isPaused() const;
 
-        /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::Engine::getConfigs instead.
-         *
-         * @brief Get the engines settings
-         * @return The engines settings
-         */
-         [[deprecated("Use 'ime::PrefContainer& ime::Engine::getConfigs()' instead.")]]
-        const PropertyContainer& getSettings() const;
-
          /**
           * @brief Get the engines settings
           * @return The engines settings
@@ -199,9 +178,26 @@ namespace ime {
          *
          * @warning The data is destroyed when the engine is shutdown
          *
-         * @see quit
+         * @see getSavablePersistentData
          */
         PropertyContainer& getPersistentData();
+        const PropertyContainer& getPersistentData() const;
+
+        /**
+         * @brief Get persistent data
+         * @return Persistent data
+         *
+         * Data stored in the this object persists from scene to scene.
+         * This means that the data is preserved during a scene push or
+         * pop. In addition, the data can be read/saved from/to a file
+         * on the disk
+         *
+         * @warning The data is destroyed when the engine is shutdown
+         *
+         * @see getPersistentData
+         */
+        PrefContainer& getSavablePersistentData();
+        const PrefContainer& getSavablePersistentData() const;
 
         /**
          * @brief Get the name of the game run by the engine
@@ -367,26 +363,6 @@ namespace ime {
         void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::Window::onClose instead.
-         *
-         * @brief Add an event lister to a window close event
-         * @param callback Function to execute when a window close event is fired
-         *
-         * The callback function will be called by the engine when a request
-         * to close the window is made by the user. The default behavior stops
-         * the engine and closes the render window.
-         *
-         * @note Only one event listener may be registered to this event. This
-         * means that when a new event listener is added, the previous one is
-         * removed. As a result, adding a window close event listener overwrites
-         * the default behavior. Pass nullptr to stop the callback from being
-         * invoked
-         */
-         [[deprecated("use 'void ime::Window::onClose(const Callback&)' instead.")]]
-        void onWindowClose(Callback<> callback);
-
-        /**
          * @brief Execute a function at the start of a frame
          * @param callback Function to executed when a frame starts
          *
@@ -508,7 +484,6 @@ namespace ime {
         std::unique_ptr<Window> window_;                   //!< Exposes parts of priv::RenderTarget through its public interface
         std::string gameTitle_;                            //!< The name of the game run by the engine
         std::string settingFile_;                          //!< The filename of the file that contains the engines config entries
-        PropertyContainer settings_;                       ///@deprecated since v2.1.0, Replace with configs_ v2.2.0
         PrefContainer configs_;                            //!< The engines settings
         bool isSettingsLoadedFromFile_;                    //!< A flag indicating whether or not config entries are loaded by the engine or are received during construction
         bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized
@@ -521,6 +496,7 @@ namespace ime {
         std::shared_ptr<ResourceManager> resourceManager_; //!< The engine level resource manager
         EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
+        PrefContainer diskDataSaver_;                      //!< Holds data that persists across scenes and can be read/saved from/to a file on the disk
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame

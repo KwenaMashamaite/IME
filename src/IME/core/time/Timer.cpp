@@ -27,6 +27,8 @@
 namespace ime {
     Timer::Timer() :
         status_{Status::Stopped},
+        isExecutionComplete_{false},
+        isRestarting_{false},
         isDispatched_{false},
         repeatCount_{0},
         dispatchCount_{0}
@@ -65,6 +67,10 @@ namespace ime {
         return interval_;
     }
 
+    Time Timer::getElapsedTime() const {
+        return interval_ - remainingDuration_;
+    }
+
     Time Timer::getRemainingDuration() const {
         return remainingDuration_;
     }
@@ -81,11 +87,11 @@ namespace ime {
     }
 
     bool Timer::isRepeating() const {
-        return repeatCount_ > 0;
+        return repeatCount_ > 0 || repeatCount_ == -1;
     }
 
     void Timer::setTimeoutCallback(Callback<> callback) {
-        callback_ = std::move(callback);
+        onTimeout_ = std::move(callback);
         dispatchCount_ = 0;
     }
 
@@ -96,34 +102,51 @@ namespace ime {
     }
 
     void Timer::start() {
-        IME_ASSERT(callback_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
+        IME_ASSERT(onTimeout_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
         if (status_ != Status::Running) {
             status_ = Status::Running;
             dispatchCount_ = 0;
+
+            if (onStart_ && !isRestarting_)
+                onStart_(*this);
         } else
             restart();
     }
 
     void Timer::stop() {
-        status_ = Status::Stopped;
-        remainingDuration_ = interval_;
+        if (status_ == Status::Running || status_ == Status::Paused) {
+            status_ = Status::Stopped;
+            remainingDuration_ = interval_;
+
+            if (onStop_ && !isRestarting_ &&!isExecutionComplete_)
+                onStop_(*this);
+        }
     }
 
     void Timer::pause() {
-        if (status_ == Status::Running)
+        if (status_ == Status::Running) {
             status_ = Status::Paused;
+
+            if (onPause_)
+                onPause_(*this);
+        }
     }
 
     void Timer::restart() {
         if (status_ == Status::Stopped)
             start();
         else {
+            isRestarting_ = true;
             stop();
             // The dispatch counter is reset when the timer starts, however we
             // must preserve it if its a restart instead of normal start()
             auto dispatchCount = dispatchCount_;
             start();
             dispatchCount_ = dispatchCount;
+            isRestarting_ = false;
+
+            if (onRestart_)
+                onRestart_(*this);
         }
     }
 
@@ -131,19 +154,37 @@ namespace ime {
         return status_;
     }
 
+    bool Timer::isRunning() const {
+        return status_ == Status::Running;
+    }
+
+    bool Timer::isPaused() const {
+        return status_ == Status::Paused;
+    }
+
+    bool Timer::isStopped() const {
+        return status_ == Status::Stopped;
+    }
+
     void Timer::update(Time deltaTime) {
         if (status_ != Status::Running || remainingDuration_ < Time::Zero)
             return;
 
         remainingDuration_ -= deltaTime;
-        if (remainingDuration_ <= Time::Zero && callback_) {
-            callback_();
+        if (remainingDuration_ <= Time::Zero && onTimeout_) {
+            onTimeout_();
             isDispatched_ = true;
             dispatchCount_++;
             if (repeatCount_ < 0 || (repeatCount_ > 0 && (dispatchCount_ <= repeatCount_)))
                 restart();
-            else
+            else {
+                // When no further callback executions will take place, we only want
+                // to invoke onTimeout_ callback and not onStop_ callback. The latter
+                // must only be triggered externally.
+                isExecutionComplete_ = true;
                 stop();
+                isExecutionComplete_ = false;
+            }
         }
     }
 
@@ -153,5 +194,21 @@ namespace ime {
 
     bool Timer::isDispatched() const {
         return isDispatched_;
+    }
+
+    void Timer::onStart(const Timer::Callback<Timer&>& callback) {
+        onStart_ = callback;
+    }
+
+    void Timer::onPause(const Timer::Callback<Timer&>& callback) {
+        onPause_ = callback;
+    }
+
+    void Timer::onStop(const Timer::Callback<Timer&>& callback) {
+        onStop_ = callback;
+    }
+
+    void Timer::onRestart(const Timer::Callback<Timer&>& callback) {
+        onRestart_ = callback;
     }
 }

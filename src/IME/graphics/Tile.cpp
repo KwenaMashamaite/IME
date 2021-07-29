@@ -31,7 +31,8 @@ namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
         id_{'\0'},
         index_{-1, -1},
-        tile_({static_cast<float>(size.x), static_cast<float>(size.y)})
+        tile_({static_cast<float>(size.x), static_cast<float>(size.y)}),
+        isCollidable_{false}
     {
         tile_.setFillColour(Colour::White);
         prevFillColour_ = tile_.getFillColour();
@@ -43,7 +44,8 @@ namespace ime {
         id_{other.id_},
         index_{other.index_},
         tile_{other.tile_},
-        prevFillColour_{other.prevFillColour_}
+        prevFillColour_{other.prevFillColour_},
+        isCollidable_{other.isCollidable_}
     {}
 
     Tile& Tile::operator=(Tile other) {
@@ -58,11 +60,12 @@ namespace ime {
         swap(index_, other.index_);
         swap(tile_, other.tile_);
         swap(prevFillColour_, other.prevFillColour_);
+        swap(isCollidable_, other.isCollidable_);
     }
 
     void Tile::attachCollider(BoxCollider::Ptr collider) {
         IME_ASSERT(collider, "Collider must not be a nullptr")
-        IME_ASSERT(tile_.hasRigidBody(), "A physWorld body must be set first before attaching a collider")
+        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a RigidBody before attaching a collider")
 
         if (collider->getSize() < tile_.getSize() || collider->getSize() > tile_.getSize())
             collider->setSize(tile_.getSize());
@@ -71,7 +74,6 @@ namespace ime {
     }
 
     void Tile::removeCollider() {
-        setCollidable(false);
         tile_.removeRigidBody();
     }
 
@@ -138,13 +140,15 @@ namespace ime {
     }
 
     void Tile::setCollidable(bool collidable) {
-        IME_ASSERT(tile_.hasRigidBody(), "The tile must have a physWorld body in order to enable/disable collisions")
-
-        if (tile_.getRigidBody()->isEnabled() == collidable)
+        if (isCollidable_ == collidable)
             return;
 
-        tile_.getRigidBody()->setEnabled(collidable);
-        emitChange(Property{"collidable", collidable});
+        isCollidable_ = collidable;
+
+        if (tile_.hasRigidBody())
+            tile_.getRigidBody()->setEnabled(collidable);
+
+        emitChange(Property{"collidable", isCollidable_});
     }
 
     void Tile::setId(char id) {
@@ -185,7 +189,7 @@ namespace ime {
     }
 
     bool Tile::isCollidable() const {
-        return hasCollider() ? tile_.getRigidBody()->isEnabled() : false;
+        return isCollidable_;
     }
 
     bool Tile::contains(Vector2f point) const {

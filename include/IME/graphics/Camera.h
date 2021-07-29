@@ -26,7 +26,6 @@
 #define IME_CAMERA_H
 
 #include "IME/Config.h"
-#include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/common/Object.h"
@@ -34,6 +33,7 @@
 #include <any>
 
 namespace ime {
+    class GameObject;
 
     /// @internal
     namespace priv {
@@ -56,8 +56,18 @@ namespace ime {
      * instantiate a scene and it is accessible within the scene. Each
      * scene instance has its own camera
      */
-    class IME_API Camera : public Object, utility::NonCopyable {
+    class IME_API Camera : public Object {
     public:
+        /**
+         * @brief Copy constructor
+         */
+        Camera(const Camera&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        Camera& operator=(const Camera&) = delete;
+
         /**
          * @brief Move constructor
          */
@@ -230,6 +240,71 @@ namespace ime {
          * (140, 25)
          */
         Vector2i worldCoordToWindowCoord(const Vector2f& point) const;
+
+        /**
+         * @brief Set the camera to follow a GameObject
+         * @param gameObject The game object to be followed
+         * @param offset The offset of the camera from the game objects position
+         *
+         * * A positive @a x offset places the camera to the right of the target,
+         * while a negative @a x offset places the camera to the left of the
+         * target. Similarly, a positive @a y offset places the camera below
+         * the target while a negative @a y offset places the camera above the
+         * target.
+         *
+         * By default, the camera will keep the game object at its centre
+         *
+         * @warning @a gameObject must not be a nullptr, otherwise undefined
+         * behavior
+         *
+         * @see stopFollow, setFollowOffset
+         */
+        void startFollow(GameObject* gameObject, const Vector2f& offset = {0, 0});
+
+        /**
+         * @brief Stop the camera from following a game object
+         *
+         * @see setFollow
+         */
+        void stopFollow();
+
+        /**
+         * @brief Check if the camera is following a game object or not
+         * @return True if the camera is following a game object, otherwise false
+         *
+         * @see startFollow
+         */
+        bool isFollowingTarget() const;
+
+        /**
+         * @brief Get that game object followed by the camera
+         * @return The game object followed by the camera or a nullptr if
+         *          the camera is not following any game object
+         *
+         * @see startFollow
+         */
+        GameObject* getFollowTarget() const;
+
+        /**
+         * @brief Set the camera's follow offset from the targets position
+         * @param offset The new follow offset
+         *
+         * A positive @a x offset places the camera to the right of the target,
+         * while a negative @a x offset places the camera to the left of the
+         * target. Similarly, a positive @a y offset places the camera below
+         * the target while a negative @a y offset places the camera above the
+         * target
+         *
+         * By default the offset is Vector2f{0, 0} which means that the camera
+         * keeps the game object at its centre
+         */
+        void setTargetFollowOffset(const Vector2f& offset);
+
+        /**
+         * @brief Get the camera's follow target offset
+         * @return Th camera's follow target offset
+         */
+        const Vector2f& getTargetFollowOffset() const;
 
         /**
          * @internal

@@ -68,8 +68,7 @@ namespace ime {
         if (target_ == target)
             return;
         else if (target) {
-            IME_ASSERT(target->hasRigidBody(), "Game objects controlled by a grid mover must have a rigid body attached to them")
-            IME_ASSERT(target->getRigidBody()->getType() == RigidBody::Type::Kinematic, "A grid mover can only control game objects with a ime::RigidBody::Type::Kinematic rigid body")
+            IME_ASSERT(!target->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
             IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover")
 
             if (target_) {
@@ -83,14 +82,10 @@ namespace ime {
                 targetDestructionId_ = -1;
             });
 
-            auto velocity = target->getRigidBody()->getLinearVelocity();
-            maxSpeed_ = {std::abs(velocity.x), std::abs(velocity.y)};
-
             if (moveRestrict_ == MoveRestriction::None || moveRestrict_ == MoveRestriction::Diagonal) {
                 IME_ASSERT(maxSpeed_.x == maxSpeed_.y, "Cannot have different x and y linear speeds if target can move diagonally")
             }
 
-            target->getRigidBody()->setLinearVelocity({0, 0});
             targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
             target_ = target;
         } else
@@ -108,6 +103,9 @@ namespace ime {
     }
 
     void GridMover::setMaxLinearSpeed(Vector2f speed) {
+        if (maxSpeed_.x == std::abs(speed.x) && maxSpeed_.y == std::abs(speed.y))
+            return;
+
         if (moveRestrict_ == MoveRestriction::None || moveRestrict_ == MoveRestriction::Diagonal) {
             IME_ASSERT(maxSpeed_.x == maxSpeed_.y, "Cannot have different x and y linear speeds if target can move diagonally")
         }
@@ -121,6 +119,9 @@ namespace ime {
     }
 
     void GridMover::setMovementRestriction(GridMover::MoveRestriction moveRestriction) {
+        if (moveRestrict_ == moveRestriction)
+            return;
+
         if (type_ == Type::Target && !(moveRestriction == MoveRestriction::All || moveRestriction == MoveRestriction::None)) {
             IME_PRINT_WARNING("Cannot set movement restriction for a TargetGridMover, movement depends on path finder algorithm")
             return;
@@ -141,10 +142,6 @@ namespace ime {
     void GridMover::setMovementFreeze(bool freeze) {
         if (isMoveFrozen_ != freeze) {
             isMoveFrozen_ = freeze;
-            if (!isMoveFrozen_ && isMoving_)
-                target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
-            else
-                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
 
             emitChange(Property{"movementFreeze", isMoveFrozen_});
         }
@@ -189,13 +186,33 @@ namespace ime {
         return currentDirection_;
     }
 
+    std::pair<bool, GameObject*> GridMover::isBlockedInDirection(const Direction &dir) const {
+        IME_ASSERT(dir.x >= -1 && dir.x <= 1, "Invalid x direction, value must be -1, 0, or 1")
+        IME_ASSERT(dir.y >= -1 && dir.y <= 1, "Invalid y Direction, value must be -1, 0, or 1")
+        IME_ASSERT(!(dir.x == 0 && dir.y == 0), "Invalid direction, at least one value must be -1 or 1")
+
+        auto [row, colm] = targetTile_->getIndex();
+        if (tileMap_.isIndexValid(Index{row + dir.y, colm + dir.x})) {
+            const Tile& adjacentTile = tileMap_.getTile(Index{row + dir.y, colm + dir.x});
+            if (!adjacentTile.isCollidable()) {
+                GameObject* obstacle = getObstacleInTile(adjacentTile);
+
+                if (obstacle && canCollide(obstacle))
+                    return {true, obstacle};
+                else
+                    return {false, nullptr};
+            }
+        }
+
+        return {true, nullptr};
+    }
+
     void GridMover::update(Time deltaTime) {
         if (target_ && !isMoveFrozen_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
-            IME_ASSERT(target_->hasRigidBody(), "The targets rigid body was removed while it was still controlled by a grid mover")
-            IME_ASSERT(target_->getRigidBody()->getType() == RigidBody::Type::Kinematic, "The targets rigid body was changed from ime::RigidBody::Type::Kinematic, a grid mover can only move game objects with a Kinematic rigid body")
+            IME_ASSERT(!target_->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
 
-            if (!isTargetMoving() && targetDirection_ != Unknown && maxSpeed_ != Vector2f{0.0f, 0.0f}) {
+            if (!isMoving_ && targetDirection_ != Unknown && maxSpeed_ != Vector2f{0.0f, 0.0f}) {
                 setTargetTile();
 
                 if (handleGridBorderCollision() || handleSolidTileCollision() || handleObstacleCollision())
@@ -203,7 +220,6 @@ namespace ime {
 
                 currentDirection_ = targetDirection_;
                 isMoving_ = true;
-                target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
 
                 // Move target to target tile ahead of time
                 tileMap_.removeChildFromTile(*prevTile_, target_);
@@ -217,9 +233,13 @@ namespace ime {
 
                 eventEmitter_.emit("adjacentMoveBeginInternal", targetTile_->getIndex());
                 eventEmitter_.emit("adjacentMoveBegin", targetTile_->getIndex());
-            } else if (isTargetMoving() && isTargetTileReached(deltaTime)) {
-                snapTargetToTargetTile();
-                onDestinationReached();
+            } else if (isMoving_) {
+                if (isTargetTileReached(deltaTime)) {
+                    snapTargetToTargetTile();
+                    onDestinationReached();
+                } else {
+                    target_->getTransform().move({(maxSpeed_.x * targetDirection_.x) * deltaTime.asSeconds(), (maxSpeed_.y * targetDirection_.y) * deltaTime.asSeconds()});
+                }
             }
         }
     }
@@ -231,7 +251,6 @@ namespace ime {
     void GridMover::snapTargetToTargetTile() {
         isMoving_ = false;
         targetDirection_ = Unknown;
-        target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
         target_->getTransform().setPosition(targetTile_->getWorldCentre());
     }
 
@@ -298,7 +317,6 @@ namespace ime {
             auto hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
-            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("solidTileCollisionInternal", hitTile->getIndex());
             eventEmitter_.emit("solidTileCollision", hitTile->getIndex());
             return true;
@@ -307,12 +325,11 @@ namespace ime {
     }
 
     bool GridMover::handleObstacleCollision() {
-        GameObject* obstacle = getObstacleInTargetTile();
+        GameObject* obstacle = getObstacleInTile(*targetTile_);
 
         if (obstacle && canCollide(obstacle)) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
-            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("gameObjectCollisionInternal", target_, obstacle);
             eventEmitter_.emit("gameObjectCollision", target_, obstacle);
             return true;
@@ -321,14 +338,15 @@ namespace ime {
         return false;
     }
 
-    GameObject* GridMover::getObstacleInTargetTile() {
+    GameObject* GridMover::getObstacleInTile(const Tile& tile) const {
         GameObject* obstacle = nullptr;
-        tileMap_.forEachChildInTile(*targetTile_, [&obstacle, this](GameObject* child) {
+        tileMap_.forEachChildInTile(tile, [&obstacle, this](GameObject* child) {
             if (child->isObstacle() && child->isActive() && child != target_) {
                 obstacle = child;
                 return;
             }
         });
+
         return obstacle;
     }
 
@@ -337,7 +355,6 @@ namespace ime {
         if (targetTile_->getIndex().row < 0 || targetTile_->getIndex().colm < 0) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
-            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             eventEmitter_.emit("gridBorderCollisionInternal");
             eventEmitter_.emit("gridBorderCollision");
             return true;
@@ -347,7 +364,7 @@ namespace ime {
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
         auto distanceToTile = target_->getTransform().getPosition().distanceTo(targetTile_->getWorldCentre());
-        auto distanceMoved = target_->getRigidBody()->getLinearVelocity() * deltaTime.asSeconds();
+        auto distanceMoved = maxSpeed_ * deltaTime.asSeconds();
 
         // Horizontally movement
         if (targetDirection_.x != 0 && std::fabs(distanceMoved.x) >= distanceToTile) {
@@ -396,23 +413,38 @@ namespace ime {
             targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileLeftOf(*targetTile_));
     }
 
-    int GridMover::onTileCollision(const Callback<Index>& callback) {
+    int GridMover::onTileCollision(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("solidTileCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("solidTileCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback) {
+    int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("gameObjectCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("gameObjectCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onGridBorderCollision(const Callback<>& callback) {
+    int GridMover::onGridBorderCollision(const Callback<>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("gridBorderCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("gridBorderCollision"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback) {
+    int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("adjacentMoveBegin"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("adjacentMoveBegin"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
-    int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback) {
+    int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("adjacentMoveEnd"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("adjacentMoveEnd"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
@@ -436,6 +468,15 @@ namespace ime {
         return false;
     }
 
+    void GridMover::removeAllEventListeners() {
+        eventEmitter_.removeAllEventListeners("gameObjectCollision");
+        eventEmitter_.removeAllEventListeners("adjacentMoveBegin");
+        eventEmitter_.removeAllEventListeners("adjacentMoveEnd");
+        eventEmitter_.removeAllEventListeners("targetTileReset");
+        eventEmitter_.removeAllEventListeners("solidTileCollision");
+        eventEmitter_.removeAllEventListeners("gridBorderCollision");
+    }
+
     void GridMover::resetTargetTile() {
         if (target_ && !isTargetMoving() && targetTile_->getIndex()
             != tileMap_.getTileOccupiedByChild(target_).getIndex())
@@ -446,7 +487,10 @@ namespace ime {
         }
     }
 
-    int GridMover::onTargetTileReset(const Callback<Index>& callback) {
+    int GridMover::onTargetTileReset(const Callback<Index>& callback, bool oneTime) {
+        if (oneTime)
+            return eventEmitter_.addOnceEventListener("targetTileReset"s + (isInternalHandler_ ? "Internal" : ""), callback);
+
         return eventEmitter_.addEventListener("targetTileReset"s + (isInternalHandler_ ? "Internal" : ""), callback);
     }
 
@@ -457,9 +501,6 @@ namespace ime {
     GridMover::~GridMover() {
         if (targetDestructionId_ != -1 && target_)
             target_->removeDestructionListener(targetDestructionId_);
-
-        if (target_ && target_->getRigidBody())
-            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
 
         target_ = nullptr;
         prevTile_ = nullptr;

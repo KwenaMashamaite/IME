@@ -127,14 +127,15 @@ namespace ime {
         backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
-    void TileMap::setCollidable(Tile &tile, bool collidable) {
+    void TileMap::setCollidable(Tile &tile, bool collidable, bool attachCollider) {
         if (tile.isCollidable() == collidable)
             return;
-        else if (collidable && !tile.hasCollider()) {
-            tile.setBody(physicsSim_->createBody());
+        else if (collidable && !tile.hasCollider() && attachCollider && physicsSim_) {
+            tile.setBody(physicsSim_->createBody(RigidBody::Type::Static));
             tile.attachCollider(BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)}));
-        } else
-            tile.setCollidable(collidable);
+        }
+
+        tile.setCollidable(collidable);
 
         if (collidable)
             tile.setFillColour(renderer_.getCollidableTileColour());
@@ -201,10 +202,12 @@ namespace ime {
     }
 
     void TileMap::draw(priv::RenderTarget &renderTarget) const {
-        renderTarget.draw(backgroundTile_);
-        forEachTile([&renderTarget](const Tile& tile) {
-            renderTarget.draw(tile);
-        });
+        if (renderer_.isVisible()) {
+            renderTarget.draw(backgroundTile_);
+            forEachTile([&renderTarget](const Tile &tile) {
+                renderTarget.draw(tile);
+            });
+        }
     }
 
     void TileMap::addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder, const std::string &renderLayer) {
@@ -214,35 +217,35 @@ namespace ime {
         sprites_.add(std::move(sprite));
     }
 
-    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
+    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider) {
         if (isIndexValid(index))
-                setCollidable(tiledMap_[index.row][index.colm], isCollidable);
+            setCollidable(tiledMap_[index.row][index.colm], isCollidable, attachCollider);
     }
 
-    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable) {
+    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable, bool attachCollider) {
         std::for_each(locations.begin(), locations.end(), [=](const Index& index) {
-            setCollidableByIndex(index, isCollidable);
+            setCollidableByIndex(index, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable) {
+    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable, bool attachCollider) {
         if (isIndexValid(startPos) && isIndexValid(endPos)){
             for (auto i = startPos.colm; i < endPos.colm; i++)
-                setCollidableByIndex({startPos.row, i}, isCollidable);
+                setCollidableByIndex({startPos.row, i}, isCollidable, attachCollider);
         }
     }
 
-    void TileMap::setCollidableById(char id, bool isCollidable) {
-        forEachTile_([id, isCollidable, this](Tile& tile) {
+    void TileMap::setCollidableById(char id, bool isCollidable, bool attachCollider) {
+        forEachTile_([=](Tile& tile) {
             if (tile.getId() == id)
-                setCollidable(tile, isCollidable);
+                setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
-        forEachTile_([id, isCollidable, this](Tile& tile) {
+    void TileMap::setCollidableByExclusion(char id, bool isCollidable, bool attachCollider) {
+        forEachTile_([=](Tile& tile) {
             if (tile.getId() != id)
-                setCollidable(tile, isCollidable);
+                setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
@@ -263,11 +266,13 @@ namespace ime {
         if (isIndexValid(index) && !hasChild(child)) {
             child->getTransform().setPosition(getTile(index).getWorldCentre());
 
-            child->onDestruction([this, id = child->getObjectId()]{
+            int destructionId = child->onDestruction([this, id = child->getObjectId()]{
                 removeChildWithId(id);
             });
 
+            destructionIds_[child->getObjectId()] = destructionId;
             children_[index].push_back(child);
+
             return true;
         }
 
@@ -346,6 +351,7 @@ namespace ime {
 
             for (auto i = 0u; i < children_[tile.getIndex()].size(); ++i) {
                 if (children_[tile.getIndex()][i] == child) {
+                    unsubscribeDestructionListener(child);
                     children_[tile.getIndex()].erase(children_[tile.getIndex()].begin() + i);
                     return true;
                 }
@@ -356,9 +362,11 @@ namespace ime {
 
     bool TileMap::removeOccupant(const Tile &tile) {
         if (isTileOccupied(tile)) {
+            unsubscribeDestructionListener(*(children_[tile.getIndex()].begin()));
             children_[tile.getIndex()].erase(children_[tile.getIndex()].begin());
             return true;
         }
+
         return false;
     }
 
@@ -366,10 +374,12 @@ namespace ime {
         for (auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id) {
+                    unsubscribeDestructionListener(*(childList.second.begin() + i));
                     childList.second.erase(childList.second.begin() + i);
                     return true;
                 }
         }
+
         return false;
     }
 
@@ -380,8 +390,16 @@ namespace ime {
     }
 
     void TileMap::removeChildrenIf(const std::function<bool(GameObject*)>& callback) {
-        for (auto& childList : children_)
-            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(), callback), childList.second.end());
+        for (auto& childList : children_) {
+            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(),
+                [this, &callback](GameObject* gameObject) {
+                    if (callback(gameObject)) {
+                        unsubscribeDestructionListener(gameObject);
+                        return true;
+                    } else
+                        return false;
+            }), childList.second.end());
+        }
     }
 
     bool TileMap::removeAllVisitors(const Tile &tile) {
@@ -389,7 +407,7 @@ namespace ime {
             return false;
         else {
             auto occupant = children_[tile.getIndex()].front();
-            children_[tile.getIndex()].clear();
+            clearVector(children_[tile.getIndex()]);
             children_[tile.getIndex()].push_back(occupant);
             return true;
         }
@@ -397,9 +415,10 @@ namespace ime {
 
     bool TileMap::removeAllChildren(const Tile &tile) {
         if (isTileOccupied(tile)) {
-            children_[tile.getIndex()].clear();
+            clearVector(children_[tile.getIndex()]);
             return true;
         }
+
         return false;
     }
 
@@ -537,5 +556,17 @@ namespace ime {
             });
         } else if (property.getName() == "gridLineColour")
             backgroundTile_.setFillColour(property.getValue<Colour>());
+    }
+
+    void TileMap::unsubscribeDestructionListener(const GameObject *child) {
+        child->removeDestructionListener(destructionIds_[child->getObjectId()]);
+        destructionIds_.erase(child->getObjectId());
+    }
+
+    void TileMap::clearVector(std::vector<GameObject *> &vector) {
+        vector.erase(std::remove_if(vector.begin(), vector.end(), [this](GameObject* gameObject) {
+            unsubscribeDestructionListener(gameObject);
+            return true;
+        }), vector.end());
     }
 }

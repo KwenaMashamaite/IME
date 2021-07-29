@@ -33,6 +33,7 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/common/PrefContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
@@ -138,8 +139,12 @@ namespace ime {
          * is entered for the first time. Note that a scene cannot be entered
          * more than once, in other words this function will only be called
          * once
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
          */
-        virtual void onEnter() = 0;
+        virtual void onEnter() {};
 
         /**
          * @brief Handle a system event
@@ -322,27 +327,6 @@ namespace ime {
 
     protected:
         /**
-         * @deprecated Since v2.1.0, will be removed in v2.2.0. Use
-         *             ime::Scene::setOnPauseAction instead.
-         *
-         * @brief Set whether or not the scene is hidden or rendered
-         *        when it is paused
-         * @param show True to show or false to hide
-         *
-         * When the scene is shown on pause, it is rendered behind the
-         * current active scene but it does not receive any events or
-         * updates. Note that the scene will only be rendered if it has
-         * been entered and it is the next scene (It is the scene that
-         * will run if the current one is popped)
-         *
-         * By default the scene is hidden when it is paused
-         *
-         * @see setOnPauseAction
-         */
-        [[deprecated("Use 'void ime::Scene::setOnPauseAction(ime::Uint32)' instead.")]]
-        void setVisibleOnPause(bool show);
-
-        /**
          * @brief Set which action is taken when the scene is paused
          * @param action Action to be taken
          *
@@ -424,15 +408,16 @@ namespace ime {
         Camera& camera();
 
         /**
-         * @brief Get the scene level physics simulation
-         * @return The scene level physics simulation
+         * @brief Get the scene level physics engine/simulation
+         * @return The scene level physics engine/simulation
          *
          * The physics simulation is responsible for creating, managing,
-         * colliding and updating all of the bodies within it.
+         * colliding and updating all of the RigidBody's in it.
          *
-         * @warning The physics simulation must be created first before
-         * calling this function. Calling it before creating the creating
-         * teh simulation will lead to undefined behavior undefined behaviour
+         * @warning By default, the scene does not have a physics engine.
+         * As a result, calling this function prior to creating the physics
+         * engine is undefined behavior. Use createPhysWorld() to create a
+         * physics engine
          *
          * @see createPhysWorld
          */
@@ -517,16 +502,31 @@ namespace ime {
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
-         * The data can also be accessed using the engine instance
+         * The data can also be accessed using ime::Engine::getPersistentData
          *
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @warning Do not keep the returned reference
-         *
          * @see engine
          */
         PropertyContainer& cache();
+
+        /**
+         * @brief Get the global savable cache
+         * @return Global savable cache
+         *
+         * Data stored in the cache persists from scene to scene. This means
+         * that another scene can access or modify data stored by another scene.
+         * Unlike ime::Scene::cache, this cache can be initialized with data
+         * read from a file and can also be saved to a file. The data can also
+         * be accessed using ime::Engine::getSavablePersistentData
+         *
+         * @note The cache only stores data, while the engine is running. When
+         * the engine is shutdown, the data in the cache is destroyed
+         *
+         * @see engine
+         */
+        PrefContainer& sCache();
 
         /**
          * @brief Get the scene render layers
@@ -611,9 +611,10 @@ namespace ime {
          * @param iterations Position and velocity iterations (see ime::PhysIterations)
          *
          * @note This function should only be called by scenes that require
-         * a physic simulation. If the scene only makes use of grid-based
-         * physics (see ime::GridMover) then set @a gravity and @a iterations
-         * to zero for improved performance
+         * a physics simulation (i.e. scenes that make use of ime::RigidBody).
+         * If the scene uses no physics at all or only makes use of grid-based
+         * physics (see ime::GridMover) then there is no need to create the
+         * physics world. Grid-based physics do not use a physics engine.
          *
          * @see physWorld
          */
@@ -662,6 +663,7 @@ namespace ime {
         std::unique_ptr<GameObjectContainer> entityContainer_;             //!< Stores game objects that belong to the scene
         std::unique_ptr<ShapeContainer> shapeContainer_;                   //!< Stores shapes that belong to the scene
         std::unique_ptr<std::reference_wrapper<PropertyContainer>> cache_; //!< The engine level cache
+        std::unique_ptr<std::reference_wrapper<PrefContainer>> sCache_; //!< The engine level savable cache
     };
 }
 
