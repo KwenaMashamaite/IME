@@ -404,15 +404,16 @@ namespace ime {
         Camera& camera();
 
         /**
-         * @brief Get the scene level physics simulation
-         * @return The scene level physics simulation
+         * @brief Get the scene level physics engine/simulation
+         * @return The scene level physics engine/simulation
          *
          * The physics simulation is responsible for creating, managing,
-         * colliding and updating all of the bodies within it.
+         * colliding and updating all of the RigidBody's in it.
          *
-         * @warning The physics simulation must be created first before
-         * calling this function. Calling it before creating the creating
-         * teh simulation will lead to undefined behavior undefined behaviour
+         * @warning By default, the scene does not have a physics engine.
+         * As a result, calling this function prior to creating the physics
+         * engine is undefined behavior. Use createPhysWorld() to create a
+         * physics engine
          *
          * @see createPhysWorld
          */
@@ -606,9 +607,10 @@ namespace ime {
          * @param iterations Position and velocity iterations (see ime::PhysIterations)
          *
          * @note This function should only be called by scenes that require
-         * a physic simulation. If the scene only makes use of grid-based
-         * physics (see ime::GridMover) then set @a gravity and @a iterations
-         * to zero for improved performance
+         * a physics simulation (i.e. scenes that make use of ime::RigidBody).
+         * If the scene uses no physics at all or only makes use of grid-based
+         * physics (see ime::GridMover) then there is no need to create the
+         * physics world. Grid-based physics do not use a physics engine.
          *
          * @see physWorld
          */

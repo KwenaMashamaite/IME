@@ -92,8 +92,9 @@ namespace ime {
          *
          * @warning If @a gameObject is left as @a nullptr, then setTarget()
          * must be called before the grid mover is used. If the @a gameObject
-         * is given, it must be in the grid prior to constructor call, otherwise
-         * the grid mover construction will fail
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
          *
          * @see setTarget
          */
@@ -171,8 +172,8 @@ namespace ime {
          * Provide nullptr as argument to remove current target
          *
          * @warning if the @a target is not a @a nullptr, then it must exist
-         * in the grid and have a rigid Body of time Body::Type::Kinematic
-         * attached to it prior to function call
+         * in the TileMap and must not have a RigidBody attached to it,
+         * otherwise undefined behavior
          */
         void setTarget(GameObject* target);
 
