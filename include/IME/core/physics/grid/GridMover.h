@@ -52,9 +52,6 @@ namespace ime {
      * it always moves from one cell to the next and never between grid cells.
      * The entities direction cannot be changed until it has completed it's
      * current movement.
-     *
-     * Note that the grid mover only supports orthogonal movement (left, right,
-     * up and down)
      */
     class IME_API GridMover : public Object {
     public:

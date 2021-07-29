@@ -291,9 +291,6 @@ namespace ime {
         /**
          * @brief Get the number of times the callback has been invoked
          * @return The number of times the callback has been invoked
-         *
-         * This function will return 0 if the callback is not yet invoked,
-         * and 1 if the callback is invoked but not repeating
          */
         int getDispatchCount() const;
 
