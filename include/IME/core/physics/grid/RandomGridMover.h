@@ -118,6 +118,7 @@ namespace ime {
     private:
         bool movementStarted_;                     //!< A flag indicating whether or not movement has been started
         std::vector<Direction> directionAttempts_; //!< Stores directions to be attempted
+        std::vector<Vector2i> possibleDirections_; //!< Stores possible directions based on the current movement restriction
     };
 }
 

@@ -71,8 +71,28 @@ namespace ime {
     void RandomGridMover::generateNewDirection() {
         ime::Direction reverseGhostDir = getDirection() * (-1);
 
+        switch (getMovementRestriction()) {
+            case MoveRestriction::None:
+                possibleDirections_ = {Left, UpLeft, Up, UpRight, Right, DownRight, Down, DownLeft};
+                break;
+            case MoveRestriction::All:
+                return;
+            case MoveRestriction::Vertical:
+                possibleDirections_ = {Up, Down};
+                break;
+            case MoveRestriction::Horizontal:
+                possibleDirections_ = {Left, Right};
+                break;
+            case MoveRestriction::Diagonal:
+                possibleDirections_ = {UpLeft, UpRight, DownLeft, DownRight};
+                break;
+            case MoveRestriction::NonDiagonal:
+                possibleDirections_ = {Left, Right, Up, Down};
+                break;
+        }
+
         // Initialize possible directions
-        for (const auto& dir : {Left, Up, Right, Down}) {
+        for (const auto& dir : possibleDirections_) {
             // Prevent target from going backwards
             if (dir == reverseGhostDir)
                 continue;
