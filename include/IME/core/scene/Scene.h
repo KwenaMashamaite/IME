@@ -139,8 +139,12 @@ namespace ime {
          * is entered for the first time. Note that a scene cannot be entered
          * more than once, in other words this function will only be called
          * once
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
          */
-        virtual void onEnter() = 0;
+        virtual void onEnter() {};
 
         /**
          * @brief Handle a system event

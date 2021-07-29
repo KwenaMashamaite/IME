@@ -25,10 +25,9 @@
 /// // Step 1: Create a game state/scene
 /// // You define the behavior of the game by overriding ime::Scene functions.
 /// // These functions will be called by the engine at appropriate times. Scene
-/// // methods are overridden by a need to use case, however overriding the
-/// // ime::Scene::onEnter function is mandatory.
+/// // methods are overridden on a need to use case.
 ///
-/// // This scene simply displays a message at the centre of the screen
+/// // This scene displays a message at the centre of the screen
 /// class StartUpScene : public ime::Scene {
 ///   public:
 ///       void onEnter() override {
