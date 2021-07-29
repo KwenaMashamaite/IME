@@ -229,6 +229,9 @@ namespace ime {
     void Animator::play() {
         if (currentAnimation_ && !isPlaying_ && !isPaused_) {
             isPlaying_ = true;
+            (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
+            resetCurrentFrame();
+
             fireEvent(Event::AnimationPlay, currentAnimation_);
         }
     }
@@ -479,7 +482,6 @@ namespace ime {
     }
 
     void Animator::setCurrentFrame(const Animation::Frame& frame) {
-        (*target_).get().setTexture(currentAnimation_->getSpriteSheet().getTexture());
         (*target_).get().setTextureRect(frame.left, frame.top, frame.width, frame.height);
     }
 
