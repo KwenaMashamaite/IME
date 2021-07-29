@@ -178,9 +178,26 @@ namespace ime {
          *
          * @warning The data is destroyed when the engine is shutdown
          *
-         * @see quit
+         * @see getSavablePersistentData
          */
         PropertyContainer& getPersistentData();
+        const PropertyContainer& getPersistentData() const;
+
+        /**
+         * @brief Get persistent data
+         * @return Persistent data
+         *
+         * Data stored in the this object persists from scene to scene.
+         * This means that the data is preserved during a scene push or
+         * pop. In addition, the data can be read/saved from/to a file
+         * on the disk
+         *
+         * @warning The data is destroyed when the engine is shutdown
+         *
+         * @see getPersistentData
+         */
+        PrefContainer& getSavablePersistentData();
+        const PrefContainer& getSavablePersistentData() const;
 
         /**
          * @brief Get the name of the game run by the engine
@@ -479,6 +496,7 @@ namespace ime {
         std::shared_ptr<ResourceManager> resourceManager_; //!< The engine level resource manager
         EventDispatcher::Ptr eventDispatcher_;             //!< System wide event emitter (Engine only keeps an instance alive for the application)
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
+        PrefContainer diskDataSaver_;                      //!< Holds data that persists across scenes and can be read/saved from/to a file on the disk
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame

@@ -33,6 +33,7 @@
 #include "IME/core/audio/AudioManager.h"
 #include "IME/core/time/TimerManager.h"
 #include "IME/common/PropertyContainer.h"
+#include "IME/common/PrefContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
@@ -496,16 +497,31 @@ namespace ime {
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
-         * The data can also be accessed using the engine instance
+         * The data can also be accessed using ime::Engine::getPersistentData
          *
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @warning Do not keep the returned reference
-         *
          * @see engine
          */
         PropertyContainer& cache();
+
+        /**
+         * @brief Get the global savable cache
+         * @return Global savable cache
+         *
+         * Data stored in the cache persists from scene to scene. This means
+         * that another scene can access or modify data stored by another scene.
+         * Unlike ime::Scene::cache, this cache can be initialized with data
+         * read from a file and can also be saved to a file. The data can also
+         * be accessed using ime::Engine::getSavablePersistentData
+         *
+         * @note The cache only stores data, while the engine is running. When
+         * the engine is shutdown, the data in the cache is destroyed
+         *
+         * @see engine
+         */
+        PrefContainer& sCache();
 
         /**
          * @brief Get the scene render layers
@@ -641,6 +657,7 @@ namespace ime {
         std::unique_ptr<GameObjectContainer> entityContainer_;             //!< Stores game objects that belong to the scene
         std::unique_ptr<ShapeContainer> shapeContainer_;                   //!< Stores shapes that belong to the scene
         std::unique_ptr<std::reference_wrapper<PropertyContainer>> cache_; //!< The engine level cache
+        std::unique_ptr<std::reference_wrapper<PrefContainer>> sCache_; //!< The engine level savable cache
     };
 }
 

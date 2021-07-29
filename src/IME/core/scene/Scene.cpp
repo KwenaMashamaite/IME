@@ -54,6 +54,7 @@ namespace ime {
             engine_ = std::move(other.engine_);
             camera_ = std::move(other.camera_);
             cache_ = std::move(other.cache_);
+            sCache_ = std::move(other.sCache_);
             world_ = std::move(other.world_);
             inputManager_ = std::move(other.inputManager_);
             audioManager_ = std::move(other.audioManager_);
@@ -83,6 +84,7 @@ namespace ime {
         engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
         cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
+        sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
         guiContainer_.setTarget(engine.getRenderTarget());
         onInit();
     }
@@ -202,6 +204,10 @@ namespace ime {
 
     PropertyContainer &Scene::cache() {
         return *cache_;
+    }
+
+    PrefContainer &Scene::sCache() {
+        return *sCache_;
     }
 
     RenderLayerContainer &Scene::renderLayers() {

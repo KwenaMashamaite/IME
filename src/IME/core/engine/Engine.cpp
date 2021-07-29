@@ -310,6 +310,7 @@ namespace ime {
         sceneManager_->clear();
         timerManager_.clear();
         dataSaver_.clear();
+        diskDataSaver_.clear();
         resourceManager_.reset();
         inputManager_ = input::InputManager();
         eventDispatcher_.reset();
@@ -354,6 +355,18 @@ namespace ime {
 
     PropertyContainer &Engine::getPersistentData() {
         return dataSaver_;
+    }
+
+    const PropertyContainer &Engine::getPersistentData() const {
+        return dataSaver_;
+    }
+
+    PrefContainer &Engine::getSavablePersistentData() {
+        return diskDataSaver_;
+    }
+
+    const PrefContainer &Engine::getSavablePersistentData() const {
+        return diskDataSaver_;
     }
 
     audio::AudioManager &Engine::getAudioManager() {
