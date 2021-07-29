@@ -166,19 +166,13 @@ namespace ime {
          * @brief Set whether tile is collidable or not
          * @param collidable True to set collidable, otherwise false
          *
-         * @warning It is required for all tiles that are collidable to have a
-         * collider attached to them. As such, invoking this function with an
-         * argument of @a true when there is no collider attached to the tile
-         * is undefined behavior.
-         *
          * Note that disabling a collision for a tile that was previously
-         * collidable does not remove the tiles collider. This removes the
-         * need to create a new collider everytime the collidability of the
-         * tile is re-enabled. The collider can be removed from the tile by
-         * calling the removeCollider function
+         * had a Collider attached to it does not remove the collider. This
+         * removes the need to create a new collider everytime the collidability
+         * of the tile is re-enabled. The collider can be explicitly removed
+         * from the tile by calling the removeCollider() function
          *
-         * By default, the tile does not have a collider attached to it, hence
-         * not collidable
+         * By default, the tile is not collidable
          *
          * @see attachCollider
          */
@@ -232,15 +226,18 @@ namespace ime {
          * @brief Add a collider to the tile
          * @param collider The collider to be added
          *
-         * @warning It is required that all tilemap tiles that are collidable
-         * have a collider attached to them. The collider must be attached to
-         * a @a Static rigid body. Providing a collider that is not attached to
-         * a rigid body is undefined behavior. In addition calling the function
-         * setCollidable with an argument of true on a tile without a collider
-         * is undefined behavior.
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. The tile can can only have one
+         * collider attached to it. The current collider must be removed first
+         * before attaching a new one
          *
-         * Note that a tile can only have one collider attached to it. The
-         * current collider must be removed first before attaching a new one
+         * By default, the tile does not have a collider attached to it
+         *
+         * @warning A RigidBody is required before attaching a Collider,
+         * doing so without a RigidBody is undefined behavior. Use the
+         * setBody() function to add a RigidBody
          *
          * @see removeCollider and hasCollider
          */
@@ -249,11 +246,11 @@ namespace ime {
         /**
          * @brief Remove the collider added to the tile
          *
-         * Note that if the tile is collidable and the collider is removed,
-         * it will no longer be collidable. This function has no effect if
-         * the tile does not have a collider attached to it
+         * Note that when the collider is removed, the tile will no longer
+         * participate in RigidBody physics, however grid-based physics
+         * (see ime::GridMover) will continue as normal.
          *
-         * @see setCollidable and hasCollider
+         * @see attachCollider and hasCollider
          */
         void removeCollider();
 
@@ -278,14 +275,13 @@ namespace ime {
         void swap(Tile& other);
 
         /**
-         * @internal
-         * @brief Set the tiles physics body physics body
+         * @brief Set the tiles RigidBody
          * @param body The physics body to set
          *
-         * @warning A physics body is required before setting the tile as
-         * collidable, doing so without a physics body is undefined behavior
+         * The rigid body is only required if you intend to attach a Collider.
+         * The rigid body must be of type ime::RigidBody::Type::Static
          *
-         * @warning This function is intended for internal use only
+         * @see attachCollider
          */
         void setBody(RigidBody::Ptr body);
 
@@ -308,6 +304,7 @@ namespace ime {
         Index index_;           //!< Position of the tile in the tilemap
         RectangleShape tile_;   //!< Tile
         Colour prevFillColour_; //!< Tiles fill colour before it was hidden
+        bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable
     };
 }
 

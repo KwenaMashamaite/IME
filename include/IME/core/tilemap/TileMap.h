@@ -164,52 +164,97 @@ namespace ime {
          * @brief Enable or disable collision for a tile at a certain location
          * @param index Location (in tiles) of the tile
          * @param isCollidable True to enable collision, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
          *
-         * The tile will be marked as a solid tile, if currently set as an
-         * empty tile
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
          */
-        void setCollidableByIndex(const Index &index, bool isCollidable);
+        void setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider = false);
 
         /**
          * @brief Enable or disable collision for tiles at certain locations
          * @param locations Locations (in tiles) of the tiles
          * @param isCollidable True to enable collision, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
+         *
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         *
+         * By default, tiles are not collidable
          *
          * All the tiles at specified indexes (if valid) will be set as solid
          * tiles if currently set as empty tiles
          */
         void setCollidableByIndex(const std::initializer_list<Index>& locations,
-            bool isCollidable);
+            bool isCollidable, bool attachCollider = false);
 
         /**
          * @brief Enable or disable collisions for tiles in a range
          * @param startPos The start position of the range
          * @param endPos The ending position of the range
          * @param isCollidable True to set collidable, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
+         *
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         *
+         * By default, tiles are not collidable
          *
          * @warning Only horizontal ranges are supported. This means that
          * that the indexes in the range [startPos, endPos] must refer to
          * tiles that are valid and horizontally contiguous
          */
-        void setCollidableByIndex(Index startPos, Index endPos, bool isCollidable);
+        void setCollidableByIndex(Index startPos, Index endPos, bool isCollidable, bool attachCollider = false);
 
         /**
          * @brief Enable or disable collisions for tiles with a certain id
          * @param id Id of the tiles to enable or disable collisions for
          * @param isCollidable True to enable collision, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
+         *
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
          *
          * All the tiles with the specified id will be marked as solid tiles
          * if currently marked as empty tiles
+         *
+         * By default, tiles are not collidable
          */
-        void setCollidableById(char id, bool isCollidable);
+        void setCollidableById(char id, bool isCollidable, bool attachCollider = false);
 
         /**
          * @brief Enable or disable collisions for all tiles except those with
          *        with a certain id
          * @param id Identification of the tiles to exclude
          * @param isCollidable True to enable collision, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
+         *
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         *
+         * By default, tiles are not collidable
          */
-        void setCollidableByExclusion(char id, bool isCollidable);
+        void setCollidableByExclusion(char id, bool isCollidable, bool attachCollider = false);
 
         /**
          * @brief Check if a tile is collidable or not
@@ -695,10 +740,18 @@ namespace ime {
          * @brief Set whether or not a tile is collidable
          * @param tile The tile to enable or disable collisions for
          * @param collidable True to set collidable, otherwise false
+         * @param attachCollider True to attach a Collider to the tile, otherwise
+         *                       false
+         *
+         * Without a Collider, only game objects that are controlled by a
+         * GridMover can collide with the tile. Attaching a collider makes
+         * a GameObject with a RigidBody that has a Collider attached to it
+         * able to collide with the tile. Note that a collider can only be
+         * attached if the Scene this TileMap belongs to has a PhysicsWorld
          *
          * By default, a tile is not collidable
          */
-        void setCollidable(Tile& tile, bool collidable);
+        void setCollidable(Tile& tile, bool collidable, bool attacheCollider = false);
 
         /**
          * @brief Execute a callback on all the tiles of the tilemap

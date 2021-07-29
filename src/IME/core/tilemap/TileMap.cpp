@@ -127,14 +127,15 @@ namespace ime {
         backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
-    void TileMap::setCollidable(Tile &tile, bool collidable) {
+    void TileMap::setCollidable(Tile &tile, bool collidable, bool attachCollider) {
         if (tile.isCollidable() == collidable)
             return;
-        else if (collidable && !tile.hasCollider()) {
-            tile.setBody(physicsSim_->createBody());
+        else if (collidable && !tile.hasCollider() && attachCollider && physicsSim_) {
+            tile.setBody(physicsSim_->createBody(RigidBody::Type::Static));
             tile.attachCollider(BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)}));
-        } else
-            tile.setCollidable(collidable);
+        }
+
+        tile.setCollidable(collidable);
 
         if (collidable)
             tile.setFillColour(renderer_.getCollidableTileColour());
@@ -216,35 +217,35 @@ namespace ime {
         sprites_.add(std::move(sprite));
     }
 
-    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable) {
+    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider) {
         if (isIndexValid(index))
-                setCollidable(tiledMap_[index.row][index.colm], isCollidable);
+            setCollidable(tiledMap_[index.row][index.colm], isCollidable, attachCollider);
     }
 
-    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable) {
+    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable, bool attachCollider) {
         std::for_each(locations.begin(), locations.end(), [=](const Index& index) {
-            setCollidableByIndex(index, isCollidable);
+            setCollidableByIndex(index, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable) {
+    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable, bool attachCollider) {
         if (isIndexValid(startPos) && isIndexValid(endPos)){
             for (auto i = startPos.colm; i < endPos.colm; i++)
-                setCollidableByIndex({startPos.row, i}, isCollidable);
+                setCollidableByIndex({startPos.row, i}, isCollidable, attachCollider);
         }
     }
 
-    void TileMap::setCollidableById(char id, bool isCollidable) {
-        forEachTile_([id, isCollidable, this](Tile& tile) {
+    void TileMap::setCollidableById(char id, bool isCollidable, bool attachCollider) {
+        forEachTile_([=](Tile& tile) {
             if (tile.getId() == id)
-                setCollidable(tile, isCollidable);
+                setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByExclusion(char id, bool isCollidable) {
-        forEachTile_([id, isCollidable, this](Tile& tile) {
+    void TileMap::setCollidableByExclusion(char id, bool isCollidable, bool attachCollider) {
+        forEachTile_([=](Tile& tile) {
             if (tile.getId() != id)
-                setCollidable(tile, isCollidable);
+                setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
