@@ -255,10 +255,11 @@ namespace ime::priv {
             if (scene->hasTilemap_)
                 scene->tileMap_->update(deltaTime * scene->getTimescale());
 
-            //Update game objects - By default, the game object updates its sprite animation
             scene->gameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
-                if (gameObject->isActive())
+                if (gameObject->isActive()) {
+                    gameObject->getSprite().updateAnimation(deltaTime * scene->getTimescale());
                     gameObject->update(deltaTime * scene->getTimescale());
+                }
             });
 
             // Update sprite animations

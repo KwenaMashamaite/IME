@@ -465,11 +465,14 @@ namespace ime {
          * @brief Update the game object
          * @param deltaTime Time past since last update
          *
-         * @warning When overriding this function make sure to call the base
-         * class version first in your implementation. In addition, don't
-         * invoke the overridden function, it will be called by the engine
+         * @a deltaTime is synced with the render FPS. In other words, it is
+         * frame-rate dependent.
+         *
+         * Note that this function is provided for external use only, IME will
+         * never put anything inside it. This means that don't have to call
+         * the base class version when overriding it
          */
-        virtual void update(Time deltaTime);
+        virtual void update(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
          * @internal

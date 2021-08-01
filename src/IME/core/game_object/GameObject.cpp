@@ -256,10 +256,6 @@ namespace ime {
         return sprite_;
     }
 
-    void GameObject::update(Time deltaTime) {
-        sprite_.updateAnimation(deltaTime);
-    }
-
     void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
         if (this == other)
             return;
