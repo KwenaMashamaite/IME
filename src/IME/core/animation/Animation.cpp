@@ -33,7 +33,7 @@ namespace ime {
         const auto defaultFrameRate = 24u;
     }
 
-    Animation::Animation(const std::string& name, const SpriteSheet&  spriteSheet, Time duration) :
+    Animation::Animation(const std::string& name, const SpriteSheet&  spriteSheet, const Time& duration) :
          name_{name},
          spriteSheet_{spriteSheet},
          duration_{duration},
@@ -50,7 +50,7 @@ namespace ime {
     }
 
     std::shared_ptr<Animation> Animation::create(const std::string &name,
-        const SpriteSheet& spriteSheet, Time duration)
+        const SpriteSheet& spriteSheet, const Time& duration)
     {
         return std::make_shared<Animation>(name, spriteSheet, duration);
     }
@@ -85,7 +85,7 @@ namespace ime {
         return repeatCounter_ == -1;
     }
 
-    void Animation::setDuration(Time duration) {
+    void Animation::setDuration(const Time& duration) {
         if (duration <= Time::Zero) {
             isDurationDerived_ = true;
             setFrameRate(defaultFrameRate);
@@ -95,7 +95,7 @@ namespace ime {
         }
     }
 
-    Time Animation::getDuration() const {
+    const Time& Animation::getDuration() const {
         return duration_;
     }
 
@@ -135,11 +135,11 @@ namespace ime {
         return name_;
     }
 
-    void Animation::setStartDelay(Time delay) {
+    void Animation::setStartDelay(const Time& delay) {
         startDelay_ = delay;
     }
 
-    Time Animation::getStartDelay() const {
+    const Time& Animation::getStartDelay() const {
         return startDelay_;
     }
 
@@ -171,7 +171,7 @@ namespace ime {
         return isFrameResetOnStop_;
     }
 
-    void Animation::addFrames(Index startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
+    void Animation::addFrames(const Index& startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
         auto newFrames = std::vector<Frame>{};
         if (arrangement == FrameArrangement::Horizontal)
             newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, (startPos.colm + static_cast<int>(numOfFrames)) - 1});
@@ -184,14 +184,14 @@ namespace ime {
         calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
     }
 
-    void Animation::addFrame(Index index) {
+    void Animation::addFrame(const Index& index) {
         if (auto frame = spriteSheet_.getFrame(index); frame) {
             frames_.emplace_back(*frame);
             calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }
 
-    void Animation::insertFrameAt(unsigned int index, Index frameIndex) {
+    void Animation::insertFrameAt(unsigned int index, const Index& frameIndex) {
         if (index >= frames_.size())
             addFrame(frameIndex); //Add frame at the back instead of issuing error
         else if (auto frame = spriteSheet_.getFrame(frameIndex); frame) {
@@ -226,7 +226,7 @@ namespace ime {
         return static_cast<unsigned int>(frames_.size());
     }
 
-    Time Animation::getFrameTime() const {
+    const Time& Animation::getFrameTime() const {
         return frameTime_;
     }
 
@@ -272,7 +272,7 @@ namespace ime {
         return completionFrame_ >= 0 ? completionFrame_ : static_cast<unsigned int>(frames_.size() - 1);
     }
 
-    void Animation::calculateFrameRate(Time duration, unsigned int frameRate) {
+    void Animation::calculateFrameRate(const Time& duration, unsigned int frameRate) {
         if (duration == Time::Zero && frameRate == 0) {
             frameRate_ = defaultFrameRate;
             duration_ = ime::seconds(static_cast<float>(getFrameCount()) / frameRate_);

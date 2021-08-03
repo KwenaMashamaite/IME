@@ -195,7 +195,7 @@ namespace ime {
         emitChange({"position", getPosition()});
     }
 
-    void Shape::setPosition(Vector2f position) {
+    void Shape::setPosition(const Vector2f& position) {
         setPosition(position.x, position.y);
     }
 
@@ -227,7 +227,7 @@ namespace ime {
         emitChange(Property{"scale", getScale()});
     }
 
-    void Shape::setScale(Vector2f scale) {
+    void Shape::setScale(const Vector2f& scale) {
         setScale(scale.x, scale.y);
     }
 
@@ -235,7 +235,7 @@ namespace ime {
         setScale(getScale().x * factorX, getScale().y * factorY);
     }
 
-    void Shape::scale(Vector2f factor) {
+    void Shape::scale(const Vector2f& factor) {
         scale(factor.x, factor.y);
     }
 
@@ -251,7 +251,7 @@ namespace ime {
         emitChange(Property{"origin", getOrigin()});
     }
 
-    void Shape::setOrigin(Vector2f origin) {
+    void Shape::setOrigin(const Vector2f& origin) {
         setOrigin(origin.x, origin.y);
     }
 
@@ -263,7 +263,7 @@ namespace ime {
         setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
     }
 
-    void Shape::move(Vector2f offset) {
+    void Shape::move(const Vector2f& offset) {
         move(offset.x, offset.y);
     }
 

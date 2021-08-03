@@ -81,7 +81,7 @@ namespace ime {
     }
 
     Animation::Ptr Animator::createAnimation(const std::string &name,
-        const SpriteSheet& spriteSheet, Time duration)
+        const SpriteSheet& spriteSheet, const Time& duration)
     {
         auto animation = Animation::create(name, spriteSheet, duration);
         if (addAnimation(animation))

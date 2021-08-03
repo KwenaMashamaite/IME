@@ -102,7 +102,7 @@ namespace ime {
         return target_;
     }
 
-    void GridMover::setMaxLinearSpeed(Vector2f speed) {
+    void GridMover::setMaxLinearSpeed(const Vector2f& speed) {
         if (maxSpeed_.x == std::abs(speed.x) && maxSpeed_.y == std::abs(speed.y))
             return;
 
@@ -114,7 +114,7 @@ namespace ime {
         emitChange(Property{"maxLinearSpeed", speed});
     }
 
-    Vector2f GridMover::getMaxLinearSpeed() const {
+    const Vector2f& GridMover::getMaxLinearSpeed() const {
         return maxSpeed_;
     }
 

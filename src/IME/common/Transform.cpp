@@ -42,11 +42,11 @@ namespace ime {
             onPropertyChange_(Property{"position", position_});
     }
 
-    void Transform::setPosition(Vector2f position) {
+    void Transform::setPosition(const Vector2f& position) {
         setPosition(position.x, position.y);
     }
 
-    Vector2f Transform::getPosition() const {
+    const Vector2f& Transform::getPosition() const {
         return position_;
     }
 
@@ -82,7 +82,7 @@ namespace ime {
             onPropertyChange_(Property{"scale", scale_});
     }
 
-    void Transform::setScale(Vector2f scale) {
+    void Transform::setScale(const Vector2f& scale) {
         setScale(scale.x, scale.y);
     }
 
@@ -90,11 +90,11 @@ namespace ime {
         setScale(scale_.x * factorX, scale_.y * factorY);
     }
 
-    void Transform::scale(Vector2f offset) {
+    void Transform::scale(const Vector2f& offset) {
         setScale(scale_.x * offset.x, scale_.y * offset.y);
     }
 
-    Vector2f Transform::getScale() const {
+    const Vector2f& Transform::getScale() const {
         return scale_;
     }
 
@@ -109,11 +109,11 @@ namespace ime {
             onPropertyChange_(Property{"origin", origin_});
     }
 
-    void Transform::setOrigin(Vector2f origin) {
+    void Transform::setOrigin(const Vector2f& origin) {
         setOrigin(origin.x, origin.y);
     }
 
-    Vector2f Transform::getOrigin() const {
+    const Vector2f& Transform::getOrigin() const {
         return origin_;
     }
 
@@ -121,7 +121,7 @@ namespace ime {
         setPosition(position_.x + offsetX, position_.y + offsetY);
     }
 
-    void Transform::move(Vector2f offset) {
+    void Transform::move(const Vector2f& offset) {
         move(offset.x, offset.y);
     }
 

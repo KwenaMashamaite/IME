@@ -56,7 +56,7 @@ namespace ime {
          * any of its functions are are called. Calling a member function
          * without a rigid body is undefined behavior
          */
-        explicit BoxCollider(Vector2f size = {0.1f, 0.1f});
+        explicit BoxCollider(const Vector2f& size = {0.1f, 0.1f});
 
         /**
          * @brief Move constructor
@@ -85,7 +85,7 @@ namespace ime {
          * any of its functions are are called. Calling a member function
          * without a rigid body is undefined behavior
          */
-        static BoxCollider::Ptr create(Vector2f size = {0.1f, 0.1f});
+        static BoxCollider::Ptr create(const Vector2f& size = {0.1f, 0.1f});
 
         /**
          * @brief Create a copy of the collider
@@ -131,13 +131,13 @@ namespace ime {
          * @brief Set the size of the box
          * @param size The size of the box
          */
-        void setSize(Vector2f size);
+        void setSize(const Vector2f& size);
 
         /**
          * @brief Get the size of the box
          * @return The size of the box
          */
-        Vector2f getSize() const;
+        const Vector2f& getSize() const;
 
         /**
          * @brief Destructor

@@ -122,7 +122,8 @@ namespace ime {
          *
          * @see setTwoSided
          */
-        void setOneSided(Vector2f v0, Vector2f v1, Vector2f v2, Vector2f v3);
+        void setOneSided(const Vector2f& v0, const Vector2f& v1, const Vector2f& v2,
+            const Vector2f& v3);
 
         /**
          * @brief Create a two sided collision edge
@@ -141,7 +142,7 @@ namespace ime {
          *
          * @see setOneSided
          */
-        void setTwoSided(Vector2f v1, Vector2f v2);
+        void setTwoSided(const Vector2f& v1, const Vector2f& v2);
 
         /**
          * @brief Get the vertices that make up the edge

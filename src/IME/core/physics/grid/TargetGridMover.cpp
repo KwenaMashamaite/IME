@@ -96,7 +96,7 @@ namespace ime {
         return "TargetGridMover";
     }
 
-    void TargetGridMover::setDestination(Index index) {
+    void TargetGridMover::setDestination(const Index& index) {
         if (index != targetTileIndex_) {
             targetTileIndex_ = index;
             if (getTarget()) {
@@ -128,11 +128,15 @@ namespace ime {
             pathToTargetTile_.pop();
     }
 
-    bool TargetGridMover::isDestinationReachable(Index index) {
+    bool TargetGridMover::isDestinationReachable(const Index& index) const {
         IME_ASSERT(getTarget(), "Cannot check destination reachability without a target")
         return !(pathFinder_->findPath(getGrid(),
             getGrid().getTileOccupiedByChild(getTarget()).getIndex(),
             index).empty());
+    }
+
+    bool TargetGridMover::isDestinationReachable(const Vector2f &position) const {
+        return isDestinationReachable(getGrid().getTile(position).getIndex());
     }
 
     void TargetGridMover::setPathFinder(std::unique_ptr<IPathFinderStrategy> pathFinder) {
@@ -150,7 +154,11 @@ namespace ime {
         }
     }
 
-    void TargetGridMover::setDestination(Vector2f position) {
+    std::string TargetGridMover::getPathFinderType() const {
+        return pathFinder_->getType();
+    }
+
+    void TargetGridMover::setDestination(const Vector2f& position) {
         setDestination(getGrid().getTile(position).getIndex());
     }
 

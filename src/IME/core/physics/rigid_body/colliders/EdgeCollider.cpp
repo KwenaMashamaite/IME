@@ -66,7 +66,7 @@ namespace ime {
         return "EdgeCollider";
     }
 
-    void EdgeCollider::setOneSided(Vector2f v0, Vector2f v1, Vector2f v2, Vector2f v3)
+    void EdgeCollider::setOneSided(const Vector2f& v0, const Vector2f& v1, const Vector2f& v2, const Vector2f& v3)
     {
         edgeShape_->SetOneSided(
             {utility::pixelsToMetres(v0.x), utility::pixelsToMetres(v0.y)},
@@ -75,7 +75,7 @@ namespace ime {
             {utility::pixelsToMetres(v3.x), utility::pixelsToMetres(v3.y)});
     }
 
-    void EdgeCollider::setTwoSided(Vector2f v1, Vector2f v2) {
+    void EdgeCollider::setTwoSided(const Vector2f& v1, const Vector2f& v2) {
         edgeShape_->SetTwoSided({utility::pixelsToMetres(v1.x), utility::pixelsToMetres(v1.y)},
             {utility::pixelsToMetres(v2.x), utility::pixelsToMetres(v2.y)});
     }

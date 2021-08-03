@@ -297,6 +297,7 @@ namespace ime {
          * that this gui is rendered on top of the scene level gui
          */
         ui::GuiContainer& getGui();
+        const ui::GuiContainer& getGui() const;
 
         /**
          * @brief Get the engine level audio manager
@@ -307,6 +308,7 @@ namespace ime {
          * shutdown
          */
         audio::AudioManager& getAudioManager();
+        const audio::AudioManager& getAudioManager() const;
 
         /**
          * @brief Get the engine level input manager
@@ -317,6 +319,7 @@ namespace ime {
          * only destroyed when the engine is shutdown
          */
         input::InputManager& getInputManager();
+        const input::InputManager& getInputManager() const;
 
         /**
          * @brief Schedule a callback to be executed after a delay

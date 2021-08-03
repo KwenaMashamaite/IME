@@ -314,7 +314,7 @@ namespace ime {
         emitChange(Property{"position", Vector2f{x, y}});
     }
 
-    void Sprite::setPosition(Vector2f position) {
+    void Sprite::setPosition(const Vector2f& position) {
         setPosition(position.x, position.y);
     }
 
@@ -334,11 +334,11 @@ namespace ime {
         emitChange(Property{"scale", Vector2f{factorX, factorY}});
     }
 
-    void Sprite::setScale(Vector2f scale) {
+    void Sprite::setScale(const Vector2f& scale) {
         setScale(scale.x, scale.y);
     }
 
-    void Sprite::setOrigin(Vector2f origin) {
+    void Sprite::setOrigin(const Vector2f& origin) {
         setOrigin(origin.x, origin.y);
     }
 
@@ -346,11 +346,11 @@ namespace ime {
         return pImpl_->getRotation();
     }
 
-    void Sprite::move(Vector2f offset) {
+    void Sprite::move(const Vector2f& offset) {
         move(offset.x, offset.y);
     }
 
-    void Sprite::scale(Vector2f offset) {
+    void Sprite::scale(const Vector2f& offset) {
         setScale(offset.x, offset.y);
     }
 

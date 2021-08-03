@@ -83,7 +83,7 @@ namespace ime::audio {
             return soundEffect_.getLoop();
         }
 
-        void seek(Time position) {
+        void seek(const Time& position) {
             soundEffect_.setPlayingOffset(sf::microseconds(position.asMicroseconds()));
         }
 
@@ -212,7 +212,7 @@ namespace ime::audio {
         return pImpl_->getDuration();
     }
 
-    void SoundEffect::seek(Time position) {
+    void SoundEffect::seek(const Time& position) {
        pImpl_->seek(position);
     }
 

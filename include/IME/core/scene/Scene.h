@@ -399,13 +399,15 @@ namespace ime {
          *
          * @warning Do not keep the returned reference
          */
-        Engine &engine() const;
+        Engine& engine();
+        const Engine& engine() const;
 
         /**
          * @brief Get the scene level camera
          * @return The scene level camera
          */
         Camera& camera();
+        const Camera& camera() const;
 
         /**
          * @brief Get the scene level physics engine/simulation
@@ -422,6 +424,7 @@ namespace ime {
          * @see createPhysWorld
          */
         PhysicsWorld& physWorld();
+        const PhysicsWorld& physWorld() const;
 
         /**
          * @brief Get the scenes grid mover container
@@ -432,6 +435,7 @@ namespace ime {
          * is that the GridMover instance is updated on your behalf
          */
         GridMoverContainer& gridMovers();
+        const GridMoverContainer& gridMovers() const;
 
         /**
          * @brief Get the scene level event event emitter
@@ -444,6 +448,7 @@ namespace ime {
          * @see globalEventEmitter
          */
         EventEmitter& eventEmitter();
+        const EventEmitter& eventEmitter() const;
 
         /**
          * @brief Get the global event emitter
@@ -472,6 +477,7 @@ namespace ime {
          * @see ime::Engine::getInputManager
          */
         input::InputManager& input();
+        const input::InputManager& input() const;
 
         /**
          * @brief Get the scene level audio manager
@@ -483,6 +489,7 @@ namespace ime {
          * @see ime::Engine::getAudioManager
          */
         audio::AudioManager& audio();
+        const audio::AudioManager& audio() const;
 
         /**
          * @brief Get the scene level timer manager
@@ -495,6 +502,7 @@ namespace ime {
          * @see ime::Engine::setTimeout and ime::Engine::setInterval
          */
         TimerManager& timer();
+        const TimerManager& timer() const;
 
         /**
          * @brief Get the global cache
@@ -510,6 +518,7 @@ namespace ime {
          * @see engine
          */
         PropertyContainer& cache();
+        const PropertyContainer& cache() const;
 
         /**
          * @brief Get the global savable cache
@@ -527,6 +536,7 @@ namespace ime {
          * @see engine
          */
         PrefContainer& sCache();
+        const PrefContainer& sCache() const;
 
         /**
          * @brief Get the scene render layers
@@ -548,6 +558,7 @@ namespace ime {
          * a tilemap
          */
         RenderLayerContainer& renderLayers();
+        const RenderLayerContainer& renderLayers() const;
 
         /**
          * @brief Get the scene level Tilemap
@@ -561,6 +572,7 @@ namespace ime {
          * @see createTilemap
          */
         TileMap& tilemap();
+        const TileMap& tilemap() const;
 
         /**
          * @brief Get the scene level gui container
@@ -572,6 +584,7 @@ namespace ime {
          * @see ime::Engine::getGui
          */
         ui::GuiContainer& gui();
+        const ui::GuiContainer& gui() const;
 
         /**
          * @brief Get the scene geometry shape container
@@ -584,6 +597,7 @@ namespace ime {
          * @warning Do not keep the returned reference
          */
         ShapeContainer& shapes();
+        const ShapeContainer& shapes() const;
 
         /**
          * @brief Get the scene level game object container
@@ -595,6 +609,7 @@ namespace ime {
          * @warning Do not keep the returned reference
          */
         GameObjectContainer& gameObjects();
+        const GameObjectContainer& gameObjects() const;
 
         /**
          * @brief Get the scene level sprite container
@@ -604,6 +619,7 @@ namespace ime {
          * will automatically be updated
          */
         SpriteContainer& sprites();
+        const SpriteContainer& sprites() const;
 
         /**
          * @brief Create a scene level physics simulation
@@ -618,7 +634,7 @@ namespace ime {
          *
          * @see physWorld
          */
-        void createPhysWorld(Vector2f gravity, const PhysIterations& iterations = {3, 8});
+        void createPhysWorld(const Vector2f& gravity, const PhysIterations& iterations = {3, 8});
 
         /**
          * @brief Create the scene level tilemap instance

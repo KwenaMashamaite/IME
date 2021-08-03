@@ -26,7 +26,6 @@
 #define IME_ANIMATION_H
 
 #include "IME/Config.h"
-#include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/core/time/Time.h"
 #include "IME/graphics/SpriteSheet.h"
@@ -77,7 +76,7 @@ namespace ime {
          * @see setFrameRate
          */
         Animation(const std::string &name, const SpriteSheet& spriteSheet,
-            Time duration = Time::Zero);
+            const Time& duration = Time::Zero);
 
         /**
          * @brief Create a new animation object
@@ -93,7 +92,7 @@ namespace ime {
          * given duration
          */
         static Animation::Ptr create(const std::string &name, const SpriteSheet& spriteSheet,
-            Time duration = Time::Zero);
+            const Time& duration = Time::Zero);
 
         /**
          * @brief Get the spritesheet used to construct the animation
@@ -180,13 +179,13 @@ namespace ime {
          *
          * @see setFrameRate and getFrameTime
          */
-        void setDuration(Time duration);
+        void setDuration(const Time& duration);
 
         /**
          * @brief Get the duration of the animation
          * @return The duration of the animation
          */
-        Time getDuration() const;
+        const Time& getDuration() const;
 
         /**
          * @brief Set the timescale factor of the animation
@@ -265,7 +264,7 @@ namespace ime {
          *
          * By default, the animation plays immediately
          */
-        void setStartDelay(Time delay);
+        void setStartDelay(const Time& delay);
 
         /**
          * @brief Get the time waited before the animation is played
@@ -273,7 +272,7 @@ namespace ime {
          *
          * @see setStartDelay
          */
-        Time getStartDelay() const;
+        const Time& getStartDelay() const;
 
         /**
          * @brief Check whether or not the animation is played after a delay
@@ -366,7 +365,7 @@ namespace ime {
          * @warning The position of the first and the last frame must be within
          * the bounds of the spritesheet
          */
-        void addFrames(Index startPos, unsigned int numOfFrames,
+        void addFrames(const Index& startPos, unsigned int numOfFrames,
             FrameArrangement arrangement = FrameArrangement::Horizontal);
 
         /**
@@ -377,7 +376,7 @@ namespace ime {
          * are not contiguously arranged on the spritesheet. If @a frame is
          * out of the spritesheet bounds, then this function has no effect
          */
-        void addFrame(Index frame);
+        void addFrame(const Index& frame);
 
         /**
          * @brief Insert an animation frame within the current animation sequence
@@ -389,7 +388,7 @@ namespace ime {
          * addition, if @a frameIndex is out of the spritesheet bounds, then
          * this function has no effect
          */
-        void insertFrameAt(unsigned int index, Index frameIndex);
+        void insertFrameAt(unsigned int index, const Index& frameIndex);
 
         /**
          * @brief Get the first frame of the animation
@@ -437,7 +436,7 @@ namespace ime {
          * @return The time spent on the current frame before changing to the
          *         next frame
          */
-        Time getFrameTime() const;
+        const Time& getFrameTime() const;
 
         /**
          * @brief Check if the animation has a frame at an index
@@ -529,7 +528,7 @@ namespace ime {
          * one and use it to derive the duration if both the specified
          * duration and frame rate are Time::Zero and 0 respectively
          */
-        void calculateFrameRate(Time duration, unsigned int frameRate);
+        void calculateFrameRate(const Time& duration, unsigned int frameRate);
 
     private:
         std::vector<Frame> frames_; //!< Stores the frames of the animation sequence

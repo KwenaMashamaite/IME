@@ -476,7 +476,7 @@ namespace ime {
                 widget_->setPosition({x, y});
             }
 
-            void setPosition(Vector2f position) override {
+            void setPosition(const Vector2f& position) override {
                 setPosition(position.x, position.y);
             }
 
@@ -508,7 +508,7 @@ namespace ime {
                 widget_->setScale({factorX, factorY});
             }
 
-            void setScale(Vector2f scale) override {
+            void setScale(const Vector2f& scale) override {
                 setScale(scale.x, scale.y);
             }
 
@@ -517,7 +517,7 @@ namespace ime {
                     widget_->getScale().y + factorY});
             }
 
-            void scale(Vector2f offset) override {
+            void scale(const Vector2f& offset) override {
                 scale(offset.x, offset.y);
             }
 
@@ -529,7 +529,7 @@ namespace ime {
                 widget_->setOrigin({x, y});
             }
 
-            void setOrigin(Vector2f origin) override {
+            void setOrigin(const Vector2f& origin) override {
                 setOrigin(origin.x, origin.y);
             }
 
@@ -541,7 +541,7 @@ namespace ime {
                 widget_->setPosition(getPosition().x + offsetX, getPosition().y + offsetY);
             }
 
-            void move(Vector2f offset) override {
+            void move(const Vector2f& offset) override {
                 move(offset.x, offset.y);
             }
 

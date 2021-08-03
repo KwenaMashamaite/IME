@@ -82,7 +82,7 @@ namespace ime::ui {
         pimpl_->setPosition(x, y);
     }
 
-    void Widget::setPosition(Vector2f position) {
+    void Widget::setPosition(const Vector2f& position) {
         pimpl_->setPosition(position);
     }
 
@@ -114,7 +114,7 @@ namespace ime::ui {
         pimpl_->setScale(factorX, factorY);
     }
 
-    void Widget::setScale(Vector2f scale) {
+    void Widget::setScale(const Vector2f& scale) {
         pimpl_->setScale(scale);
     }
 
@@ -122,7 +122,7 @@ namespace ime::ui {
         pimpl_->scale(factorX, factorY);
     }
 
-    void Widget::scale(Vector2f factor) {
+    void Widget::scale(const Vector2f& factor) {
         pimpl_->scale(factor);
     }
 
@@ -134,7 +134,7 @@ namespace ime::ui {
         pimpl_->setOrigin(x, y);
     }
 
-    void Widget::setOrigin(Vector2f origin) {
+    void Widget::setOrigin(const Vector2f& origin) {
         pimpl_->setOrigin(origin);
     }
 
@@ -146,7 +146,7 @@ namespace ime::ui {
         pimpl_->move(offsetX, offsetY);
     }
 
-    void Widget::move(Vector2f offset) {
+    void Widget::move(const Vector2f& offset) {
         pimpl_->move(offset);
     }
 

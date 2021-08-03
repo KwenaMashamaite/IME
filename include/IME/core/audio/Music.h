@@ -148,7 +148,7 @@ namespace ime {
              * when the music is stopped has no effect, since playing
              * the music would reset its position
              */
-            void seek(Time position) override;
+            void seek(const Time& position) override;
 
             /**
              * @brief Get the current playing position of the music

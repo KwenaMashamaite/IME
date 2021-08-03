@@ -119,13 +119,13 @@ namespace ime {
          *
          * @note This class does not keep a reference to the created object
          */
-        static PhysicsWorld::Ptr create(Scene& scene, Vector2f gravity);
+        static PhysicsWorld::Ptr create(Scene& scene, const Vector2f& gravity);
 
         /**
          * @brief Change the gravity of the world
          * @param gravity The new gravity
          */
-        void setGravity(Vector2f gravity);
+        void setGravity(const Vector2f& gravity);
 
         /**
          * @brief Get the gravity of the world

@@ -118,7 +118,7 @@ namespace ime {
         }
     }
 
-    void RigidBody::setPosition(Vector2f position) {
+    void RigidBody::setPosition(const Vector2f& position) {
         if (getPosition() == position)
             return;
 
@@ -154,7 +154,7 @@ namespace ime {
                 utility::metresToPixels(body_->GetLocalCenter().y)};
     }
 
-    void RigidBody::setLinearVelocity(Vector2f velocity) {
+    void RigidBody::setLinearVelocity(const Vector2f& velocity) {
         if (getLinearVelocity() == velocity)
             return;
 
@@ -178,13 +178,13 @@ namespace ime {
         return utility::radToDeg(body_->GetAngularVelocity());
     }
 
-    void RigidBody::applyForce(Vector2f force, Vector2f point, bool wake) {
+    void RigidBody::applyForce(const Vector2f& force, const Vector2f& point, bool wake) {
         body_->ApplyForce({force.x, force.y},
             {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
-    void RigidBody::applyForceToCenter(Vector2f force, bool wake) {
+    void RigidBody::applyForceToCenter(const Vector2f& force, bool wake) {
         body_->ApplyForceToCenter({force.x, force.y}, wake);
     }
 
@@ -192,13 +192,13 @@ namespace ime {
         body_->ApplyTorque(torque, wake);
     }
 
-    void RigidBody::applyLinearImpulse(Vector2f impulse, Vector2f point, bool wake) {
+    void RigidBody::applyLinearImpulse(const Vector2f& impulse, const Vector2f& point, bool wake) {
         body_->ApplyLinearImpulse({impulse.x, impulse.y},
             {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
-    void RigidBody::applyLinearImpulseToCenter(Vector2f impulse, bool wake) {
+    void RigidBody::applyLinearImpulseToCenter(const Vector2f& impulse, bool wake) {
         body_->ApplyLinearImpulseToCenter({impulse.x, impulse.y}, wake);
     }
 
@@ -214,7 +214,7 @@ namespace ime {
         return body_->GetInertia();
     }
 
-    Vector2f RigidBody::getWorldPoint(Vector2f localPoint) const {
+    Vector2f RigidBody::getWorldPoint(const Vector2f& localPoint) const {
         auto worldPoint = body_->GetWorldPoint({utility::pixelsToMetres(localPoint.x),
             utility::pixelsToMetres(localPoint.y)});
 
@@ -222,7 +222,7 @@ namespace ime {
                 utility::metresToPixels(worldPoint.y)};
     }
 
-    Vector2f RigidBody::getWorldRotation(Vector2f localVector) const {
+    Vector2f RigidBody::getWorldRotation(const Vector2f& localVector) const {
         auto worldVector = body_->GetWorldVector({utility::pixelsToMetres(localVector.x),
             utility::pixelsToMetres(localVector.y)});
 
@@ -230,7 +230,7 @@ namespace ime {
                 utility::radToDeg(worldVector.y)};
     }
 
-    Vector2f RigidBody::getLocalPoint(Vector2f worldPoint) const {
+    Vector2f RigidBody::getLocalPoint(const Vector2f& worldPoint) const {
         auto localPoint = body_->GetLocalPoint({utility::pixelsToMetres(worldPoint.x),
             utility::pixelsToMetres(worldPoint.y)});
 
@@ -238,7 +238,7 @@ namespace ime {
                 utility::metresToPixels(localPoint.y)};
     }
 
-    Vector2f RigidBody::getLocalRotation(Vector2f worldVector) const {
+    Vector2f RigidBody::getLocalRotation(const Vector2f& worldVector) const {
         auto localVector = body_->GetLocalVector({utility::pixelsToMetres(worldVector.x),
             utility::pixelsToMetres(worldVector.y)});
 
@@ -246,14 +246,14 @@ namespace ime {
                 utility::radToDeg(localVector.y)};
     }
 
-    Vector2f RigidBody::getLinearVelocityFromWorldPoint(Vector2f worldPoint) const {
+    Vector2f RigidBody::getLinearVelocityFromWorldPoint(const Vector2f& worldPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(worldPoint.x),
             utility::pixelsToMetres(worldPoint.y)});
 
         return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
-    Vector2f RigidBody::getLinearVelocityFromLocalPoint(Vector2f localPoint) const {
+    Vector2f RigidBody::getLinearVelocityFromLocalPoint(const Vector2f& localPoint) const {
         auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(localPoint.x),
             utility::pixelsToMetres(localPoint.y)});
 

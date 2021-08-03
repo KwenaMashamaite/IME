@@ -27,7 +27,7 @@
 #include <box2d/b2_polygon_shape.h>
 
 namespace ime {
-    BoxCollider::BoxCollider(Vector2f size) :
+    BoxCollider::BoxCollider(const Vector2f& size) :
         Collider(Collider::Type::Box),
         box_{std::make_unique<b2PolygonShape>()}
     {
@@ -54,7 +54,7 @@ namespace ime {
     BoxCollider::BoxCollider(BoxCollider&&) noexcept = default;
     BoxCollider &BoxCollider::operator=(BoxCollider&&) noexcept = default;
 
-    BoxCollider::Ptr BoxCollider::create(Vector2f size) {
+    BoxCollider::Ptr BoxCollider::create(const Vector2f& size) {
         return std::make_unique<BoxCollider>(size);
     }
 
@@ -85,11 +85,11 @@ namespace ime {
         emitChange(Property{"size", size_});
     }
 
-    void BoxCollider::setSize(Vector2f size) {
+    void BoxCollider::setSize(const Vector2f& size) {
         setSize(size.x, size.y);
     }
 
-    Vector2f BoxCollider::getSize() const {
+    const Vector2f& BoxCollider::getSize() const {
         return size_;
     }
 

@@ -36,19 +36,22 @@ namespace ime {
     }
 
     /**
-     * @brief Class for moving a game object to a specific position in the grid
+     * @brief Moves a GameObject to a specific position in the TileMap
      */
     class IME_API TargetGridMover : public GridMover {
     public:
         using Ptr = std::unique_ptr<TargetGridMover>; //!< Unique grid mover pointer
 
         /**
-         * @brief Create a random grid mover object
+         * @brief Constructor
          * @param tileMap Grid to move target in
-         * @param target GameObject to be moved in the grid
+         * @param target The game object to be moved in the grid
          *
-         * @warning The tilemap must be loaded before constructing this
-         * grid mover
+         * @warning If @a target is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a target
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
          */
         explicit TargetGridMover(TileMap &tileMap, GameObject* target = nullptr);
 
@@ -62,13 +65,19 @@ namespace ime {
          * @brief Set the path finder
          * @param pathFinder New path finder
          *
-         * The default path finder is Breadth First Search
+         * The default path finder is ime::BFS
          */
         void setPathFinder(std::unique_ptr<IPathFinderStrategy> pathFinder);
 
         /**
+         * @brief Get the type of path finder used
+         * @return The type of the path finder
+         */
+        std::string getPathFinderType() const;
+
+        /**
          * @brief Set the index of the tile the target should go to
-         * @param index The targets new destination
+         * @param index The targets new destination (in tiles)
          *
          * The specified index must be within the the bounds of the grid and
          * the tile at index must be reachable from the targets current tile,
@@ -77,11 +86,11 @@ namespace ime {
          *
          * @see getDestination, getPath and onPathGenFinish
          */
-        void setDestination(Index index);
+        void setDestination(const Index& index);
 
         /**
          * @brief Set the position the target should go to
-         * @param position New target position
+         * @param position New target position (in pixels)
          *
          * The specified position must be within the grid and the tile at that
          * position must be reachable from the targets current tile, otherwise
@@ -90,11 +99,11 @@ namespace ime {
          *
          * @see getDestination, getPath and onPathGenFinish
          */
-        void setDestination(Vector2f position);
+        void setDestination(const Vector2f& position);
 
         /**
          * @brief Get the destination position of the target
-         * @return The position that the target must reach
+         * @return The position that the target must reach (in tiles)
          *
          * This destination will be returned even if the target has reached it
          */
@@ -119,7 +128,7 @@ namespace ime {
          *
          * If the target is currently en route on this path, it will stop
          * when it gets to its currently targeted adjacent tile. In addition,
-         * if the targets movement was stopped while he was moving to an
+         * if the targets movement was stopped while it was moving to an
          * adjacent tile and is resumed after the path is cleared the target
          * will resume the move to an adjacent tile and stop thereafter
          */
@@ -127,7 +136,7 @@ namespace ime {
 
         /**
          * @brief Check whether or not a destination is reachable
-         * @param index Destination to be checked
+         * @param index Destination to be checked (in tiles)
          * @return True if the destination is reachable from the targets
          *         current position otherwise false
          *
@@ -138,7 +147,22 @@ namespace ime {
          *
          * @see setDestination
          */
-        bool isDestinationReachable(Index index);
+        bool isDestinationReachable(const Index& index) const;
+
+        /**
+         * @brief Check whether or not a destination is reachable
+         * @param position The destination in (in pixels) to be checked
+         * @return True if the destination is reachable from the targets
+         *         current position otherwise false
+         *
+         * @warning This function is expensive when the tilemap has a lot of
+         * accessible tiles because the path is regenerated every time the
+         * function is called to accommodate changes in position since the
+         * destination was set
+         *
+         * @see setDestination
+         */
+        bool isDestinationReachable(const Vector2f& position) const;
 
         /**
          * @brief Start moving the target to its destination tile

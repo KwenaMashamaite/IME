@@ -276,6 +276,7 @@ namespace ime {
          * it is reserved for external use only
          */
         PropertyContainer& getUserData();
+        const PropertyContainer& getUserData() const;
 
         /**
          * @brief Get the name of the class the game object is instantiated from

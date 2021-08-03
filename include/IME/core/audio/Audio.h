@@ -165,7 +165,7 @@ namespace ime {
              * when the audio is stopped has no effect, since playing
              * the audio would reset its position
              */
-            virtual void seek(Time position) = 0;
+            virtual void seek(const Time& position) = 0;
 
             /**
             * @brief Get the current playing position of the audio

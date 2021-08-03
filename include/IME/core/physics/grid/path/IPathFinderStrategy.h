@@ -47,7 +47,8 @@ namespace ime {
          *         destination is reachable from the source, otherwise
          *         an empty path
          */
-        virtual std::stack<Index> findPath(TileMap& grid, Index sourceNode, Index source) = 0;
+        virtual std::stack<Index> findPath(const TileMap& grid, const Index& sourceNode,
+            const Index& source) = 0;
 
         /**
          * @brief Get the type of path finding algorithm

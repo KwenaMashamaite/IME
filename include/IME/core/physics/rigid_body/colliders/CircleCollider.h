@@ -110,7 +110,7 @@ namespace ime {
          * @brief Set the position of the circle
          * @param position The position of the circle
          */
-        void setPosition(Vector2f position);
+        void setPosition(const Vector2f& position);
 
         /**
          * @brief Get the position of the circle

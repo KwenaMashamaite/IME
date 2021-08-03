@@ -92,7 +92,7 @@ namespace ime::audio {
             return false;
         }
 
-        void seek(Time position) {
+        void seek(const Time& position) {
             if (song_) {
                 song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
                 parent_->emitChange(Property{"seek", position});
@@ -221,7 +221,7 @@ namespace ime::audio {
         return pImpl_->getDuration();
     }
 
-    void Music::seek(Time position) {
+    void Music::seek(const Time& position) {
         pImpl_->seek(position);
     }
 

@@ -281,7 +281,7 @@ namespace ime {
          *
          * @see move
          */
-        void setPosition(Vector2f position) override;
+        void setPosition(const Vector2f& position) override;
 
         /**
          * @brief Get the position of the sprite
@@ -341,7 +341,7 @@ namespace ime {
          *
          * @see scale
          */
-        void setScale(Vector2f scale) override;
+        void setScale(const Vector2f& scale) override;
 
         /**
          * @brief Scale the sprite by an offset
@@ -364,7 +364,7 @@ namespace ime {
          *
          * @see setScale
          */
-        void scale(Vector2f offset) override;
+        void scale(const Vector2f& offset) override;
 
         /**
          * @brief Get the current scale of the sprite
@@ -399,7 +399,7 @@ namespace ime {
          *
          * The default origin of the sprite is (0, 0)
          */
-        void setOrigin(Vector2f origin) override;
+        void setOrigin(const Vector2f& origin) override;
 
         /**
          * @brief Get the local origin of the sprite
@@ -428,7 +428,7 @@ namespace ime {
          *
          * @see setPosition
          */
-        void move(Vector2f offset) override;
+        void move(const Vector2f& offset) override;
 
         /**
          * @internal

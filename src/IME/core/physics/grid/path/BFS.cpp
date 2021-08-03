@@ -27,11 +27,11 @@
 #include <algorithm>
 
 namespace ime {
-    BFS::BFS(Vector2u gridSize) {
+    BFS::BFS(const Vector2u& gridSize) {
         visited_ = std::vector<std::vector<bool>>(gridSize.y, std::vector<bool>(gridSize.x, false));
     }
 
-    std::stack<Index> BFS::findPath(TileMap& grid, Index sourceTile, Index targetTile) {
+    std::stack<Index> BFS::findPath(const TileMap& grid, const Index& sourceTile, const Index& targetTile) {
         if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
             || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};
@@ -56,7 +56,7 @@ namespace ime {
         }
     }
 
-    void BFS::bfs(Node source, Index target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
+    void BFS::bfs(const Node& source, const Index& target, std::queue<Node> &nodeToVisit, std::vector<Node> &exploredNodes) {
         if (visited_.at(source.index.row).at(source.index.colm)) //Don't explore a node more than once
             return;
         else if (source.index == target) {

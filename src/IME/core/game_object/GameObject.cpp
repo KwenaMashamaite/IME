@@ -173,6 +173,10 @@ namespace ime {
         return userData_;
     }
 
+    const PropertyContainer &GameObject::getUserData() const {
+        return userData_;
+    }
+
     std::string GameObject::getClassName() const {
         return "GameObject";
     }

@@ -26,12 +26,12 @@
 #include "IME/core/tilemap/TileMap.h"
 
 namespace ime {
-    DFS::DFS(Vector2u gridSize) {
+    DFS::DFS(const Vector2u& gridSize) {
         visited_ = std::vector<std::vector<bool>>(gridSize.y, std::vector<bool>(gridSize.x, false));
     }
 
     std::stack<Index>
-    DFS::findPath(TileMap &grid, Index sourceTile, Index targetTile) {
+    DFS::findPath(const TileMap &grid, const Index& sourceTile, const Index& targetTile) {
         if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
             || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};

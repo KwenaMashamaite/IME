@@ -172,7 +172,7 @@ namespace ime {
          *
          * By default, the position is (0, 0)
          */
-        void setPosition(Vector2f position);
+        void setPosition(const Vector2f& position);
 
         /**
          * @brief Get the world position of the body's origin
@@ -212,7 +212,7 @@ namespace ime {
          *
          * By default, the linear velocity is 0 pixels per second
          */
-        void setLinearVelocity(Vector2f velocity);
+        void setLinearVelocity(const Vector2f& velocity);
 
         /**
          * @brief Get the linear velocity of the centre of mass
@@ -244,7 +244,7 @@ namespace ime {
          * generate a torque and affect the angular velocity. This
          * wakes up the body
          */
-        void applyForce(Vector2f force, Vector2f point, bool wake = true);
+        void applyForce(const Vector2f& force, const Vector2f& point, bool wake = true);
 
         /**
          * @brief Apply a force to the centre of mass
@@ -253,7 +253,7 @@ namespace ime {
          *
          * This function will force the body to wake up
          */
-        void applyForceToCenter(Vector2f force, bool wake = true);
+        void applyForceToCenter(const Vector2f& force, bool wake = true);
 
         /**
          * @brief Apply a torque
@@ -276,7 +276,7 @@ namespace ime {
          *
          * This function will force the body to wake if it is sleeping
          */
-        void applyLinearImpulse(Vector2f impulse, Vector2f point, bool wake = true);
+        void applyLinearImpulse(const Vector2f& impulse, const Vector2f& point, bool wake = true);
 
         /**
          * @brief Apply an impulse at the centre of mass
@@ -285,7 +285,7 @@ namespace ime {
          *
          * By default, This function will wake the body if it is sleeping
          */
-        void applyLinearImpulseToCenter(Vector2f impulse, bool wake = true);
+        void applyLinearImpulseToCenter(const Vector2f& impulse, bool wake = true);
 
         /**
          * @brief Apply an angular impulse
@@ -320,7 +320,7 @@ namespace ime {
          * @param worldPoint The world coordinate to be converted to local
          * @return The given world coordinate relative to the body's origin
          */
-        Vector2f getLocalPoint(Vector2f worldPoint) const;
+        Vector2f getLocalPoint(const Vector2f& worldPoint) const;
 
         /**
          * @brief Get the world coordinate of a local coordinate
@@ -328,35 +328,35 @@ namespace ime {
          *        body's origin
          * @return The given point in world coordinates
          */
-        Vector2f getWorldPoint(Vector2f localPoint) const;
+        Vector2f getWorldPoint(const Vector2f& localPoint) const;
 
         /**
          * @brief Get the local rotation of a world rotation
          * @param worldVector The world rotation to get local rotation from
          * @return @a worldVector in local rotation
          */
-        Vector2f getLocalRotation(Vector2f worldVector) const;
+        Vector2f getLocalRotation(const Vector2f& worldVector) const;
 
         /**
          * @brief Get the world rotation of a local rotation
          * @param localVector The local rotation to be converted to world rotation
          * @return The given local rotation in world rotation
          */
-        Vector2f getWorldRotation(Vector2f localVector) const;
+        Vector2f getWorldRotation(const Vector2f& localVector) const;
 
         /**
          * @brief Get the world velocity of a local point
          * @param localPoint Local point to get world velocity of
          * @return The world velocity of a point
          */
-        Vector2f getLinearVelocityFromLocalPoint(Vector2f localPoint) const;
+        Vector2f getLinearVelocityFromLocalPoint(const Vector2f& localPoint) const;
 
         /**
          * @brief Get the world linear velocity of a world point on the body
          * @param worldPoint The world point
          * @return The world velocity of a point
          */
-        Vector2f getLinearVelocityFromWorldPoint(Vector2f worldPoint) const;
+        Vector2f getLinearVelocityFromWorldPoint(const Vector2f& worldPoint) const;
 
         /**
          * @brief Set the linear damping of the body
@@ -574,6 +574,7 @@ namespace ime {
          * to use
          */
         PropertyContainer& getUserData();
+        const PropertyContainer& getUserData() const;
 
         /**
          * @brief Execute a function for each collider attached to the body

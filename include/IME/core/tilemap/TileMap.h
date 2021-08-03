@@ -145,7 +145,7 @@ namespace ime {
          *
          * @see loadFromFile and loadFromVector
          */
-        void construct(Vector2u size, char id);
+        void construct(const Vector2u& size, char id);
 
         /**
          * @brief Construct the tilemap from data located on a file on the disk

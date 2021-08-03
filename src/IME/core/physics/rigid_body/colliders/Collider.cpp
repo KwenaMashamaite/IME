@@ -161,7 +161,7 @@ namespace ime {
         return hasRigidBody_;
     }
 
-    bool Collider::containsPoint(Vector2f point) const {
+    bool Collider::containsPoint(const Vector2f& point) const {
         return fixture_->TestPoint({utility::pixelsToMetres(point.x),
             utility::pixelsToMetres(point.y)});
     }

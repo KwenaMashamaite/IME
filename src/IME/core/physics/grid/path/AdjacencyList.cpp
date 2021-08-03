@@ -27,7 +27,7 @@
 
 namespace ime {
     namespace {
-        bool tileHasObstacle(TileMap& grid, Index index) {
+        bool tileHasObstacle(const TileMap& grid, Index index) {
             auto hasObstacle = false;
             grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GameObject* child) {
                 if (child->isObstacle() && child->isActive()) {
@@ -39,7 +39,7 @@ namespace ime {
         }
     }
 
-    void AdjacencyList::generateFrom(TileMap &tileMap) {
+    void AdjacencyList::generateFrom(const TileMap &tileMap) {
         adjacencyList_.clear();
         auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {
             if (tilemap.isIndexValid({row, colm})

@@ -49,7 +49,7 @@ namespace ime {
          * each node/tile in the tilemap. This functions assumes that the
          * grid nodes are bidirectional
          */
-        void generateFrom(TileMap& tilemap);
+        void generateFrom(const TileMap& tilemap);
 
         /**
          * @brief Get the neighbours of a node at a certain position in the grid

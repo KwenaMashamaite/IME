@@ -144,7 +144,7 @@ namespace ime {
              * when the sound effect is stopped has no effect, since playing
              * the sound effect would reset its position
              */
-            void seek(Time position) override;
+            void seek(const Time& position) override;
 
             /**
              * @brief Get the current playing position of the sound effect

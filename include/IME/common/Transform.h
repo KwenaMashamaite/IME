@@ -66,13 +66,13 @@ namespace ime {
          * position instead. The default position of a transformable object
          * is (0, 0).
          */
-        void setPosition(Vector2f position);
+        void setPosition(const Vector2f& position);
 
         /**
          * @brief Get the position of the object
          * @return Current position of the object
          */
-        Vector2f getPosition() const;
+        const Vector2f& getPosition() const;
 
         /**
          * @brief Set the orientation of the object
@@ -125,7 +125,7 @@ namespace ime {
          *
          * @see scale
          */
-        void setScale(Vector2f scale);
+        void setScale(const Vector2f& scale);
 
         /**
          * @brief Scale the object by an offset
@@ -148,13 +148,13 @@ namespace ime {
          *
          * @see setScale
          */
-        void scale(Vector2f offset);
+        void scale(const Vector2f& offset);
 
         /**
          * @brief Get the current scale of the object
          * @return Current scale of the object
          */
-        Vector2f getScale() const;
+        const Vector2f& getScale() const;
 
         /**
          * @brief Set the local origin of the object
@@ -182,13 +182,13 @@ namespace ime {
          * transformations (position, scale, rotation).
          * The default origin of a transformable object is (0, 0)
          */
-        void setOrigin(Vector2f origin);
+        void setOrigin(const Vector2f& origin);
 
         /**
          * @brief Get the local origin of the object
          * @return Local origin of the object
          */
-        Vector2f getOrigin() const;
+        const Vector2f& getOrigin() const;
 
         /**
          * @brief Move the object by a given offset
@@ -211,7 +211,7 @@ namespace ime {
          *
          * @see setPosition
          */
-        void move(Vector2f offset);
+        void move(const Vector2f& offset);
 
         /**
          * @brief Add an event listener to a property change event

@@ -68,7 +68,7 @@ namespace ime {
         return "CircleCollider";
     }
 
-    void CircleCollider::setPosition(Vector2f position) {
+    void CircleCollider::setPosition(const Vector2f& position) {
         if (getPosition() == position)
             return;
 

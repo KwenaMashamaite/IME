@@ -169,11 +169,11 @@ namespace ime {
 #endif
     }
 
-    PhysicsWorld::Ptr PhysicsWorld::create(Scene &scene, Vector2f gravity) {
+    PhysicsWorld::Ptr PhysicsWorld::create(Scene &scene, const Vector2f& gravity) {
         return PhysicsWorld::Ptr(new PhysicsWorld(scene, gravity));
     }
 
-    void PhysicsWorld::setGravity(Vector2f gravity) {
+    void PhysicsWorld::setGravity(const Vector2f& gravity) {
         world_->SetGravity({gravity.x, gravity.y});
     }
 

@@ -341,6 +341,10 @@ namespace ime {
         return gui_;
     }
 
+    const ui::GuiContainer &Engine::getGui() const {
+        return gui_;
+    }
+
     PrefContainer &Engine::getConfigs() {
         return configs_;
     }
@@ -373,7 +377,15 @@ namespace ime {
         return audioManager_;
     }
 
+    const audio::AudioManager &Engine::getAudioManager() const {
+        return audioManager_;
+    }
+
     input::InputManager &Engine::getInputManager() {
+        return inputManager_;
+    }
+
+    const input::InputManager &Engine::getInputManager() const {
         return inputManager_;
     }
 

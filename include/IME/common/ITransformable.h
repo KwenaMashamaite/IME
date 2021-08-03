@@ -55,7 +55,7 @@ namespace ime {
          * position instead. The default position of a transformable object
          * is (0, 0).
          */
-        virtual void setPosition(Vector2f position) = 0;
+        virtual void setPosition(const Vector2f& position) = 0;
 
         /**
          * @brief Get the position of the object
@@ -114,7 +114,7 @@ namespace ime {
          *
          * @see scale
          */
-        virtual void setScale(Vector2f scale) = 0;
+        virtual void setScale(const Vector2f& scale) = 0;
 
         /**
          * @brief Scale the object by an offset
@@ -137,7 +137,7 @@ namespace ime {
          *
          * @see setScale
          */
-        virtual void scale(Vector2f offset) = 0;
+        virtual void scale(const Vector2f& offset) = 0;
 
         /**
          * @brief Get the current scale of the object
@@ -171,7 +171,7 @@ namespace ime {
          * transformations (position, scale, rotation).
          * The default origin of a transformable object is (0, 0)
          */
-        virtual void setOrigin(Vector2f origin) = 0;
+        virtual void setOrigin(const Vector2f& origin) = 0;
 
         /**
          * @brief Get the local origin of the object
@@ -200,7 +200,7 @@ namespace ime {
          *
          * @see setPosition
          */
-        virtual void move(Vector2f offset) = 0;
+        virtual void move(const Vector2f& offset) = 0;
 
         /**
          * @brief Destructor

@@ -39,9 +39,9 @@ namespace ime {
     public:
         /**
          * @brief Initialize the algorithm
-         * @param gridSize Size of the grid
+         * @param gridSize Size of the grid in tiles
          */
-        explicit BFS(Vector2u gridSize);
+        explicit BFS(const Vector2u& gridSize);
 
         /**
          * @brief Generate a path from a source tile to a target tile in a grid
@@ -51,8 +51,8 @@ namespace ime {
          * @return The path from the source to the destination if reachable,
          *         otherwise an empty path
          */
-        std::stack<Index> findPath(TileMap& grid, Index sourceTile,
-            Index targetTile) override;
+        std::stack<Index> findPath(const TileMap& grid, const Index& sourceTile,
+            const Index& targetTile) override;
 
         /**
          * @brief Get the type of path finding algorithm
@@ -69,7 +69,7 @@ namespace ime {
          *                    the next run
          * @param exploredNodes A vector to stores nodes that have been visited
          */
-        void bfs(Node source, Index target, std::queue<Node>& nodeToVisit,
+        void bfs(const Node& source, const Index& target, std::queue<Node>& nodeToVisit,
              std::vector<Node>& exploredNodes);
 
         /**

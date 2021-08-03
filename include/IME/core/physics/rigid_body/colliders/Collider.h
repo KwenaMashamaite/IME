@@ -361,13 +361,14 @@ namespace ime {
          * @param point The point to be checked in world coordinates
          * @return True if the collider contains the point, otherwise false
          */
-        bool containsPoint(Vector2f point) const;
+        bool containsPoint(const Vector2f& point) const;
 
         /**
          * @brief Get the user data extracted from the collider definition
          * @return The user data
          */
         PropertyContainer& getUserData();
+        const PropertyContainer& getUserData() const;
 
         /**
          * @brief Add an event listener to a collision start event

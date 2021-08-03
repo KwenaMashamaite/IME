@@ -109,7 +109,7 @@ namespace ime {
          * @see ime::Animation::create
          */
         Animation::Ptr createAnimation(const std::string &name,
-            const SpriteSheet& spriteSheet, Time duration = Time::Zero);
+            const SpriteSheet& spriteSheet, const Time& duration = Time::Zero);
 
         /**
          * @brief Set the animation target

@@ -193,13 +193,13 @@ namespace ime {
          * the velocity directly will transfer movement management of the game
          * object from the grid mover to the physics engine
          */
-        void setMaxLinearSpeed(Vector2f speed);
+        void setMaxLinearSpeed(const Vector2f& speed);
 
         /**
          * @brief Get the maximum speed of the game object
          * @return The maximum speed of the game object
          */
-        Vector2f getMaxLinearSpeed() const;
+        const Vector2f& getMaxLinearSpeed() const;
 
         /**
          * @brief Restrict the movement of the game object to certain directions

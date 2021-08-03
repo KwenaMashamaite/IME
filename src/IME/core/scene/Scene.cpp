@@ -166,7 +166,11 @@ namespace ime {
         return timescale_;
     }
 
-    Engine &Scene::engine() const {
+    Engine &Scene::engine() {
+        return *engine_;
+    }
+
+    const Engine &Scene::engine() const {
         return *engine_;
     }
 
@@ -174,7 +178,15 @@ namespace ime {
         return *camera_;
     }
 
+    const Camera &Scene::camera() const {
+        return *camera_;
+    }
+
     PhysicsWorld& Scene::physWorld() {
+        return *world_;
+    }
+
+    const PhysicsWorld& Scene::physWorld() const {
         return *world_;
     }
 
@@ -182,7 +194,15 @@ namespace ime {
         return gridMovers_;
     }
 
+    const GridMoverContainer &Scene::gridMovers() const {
+        return gridMovers_;
+    }
+
     input::InputManager &Scene::input() {
+        return inputManager_;
+    }
+
+    const input::InputManager &Scene::input() const {
         return inputManager_;
     }
 
@@ -190,11 +210,23 @@ namespace ime {
         return audioManager_;
     }
 
+    const audio::AudioManager &Scene::audio() const {
+        return audioManager_;
+    }
+
     TimerManager &Scene::timer() {
         return timerManager_;
     }
 
+    const TimerManager &Scene::timer() const {
+        return timerManager_;
+    }
+
     EventEmitter &Scene::eventEmitter() {
+        return eventEmitter_;
+    }
+
+    const EventEmitter &Scene::eventEmitter() const {
         return eventEmitter_;
     }
 
@@ -206,7 +238,15 @@ namespace ime {
         return *cache_;
     }
 
+    const PropertyContainer &Scene::cache() const {
+        return *cache_;
+    }
+
     PrefContainer &Scene::sCache() {
+        return *sCache_;
+    }
+
+    const PrefContainer &Scene::sCache() const {
         return *sCache_;
     }
 
@@ -214,7 +254,15 @@ namespace ime {
         return renderLayers_;
     }
 
+    const RenderLayerContainer &Scene::renderLayers() const {
+        return renderLayers_;
+    }
+
     TileMap &Scene::tilemap() {
+        return *tileMap_;
+    }
+
+    const TileMap &Scene::tilemap() const {
         return *tileMap_;
     }
 
@@ -222,7 +270,15 @@ namespace ime {
         return guiContainer_;
     }
 
+    const ui::GuiContainer &Scene::gui() const {
+        return guiContainer_;
+    }
+
     ShapeContainer &Scene::shapes() {
+        return *shapeContainer_;
+    }
+
+    const ShapeContainer &Scene::shapes() const {
         return *shapeContainer_;
     }
 
@@ -230,11 +286,19 @@ namespace ime {
         return *entityContainer_;
     }
 
+    const GameObjectContainer &Scene::gameObjects() const {
+        return *entityContainer_;
+    }
+
     SpriteContainer &Scene::sprites() {
         return *spriteContainer_;
     }
 
-    void Scene::createPhysWorld(Vector2f gravity, const PhysIterations& iterations) {
+    const SpriteContainer &Scene::sprites() const {
+        return *spriteContainer_;
+    }
+
+    void Scene::createPhysWorld(const Vector2f& gravity, const PhysIterations& iterations) {
         world_ = PhysicsWorld::create(*this, gravity);
         world_->setIterations(iterations);
         world_->createDebugDrawer(engine().getRenderTarget());
