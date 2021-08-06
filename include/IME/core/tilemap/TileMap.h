@@ -115,15 +115,22 @@ namespace ime {
         bool isIndexValid(const Index &index) const;
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Set the image to be used as the tileset
          * @param name Name of the tileset
          * @param filename Filename of the tileset image
          * @throws FileNotFound If the tileset cannot be loaded by the asset
          *        manager
          */
+         [[deprecated("Use 'void addTileset(const std::string& name, const SpriteSheet& tileset)' instead.")]]
         void setTileset(const std::string& name, const std::string& filename);
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Set the current tileset
          * @param name Name of the tileset
          *
@@ -131,6 +138,7 @@ namespace ime {
          * In order to tile the map from different tileset, the current tileset
          * must be alternated
          */
+         [[deprecated("Use 'RenderLayerContainer ime::Scene::renderLayers()' instead.")]]
         void setCurrentTileset(const std::string& name);
 
         /**
@@ -401,10 +409,16 @@ namespace ime {
          * the "default" layer from the render layer container, however you
          * must not forget to reallocate the objects in the "default" layer to
          * another layer, otherwise they will not be drawn to the screen
+         *
+         * @note The returned object is the same as that returned by
+         * ime::Scene::renderLayers
          */
         RenderLayerContainer& renderLayers();
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Texture a tile at given index
          * @param index Index of the tile to apply a texture to
          * @param rect Texture to apply
@@ -413,9 +427,13 @@ namespace ime {
          * The @a rect defines the sub-rectangle of the tileset to use
          * for texturing the tile
          */
+        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
         void textureTile(const Index& index, const UIntRect& rect);
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Apply a texture to all tiles with a certain id
          * @param id Id of the tile to apply texture to
          * @param rect Texture to apply
@@ -427,9 +445,13 @@ namespace ime {
          *
          * @see textureTilesById(char, const Sprite&)
          */
+        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
         void textureTilesById(char id, const UIntRect& rect);
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Apply a texture to all tiles with a certain id
          * @param id Id of the tile to apply texture to
          * @param sprite Texture to apply
@@ -439,6 +461,7 @@ namespace ime {
          * function is useful if the texture from the tileset must be transformed
          * first (scaled, rotated, etc...) before its applied to the tilemap
          */
+        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
         void textureTilesById(char id, const Sprite& sprite);
 
         /**
@@ -456,6 +479,9 @@ namespace ime {
         void draw(priv::RenderTarget &renderTarget) const;
 
         /**
+         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
+         *             ime::Scene::renderLayers instead
+         *
          * @brief Add a sprite to the tilemap
          * @param sprite The sprite to be added to the tilemap
          * @param index The index of the tile to add the sprite at
@@ -469,6 +495,7 @@ namespace ime {
          *
          * Note that the sprite is added at the centre of the the tile
          */
+         [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
         void addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder = 0,
             const std::string& renderLayer = "default");
 
