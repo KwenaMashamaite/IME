@@ -52,12 +52,15 @@ namespace ime {
         isPaused_{other.isPaused_},
         hasStarted_{other.hasStarted_},
         eventEmitter_{other.eventEmitter_},
-        currentAnimation_{other.currentAnimation_},
+        currentAnimation_{std::make_shared<Animation>(*other.currentAnimation_)},
         chains_{other.chains_},
-        animations_{other.animations_},
         cycleDirection_{other.cycleDirection_},
         completedFirstAlternateCycle_{other.completedFirstAlternateCycle_}
-    {}
+    {
+        for (const auto& [name, animation] : other.animations_) {
+            animations_.insert({name, std::make_shared<Animation>(*animation)});
+        }
+    }
 
     Animator &Animator::operator=(Animator other) {
         swap(other);
