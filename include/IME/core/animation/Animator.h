@@ -521,6 +521,11 @@ namespace ime {
          */
         void cycle(bool isAlternating);
 
+        /**
+         * @brief Complete first cycle of an alternation
+         */
+        void completeFirstAlternateCycle();
+
     private:
         unsigned int currentFrameIndex_;                             //!< The index of the animation frame that is currently displayed
         Time totalTime_;                                             //!< Time passed since animation was started

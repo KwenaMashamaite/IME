@@ -381,6 +381,17 @@ namespace ime {
             cycleDirection_ = Direction::Backward;
     }
 
+    void Animator::completeFirstAlternateCycle() {
+        completedFirstAlternateCycle_ = true;
+        if (cycleDirection_ == Direction::Forward) {
+            currentFrameIndex_--;
+            cycleDirection_ = Direction::Backward;
+        } else {
+            currentFrameIndex_++;
+            cycleDirection_ = Direction::Forward;
+        }
+    }
+
     void Animator::cycle(bool isAlternating) {
         /// @TODO - Reduce conditional branches in this function
         /// When I wrote this code I was very tired as it was very late in the am's
@@ -388,17 +399,6 @@ namespace ime {
         /// I intended on refactoring it later that day after getting some rest.
         /// Well it is true what they say, "A temporary solution tends to be a
         /// permanent one more often than not" - It's been 3 months :) as of this text
-        static auto completeFirstAlternateCycle = [this] {
-            completedFirstAlternateCycle_ = true;
-            if (cycleDirection_ == Direction::Forward) {
-                currentFrameIndex_--;
-                cycleDirection_ = Direction::Backward;
-            } else {
-                currentFrameIndex_++;
-                cycleDirection_ = Direction::Forward;
-            }
-        };
-
         if ((cycleDirection_ == Direction::Backward && currentFrameIndex_ == 0)
             || (cycleDirection_ == Direction::Forward && currentFrameIndex_ == currentAnimation_->getFrameCount() - 1))
         {
