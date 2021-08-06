@@ -303,11 +303,16 @@ namespace ime {
         world_->setIterations(iterations);
         world_->createDebugDrawer(engine().getRenderTarget());
         hasPhysicsSim_ = true;
+
+        if (hasTilemap_)
+            tileMap_->setPhysicsSimulation(world_.get());
     }
 
     void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
         tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, renderLayers());
-        tileMap_->setPhysicsSimulation(world_.get());
+        if (hasPhysicsSim_)
+            tileMap_->setPhysicsSimulation(world_.get());
+
         hasTilemap_ = true;
     }
 
