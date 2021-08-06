@@ -261,10 +261,18 @@ namespace ime {
         /**
          * @brief Set the time to wait before that animation is started
          * @param delay The time to wait before the animation is played
+         * @param oneTime True to apply the start delay only when the animation
+         *                is played for the first time or false (default) to
+         *                apply the start delay every time the animation starts
+         *                from the beginning
+         *
+         * Note that @a oneTime parameter only applies if the animation is
+         * repeating (see setRepeat()). For non-repeating animations, the
+         * start delay will always be applied
          *
          * By default, the animation plays immediately
          */
-        void setStartDelay(const Time& delay);
+        void setStartDelay(const Time& delay, bool oneTime = false);
 
         /**
          * @brief Get the time waited before the animation is played
@@ -273,6 +281,14 @@ namespace ime {
          * @see setStartDelay
          */
         const Time& getStartDelay() const;
+
+        /**
+         * @param Check if the start delay is applied when the animation restarts
+         * @return True if it is applied, or false if it is applied once
+         *
+         * @see setStartDelay
+         */
+        bool isStartDelayedOnce() const;
 
         /**
          * @brief Check whether or not the animation is played after a delay
@@ -544,6 +560,7 @@ namespace ime {
         bool isHiddenOnComplete_;   //!< A flag indicating whether or not the sprite is hidden when the animation completes
         bool isFrameResetOnStop_;   //!< A flag indicating whether or not the current frame is reset to the first frame when animation is interrupted
         bool isDurationDerived_;    //!< A flag indicating whether or not the duration was derived from the frame rate
+        bool isStartDelayedOnce_;   //!< A flag indicating whether or not the animation is start delayed once or every time it starts from the beginning
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
         float timescale_;           //!< Playback speed of the animation
     };

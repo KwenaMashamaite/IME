@@ -43,6 +43,7 @@ namespace ime {
          isShownOnStart_{true},
          isHiddenOnComplete_{false},
          isFrameResetOnStop_{true},
+         isStartDelayedOnce_{false},
          completionFrame_{-1},
          timescale_{1.0f}
     {
@@ -135,8 +136,9 @@ namespace ime {
         return name_;
     }
 
-    void Animation::setStartDelay(const Time& delay) {
+    void Animation::setStartDelay(const Time& delay, bool oneTime) {
         startDelay_ = delay;
+        isStartDelayedOnce_ = oneTime;
     }
 
     const Time& Animation::getStartDelay() const {
@@ -145,6 +147,10 @@ namespace ime {
 
     bool Animation::isStartDelayed() const {
         return startDelay_ > Time::Zero;
+    }
+
+    bool Animation::isStartDelayedOnce() const {
+        return isStartDelayedOnce_;
     }
 
     void Animation::showTargetOnStart(bool show) {

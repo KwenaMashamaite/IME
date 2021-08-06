@@ -413,6 +413,10 @@ namespace ime {
                     return;
                 }
             } else {
+                // Handle start delay
+                if (currentAnimation_->isRepeating() && !currentAnimation_->isStartDelayedOnce())
+                    hasStarted_ = false;
+
                 // Update repeat counter
                 if (currentAnimation_->getRepeatCount() != -1) { // -1 = repeat forever
                     if (isAlternating) {
