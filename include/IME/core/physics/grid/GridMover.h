@@ -128,6 +128,10 @@ namespace ime {
          * Usually property change events are only emitted by setters (functions
          * that begin with a "set" prefix)
          *
+         * @note If the direction change is granted, then the adjacent tile in
+         * the requested direction will be flagged as occupied by the target
+         * before it is moved there
+         *
          * @code
          * gridMover.onPropertyChange("direction", [](const ime::Property& p) {
          *      auto dir = p.getValue<ime::Direction>();
@@ -161,6 +165,12 @@ namespace ime {
          * @return The current direction of the game object
          */
         Direction getDirection() const;
+
+        /**
+         * @brief Get the previous direction of the target
+         * @return The previous direction of the target
+         */
+        Direction getPrevDirection() const;
 
         /**
          * @brief Change the controlled entity
@@ -244,6 +254,9 @@ namespace ime {
         bool isMovementFrozen() const;
 
         /**
+         * @deprecated Since v2.2.0 and will be removed in v2.3.0. Use
+         *             ime::GridMover::getCurrentTileIndex instead
+         *
          * @brief Get the index of the adjacent tile the target is trying to reach
          * @return The index of the adjacent tile the target is trying to reach
          *
@@ -251,7 +264,31 @@ namespace ime {
          * will return the index of the tile currently occupied by the
          * target
          */
+         [[deprecated("Use 'ime::Index getCurrentTileIndex() const' instead.")]]
         virtual Index getTargetTileIndex() const;
+
+        /**
+         * @brief Get the index of the tile currently occupied by the target
+         * @return The position of the tile currently occupied by the target
+         *         in tiles
+         *
+         * Recall that when moved, the target occupies a tile ahead of time
+         * (see requestDirectionChange())
+         *
+         * @see getPrevTileIndex
+         */
+        Index getCurrentTileIndex() const;
+
+        /**
+         * @brief Get the index of the tile previously occupied by the target
+         * @return The tile the target was on before moving to another tile
+         *
+         * If the target never moved, then this function will return the tile
+         * currently occupied by the target
+         *
+         * @see getCurrentTileIndex
+         */
+        Index getPrevTileIndex() const;
 
         /**
          * @brief Get the type of the grid mover
@@ -423,17 +460,15 @@ namespace ime {
          * ...
          *
          * // Manually move the player to some desired position
-         * tilemap.removeChild(player);
-         * tilemap.addChild(player, ime::Index{11, 20});
+         * if (!gridMover.isTargetMoving) {
+         *     gridMover.getGrid().removeChild(player);
+         *     gridMover.getGrid().addChild(player, ime::Index{11, 20});
          *
-         * // Let the grid mover know that the player is no longer where it
-         * // was registered to be (The grid mover will update itself accordingly)
-         * gridMover.setMovementFreeze(true);
-         * gridMover.resetTargetTile();
-         * gridMover.setMovementFreeze(false);
+         *      // Let the grid mover know that the player is no longer where it
+         *      // was registered to be (The grid mover will update itself accordingly)
+         *      gridMover.resetTargetTile();
+         * }
          * @endcode
-         *
-         * @see setMovementFreeze
          */
         void resetTargetTile();
 
@@ -590,6 +625,7 @@ namespace ime {
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
         Direction targetDirection_;    //!< The direction in which the game object wishes to go in
         Direction currentDirection_;   //!< The current direction of the game object
+        Direction prevDirection_;      //!< The previous direction of the game object
         const Tile* targetTile_;       //!< The grid tile the target wishes to reach
         const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
         EventEmitter eventEmitter_;    //!< Collision event publisher

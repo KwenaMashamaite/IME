@@ -86,7 +86,7 @@ namespace ime {
                 IME_ASSERT(maxSpeed_.x == maxSpeed_.y, "Cannot have different x and y linear speeds if target can move diagonally")
             }
 
-            targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
+            prevTile_ = targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
             target_ = target;
         } else
             target_ = target;
@@ -155,6 +155,14 @@ namespace ime {
         return targetTile_->getIndex();
     }
 
+    Index GridMover::getCurrentTileIndex() const {
+        return targetTile_->getIndex();
+    }
+
+    Index GridMover::getPrevTileIndex() const {
+        return prevTile_->getIndex();
+    }
+
     TileMap &GridMover::getGrid() {
         return tileMap_;
     }
@@ -184,6 +192,10 @@ namespace ime {
 
     Direction GridMover::getDirection() const {
         return currentDirection_;
+    }
+
+    Direction GridMover::getPrevDirection() const {
+        return prevDirection_;
     }
 
     std::pair<bool, GameObject*> GridMover::isBlockedInDirection(const Direction &dir) const {
@@ -218,6 +230,7 @@ namespace ime {
                 if (handleGridBorderCollision() || handleSolidTileCollision() || handleObstacleCollision())
                     return;
 
+                prevDirection_ = currentDirection_;
                 currentDirection_ = targetDirection_;
                 isMoving_ = true;
 

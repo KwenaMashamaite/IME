@@ -260,7 +260,7 @@ namespace ime {
     void TargetGridMover::renderPath(priv::RenderTarget &window) const {
         if (renderPath_) {
             auto path = pathToTargetTile_;
-            path.push(getTargetTileIndex());
+            path.push(getCurrentTileIndex());
             while (!path.empty()) {
                 auto index = path.top();
                 path.pop();
