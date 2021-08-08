@@ -52,7 +52,7 @@ namespace ime {
         isPaused_{other.isPaused_},
         hasStarted_{other.hasStarted_},
         eventEmitter_{other.eventEmitter_},
-        currentAnimation_{std::make_shared<Animation>(*other.currentAnimation_)},
+        currentAnimation_{other.currentAnimation_ ? std::make_shared<Animation>(*other.currentAnimation_) : nullptr},
         chains_{other.chains_},
         cycleDirection_{other.cycleDirection_},
         completedFirstAlternateCycle_{other.completedFirstAlternateCycle_}
