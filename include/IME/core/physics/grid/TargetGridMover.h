@@ -283,7 +283,7 @@ namespace ime {
          *         next target position
          * @param nextPos The next target position
          */
-        void generateNewDirOfMotion(Index nextPos);
+        bool generateNewDirOfMotion(Index nextPos);
 
         /**
          * @brief Generate path to target
@@ -304,6 +304,7 @@ namespace ime {
         bool movementStarted_;                            //!< Flags whether the target has been stopped or not
         bool targetTileChangedWhileMoving_;               //!< Flags whether the target tile was changed while target was in motion
         bool isAdaptiveMoveEnabled_;                      //!< A flag indicating whether or not adaptive movement is enabled
+        bool isPendingMove_;                              //!< A flag indicating whether or not adjacent move was rejected
         Callback<const std::stack<Index>&> onPathGen_;    //!< A function executed after path generation
     };
 }

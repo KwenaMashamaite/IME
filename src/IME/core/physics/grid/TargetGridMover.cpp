@@ -37,7 +37,8 @@ namespace ime {
         renderPath_{false},
         movementStarted_{false},
         targetTileChangedWhileMoving_{false},
-        isAdaptiveMoveEnabled_{false}
+        isAdaptiveMoveEnabled_{false},
+        isPendingMove_{false}
     {
         IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
 
@@ -61,10 +62,13 @@ namespace ime {
             }
         });
 
+        // Automatically keep target moving until it reaches its destination
         onAdjacentMoveEnd([this](ime::Index) {
-            if (isAdaptiveMoveEnabled_) {
+            if (isPendingMove_)
+                isPendingMove_ = false;
+            else if (isAdaptiveMoveEnabled_)
                 generatePath();
-            } else {
+            else {
                 if (targetTileChangedWhileMoving_) {
                     targetTileChangedWhileMoving_ = false;
                     generatePath();
@@ -173,12 +177,13 @@ namespace ime {
         movementStarted_ = false;
     }
 
-    void TargetGridMover::generateNewDirOfMotion(Index nextPos) {
-        if (!getTarget())
-            return;
+    bool TargetGridMover::generateNewDirOfMotion(Index nextPos) {
+        Direction newDirection = Unknown;
+        Index currentPosIndex = getCurrentTileIndex();
 
-        auto newDirection = Unknown;
-        auto currentPosIndex = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
+        if (currentPosIndex == nextPos)
+            return true;
+
         if (Index{currentPosIndex.row, currentPosIndex.colm + 1} == nextPos)
             newDirection = Right;
         else if (Index{currentPosIndex.row, currentPosIndex.colm - 1} == nextPos)
@@ -195,16 +200,18 @@ namespace ime {
             newDirection = DownLeft;
         else if (Index{currentPosIndex.row + 1, currentPosIndex.colm + 1} == nextPos)
             newDirection = DownRight;
-        else
-            return; // Unsupported direction
+        else {
+            IME_ASSERT(false, "Failed to determine direction from position {"
+                << currentPosIndex.row << ", " << currentPosIndex.colm << "} to position {"
+                << nextPos.row << ", " << nextPos.colm << "}")
+        }
 
-        requestDirectionChange(newDirection);
+        return requestDirectionChange(newDirection);
     }
 
     void TargetGridMover::generatePath() {
-        if (getTarget() && getMovementRestriction() != GridMover::MoveRestriction::All) {
-            auto sourceTilePos = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
-            pathToTargetTile_ = pathFinder_->findPath(getGrid(), sourceTilePos, targetTileIndex_);
+        if (getTarget()) {
+            pathToTargetTile_ = pathFinder_->findPath(getGrid(), getCurrentTileIndex(), targetTileIndex_);
 
             if (onPathGen_)
                 onPathGen_(pathToTargetTile_);
@@ -212,9 +219,14 @@ namespace ime {
     }
 
     void TargetGridMover::moveTarget() {
-        if (!pathToTargetTile_.empty() && movementStarted_) {
-            generateNewDirOfMotion(pathToTargetTile_.top());
-            pathToTargetTile_.pop();
+        if (!pathToTargetTile_.empty() && getTarget()) {
+            if (isTargetMoving()) {
+                isPendingMove_ = true;
+                return;
+            }
+
+            if (movementStarted_ && generateNewDirOfMotion(pathToTargetTile_.top()))
+                pathToTargetTile_.pop();
         }
     }
 
