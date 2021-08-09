@@ -484,6 +484,10 @@ namespace ime {
         externalEmitter_.removeAllEventListeners("gridBorderCollision");
     }
 
+    void GridMover::copyExternEventListeners(const GridMover &other) {
+        externalEmitter_ = other.externalEmitter_;
+    }
+
     void GridMover::resetTargetTile() {
         if (target_ && !isTargetMoving() && targetTile_->getIndex()
             != tileMap_.getTileOccupiedByChild(target_).getIndex())

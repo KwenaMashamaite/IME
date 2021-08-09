@@ -443,6 +443,16 @@ namespace ime {
         void removeAllEventListeners();
 
         /**
+         * @brief Copy external event listeners of another grid mover
+         * @param other The grid mover whose external event listeners should be
+         *              copied
+         *
+         * This function is useful if you want to switch between different
+         * types of grid movers without losing event responses
+         */
+        void copyExternEventListeners(const GridMover& other);
+
+        /**
          * @brief Reset the target tile to be the same as the entity tile
          *
          * @note This function must be called every time the target is
