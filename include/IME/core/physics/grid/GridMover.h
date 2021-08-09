@@ -585,6 +585,15 @@ namespace ime {
          */
         bool canCollide(GameObject* other) const;
 
+        /**
+         * @brief Remove an event handler
+         * @param name The name of the event to remove the handler from
+         * @param id The id of the event handler
+         * @return True if the handler was removed or false if the handler
+         *         does not exist
+         */
+        bool removeEventListener(const std::string& name, int id);
+
     protected:
         /**
          * @brief Create a grid mover
@@ -628,7 +637,8 @@ namespace ime {
         Direction prevDirection_;      //!< The previous direction of the game object
         const Tile* targetTile_;       //!< The grid tile the target wishes to reach
         const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
-        EventEmitter eventEmitter_;    //!< Collision event publisher
+        EventEmitter externalEmitter_; //!< External event publisher
+        EventEmitter internalEmitter_; //!< Internal event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
         bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
