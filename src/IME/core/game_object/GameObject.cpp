@@ -224,6 +224,10 @@ namespace ime {
         }
     }
 
+    void GameObject::onCollision(const CollisionCallback& callback) {
+        onCollision_ = callback;
+    }
+
     void GameObject::onCollisionStart(const CollisionCallback& callback) {
         onContactBegin_ = callback;
     }
@@ -261,6 +265,9 @@ namespace ime {
     }
 
     void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
+        IME_ASSERT(other, "Internal Error, cannot collide with nullptr")
+
+        // Prevent self collisions
         if (this == other)
             return;
 
@@ -270,6 +277,17 @@ namespace ime {
             onContactEnd_(this, other);
         else if (event == "contactStay" && onContactStay_)
             onContactStay_(this, other);
+    }
+
+    void GameObject::emitCollisionEvent(GameObject *other) {
+        IME_ASSERT(other, "Internal Error, cannot collide with nullptr")
+
+        // Prevent self collisions
+        if (this == other)
+            return;
+
+        if (onCollision_)
+            onCollision_(this, other);
     }
 
     void GameObject::initEvents() {

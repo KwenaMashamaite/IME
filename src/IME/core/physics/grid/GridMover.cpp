@@ -360,6 +360,10 @@ namespace ime {
             targetDirection_ = Unknown;
             internalEmitter_.emit("gameObjectCollision", target_, obstacle);
             externalEmitter_.emit("gameObjectCollision", target_, obstacle);
+
+            target_->emitCollisionEvent(obstacle);
+            obstacle->emitCollisionEvent(target_);
+
             return true;
         }
 
@@ -412,9 +416,11 @@ namespace ime {
             if (!canCollide(gameObject))
                 return;
 
-            // Satisfied collision criteria, invoke collision handler
             internalEmitter_.emit("gameObjectCollision", target_, gameObject);
             externalEmitter_.emit("gameObjectCollision", target_, gameObject);
+
+            target_->emitCollisionEvent(gameObject);
+            gameObject->emitCollisionEvent(target_);
         });
 
         internalEmitter_.emit("adjacentMoveEnd", targetTile_->getIndex());

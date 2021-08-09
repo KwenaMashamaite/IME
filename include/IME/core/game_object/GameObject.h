@@ -352,6 +352,36 @@ namespace ime {
         bool hasRigidBody() const;
 
         /**
+         * @brief Add an event listener to a grid collision event
+         * @param callback Function to be executed when this game object
+         *                 collides with another game object in a TileMap
+         *
+         * @note This function is applicable to grid-based collisions only
+         * (see ime::GridMover), as such it is called only when this game
+         * object and another game object occupy the same tile. The callback
+         * is passed this game object and the game object in collision with
+         * respectively.
+         *
+         * Unlike ime::GridMover::onGameObjectCollision which is triggered
+         * only when the game object collides with another game object, this
+         * callback is called when the game object collides with another game
+         * object or when another game object collides with it.
+         *
+         * By default, there is no event listener for this event. Note that,
+         * only one event listener may be attached to this event, subsequent
+         * listeners overwrite the previous one. To remove the current listener,
+         * pass @a nullptr as the argument. The callback is passed this game
+         * object and the game object in collision with it respectively.
+         *
+         * When a collision takes place, the invocation order is as follows:
+         * ime::GridMover::onGameObjectCollision -> ime::GameObject::onCollision
+         *
+         * For ime::RigidBody collision, see onCollisionStart, onCollisionStay
+         * and onCollisionEnd
+         */
+        void onCollision(const CollisionCallback& callback);
+
+        /**
          * @brief Add an event listener to a collision begin event
          * @param callback The function to be executed when event is fired
          *
@@ -487,6 +517,16 @@ namespace ime {
         void emitCollisionEvent(const std::string& event, GameObject* other);
 
         /**
+         * @internal
+         * @brief Emit a collision event
+         * @param other The game object in collision with this game object
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void emitCollisionEvent(GameObject* other);
+
+        /**
          * @brief Destructor
          */
         ~GameObject() override;
@@ -508,6 +548,7 @@ namespace ime {
         int postStepId_;                      //!< Scene post step handler id
         int destructionId_;                   //!< Scene destruction listener id
         PropertyContainer userData_;          //!< Used to store metadata about the object
+        CollisionCallback onCollision_;       //!< Called when this game object occupies the same tile as another game object in a ime::TileMap
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
         CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa
