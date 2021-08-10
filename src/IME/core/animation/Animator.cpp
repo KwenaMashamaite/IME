@@ -35,7 +35,7 @@ namespace ime {
         isPaused_{false},
         hasStarted_{false},
         cycleDirection_{Direction::Unknown},
-        completedFirstAlternateCycle_{false}
+        cycleCount_{0}
     {}
 
     Animator::Animator(Sprite &target) :
@@ -55,7 +55,7 @@ namespace ime {
         currentAnimation_{other.currentAnimation_ ? std::make_shared<Animation>(*other.currentAnimation_) : nullptr},
         chains_{other.chains_},
         cycleDirection_{other.cycleDirection_},
-        completedFirstAlternateCycle_{other.completedFirstAlternateCycle_}
+        cycleCount_{other.cycleCount_}
     {
         for (const auto& [name, animation] : other.animations_) {
             animations_.insert({name, std::make_shared<Animation>(*animation)});
@@ -80,7 +80,7 @@ namespace ime {
         std::swap(target_, other.target_);
         std::swap(animations_, other.animations_);
         std::swap(cycleDirection_, other.cycleDirection_);
-        std::swap(completedFirstAlternateCycle_, other.completedFirstAlternateCycle_);
+        std::swap(cycleCount_, other.cycleCount_);
     }
 
     Animation::Ptr Animator::createAnimation(const std::string &name,
@@ -381,15 +381,8 @@ namespace ime {
             cycleDirection_ = Direction::Backward;
     }
 
-    void Animator::completeFirstAlternateCycle() {
-        completedFirstAlternateCycle_ = true;
-        if (cycleDirection_ == Direction::Forward) {
-            currentFrameIndex_--;
-            cycleDirection_ = Direction::Backward;
-        } else {
-            currentFrameIndex_++;
-            cycleDirection_ = Direction::Forward;
-        }
+    void Animator::reverseAlternateDirection() {
+        cycleDirection_ = (cycleDirection_ == Direction::Forward) ? Direction::Backward : Direction::Forward;
     }
 
     void Animator::cycle(bool isAlternating) {
@@ -399,52 +392,58 @@ namespace ime {
         /// I intended on refactoring it later that day after getting some rest.
         /// Well it is true what they say, "A temporary solution tends to be a
         /// permanent one more often than not" - It's been 3 months :) as of this text
+
+        // Handle end of sequence
         if ((cycleDirection_ == Direction::Backward && currentFrameIndex_ == 0)
             || (cycleDirection_ == Direction::Forward && currentFrameIndex_ == currentAnimation_->getFrameCount() - 1))
         {
             if (!currentAnimation_->isRepeating()) {
                 if (isAlternating) {
-                    if (completedFirstAlternateCycle_) {
-                        completedFirstAlternateCycle_ = false;
+                    if (cycleCount_ == 1) {
+                        cycleCount_ = 0;
                         onComplete();
                         return;
                     } else {
-                        completeFirstAlternateCycle();
+                        reverseAlternateDirection();
+                        cycleCount_++;
                     }
                 } else {
                     onComplete();
                     return;
                 }
             } else {
-                // Handle start delay
-                if (currentAnimation_->isRepeating() && !currentAnimation_->isStartDelayedOnce())
-                    hasStarted_ = false;
+                // Update start delay
+                if (!currentAnimation_->isStartDelayedOnce()) {
+                    if (!isAlternating || (isAlternating && cycleCount_ == 1))
+                        hasStarted_ = false;
+                }
 
                 // Update repeat counter
-                if (currentAnimation_->getRepeatCount() != -1) { // -1 = repeat forever
-                    if (isAlternating) {
-                        if (completedFirstAlternateCycle_) {
-                            completedFirstAlternateCycle_ = false;
-                            currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
-                            fireEvent(Event::AnimationRepeat, currentAnimation_);
-                        }
-                    } else {
+                if (!isAlternating || (isAlternating && cycleCount_ == 1)) {
+                    if (!currentAnimation_->isLooped()) // Repeats a fixed number of times
                         currentAnimation_->setRepeatCount(currentAnimation_->getRepeatCount() - 1);
-                        fireEvent(Event::AnimationRepeat, currentAnimation_);
-                    }
                 }
 
                 // Repeat animation
-                if (!isAlternating) {
+                if (isAlternating) {
+                    if (cycleCount_ == 1) { // Completed two cycles
+                        reverseAlternateDirection();
+                        cycleCount_ = 0;
+                        fireEvent(Event::AnimationRepeat, currentAnimation_);
+                    } else { // Complete first cycle
+                        reverseAlternateDirection();
+                        cycleCount_++;
+                    }
+                } else {
                     if (currentFrameIndex_ == 0)
                         currentFrameIndex_ = currentAnimation_->getFrameCount() - 1;
                     else
                         currentFrameIndex_ = 0;
-                } else {
-                    completeFirstAlternateCycle();
+
+                    fireEvent(Event::AnimationRepeat, currentAnimation_);
                 }
             }
-        } else {
+        } else { // Advance frame
             if (cycleDirection_ == Direction::Forward)
                 currentFrameIndex_++;
             else

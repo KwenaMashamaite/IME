@@ -126,6 +126,8 @@ namespace ime {
 
     void Animation::setDirection(Animation::Direction direction) {
         direction_ = direction;
+        if (direction_ == Direction::Alternate_Forward || direction == Direction::Reverse)
+            finishOnFirstFrame();
     }
 
     Animation::Direction Animation::getDirection() const {

@@ -522,9 +522,9 @@ namespace ime {
         void cycle(bool isAlternating);
 
         /**
-         * @brief Complete first cycle of an alternation
+         * @brief Make alternating animation play in the opposite direction
          */
-        void completeFirstAlternateCycle();
+        void reverseAlternateDirection();
 
     private:
         unsigned int currentFrameIndex_;                             //!< The index of the animation frame that is currently displayed
@@ -548,8 +548,8 @@ namespace ime {
             Backward //!< Cycles backwards one animation frame at a time
         };
 
-        Direction cycleDirection_;          //!< Current cycle direction
-        bool completedFirstAlternateCycle_; //!< A flag indicating whether or not the animation has completed its first cycle (For alternating animations only)
+        Direction cycleDirection_;  //!< Current cycle direction
+        unsigned int cycleCount_;   //!< Indicates how many cycles an alternating animation has completed
     };
 }
 
