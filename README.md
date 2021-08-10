@@ -4,26 +4,22 @@
 
 # IME — Infinite Motion Engine
 
-IME is a framework for developing 2D games. It is built on top of [SFML](https://www.sfml-dev.org/index.php)
-using C++17. IME is state-based, this means that your game is treated as a collection of
-distinct game states that are active one at a time. For states that need to share information
-with each other, IME provides an engine level caching system which can store data of any kind
-that can be accessed by any state at any given time.
-
-For any feature suggestions, feedback or questions, please do that [here](https://github.com/KwenaMashamaite/IME/discussions/)
+IME is a state-based game engine for developing 2D games. It is written in C++17.
 
 ## Features
 
-* **Graphics** - Tilemap, Animatable Sprites, 2D camera, Spritesheet
-* **GUI** - Label, Button, Checkbox, MenuBar, and much more thanks to a seamless [TGUI](https://tgui.eu/) integration
+* **Graphics** - Render Window, Tilemap, Animatable Sprites, 2D camera, Spritesheet, etc...
+* **GUI** - Label, Button, Checkbox, MenuBar, and much more
 * **Animations** - 2D animations which support both spritesheet and texture atlas
-* **Physics** - Path finding, grid based movement, grid cell based collisions, [Rigid body dynamics](https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics) 
-  thanks to a seamless [Box2d](https://box2d.org/) integration, collision detection using contact callbacks: onBegin, onEnd and onStay
+* **Physics** - Path finding, Grid based movement, Grid cell based collisions, Rigid body physics engine,
+                Collision detection using contact callbacks
 * **Input** - Keyboard and Mouse support
-* **Sound** - Music and Sound effects
-* **Event system** - Javascript inspired event system
-* **Asset management** - Automated asset management system
-* **Time** - Execute one time, repeating or infinite time-based callbacks
+* **Sound** - Music and Sound effects support
+* **Event system** - Thread safe event system
+* **Asset management** - Automated resource management system
+* **Time** - Schedule one time, repeating or indefinite callbacks
+
+*IME does not support an Editor*
 
 ## Demos
 
@@ -33,9 +29,9 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.2-beta).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.2.0).
 To use the library you must have a supported (GCC or VC++) C++17 compliant compiler. 
-Available binaries are compiled with `GCC MinGW: 7.3.0, 10.2.0` and `Microsoft Visual C++ 16 2019` 
+Available binaries are compiled with `GCC MinGW: 7.3.0, 10.3.0` and `Microsoft Visual C++ 16 2019`
 compilers. This means that in order to use them, you must have the exact compiler on your system. 
 If you want to use different versions of the above compilers, then you have to [build](#Build) the 
 library yourself.
@@ -98,7 +94,7 @@ location, usually `Program Files (x86)\IME`. However, this may require admin pri
 ## Learn
 
 * [Tutorials](#Learn) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.2-beta/html/index.html)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.2.0/html/index.html)
 
 ## Platform
 
@@ -109,6 +105,8 @@ Currently, IME only supports Windows OS
 Name:  Kwena Mashamaite (Author)
 
 Email: kwena.mashamaite1@gmail.com
+
+For any feature suggestions, feedback or questions, you can get in touch with me [here](https://github.com/KwenaMashamaite/IME/discussions/).
  
 ## License
 
