@@ -77,8 +77,33 @@ namespace ime::input {
         return mouse_.unsubscribe(event, id);
     }
 
+    int InputManager::onJoyConnect(const Callback<unsigned int> &callback) {
+        return joystick_.onConnect(callback);
+    }
+
+    int InputManager::onJoyDisconnect(const Callback<unsigned int> &callback) {
+        return joystick_.onDisconnect(callback);
+    }
+
+    int InputManager::onJoyButtonPress(const Callback<unsigned int, unsigned int> &callback) {
+        return joystick_.onButtonPress(callback);
+    }
+
+    int InputManager::onJoyButtonRelease(const Callback<unsigned int, unsigned int> &callback) {
+        return joystick_.onButtonRelease(callback);
+    }
+
+    int InputManager::onJoyAxisMove(const Callback<unsigned int, Joystick::Axis, float> &callback) {
+        return joystick_.onAxisMove(callback);
+    }
+
+    bool InputManager::unsubscribe(JoystickEvent event, int id) {
+        return joystick_.unsubscribe(event, id);
+    }
+
     void InputManager::handleEvent(Event event) {
         keyboard_.handleEvent(event);
         mouse_.handleEvent(event);
+        joystick_.handleEvent(event);
     }
 }

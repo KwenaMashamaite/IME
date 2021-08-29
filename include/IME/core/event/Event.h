@@ -27,6 +27,7 @@
 
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"
+#include "IME/core/input/Joystick.h"
 
 namespace ime {
     /**
@@ -91,23 +92,54 @@ namespace ime {
         };
 
         /**
+         * @brief Joystick connection events parameters
+         *        (JoystickConnected, JoystickDisconnected)
+         */
+        struct JoystickConnectEvent {
+            unsigned int joystickId; //!< Index of the joystick (in range [0 .. Joystick::Count - 1])
+        };
+
+        /**
+         * @brief Joystick axis move event parameters (JoystickMoved)
+         */
+        struct JoystickMoveEvent {
+            unsigned int   joystickId;  //!< Index of the joystick (in range [0 .. Joystick::Count - 1])
+            input::Joystick::Axis axis; //!< Axis on which the joystick moved
+            float          position;    //!< New position on the axis (in range [-100 .. 100])
+        };
+
+        /**
+         * @brief Joystick buttons events parameters
+         *        (JoystickButtonPressed, JoystickButtonReleased)
+         */
+        struct JoystickButtonEvent {
+            unsigned int joystickId; //!< Index of the joystick (in range [0 .. Joystick::Count - 1])
+            unsigned int button;     //!< Index of the button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
+        };
+
+        /**
          * @brief Enumeration of the different types of events
          */
         enum Type {
-            Unknown = -1,        //!< Unhandled event
-            Closed = 0,          //!< The window requested to be closed (no data)
-            Resized,             //!< The window was resized (data in event.size)
-            LostFocus,           //!< The window lost the focus (no data)
-            GainedFocus,         //!< The window gained the focus (no data)
-            TextEntered,         //!< A character was entered (data in event.text)
-            KeyPressed,          //!< A key was pressed (data in event.key)
-            KeyReleased,         //!< A key was released (data in event.key)
-            MouseWheelScrolled,  //!< The mouse wheel was scrolled (data in event.mouseWheelScroll)
-            MouseButtonPressed,  //!< A mouse button was pressed (data in event.mouseButton)
-            MouseButtonReleased, //!< A mouse button was released (data in event.mouseButton)
-            MouseMoved,          //!< The mouse cursor moved (data in event.mouseMove)
-            MouseEntered,        //!< The mouse cursor entered the area of the window (no data)
-            MouseLeft,           //!< The mouse cursor left the area of the window (no data)
+            Unknown = -1,            //!< Unhandled event
+            Closed = 0,              //!< The window requested to be closed (no data)
+            Resized,                 //!< The window was resized (data in event.size)
+            LostFocus,               //!< The window lost the focus (no data)
+            GainedFocus,             //!< The window gained the focus (no data)
+            TextEntered,             //!< A character was entered (data in event.text)
+            KeyPressed,              //!< A key was pressed (data in event.key)
+            KeyReleased,             //!< A key was released (data in event.key)
+            MouseWheelScrolled,      //!< The mouse wheel was scrolled (data in event.mouseWheelScroll)
+            MouseButtonPressed,      //!< A mouse button was pressed (data in event.mouseButton)
+            MouseButtonReleased,     //!< A mouse button was released (data in event.mouseButton)
+            MouseMoved,              //!< The mouse cursor moved (data in event.mouseMove)
+            MouseEntered,            //!< The mouse cursor entered the area of the window (no data)
+            MouseLeft,               //!< The mouse cursor left the area of the window (no data)
+            JoystickButtonPressed,   //!< A joystick button was pressed (data in event.joystickButton)
+            JoystickButtonReleased,  //!< A joystick button was released (data in event.joystickButton)
+            JoystickMoved,           //!< The joystick moved along an axis (data in event.joystickMove)
+            JoystickConnected,       //!< A joystick was connected (data in event.joystickConnect)
+            JoystickDisconnected,    //!< A joystick was disconnected (data in event.joystickConnect)
         };
 
         ////////////////////////////////////////////////////////////
@@ -122,6 +154,9 @@ namespace ime {
             MouseMoveEvent        mouseMove;         //!< Mouse move event parameters (Event::MouseMoved)
             MouseButtonEvent      mouseButton;       //!< Mouse button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
             MouseWheelScrollEvent mouseWheelScroll;  //!< Mouse wheel event parameters (Event::MouseWheelScrolled)
+            JoystickMoveEvent     joystickMove;      ///< Joystick move event parameters (Event::JoystickMoved)
+            JoystickButtonEvent   joystickButton;    ///< Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
+            JoystickConnectEvent  joystickConnect;   ///< Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
         };
     };
 }

@@ -103,21 +103,34 @@ namespace ime::utility {
             case sf::Event::MouseLeft:
                 IME_Event.type = Event::MouseLeft;
                 return IME_Event;
+            case sf::Event::JoystickButtonPressed:
+                IME_Event.type = Event::JoystickButtonPressed;
+                IME_Event.joystickButton.joystickId = SFML_Event.joystickButton.joystickId;
+                IME_Event.joystickButton.button = SFML_Event.joystickButton.button;
+                return IME_Event;
+            case sf::Event::JoystickButtonReleased:
+                IME_Event.type = Event::JoystickButtonReleased;
+                IME_Event.joystickButton.joystickId = SFML_Event.joystickButton.joystickId;
+                IME_Event.joystickButton.button = SFML_Event.joystickButton.button;
+                return IME_Event;
+            case sf::Event::JoystickMoved:
+                IME_Event.type = Event::JoystickMoved;
+                IME_Event.joystickMove.joystickId = SFML_Event.joystickMove.joystickId;
+                IME_Event.joystickMove.axis = static_cast<input::Joystick::Axis>(SFML_Event.joystickMove.axis);
+                IME_Event.joystickMove.position = SFML_Event.joystickMove.position;
+                return IME_Event;
+            case sf::Event::JoystickConnected:
+                IME_Event.type = Event::JoystickConnected;
+                IME_Event.joystickConnect.joystickId = SFML_Event.joystickConnect.joystickId;
+                return IME_Event;
+            case sf::Event::JoystickDisconnected:
+                IME_Event.type = Event::JoystickDisconnected;
+                IME_Event.joystickConnect.joystickId = SFML_Event.joystickConnect.joystickId;
+                return IME_Event;
             default:
             {
                 IME_Event.type = Event::Unknown;
                 switch (SFML_Event.type) {
-                    case sf::Event::JoystickButtonPressed:
-                    case sf::Event::JoystickButtonReleased:
-                    case sf::Event::JoystickMoved:
-                    case sf::Event::JoystickConnected:
-                    case sf::Event::JoystickDisconnected:
-                        IME_PRINT_WARNING(
-                            "Joysticks are not supported in IME v"
-                            + std::to_string(IME_VERSION_MAJOR) + "."
-                            + std::to_string(IME_VERSION_MINOR) + + "."
-                            + std::to_string(IME_VERSION_PATCH))
-                        break;
                     case sf::Event::TouchBegan:
                     case sf::Event::TouchEnded:
                         if (SFML_Event.touch.finger != 0) // Multi-touch not supported
@@ -223,6 +236,30 @@ namespace ime::utility {
                 return SFML_Event;
             case Event::MouseLeft:
                 SFML_Event.type = sf::Event::EventType::MouseLeft;
+                return SFML_Event;
+            case Event::JoystickButtonPressed:
+                SFML_Event.type = sf::Event::JoystickButtonPressed;
+                SFML_Event.joystickButton.joystickId = IME_Event.joystickButton.joystickId;
+                SFML_Event.joystickButton.button = IME_Event.joystickButton.button;
+                return SFML_Event;
+            case Event::JoystickButtonReleased:
+                SFML_Event.type = sf::Event::JoystickButtonReleased;
+                SFML_Event.joystickButton.joystickId = IME_Event.joystickButton.joystickId;
+                SFML_Event.joystickButton.button = IME_Event.joystickButton.button;
+                return SFML_Event;
+            case Event::JoystickMoved:
+                SFML_Event.type = sf::Event::JoystickMoved;
+                SFML_Event.joystickMove.joystickId = IME_Event.joystickMove.joystickId;
+                SFML_Event.joystickMove.axis = static_cast<sf::Joystick::Axis>(IME_Event.joystickMove.axis);
+                SFML_Event.joystickMove.position = IME_Event.joystickMove.position;
+                return SFML_Event;
+            case Event::JoystickConnected:
+                SFML_Event.type = sf::Event::JoystickConnected;
+                SFML_Event.joystickConnect.joystickId = IME_Event.joystickConnect.joystickId;
+                return SFML_Event;
+            case Event::JoystickDisconnected:
+                SFML_Event.type = sf::Event::JoystickDisconnected;
+                SFML_Event.joystickConnect.joystickId = IME_Event.joystickConnect.joystickId;
                 return SFML_Event;
             default:
                 return SFML_Event;

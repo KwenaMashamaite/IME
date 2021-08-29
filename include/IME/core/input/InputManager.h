@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/input/Keyboard.h"
 #include "IME/core/input/Mouse.h"
+#include "IME/core/input/Joystick.h"
 #include "IME/core/event/Event.h"
 
 namespace ime {
@@ -197,6 +198,71 @@ namespace ime {
             bool unsubscribe(MouseEvent event, int id);
 
             /**
+             * @brief Add an event listener to a joystick connection event
+             * @param callback Function to be executed when a joystick is
+             *                 connected
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick on invocation
+             */
+            int onJoyConnect(const Callback<unsigned int>& callback);
+
+            /**
+             * @brief Add an event listener to a joystick disconnect event
+             * @param callback Function to be executed when a joystick is
+             *                 disconnected
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick on invocation
+             */
+            int onJoyDisconnect(const Callback<unsigned int>& callback);
+
+            /**
+             * @brief Add an event listener to a joystick button press event
+             * @param callback The function to be executed when a joystick
+             *                 button is pressed
+             * @return The event listeners identification number
+             *
+             * A button press event does not fire while the button is held down
+             *
+             * The callback is passed the index of the joystick and the button
+             * that was pressed respectively
+             */
+            int onJoyButtonPress(const Callback<unsigned int, unsigned int>& callback);
+
+            /**
+             * @brief Add an event listener to joystick button release event
+             * @param callback The function to be executed when a joystick
+             *                 button is released
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick and the button
+             * that was released respectively
+             */
+            int onJoyButtonRelease(const Callback<unsigned int, unsigned int>& callback);
+
+            /**
+             * @brief Add an event listener to an joystick axis move event
+             * @param callback The function to be executed when the axis of
+             *                 a joystick is moved
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick, the axis that
+             * was moved and its new position respectively
+             */
+            int onJoyAxisMove(const Callback<unsigned int, Joystick::Axis, float>& callback);
+
+            /**
+             * @brief Remove an event listener from a joystick event
+             * @param event The event to remove the event listener from
+             * @param id The event listeners identification number
+             * @return True if the event listener was removed or false if
+             *         the given event does not have the specified event
+             *         listener
+             */
+            bool unsubscribe(JoystickEvent event, int id);
+
+            /**
              * @internal
              * @brief Update the event manager
              * @param event Event to be handled
@@ -209,6 +275,7 @@ namespace ime {
         private:
             Keyboard keyboard_; //!< Managed keyboard
             Mouse mouse_;       //!< Managed Mouse
+            Joystick joystick_; //!< Managed Joystick
         };
     }
 }

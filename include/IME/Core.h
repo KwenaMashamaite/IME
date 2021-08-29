@@ -48,6 +48,7 @@
 #include "IME/core/input/InputManager.h"
 #include "IME/core/input/Mouse.h"
 #include "IME/core/input/Keyboard.h"
+#include "IME/core/input/Joystick.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/core/physics/grid/path/BFS.h"
 #include "IME/core/physics/grid/path/DFS.h"

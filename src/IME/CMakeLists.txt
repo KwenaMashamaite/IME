@@ -18,6 +18,7 @@ set(IME_SRC
     core/game_object/CollisionExcludeList.cpp
     core/event/EventEmitter.cpp
     core/event/EventDispatcher.cpp
+    core/input/Joystick.cpp
     core/input/Keyboard.cpp
     core/input/Mouse.cpp
     core/engine/Engine.cpp
