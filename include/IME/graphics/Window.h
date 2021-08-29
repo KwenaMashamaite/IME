@@ -129,6 +129,28 @@ namespace ime {
         Vector2i getPosition() const;
 
         /**
+         * @brief Set the position of the mouse cursor relative to the window
+         * @param position The new position of the cursor relative to the window
+         *
+         * To set the position of the mouse cursor in desktop coordinates, use
+         * ime::Mouse::setPosition
+         *
+         * @see getRelativeMousePosition
+         */
+        void setRelativeMousePosition(const Vector2i& position);
+
+        /**
+         * @brief Get the position of the mouse cursor relative to the window
+         * @return The position of the mouse cursor relative to the window
+         *
+         * To get the position of the mouse cursor in desktop coordinates, use
+         * ime::Mouse::getPosition
+         *
+         * @see setRelativeMousePosition
+         */
+        Vector2i getRelativeMousePosition() const;
+
+        /**
          * @brief Set the size of the rendering region of the window
          * @param size The new size in pixels
          */

@@ -32,11 +32,6 @@
 namespace ime {
     class Event;
 
-    /// @internal
-    namespace priv {
-        class RenderTarget;
-    }
-
     /**
      * @brief Mouse events
      */
@@ -113,8 +108,11 @@ namespace ime {
              * @brief Set the current position of the mouse in desktop coordinates
              * @param position New position of the mouse
              *
-             * This function sets the global position of the mouse
-             * cursor on the desktop
+             * This function sets the global position of the mouse cursor on
+             * the desktop. To set the position of the mouse cursor relative
+             * to the game window, use ime::Window::setRelativeMousePosition
+             *
+             * @see getPosition
              */
             static void setPosition(const Vector2i& position);
 
@@ -122,30 +120,13 @@ namespace ime {
              * @brief Get the current position of the mouse in desktop coordinates
              * @return The current position of the mouse
              *
-             * This function returns the global position of the mouse
-             * cursor on the desktop.
+             * This function returns the global position of the mouse cursor
+             * on the desktop. To get the position of the mouse cursor relative
+             * to the game window, use ime::Window::getRelativeMousePosition
+             *
+             * @see setPosition
              */
             static Vector2i getPosition();
-
-            /**
-             * @brief Set the current position of the mouse in window coordinates
-             * @param position New position of the mouse
-             * @param window Reference window
-             *
-             * This function sets the current position of the mouse
-             * cursor, relative to the given window
-             */
-            static void setPosition(const Vector2i& position, const priv::RenderTarget& window);
-
-            /**
-             * @brief Get the current position of the mouse in window coordinates
-             * @param window Reference window
-             * @return The current position of the mouse
-             *
-             * This function returns the current position of the mouse
-             * cursor, relative to the given window
-             */
-            static Vector2i getPosition(const priv::RenderTarget& window);
 
             /**
              * @brief Add an event listener to a mouse button up event

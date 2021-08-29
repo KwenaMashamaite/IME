@@ -68,6 +68,15 @@ namespace ime {
         return {x, y};
     }
 
+    void Window::setRelativeMousePosition(const Vector2i &position) {
+        sf::Mouse::setPosition({position.x, position.y}, renderTarget_.getImpl()->getSFMLWindow());
+    }
+
+    Vector2i Window::getRelativeMousePosition() const {
+        sf::Vector2i position = sf::Mouse::getPosition(renderTarget_.getImpl()->getSFMLWindow());
+        return {position.x, position.y};
+    }
+
     void Window::setSize(const Vector2u &size) {
         renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{size.x, size.y});
     }

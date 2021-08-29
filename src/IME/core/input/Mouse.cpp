@@ -70,14 +70,6 @@ namespace ime::input {
         return {sf::Mouse::getPosition().x, sf::Mouse::getPosition().y};
     }
 
-    void Mouse::setPosition(const Vector2i &position, const priv::RenderTarget &window) {
-        sf::Mouse::setPosition({position.x, position.y}, window.getImpl()->getSFMLWindow());
-    }
-
-    Vector2i Mouse::getPosition(const priv::RenderTarget &window) {
-        return {sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).x, sf::Mouse::getPosition(window.getImpl()->getSFMLWindow()).y};
-    }
-
     int Mouse::onButtonUp(Callback<Mouse::Button, int, int> callback) {
         return eventEmitter_.on("mouseUp", std::move(callback));
     }
