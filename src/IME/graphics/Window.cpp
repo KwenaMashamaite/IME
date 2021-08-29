@@ -163,6 +163,10 @@ namespace ime {
         return texture;
     }
 
+    void Window::takeScreenshot(const std::string &filename) {
+        takeScreenshot()->saveToFile(filename);
+    }
+
     void Window::close() {
         renderTarget_.getImpl()->getSFMLWindow().close();
     }

@@ -277,6 +277,25 @@ namespace ime {
         std::unique_ptr<Texture> takeScreenshot();
 
         /**
+         * @brief Take a screenshot of the window and immediately save it to a file
+         * @param filename Name of the file to save the screenshot to
+         *
+         * The format of the image is automatically deduced from the file
+         * extension. The supported image formats are bmp, png, tga and jpg.
+         * The destination file is overwritten if it already exists
+         *
+         * @code
+         * window.takeScreenshot("images/screenshot.png");
+         * @endcode
+         *
+         * Note that calling this function before the window is created leads
+         * to undefined behavior
+         *
+         * @note This function performs a slow operation
+         */
+        void takeScreenshot(const std::string& filename);
+
+        /**
          * @brief Close the window
          *
          * Note that closing the window will trigger an engine shutdown
