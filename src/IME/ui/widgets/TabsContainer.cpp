@@ -90,20 +90,8 @@ namespace ime::ui {
         return *this;
     }
 
-    TabsContainer::TabsContainer(TabsContainer&& other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    TabsContainer &TabsContainer::operator=(TabsContainer&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    TabsContainer::TabsContainer(TabsContainer&& other) noexcept = default;
+    TabsContainer &TabsContainer::operator=(TabsContainer&& rhs) noexcept = default;
 
     TabsContainer::Ptr TabsContainer::create(const std::string& width,
         const std::string& height)

@@ -51,21 +51,8 @@ namespace ime::ui {
         return *this;
     }
 
-    Widget::Widget(Widget&& other) noexcept {
-        *this = std::move(other);
-    }
-
-    Widget &Widget::operator=(Widget&& other) noexcept {
-        if (this != &other) {
-            pimpl_ = std::move(other.pimpl_);
-            eventEmitter_ = std::move(other.eventEmitter_);
-            name_ = std::move(other.name_);
-            isContainer_ = other.isContainer_;
-            initEvents();
-        }
-
-        return *this;
-    }
+    Widget::Widget(Widget&& other) noexcept = default;
+    Widget &Widget::operator=(Widget&& other) noexcept = default;
 
     void Widget::setName(const std::string &name) {
         if (name_ != name) {

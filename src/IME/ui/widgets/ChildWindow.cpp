@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    ChildWindow::ChildWindow(ChildWindow&& other) noexcept :
-        WidgetContainer(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    ChildWindow &ChildWindow::operator=(ChildWindow&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    ChildWindow::ChildWindow(ChildWindow&& other) noexcept = default;
+    ChildWindow &ChildWindow::operator=(ChildWindow&& rhs) noexcept = default;
 
     ChildWindow::Ptr ChildWindow::create(const std::string& title, unsigned int titleButtons) {
         return ChildWindow::Ptr(new ChildWindow(title, titleButtons));

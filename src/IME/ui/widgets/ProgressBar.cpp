@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    ProgressBar::ProgressBar(ProgressBar&& other) noexcept :
-        ClickableWidget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    ProgressBar &ProgressBar::operator=(ProgressBar&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    ProgressBar::ProgressBar(ProgressBar&& other) noexcept = default;
+    ProgressBar &ProgressBar::operator=(ProgressBar&& rhs) noexcept = default;
 
     ProgressBar::Ptr ProgressBar::create(const std::string& text) {
         return Ptr(new ProgressBar(text));

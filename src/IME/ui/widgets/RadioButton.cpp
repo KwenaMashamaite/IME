@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    RadioButton::RadioButton(RadioButton&& other) noexcept :
-        ClickableWidget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    RadioButton &RadioButton::operator=(RadioButton&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    RadioButton::RadioButton(RadioButton&& other) noexcept = default;
+    RadioButton &RadioButton::operator=(RadioButton&& rhs) noexcept = default;
 
     RadioButton::Ptr RadioButton::create(const std::string &text) {
         return Ptr(new RadioButton(text));

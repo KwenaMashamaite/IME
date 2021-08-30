@@ -65,21 +65,8 @@ namespace ime::ui {
         return *this;
     }
 
-    ClickableWidget::ClickableWidget(ClickableWidget && other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&rhs) noexcept {
-        if (this != &rhs) {
-            Widget::operator=(std::move(rhs));
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    ClickableWidget::ClickableWidget(ClickableWidget&& other) noexcept = default;
+    ClickableWidget& ClickableWidget::operator=(ClickableWidget &&rhs) noexcept = default;
 
     void ClickableWidget::setEnabled(bool isEnable) {
         pimpl_->widget_->setEnabled(isEnable);

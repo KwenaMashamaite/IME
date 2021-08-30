@@ -69,20 +69,8 @@ namespace ime::ui {
         return *this;
     }
 
-    SpinControl::SpinControl(SpinControl&& other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    SpinControl &SpinControl::operator=(SpinControl&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    SpinControl::SpinControl(SpinControl&& other) noexcept = default;
+    SpinControl &SpinControl::operator=(SpinControl&& rhs) noexcept = default;
 
     SpinControl::Ptr SpinControl::create(float minValue, float maxValue,
         float initialValue, unsigned int decimal, float step) 

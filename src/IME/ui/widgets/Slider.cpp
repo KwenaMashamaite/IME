@@ -67,20 +67,8 @@ namespace ime::ui {
         return *this;
     }
 
-    Slider::Slider(Slider&& other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    Slider &Slider::operator=(Slider&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    Slider::Slider(Slider&& other) noexcept = default;
+    Slider &Slider::operator=(Slider&& rhs) noexcept = default;
 
     Slider::Ptr Slider::create(float minimum, float maximum) {
         return Ptr(new Slider(minimum, maximum));

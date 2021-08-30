@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    MessageBox::MessageBox(MessageBox&& other) noexcept :
-        WidgetContainer(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    MessageBox &MessageBox::operator=(MessageBox&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    MessageBox::MessageBox(MessageBox&& other) noexcept = default;
+    MessageBox &MessageBox::operator=(MessageBox&& rhs) noexcept = default;
 
     MessageBox::Ptr MessageBox::create(const std::string& title, const std::string& text,
         const std::initializer_list<std::string>& buttons)

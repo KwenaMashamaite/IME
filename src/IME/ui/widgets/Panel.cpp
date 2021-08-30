@@ -46,6 +46,15 @@ namespace ime::ui {
         initEvents();
     }
 
+    Panel &Panel::operator=(const Panel& rhs) {
+        if (this != &rhs) {
+            WidgetContainer::operator=(rhs);
+            initEvents();
+        }
+
+        return *this;
+    }
+
     Panel::Ptr Panel::create(const std::string& width, const std::string& height) {
         return Panel::Ptr(new Panel(width, height));
     }

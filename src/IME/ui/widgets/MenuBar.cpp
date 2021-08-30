@@ -67,20 +67,8 @@ namespace ime::ui {
         return *this;
     }
 
-    MenuBar::MenuBar(MenuBar&& other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    MenuBar &MenuBar::operator=(MenuBar&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    MenuBar::MenuBar(MenuBar&& other) noexcept = default;
+    MenuBar &MenuBar::operator=(MenuBar&& rhs) noexcept = default;
 
     MenuBar::Ptr MenuBar::create() {
         return MenuBar::Ptr(new MenuBar());;

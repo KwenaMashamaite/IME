@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    EditBox::EditBox(EditBox&& other) noexcept :
-        ClickableWidget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    EditBox &EditBox::operator=(EditBox&& rhs) noexcept {
-        if (this !=  &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    EditBox::EditBox(EditBox&& other) noexcept = default;
+    EditBox &EditBox::operator=(EditBox&& rhs) noexcept = default;
 
     EditBox::Ptr EditBox::create(const std::string& defaultText) {
         return Ptr(new EditBox(defaultText));

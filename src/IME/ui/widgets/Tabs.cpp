@@ -67,20 +67,8 @@ namespace ime::ui {
         return *this;
     }
 
-    Tabs::Tabs(Tabs&& other) noexcept :
-        Widget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    Tabs &Tabs::operator=(Tabs&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    Tabs::Tabs(Tabs&& other) noexcept = default;
+    Tabs &Tabs::operator=(Tabs&& rhs) noexcept = default;
 
     Tabs::Ptr Tabs::create() {
         return Ptr(new Tabs());

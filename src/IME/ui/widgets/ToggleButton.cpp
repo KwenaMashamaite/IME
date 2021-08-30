@@ -92,20 +92,8 @@ namespace ime::ui {
         return *this;
     }
 
-    ToggleButton::ToggleButton(ToggleButton&& other) noexcept :
-        ClickableWidget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    ToggleButton &ToggleButton::operator=(ToggleButton&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    ToggleButton::ToggleButton(ToggleButton&& other) noexcept = default;
+    ToggleButton &ToggleButton::operator=(ToggleButton&& rhs) noexcept = default;
 
     ToggleButton::Ptr ToggleButton::create(const std::string &text, bool checked) {
         return ToggleButton::Ptr(new ToggleButton(text, checked));

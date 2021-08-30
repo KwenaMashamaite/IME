@@ -87,20 +87,8 @@ namespace ime::ui {
         return *this;
     }
 
-    Picture::Picture(Picture&& other) noexcept :
-        ClickableWidget(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    Picture &Picture::operator=(Picture&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    Picture::Picture(Picture&& other) noexcept = default;
+    Picture &Picture::operator=(Picture&& rhs) noexcept = default;
 
     Picture::Ptr Picture::create() {
         return Picture::Ptr(new Picture());

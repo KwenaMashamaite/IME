@@ -68,20 +68,8 @@ namespace ime::ui {
         return *this;
     }
 
-    ScrollablePanel::ScrollablePanel(ScrollablePanel&& other) noexcept :
-        WidgetContainer(std::move(other))
-    {
-        *this = std::move(other);
-    }
-
-    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel&& rhs) noexcept {
-        if (this != &rhs) {
-            pimpl_ = std::move(rhs.pimpl_);
-            initEvents();
-        }
-
-        return *this;
-    }
+    ScrollablePanel::ScrollablePanel(ScrollablePanel&& other) noexcept = default;
+    ScrollablePanel &ScrollablePanel::operator=(ScrollablePanel&& rhs) noexcept = default;
 
     ScrollablePanel::Ptr ScrollablePanel::create(const std::string &width,
         const std::string &height, Vector2f contentSize)
