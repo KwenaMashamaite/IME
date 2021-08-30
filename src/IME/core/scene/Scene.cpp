@@ -80,6 +80,10 @@ namespace ime {
         return *this;
     }
 
+    Scene::Ptr Scene::create() {
+        return std::make_unique<Scene>();
+    }
+
     void Scene::init(Engine &engine) {
         engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));

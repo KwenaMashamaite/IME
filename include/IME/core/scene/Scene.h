@@ -114,6 +114,12 @@ namespace ime {
         void init(Engine& engine);
 
         /**
+         * @brief Create an empty scene
+         * @return The created scene
+         */
+        static Scene::Ptr create();
+
+        /**
          * @brief Initialize scene
          *
          * This function is called by the game engine when the base scene is ready
