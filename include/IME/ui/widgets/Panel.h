@@ -44,7 +44,7 @@ namespace ime {
             /**
              * @brief Copy constructor
              */
-            Panel(const Panel&) = default;
+            Panel(const Panel&);
 
             /**
              * @brief Copy assignment operator

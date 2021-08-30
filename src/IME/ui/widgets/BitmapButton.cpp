@@ -28,6 +28,8 @@
 #include <TGUI/Widgets/BitmapButton.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     //////////////////////////////////////////////////////////////////////////
     // Button implementation
     //////////////////////////////////////////////////////////////////////////
@@ -68,13 +70,16 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::BitmapButton>>(tgui::BitmapButton::create(buttonText))),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("BitmapButton" + std::to_string(count++));
         setRenderer(std::make_unique<ButtonRenderer>());
     }
 
     BitmapButton::BitmapButton(const BitmapButton& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("BitmapButton" + std::to_string(count++));
+    }
 
     BitmapButton &BitmapButton::operator=(const BitmapButton& rhs) {
         if (this != &rhs) {

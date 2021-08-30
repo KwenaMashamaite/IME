@@ -28,6 +28,8 @@
 #include <TGUI/Widgets/Picture.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class Picture::PictureImpl {
     public:
         explicit PictureImpl(tgui::Widget* widget) :
@@ -43,6 +45,7 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Picture>>(tgui::Picture::create())),
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Picture" + std::to_string(count++));
         setRenderer(std::make_unique<PictureRenderer>());
         initEvents();
     }
@@ -53,6 +56,7 @@ namespace ime::ui {
             transparentTexture))),
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Picture" + std::to_string(count++));
         setRenderer(std::make_unique<PictureRenderer>());
         initEvents();
     }
@@ -69,6 +73,7 @@ namespace ime::ui {
         ClickableWidget(other),
         pimpl_{std::make_unique<PictureImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Picture" + std::to_string(count++));
         initEvents();
     }
 

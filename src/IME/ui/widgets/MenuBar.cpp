@@ -27,6 +27,8 @@
 #include "IME/ui/widgets/WidgetImpl.h"
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class MenuBar::MenuBarImpl {
     public:
         explicit MenuBarImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         Widget(std::make_unique<priv::WidgetImpl<tgui::MenuBar>>(tgui::MenuBar::create())),
         pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("MenuBar" + std::to_string(count++));
         setRenderer(std::make_unique<MenuBarRenderer>());
         initEvents();
     }
@@ -50,6 +53,7 @@ namespace ime::ui {
         Widget(other),
         pimpl_{std::make_unique<MenuBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("MenuBar" + std::to_string(count++));
         initEvents();
     }
 

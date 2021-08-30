@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/Tabs.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class Tabs::TabsImpl {
     public:
         explicit TabsImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         Widget(std::make_unique<priv::WidgetImpl<tgui::Tabs>>(tgui::Tabs::create())),
         pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Tabs" + std::to_string(count++));
         setRenderer(std::make_unique<TabsRenderer>());
         initEvents();
     }
@@ -50,6 +53,7 @@ namespace ime::ui {
         Widget(other),
         pimpl_{std::make_unique<TabsImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Tabs" + std::to_string(count++));
         initEvents();
     }
 

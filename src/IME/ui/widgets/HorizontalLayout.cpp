@@ -28,6 +28,8 @@
 #include <TGUI/Widgets/HorizontalLayout.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class HorizontalLayout::HorizontalLayoutImpl {
     public:
         explicit HorizontalLayoutImpl(tgui::Widget* widget) :
@@ -43,6 +45,7 @@ namespace ime::ui {
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::HorizontalLayout>>(tgui::HorizontalLayout::create({width.c_str(), height.c_str()}))),
         pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("HorizontalLayout" + std::to_string(count++));
         setRenderer(std::make_unique<BoxLayoutRenderer>());
         setAsContainer(true);
     }
@@ -50,7 +53,9 @@ namespace ime::ui {
     HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
         IBoxLayout(other),
         pimpl_{std::make_unique<HorizontalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("HorizontalLayout" + std::to_string(count++));
+    }
 
     HorizontalLayout &HorizontalLayout::operator=(const HorizontalLayout& rhs) {
         if (this != &rhs) {

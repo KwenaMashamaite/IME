@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/ToggleButton.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     //////////////////////////////////////////////////////////////////////////
     // Button implementation
     //////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,7 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::ToggleButton>>(tgui::ToggleButton::create(buttonText, checked))),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ToggleButton" + std::to_string(count++));
         setRenderer(std::make_unique<ButtonRenderer>());
         initEvents();
     }
@@ -75,6 +78,7 @@ namespace ime::ui {
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ToggleButton" + std::to_string(count++));
         initEvents();
     }
 

@@ -115,6 +115,41 @@ namespace ime {
             Widget& operator=(Widget&&) noexcept;
 
             /**
+             * @brief Set the name of the widget
+             * @param name The name of the widget
+             *
+             * By default the widget is assigned a unique name. The naming
+             * convention is as follows:
+             *
+             * widgetType + instantiation number
+             *
+             * For example:
+             *
+             * @code
+             * ime::Button::Ptr myBtn = ime::Button::create("Click me");
+             * std::cout << myBtn->getName(); // Button1
+             *
+             * ime::Label::Ptr lblGreet = ime::Label::create("Hello");
+             * std::cout << lblGreet->getName(); // Label1
+             *
+             * std::cout << lblGreet->copy()->getName(); // Label2
+             * @endcode
+             *
+             * @warning The name must not contain white spaces
+             *
+             * @see getName
+             */
+            void setName(const std::string& name);
+
+            /**
+             * @brief Get the name of the widget
+             * @return The name of the widget
+             *
+             * @see setName
+             */
+            const std::string& getName() const;
+
+            /**
              * @brief Set the widgets renderer
              * @param renderer The new renderer
              *
@@ -659,6 +694,7 @@ namespace ime {
         private:
             std::unique_ptr<priv::IWidgetImpl> pimpl_;
             EventEmitter eventEmitter_; //!< Widgets event publisher
+            std::string name_;          //!< The name of the widget
             bool isContainer_{false};   //!< Stores whether or not a widget inherits from IContainer
         };
     } // namespace ui

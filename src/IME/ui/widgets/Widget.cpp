@@ -59,11 +59,20 @@ namespace ime::ui {
         if (this != &other) {
             pimpl_ = std::move(other.pimpl_);
             eventEmitter_ = std::move(other.eventEmitter_);
+            name_ = std::move(other.name_);
             isContainer_ = other.isContainer_;
             initEvents();
         }
 
         return *this;
+    }
+
+    void Widget::setName(const std::string &name) {
+        name_ = name;
+    }
+
+    const std::string &Widget::getName() const {
+        return name_;
     }
 
     void Widget::setRenderer(IWidgetRenderer::Ptr renderer) {

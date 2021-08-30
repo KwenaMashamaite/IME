@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/EditBox.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class EditBox::EditBoxImpl {
     public:
         explicit EditBoxImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::EditBox>>(tgui::EditBox::create())),
         pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("EditBox" + std::to_string(count++));
         setRenderer(std::make_unique<EditBoxRenderer>());
         pimpl_->editbox_->setDefaultText(defaultText);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         ClickableWidget(other),
         pimpl_{std::make_unique<EditBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("EditBox" + std::to_string(count++));
         initEvents();
     }
 

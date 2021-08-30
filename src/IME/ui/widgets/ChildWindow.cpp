@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/ChildWindow.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class ChildWindow::ChildWindowImpl {
     public:
         explicit ChildWindowImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ChildWindow>>(tgui::ChildWindow::create(title, titleButtons))),
         pimpl_{std::make_unique<ChildWindowImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ChildWindow" + std::to_string(count++));
         setRenderer(std::make_unique<ChildWindowRenderer>());
         setAsContainer(true);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         WidgetContainer(other),
         pimpl_{std::make_unique<ChildWindowImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ChildWindow" + std::to_string(count++));
         initEvents();
     }
 

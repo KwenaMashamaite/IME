@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/SpinControl.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class SpinControl::SpinControlImpl {
     public:
         explicit SpinControlImpl(tgui::Widget* widget) :
@@ -44,6 +46,7 @@ namespace ime::ui {
                 tgui::SpinControl::create(minValue, maxValue, initialValue, decimal, step))),
             pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("SpinControl" + std::to_string(count++));
         setRenderer(std::make_unique<SpinButtonRenderer>());
         initEvents();
     }
@@ -52,6 +55,7 @@ namespace ime::ui {
         Widget(other),
         pimpl_{std::make_unique<SpinControlImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("SpinControl" + std::to_string(count++));
         initEvents();
     }
 

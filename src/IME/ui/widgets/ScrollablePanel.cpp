@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/ScrollablePanel.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class ScrollablePanel::PanelImpl {
     public:
         explicit PanelImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::ScrollablePanel>>(tgui::ScrollablePanel::create({width.c_str(), height.c_str()}, {contentSize.x, contentSize.y}))),
         pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ScrollablePanel" + std::to_string(count++));
         setRenderer(std::make_unique<ScrollablePanelRenderer>());
         setAsContainer(true);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         WidgetContainer(other),
         pimpl_{std::make_unique<PanelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ScrollablePanel" + std::to_string(count++));
         initEvents();
     }
 

@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/CheckBox.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class CheckBox::CheckBoxImpl {
     public:
         explicit CheckBoxImpl(tgui::Widget* widget) :
@@ -37,18 +39,21 @@ namespace ime::ui {
     }; // class WidgetContainerImpl
 
 
-////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     CheckBox::CheckBox(const std::string &text) :
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::CheckBox>>(tgui::CheckBox::create(text))),
         pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Checkbox" + std::to_string(count++));
         setRenderer(std::make_unique<CheckBoxRenderer>());
     }
 
     CheckBox::CheckBox(const CheckBox& other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("Checkbox" + std::to_string(count++));
+    }
 
     CheckBox &CheckBox::operator=(const CheckBox& rhs) {
         if (this != &rhs) {

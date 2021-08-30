@@ -28,11 +28,20 @@
 #include <TGUI/Widgets/Panel.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     Panel::Panel(const std::string& width, const std::string& height) :
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::Panel>>(tgui::Panel::create({width.c_str(), height.c_str()})))
     {
+        setName("Panel" + std::to_string(count++));
         setRenderer(std::make_unique<PanelRenderer>());
         setAsContainer(true);
+    }
+
+    Panel::Panel(const Panel& other) :
+        WidgetContainer(other)
+    {
+        setName("Panel" + std::to_string(count++));
     }
 
     Panel::Ptr Panel::create(const std::string& width, const std::string& height) {

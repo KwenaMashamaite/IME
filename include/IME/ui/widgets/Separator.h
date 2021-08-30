@@ -46,7 +46,7 @@ namespace ime {
             /**
              * @brief Copy constructor
              */
-            Separator(const Separator&) = default;
+            Separator(const Separator&);
 
             /**
              * @brief Copy assignment operator

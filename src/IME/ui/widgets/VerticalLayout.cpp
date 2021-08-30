@@ -28,6 +28,8 @@
 #include <TGUI/Widgets/VerticalLayout.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class VerticalLayout::VerticalLayoutImpl {
     public:
         explicit VerticalLayoutImpl(tgui::Widget* widget) :
@@ -43,6 +45,7 @@ namespace ime::ui {
         IBoxLayout(std::make_unique<priv::WidgetImpl<tgui::VerticalLayout>>(tgui::VerticalLayout::create({width.c_str(), height.c_str()}))),
         pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("VerticalLayout" + std::to_string(count++));
         setRenderer(std::make_unique<BoxLayoutRenderer>());
         setAsContainer(true);
     }
@@ -50,7 +53,9 @@ namespace ime::ui {
     VerticalLayout::VerticalLayout(const VerticalLayout& other) :
         IBoxLayout(other),
         pimpl_{std::make_unique<VerticalLayoutImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("VerticalLayout" + std::to_string(count++));
+    }
 
     VerticalLayout &VerticalLayout::operator=(const VerticalLayout& rhs) {
         if (this != &rhs) {

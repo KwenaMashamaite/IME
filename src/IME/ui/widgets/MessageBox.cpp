@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/MessageBox.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class MessageBox::MessageBoxImpl {
     public:
         explicit MessageBoxImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         WidgetContainer(std::make_unique<priv::WidgetImpl<tgui::MessageBox>>(tgui::MessageBox::create())),
         pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("MessageBox" + std::to_string(count++));
         setRenderer(std::make_unique<MessageBoxRenderer>());
         setAsContainer(true);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         WidgetContainer(other),
         pimpl_{std::make_unique<MessageBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("MessageBox" + std::to_string(count++));
         initEvents();
     }
 

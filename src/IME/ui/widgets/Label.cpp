@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/Label.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     //////////////////////////////////////////////////////////////////////////
     // Label implementation
     //////////////////////////////////////////////////////////////////////////
@@ -106,13 +108,16 @@ namespace ime::ui {
         Widget(std::make_unique<priv::WidgetImpl<tgui::Label>>(tgui::Label::create(text))),
         pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Label" + std::to_string(count++));
         setRenderer(std::make_unique<LabelRenderer>());
     }
 
     Label::Label(const Label& other) :
         Widget(other),
         pimpl_{std::make_unique<LabelImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("Label" + std::to_string(count++));
+    }
 
     Label &Label::operator=(const Label& rhs) {
         if (this != &rhs) {

@@ -74,9 +74,12 @@ namespace ime {
              *         or nullptr if the container already has a widget with
              *         the same name as the specified widget name
              *
-             * The name of the widget must not contain whitespaces
+             * The @a name parameter is kept for compatibility with v2.2.x and
+             * prior. Starting with v2.3.0, use ime::ui::Widget::setName
+             *
+             * @warning The name of the widget must not contain whitespaces
              */
-            Widget* addWidget(Widget::Ptr widget, const std::string& name);
+            Widget* addWidget(Widget::Ptr widget, const std::string& name = "");
             
             /**
              * @brief Get access to a widget in the container
@@ -94,10 +97,13 @@ namespace ime {
             /**
              * @brief Add a widget to the gui
              * @param widget The widget to be added
-             * @param widgetName Unique name of the widget
+             * @param name Unique name of the widget
              * @return Pointer to the widget if it was added to the container
              *         or a premature program exit if a widget with the same
-             *         name as @a widgetName already exist in the container
+             *         name as @a name already exist in the container
+             *
+             * The @a name parameter is kept for compatibility with v2.2.x and
+             * prior. Starting with v2.3.0, use ime::ui::Widget::setName
              *
              * This function that will return the widget pointer already casted
              * to the desired type:
@@ -112,12 +118,12 @@ namespace ime {
              * @endcode
              *
              * @warning This function will return a nullptr if the argument
-             * @a widget is not convertible to T. In addition @a widgetName
+             * @a widget is not convertible to T. In addition @a name
              * must be unique
              */
             template<typename T>
-            T* addWidget(Widget::Ptr widget, const std::string& widgetName) {
-                return dynamic_cast<T*>(addWidget(std::move(widget), widgetName));
+            T* addWidget(Widget::Ptr widget, const std::string& name = "") {
+                return dynamic_cast<T*>(addWidget(std::move(widget), name));
             }
 
             /**

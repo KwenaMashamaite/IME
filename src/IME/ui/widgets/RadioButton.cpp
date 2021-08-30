@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/RadioButton.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class RadioButton::ButtonImpl {
     public:
         explicit ButtonImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::RadioButton>>(tgui::RadioButton::create())),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("RadioButton" + std::to_string(count++));
         setRenderer(std::make_unique<RadioButtonRenderer>());
         pimpl_->button_->setText(buttonText);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("RadioButton" + std::to_string(count++));
         initEvents();
     }
 

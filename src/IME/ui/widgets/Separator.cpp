@@ -27,10 +27,19 @@
 #include <TGUI/Widgets/SeparatorLine.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     Separator::Separator() :
         Widget(std::make_unique<priv::WidgetImpl<tgui::SeparatorLine>>(tgui::SeparatorLine::create()))
     {
+        setName("Separator" + std::to_string(count++));
         setRenderer(std::make_unique<SeparatorRenderer>());
+    }
+
+    Separator::Separator(const Separator& other) :
+        Widget(other)
+    {
+        setName("Separator" + std::to_string(count++));
     }
 
     Separator::Ptr Separator::create() {

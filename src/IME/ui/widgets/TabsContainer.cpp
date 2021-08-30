@@ -28,6 +28,8 @@
 #include <unordered_map>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class TabsContainer::TabsContainerImpl {
     public:
         explicit TabsContainerImpl(tgui::Widget* widget) :
@@ -65,6 +67,7 @@ namespace ime::ui {
         Widget(std::make_unique<priv::WidgetImpl<tgui::TabContainer>>(tgui::TabContainer::create({width.c_str(), height.c_str()}))),
         pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("TabsContainer" + std::to_string(count++));
         setRenderer(std::make_unique<TabsRenderer>());
         initEvents();
     }
@@ -73,6 +76,7 @@ namespace ime::ui {
         Widget(other),
         pimpl_{std::make_unique<TabsContainerImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("TabsContainer" + std::to_string(count++));
         initEvents();
     }
 

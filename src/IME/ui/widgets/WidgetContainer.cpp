@@ -63,13 +63,18 @@ namespace ime::ui {
 
         Widget* addWidget(Widget::Ptr widget, const std::string &name)  {
             IME_ASSERT(widget, "Cannot add nullptr to a WidgetContainer")
-            auto [iter, inserted] = widgets_.insert({name, std::move(widget)});
+
+            // Maintain Compatibility with v2.2.x
+            if (!name.empty())
+                widget->setName(name);
+
+            auto [iter, inserted] = widgets_.insert({widget->getName(), std::move(widget)});
             if (inserted) {
-                tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(iter->second->getInternalPtr()), name);
+                tguiContainer_->add(std::static_pointer_cast<tgui::Widget>(iter->second->getInternalPtr()), iter->second->getName());
                 return iter->second.get();
             }
 
-            std::cerr << "IME ERROR: A widget with the name \"" + name + "\" already exists in the container, widget names must be unique";
+            std::cerr << "IME ERROR: A widget with the name \"" + iter->second->getName() + "\" already exists in the container, widget names must be unique";
             exit(-3); //@TODO - Replace magic number with error code
         }
 

@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/Button.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     //////////////////////////////////////////////////////////////////////////
     // Button implementation
     //////////////////////////////////////////////////////////////////////////
@@ -55,13 +57,16 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::Button>>(tgui::Button::create(buttonText))),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("Button" + std::to_string(count++));
         setRenderer(std::make_unique<ButtonRenderer>());
     }
 
     Button::Button(const Button & other) :
         ClickableWidget(other),
         pimpl_{std::make_unique<ButtonImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
-    {}
+    {
+        setName("Button" + std::to_string(count++));
+    }
 
     Button &Button::operator=(const Button& rhs) {
         if (this != &rhs) {

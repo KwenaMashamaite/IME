@@ -27,6 +27,8 @@
 #include <TGUI/Widgets/ProgressBar.hpp>
 
 namespace ime::ui {
+    static unsigned int count = 1; // Keeps track of how many widgets of this type have been instantiated
+
     class ProgressBar::ProgressBarImpl {
     public:
         explicit ProgressBarImpl(tgui::Widget* widget) :
@@ -42,6 +44,7 @@ namespace ime::ui {
         ClickableWidget(std::make_unique<priv::WidgetImpl<tgui::ProgressBar>>(tgui::ProgressBar::create())),
         pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ProgressBar" + std::to_string(count++));
         setRenderer(std::make_unique<ProgressBarRenderer>());
         pimpl_->progressBar_->setText(text);
         initEvents();
@@ -51,6 +54,7 @@ namespace ime::ui {
         ClickableWidget(other),
         pimpl_{std::make_unique<ProgressBarImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
+        setName("ProgressBar" + std::to_string(count++));
         initEvents();
     }
 
