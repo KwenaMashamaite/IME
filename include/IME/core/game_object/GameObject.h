@@ -355,6 +355,7 @@ namespace ime {
          * @brief Add an event listener to a grid collision event
          * @param callback Function to be executed when this game object
          *                 collides with another game object in a TileMap
+         * @return The event listeners identification number
          *
          * @note This function is applicable to grid-based collisions only
          * (see ime::GridMover), as such it is called only when this game
@@ -367,19 +368,20 @@ namespace ime {
          * callback is called when the game object collides with another game
          * object or when another game object collides with it.
          *
-         * By default, there is no event listener for this event. Note that,
-         * only one event listener may be attached to this event, subsequent
-         * listeners overwrite the previous one. To remove the current listener,
-         * pass @a nullptr as the argument. The callback is passed this game
-         * object and the game object in collision with it respectively.
-         *
-         * When a collision takes place, the invocation order is as follows:
-         * ime::GridMover::onGameObjectCollision -> ime::GameObject::onCollision
-         *
          * For ime::RigidBody collision, see onCollisionStart, onCollisionStay
          * and onCollisionEnd
+         *
+         * @see removeCollisionListener
          */
-        void onCollision(const CollisionCallback& callback);
+        int onCollision(const CollisionCallback& callback);
+
+        /**
+         * @brief Remove a grid collision event listener
+         * @param id The id of the collision listener to be removed
+         * @return True if the event listener was removed or false if no
+         *         such handler exists
+         */
+        bool removeCollisionListener(int id);
 
         /**
          * @brief Add an event listener to a collision begin event
@@ -548,7 +550,7 @@ namespace ime {
         int postStepId_;                      //!< Scene post step handler id
         int destructionId_;                   //!< Scene destruction listener id
         PropertyContainer userData_;          //!< Used to store metadata about the object
-        CollisionCallback onCollision_;       //!< Called when this game object occupies the same tile as another game object in a ime::TileMap
+        EventEmitter emitter_;                //!< Publishes events specific to GameObject
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
         CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa

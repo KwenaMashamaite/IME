@@ -49,6 +49,7 @@ namespace ime {
         sprite_{other.sprite_},
         postStepId_{-1},
         destructionId_{-1},
+        emitter_{other.emitter_},
         collisionGroup_{other.collisionGroup_},
         collisionId_{other.collisionId_}
     {
@@ -96,6 +97,7 @@ namespace ime {
         std::swap(body_, other.body_);
         std::swap(userData_, other.userData_);
         std::swap(postStepId_, other.postStepId_);
+        std::swap(emitter_, other.emitter_);
         std::swap(destructionId_, other.destructionId_);
         std::swap(collisionGroup_, other.collisionGroup_);
         std::swap(collisionId_, other.collisionId_);
@@ -224,8 +226,12 @@ namespace ime {
         }
     }
 
-    void GameObject::onCollision(const CollisionCallback& callback) {
-        onCollision_ = callback;
+    int GameObject::onCollision(const CollisionCallback& callback) {
+        return emitter_.on("collision", callback);
+    }
+
+    bool GameObject::removeCollisionListener(int id) {
+        return emitter_.removeEventListener("collision", id);
     }
 
     void GameObject::onCollisionStart(const CollisionCallback& callback) {
@@ -286,8 +292,7 @@ namespace ime {
         if (this == other)
             return;
 
-        if (onCollision_)
-            onCollision_(this, other);
+        emitter_.emit("collision", this, other);
     }
 
     void GameObject::initEvents() {
