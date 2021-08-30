@@ -212,8 +212,9 @@ namespace ime {
         /**
          * @brief Limit the frame rate to a maximum fixed frequency
          * @param limit The new limit in frames per seconds (FPS)
+         * @throws InvalidArgument If @a limit is equal to 0
          *
-         * The frame rate limit can disabled by setting @a limit to 0
+         * @warning The frame rate limit must be greater than 0
          *
          * BY default the frame rate limit is 60 FPS
          */
