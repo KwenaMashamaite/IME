@@ -31,11 +31,12 @@ namespace ime {
      *        by resource manager)
     */
     enum class ResourceType {
-        Texture,     //!< Texture
-        Font,        //!< Font
-        Image,       //!< Image
-        SoundBuffer, //!< Sound buffer
-        Music        //!< Music
+        Texture,     //!< ime::Texture
+        Font,        //!< ime::Font
+        Image,       //!< ime::Image
+        SoundBuffer [[deprecated("Use ime::ResourceType::SoundEffect instead.")]], //!< SoundBuffer
+        SoundEffect = 3, //!< ime::SoundEffect
+        Music        //!< ime::Music
     };
 }
 

@@ -137,7 +137,7 @@ namespace ime {
         resourceManager_->setPathFor(ResourceType::Font, configs_.getPref("FONTS_DIR").getValue<std::string>());
         resourceManager_->setPathFor(ResourceType::Texture, configs_.getPref("TEXTURES_DIR").getValue<std::string>());
         resourceManager_->setPathFor(ResourceType::Image, configs_.getPref("TEXTURES_DIR").getValue<std::string>());
-        resourceManager_->setPathFor(ResourceType::SoundBuffer, configs_.getPref("SOUND_EFFECTS_DIR").getValue<std::string>());
+        resourceManager_->setPathFor(ResourceType::SoundEffect, configs_.getPref("SOUND_EFFECTS_DIR").getValue<std::string>());
         resourceManager_->setPathFor(ResourceType::Music, configs_.getPref("MUSIC_DIR").getValue<std::string>());
     }
 

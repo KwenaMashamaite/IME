@@ -42,7 +42,7 @@ namespace ime {
         switch (type) {
             case ResourceType::Texture:
                 return textures_.loadFromFile(filename);
-            case ResourceType::SoundBuffer:
+            case ResourceType::SoundEffect:
                 return soundBuffers_.loadFromFile(filename);
             case ResourceType::Image:
                 return images_.loadFromFile(filename);
@@ -107,7 +107,7 @@ namespace ime {
                 return fonts_.unload(filename);
             case ResourceType::Image:
                 return images_.unload(filename);
-            case ResourceType::SoundBuffer:
+            case ResourceType::SoundEffect:
                 return soundBuffers_.unload(filename);
             case ResourceType::Music:
                 if (musicHolder_.find(filename) != musicHolder_.end()) {
@@ -131,7 +131,7 @@ namespace ime {
             case ResourceType::Image:
                 images_.unloadAll();
                 break;
-            case ResourceType::SoundBuffer:
+            case ResourceType::SoundEffect:
                 soundBuffers_.unloadAll();
                 break;
             case ResourceType::Music:
@@ -156,7 +156,7 @@ namespace ime {
                 return fonts_.getPath();
             case ResourceType::Image:
                 return images_.getPath();
-            case ResourceType::SoundBuffer:
+            case ResourceType::SoundEffect:
                 return soundBuffers_.getPath();
             case ResourceType::Music:
                 return musicPath_;
@@ -175,7 +175,7 @@ namespace ime {
                 images_.setPath(path);
                 textures_.setPath(path);
                 break;
-            case ResourceType::SoundBuffer:
+            case ResourceType::SoundEffect:
                 soundBuffers_.setPath(path);
                 break;
             case ResourceType::Music:
