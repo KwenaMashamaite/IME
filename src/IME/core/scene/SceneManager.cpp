@@ -213,7 +213,6 @@ namespace ime::priv {
 
         static auto update = [](Scene* scene, Time dt) {
             scene->timerManager_.preUpdate();
-            scene->timerManager_.update(dt * scene->getTimescale());
             scene->audioManager_.removePlayedAudio();
             scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
         };
@@ -228,8 +227,10 @@ namespace ime::priv {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
 
-        // Update gui
-        scene->guiContainer_.update(deltaTime);
+        if (!fixedUpdate) {
+            scene->timerManager_.update(deltaTime * scene->getTimescale());
+            scene->guiContainer_.update(deltaTime);
+        }
 
         // Update physics simulation
         if (scene->hasPhysicsSim_) {
