@@ -159,6 +159,11 @@ namespace ime {
              */
             explicit CheckBox(const std::string &text = "");
 
+            /**
+             * @brief Initialize events emitted by the widget
+             */
+            void initEvents();
+
         private:
             class CheckBoxImpl;
             std::unique_ptr<CheckBoxImpl> pimpl_;

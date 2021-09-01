@@ -46,6 +46,7 @@ namespace ime::ui {
     {
         setName("Checkbox" + std::to_string(count++));
         setRenderer(std::make_unique<CheckBoxRenderer>());
+        initEvents();
     }
 
     CheckBox::CheckBox(const CheckBox& other) :
@@ -53,12 +54,14 @@ namespace ime::ui {
         pimpl_{std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get())}
     {
         setName("Checkbox" + std::to_string(count++));
+        initEvents();
     }
 
     CheckBox &CheckBox::operator=(const CheckBox& rhs) {
         if (this != &rhs) {
             ClickableWidget::operator=(rhs);
             pimpl_ = std::make_unique<CheckBoxImpl>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+            initEvents();
         }
 
         return *this;
@@ -113,6 +116,20 @@ namespace ime::ui {
 
     std::string CheckBox::getWidgetType() const {
         return "CheckBox";
+    }
+
+    void CheckBox::initEvents() {
+        pimpl_->checkbox_->onCheck([this] {
+            emit("check");
+        });
+
+        pimpl_->checkbox_->onUncheck([this] {
+            emit("uncheck");
+        });
+
+        pimpl_->checkbox_->onChange([this](bool checked) {
+            emit("valueChange", checked);
+        });
     }
 
     CheckBox::~CheckBox() = default;
