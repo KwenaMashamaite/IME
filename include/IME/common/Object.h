@@ -284,6 +284,17 @@ namespace ime {
         bool removeDestructionListener(int id) const;
 
         /**
+         * @brief Check if another object is the same instance as this object
+         * @param other The object to compare against this object
+         * @return True if @a other is the same instance as this object,
+         *         otherwise false
+         */
+        bool isSameObjectAs(const Object& other) const;
+
+        /**
+         * @deprecated Since v2.3.0 and will be removed in v2.4.0. Use
+         *             ime::Object::isSameObjectAs
+         *
          * @brief Check if two objects are the same object or not
          * @param rhs Object to compare against this object
          * @return True if @a rhs is the same object as this object,
@@ -292,21 +303,27 @@ namespace ime {
          * Two objects are the same object if they have the same object id.
          * Recall that each ime::Object instance has a unique id
          *
-         * @see getObjectId
+         * @see getObjectId, ime::Object::operator!= and isSameObjectAs
          */
+        [[deprecated("Use 'bool ime::Object::isSameObjectAs(const ime::Object&) const'")]]
         bool operator==(const Object& rhs) const;
 
         /**
+         * @deprecated Since v2.3.0 and will be removed in v2.4.0. Use
+         *             ime::Object::isSameObjectAs
+         *
          * @brief Check if two objects are Not the same object
          * @param rhs Object to compare against this object
          * @return True if @a rhs is NOT the same object as this object,
          *         otherwise false
          *
-         * Two objects are different from each other if they have different
-         * object id's
+         * Two objects are not the same Object if they have different
+         * object id's. Recall that each ime::Object instance has a unique
+         * id
          *
-         * @see getObjectId
+         * @see getObjectId, isSameObjectAs and ime::Object::operator==
          */
+         [[deprecated("Use 'bool ime::Object::isSameObjectAs(const ime::Object&) const'")]]
         bool operator!=(const Object& rhs) const;
 
         /**

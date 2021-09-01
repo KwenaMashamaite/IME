@@ -79,17 +79,17 @@ namespace ime {
 
     bool RenderLayer::has(const Drawable &drawable) const {
         return std::any_of(drawables_.begin(), drawables_.end(), [&drawable](auto& pair) {
-            return pair.second.first.get() == drawable;
+            return pair.second.first.get().isSameObjectAs(drawable);
         });
     }
 
     bool RenderLayer::remove(const Drawable &drawable) {
         for (auto& [renderOrder, interDrawable] : drawables_) {
-            if (drawable == interDrawable.first) {
+            if (drawable.isSameObjectAs(interDrawable.first)) {
                 auto range = drawables_.equal_range(renderOrder);
                 for (auto iter = range.first; iter != range.second; ++iter) {
                     auto& [drawableRef, destructionId] = iter->second;
-                    if (drawableRef.get() == drawable) {
+                    if (drawableRef.get().isSameObjectAs(drawable)) {
                         drawableRef.get().removeDestructionListener(destructionId);
                         drawables_.erase(iter);
                         return true;

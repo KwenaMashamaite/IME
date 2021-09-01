@@ -111,6 +111,10 @@ namespace ime {
         return eventEmitter_.removeEventListener("destruction", id);
     }
 
+    bool Object::isSameObjectAs(const Object &other) const {
+        return id_ == other.id_;
+    }
+
     bool Object::operator==(const Object &rhs) const {
         return id_ == rhs.id_;
     }
