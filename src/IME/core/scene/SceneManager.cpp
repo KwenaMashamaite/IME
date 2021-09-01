@@ -223,7 +223,7 @@ namespace ime::priv {
             update(prevScene_, deltaTime);
     }
 
-    void SceneManager::updateScene(Time deltaTime, Scene* scene, bool fixedUpdate) {
+    void SceneManager::updateScene(const Time& deltaTime, Scene* scene, bool fixedUpdate) {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
 
@@ -232,7 +232,11 @@ namespace ime::priv {
             scene->guiContainer_.update(deltaTime);
         }
 
-        // Update physics simulation
+        updatePhysicsWorld(scene, deltaTime, fixedUpdate);
+        updateExternalScene(scene, deltaTime, fixedUpdate);
+    }
+
+    void SceneManager::updatePhysicsWorld(Scene *scene, const Time &deltaTime, bool fixedUpdate) {
         if (scene->hasPhysicsSim_) {
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
 
@@ -247,8 +251,9 @@ namespace ime::priv {
 
             scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
+    }
 
-        // Update user scene
+    void SceneManager::updateExternalScene(Scene* scene, const Time& deltaTime, bool fixedUpdate) {
         if (fixedUpdate) {
             scene->gridMovers().update(deltaTime * scene->getTimescale());
             scene->fixedUpdate(deltaTime * scene->getTimescale());
