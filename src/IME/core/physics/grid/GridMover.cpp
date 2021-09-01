@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/grid/GridMover.h"
+#include "IME/utility/Helpers.h"
 #include <string_view>
 
 using namespace std::string_literals;
@@ -32,14 +33,6 @@ namespace ime {
         bool isSupportedDirection(const Direction& dir) {
             return dir == Left || dir == UpLeft || dir == Up || dir == UpRight
                 || dir == Right ||dir == DownRight || dir == Down || dir == DownLeft;
-        }
-
-        template<typename ...Args>
-        int addEventListener(EventEmitter& emitter, const std::string& name, const Callback<Args...>& callback, bool oneTime) {
-            if (oneTime)
-                return emitter.addOnceEventListener(name, callback);
-            else
-                return emitter.addEventListener(name, callback);
         }
     }
 
@@ -326,7 +319,7 @@ namespace ime {
         }
 
         // Objects with different collision id's do not collide (collision filtering by id)
-        if (!(target_->getCollisionId() == other->getCollisionId()))
+        if (target_->getCollisionId() != other->getCollisionId())
             return false;
 
         // Satisfies collision requirement
@@ -448,23 +441,23 @@ namespace ime {
     }
 
     int GridMover::onTileCollision(const Callback<Index>& callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "solidTileCollision", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "solidTileCollision", callback, oneTime);
     }
 
     int GridMover::onGameObjectCollision(const GridMover::CollisionCallback &callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gameObjectCollision", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gameObjectCollision", callback, oneTime);
     }
 
     int GridMover::onGridBorderCollision(const Callback<>& callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gridBorderCollision", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gridBorderCollision", callback, oneTime);
     }
 
     int GridMover::onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "adjacentMoveBegin", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "adjacentMoveBegin", callback, oneTime);
     }
 
     int GridMover::onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "adjacentMoveEnd", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "adjacentMoveEnd", callback, oneTime);
     }
 
     bool GridMover::unsubscribe(int handlerId) {
@@ -505,7 +498,7 @@ namespace ime {
     }
 
     int GridMover::onTargetTileReset(const Callback<Index>& callback, bool oneTime) {
-        return addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "targetTileReset", callback, oneTime);
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "targetTileReset", callback, oneTime);
     }
 
     void GridMover::setHandlerIntakeAsInternal(bool internal) {

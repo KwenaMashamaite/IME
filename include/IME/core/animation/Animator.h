@@ -384,8 +384,8 @@ namespace ime {
          *
          * @see unsubscribe
          */
-        int on(Event event, Callback<Animation::Ptr> callback, bool oneTime = false);
-        int on(Event event, Callback<> callback, bool oneTime = false);
+        int on(Event event, const Callback<Animation::Ptr>& callback, bool oneTime = false);
+        int on(Event event, const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Subscribe a callback to a specific animation event
@@ -410,8 +410,8 @@ namespace ime {
          *
          * @see unsubscribe(ime::Animator::Event, const std::string&, ime::Callback)
          */
-        int on(Event event, const std::string& name, Callback<Animation::Ptr> callback, bool oneTime = false);
-        int on(Event event, const std::string& name, Callback<> callback, bool oneTime = false);
+        int on(Event event, const std::string& name, const Callback<Animation::Ptr>& callback, bool oneTime = false);
+        int on(Event event, const std::string& name, const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Remove a callback from an animation event

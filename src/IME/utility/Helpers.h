@@ -238,6 +238,18 @@ namespace ime {
         extern bool removeRecursively(const std::unordered_map<std::string,
             std::unique_ptr<ui::Widget>>& container, const std::string& widgetName);
 
+        /**
+         * @brief Add an event listener to an event emitter
+         * @param emitter The event emitter to add an event listener to
+         * @param name The name of the event to add the event listener to
+         * @param callback The event listener to be added
+         * @param oneTime True if @a callback is a one time listener otherwise false
+         * @return The event listeners identification number
+         */
+        template<typename ...Args>
+        int addEventListener(EventEmitter& emitter, const std::string& name,
+            const Callback<Args...>& callback, bool oneTime);
+
         #include "Helpers.inl"
     }
 }

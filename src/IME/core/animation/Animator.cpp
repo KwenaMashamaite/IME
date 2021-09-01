@@ -24,6 +24,7 @@
 
 #include "IME/core/animation/Animator.h"
 #include "IME/graphics/Sprite.h"
+#include "IME/utility/Helpers.h"
 #include <algorithm>
 #include <memory>
 
@@ -326,36 +327,24 @@ namespace ime {
         }
     }
 
-    int Animator::on(Animator::Event event, Callback<Animation::Ptr> callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
-
-        return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
+    int Animator::on(Animator::Event event, const Callback<Animation::Ptr>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)), callback, oneTime);
     }
 
-    int Animator::on(Animator::Event event, Callback<> callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)), std::move(callback));
-
-        return eventEmitter_.on(std::to_string(static_cast<int>(event)), std::move(callback));
+    int Animator::on(Animator::Event event, const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)), callback, oneTime);
     }
 
     bool Animator::unsubscribe(Animator::Event event, int id) {
         return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)), id);
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<Animation::Ptr> callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
-
-        return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+    int Animator::on(Animator::Event event, const std::string &name, const Callback<Animation::Ptr>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)) + name, callback, oneTime);
     }
 
-    int Animator::on(Animator::Event event, const std::string &name, Callback<> callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(std::to_string(static_cast<int>(event)) + name, std::move(callback));
-
-        return eventEmitter_.on(std::to_string(static_cast<int>(event)) + name, std::move(callback));
+    int Animator::on(Animator::Event event, const std::string &name, const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)) + name, callback, oneTime);
     }
 
     bool Animator::unsubscribe(Animator::Event event, const std::string &name, int id) {

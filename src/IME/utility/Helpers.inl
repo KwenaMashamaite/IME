@@ -51,3 +51,11 @@ bool eraseIn(std::vector<T>& vector, const U& element) {
     }
     return false;
 }
+
+template<typename ...Args>
+int addEventListener(EventEmitter& emitter, const std::string& name, const Callback<Args...>& callback, bool oneTime) {
+    if (oneTime)
+        return emitter.addOnceEventListener(name, callback);
+    else
+        return emitter.addEventListener(name, callback);
+}

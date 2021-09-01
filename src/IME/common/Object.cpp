@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/common/Object.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime {
     namespace {
@@ -69,24 +70,15 @@ namespace ime {
     }
 
     int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(property + "Change", callback);
-
-        return eventEmitter_.on(property + "Change", callback);
+        return utility::addEventListener(eventEmitter_, property + "Change", callback, oneTime);
     }
 
     int Object::onPropertyChange(const Callback<Property> &callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener("propertyChange", callback);
-
-        return eventEmitter_.on("propertyChange", callback);
+        return utility::addEventListener(eventEmitter_, "propertyChange", callback, oneTime);
     }
 
     int Object::onEvent(const std::string &event, const Callback<> &callback, bool oneTime) {
-        if (oneTime)
-            return eventEmitter_.addOnceEventListener(event, callback);
-        else
-            return eventEmitter_.on(event, callback);
+        return utility::addEventListener(eventEmitter_, event, callback, oneTime);
     }
 
     bool Object::unsubscribe(const std::string &event, int id) {
