@@ -153,8 +153,12 @@ namespace ime::ui {
     }
 
     void ProgressBar::initEvents() {
-        pimpl_->progressBar_->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
+        pimpl_->progressBar_->onValueChange([this](unsigned int value) {
+            emit("valueChange", value);
+        });
+
+        pimpl_->progressBar_->onFull([this] {
+            emit("full");
         });
     }
 
