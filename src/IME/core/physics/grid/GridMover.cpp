@@ -152,10 +152,6 @@ namespace ime {
         return isMoveFrozen_;
     }
 
-    Index GridMover::getTargetTileIndex() const {
-        return targetTile_->getIndex();
-    }
-
     Index GridMover::getCurrentTileIndex() const {
         return targetTile_->getIndex();
     }

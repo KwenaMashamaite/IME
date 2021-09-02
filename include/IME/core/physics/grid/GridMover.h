@@ -254,20 +254,6 @@ namespace ime {
         bool isMovementFrozen() const;
 
         /**
-         * @deprecated Since v2.2.0 and will be removed in v2.3.0. Use
-         *             ime::GridMover::getCurrentTileIndex instead
-         *
-         * @brief Get the index of the adjacent tile the target is trying to reach
-         * @return The index of the adjacent tile the target is trying to reach
-         *
-         * If the target it not moving towards any tiles, this function
-         * will return the index of the tile currently occupied by the
-         * target
-         */
-         [[deprecated("Use 'ime::Index getCurrentTileIndex() const' instead.")]]
-        virtual Index getTargetTileIndex() const;
-
-        /**
          * @brief Get the index of the tile currently occupied by the target
          * @return The position of the tile currently occupied by the target
          *         in tiles

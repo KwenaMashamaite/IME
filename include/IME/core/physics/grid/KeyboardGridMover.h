@@ -90,24 +90,6 @@ namespace ime {
         MovementTrigger getMovementTrigger() const;
 
         /**
-         * @deprecated Since v2.2.0. Use ime::KeyboardGridMover::setKeys(const TriggerKeys&) instead
-         * @brief Set the keys to move the target in all four directions
-         * @param leftKey Key to move target left on trigger
-         * @param rightKey Key to move target right on trigger
-         * @param upKey Key to move target up on trigger
-         * @param downKey Key to move target down on trigger
-         *
-         * In addition to setting the keys, the movement trigger must be set.
-         * The default keys are as follows:
-         *
-         * A = Left, W = Up, S = Down and D = Right
-         *
-         * @see setMovementTrigger
-         */
-         [[deprecated("Use 'void ime::KeyboardGridMover::setKeys(const TriggerKeys&)' instead.")]]
-        void setKeys(Key leftKey, Key rightKey, Key upKey, Key downKey);
-
-        /**
          * @brief Set the keys to move the target
          * @param triggerKeys The keys to set
          *

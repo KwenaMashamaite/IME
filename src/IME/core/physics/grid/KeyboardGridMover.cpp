@@ -28,7 +28,8 @@
 namespace ime {
     KeyboardGridMover::KeyboardGridMover(TileMap &tileMap, GameObject* target) :
         GridMover(Type::KeyboardControlled, tileMap, target),
-        trigger_(MovementTrigger::None), onTriggerHandlerId_{-1}
+        trigger_(MovementTrigger::None), onTriggerHandlerId_{-1},
+        triggerKeys_{Key::A, Key::D, Key::W, Key::S}
     {
 
         // Invoke internal event handlers first before raising event externally
@@ -43,7 +44,6 @@ namespace ime {
         });
 
         setMovementTrigger(MovementTrigger::OnKeyDown);
-        setKeys(TriggerKeys{Key::A, Key::D, Key::W, Key::S});
 
         // Register subsequent event handlers as external
         setHandlerIntakeAsInternal(false);
@@ -65,16 +65,6 @@ namespace ime {
 
     MovementTrigger KeyboardGridMover::getMovementTrigger() const {
         return trigger_;
-    }
-
-    void KeyboardGridMover::setKeys(input::Keyboard::Key leftKey,
-        input::Keyboard::Key rightKey, input::Keyboard::Key upKey,
-        input::Keyboard::Key downKey)
-    {
-        triggerKeys_.leftKey = leftKey;
-        triggerKeys_.rightKey = rightKey;
-        triggerKeys_.upKey = upKey;
-        triggerKeys_.downKey = downKey;
     }
 
     void KeyboardGridMover::setKeys(const TriggerKeys &triggerKeys) {

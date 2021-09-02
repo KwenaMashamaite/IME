@@ -36,7 +36,6 @@ namespace ime {
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
         renderLayers_{renderLayers},
-        sprites_{renderLayers_},
         physicsSim_{nullptr}
     {
         invalidTile_.setIndex({-1, -1});
@@ -160,16 +159,6 @@ namespace ime {
         }
     }
 
-    void TileMap::setTileset(const std::string& name, const std::string &filename) {
-        ResourceManager::getInstance()->loadFromFile(ResourceType::Texture, filename);
-        tilesets_.insert({name, filename});
-    }
-
-    void TileMap::setCurrentTileset(const std::string &name) {
-        if (tilesets_.find(name) != tilesets_.end())
-            tileSet_ = tilesets_.at(name);
-    }
-
     Vector2f TileMap::getPosition() const {
         return mapPos_;
     }
@@ -208,13 +197,6 @@ namespace ime {
                 renderTarget.draw(tile);
             });
         }
-    }
-
-    void TileMap::addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder, const std::string &renderLayer) {
-        IME_ASSERT(sprite, "Sprite cannot be a nullptr")
-        renderLayers_.add(*sprite, renderOrder, renderLayer);
-        sprite->setPosition(getTile(index).getWorldCentre());
-        sprites_.add(std::move(sprite));
     }
 
     void TileMap::setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider) {
@@ -338,10 +320,8 @@ namespace ime {
         return 0;
     }
 
-    void TileMap::update(Time deltaTime) {
-        sprites_.forEach([&deltaTime](Sprite* sprite) {
-            sprite->updateAnimation(deltaTime);
-        });
+    void TileMap::update(Time) {
+
     }
 
     bool TileMap::removeChildFromTile(const Tile& tile, const GameObject* child) {
@@ -439,30 +419,6 @@ namespace ime {
 
     RenderLayerContainer &TileMap::renderLayers() {
         return renderLayers_;
-    }
-
-    void TileMap::textureTile(const Index& index, const UIntRect& rect) {
-        IME_ASSERT(!tilesets_.empty(), "Cannot texture tile with an empty tileset, set tileset to be used first");
-        if (isIndexValid(index)) {
-            auto sprite = Sprite(tileSet_);
-            sprite.setTextureRect(rect.left, rect.top, rect.width, rect.height);
-            // @TODO add sprite to textures - Dont know the render layer to add it to
-        }
-    }
-
-    void TileMap::textureTilesById(char id, const UIntRect& rect) {
-        forEachTile([id, &rect, this](const Tile& tile) {
-            if (tile.getId() == id)
-                textureTile(tile.getIndex(), rect);
-        });
-    }
-
-    void TileMap::textureTilesById(char id, const Sprite &sprite) {
-        forEachTile([&sprite, id](const Tile& tile) {
-            if (tile.getId() == id) {
-                //addSprite(sprite, tile.getIndex()); @TODO fix - dont know the layer to put it in
-            }
-        });
     }
 
     void TileMap::forEachTile(const Callback<const Tile&>& callback) const {

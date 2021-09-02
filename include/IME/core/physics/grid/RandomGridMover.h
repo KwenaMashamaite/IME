@@ -76,35 +76,6 @@ namespace ime {
         void stopMovement();
 
         /**
-         * @deprecated Since v2.2.0. The target can now move out of a dead-end
-         *             by default.
-         *
-         * @brief Enable or disable smart random movement
-         * @param enable True to enable or false to disable
-         *
-         * In smart mode, the target can get itself out of a dead end. As a
-         * result the no reversing direction rule is overridden. Note for
-         * large grids or grids that have a lot of accessible tiles, smart
-         * mode may have an impact on performance
-         *
-         * @note In smart mode, the target cannot move diagonally
-         *
-         * By default smart mode is disabled
-         */
-         [[deprecated("It will be removed in v2.3.0.")]]
-        void setSmartMoveEnable(bool enable) {IME_UNUSED(enable);}
-
-        /**
-         * @deprecated Since v2.2.0
-         * @brief Check if smart mode is enabled or not
-         * @return True if enabled, otherwise false
-         *
-         * @see setSmartMoveEnable
-         */
-        [[deprecated("It will be removed in v2.3.0.")]]
-        bool isSmartMoveEnabled() const {return true;}
-
-        /**
          * @brief Destructor
          */
         ~RandomGridMover() override;

@@ -115,33 +115,6 @@ namespace ime {
         bool isIndexValid(const Index &index) const;
 
         /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Set the image to be used as the tileset
-         * @param name Name of the tileset
-         * @param filename Filename of the tileset image
-         * @throws FileNotFound If the tileset cannot be loaded by the asset
-         *        manager
-         */
-         [[deprecated("Use 'void addTileset(const std::string& name, const SpriteSheet& tileset)' instead.")]]
-        void setTileset(const std::string& name, const std::string& filename);
-
-        /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Set the current tileset
-         * @param name Name of the tileset
-         *
-         * All tileset related operations are performed on the current tileset.
-         * In order to tile the map from different tileset, the current tileset
-         * must be alternated
-         */
-         [[deprecated("Use 'RenderLayerContainer ime::Scene::renderLayers()' instead.")]]
-        void setCurrentTileset(const std::string& name);
-
-        /**
          * @brief Construct a tilemap
          * @param id The id of each tile
          * @param size The size of the tilemap in tiles
@@ -416,55 +389,6 @@ namespace ime {
         RenderLayerContainer& renderLayers();
 
         /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Texture a tile at given index
-         * @param index Index of the tile to apply a texture to
-         * @param rect Texture to apply
-         *
-         * The current tileset image will be used to texture the tile.
-         * The @a rect defines the sub-rectangle of the tileset to use
-         * for texturing the tile
-         */
-        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
-        void textureTile(const Index& index, const UIntRect& rect);
-
-        /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Apply a texture to all tiles with a certain id
-         * @param id Id of the tile to apply texture to
-         * @param rect Texture to apply
-         *
-         * The current tileset image will be used to texture the tile.
-         * The @a rect defines the sub-rectangle of the tileset to use
-         * for texturing the tile. The image will taken as is from the
-         * tileset
-         *
-         * @see textureTilesById(char, const Sprite&)
-         */
-        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
-        void textureTilesById(char id, const UIntRect& rect);
-
-        /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Apply a texture to all tiles with a certain id
-         * @param id Id of the tile to apply texture to
-         * @param sprite Texture to apply
-         *
-         * The texture will be applied as is (i.e the properties of the sprite
-         * object (scaling, rotation, origin etc..) will no be altered. This
-         * function is useful if the texture from the tileset must be transformed
-         * first (scaled, rotated, etc...) before its applied to the tilemap
-         */
-        [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
-        void textureTilesById(char id, const Sprite& sprite);
-
-        /**
          * @internal
          * @brief Render tilemap on a render target
          * @param renderTarget Target to render tilemap on
@@ -477,27 +401,6 @@ namespace ime {
          * should never be called outside of IME
          */
         void draw(priv::RenderTarget &renderTarget) const;
-
-        /**
-         * @deprecated Since v2.2.0, will be removed in v2.3.0. Use
-         *             ime::Scene::renderLayers instead
-         *
-         * @brief Add a sprite to the tilemap
-         * @param sprite The sprite to be added to the tilemap
-         * @param index The index of the tile to add the sprite at
-         * @param renderOrder The render order of the sprite in the layer
-         * @param renderLayer The render layer to add the sprite to
-         *
-         * If @a renderLayer cannot be found, then sprite will be added to
-         * the "default" layer. If the default layer cannot be found then
-         * the behaviour is undefined. A tilemap without a "default" layer
-         * is undefined behavior
-         *
-         * Note that the sprite is added at the centre of the the tile
-         */
-         [[deprecated("Use 'ime::Scene::renderLayers' instead.")]]
-        void addSprite(Sprite::Ptr sprite, const Index& index, int renderOrder = 0,
-            const std::string& renderLayer = "default");
 
         /**
          * @brief Add an entity to the tilemap
@@ -812,16 +715,13 @@ namespace ime {
         unsigned int numOfRows_;             //!< The width of the tilemap in tiles
         unsigned int numOfColms_;            //!< The height of the tilemap in tiles
         Map mapData_;                        //!< Map data used to identify different tiles
-        std::string tileSet_;                //!< Tileset the visual grid is constructed from
         Tile invalidTile_;                   //!< Tile returned when an invalid index is provided
         TileMapRenderer renderer_;           //!< Determines the look of the grid
         RenderLayerContainer& renderLayers_; //!< Render layers for this scene
-        SpriteContainer sprites_;            //!< Stores sprites that belong to the tilemap
         RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
 
         std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
-        std::unordered_map<std::string, std::string> tilesets_;        //!< Tilesets container
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
         PhysicsWorld* physicsSim_;                                     //!< The physics simulation
 

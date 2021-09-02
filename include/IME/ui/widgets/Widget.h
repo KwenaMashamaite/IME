@@ -700,11 +700,6 @@ namespace ime {
     } // namespace ui
 
     /**
-     * @deprecated Since v2.2.0, use ime::ui::AnimationType instead
-     */
-    using ShowAnimationType [[deprecated("Use 'ime::ui::AnimationType' instead.")]] = ui::AnimationType;
-
-    /**
      * @brief Bind to the x position of a widget
      * @param widget Widget to bind to
      * @return The bound position
