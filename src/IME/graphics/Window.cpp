@@ -134,6 +134,8 @@ namespace ime {
     void Window::setFrameRateLimit(unsigned int limit) {
         if (frameRateLimit_ == limit)
             return;
+        else if (limit == 0)
+            throw InvalidArgument("The frame rate limit of ime::Window must be greater than 0");
 
         frameRateLimit_ = limit;
         renderTarget_.getImpl()->getSFMLWindow().setFramerateLimit(limit);
