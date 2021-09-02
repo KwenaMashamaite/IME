@@ -114,12 +114,13 @@ namespace ime {
 
         auto configEntry = std::string();
         auto prefDescription = std::string();
-        while (std::getline(configurations, configEntry)) {
-            static auto errorMessage = [&](const std::string& errorMsg) {
-                return "The entry \"" + configEntry + "\" in \"" + filename
-                       + "\" is invalid because \"" + errorMsg + "\"";
-            };
 
+        auto errorMessage = [&](const std::string& errorMsg) {
+            return "The entry \"" + configEntry + "\" in \"" + filename
+                   + "\" is invalid because \"" + errorMsg + "\"";
+        };
+
+        while (std::getline(configurations, configEntry)) {
             // Skip lines that are empty or begin with a comment or whitespaces
             if (configEntry.empty() || configEntry[0] == '/' || configEntry[0] == ' ')
                 continue;

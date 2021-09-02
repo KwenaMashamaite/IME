@@ -213,7 +213,6 @@ namespace ime::priv {
 
         static auto update = [](Scene* scene, Time dt) {
             scene->timerManager_.preUpdate();
-            scene->timerManager_.update(dt * scene->getTimescale());
             scene->audioManager_.removePlayedAudio();
             scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
         };
@@ -224,14 +223,20 @@ namespace ime::priv {
             update(prevScene_, deltaTime);
     }
 
-    void SceneManager::updateScene(Time deltaTime, Scene* scene, bool fixedUpdate) {
+    void SceneManager::updateScene(const Time& deltaTime, Scene* scene, bool fixedUpdate) {
         if (!(!scenes_.empty() && scenes_.top()->isEntered()))
             return;
 
-        // Update gui
-        scene->guiContainer_.update(deltaTime);
+        if (!fixedUpdate) {
+            scene->timerManager_.update(deltaTime * scene->getTimescale());
+            scene->guiContainer_.update(deltaTime);
+        }
 
-        // Update physics simulation
+        updatePhysicsWorld(scene, deltaTime, fixedUpdate);
+        updateExternalScene(scene, deltaTime, fixedUpdate);
+    }
+
+    void SceneManager::updatePhysicsWorld(Scene *scene, const Time &deltaTime, bool fixedUpdate) {
         if (scene->hasPhysicsSim_) {
             scene->internalEmitter_.emit("preStep", deltaTime * scene->getTimescale());
 
@@ -246,8 +251,9 @@ namespace ime::priv {
 
             scene->internalEmitter_.emit("postStep", deltaTime * scene->getTimescale());
         }
+    }
 
-        // Update user scene
+    void SceneManager::updateExternalScene(Scene* scene, const Time& deltaTime, bool fixedUpdate) {
         if (fixedUpdate) {
             scene->gridMovers().update(deltaTime * scene->getTimescale());
             scene->fixedUpdate(deltaTime * scene->getTimescale());

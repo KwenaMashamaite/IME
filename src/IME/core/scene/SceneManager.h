@@ -218,7 +218,23 @@ namespace ime {
              * @param deltaTime Time passed since last update
              * @param fixedUpdate True if it's a fixed update, otherwise false
              */
-            void updateScene(Time deltaTime, Scene* scene, bool fixedUpdate);
+            void updateScene(const Time& deltaTime, Scene* scene, bool fixedUpdate);
+
+            /**
+             * @brief Update external time components of a scene
+             * @param deltaTime Time passed since last update
+             * @param scene The scene to be updated
+             * @param fixedUpdate True if it's a fixed update, otherwise false
+             */
+            void updateExternalScene(Scene* scene, const Time& deltaTime, bool fixedUpdate);
+
+            /**
+             * @brief Update a scenes physics world
+             * @param deltaTime Time passed since last update
+             * @param scene The scene to be updated
+             * @param fixedUpdate True if it's a fixed update, otherwise false
+             */
+            void updatePhysicsWorld(Scene* scene, const Time& deltaTime, bool fixedUpdate);
 
         private:
             std::stack<ScenePtr> scenes_; //!< Scenes container
