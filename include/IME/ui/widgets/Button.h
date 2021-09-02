@@ -34,7 +34,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Widget that can display text perform actions
+         * @brief A widget that performs an action when clicked with the mouse
          */
         class IME_API Button : public ClickableWidget {
         public:

@@ -34,7 +34,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A widget which acts as a container for Tabs widget
+         * @brief A container widget for a Tabs widget
          *
          * This widget can hold multiple panels which are displayed
          * one panel at a time. The widget uses Tabs to switch

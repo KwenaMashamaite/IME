@@ -32,7 +32,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A spin control widget
+         * @brief A widget that can be used to select/adjust a value using
+         *        the mouse by clicking up or down on it
          */
         class IME_API SpinControl : public Widget {
         public:

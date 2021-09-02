@@ -35,6 +35,9 @@ namespace ime {
     namespace ui {
         /**
          * @brief Widget that displays a single or multiple lines of text
+         *
+         * Note that this widget does not generate any interaction events
+         * such as click events
          */
         class IME_API Label : public Widget {
         public:

@@ -32,7 +32,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Abstract base class for widgets that can store other
+         * @brief An Abstract Base Class for widgets that can store other
          *        widgets in them
          */
         class IME_API WidgetContainer : public Widget {

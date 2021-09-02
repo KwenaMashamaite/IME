@@ -81,7 +81,7 @@ namespace ime {
         };
 
         /**
-         * @brief Abstract base class for Graphical User Interface (GUI) elements
+         * @brief An Abstract Base Class for Graphical User Interface (GUI) elements
          */
         class IME_API Widget : public ITransformable {
         public:

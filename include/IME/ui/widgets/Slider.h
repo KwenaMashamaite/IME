@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Slider widget
+         * @brief A widget that can be used to select a value within a range
+         *        using the mouse
          */
         class IME_API Slider : public Widget {
         public:

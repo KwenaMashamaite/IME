@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Widget for displaying progress
+         * @brief A widget that can be used to graphically visualize the
+         *        progress of an operation
          */
         class IME_API ProgressBar : public ClickableWidget {
         public:

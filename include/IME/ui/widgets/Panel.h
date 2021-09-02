@@ -33,8 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A widget container that has a background colour and
-         *        optional borders
+         * @brief A rectangular container for other widgets
          */
         class IME_API Panel : public WidgetContainer {
         public:

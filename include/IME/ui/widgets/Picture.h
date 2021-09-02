@@ -33,7 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A widget which displays images
+         * @brief A widget that displays graphic images
          */
         class IME_API Picture : public ClickableWidget {
         public:

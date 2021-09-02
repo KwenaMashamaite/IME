@@ -33,7 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A message box widget
+         * @brief A widget that can be used to display a message to the user
          */
         class IME_API MessageBox : public WidgetContainer {
         public:

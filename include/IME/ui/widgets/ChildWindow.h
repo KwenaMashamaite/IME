@@ -33,9 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A window that can be displayed on top of the another window
-         *
-         * This widget can also contain other widgets
+         * @brief A rectangular window that is launched and contained
+         *        inside of a parent window
          */
         class IME_API ChildWindow : public WidgetContainer {
         public:

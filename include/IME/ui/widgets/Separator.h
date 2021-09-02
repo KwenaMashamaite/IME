@@ -35,7 +35,7 @@ namespace ime {
          * @brief A rectangle that can be used as a line to visually
          *        separate widgets from each other
          *
-         * @note This widget just draws a line. It does not support dragging
+         * This widget just draws a line. It does not support dragging
          * to e.g enlarge or shrink a panel
          */
         class IME_API Separator : public Widget {

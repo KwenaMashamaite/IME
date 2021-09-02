@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Checkbox widget
+         * @brief A widget that can be used to make on/off selection. It toggles
+         *        between checked and unchecked states when clicked with a mouse
          */
         class IME_API CheckBox : public ClickableWidget {
         public:

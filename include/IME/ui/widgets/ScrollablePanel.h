@@ -29,8 +29,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A widget container that has a background colour optional
-         *        borders and is scrollable
+         * @brief A scrollable rectangular container for other widgets
          */
         class IME_API ScrollablePanel : public WidgetContainer {
         public:

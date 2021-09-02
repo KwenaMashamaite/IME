@@ -33,8 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Button widget with an image displayed next to the text (or
-         *        centered in the button without text)
+         * @brief A widget with a bitmap image displayed next to its text that
+         *        can be used to perform an action when clicked with a mouse
          */
         class IME_API BitmapButton : public ClickableWidget {
         public:

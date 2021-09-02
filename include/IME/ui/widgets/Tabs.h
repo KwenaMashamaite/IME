@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A Tabs widget
+         * @brief A widget that can be used to define different tabbed pages
+         *        for the same area of a window
          *
          * This widget can hold multiple tabs. If you want Tabs with
          * panels, checkout the TabsContainer class

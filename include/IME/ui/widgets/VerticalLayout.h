@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A widget container that stacks widgets vertically
+         * @brief A widget container that stores other widgets inside of it
+         *        vertically (Stacked on-top of each other)
          *
          * The widget automatically resizes children to fit the entire
          * size of the container

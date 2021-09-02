@@ -33,7 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief A single line input field
+         * @brief A widget that can capture user input on a keyboard
          */
         class IME_API EditBox : public ClickableWidget {
         public:

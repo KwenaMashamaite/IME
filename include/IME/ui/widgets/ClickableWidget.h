@@ -33,7 +33,7 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Interface for clickable widgets
+         * @brief An Abstract Base Class  for clickable widgets
          */
         class IME_API ClickableWidget : public Widget {
         public:

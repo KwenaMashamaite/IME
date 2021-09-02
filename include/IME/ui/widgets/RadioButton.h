@@ -33,7 +33,8 @@
 namespace ime {
     namespace ui {
         /**
-         * @brief Widget that can toggle between on and off states
+         * @brief A round widget than can be selected or deselected when clicked
+         *        with a mouse
          */
         class IME_API RadioButton : public ClickableWidget {
         public:
