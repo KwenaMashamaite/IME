@@ -29,7 +29,7 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.2.0).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.2.1).
 To use the library you must have a supported (GCC or VC++) C++17 compliant compiler. 
 Available binaries are compiled with `GCC MinGW: 7.3.0, 10.3.0` and `Microsoft Visual C++ 16 2019`
 compilers. This means that in order to use them, you must have the exact compiler on your system. 
@@ -46,7 +46,7 @@ set `IME_DIR`, *CMake* will automatically find the library
 ```cmake
 # Find IME
 set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if IME installed in known location
-find_package(IME 2.2.0 REQUIRED)
+find_package(IME 2.2.1 REQUIRED)
 
 # Link IME
 target_link_libraries (myGame PRIVATE ime)
