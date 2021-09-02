@@ -46,6 +46,8 @@ namespace ime {
          * @param filename The name of the file to load the preferences from
          * @throws FileNotFound If @a filename cannot be opened for reading
          *
+         * @note All current data is destroyed on subsequent function calls
+         *
          * @see save
          */
         void load(const std::string& filename);

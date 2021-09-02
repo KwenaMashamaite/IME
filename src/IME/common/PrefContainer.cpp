@@ -107,6 +107,8 @@ namespace ime {
 
     //------------------------ PrefContainer class --------------------------//
     void PrefContainer::load(const std::string &filename) {
+        prefs_.clear();
+
         auto properties = PrefContainer();
         auto configurations = std::stringstream();
         utility::DiskFileReader().readFileInto(filename, configurations);
