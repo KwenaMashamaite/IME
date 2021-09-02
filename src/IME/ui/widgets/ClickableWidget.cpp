@@ -105,33 +105,33 @@ namespace ime::ui {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){
             emit("click");
-            emit("click", mousePos.x, mousePos.y);
+            emit("click", ime::Vector2f{mousePos.x, mousePos.y});
         });
 
         pimpl_->widget_->onMousePress([this](tgui::Vector2f mousePos) {
             emit("leftMouseDown");
-            emit("leftMouseDown", mousePos.x, mousePos.y);
+            emit("leftMouseDown", ime::Vector2f{mousePos.x, mousePos.y});
         });
 
         pimpl_->widget_->onMouseRelease([this](tgui::Vector2f mousePos) {
             emit("leftMouseUp");
-            emit("leftMouseUp", mousePos.x, mousePos.y);
+            emit("leftMouseUp", ime::Vector2f{mousePos.x, mousePos.y});
         });
 
         //Events triggered by right mouse button
         pimpl_->widget_->onRightMousePress([this](tgui::Vector2f mousePos){
             emit("rightMouseDown");
-            emit("rightMouseDown", mousePos.x, mousePos.y);
+            emit("rightMouseDown", ime::Vector2f{mousePos.x, mousePos.y});
         });
 
         pimpl_->widget_->onRightMouseRelease([this](tgui::Vector2f mousePos){
             emit("rightMouseUp");
-            emit("rightMouseUp", mousePos.x, mousePos.y);
+            emit("rightMouseUp", ime::Vector2f{mousePos.x, mousePos.y});
         });
 
         pimpl_->widget_->onRightClick([this](tgui::Vector2f mousePos){
             emit("rightClick");
-            emit("rightClick", mousePos.x, mousePos.y);
+            emit("rightClick", ime::Vector2f{mousePos.x, mousePos.y});
         });
     }
 

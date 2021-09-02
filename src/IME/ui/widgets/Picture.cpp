@@ -148,7 +148,7 @@ namespace ime::ui {
     void Picture::initEvents() {
         pimpl_->picture_->onDoubleClick([this](tgui::Vector2f mousePos) {
             emit("doubleClick");
-            emit("doubleClick", mousePos.x, mousePos.y);
+            emit("doubleClick", Vector2f{mousePos.x, mousePos.y});
         });
     }
 

@@ -68,7 +68,10 @@ namespace ime::ui {
     }
 
     void Widget::setName(const std::string &name) {
-        name_ = name;
+        if (name_ != name) {
+            name_ = name;
+            emit("nameChange", name_);
+        }
     }
 
     const std::string &Widget::getName() const {
@@ -275,11 +278,11 @@ namespace ime::ui {
         });
 
         widget->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
+            emit("sizeChange", ime::Vector2f{newSize.x, newSize.y});
         });
 
         widget->onPositionChange([this](tgui::Vector2f newPos) {
-            emit("positionChange", newPos.x, newPos.y);
+            emit("positionChange", Vector2f{newPos.x, newPos.y});
         });
     }
 

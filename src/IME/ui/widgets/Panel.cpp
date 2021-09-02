@@ -36,12 +36,14 @@ namespace ime::ui {
         setName("Panel" + std::to_string(count++));
         setRenderer(std::make_unique<PanelRenderer>());
         setAsContainer(true);
+        initEvents();
     }
 
     Panel::Panel(const Panel& other) :
         WidgetContainer(other)
     {
         setName("Panel" + std::to_string(count++));
+        initEvents();
     }
 
     Panel::Ptr Panel::create(const std::string& width, const std::string& height) {
@@ -66,5 +68,14 @@ namespace ime::ui {
 
     std::string Panel::getWidgetType() const {
         return "Panel";
+    }
+
+    void Panel::initEvents() {
+        auto widget = static_cast<tgui::Panel*>(std::static_pointer_cast<tgui::Widget>(getInternalPtr()).get());
+
+        widget->onDoubleClick([this](tgui::Vector2f mousePos) {
+            emit("doubleClick");
+            emit("doubleClick", Vector2f{mousePos.x, mousePos.y});
+        });
     }
 }

@@ -204,7 +204,7 @@ namespace ime::ui {
 
     void Tabs::initEvents() {
         pimpl_->tabs_->onTabSelect([this](const tgui::String& item){
-            emit("select", item.toStdString());
+            emit("tabSelect", item.toStdString());
         });
     }
 

@@ -142,7 +142,7 @@ namespace ime::ui {
         });
 
         pimpl_->button_->onChange([this](bool checked) {
-            emit("checkedChanged", checked);
+            emit("valueChange", checked);
         });
     }
 

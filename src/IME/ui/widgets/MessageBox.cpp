@@ -218,7 +218,7 @@ namespace ime::ui {
         });
 
         pimpl_->messageBox_->onClose([this]{
-            emit("closed");
+            emit("close");
         });
 
         pimpl_->messageBox_->onMinimize([this]{
@@ -231,10 +231,6 @@ namespace ime::ui {
 
         pimpl_->messageBox_->onEscapeKeyPress([this]{
             emit("escapeKeyPress");
-        });
-
-        pimpl_->messageBox_->onSizeChange([this](tgui::Vector2f newSize) {
-            emit("sizeChange", newSize.x, newSize.y);
         });
     }
 

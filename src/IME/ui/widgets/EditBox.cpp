@@ -165,10 +165,11 @@ namespace ime::ui {
 
     void EditBox::initEvents() {
         pimpl_->editbox_->onTextChange([this](const tgui::String& text) {
-            emit("textEnter", text.toStdString());
+            emit("textChange", text.toStdString());
         });
 
         pimpl_->editbox_->onReturnKeyPress([this](const tgui::String& text) {
+            emit("enterKeyPress");
             emit("enterKeyPress", text.toStdString());
         });
     }
