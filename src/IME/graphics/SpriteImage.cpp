@@ -26,7 +26,13 @@
 #include "IME/core/resources/ResourceManager.h"
 
 namespace ime {
+    SpriteImage::SpriteImage() = default;
+
     SpriteImage::SpriteImage(const std::string &sourceTexture, UIntRect area) {
+        create(sourceTexture, area);
+    }
+
+    void SpriteImage::create(const std::string &sourceTexture, UIntRect area) {
         relativePos_ = {area.left, area.top};
         texture_ = std::make_shared<Texture>(sourceTexture, area);
     }

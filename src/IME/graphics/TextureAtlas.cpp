@@ -26,6 +26,8 @@
 #include "IME/graphics/Sprite.h"
 
 namespace ime {
+    TextureAtlas::TextureAtlas() = default;
+
     TextureAtlas::TextureAtlas(const std::string &sourceTexture, UIntRect area) :
         SpriteImage(sourceTexture, area)
     {}

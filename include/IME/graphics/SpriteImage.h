@@ -51,6 +51,17 @@ namespace ime {
     class IME_API SpriteImage : public Object {
     public:
         using Ptr = std::shared_ptr<SpriteImage>; //!< A shared sprite pointer
+
+        /**
+         * @brief Default constructor
+         *
+         * @warning This constructor creates an empty sprite image. You must
+         * call create() before using the class, not doing so leads to undefined
+         * behavior
+         *
+         * @see create
+         */
+        SpriteImage();
         
         /**
          * @brief Constructor
@@ -66,6 +77,26 @@ namespace ime {
          * size
          */
         explicit SpriteImage(const std::string& sourceTexture, UIntRect area = {});
+
+        /**
+         * @brief Create the sprite image
+         * @param sourceTexture The filename of the sprite image on the disk
+         * @param area Sub-rectangle to construct sprite image from
+         * @throws FileNotFound If the image could not be found on the disk
+         *
+         * The @a area can be used to construct the sprite image from a
+         * sub-rectangle of the @a sourceTexture. To construct the sprite
+         * image from the whole @a sourceTexture (default), leave the @a area
+         * argument unspecified. If the @a area rectangle crosses the bounds
+         * of the @a sourceTexture, it is adjusted to fit the @a sourceTexture
+         * size
+         *
+         * @note Only use this function if you've previously created an empty
+         * sprite image
+         *
+         * @see SpriteImage()
+         */
+        void create(const std::string& sourceTexture, UIntRect area = {});
 
         /**
          * @brief Copy constructor

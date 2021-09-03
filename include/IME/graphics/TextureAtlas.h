@@ -49,6 +49,16 @@ namespace ime {
         using Frame = UIntRect; //!< A texture atlas image
 
         /**
+         * @brief Default constructor
+         *
+         * @warning You must call ime::SpriteImage::create (inherited) before
+         * using the object, not doing so leads to undefined behaviour
+         *
+         * @see ime::SpriteImage::create
+         */
+        TextureAtlas();
+
+        /**
          * @brief Constructor
          * @param sourceTexture The filename of the sprite image on the disk
          * @param area Sub-rectangle to construct sprite image from

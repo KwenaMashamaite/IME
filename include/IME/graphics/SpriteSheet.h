@@ -55,7 +55,18 @@ namespace ime {
         using Frame = UIntRect; //!< A frame in the spritesheet
 
         /**
-         * @brief Create the spritesheet
+         * @brief Default constructor
+         *
+         * @warning This constructor creates an empty spritesheet, you must
+         * call the create() function before using the class, not doing so
+         * leads to undefined behavior
+         *
+         * @see create
+         */
+        SpriteSheet();
+
+        /**
+         * @brief Constructor
          * @param sourceTexture Filename of the image used by the spritesheet
          * @param frameSize The size of each frame in the source texture
          * @param spacing The space between frames in the source texture
@@ -76,6 +87,35 @@ namespace ime {
          * (The assumption applies for first frames)
          */
         SpriteSheet(const std::string& sourceTexture, Vector2u frameSize,
+            Vector2u spacing = {0, 0}, UIntRect area = {});
+
+        /**
+         * @brief Create the spritesheet
+         * @param sourceTexture Filename of the image used by the spritesheet
+         * @param frameSize The size of each frame in the source texture
+         * @param spacing The space between frames in the source texture
+         * @param area Sub-rectangle to construct spritesheet from
+         * @throws FileNotFount if the the source image cannot be found on the
+         *         disk
+         *
+         * The @a area can be used to construct the spritesheet from a
+         * sub-rectangle of the whole spritesheet image. To construct
+         * the spritesheet from the whole image (default), leave the
+         * @a area argument unspecified. If the @a area rectangle crosses
+         * the bounds of the image, it is adjusted to fit the image size
+         *
+         * @note This class assumes that if the spacing between frames in non-
+         * zero then the frame has spacing on both sides. For example if the
+         * spacing is {1, 0}, it is assumed that each individual frame has a
+         * space of 1 pixel to its left and a space of 1 pixel to its right
+         * (The assumption applies for first frames)
+         *
+         * @note Only use this function if you've previously created an empty
+         * spritesheet
+         *
+         * @see SpriteSheet()
+         */
+        void create(const std::string& sourceTexture, Vector2u frameSize,
             Vector2u spacing = {0, 0}, UIntRect area = {});
 
         /**

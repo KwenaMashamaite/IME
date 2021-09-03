@@ -29,13 +29,23 @@
 #include <cmath>
 
 namespace ime {
+    SpriteSheet::SpriteSheet() = default;
+
     SpriteSheet::SpriteSheet(const std::string &sourceTexture, Vector2u frameSize,
             Vector2u spacing, UIntRect area) :
-        SpriteImage(sourceTexture, area),
-        frameSize_{frameSize},
-        spacing_{spacing}
+        SpriteImage()
+    {
+        create(sourceTexture, frameSize, spacing, area);
+    }
+
+    void SpriteSheet::create(const std::string &sourceTexture, Vector2u frameSize,
+        Vector2u spacing, UIntRect area)
     {
         IME_ASSERT((frameSize.x >= 1 && frameSize.y >= 1), "The minimum size of a Spritesheet frame is 1x1")
+
+        SpriteImage::create(sourceTexture, area);
+        frameSize_ = frameSize;
+        spacing_ = spacing;
 
         //Remove the spacing to get the actual number of columns and rows
         Vector2f numerator{getSize() - spacing_};
@@ -47,7 +57,7 @@ namespace ime {
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
             for (auto j = 0u; j < sizeInFrames_.x; ++j) {
                 frames_.insert({{static_cast<int>(i), static_cast<int>(j)},
-                    {currentPos.x, currentPos.y, frameSize_.x, frameSize_.y}});
+                                {currentPos.x, currentPos.y, frameSize_.x, frameSize_.y}});
                 currentPos.x += frameSize_.x + spacing_.x;
             }
             currentPos.x = spacing_.x;
