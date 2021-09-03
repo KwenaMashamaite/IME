@@ -234,12 +234,14 @@ namespace ime {
     const Tile& TileMap::getTile(const Index &index) const {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
+
         return invalidTile_;
     }
 
     bool TileMap::isCollidable(const Index &index) const {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm].isCollidable();
+
         return false;
     }
 
@@ -270,6 +272,7 @@ namespace ime {
                 if (childList.second[i] == child)
                     return true;
         }
+
         return false;
     }
 
@@ -279,20 +282,28 @@ namespace ime {
                 if (childList.second[i]->getObjectId() == id)
                     return childList.second[i];
         }
+
         return nullptr;
     }
 
     bool TileMap::isTileOccupied(const Tile& tile) const {
-        return !children_.at(tile.getIndex()).empty();
+        if (isIndexValid(tile.getIndex()))
+            return !children_.at(tile.getIndex()).empty();
+
+        return false;
     }
 
     bool TileMap::tileHasVisitors(const Tile &tile) const {
-        return children_.at(tile.getIndex()).size() > 1;
+        if (isIndexValid(tile.getIndex()))
+            return children_.at(tile.getIndex()).size() > 1;
+
+        return false;
     }
 
     GameObject* TileMap::getOccupant(const Tile& tile) {
         if (isTileOccupied(tile))
             return children_[tile.getIndex()].front();
+
         return nullptr;
     }
 
@@ -317,6 +328,7 @@ namespace ime {
     std::size_t TileMap::getNumOfOccupants(const Tile &tile) const {
         if (isTileOccupied(tile))
             return children_.at(tile.getIndex()).size();
+
         return 0;
     }
 
@@ -337,6 +349,7 @@ namespace ime {
                 }
             }
         }
+
         return false;
     }
 
@@ -366,6 +379,7 @@ namespace ime {
     bool TileMap::removeChild(const GameObject* child) {
         if (!child)
             return false;
+
         return removeChildWithId(child->getObjectId());
     }
 
