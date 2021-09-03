@@ -195,6 +195,14 @@ namespace ime {
             Panel* getPanel(int index) const;
 
             /**
+             * @brief Get the a panel with a given name
+             * @param name The name of the panel
+             * @return The panel with the given name if found, otherwise a
+             *         nullptr
+             */
+            Panel* getPanel(const std::string& name);
+
+            /**
              * @brief Get the text of a container
              * @param index Index of the container to get the index of
              * @return The text on the container or an empty string if the index

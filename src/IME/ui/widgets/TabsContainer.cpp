@@ -181,6 +181,17 @@ namespace ime::ui {
         return nullptr;
     }
 
+    Panel* TabsContainer::getPanel(const std::string &name) {
+        auto found = std::find_if(pimpl_->panels_.begin(), pimpl_->panels_.end(), [&name](auto& pair) {
+            return pair.second->getName() == name;
+        });
+
+        if (found != pimpl_->panels_.end())
+            return found->second.get();
+        else
+            return nullptr;
+    }
+
     std::string TabsContainer::getTabText(std::size_t index) const {
         return pimpl_->tabContainer_->getTabText(index).toStdString();
     }
