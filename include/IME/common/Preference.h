@@ -46,11 +46,12 @@ namespace ime {
          * @brief The type of the value in the key-value pair
          */
         enum class Type {
-            Bool,    //!< Boolean type
+            Bool,    //!< bool
             String,  //!< std::string type (NOT "const char*")
-            Int,     //!< Int type
-            Double,  //!< Double type
-            Float    //!< Float type
+            Int,     //!< int
+            UInt,    //!< unsigned int
+            Double,  //!< double
+            Float    //!< float
         };
 
         /**

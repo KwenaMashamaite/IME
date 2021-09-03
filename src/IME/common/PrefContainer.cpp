@@ -46,6 +46,8 @@ namespace ime {
                 return Preference::Type::String;
             else if (type == "INT")
                 return Preference::Type::Int;
+            else if (type == "UINT")
+                return Preference::Type::UInt;
             else if (type == "DOUBLE")
                 return Preference::Type::Double;
             else if (type == "FLOAT")
@@ -59,6 +61,7 @@ namespace ime {
                 case Preference::Type::Bool:    return "BOOL";
                 case Preference::Type::String:  return "STRING";
                 case Preference::Type::Int:     return "INT";
+                case Preference::Type::UInt:    return "UINT";
                 case Preference::Type::Double:  return "DOUBLE";
                 case Preference::Type::Float:   return  "FLOAT";
                 default:
@@ -71,6 +74,7 @@ namespace ime {
                 case Preference::Type::Bool:    return std::to_string(pref.getValue<bool>());
                 case Preference::Type::String:  return pref.getValue<std::string>();
                 case Preference::Type::Int:     return std::to_string(pref.getValue<int>());
+                case Preference::Type::UInt:    return std::to_string(pref.getValue<unsigned int>());
                 case Preference::Type::Double:  return std::to_string(pref.getValue<double>());
                 case Preference::Type::Float:   return std::to_string(pref.getValue<float>());
                 default:
@@ -92,6 +96,9 @@ namespace ime {
                     break;
                 case Preference::Type::Int:
                     preference.setValue(std::stoi(value));
+                    break;
+                case Preference::Type::UInt:
+                    preference.setValue(static_cast<unsigned int>(std::stoul(value)));
                     break;
                 case Preference::Type::Double:
                     preference.setValue(std::stod(value));
@@ -219,6 +226,9 @@ namespace ime {
                 case Preference::Type::Int:
                     property.setValue(preference.getValue<int>());
                     break;
+                case Preference::Type::UInt:
+                    property.setValue(preference.getValue<unsigned int>());
+                    break;
                 case Preference::Type::Double:
                     property.setValue(preference.getValue<double>());
                     break;
@@ -266,14 +276,14 @@ namespace ime {
 // 	    KEY:TYPE=value
 //
 // KEY is the name of a variable, TYPE is the type of
-// the KEY value (Supported types are STRING, BOOL, INT,
-// FLOAT and DOUBLE) and VALUE is the current value of
-// the KEY. The KEY must not contain any whitespaces or
+// the KEY value (Supported types are: STRING, BOOL, INT,
+// UINT, FLOAT and DOUBLE) and VALUE is the current value
+// of the KEY. The KEY must not contain any whitespaces or
 // special characters except underscores. For BOOL types
 // use 1 for true and 0 for false.
 //
 // This file may be edited directly at any time, however
-// changes are not automatically detected
+// changes are not automatically detected by IME
 //
 //###################################################)";
 

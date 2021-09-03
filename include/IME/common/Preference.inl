@@ -49,6 +49,10 @@ void Preference::setValue(T value) {
             if constexpr (!std::is_same_v<int, T>)
                 throwException(getKey(), "int");
             break;
+        case Type::UInt:
+            if constexpr (!std::is_same_v<unsigned int, T>)
+                throwException(getKey(), "unsigned int");
+            break;
         case Type::Double:
             if constexpr (!std::is_same_v<double, T>)
                 throwException(getKey(), "double");
