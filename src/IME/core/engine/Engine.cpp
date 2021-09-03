@@ -298,7 +298,6 @@ namespace ime {
         eventEmitter_.emit("shutdown");
         audioManager_.stopAll();
         audioManager_.removePlayedAudio();
-        window_->close();
         isInitialized_ = false;
         isRunning_ = false;
         popCounter_ = 0;
@@ -319,6 +318,8 @@ namespace ime {
 
         while (!scenesPendingPush_.empty())
             scenesPendingPush_.pop();
+
+        window_->close();
     }
 
     bool Engine::isRunning() const {
