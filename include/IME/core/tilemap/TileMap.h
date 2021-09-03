@@ -548,6 +548,19 @@ namespace ime {
         bool isTileOccupied(const Tile& tile) const;
 
         /**
+         * @brief Check if a tile is occupied or not
+         * @param index The position of the tile to be checked
+         * @return True if the tile is occupied, otherwise false
+         *
+         * A tile is occupied if it has at least one child
+         *
+         * This function returns false if @a index is out of bounds
+         *
+         * @see addChild
+         */
+        bool isTileOccupied(const Index& index) const;
+
+        /**
          * @brief Check if the tile at a specified index has visitors or not
          * @param tile Tile to be checked
          * @return True if the tile has visitors, otherwise false

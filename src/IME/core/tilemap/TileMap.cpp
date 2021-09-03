@@ -293,6 +293,13 @@ namespace ime {
         return false;
     }
 
+    bool TileMap::isTileOccupied(const Index &index) const {
+        if (isIndexValid(index))
+            return !children_.at(index).empty();
+
+        return false;
+    }
+
     bool TileMap::tileHasVisitors(const Tile &tile) const {
         if (isIndexValid(tile.getIndex()))
             return children_.at(tile.getIndex()).size() > 1;
