@@ -221,8 +221,6 @@ namespace ime {
          */
         void removeDestructionHandlers();
 
-        using Object::setTag;
-
     private:
         unsigned int index_;               //!< The index of the layer in the render layer container
         std::string name_;                 //!< The name of the layer
