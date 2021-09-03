@@ -476,6 +476,13 @@ namespace ime {
         const Transform& getTransform() const;
 
         /**
+         * @brief Get the scene the game object belongs to
+         * @return The scene the game object belongs to
+         */
+        Scene& getScene();
+        const Scene& getScene() const;
+
+        /**
          * @brief Reset the origin of the sprite
          *
          * The origin is reset to the local centre of the sprite

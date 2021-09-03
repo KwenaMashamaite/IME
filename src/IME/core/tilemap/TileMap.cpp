@@ -32,7 +32,8 @@
 
 namespace ime {
     TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight,
-            RenderLayerContainer& renderLayers) :
+            RenderLayerContainer& renderLayers, Scene& scene) :
+        scene_{scene},
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
         renderLayers_{renderLayers},
@@ -57,6 +58,14 @@ namespace ime {
 
     void TileMap::setPhysicsSimulation(PhysicsWorld* physicsSimulation) {
         physicsSim_ = physicsSimulation;
+    }
+
+    Scene &TileMap::getScene() {
+        return scene_;
+    }
+
+    const Scene &TileMap::getScene() const {
+        return scene_;
     }
 
     TileMapRenderer &TileMap::getRenderer() {

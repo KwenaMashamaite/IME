@@ -65,13 +65,15 @@ namespace ime {
          * @brief Create an empty tilemap
          * @param tileWidth Width of each tile in the map
          * @param tileHeight height of each tile in the map
+         * @param renderLayers The scenes render layer
+         * @param scene The scene the tilemap belongs to
          *
          * The tile map has the position (0, 0) by default
          *
          * This constructor is intended for internal use only
          */
         TileMap(unsigned int tileWidth, unsigned int tileHeight,
-                RenderLayerContainer& renderLayers);
+                RenderLayerContainer& renderLayers, Scene& scene);
 
         /**
          * @internal
@@ -81,6 +83,13 @@ namespace ime {
          * @warning This function is intended for internal use only
          */
         void setPhysicsSimulation(PhysicsWorld* physicsSimulation);
+
+        /**
+         * @brief Get the scene the tilemap belongs to
+         * @return The scene the tilemap belongs to
+         */
+        Scene& getScene();
+        const Scene& getScene() const;
 
         /**
          * @brief Get the tilemaps renderer
@@ -721,6 +730,7 @@ namespace ime {
         void clearVector(std::vector<GameObject*> &vector);
 
     private:
+        Scene& scene_;                       //!< The scene the tilemap belongs to
         unsigned int tileSpacing_;           //!< Spacing between tiles in all directions
         Vector2u tileSize_;                  //!< The Size of each tile
         Vector2u mapSizeInPixels_;           //!< The Size of the tilemap in pixels

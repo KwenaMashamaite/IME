@@ -258,6 +258,14 @@ namespace ime {
         return transform_;
     }
 
+    Scene &GameObject::getScene() {
+        return scene_;
+    }
+
+    const Scene &GameObject::getScene() const {
+        return scene_;
+    }
+
     void GameObject::resetSpriteOrigin() {
         transform_.setOrigin(sprite_.getLocalBounds().width / 2.0f, sprite_.getLocalBounds().height / 2.0f);
     }
