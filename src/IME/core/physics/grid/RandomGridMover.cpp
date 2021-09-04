@@ -49,6 +49,10 @@ namespace ime {
         setHandlerIntakeAsInternal(false);
     }
 
+    RandomGridMover::Ptr RandomGridMover::create(TileMap &tileMap, GameObject *target) {
+        return std::make_unique<RandomGridMover>(tileMap, target);
+    }
+
     std::string RandomGridMover::getClassName() const {
         return "RandomGridMover";
     }

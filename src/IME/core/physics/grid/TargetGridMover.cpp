@@ -96,6 +96,10 @@ namespace ime {
         setHandlerIntakeAsInternal(false);
     }
 
+    TargetGridMover::Ptr TargetGridMover::create(TileMap &tileMap, GameObject *target) {
+        return std::make_unique<TargetGridMover>(tileMap, target);
+    }
+
     std::string TargetGridMover::getClassName() const {
         return "TargetGridMover";
     }

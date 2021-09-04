@@ -47,6 +47,10 @@ namespace ime {
         setHandlerIntakeAsInternal(false);
     }
 
+    CyclicGridMover::Ptr CyclicGridMover::create(TileMap &tileMap, GameObject *target) {
+        return std::make_unique<CyclicGridMover>(tileMap, target);
+    }
+
     void CyclicGridMover::setCycleDirection(CyclicGridMover::CycleDirection direction) {
         if (direction_ != direction) {
             direction_ = direction;

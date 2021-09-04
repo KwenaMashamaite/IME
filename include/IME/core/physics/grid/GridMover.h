@@ -98,6 +98,22 @@ namespace ime {
         explicit GridMover(TileMap& tilemap, GameObject* gameObject = nullptr);
 
         /**
+         * @brief Create the grid mover
+         * @param tilemap The grid the game object is in
+         * @param gameObject The game object to be controlled by the grid mover
+         * @return The created grid mover
+         *
+         * @warning If @a gameObject is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a gameObject
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
+         */
+        static GridMover::Ptr create(TileMap& tilemap, GameObject* gameObject = nullptr);
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          *

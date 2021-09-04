@@ -57,6 +57,10 @@ namespace ime {
         GridMover(Type::Manual, tilemap, gameObject)
     {}
 
+    GridMover::Ptr GridMover::create(TileMap &tilemap, GameObject *gameObject) {
+        return std::make_unique<GridMover>(tilemap, gameObject);
+    }
+
     std::string GridMover::getClassType() const {
         return "GridMover";
     }

@@ -49,6 +49,10 @@ namespace ime {
         setHandlerIntakeAsInternal(false);
     }
 
+    KeyboardGridMover::Ptr KeyboardGridMover::create(TileMap &tileMap, GameObject *target) {
+        return std::make_unique<KeyboardGridMover>(tileMap, target);
+    }
+
     std::string KeyboardGridMover::getClassName() const {
         return "KeyboardGridMover";
     }

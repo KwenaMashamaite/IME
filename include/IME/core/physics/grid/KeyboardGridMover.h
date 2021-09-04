@@ -62,8 +62,32 @@ namespace ime {
          * @brief Constructor
          * @param tileMap Grid to move target in
          * @param target Target to be moved in the grid
+         *
+         * @warning If @a gameObject is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a gameObject
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
          */
         explicit KeyboardGridMover(TileMap &tileMap, GameObject* target = nullptr);
+
+        /**
+         * @brief Create a KeyboardGridMover
+         * @param tileMap The grid the target is in
+         * @param target The target to be controlled
+         * @return The created grid mover
+         *
+         * @warning If @a gameObject is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a gameObject
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
+         */
+        static KeyboardGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

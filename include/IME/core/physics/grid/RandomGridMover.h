@@ -45,8 +45,32 @@ namespace ime {
          * @brief Constructor
          * @param tileMap Grid to move target in
          * @param target Game object to be moved in the grid
+         *
+         * @warning If @a target is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a target
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
          */
         explicit RandomGridMover(TileMap &tileMap, GameObject* target = nullptr);
+
+        /**
+         * @brief Create a RandomGridMover
+         * @param tileMap The grid to move the target in
+         * @param target Game object to be moved in the grid
+         * @return The created grid mover
+         *
+         * @warning If @a target is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a target
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
+         */
+        static RandomGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

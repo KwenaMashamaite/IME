@@ -47,6 +47,8 @@ namespace ime {
      */
     class IME_API CyclicGridMover : public GridMover {
     public:
+        using Ptr = std::unique_ptr<CyclicGridMover>; //!< Unique grid mover pointer
+
         /**
          * @brief The targets direction of movement
          */
@@ -59,8 +61,32 @@ namespace ime {
          * @brief Constructor
          * @param tilemap The grid to move the target in
          * @param target The target to be moved in the grid
+         *
+         * @warning If @a target is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a target
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
          */
         explicit CyclicGridMover(TileMap& tilemap, GameObject* target = nullptr);
+
+        /**
+         * @brief Create a CyclicGridMover
+         * @param tilemap The grid to move the target in
+         * @param target The target to be moved in the grid
+         * @return The created grid mover
+         *
+         * @warning If @a target is left as @a nullptr, then setTarget()
+         * must be called before the grid mover is used. If the @a target
+         * is given, it must be in the grid prior to constructor call and it
+         * must not have a RigidBody attached to it, otherwise undefined
+         * behavior
+         *
+         * @see setTarget
+         */
+        static CyclicGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
 
         /**
          * @brief Get the name of this class
