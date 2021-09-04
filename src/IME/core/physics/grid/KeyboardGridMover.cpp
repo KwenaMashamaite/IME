@@ -28,7 +28,8 @@
 namespace ime {
     KeyboardGridMover::KeyboardGridMover(TileMap &tileMap, GameObject* target) :
         GridMover(Type::KeyboardControlled, tileMap, target),
-        trigger_(MovementTrigger::None), onTriggerHandlerId_{-1},
+        trigger_(MovementTrigger::None),
+        onTriggerHandlerId_{-1, -1},
         triggerKeys_{Key::A, Key::D, Key::W, Key::S}
     {
 
@@ -59,10 +60,10 @@ namespace ime {
 
     void KeyboardGridMover::setMovementTrigger(MovementTrigger trigger) {
         if (trigger_ != trigger) {
-            trigger_ = trigger;
             removeInputEventListeners();
-            attachInputEventListeners();
 
+            trigger_ = trigger;
+            attachInputEventListeners();
             emitChange(Property{"movementTrigger", trigger});
         }
     }
@@ -103,23 +104,39 @@ namespace ime {
             }
         };
 
-        if (trigger_ == MovementTrigger::OnKeyDown)
-            onTriggerHandlerId_ = keyboard_.onKeyDown(moveEntity);
+        if (trigger_ == MovementTrigger::OnKeyDownHeld) {
+            onTriggerHandlerId_.first = keyboard_.onKeyDown(moveEntity);
+            onTriggerHandlerId_.second = keyboard_.onKeyHeld(moveEntity);
+        } else if (trigger_ == MovementTrigger::OnKeyDown)
+            onTriggerHandlerId_.first = keyboard_.onKeyDown(moveEntity);
         else if (trigger_ == MovementTrigger::OnKeyUp)
-            onTriggerHandlerId_ = keyboard_.onKeyUp(moveEntity);
+            onTriggerHandlerId_.first = keyboard_.onKeyUp(moveEntity);
         else if (trigger_ == MovementTrigger::OnKeyHeld)
-            onTriggerHandlerId_ = keyboard_.onKeyHeld(moveEntity);
+            onTriggerHandlerId_.first = keyboard_.onKeyHeld(moveEntity);
     }
 
     void KeyboardGridMover::removeInputEventListeners() {
-        if (onTriggerHandlerId_ != -1) {
-            if (!keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_)
-                && !keyboard_.unsubscribe(KeyboardEvent::KeyUp, onTriggerHandlerId_))
-            {
-                keyboard_.unsubscribe(KeyboardEvent::KeyHeld, onTriggerHandlerId_);
+        if (onTriggerHandlerId_.first != -1) {
+            switch (trigger_) {
+                case MovementTrigger::None:
+                    IME_ASSERT(false, "Internal Error: KeyboardGridMover event handler subscribed with no movement trigger")
+                    break;
+                case MovementTrigger::OnKeyDown:
+                    keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_.first);
+                    break;
+                case MovementTrigger::OnKeyUp:
+                    keyboard_.unsubscribe(KeyboardEvent::KeyUp, onTriggerHandlerId_.first);
+                    break;
+                case MovementTrigger::OnKeyHeld:
+                    keyboard_.unsubscribe(KeyboardEvent::KeyHeld, onTriggerHandlerId_.first);
+                    break;
+                case MovementTrigger::OnKeyDownHeld:
+                    keyboard_.unsubscribe(KeyboardEvent::KeyDown, onTriggerHandlerId_.first);
+                    keyboard_.unsubscribe(KeyboardEvent::KeyHeld, onTriggerHandlerId_.second);
+                    break;
             }
 
-            onTriggerHandlerId_ = -1;
+            onTriggerHandlerId_ = std::pair{-1, -1};
         }
     }
 

@@ -33,10 +33,11 @@ namespace ime {
      * @brief Defines how the movement is triggered based on the state of a key
      */
     enum class MovementTrigger {
-        None,      //!< Does not trigger any movement
-        OnKeyDown, //!< Only triggers movement when a key goes down
-        OnKeyUp,   //!< Only triggers movement when a key is released
-        OnKeyHeld  //!< Continues to trigger movement while key is held down
+        None,          //!< Does not trigger any movement
+        OnKeyDown,     //!< Only triggers movement when a key goes down
+        OnKeyUp,       //!< Only triggers movement when a key is released
+        OnKeyHeld,     //!< Continues to trigger movement while key is held down
+        OnKeyDownHeld  //!< Triggers movement when a key goes down and continues to trigger movement while key is held down
     };
 
     /**
@@ -183,12 +184,12 @@ namespace ime {
         void removeInputEventListeners();
 
     private:
-        MovementTrigger trigger_;           //!< Key event that triggers target movement
-        int onTriggerHandlerId_;            //!< Movement trigger Handler id
-        input::Keyboard keyboard_;          //!< Detects keyboard inputs
-        std::pair<bool, Direction> newDir_; //!< A flag indicating whether or not the direction was changed while target was moving
-        TriggerKeys triggerKeys_;           //!< Keyboard keys that control the actors direction of motion
-        InputCallback onInput_;             //!< A function called when the grid mover receives input
+        MovementTrigger trigger_;                //!< Key event that triggers target movement
+        std::pair<int, int> onTriggerHandlerId_; //!< Movement trigger Handler id
+        input::Keyboard keyboard_;               //!< Detects keyboard inputs
+        std::pair<bool, Direction> newDir_;      //!< A flag indicating whether or not the direction was changed while target was moving
+        TriggerKeys triggerKeys_;                //!< Keyboard keys that control the actors direction of motion
+        InputCallback onInput_;                  //!< A function called when the grid mover receives input
     };
 
     /**
