@@ -8,16 +8,17 @@ ime_set_option(CMAKE_BUILD_TYPE Release STRING "Choose the type of build (Debug 
 cmake_minimum_required(VERSION 3.17)
 
 # Project name, version and description
+
 project(IME VERSION 2.3.0 DESCRIPTION "A 2D state-based game engine using modern C++")
 
 # IME uses the paths from the cmake GNUInstallDirs module as defaults
 # (https://cmake.org/cmake/help/v3.0/module/GNUInstallDirs.html)
 include(GNUInstallDirs)
 
-# Install VC++ runtime binaries
+# Install ntime binaries
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR}/Runtime)
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT IME_Runtime)
-include(InstallRequiredSystemLibraries)
+includnstlRequiredSystemLibraries)
 
 # Include the configuration file
 include(${PROJECT_SOURCE_DIR}/cmake/Config.cmake)
