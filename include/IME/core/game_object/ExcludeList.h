@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_COLLISIONEXCLUDELIST_H
-#define IME_COLLISIONEXCLUDELIST_H
+#ifndef IME_EXCLUDELIST_H
+#define IME_EXCLUDELIST_H
 
 #include "IME/Config.h"
 #include <string>
@@ -36,7 +36,7 @@ namespace ime {
      * This class allows a GameObject to select which other game objects
      * it should not collide with
      */
-    class IME_API CollisionExcludeList {
+    class IME_API ExcludeList {
     public:
         /**
          * @brief Add a group to the list
@@ -75,4 +75,4 @@ namespace ime {
     };
 }
 
-#endif //IME_COLLISIONEXCLUDELIST_H
+#endif //IME_EXCLUDELIST_H

@@ -163,12 +163,20 @@ namespace ime {
         return collisionGroup_;
     }
 
-    CollisionExcludeList &GameObject::getCollisionExcludeList() {
+    ExcludeList &GameObject::getCollisionExcludeList() {
         return excludeList_;
     }
 
-    const CollisionExcludeList &GameObject::getCollisionExcludeList() const {
+    const ExcludeList &GameObject::getCollisionExcludeList() const {
         return excludeList_;
+    }
+
+    ExcludeList &GameObject::getObstacleCollisionFilter() {
+        return obstacleColFilter_;
+    }
+
+    const ExcludeList &GameObject::getObstacleCollisionFilter() const {
+        return obstacleColFilter_;
     }
 
     PropertyContainer& GameObject::getUserData() {

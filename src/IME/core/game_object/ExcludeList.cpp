@@ -22,26 +22,26 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/game_object/CollisionExcludeList.h"
+#include "IME/core/game_object/ExcludeList.h"
 
 namespace ime {
-    void CollisionExcludeList::add(const std::string &group) {
+    void ExcludeList::add(const std::string &group) {
         list_.insert(group);
     }
 
-    bool CollisionExcludeList::remove(const std::string &group) {
+    bool ExcludeList::remove(const std::string &group) {
         return list_.erase(group);
     }
 
-    bool CollisionExcludeList::contains(const std::string &group) {
+    bool ExcludeList::contains(const std::string &group) {
         return list_.find(group) != list_.end();
     }
 
-    std::size_t CollisionExcludeList::getCount() const {
+    std::size_t ExcludeList::getCount() const {
         return list_.size();
     }
 
-    void CollisionExcludeList::clear() {
+    void ExcludeList::clear() {
         list_.clear();
     }
 }

@@ -210,9 +210,14 @@ namespace ime {
             if (!adjacentTile.isCollidable()) {
                 GameObject* obstacle = getObstacleInTile(adjacentTile);
 
-                if (obstacle && canCollide(obstacle))
+                if (obstacle && canCollide(obstacle)) {
+                    // Objects in this list generate a collision event with an obstacle without being blocked
+                    // from occupying the same tile as the obstacle
+                    if (obstacle->getObstacleCollisionFilter().contains(target_->getCollisionGroup()))
+                        return {false, nullptr};
+
                     return {true, obstacle};
-                else
+                } else
                     return {false, nullptr};
             }
         }
@@ -349,6 +354,11 @@ namespace ime {
         GameObject* obstacle = getObstacleInTile(*targetTile_);
 
         if (obstacle && canCollide(obstacle)) {
+            // Objects in this list generate a collision event with an obstacle without being blocked
+            // from occupying the same tile as the obstacle
+            if (obstacle->getObstacleCollisionFilter().contains(target_->getCollisionGroup()))
+                return false;
+
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
             internalEmitter_.emit("gameObjectCollision", target_, obstacle);

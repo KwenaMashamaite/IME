@@ -32,7 +32,7 @@
 #include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
-#include "IME/core/game_object/CollisionExcludeList.h"
+#include "IME/core/game_object/ExcludeList.h"
 #include <stack>
 
 namespace ime {
@@ -259,9 +259,33 @@ namespace ime {
          * @note This function is only applicable to grid-based physics
          * (see ime::GridMover). For ime::RigidBody physics collision
          * filtering use ime::Collider::setCollisionFilter
+         *
+         * @see getObstacleCollisionFilter
          */
-        CollisionExcludeList& getCollisionExcludeList();
-        const CollisionExcludeList& getCollisionExcludeList() const;
+        ExcludeList& getCollisionExcludeList();
+        const ExcludeList& getCollisionExcludeList() const;
+
+        /**
+         * @brief Get access to the game object's obstacle collision filter
+         * @return The game objects obstacle collision filter
+         *
+         * @note This function is only applicable to obstacle game objects
+         * (see setAsObstacle()).
+         *
+         * By default, any object that @e cannot collide with an obstacle game
+         * object will pass through it without generating a collision event
+         * whereas if they @e can collide, the two objects will never overlap.
+         *
+         * Sometimes you may want an obstacle object to exhibit the default
+         * behavior for some objects but allow others to pass through it and
+         * still generate a collision event. This list helps you achieve that.
+         * The collision groups of game objects added to this list will pass
+         * over an obstacle game object but generate a collision event
+         *
+         * @see getCollisionExcludeList
+         */
+        ExcludeList& getObstacleCollisionFilter();
+        const ExcludeList& getObstacleCollisionFilter() const;
 
         /**
          * @brief Get the user data added to game object
@@ -561,7 +585,8 @@ namespace ime {
         CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
         CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
         CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa
-        CollisionExcludeList excludeList_;    //!< Stores the collision groups of game objects this game object should not collide with
+        ExcludeList excludeList_;             //!< Stores the collision groups of game objects this game object should not collide with
+        ExcludeList obstacleColFilter_;       //!< Stores the collision groups of game objects that can collide with an obstacle without being blocked
         std::string collisionGroup_;          //!< The objects collision group (collision filtering)
         int collisionId_;                     //!< The objects collision id (collision filtering)
     };
