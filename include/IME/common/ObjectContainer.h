@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Object.h"
 #include <memory>
-#include <vector>
+#include <list>
 #include <algorithm>
 #include <functional>
 #include <unordered_map>
@@ -341,7 +341,7 @@ namespace ime {
         virtual ~ObjectContainer() = default;
 
     private:
-        std::vector<ObjectPtr> objects_;
+        std::list<ObjectPtr> objects_;
         std::unordered_map<std::string, std::unique_ptr<ObjectContainer<T>>> groups_;
     };
 
