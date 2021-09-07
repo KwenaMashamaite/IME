@@ -29,7 +29,7 @@
 #include "IME/core/time/Timer.h"
 #include "IME/core/time/Time.h"
 #include <functional>
-#include <vector>
+#include <list>
 #include <stack>
 
 namespace ime {
@@ -43,11 +43,6 @@ namespace ime {
     public:
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
-
-        /**
-         * @brief Default constructor
-         */
-        TimerManager();
 
         /**
          * @brief Schedule a one time callback
@@ -157,9 +152,7 @@ namespace ime {
         Timer& addTimer(Timer timer);
 
     private:
-        std::vector<Timer> activeTimers_; //!< Timers that are counting down
-        std::stack<Timer> pendingTimers_; //!< Timers pending a start
-        bool isUpdating_;                 //!< A flag indicating whether or not active timers are currently being updated
+        std::list<Timer> activeTimers_;   //!< Timers that are counting down
     };
 }
 

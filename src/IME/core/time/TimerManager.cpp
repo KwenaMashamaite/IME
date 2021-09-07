@@ -25,21 +25,10 @@
 #include "IME/core/time/TimerManager.h"
 
 namespace ime {
-    TimerManager::TimerManager() :
-        isUpdating_{false}
-    {}
-
     Timer& TimerManager::addTimer(Timer timer) {
-        // Prevent a new timer from being started inside the timeout callback.
-        // This invalidates iterators.
-        if (isUpdating_) {
-            pendingTimers_.push(std::move(timer));
-            return pendingTimers_.top();
-        } else {
-            timer.start();
-            activeTimers_.push_back(std::move(timer));
-            return activeTimers_.back();
-        }
+        timer.start();
+        activeTimers_.push_back(std::move(timer));
+        return activeTimers_.back();
     }
 
     Timer& TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
@@ -59,18 +48,8 @@ namespace ime {
     }
 
     void TimerManager::update(Time deltaTime) {
-        isUpdating_ = true;
-
         for (Timer& timer : activeTimers_)
             timer.update(deltaTime);
-
-        while (!pendingTimers_.empty()) {
-            activeTimers_.push_back(std::move(pendingTimers_.top()));
-            pendingTimers_.pop();
-            activeTimers_.back().start();
-        }
-
-        isUpdating_ = false;
     }
 
     std::size_t TimerManager::getTimerCount() const {
