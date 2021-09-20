@@ -15,10 +15,10 @@ project(IME VERSION 2.3.0 DESCRIPTION "A 2D state-based game engine using modern
 # (https://cmake.org/cmake/help/v3.0/module/GNUInstallDirs.html)
 include(GNUInstallDirs)
 
-# Install ntime binaries
+# Install VC++ runtime binaries
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR}/Runtime)
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT IME_Runtime)
-includnstlRequiredSystemLibraries)
+include(InstallRequiredSystemLibraries)
 
 # Include the configuration file
 include(${PROJECT_SOURCE_DIR}/cmake/Config.cmake)
