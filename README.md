@@ -12,14 +12,14 @@ IME is a state-based game engine for developing 2D games. It is written in C++17
 * **GUI** - Label, Button, Checkbox, MenuBar, and much more
 * **Animations** - 2D animations which support both spritesheet and texture atlas
 * **Physics** - Path finding, Grid based movement, Grid cell based collisions, Rigid body physics engine,
-                Collision detection using contact callbacks
-* **Input** - Keyboard and Mouse support
+  Collision detection using contact callbacks
+* **Input** - Keyboard, Mouse and Joystick support
 * **Sound** - Music and Sound effects support
 * **Event system** - Thread safe event system
 * **Asset management** - Automated resource management system
 * **Time** - Schedule one time, repeating or indefinite callbacks
 
-*IME does not support an Editor*
+*IME does not have an Editor*
 
 ## Demos
 
@@ -29,24 +29,24 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.2.1).
-To use the library you must have a supported (GCC or VC++) C++17 compliant compiler. 
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.3.0).
+To use the library you must have a supported (GCC or VC++) C++17 compliant compiler.
 Available binaries are compiled with `GCC MinGW: 7.3.0, 10.3.0` and `Microsoft Visual C++ 16 2019`
-compilers. This means that in order to use them, you must have the exact compiler on your system. 
-If you want to use different versions of the above compilers, then you have to [build](#Build) the 
+compilers. This means that in order to use them, you must have the exact compiler on your system.
+If you want to use different versions of the above compilers, then you have to [build](#Build) the
 library yourself.
 
 ## Installation
 
 1. Using CMake
 
-If you install IME in a known location, usually `Program Files (x86)`, you don't have to 
+If you install IME in a known location, usually `Program Files (x86)`, you don't have to
 set `IME_DIR`, *CMake* will automatically find the library
 
 ```cmake
 # Find IME
 set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if IME installed in known location
-find_package(IME 2.2.1 REQUIRED)
+find_package(IME 2.3.0 REQUIRED)
 
 # Link IME
 target_link_libraries (myGame PRIVATE ime)
@@ -54,13 +54,13 @@ target_link_libraries (myGame PRIVATE ime)
 <br>
 
 After successfully building your game executable, copy the contents of `IME/bin` folder to the
-folder in which your game executable resides. If your current `BUILD_TYPE` is **Debug**, then copy 
-the contents of `IME/bin/Debug` and if it is **Release**, then copy the contents of `IME/bin/Release`. 
-For `GCC MinGW` compilers, you must also copy the contents of `IME/bin/Runtime` to your game executables 
-folder. For `VC++` compilers, you should only copy the contents of `IME/bin/Runtime` if you don't have 
-[Visual C++ Redistributable Runtimes](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0) 
-installed on your system. Note that copying the contents of `IME/bin/BUILD_TYPE` applies to both `dynamic` 
-and `static` linking to *IME*. However, for `static` linking, you only need to copy 
+folder in which your game executable resides. If your current `BUILD_TYPE` is **Debug**, then copy
+the contents of `IME/bin/Debug` and if it is **Release**, then copy the contents of `IME/bin/Release`.
+For `GCC MinGW` compilers, you must also copy the contents of `IME/bin/Runtime` to your game executables
+folder. For `VC++` compilers, you should only copy the contents of `IME/bin/Runtime` if you don't have
+[Visual C++ Redistributable Runtimes](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)
+installed on your system. Note that copying the contents of `IME/bin/BUILD_TYPE` applies to both `dynamic`
+and `static` linking to *IME*. However, for `static` linking, you only need to copy
 `IME/bin/Debug/openal32.dll` or `IME/bin/Release/openal32.dll` to your game directory.
 
 ##  Build
@@ -77,7 +77,7 @@ $ git clone https://github.com/KwenaMashamaite/IME
    The dependencies must have a matching compiler and architecture (e.g, If you intend to build *IME* with <br>
    `Visual C++ 15 2017 (32-bit)`, then *SFML*, *TGUI* and *Box2d* binaries must all be compiled with `Visual C++ 15 2017 (32-bit)`
    <br>
-   
+
 4. Run the following commands from the project root directory:
 
 ```shell
@@ -94,7 +94,7 @@ location, usually `Program Files (x86)\IME`. However, this may require admin pri
 ## Learn
 
 * [Tutorials](#Learn) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.2.0/html/index.html)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.3.0/html/index.html)
 
 ## Platform
 
@@ -107,7 +107,7 @@ Name:  Kwena Mashamaite (Author)
 Email: kwena.mashamaite1@gmail.com
 
 For any feature suggestions, feedback or questions, you can get in touch with me [here](https://github.com/KwenaMashamaite/IME/discussions/).
- 
+
 ## License
 
 IME is released under the [MIT](https://opensource.org/licenses/MIT) license. See [LICENSE](LICENSE) file.

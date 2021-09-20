@@ -21,7 +21,7 @@
 /// // Step 1: Create a scene (or state)
 /// // You define the behavior of your game by overriding ime::Scene functions.
 /// // These functions will be called by the engine at appropriate times. ime::Scene
-/// // methods are overridden on a need to use case.
+/// // functions are overridden on a need to use case.
 ///
 /// // This scene displays a welcome message at the centre of the screen
 /// class StartUpScene : public ime::Scene {
@@ -32,11 +32,11 @@
 ///          greeting->setOrigin(0.5f, 0.5f);
 ///          greeting->setPosition("50%", "50%");
 ///          greeting->getRenderer()->setTextColour(ime::Colour::White);
-///          gui().addWidget(std::move(greeting), "lblGreeting");
+///          gui().addWidget(std::move(greeting));
 ///
 ///           // Quit the game when "Esc" key is pressed
-///           input().onKeyUp([this](ime::Key key) {
-///                 if (key == ime::Key::Escape)
+///           input().onKeyUp([this](ime::Keyboard::Key key) {
+///                 if (key == ime::Keyboard::Key::Escape)
 ///                     engine().quit();
 ///           });
 ///     }
@@ -51,16 +51,16 @@
 ///    //       default values
 ///    ime::PrefContainer settings;
 ///    settings.addPref({"WINDOW_TITLE", ime::PrefType::String, std::string("IME Demo App")});
-///    settings.addPref({"WINDOW_WIDTH", ime::Pref::Type::Int, 600});
-///    settings.addPref({"WINDOW_HEIGHT", ime::Pref::Type::Int, 600});
-///    settings.addPref({"WINDOW_ICON", ime::Pref::Type::String, std::string("assets/images/icon.png")});
-///    settings.addPref({"FULLSCREEN", ime::Pref::Type::Bool, false});
-///    settings.addPref({"FPS_LIMIT", ime::Pref::Type::Int, 60});
-///    settings.addPref({"V_SYNC", ime::Pref::Type::Bool,  true});
-///    settings.addPref({"FONTS_DIR", ime::Pref::Type::String, std::string("assets/fonts/")});
-///    settings.addPref({"TEXTURES_DIR", ime::Pref::Type::String, std::string("assets/textures/")});
-///    settings.addPref({"SOUND_EFFECTS_DIR", ime::Pref::Type::String, std::string("assets/soundEffects/")});
-///    settings.addPref({"MUSIC_DIR", ime::Pref::Type::String, std::string("assets/music/")});
+///    settings.addPref({"WINDOW_WIDTH", ime::PrefType::Int, 600});
+///    settings.addPref({"WINDOW_HEIGHT", ime::PrefType::Int, 600});
+///    settings.addPref({"WINDOW_ICON", ime::PrefType::String, std::string("assets/images/icon.png")});
+///    settings.addPref({"FULLSCREEN", ime::PrefType::Bool, false});
+///    settings.addPref({"FPS_LIMIT", ime::PrefType::Int, 60});
+///    settings.addPref({"V_SYNC", ime::PrefType::Bool,  true});
+///    settings.addPref({"FONTS_DIR", ime::PrefType::String, std::string("assets/fonts/")});
+///    settings.addPref({"TEXTURES_DIR", ime::PrefType::String, std::string("assets/textures/")});
+///    settings.addPref({"SOUND_EFFECTS_DIR", ime::PrefType::String, std::string("assets/soundEffects/")});
+///    settings.addPref({"MUSIC_DIR", ime::PrefType::String, std::string("assets/music/")});
 ///
 ///    // Step 2.2 - Instantiating and initializing the engine
 ///    ime::Engine engine = ime::Engine("Name of game here", settings);
