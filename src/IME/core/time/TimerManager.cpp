@@ -25,10 +25,10 @@
 #include "IME/core/time/TimerManager.h"
 
 namespace ime {
-    Timer& TimerManager::addTimer(Timer timer) {
-        timer.start();
+    Timer& TimerManager::addTimer(Timer::Ptr timer) {
+        timer->start();
         activeTimers_.push_back(std::move(timer));
-        return activeTimers_.back();
+        return *activeTimers_.back();
     }
 
     Timer& TimerManager::setTimeout(Time delay, Callback<Timer &> callback) {
@@ -48,8 +48,8 @@ namespace ime {
     }
 
     void TimerManager::update(Time deltaTime) {
-        for (Timer& timer : activeTimers_)
-            timer.update(deltaTime);
+        for (Timer::Ptr& timer : activeTimers_)
+            timer->update(deltaTime);
     }
 
     std::size_t TimerManager::getTimerCount() const {
@@ -61,8 +61,8 @@ namespace ime {
     }
 
     void TimerManager::preUpdate() {
-        activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer& timer) {
-            return timer.getStatus() == Timer::Status::Stopped;
+        activeTimers_.erase(std::remove_if(activeTimers_.begin(), activeTimers_.end(), [](Timer::Ptr& timer) {
+            return timer->getStatus() == Timer::Status::Stopped;
         }), activeTimers_.end());
     }
 }

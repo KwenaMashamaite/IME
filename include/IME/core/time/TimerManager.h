@@ -149,10 +149,10 @@ namespace ime {
          * @param timer The timer to be added
          * @return A reference to the timer after its added to the manager
          */
-        Timer& addTimer(Timer timer);
+        Timer& addTimer(Timer::Ptr timer);
 
     private:
-        std::list<Timer> activeTimers_;   //!< Timers that are counting down
+        std::list<Timer::Ptr> activeTimers_;   //!< Timers that are counting down
     };
 }
 

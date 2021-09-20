@@ -34,17 +34,17 @@ namespace ime {
         dispatchCount_{0}
     {}
 
-    Timer Timer::create(Time interval, Callback<> callback, int repeatCount) {
-        auto timer = Timer();
-        timer.setInterval(interval);
-        timer.setRepeat(repeatCount);
-        timer.setTimeoutCallback(std::move(callback));
+    Timer::Ptr Timer::create(Time interval, Callback<> callback, int repeatCount) {
+        auto timer = std::make_unique<Timer>();
+        timer->setInterval(interval);
+        timer->setRepeat(repeatCount);
+        timer->setTimeoutCallback(std::move(callback));
         return timer;
     }
 
-    Timer Timer::create(Time interval, Callback<Timer &> callback, int repeatCounter) {
+    Timer::Ptr Timer::create(Time interval, Callback<Timer &> callback, int repeatCounter) {
         auto timer = create(interval, []{}, repeatCounter);
-        timer.setTimeoutCallback(std::move(callback));
+        timer->setTimeoutCallback(std::move(callback));
         return timer;
     }
 
@@ -175,15 +175,19 @@ namespace ime {
             onTimeout_();
             isDispatched_ = true;
             dispatchCount_++;
-            if (repeatCount_ < 0 || (repeatCount_ > 0 && (dispatchCount_ <= repeatCount_)))
-                restart();
-            else {
-                // When no further callback executions will take place, we only want
-                // to invoke onTimeout_ callback and not onStop_ callback. The latter
-                // must only be triggered externally.
-                isExecutionComplete_ = true;
-                stop();
-                isExecutionComplete_ = false;
+
+            // Timer may be paused or stopped by the timeout callback
+            if (status_ == Status::Running) {
+                if (repeatCount_ < 0 || (repeatCount_ > 0 && (dispatchCount_ <= repeatCount_)))
+                    restart();
+                else {
+                    // When no further callback executions will take place, we only want
+                    // to invoke onTimeout_ callback and not onStop_ callback. The latter
+                    // must only be triggered externally.
+                    isExecutionComplete_ = true;
+                    stop();
+                    isExecutionComplete_ = false;
+                }
             }
         }
     }

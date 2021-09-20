@@ -28,6 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/time/Time.h"
 #include <functional>
+#include <memory>
 
 namespace ime {
     /**
@@ -40,6 +41,8 @@ namespace ime {
     public:
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
+
+        using Ptr = std::unique_ptr<Timer>; //!< Timer ptr
 
         /**
          * @brief States the timer can be in
@@ -70,7 +73,7 @@ namespace ime {
          *
          * @see start and setRepeat
          */
-        static Timer create(Time interval, Callback<> callback, int repeatCounter = 0);
+        static Timer::Ptr create(Time interval, Callback<> callback, int repeatCounter = 0);
 
         /**
          * @brief Create a timer
@@ -87,7 +90,7 @@ namespace ime {
          *
          * @see start and setRepeat
          */
-        static Timer create(Time interval, Callback<Timer&> callback, int repeatCounter = 0);
+        static Timer::Ptr create(Time interval, Callback<Timer&> callback, int repeatCounter = 0);
 
         /**
          * @brief Set the countdown starting point
