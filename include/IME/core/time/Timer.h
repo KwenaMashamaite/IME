@@ -42,7 +42,11 @@ namespace ime {
         template <typename... Args>
         using Callback = std::function<void(Args...)>; //!< Event listener
 
+#if defined(__GNUC__)
         using Ptr = std::unique_ptr<Timer>; //!< Timer ptr
+#else
+        using Ptr = std::shared_ptr<Timer>;
+#endif
 
         /**
          * @brief States the timer can be in
