@@ -115,14 +115,6 @@ namespace ime {
         return id_ == other.id_;
     }
 
-    bool Object::operator==(const Object &rhs) const {
-        return id_ == rhs.id_;
-    }
-
-    bool Object::operator!=(const Object &rhs) const {
-        return id_ != rhs.id_;
-    }
-
     void Object::emitChange(const Property &property) {
         eventEmitter_.emit(property.getName() + "Change", property);
         eventEmitter_.emit("propertyChange", property);

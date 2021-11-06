@@ -34,8 +34,7 @@ namespace ime {
         Texture,     //!< ime::Texture
         Font,        //!< ime::Font
         Image,       //!< ime::Image
-        SoundBuffer [[deprecated("Use ime::ResourceType::SoundEffect instead.")]], //!< SoundBuffer
-        SoundEffect = 3, //!< ime::SoundEffect
+        SoundEffect, //!< ime::SoundEffect
         Music        //!< ime::Music
     };
 }
