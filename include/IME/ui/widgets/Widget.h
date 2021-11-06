@@ -621,6 +621,24 @@ namespace ime {
             }
 
             /**
+             * @brief Emit a widget event
+             * @param event Name of the event to be emitted
+             * @param args Arguments to pass to event listeners
+             *
+             * This function will invoke all event listeners of the
+             * given event.
+             *
+             * @code
+             * button.emit("click");
+             * button.emit("click", ime::Vector2f{100, 200});
+             * @endcode
+             */
+            template<typename... Args>
+            void emit(const std::string& event, Args&& ...args) {
+                eventEmitter_.emit(event, std::forward<Args>(args)...);
+            }
+
+            /**
              * @brief Remove an event listener from a widget event
              * @param event Event to remove event listener from
              * @param id Id number of the event listener
@@ -661,19 +679,6 @@ namespace ime {
             ~Widget() override;
 
         protected:
-            /**
-             * @brief Emit a widget event
-             * @param event Name of the event to be emitted
-             * @param args Arguments to pass to event listeners
-             *
-             * This function will invoke all event listeners of the
-             * given event
-             */
-            template<typename... Args>
-            void emit(const std::string& event, Args&& ...args) {
-                eventEmitter_.emit(event, std::forward<Args>(args)...);
-            }
-
             /**
              * @brief Set whether or not the widget is a container
              * @param container True to flag as container, otherwise false
