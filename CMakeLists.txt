@@ -101,6 +101,11 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
+# Disable static linking
+if(NOT IME_SHARED_LIBS AND IME_VERSION_MAJOR VERSION_EQUAL 2 AND IME_VERSION_MINOR VERSION_GREATER_EQUAL 4)
+    message(FATAL_ERROR "IME v2.4.0 and higher do not support static builds")
+endif()
+
 # Link SFML in the same way as IME, unless SFML_STATIC_LIBRARIES is manually specified
 if(NOT DEFINED SFML_STATIC_LIBRARIES)
     if(IME_SHARED_LIBS)
