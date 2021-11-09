@@ -85,6 +85,7 @@ namespace ime {
         if (target_ == target)
             return;
         else if (target) {
+            IME_ASSERT(!target->getGridMover(), "A game object can only be controlled by one grid mover at a time, call setTarget(nullptr) on the current grid mover")
             IME_ASSERT(!target->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
             IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover")
 
@@ -92,6 +93,7 @@ namespace ime {
                 target_->removeDestructionListener(targetDestructionId_);
                 targetDestructionId_ = -1;
                 teleportTargetToDestination();
+                target_->setGridMover(nullptr);
             }
 
             targetDestructionId_ = target->onDestruction([this] {
@@ -105,8 +107,13 @@ namespace ime {
 
             prevTile_ = targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
             target_ = target;
-        } else
+            target_->setGridMover(this);
+        } else { // Detaching the target from the grid mover
+            if (target_)
+                target_->setGridMover(nullptr);
+
             target_ = target;
+        }
 
         emitChange(Property{"target", target_});
     }
@@ -528,8 +535,12 @@ namespace ime {
     }
 
     GridMover::~GridMover() {
-        if (targetDestructionId_ != -1 && target_)
-            target_->removeDestructionListener(targetDestructionId_);
+        if (target_) {
+            if (targetDestructionId_ != -1)
+                target_->removeDestructionListener(targetDestructionId_);
+
+            target_->setGridMover(nullptr);
+        }
 
         target_ = nullptr;
         prevTile_ = nullptr;

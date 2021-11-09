@@ -38,6 +38,7 @@
 namespace ime {
     class RigidBody;
     class Scene;
+    class GridMover;
 
     /**
      * @brief Abstract base class for game objects (players, enemies etc...)
@@ -528,6 +529,16 @@ namespace ime {
         const Sprite& getSprite() const;
 
         /**
+         * @brief Get the objects grid mover
+         * @return The objects grid mover or a nullptr if the object is not
+         *         being controlled by a grid mover
+         *
+         * @see ime::GridMover
+         */
+        GridMover* getGridMover();
+        const GridMover* getGridMover() const;
+
+        /**
          * @brief Update the game object
          * @param deltaTime Time past since last update
          *
@@ -539,6 +550,16 @@ namespace ime {
          * the base class version when overriding it
          */
         virtual void update(Time deltaTime) {IME_UNUSED(deltaTime);}
+
+        /**
+         * @internal
+         * @brief Set the game object's grid mover
+         * @param gridMover The grid mover to be set
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void setGridMover(GridMover* gridMover);
 
         /**
          * @internal
@@ -591,6 +612,7 @@ namespace ime {
         ExcludeList obstacleColFilter_;       //!< Stores the collision groups of game objects that can collide with an obstacle without being blocked
         std::string collisionGroup_;          //!< The objects collision group (collision filtering)
         int collisionId_;                     //!< The objects collision id (collision filtering)
+        GridMover* gridMover_;                //!< The objects grid mover
     };
 }
 

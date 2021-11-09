@@ -26,6 +26,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/utility/Helpers.h"
+#include "IME/core/physics/grid/GridMover.h"
 
 namespace ime {
     GameObject::GameObject(Scene& scene) :
@@ -35,7 +36,8 @@ namespace ime {
         isActive_{true},
         postStepId_{-1},
         destructionId_{-1},
-        collisionId_{0}
+        collisionId_{0},
+        gridMover_{nullptr}
     {
         initEvents();
     }
@@ -52,7 +54,8 @@ namespace ime {
         destructionId_{-1},
         emitter_{other.emitter_},
         collisionGroup_{other.collisionGroup_},
-        collisionId_{other.collisionId_}
+        collisionId_{other.collisionId_},
+        gridMover_{nullptr}
     {
         initEvents();
 
@@ -83,6 +86,7 @@ namespace ime {
         if (this != &rhs) {
             Object::operator=(std::move(rhs));
             swap(rhs);
+            gridMover_ = nullptr;
         }
 
         return *this;
@@ -285,6 +289,18 @@ namespace ime {
 
     const Sprite &GameObject::getSprite() const {
         return sprite_;
+    }
+
+    GridMover *GameObject::getGridMover() {
+        return gridMover_;
+    }
+
+    const GridMover *GameObject::getGridMover() const {
+        return gridMover_;
+    }
+
+    void GameObject::setGridMover(GridMover *gridMover) {
+        gridMover_ = gridMover;
     }
 
     void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
