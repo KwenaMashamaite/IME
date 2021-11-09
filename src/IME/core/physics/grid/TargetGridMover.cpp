@@ -171,6 +171,8 @@ namespace ime {
     }
 
     void TargetGridMover::startMovement() {
+        IME_ASSERT(getTarget(), "A grid mover target is required before starting movement")
+
         if (!movementStarted_) {
             movementStarted_ = true;
             moveTarget();

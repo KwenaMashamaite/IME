@@ -76,6 +76,8 @@ namespace ime {
     }
 
     void CyclicGridMover::startMovement() {
+        IME_ASSERT(getTarget(), "A grid mover target is required before starting movement")
+
         if (!isMovementStarted_) {
             isMovementStarted_ = true;
             requestDirectionChange(direction_ == CycleDirection::Clockwise ? ime::Right : ime::Left);
