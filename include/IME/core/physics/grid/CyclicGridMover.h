@@ -95,6 +95,26 @@ namespace ime {
         std::string getClassName() const override;
 
         /**
+         * @brief Start the cycle movement
+         *
+         * @see stopMovement
+         */
+        void startMovement();
+
+        /**
+         * @brief Stop the targets movement
+         *
+         * Since a child in the grid can never be in between tiles, the
+         * targets movement will be stopped after it completes its current
+         * move.
+         *
+         * By default the targets movement is stopped
+         *
+         * @see startMovement
+         */
+        void stopMovement();
+
+        /**
          * @brief Set the direction of movement
          * @param direction The new direction
          *
@@ -122,6 +142,7 @@ namespace ime {
 
     private:
         CycleDirection direction_; //!< The targets direction of cycle
+        bool isMovementStarted_;   //!< A flag indicating whether or not the movement has started
     };
 }
 

@@ -27,7 +27,8 @@
 namespace ime {
     CyclicGridMover::CyclicGridMover(TileMap &tilemap, GameObject *target) :
         GridMover(Type::Cyclic, tilemap, target),
-        direction_{CycleDirection::Clockwise}
+        direction_{CycleDirection::Clockwise},
+        isMovementStarted_{false}
     {
         setHandlerIntakeAsInternal(true);
 
@@ -42,6 +43,14 @@ namespace ime {
                 moveTarget(getDirection(), currentDir.x == 0 ? swapValues(currentDir) * -1 : swapValues(currentDir));
             else
                 moveTarget(getDirection(), std::abs(currentDir.x) == 1 ? swapValues(currentDir) * -1 : swapValues(currentDir));
+        });
+
+        /// Automatically move the new target if the previous target was also moving
+        onPropertyChange("target", [this](const Property& property) {
+            if (property.getValue<GameObject*>() && isMovementStarted_) {
+                isMovementStarted_ = false;
+                startMovement();
+            }
         });
 
         setHandlerIntakeAsInternal(false);
@@ -66,7 +75,25 @@ namespace ime {
         return "WallFollowerGridMover";
     }
 
+    void CyclicGridMover::startMovement() {
+        if (!isMovementStarted_) {
+            isMovementStarted_ = true;
+            requestDirectionChange(direction_ == CycleDirection::Clockwise ? ime::Right : ime::Left);
+            emit("startMovement");
+        }
+    }
+
+    void CyclicGridMover::stopMovement() {
+        if (isMovementStarted_) {
+            isMovementStarted_ = false;
+            emit("stopMovement");
+        }
+    }
+
     void CyclicGridMover::moveTarget(const Vector2i &curDir, const Vector2i &newDir) {
+        if (!isMovementStarted_)
+            return;
+
         if (!isBlockedInDirection(newDir).first)
             requestDirectionChange(newDir);
         else if (!isBlockedInDirection(curDir).first)
