@@ -69,6 +69,18 @@ namespace ime {
         return "GridMover";
     }
 
+    void GridMover::syncWith(const GridMover &other) {
+        if (this != &other && other.isMoving_) {
+            isMoving_ = true;
+            isMoveFrozen_ = other.isMoveFrozen_;
+            targetDirection_ = other.targetDirection_;
+            currentDirection_ = other.currentDirection_;
+            prevDirection_ = other.prevDirection_;
+            targetTile_ = &getGrid().getTile(other.targetTile_->getIndex());
+            prevTile_ = &getGrid().getTile(other.prevTile_->getIndex());
+        }
+    }
+
     void GridMover::setTarget(GameObject* target) {
         if (target_ == target)
             return;

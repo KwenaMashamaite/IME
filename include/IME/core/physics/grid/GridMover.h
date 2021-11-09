@@ -98,6 +98,16 @@ namespace ime {
         explicit GridMover(TileMap& tilemap, GameObject* gameObject = nullptr);
 
         /**
+         * @brief Copy constructor
+         */
+        GridMover(const GridMover&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        GridMover& operator=(const GridMover) = delete;
+
+        /**
          * @brief Create the grid mover
          * @param tilemap The grid the game object is in
          * @param gameObject The game object to be controlled by the grid mover
@@ -129,6 +139,28 @@ namespace ime {
          * @return The name of this class
          */
         std::string getClassName() const override;
+
+        /**
+         * @brief Sync this grid mover with another grid mover
+         * @param other The grid mover to sync with this grid mover with
+         *
+         * In situations where you want to change a targets grid mover, you'll
+         * have to synchronize the new grid mover with the current grid mover
+         * to avoid misalignment with the grid. When misaligned, the target is
+         * no longer confined to the grid and moves indefinitely in its current
+         * direction. Note that misalignment does not occur when the target is
+         * not moving, i.e when isMoving() returns false.
+         *
+         * @code
+         * // Lets assume a player target was being moved by a ime::RandomGridMover
+         * // and now we want it to be moved by a ime::CyclicGridMover
+         * cyclicGridMover.sync(randomGridMover);
+         * cyclicGridMover.setTarget(randomGridMover.getTarget());
+         * randomGridMover.setTarget(nullptr);
+         * cyclicGridMover.startMovement();
+         * @endcode
+         */
+        void syncWith(const GridMover& other);
 
         /**
          * @brief Change the direction of the game object
