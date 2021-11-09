@@ -379,6 +379,8 @@ namespace ime {
          * @brief Add an event listener to a grid collision event
          * @param callback Function to be executed when this game object
          *                 collides with another game object in a TileMap
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
          * @return The event listeners identification number
          *
          * @note This function is applicable to grid-based collisions only
@@ -397,7 +399,7 @@ namespace ime {
          *
          * @see removeCollisionListener
          */
-        int onCollision(const CollisionCallback& callback);
+        int onCollision(const CollisionCallback& callback, bool onetime = false);
 
         /**
          * @brief Remove a grid collision event listener

@@ -25,6 +25,7 @@
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime {
     GameObject::GameObject(Scene& scene) :
@@ -234,8 +235,8 @@ namespace ime {
         }
     }
 
-    int GameObject::onCollision(const CollisionCallback& callback) {
-        return emitter_.on("collision", callback);
+    int GameObject::onCollision(const CollisionCallback& callback, bool oneTime) {
+        return utility::addEventListener(emitter_, "collision", callback, oneTime);
     }
 
     bool GameObject::removeCollisionListener(int id) {
