@@ -259,6 +259,9 @@ namespace ime {
          * engine.popScene(); // Remove remaining active scene at the end of the frame
          * @endcode
          *
+         * @note ime::Scene::onExit is not invoked on scenes that are removed
+         * using this function
+         *
          * @see pushScene, popScene, run and quit
          */
         void removeAllScenesExceptActive();
