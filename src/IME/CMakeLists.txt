@@ -10,6 +10,7 @@ set(IME_SRC
     common/Transform.cpp
     common/Object.cpp
     core/animation/Animation.cpp
+    core/animation/AnimationFrame.cpp
     core/animation/Animator.cpp
     core/audio/Audio.cpp
     core/audio/Music.cpp

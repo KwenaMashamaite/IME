@@ -180,7 +180,7 @@ namespace ime {
     }
 
     void Animation::addFrames(const Index& startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
-        auto newFrames = std::vector<Frame>{};
+        auto newFrames = std::vector<SpriteSheet::Frame>{};
         if (arrangement == FrameArrangement::Horizontal)
             newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, (startPos.colm + static_cast<int>(numOfFrames)) - 1});
         else
@@ -189,12 +189,14 @@ namespace ime {
         IME_ASSERT(!newFrames.empty(), "Failed to construct frames, either start position or number of frames is invalid")
 
         std::move(newFrames.begin(), newFrames.end(), std::back_inserter(frames_));
+        updateIndexes();
         calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
     }
 
     void Animation::addFrame(const Index& index) {
         if (auto frame = spriteSheet_.getFrame(index); frame) {
             frames_.emplace_back(*frame);
+            frames_.back().index_ = frames_.size() - 1;
             calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }
@@ -204,29 +206,30 @@ namespace ime {
             addFrame(frameIndex); //Add frame at the back instead of issuing error
         else if (auto frame = spriteSheet_.getFrame(frameIndex); frame) {
             frames_.insert(frames_.begin() + index, *frame);
+            updateIndexes();
             calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }
 
-    std::optional<Animation::Frame> Animation::getFirstFrame() const {
+    std::optional<AnimationFrame> Animation::getFirstFrame() const {
         if (!frames_.empty())
             return frames_.front();
         return std::nullopt;
     }
 
-    std::optional<Animation::Frame> Animation::getLastFrame() const {
+    std::optional<AnimationFrame> Animation::getLastFrame() const {
         if (!frames_.empty())
             return frames_.back();
         return std::nullopt;
     }
 
-    std::optional<Animation::Frame> Animation::getFrameAt(unsigned int index) const {
+    std::optional<AnimationFrame> Animation::getFrameAt(unsigned int index) const {
         if (index < frames_.size())
             return frames_.at(index);
         return std::nullopt;
     }
 
-    const std::vector<Animation::Frame> &Animation::getAllFrames() const {
+    const std::vector<AnimationFrame> &Animation::getAllFrames() const {
         return frames_;
     }
 
@@ -243,8 +246,10 @@ namespace ime {
     }
 
     void Animation::removeFirstFrame() {
-        if (!frames_.empty())
+        if (!frames_.empty()) {
             frames_.erase(frames_.begin());
+            updateIndexes();
+        }
     }
 
     void Animation::removeLastFrame() {
@@ -253,8 +258,10 @@ namespace ime {
     }
 
     void Animation::removeFrameAt(unsigned int index) {
-        if (!frames_.empty() && index < frames_.size())
+        if (!frames_.empty() && index < frames_.size()) {
             frames_.erase(frames_.begin() + index);
+            updateIndexes();
+        }
     }
 
     void Animation::removeAll() {
@@ -278,6 +285,11 @@ namespace ime {
 
     unsigned int Animation::getCompletionFrameIndex() const {
         return completionFrame_ >= 0 ? completionFrame_ : static_cast<unsigned int>(frames_.size() - 1);
+    }
+
+    void Animation::updateIndexes() {
+        for (unsigned int i = 0; i < frames_.size(); i++)
+            frames_[i].index_ = i;
     }
 
     void Animation::calculateFrameRate(const Time& duration, unsigned int frameRate) {

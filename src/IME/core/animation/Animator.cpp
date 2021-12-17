@@ -476,8 +476,9 @@ namespace ime {
         /// @See cycle(bool). Code must come here after refactoring that function
     }
 
-    void Animator::setCurrentFrame(const Animation::Frame& frame) {
-        (*target_).get().setTextureRect(frame.left, frame.top, frame.width, frame.height);
+    void Animator::setCurrentFrame(const AnimationFrame& frame) {
+        auto& [leftPos, topPos, width, height] = frame.getSpritesheetRect();
+        (*target_).get().setTextureRect(leftPos, topPos, width, height);
     }
 
     void Animator::resetCurrentFrame() {

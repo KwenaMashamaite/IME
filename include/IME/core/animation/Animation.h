@@ -29,6 +29,7 @@
 #include "IME/common/Rect.h"
 #include "IME/core/time/Time.h"
 #include "IME/graphics/SpriteSheet.h"
+#include "IME/core/animation/AnimationFrame.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -48,7 +49,6 @@ namespace ime {
      */
     class IME_API Animation {
     public:
-        using Frame = UIntRect;                 //!< Animation Frame
         using Ptr = std::shared_ptr<Animation>; //!< Shared animation pointer
 
         /**
@@ -413,7 +413,7 @@ namespace ime {
          *
          * @see addFrame, addFrames and getLastFrame
          */
-        std::optional<Frame> getFirstFrame() const;
+        std::optional<AnimationFrame> getFirstFrame() const;
 
         /**
          * @brief Get the last frame of the animation
@@ -422,7 +422,7 @@ namespace ime {
          *
          * @see addFrame, addFrames and getFirstFrame
          */
-        std::optional<Frame> getLastFrame() const;
+        std::optional<AnimationFrame> getLastFrame() const;
 
         /**
          * @brief Get the frame at an index
@@ -432,13 +432,13 @@ namespace ime {
          *
          * @see getFirstFrame and getLastFrame
          */
-        std::optional<Frame> getFrameAt(unsigned int index) const;
+        std::optional<AnimationFrame> getFrameAt(unsigned int index) const;
 
         /**
          * @brief Get all the frames in the animation
          * @return All the frames in he animation
          */
-        const std::vector<Frame>& getAllFrames() const;
+        const std::vector<AnimationFrame>& getAllFrames() const;
 
         /**
          * @brief Get the total number of frames in the animation sequence
@@ -535,6 +535,11 @@ namespace ime {
 
     private:
         /**
+         * @brief Update the animation frame index
+         */
+        void updateIndexes();
+
+        /**
          * @brief Calculate the duration and frame rate of the animation
          *
          * This function will derive the duration from the frame rate
@@ -547,7 +552,7 @@ namespace ime {
         void calculateFrameRate(const Time& duration, unsigned int frameRate);
 
     private:
-        std::vector<Frame> frames_; //!< Stores the frames of the animation sequence
+        std::vector<AnimationFrame> frames_; //!< Stores the frames of the animation sequence
         std::string name_;          //!< The name of the animation
         SpriteSheet spriteSheet_;   //!< The spritesheet used to construct the animation frames
         Time duration_;             //!< How long the animation plays before completing or repeating
