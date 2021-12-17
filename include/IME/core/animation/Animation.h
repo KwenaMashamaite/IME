@@ -34,6 +34,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include <functional>
 
 namespace ime {
     /**
@@ -50,6 +51,7 @@ namespace ime {
     class IME_API Animation {
     public:
         using Ptr = std::shared_ptr<Animation>; //!< Shared animation pointer
+        using FrameSwitchCallback = std::function<void(const AnimationFrame&)>;
 
         /**
          * @brief The playing direction of the animation
@@ -558,6 +560,17 @@ namespace ime {
         float getProgress() const;
 
         /**
+         * @brief Add a callback to a frame switch event
+         * @param callback The function to be called when the animation frame changes
+         *
+         * The callback will be passed the new animation frame as the argument.
+         * Pass nullptr to remove the callback
+         *
+         * By default there is no callback registered to this event
+         */
+        void onFrameSwitch(const FrameSwitchCallback& callback);
+
+        /**
          * @internal
          * @brief Set the index of the current frame
          * @param index The new index
@@ -605,6 +618,7 @@ namespace ime {
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
         unsigned int currentFrameIndex_; //!< The index of the current frame displayed by the animation
         float timescale_;           //!< Playback speed of the animation
+        FrameSwitchCallback onFrameSwitch_; //!< A function called when the animation frame changes
     };
 }
 

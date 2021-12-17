@@ -307,12 +307,19 @@ namespace ime {
             return static_cast<float>(currentFrameIndex_) / (frames_.size() - 1.0f);
     }
 
+    void Animation::onFrameSwitch(const Animation::FrameSwitchCallback &callback) {
+        onFrameSwitch_ = callback;
+    }
+
     void Animation::setCurrentFrameIndex(unsigned int index) {
         if (getCurrentFrame().has_value())
             frames_[currentFrameIndex_].isCurrent_ = false;
 
         currentFrameIndex_ = index;
         frames_[index].isCurrent_ = true;
+
+        if (onFrameSwitch_)
+            onFrameSwitch_(frames_[index]);
     }
 
     void Animation::updateIndexes() {
