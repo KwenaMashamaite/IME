@@ -133,16 +133,28 @@ namespace ime {
         return currentAnimation_;
     }
 
-    std::optional<AnimationFrame> Animator::getCurrentFrame() const {
-        return currentAnimation_ ? currentAnimation_->getCurrentFrame() : std::nullopt;
+    AnimationFrame *Animator::getCurrentFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getCurrentFrame());
     }
 
-    std::optional<AnimationFrame> Animator::getNextFrame() const {
-        return currentAnimation_ ? currentAnimation_->getNextFrame() : std::nullopt;
+    const AnimationFrame* Animator::getCurrentFrame() const {
+        return currentAnimation_ ? currentAnimation_->getCurrentFrame() : nullptr;
     }
 
-    std::optional<AnimationFrame> Animator::getPreviousFrame() const {
-        return currentAnimation_ ? currentAnimation_->getPreviousFrame() : std::nullopt;
+    AnimationFrame *Animator::getNextFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getNextFrame());
+    }
+
+    const AnimationFrame* Animator::getNextFrame() const {
+        return currentAnimation_ ? currentAnimation_->getNextFrame() : nullptr;
+    }
+
+    AnimationFrame *Animator::getPreviousFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getPreviousFrame());
+    }
+
+    const AnimationFrame* Animator::getPreviousFrame() const {
+        return currentAnimation_ ? currentAnimation_->getPreviousFrame() : nullptr;
     }
 
     bool Animator::removeAnimation(const std::string &name) {

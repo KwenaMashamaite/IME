@@ -212,22 +212,50 @@ namespace ime {
         }
     }
 
-    std::optional<AnimationFrame> Animation::getFirstFrame() const {
-        if (!frames_.empty())
-            return frames_.front();
-        return std::nullopt;
+    AnimationFrame* Animation::getFirstFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getFirstFrame());
     }
 
-    std::optional<AnimationFrame> Animation::getLastFrame() const {
+    const AnimationFrame* Animation::getFirstFrame() const {
         if (!frames_.empty())
-            return frames_.back();
-        return std::nullopt;
+            return &frames_.front();
+
+        return nullptr;
     }
 
-    std::optional<AnimationFrame> Animation::getFrameAt(unsigned int index) const {
+    AnimationFrame *Animation::getLastFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getLastFrame());
+    }
+
+    const AnimationFrame* Animation::getLastFrame() const {
+        if (!frames_.empty())
+            return &frames_.back();
+
+        return nullptr;
+    }
+
+    AnimationFrame *Animation::getFrameAt(unsigned int index) {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getFrameAt(index));
+    }
+
+    const AnimationFrame* Animation::getFrameAt(unsigned int index) const {
         if (index < frames_.size())
-            return frames_.at(index);
-        return std::nullopt;
+            return &frames_.at(index);
+
+        return nullptr;
+    }
+
+    AnimationFrame *Animation::getFrame(const std::string &name) {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getFrame(name));
+    }
+
+    const AnimationFrame* Animation::getFrame(const std::string &name) const {
+        for (const auto& frame : frames_) {
+            if (frame.getName() == name)
+                return &frame;
+        }
+
+        return nullptr;
     }
 
     const std::vector<AnimationFrame> &Animation::getAllFrames() const {
@@ -288,15 +316,30 @@ namespace ime {
         return completionFrame_ >= 0 ? completionFrame_ : static_cast<unsigned int>(frames_.size() - 1);
     }
 
-    std::optional<AnimationFrame> Animation::getCurrentFrame() const {
+    AnimationFrame *Animation::getCurrentFrame() {
         return getFrameAt(currentFrameIndex_);
     }
 
-    std::optional<AnimationFrame> Animation::getNextFrame() const {
+    const AnimationFrame* Animation::getCurrentFrame() const {
+        return getFrameAt(currentFrameIndex_);
+    }
+
+    AnimationFrame *Animation::getNextFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getNextFrame());
+    }
+
+    const AnimationFrame* Animation::getNextFrame() const {
         return getFrameAt(currentFrameIndex_ + 1);
     }
 
-    std::optional<AnimationFrame> Animation::getPreviousFrame() const {
+    AnimationFrame *Animation::getPreviousFrame() {
+        return const_cast<AnimationFrame*>(std::as_const(*this).getPreviousFrame());
+    }
+
+    const AnimationFrame* Animation::getPreviousFrame() const {
+        if (currentFrameIndex_ == 0) // Avoid overflow
+            return nullptr;
+
         return getFrameAt(currentFrameIndex_ - 1);
     }
 
@@ -312,7 +355,7 @@ namespace ime {
     }
 
     void Animation::setCurrentFrameIndex(unsigned int index) {
-        if (getCurrentFrame().has_value())
+        if (getCurrentFrame())
             frames_[currentFrameIndex_].isCurrent_ = false;
 
         currentFrameIndex_ = index;

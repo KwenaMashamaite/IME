@@ -35,6 +35,14 @@ namespace ime {
         AnimationFrame{rect.left, rect.top, rect.width, rect.height}
     {}
 
+    void AnimationFrame::setName(const std::string &name) {
+        name_ = name;
+    }
+
+    const std::string &AnimationFrame::getName() const {
+        return name_;
+    }
+
     const UIntRect& AnimationFrame::getSpritesheetRect() const {
         return rect_;
     }

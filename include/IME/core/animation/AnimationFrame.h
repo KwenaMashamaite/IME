@@ -27,6 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Rect.h"
+#include <string>
 
 namespace ime {
     /**
@@ -63,6 +64,40 @@ namespace ime {
         AnimationFrame& operator=(const AnimationFrame&) = default;
 
         /**
+         * @brief Set the name of the frame
+         * @param name The name of the frame
+         *
+         * The name property allows you to retrieve or remove an animation frame
+         * from an Animation by its name instead of its index. Here is an example
+         * that plays an explosion effect when the animation reaches the 3rd frame:
+         *
+         * @code
+         * ime::Animation::Ptr explosionAnim = ime::Animation::create("explosion", spritesheet, ime::seconds(5));
+         * explosionAnim->addFrame(ime::Index{0, 0}, 5);
+         * explosionAnim->getFrame(2).setName("audioTrigger");
+         *
+         * ...
+         *
+         * if (animator.getCurrentFrame().getName() == "audioTrigger")
+         *      explosionSfx.play()
+         *
+         * @endcode
+         *
+         * By default the frame name is an empty string
+         *
+         * @see getName
+         */
+        void setName(const std::string& name);
+
+        /**
+         * @brief Get the name of the frame
+         * @return The name of the frame
+         *
+         * @see setName
+         */
+        const std::string& getName() const;
+
+        /**
          * @brief Get position information of the frame on the Spritesheet
          * @return Position information on the animations spritesheet
          */
@@ -84,6 +119,7 @@ namespace ime {
         UIntRect rect_;       //!< Position information of the frame
         unsigned int index_;  //!< The position of the frame in the animation sequence
         bool isCurrent_;      //!< A flag indicating whether or not the frame is currently displayed by the animation
+        std::string name_;    //!< The name of the frame
 
         friend class Animation;
     };

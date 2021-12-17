@@ -190,26 +190,29 @@ namespace ime {
 
         /**
          * @brief Get the frame that is currently displayed by the active animation
-         * @return The current frame of the active animation or a std::nullopt if
+         * @return The current frame of the active animation or a nullptr if
          *         there is no active animation
          */
-        std::optional<AnimationFrame> getCurrentFrame() const;
+        AnimationFrame* getCurrentFrame();
+        const AnimationFrame* getCurrentFrame() const;
 
         /**
          * @brief Get the frame that comes after the frame that is currently
          *        displayed by the active animation
-         * @return The next frame of the active animation or a std::nullopt if
+         * @return The next frame of the active animation or a nullptr if
          *         there is no active animation or the is no next frame
          */
-        std::optional<AnimationFrame> getNextFrame() const;
+        AnimationFrame* getNextFrame();
+        const AnimationFrame* getNextFrame() const;
 
         /**
          * @brief Get the frame that comes before the frame that is currently
          *        displayed by the active animation
-         * @return The current frame of the active animation or a std::nullopt if
+         * @return The current frame of the active animation or a nullptr if
          *         there is no active animation or there is no previous frame
          */
-        std::optional<AnimationFrame> getPreviousFrame() const;
+        AnimationFrame* getPreviousFrame();
+        const AnimationFrame* getPreviousFrame() const;
 
         /**
          * @brief Remove an animation from the animator

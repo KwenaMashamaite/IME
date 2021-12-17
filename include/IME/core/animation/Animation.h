@@ -415,7 +415,8 @@ namespace ime {
          *
          * @see addFrame, addFrames and getLastFrame
          */
-        std::optional<AnimationFrame> getFirstFrame() const;
+        AnimationFrame* getFirstFrame();
+        const AnimationFrame* getFirstFrame() const;
 
         /**
          * @brief Get the last frame of the animation
@@ -424,7 +425,8 @@ namespace ime {
          *
          * @see addFrame, addFrames and getFirstFrame
          */
-        std::optional<AnimationFrame> getLastFrame() const;
+        AnimationFrame* getLastFrame();
+        const AnimationFrame* getLastFrame() const;
 
         /**
          * @brief Get the frame at an index
@@ -434,7 +436,19 @@ namespace ime {
          *
          * @see getFirstFrame and getLastFrame
          */
-        std::optional<AnimationFrame> getFrameAt(unsigned int index) const;
+        AnimationFrame* getFrameAt(unsigned int index);
+        const AnimationFrame* getFrameAt(unsigned int index) const;
+
+        /**
+         * @brief Get the frame with a given name
+         * @param name The name of the frame
+         * @return The frame at the specified name or nullptr if there is
+         *         no such frame
+         *
+         * @see getFirstFrame and getLastFrame
+         */
+        AnimationFrame* getFrame(const std::string& name);
+        const AnimationFrame* getFrame(const std::string& name) const;
 
         /**
          * @brief Get all the frames in the animation
@@ -537,21 +551,24 @@ namespace ime {
 
         /**
          * @brief Get the current frame
-         * @return The current frame or std::nullopt if the animation does not have any frames
+         * @return The current frame or nullptr if the animation does not have any frames
          */
-        std::optional<AnimationFrame> getCurrentFrame() const;
+        AnimationFrame* getCurrentFrame();
+        const AnimationFrame* getCurrentFrame() const;
 
         /**
          * @brief Get the frame that comes after the current frame
-         * @return The next frame or std::nullopt if there is no next frame
+         * @return The next frame or nullptr if there is no next frame
          */
-        std::optional<AnimationFrame> getNextFrame() const;
+        AnimationFrame* getNextFrame();
+        const AnimationFrame* getNextFrame() const;
 
         /**
          * @brief Get the frame that comes before the current frame
-         * @return The previous frame or std::nullopt if there is no previous frame
+         * @return The previous frame or nullptr if there is no previous frame
          */
-        std::optional<AnimationFrame> getPreviousFrame() const;
+        AnimationFrame* getPreviousFrame();
+        const AnimationFrame* getPreviousFrame() const;
 
         /**
          * @brief Get the completion progress of the animation in the range [0, 1]
