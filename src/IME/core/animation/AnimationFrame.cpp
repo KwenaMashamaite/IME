@@ -27,7 +27,8 @@
 namespace ime {
     AnimationFrame::AnimationFrame(unsigned int rectLeft, unsigned int rectTop, unsigned int rectWidth, unsigned int rectHeight) :
         rect_{rectLeft, rectTop, rectWidth, rectHeight},
-        index_{0}
+        index_{0},
+        isCurrent_{false}
     {}
 
     AnimationFrame::AnimationFrame(const UIntRect& rect) :
@@ -36,6 +37,10 @@ namespace ime {
 
     const UIntRect& AnimationFrame::getSpritesheetRect() const {
         return rect_;
+    }
+
+    bool AnimationFrame::isCurrent() const {
+        return isCurrent_;
     }
 
     unsigned int AnimationFrame::getIndex() const {

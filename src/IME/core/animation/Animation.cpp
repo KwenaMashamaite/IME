@@ -45,6 +45,7 @@ namespace ime {
          isFrameResetOnStop_{true},
          isStartDelayedOnce_{false},
          completionFrame_{-1},
+         currentFrameIndex_{0},
          timescale_{1.0f}
     {
         isDurationDerived_ = (duration == Time::Zero);
@@ -285,6 +286,26 @@ namespace ime {
 
     unsigned int Animation::getCompletionFrameIndex() const {
         return completionFrame_ >= 0 ? completionFrame_ : static_cast<unsigned int>(frames_.size() - 1);
+    }
+
+    std::optional<AnimationFrame> Animation::getCurrentFrame() const {
+        return getFrameAt(currentFrameIndex_);
+    }
+
+    std::optional<AnimationFrame> Animation::getNextFrame() const {
+        return getFrameAt(currentFrameIndex_ + 1);
+    }
+
+    std::optional<AnimationFrame> Animation::getPreviousFrame() const {
+        return getFrameAt(currentFrameIndex_ - 1);
+    }
+
+    void Animation::setCurrentFrameIndex(unsigned int index) {
+        if (getCurrentFrame().has_value())
+            frames_[currentFrameIndex_].isCurrent_ = false;
+
+        currentFrameIndex_ = index;
+        frames_[index].isCurrent_ = true;
     }
 
     void Animation::updateIndexes() {

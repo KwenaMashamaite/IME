@@ -533,6 +533,36 @@ namespace ime {
          */
         unsigned int getCompletionFrameIndex() const;
 
+        /**
+         * @brief Get the current frame
+         * @return The current frame or std::nullopt if the animation does not have any frames
+         */
+        std::optional<AnimationFrame> getCurrentFrame() const;
+
+        /**
+         * @brief Get the frame that comes after the current frame
+         * @return The next frame or std::nullopt if there is no next frame
+         */
+        std::optional<AnimationFrame> getNextFrame() const;
+
+        /**
+         * @brief Get the frame that comes before the current frame
+         * @return The previous frame or std::nullopt if there is no previous frame
+         */
+        std::optional<AnimationFrame> getPreviousFrame() const;
+
+        /**
+         * @internal
+         * @brief Set the index of the current frame
+         * @param index The new index
+         *
+         * By default the index is 0
+         *
+         * @warning This function is intended for internal use only and
+         * should never be called outside of IME
+         */
+        void setCurrentFrameIndex(unsigned int index);
+
     private:
         /**
          * @brief Update the animation frame index
@@ -567,6 +597,7 @@ namespace ime {
         bool isDurationDerived_;    //!< A flag indicating whether or not the duration was derived from the frame rate
         bool isStartDelayedOnce_;   //!< A flag indicating whether or not the animation is start delayed once or every time it starts from the beginning
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
+        unsigned int currentFrameIndex_; //!< The index of the current frame displayed by the animation
         float timescale_;           //!< Playback speed of the animation
     };
 }

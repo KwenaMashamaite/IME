@@ -133,6 +133,18 @@ namespace ime {
         return currentAnimation_;
     }
 
+    std::optional<AnimationFrame> Animator::getCurrentFrame() const {
+        return currentAnimation_ ? currentAnimation_->getCurrentFrame() : std::nullopt;
+    }
+
+    std::optional<AnimationFrame> Animator::getNextFrame() const {
+        return currentAnimation_ ? currentAnimation_->getNextFrame() : std::nullopt;
+    }
+
+    std::optional<AnimationFrame> Animator::getPreviousFrame() const {
+        return currentAnimation_ ? currentAnimation_->getPreviousFrame() : std::nullopt;
+    }
+
     bool Animator::removeAnimation(const std::string &name) {
         if (hasAnimation(name)) {
             animations_.erase(name);
@@ -477,6 +489,7 @@ namespace ime {
     }
 
     void Animator::setCurrentFrame(const AnimationFrame& frame) {
+        currentAnimation_->setCurrentFrameIndex(currentFrameIndex_);
         auto& [leftPos, topPos, width, height] = frame.getSpritesheetRect();
         (*target_).get().setTextureRect(leftPos, topPos, width, height);
     }

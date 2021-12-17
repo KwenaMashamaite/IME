@@ -69,6 +69,12 @@ namespace ime {
         const UIntRect& getSpritesheetRect() const;
 
         /**
+         * @brief Check if the frame is currently displayed by the animation
+         * @return True if currently displayed, otherwise false
+         */
+        bool isCurrent() const;
+
+        /**
          * @brief Get the position of the frame in the animation sequence
          * @return The index of the frame in the animation sequence
          */
@@ -77,6 +83,8 @@ namespace ime {
     private:
         UIntRect rect_;       //!< Position information of the frame
         unsigned int index_;  //!< The position of the frame in the animation sequence
+        bool isCurrent_;      //!< A flag indicating whether or not the frame is currently displayed by the animation
+
         friend class Animation;
     };
 }
