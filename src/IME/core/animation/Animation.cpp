@@ -300,6 +300,13 @@ namespace ime {
         return getFrameAt(currentFrameIndex_ - 1);
     }
 
+    float Animation::getProgress() const {
+        if (frames_.empty() || frames_.size() == 1)
+            return 0;
+        else
+            return static_cast<float>(currentFrameIndex_) / (frames_.size() - 1.0f);
+    }
+
     void Animation::setCurrentFrameIndex(unsigned int index) {
         if (getCurrentFrame().has_value())
             frames_[currentFrameIndex_].isCurrent_ = false;

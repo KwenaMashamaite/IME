@@ -552,6 +552,12 @@ namespace ime {
         std::optional<AnimationFrame> getPreviousFrame() const;
 
         /**
+         * @brief Get the completion progress of the animation in the range [0, 1]
+         * @return The completion progress
+         */
+        float getProgress() const;
+
+        /**
          * @internal
          * @brief Set the index of the current frame
          * @param index The new index
