@@ -35,22 +35,26 @@ namespace ime {
     class IME_API Colour {
     public:
         // Predefined colours
-        static const Colour Black;       //!< Black
-        static const Colour White;       //!< White
-        static const Colour Red;         //!< Red
-        static const Colour Green;       //!< Green
-        static const Colour Blue;        //!< Blue
-        static const Colour Yellow;      //!< Yellow
-        static const Colour Orange;      //!< Orange
-        static const Colour Cyan;        //!< Cyan
-        static const Colour Magenta;     //!< Magenta
-        static const Colour Purple;      //!< Purple
-        static const Colour Pink;        //!< Pink
-        static const Colour Grey;        //!< Grey
-        static const Colour Violet;      //!< Violet
-        static const Colour Turquoise;   //!< Turquoise
-        static const Colour Gold;        //!< Gold
-        static const Colour Transparent; //!< Transparent
+        static const Colour Black;       //!< Black colour
+        static const Colour White;       //!< White colour
+        static const Colour Red;         //!< Red colour
+        static const Colour Green;       //!< Green colour
+        static const Colour Blue;        //!< Blue colour
+        static const Colour Yellow;      //!< Yellow colour
+        static const Colour Orange;      //!< Orange colour
+        static const Colour Brown;       //!< Brown colour
+        static const Colour Maroon;      //!< Maroon colour
+        static const Colour Indigo;      //!< Indigo colour
+        static const Colour Cyan;        //!< Cyan colour
+        static const Colour Magenta;     //!< Magenta colour
+        static const Colour Purple;      //!< Purple colour
+        static const Colour Pink;        //!< Pink colour
+        static const Colour Grey;        //!< Grey colour
+        static const Colour Violet;      //!< Violet colour
+        static const Colour Turquoise;   //!< Turquoise colour
+        static const Colour Gold;        //!< Gold colour
+        static const Colour Silver;      //!< Silver colour
+        static const Colour Transparent; //!< Transparent colour
 
         /**
          * @brief Default constructor

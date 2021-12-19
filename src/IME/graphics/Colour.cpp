@@ -34,6 +34,9 @@ namespace ime {
     const Colour Colour::Blue{0, 0, 255, 255};
     const Colour Colour::Yellow{255, 255, 0, 255};
     const Colour Colour::Orange{255, 165, 0, 255};
+    const Colour Colour::Brown{165, 42, 42, 255};
+    const Colour Colour::Maroon{128, 0, 0, 255};
+    const Colour Colour::Indigo{75, 0, 130, 255};
     const Colour Colour::Cyan{0, 255, 255, 255};
     const Colour Colour::Purple{128, 0, 128, 255};
     const Colour Colour::Violet{238, 130, 238, 255};
@@ -42,6 +45,7 @@ namespace ime {
     const Colour Colour::Grey{128, 128, 128, 255};
     const Colour Colour::Turquoise{64, 224, 208, 255};
     const Colour Colour::Gold{255, 215, 0, 255};
+    const Colour Colour::Silver{192, 192, 192, 255};
     const Colour Colour::Transparent{0, 0, 0, 0};
 
     Colour::Colour() : red(0u), green (0u), blue(0u), opacity(255u)
