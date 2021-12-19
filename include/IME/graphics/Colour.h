@@ -111,6 +111,82 @@ namespace ime {
         unsigned int blue = 0;       //!< Blue component
         unsigned int opacity = 255;  //!< Opacity
     };
+
+    /**
+     * @relates Colour
+     * @brief Add two colours together
+     * @param left Left operand
+     * @param right Right operand
+     * @return The colour that results from the component-wise sum of @a left
+     *         and @a right colours
+     *
+     * Note that the component-wise sum that exceeds 255 will be clamped to 255
+     */
+    IME_API Colour operator +(const Colour& left, const Colour& right);
+
+    /**
+     * @relates Colour
+     * @brief Subtract two colours
+     * @param left Left operand
+     * @param right Right operand
+     * @return The colour that results from the component-wise subtraction of
+     *         @a left and @a right colours
+     *
+     * Note that the component-wise subtraction that results in a negative value
+     * will be clamped to 0
+     */
+    IME_API Colour operator -(const Colour& left, const Colour& right);
+
+    /**
+     * @relates Colour
+     * @brief Multiply/Modulate two colours together
+     * @param left Left operand
+     * @param right Right operand
+     * @return The colour that results from the component-wise multiplication
+     *         of @a left and @a right colours
+     *
+     * Note that after the multiplication, components are then divided by 255
+     * to ensure they remain in the range [0, 255]
+     */
+    IME_API Colour operator *(const Colour& left, const Colour& right);
+
+    /**
+     * @relates Colour
+     * @brief Add two colours together and assign the result to the left operand
+     * @param left Left operand
+     * @param right Right operand
+     * @return Reference to @a left
+     *
+     * Note that the colours are added together component-wise and the
+     * component-wise sum that exceeds 255 will be clamped to 255
+     */
+    IME_API Colour& operator +=(Colour& left, const Colour& right);
+
+    /**
+     * @relates Colour
+     * @brief Subtract two colours and assign the result to the left operand
+     * @param left Left operand
+     * @param right Right operand
+     * @return A reference to @a left
+     *
+     * Note that the colours are subtracted component-wise and the component-wise
+     * subtraction that results in a negative value will be clamped to 0
+     */
+    IME_API Colour& operator -=(Colour& left, const Colour& right);
+
+    /**
+     * @relates Colour
+     * @brief Multiply/Modulate two colours together and assign the result to
+     *        the left operand
+     * @param left Left operand
+     * @param right Right operand
+     * @return A reference to @a left
+     *
+     * Note that the colours are multiplied component-wise and after the
+     * multiplication, components are then divided by 255 to ensure they
+     * remain in the range [0, 255]
+     */
+    IME_API Colour& operator *=(Colour& left, const Colour& right);
 }
 
 #endif // IME_COLOUR_H

@@ -24,6 +24,7 @@
 
 #include "IME/graphics/Colour.h"
 #include <algorithm>
+#include <cmath>
 
 namespace ime {
     const Colour Colour::Black{0, 0, 0, 255};
@@ -76,5 +77,38 @@ namespace ime {
 
     bool Colour::operator!=(const Colour &rhs) const {
         return !(*this == rhs);
+    }
+
+    Colour operator+(const Colour &left, const Colour &right) {
+        return Colour(std::min(left.red + right.red, 255u),
+                     std::min(left.green + right.green, 255u),
+                     std::min(left.blue + right.blue, 255u),
+                     std::min(left.opacity + right.opacity, 255u));
+    }
+
+    Colour operator-(const Colour &left, const Colour &right) {
+        return Colour(static_cast<unsigned int>(std::max(int(left.red) - int(right.red), 0)),
+                      static_cast<unsigned int>(std::max(int(left.green) - int(right.green), 0)),
+                      static_cast<unsigned int>(std::max(int(left.blue) - int(right.blue), 0)),
+                      static_cast<unsigned int>(std::max(int(left.opacity) - int(right.opacity), 0)));
+    }
+
+    Colour operator*(const Colour &left, const Colour &right) {
+        return Colour((left.red * right.red) / 255u,
+                     (left.green * right.green) / 255u,
+                      (left.blue * right.blue) / 255u,
+                      (left.opacity * right.opacity) / 255u);
+    }
+
+    Colour &operator+=(Colour &left, const Colour &right) {
+        return left = left + right;
+    }
+
+    Colour &operator-=(Colour &left, const Colour &right) {
+        return left = left - right;
+    }
+
+    Colour &operator*=(Colour &left, const Colour &right) {
+        return left = left * right;
     }
 }
