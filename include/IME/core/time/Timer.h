@@ -363,6 +363,18 @@ namespace ime {
         void onRestart(const Callback<Timer&>& callback);
 
         /**
+         * @brief Add an event listener to an update event
+         * @param callback Function to be executed when the timer ticks
+         *
+         * This event is triggered every time the timer advances/updates.
+         * Only one event listener may be registered at a time. Pass nullptr
+         * to remove the current event listener
+         *
+         * @see onStart, onPause and onStop, onRestart
+         */
+        void onUpdate(const Callback<Timer&>& callback);
+
+        /**
          * @internal
          * @brief Update the time
          * @param deltaTime Time passed since last update
@@ -386,6 +398,7 @@ namespace ime {
         Callback<Timer&> onPause_;   //!< A function executed when the timer is paused
         Callback<Timer&> onStop_;    //!< A function executed when the timer is stopped
         Callback<Timer&> onRestart_; //!< A Function executed when the timer is restarted
+        Callback<Timer&> onUpdate_;  //!< A function executed when the timer ticks
     };
 }
 

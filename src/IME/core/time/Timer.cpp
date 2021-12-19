@@ -171,6 +171,10 @@ namespace ime {
             return;
 
         remainingDuration_ -= deltaTime;
+
+        if (onUpdate_)
+            onUpdate_(*this);
+
         if (remainingDuration_ <= Time::Zero && onTimeout_) {
             onTimeout_();
             isDispatched_ = true;
@@ -214,5 +218,9 @@ namespace ime {
 
     void Timer::onRestart(const Timer::Callback<Timer&>& callback) {
         onRestart_ = callback;
+    }
+
+    void Timer::onUpdate(const Timer::Callback<Timer &> &callback) {
+        onUpdate_ = callback;
     }
 }
