@@ -180,15 +180,17 @@ namespace ime {
     }
 
     void Timer::update(Time deltaTime) {
-        if (status_ != Status::Running || remainingDuration_ < Time::Zero)
+        if (status_ != Status::Running)
             return;
 
         remainingDuration_ -= deltaTime;
+        if (remainingDuration_ < Time::Zero)
+            remainingDuration_ = Time::Zero;
 
         if (onUpdate_)
             onUpdate_(*this);
 
-        if (remainingDuration_ <= Time::Zero && onTimeout_) {
+        if (remainingDuration_ == Time::Zero && onTimeout_) {
             onTimeout_();
             isDispatched_ = true;
             dispatchCount_++;
