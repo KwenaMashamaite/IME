@@ -25,13 +25,14 @@ IME is a state-based game engine for developing 2D games. It is written in C++17
 
 Here is a list of games developed with IME:
 
-1. [1980's Pac-Man arcade game clone](https://github.com/KwenaMashamaite/PacMan)
+1. [Pac-Man arcade game clone](https://github.com/KwenaMashamaite/PacMan)
+2. [Super Pac-Man arcade game clone](https://github.com/KwenaMashamaite/SuperPacMan)
 
 ## Downloads
 
 _**Note that from `v2.4.0`, IME no longer provides precompiled `MinGW 7.3.0` binaries**_
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.4.0).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.5.0).
 To use the library you must have a supported (GCC or VC++) C++17 compliant compiler.
 Available binaries are compiled with `GCC MinGW 10.3.0` and `Microsoft Visual C++ 16 2019`
 compilers. This means that in order to use them, you must have the exact compiler on your system.
@@ -50,7 +51,7 @@ set `IME_DIR`, *CMake* will automatically find the library
 ```cmake
 # Find IME
 set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if IME installed in known location
-find_package(IME 2.4.0 REQUIRED)
+find_package(IME 2.5.0 REQUIRED)
 
 # Link IME
 target_link_libraries (myGame PRIVATE ime)
@@ -96,7 +97,7 @@ location, usually `Program Files (x86)\IME`. However, this may require admin pri
 ## Learn
 
 * [Tutorials](#Learn) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.4.0/html/index.html)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.5.0/html/index.html)
 
 ## Platform
 
