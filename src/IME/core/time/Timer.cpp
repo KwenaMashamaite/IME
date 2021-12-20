@@ -104,11 +104,15 @@ namespace ime {
     void Timer::start() {
         IME_ASSERT(onTimeout_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
         if (status_ != Status::Running) {
-            status_ = Status::Running;
-            dispatchCount_ = 0;
+            if (status_ == Status::Paused)
+                resume();
+            else {
+                status_ = Status::Running;
+                dispatchCount_ = 0;
 
-            if (onStart_ && !isRestarting_)
-                onStart_(*this);
+                if (onStart_ && !isRestarting_)
+                    onStart_(*this);
+            }
         } else
             restart();
     }
@@ -118,7 +122,7 @@ namespace ime {
             status_ = Status::Stopped;
             remainingDuration_ = interval_;
 
-            if (onStop_ && !isRestarting_ &&!isExecutionComplete_)
+            if (onStop_ && !isRestarting_ && !isExecutionComplete_)
                 onStop_(*this);
         }
     }
@@ -129,6 +133,15 @@ namespace ime {
 
             if (onPause_)
                 onPause_(*this);
+        }
+    }
+
+    void Timer::resume() {
+        if (status_ == Status::Paused) {
+            status_ = Status::Running;
+
+            if (onResume_ && !isRestarting_)
+                onResume_(*this);
         }
     }
 
@@ -210,6 +223,10 @@ namespace ime {
 
     void Timer::onPause(const Timer::Callback<Timer&>& callback) {
         onPause_ = callback;
+    }
+
+    void Timer::onResume(const Timer::Callback<Timer &> &callback) {
+        onResume_ = callback;
     }
 
     void Timer::onStop(const Timer::Callback<Timer&>& callback) {

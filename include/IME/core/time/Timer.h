@@ -213,12 +213,13 @@ namespace ime {
          * zero
          *
          * @note This function will start the countdown if it was not started
-         * or resume it if it was paused. If called while the timer is running
-         * then, the timer will restart
+         * or resume it if it was paused. If the timer is paused, onResume()
+         * will be called instead of onStart(). If start() is called while the
+         * timer is running then, the timer will restart
          *
          * @warning This function must be called only if the interval is
-         * greater than zero and the timeout callback is set, otherwise
-         * undefined behavior
+         * greater than or equal to zero and the timeout callback is set,
+         * otherwise undefined behavior
          *
          * @see onStart, setInterval, setTimeoutCallback, restart and pause
          */
@@ -240,13 +241,20 @@ namespace ime {
         /**
          * @brief Stop the timer without resetting the remaining duration
          *
-         * When the timer is paused it can be resumed by calling the start
-         * function. The timer will begin the countdown from the remaining
-         * duration instead of restarting from the interval
+         * When the timer is paused it can be resumed by calling the start()
+         * or resume() functions. The timer will begin the countdown from the
+         * remaining duration instead of restarting from the interval
          *
          * @see onPause, start and setInterval
          */
         void pause();
+
+        /**
+         * @brief Resume a paused timer
+         *
+         * @see onResume, pause and start
+         */
+        void resume();
 
         /**
          * @brief Restart the countdown
@@ -311,8 +319,8 @@ namespace ime {
          * @brief Add an event listener to a start event
          * @param callback The function to be executed when the timer is started
          *
-         * This event is triggered when the timer is started for the first
-         * time or when it is started after it was paused.
+         * This event is triggered when the timer is started from a stopped
+         * state
          *
          * By default, there is no callback registered to this event. Pass
          * @a nullptr to remove any registered event listener. In addition,
@@ -335,6 +343,19 @@ namespace ime {
          * @see pause, onStart, onStop and onRestart
          */
         void onPause(const Callback<Timer&>& callback);
+
+        /**
+         * @brief Add an event listener to a resume event
+         * @param callback Function to be executed when the timer is resumed
+         *
+         * By default, there is no callback registered to this event. Pass
+         * @a nullptr to remove any registered event listener. In addition,
+         * note that adding a new event listener removes the previous event
+         * listener
+         *
+         * @see pause, onStart, onStop and onRestart
+         */
+        void onResume(const Callback<Timer&>& callback);
 
         /**
          * @brief Add an event listener to a stop event
@@ -396,6 +417,7 @@ namespace ime {
         Callback<> onTimeout_;       //!< A function executed when the countdown reaches zero
         Callback<Timer&> onStart_;   //!< A function executed when the timer is started
         Callback<Timer&> onPause_;   //!< A function executed when the timer is paused
+        Callback<Timer&> onResume_;  //!< A function executed when the timer is resumed
         Callback<Timer&> onStop_;    //!< A function executed when the timer is stopped
         Callback<Timer&> onRestart_; //!< A Function executed when the timer is restarted
         Callback<Timer&> onUpdate_;  //!< A function executed when the timer ticks
