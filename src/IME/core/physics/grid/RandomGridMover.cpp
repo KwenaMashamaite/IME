@@ -116,7 +116,7 @@ namespace ime {
             // Attempt to reverse direction and go backwards. This an exception to the no reverse
             // direction rule. Without the exception, the target will be stuck in an infinite loop
             if (directionAttempts_.empty()) {
-                requestDirectionChange(reverseGhostDir);
+                requestMove(reverseGhostDir);
                 break;
             }
 
@@ -125,7 +125,7 @@ namespace ime {
 
             if (!isBlockedInDirection(dir).first) {
                 directionAttempts_.clear();
-                requestDirectionChange(dir);
+                requestMove(dir);
                 break;
             }
 

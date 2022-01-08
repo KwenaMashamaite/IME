@@ -80,7 +80,7 @@ namespace ime {
 
         if (!isMovementStarted_) {
             isMovementStarted_ = true;
-            requestDirectionChange(direction_ == CycleDirection::Clockwise ? ime::Right : ime::Left);
+            requestMove(direction_ == CycleDirection::Clockwise ? ime::Right : ime::Left);
             emit("startMovement");
         }
     }
@@ -97,10 +97,10 @@ namespace ime {
             return;
 
         if (!isBlockedInDirection(newDir).first)
-            requestDirectionChange(newDir);
+            requestMove(newDir);
         else if (!isBlockedInDirection(curDir).first)
-            requestDirectionChange(curDir);
+            requestMove(curDir);
         else
-            requestDirectionChange(newDir * -1);
+            requestMove(newDir * -1);
     }
 }

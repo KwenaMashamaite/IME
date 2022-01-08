@@ -212,7 +212,7 @@ namespace ime {
                 << nextPos.row << ", " << nextPos.colm << "}")
         }
 
-        return requestDirectionChange(newDirection);
+        return requestMove(newDirection);
     }
 
     void TargetGridMover::generatePath() {

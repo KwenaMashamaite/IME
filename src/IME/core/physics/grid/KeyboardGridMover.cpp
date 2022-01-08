@@ -39,7 +39,7 @@ namespace ime {
         onAdjacentMoveEnd([this](Index) {
             if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
-                requestDirectionChange(newDir);
+                requestMove(newDir);
                 newDir = Unknown;
             }
         });
@@ -177,7 +177,7 @@ namespace ime {
             newDir_.first = true;
             newDir_.second = targetDirection;
         } else if (targetDirection != Vector2i{0, 0})
-            requestDirectionChange(targetDirection);
+            requestMove(targetDirection);
     }
 
     void KeyboardGridMover::handleEvent(Event event) {

@@ -196,14 +196,23 @@ namespace ime {
     }
 
     bool GridMover::requestDirectionChange(const Direction& newDir) {
+        return requestMove(newDir);
+    }
+
+    bool GridMover::requestMove(const Direction &dir) {
         IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first")
 
-        if (!isMoveValid(newDir))
+        if (!isMoveValid(dir))
             return false;
 
         if (!isTargetMoving() && targetDirection_ == Unknown) {
-            targetDirection_ = newDir;
+            targetDirection_ = dir;
+            internalEmitter_.emit("directionChange", dir);
+            externalEmitter_.emit("directionChange", dir);
+
+            ///@deprecated since v2.6.0, @todo remove statement in v2.7.0
             emitChange(Property{"direction", targetDirection_});
+
             return true;
         }
 
@@ -477,6 +486,10 @@ namespace ime {
         return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gameObjectCollision", callback, oneTime);
     }
 
+    int GridMover::onDirectionChange(const Callback<Direction> &callback, bool oneTime) {
+        return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "directionChange", callback, oneTime);
+    }
+
     int GridMover::onGridBorderCollision(const Callback<>& callback, bool oneTime) {
         return utility::addEventListener(isInternalHandler_ ? internalEmitter_ : externalEmitter_, "gridBorderCollision", callback, oneTime);
     }
@@ -495,7 +508,8 @@ namespace ime {
             (removeEventListener("adjacentMoveEnd", handlerId)) ||
             (removeEventListener("targetTileReset", handlerId)) ||
             (removeEventListener("solidTileCollision", handlerId)) ||
-            (removeEventListener("gridBorderCollision", handlerId)))
+            (removeEventListener("gridBorderCollision", handlerId)) ||
+            (removeEventListener("directionChange", handlerId)))
         {
             return true;
         }
@@ -510,6 +524,7 @@ namespace ime {
         externalEmitter_.removeAllEventListeners("targetTileReset");
         externalEmitter_.removeAllEventListeners("solidTileCollision");
         externalEmitter_.removeAllEventListeners("gridBorderCollision");
+        externalEmitter_.removeAllEventListeners("directionChange");
     }
 
     void GridMover::copyExternEventListeners(const GridMover &other) {

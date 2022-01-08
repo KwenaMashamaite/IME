@@ -163,6 +163,8 @@ namespace ime {
         void syncWith(const GridMover& other);
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::GridMover::requestMove instead
          * @brief Change the direction of the game object
          * @param newDir The new direction of the game object
          * @return True if the direction was changed or false if the game
@@ -176,6 +178,9 @@ namespace ime {
          * Usually property change events are only emitted by setters (functions
          * that begin with a "set" prefix)
          *
+         * @attention post v2.6.0, the "direction" property change event will no
+         * longer be emitted. Use ime::GridMover::onDirectionChange() instead.
+         *
          * @note If the direction change is granted, then the adjacent tile in
          * the requested direction will be flagged as occupied by the target
          * before it is moved there
@@ -187,9 +192,25 @@ namespace ime {
          * });
          * @endcode
          *
-         * @see update
+         * @see update, requestMove
          */
+         [[deprecated("Use 'ime::GridMover::requestMove(const ime::Direction&)' instead.")]]
         bool requestDirectionChange(const Direction& newDir);
+
+        /**
+         * @brief Request a move in a given direction
+         * @param dir The direction to move in
+         * @return True if the move was granted or false if the target is
+         *         currently moving to another tile
+         *
+         * The target can only move one tile at a time, as a result it
+         * cannot be requested to move to a tile while it is currently moving
+         * towards another tile (see isTargetMoving()). In addition, If a move
+         * in the specified direction is possible, the adjacent tile in the
+         * specified direction will be flagged as occupied by the target before
+         * it moves to it
+         */
+        bool requestMove(const Direction& dir);
 
         /**
          * @brief Check if the target is blocked from moving in a direction
@@ -307,7 +328,7 @@ namespace ime {
          *         in tiles
          *
          * Recall that when moved, the target occupies a tile ahead of time
-         * (see requestDirectionChange())
+         * (see requestMove())
          *
          * @see getPrevTileIndex
          */
@@ -466,6 +487,19 @@ namespace ime {
         int onGameObjectCollision(const CollisionCallback& callback, bool oneTime = false);
 
         /**
+         * @brief Add an event listener to a target direction change
+         * @param callback The function to be executed when target direction changes
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identifier
+         *
+         * The direction change event is triggered by a move request
+         *
+         * @see requestMove
+         */
+        int onDirectionChange(const Callback<Direction>& callback, bool oneTime = false);
+
+        /**
          * @brief Remove an event listener from the grid movers event list
          * @param handlerId The unique identification number of the listener
          * @return True if the event listener was removed or false if no such
@@ -550,7 +584,7 @@ namespace ime {
          * @warning This function is intended for internal use only and
          * should never be called outside of IME
          *
-         * @see onAdjacentMoveEnd and requestDirectionChange
+         * @see onAdjacentMoveEnd
          */
         virtual void update(Time deltaTime);
 
