@@ -446,6 +446,12 @@ namespace ime {
         void onFrameEnd(Callback<> callback);
 
         /**
+         * @brief Execute a callback when the engine starts running
+         * @param callback Function to be executed
+         */
+        void onStart(Callback<> callback);
+
+        /**
          * @brief Execute a callback when the engine is shut down
          * @param callback The function to be executed
          *

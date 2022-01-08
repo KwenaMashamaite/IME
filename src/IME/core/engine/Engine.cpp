@@ -174,6 +174,8 @@ namespace ime {
         sceneManager_->enterTopScene();
         Time deltaTime;
         Clock gameClock;
+        eventEmitter_.emit("start");
+
         while (window_->isOpen() && isRunning_ && !sceneManager_->isEmpty()) {
             deltaTime = gameClock.restart();
             if (onFrameStart_)
@@ -442,6 +444,10 @@ namespace ime {
 
     void Engine::onFrameEnd(Callback<> callback) {
         onFrameEnd_ = std::move(callback);
+    }
+
+    void Engine::onStart(Callback<> callback) {
+        eventEmitter_.addEventListener("start", std::move(callback));
     }
 
     void Engine::onShutDown(Callback<> callback) {
