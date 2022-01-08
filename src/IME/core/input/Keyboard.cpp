@@ -74,7 +74,9 @@ namespace ime::input {
             case KeyboardEvent::KeyDown:
                 return eventEmitter_.removeEventListener("keyDown", id);
             case KeyboardEvent::KeyUp:
-                return eventEmitter_.removeEventListener("keyPressed", id);
+                return eventEmitter_.removeEventListener("keyUp", id);
+            case KeyboardEvent::KeyHeld:
+                return eventEmitter_.removeEventListener("keyHeld", id);
             default:
                 return false;
         }
