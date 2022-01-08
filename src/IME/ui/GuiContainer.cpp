@@ -194,8 +194,10 @@ namespace ime::ui {
 
         Widget* getFocusedLeaf() const {
             auto widget = sfmlGui_.getFocusedLeaf();
+
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString()).get();
+                return getWidget(widget->getWidgetName().toStdString());
+
             return nullptr;
         }
 
