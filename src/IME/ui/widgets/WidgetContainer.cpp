@@ -25,6 +25,7 @@
 #include "IME/ui/widgets/WidgetContainer.h"
 #include "IME/utility/Helpers.h"
 #include "IME/ui/widgets/WidgetImpl.h"
+#include "IME/ui/widgets/TabsContainer.h"
 #include <TGUI/Container.hpp>
 #include <iostream>
 
@@ -95,8 +96,10 @@ namespace ime::ui {
 
         ui::Widget* getWidgetAtPosition(Vector2f pos) const  {
             auto widget = tguiContainer_->getWidgetAtPosition({pos.x, pos.y});
+
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString()).get();
+                return getWidget(widget->getWidgetName().toStdString());
+
             return nullptr;
         }
 

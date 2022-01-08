@@ -42,6 +42,7 @@
 #include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
 #include "IME/graphics/RenderTargetImpl.h"
+#include "IME/ui/widgets/TabsContainer.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
 #include <iostream>
@@ -124,8 +125,10 @@ namespace ime::ui {
 
         Widget* getWidgetBelowMouseCursor(Vector2f mousePos) const {
             auto widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
+
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString()).get();
+                return getWidget(widget->getWidgetName().toStdString());
+
             return nullptr;
         }
 
@@ -203,8 +206,10 @@ namespace ime::ui {
 
         Widget* getWidgetAtPosition(Vector2f pos) const {
             auto widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
+
             if (widget)
-                return widgets_.at(widget->getWidgetName().toStdString()).get();
+                return getWidget(widget->getWidgetName().toStdString());
+
             return nullptr;
         }
 
