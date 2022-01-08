@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.17)
 
 # Project name, version and description
 
-project(IME VERSION 2.5.0 DESCRIPTION "A 2D state-based game engine using modern C++")
+project(IME VERSION 2.6.0 DESCRIPTION "A 2D state-based game engine using modern C++")
 
 # IME uses the paths from the cmake GNUInstallDirs module as defaults
 # (https://cmake.org/cmake/help/v3.0/module/GNUInstallDirs.html)
