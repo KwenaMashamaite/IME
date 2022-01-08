@@ -259,6 +259,20 @@ namespace ime {
         virtual void onResume() {};
 
         /**
+         * @brief Handle a reactivation from
+         *
+         * This function is called when this scene is reactivated from the cache
+         * (see ime::Engine::PushCachedScene)
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
+         *
+         * @see ime::Engine::PushCachedScene, onPause, onResume
+         */
+        virtual void onResumeFromCache() {};
+
+        /**
          * @brief Exit a scene
          *
          * This function will be called by the game engine before the
@@ -373,6 +387,35 @@ namespace ime {
          * @see setInputEnable
          */
         bool isInputEnabled() const;
+
+        /**
+         * @brief Cache or uncahe the scene
+         * @param cache True to cache or false to uncache
+         * @param alias A unique name for identification during retrieval
+         *
+         * A cached scene is not destroyed when popped from the Engine but
+         * rather saved for reuse. For example, instead of instantiating a
+         * new pause menu scene every time the game is paused, you can cache
+         * the pause menu scene instance and return to it whenever the game
+         * is paused. This may improve performance.
+         *
+         * Unlike ime::Engine::cacheScene, this function will cache the scene
+         * after it was active. To remove the scene from the cache simply call
+         * @e setCached(false)
+         *
+         * By default the scene is not cached
+         *
+         * @see isCached, ime::Engine::cacheScene, ime::Engine::uncacheScene
+         */
+        void setCached(bool cache, const std::string& alias = "");
+
+        /**
+         * @brief Check if the scene is cached or not
+         * @return True if cached, otherwise false
+         *
+         * @see setCached
+         */
+        bool isCached() const;
 
         /**
          * @brief Set the scene timescale
@@ -678,6 +721,7 @@ namespace ime {
         bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
+        std::pair<bool, std::string> cacheState_;
         friend class priv::SceneManager;      //!< Pre updates the scene
 
         std::unique_ptr<std::reference_wrapper<Engine>> engine_;           //!< A reference to the game engine

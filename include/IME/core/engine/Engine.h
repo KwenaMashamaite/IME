@@ -227,8 +227,23 @@ namespace ime {
          * the active scene. All the other scenes will be pushed without
          * initialization. This means that only the optional callback attached
          * to the last scene will be invoked
+         *
+         * @see popScene
          */
         void pushScene(Scene::Ptr scene, Callback<> callback = nullptr);
+
+        /**
+         * @brief Push a cached scene
+         * @param name The name of the scene to push
+         * @return True if the scene was pushed or false if the scene with
+         *         the given name does not exist in the cache list
+         *
+         * Note that after the push, the scene is removed from the cache and
+         * will be added back once its popped (if the cache state is still true)
+         *
+         * @see cacheScene, ime::Scene::setCached and popScene
+         */
+        bool pushCachedScene(const std::string& name);
 
         /**
          * @brief Remove the current scene from the engine
@@ -240,9 +255,49 @@ namespace ime {
          * In addition, Calling this function when the engine has no scenes
          * has no effect
          *
-         * @see pushScene
+         * @see pushScene and pushCachedScene
          */
         void popScene();
+
+        /**
+         * @brief Add a scene to the cache list
+         * @param name The unique name of the scene for later access
+         * @param scene The scene to be added
+         *
+         * A cached scene is not destroyed when popped from the Engine but
+         * rather saved for reuse. This means that you can have a single
+         * instance that you return to. For example, instead of instantiating
+         * a new main menu scene every time the user wants to go to the main
+         * menu, you can instantiate it once, cache it and use pushCachedScene()
+         *
+         * Unlike ime::Scene::setCached, this function will cache the scene
+         * immediately
+         *
+         * @see pushCachedScene, uncacheScene, ime::Scene::setCached
+         */
+        void cacheScene(const std::string& name, Scene::Ptr scene);
+
+        /**
+         * @brief Remove a scene from the cache list
+         * @param name The name of the scene to be removed
+         * @return True if the scene was removed or false if it does not exist
+         *
+         * Unlike calling ime::Scene::setCached with a @a false argument, which
+         * destroys the scene after it gets popped, this function will destroy
+         * the scene immediately
+         *
+         * @see cacheScene
+         */
+        bool uncacheScene(const std::string& name);
+
+        /**
+         * @brief Check if a scene with a given name is cached or not
+         * @param name The name of the scene to be checked
+         * @return True if the scene is cached, otherwise false
+         *
+         * @see cacheScene
+         */
+        bool isSceneCached(const std::string& name) const;
 
         /**
          * @brief Remove all the scenes from the engine except the current

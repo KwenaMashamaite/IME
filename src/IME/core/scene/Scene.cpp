@@ -36,6 +36,7 @@ namespace ime {
         isEventUpdatedWhenPaused_{false},
         hasPhysicsSim_{false},
         hasTilemap_{false},
+        cacheState_{false, ""},
         spriteContainer_{std::make_unique<SpriteContainer>(renderLayers_)},
         entityContainer_{std::make_unique<GameObjectContainer>(renderLayers_)},
         shapeContainer_{std::make_unique<ShapeContainer>(renderLayers_)}
@@ -74,6 +75,7 @@ namespace ime {
             isEventUpdatedWhenPaused_ = other.isEventUpdatedWhenPaused_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasTilemap_ = other.hasTilemap_;
+            cacheState_ = other.cacheState_;
             isEntered_ = false;
         }
 
@@ -144,6 +146,15 @@ namespace ime {
 
     bool Scene::isInputEnabled() const {
         return isInputEnabled_;
+    }
+
+    void Scene::setCached(bool cache, const std::string& alias) {
+        cacheState_.first = cache;
+        cacheState_.second = alias;
+    }
+
+    bool Scene::isCached() const {
+        return cacheState_.first;
     }
 
     bool Scene::isVisibleOnPause() const {

@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/SceneManager.h"
-#include "IME/core/scene/Scene.h"
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
@@ -43,10 +42,43 @@ namespace ime::priv {
         }
 
         scenes_.push(std::move(scene));
-        if (enterScene && !scenes_.top()->isEntered()) {
-            scenes_.top()->isEntered_ = true;
-            scenes_.top()->onEnter();
+        auto* activeScene = scenes_.top().get();
+
+        if (activeScene->isEntered()) {
+            if (activeScene->isCached())
+                activeScene->onResumeFromCache();
+        } else if (enterScene) {
+            activeScene->isEntered_ = true;
+            activeScene->onEnter();
         }
+    }
+
+    Scene::Ptr SceneManager::getCached(const std::string &name) {
+        auto found = cachedScenes_.find(name);
+
+        if (found != cachedScenes_.end()) {
+            auto scene = std::move(found->second);
+            cachedScenes_.erase(found);
+            return scene;
+        }
+
+        return nullptr;
+    }
+
+    void SceneManager::cache(const std::string &name, Scene::Ptr scene) {
+        IME_ASSERT(scene, "Cached scene must not be a nullptr")
+        scene->setCached(true, name);
+        cachedScenes_.insert({name, std::move(scene)});
+    }
+
+    bool SceneManager::isCached(const std::string &name) const {
+        return cachedScenes_.find(name) != cachedScenes_.end();
+    }
+
+    bool SceneManager::removeCached(const std::string &name) {
+        int sizeBefore = cachedScenes_.size();
+        cachedScenes_.erase(name);
+        return cachedScenes_.size() < sizeBefore;
     }
 
     void SceneManager::popScene() {
@@ -62,6 +94,9 @@ namespace ime::priv {
 
         if (poppedScene->isEntered())
             poppedScene->onExit();
+
+        if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached)
+            cachedScenes_.insert({cacheAlias, std::move(poppedScene)});
 
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
@@ -88,6 +123,10 @@ namespace ime::priv {
         prevScene_ = nullptr;
         while (!scenes_.empty())
             scenes_.pop();
+    }
+
+    void SceneManager::clearCachedScenes() {
+        cachedScenes_.clear();
     }
 
     void SceneManager::clearAllExceptActive() {
@@ -190,7 +229,7 @@ namespace ime::priv {
             updateScene(deltaTime, prevScene_, true);
     }
 
-    void SceneManager::forEachScene(const Callback<const SceneManager::ScenePtr&>& callback) {
+    void SceneManager::forEachScene(const Callback<const Scene::Ptr&>& callback) {
         std::stack<Scene::Ptr> temp;
         while (!scenes_.empty()) {
             callback(scenes_.top());

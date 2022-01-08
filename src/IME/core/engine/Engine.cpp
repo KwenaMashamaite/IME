@@ -243,11 +243,36 @@ namespace ime {
             scenesPendingPush_.push({std::move(scene), std::move(callback)});
     }
 
+    bool Engine::pushCachedScene(const std::string &name) {
+        Scene::Ptr scene = sceneManager_->getCached(name);
+
+        if (scene) {
+            pushScene(std::move(scene), nullptr);
+            return true;
+        }
+
+        return false;
+    }
+
     void Engine::popScene() {
         if (!isRunning_)
             sceneManager_->popScene();
         else
             popCounter_++;
+    }
+
+    void Engine::cacheScene(const std::string &name, Scene::Ptr scene) {
+        IME_ASSERT(scene, "A cached scene cannot be a nullptr")
+        scene->init(*this);
+        sceneManager_->cache(name, std::move(scene));
+    }
+
+    bool Engine::uncacheScene(const std::string &name) {
+        return sceneManager_->removeCached(name);
+    }
+
+    bool Engine::isSceneCached(const std::string &name) const {
+        return sceneManager_->isCached(name);
     }
 
     void Engine::removeAllScenesExceptActive() {
@@ -307,6 +332,7 @@ namespace ime {
         settingFile_.clear();
         configs_.clear();
         sceneManager_->clear();
+        sceneManager_->clearCachedScenes();
         timerManager_.clear();
         dataSaver_.clear();
         diskDataSaver_.clear();

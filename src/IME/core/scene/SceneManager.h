@@ -28,12 +28,13 @@
 #include "IME/Config.h"
 #include "IME/core/time/Time.h"
 #include "IME/core/event/Event.h"
+#include "IME/core/scene/Scene.h"
 #include <stack>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace ime {
-    class Scene;
-
     /// @internal
     namespace priv {
         class RenderTarget;
@@ -59,8 +60,6 @@ namespace ime {
          */
         class IME_API SceneManager final {
         public:
-            using ScenePtr = std::unique_ptr<Scene>;
-
             /**
              * @brief Default constructor
              */
@@ -119,12 +118,40 @@ namespace ime {
              *
              * @see enterTopScene
              */
-            void pushScene(ScenePtr scene, bool enterScene = false);
+            void pushScene(Scene::Ptr scene, bool enterScene = false);
 
             /**
              * @brief Remove the current active scene
              */
             void popScene();
+
+            /**
+             * @brief Cache a scene
+             * @param name The unique scene identifier
+             * @param scene The scene to be cached
+             */
+            void cache(const std::string& name, Scene::Ptr scene);
+
+            /**
+             * @brief Check if a scene with a given name exists in the cache list
+             * @param name The name of the scene to be checked
+             * @return True if it exists, otherwise false
+             */
+            bool isCached(const std::string& name) const;
+
+            /**
+             * @brief Remove a cached scene
+             * @param name The name of the scene to be removed
+             * @return True if the scene was removed or false if it does not exist
+             */
+            bool removeCached(const std::string& name);
+
+            /**
+             * @brief Push a cached scene
+             * @param name The name of the scene to push
+             * @return The requested scene if it exists, otherwise a nullptr
+             */
+            Scene::Ptr getCached(const std::string& name);
 
             /**
              * @brief Get the current number of scenes
@@ -150,6 +177,11 @@ namespace ime {
              * @see clearAllExceptActive
              */
             void clear();
+
+            /**
+             * @brief Clear cached scenes
+             */
+            void clearCachedScenes();
 
             /**
              * @brief Remove all scenes except the current active scene
@@ -204,7 +236,7 @@ namespace ime {
              * @brief Execute a callback for every scene in the scene manager
              * @param callback The callback to be executed
              */
-            void forEachScene(const Callback<const ScenePtr&>& callback);
+            void forEachScene(const Callback<const Scene::Ptr&>& callback);
 
             /**
              * @brief Destructor
@@ -237,8 +269,9 @@ namespace ime {
             void updatePhysicsWorld(Scene* scene, const Time& deltaTime, bool fixedUpdate);
 
         private:
-            std::stack<ScenePtr> scenes_; //!< Scenes container
-            Scene* prevScene_;            //!< Pointer to the active scene before a push operation
+            std::stack<Scene::Ptr> scenes_; //!< Scenes container
+            Scene* prevScene_;              //!< Pointer to the active scene before a push operation
+            std::unordered_map<std::string, Scene::Ptr> cachedScenes_;
         };
     }
 }
