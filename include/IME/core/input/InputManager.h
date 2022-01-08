@@ -34,6 +34,17 @@
 namespace ime {
     namespace input {
         /**
+         * @brief Action triggers for key binds
+         */
+        enum class KeyBindType {
+            KeyUp,   //!< The action is triggered when a depressed/held key is released
+            KeyDown, //!< The action is triggered when a key is depressed
+            KeyHeld  //!< The action is triggered when a depressed key remains held
+        };
+
+        using KeybindAction = Callback<>; //!< An action performed when a key bind is triggered
+
+        /**
          * @brief Manages keyboard and mouse inputs
          *
          * This class is not meant to be instantiated directly, use
@@ -49,6 +60,44 @@ namespace ime {
              * This function checks the state of the key in real time
              */
             static bool isKeyPressed(Keyboard::Key key) ;
+
+            /**
+             * @brief Bind a key to an action
+             * @param key The key to bind the action to
+             * @param type The type of key bind
+             * @param action The action to be performed when the key is triggered
+             * @return The actions unique identifier
+             *
+             * @see unbindKey
+             */
+            int bindKey(Keyboard::Key key, KeyBindType type, const KeybindAction& action);
+
+            /**
+             * @brief Bind a two key combination to an action
+             * @param keyA The first key
+             * @param keyB The second key
+             * @param keyBindType The type of key bind (key down or key held only)
+             * @param action The action to be performed when the two keys are triggered
+             * @return The actions unique identifier
+             *
+             * Note that if @a keyBindType is ime::input::KeyBindType::KeyUp,
+             * the key bind will be ignored
+             *
+             * @see bindKey, unbindKey
+             */
+            int bindKeys(Keyboard::Key keyA, Keyboard::Key keyB, KeyBindType keyBindType,
+                const KeybindAction& action);
+
+            /**
+             * @brief Unbind a key action
+             * @param keyBindType The type of key action to unbind
+             * @param id The id of the action
+             * @return True if the action was unbounded or false if no such
+             *         binding key exists
+             *
+             * @see bindKey
+             */
+            bool unbindKey(KeyBindType keyBindType, int id);
 
             /**
              * @brief Add an event listener to a key up event

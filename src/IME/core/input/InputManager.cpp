@@ -29,6 +29,49 @@ namespace ime::input {
         return input::Keyboard::isKeyPressed(key);
     }
 
+    int InputManager::bindKey(Keyboard::Key key, KeyBindType type, const KeybindAction &action) {
+        switch (type) {
+            case KeyBindType::KeyUp:
+                return keyboard_.onKeyUp([key, action](Keyboard::Key upKey) {
+                    if (key == upKey)
+                        action();
+                });
+            case KeyBindType::KeyDown:
+                return keyboard_.onKeyDown([key, action](Keyboard::Key downKey) {
+                    if (key == downKey)
+                        action();
+                });
+            case KeyBindType::KeyHeld:
+                return keyboard_.onKeyHeld([key, action](Keyboard::Key heldKey) {
+                    if (key == heldKey)
+                        action();
+                });
+            default:
+                return -1;
+        }
+    }
+
+    int InputManager::bindKeys(Keyboard::Key keyA, Keyboard::Key keyB, KeyBindType keyBindType, const KeybindAction &action) {
+        switch (keyBindType) {
+            case KeyBindType::KeyDown:
+                return keyboard_.onKeyDown([=](Keyboard::Key key) {
+                    if ((key == keyA && isKeyPressed(keyB)) || (key == keyB && isKeyPressed(keyA)))
+                        action();
+                });
+            case KeyBindType::KeyHeld:
+                return keyboard_.onKeyHeld([=](Keyboard::Key key) {
+                    if ((key == keyA && isKeyPressed(keyB)) || (key == keyB && isKeyPressed(keyA)))
+                        action();
+                });
+            default:
+                return -1;
+        }
+    }
+
+    bool InputManager::unbindKey(KeyBindType keyBindType, int id) {
+        return unsubscribe(static_cast<KeyboardEvent>(keyBindType), id);
+    }
+
     int InputManager::onKeyUp(Callback<Keyboard::Key> callback) {
         return keyboard_.onKeyUp(std::move(callback));
     }
