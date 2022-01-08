@@ -24,6 +24,7 @@
 
 #include "IME/ui/widgets/TabsContainer.h"
 #include "IME/ui/widgets/WidgetImpl.h"
+#include "IME/utility/Helpers.h"
 #include <TGUI/Widgets/TabContainer.hpp>
 #include <unordered_map>
 
@@ -206,6 +207,26 @@ namespace ime::ui {
 
     std::string TabsContainer::getWidgetType() const {
         return "TabsContainer";
+    }
+
+    Widget *TabsContainer::getWidget(const std::string &name) const {
+        // A panel can be retrieved with getPanel(), but for consistency with
+        // similar functions in WidgetContainer child classes we search for
+        // direct children first
+        for (auto& [index, panel] : pimpl_->panels_) {
+            if (panel->getName() == name)
+                return panel.get();
+        }
+
+        // Recursively search the panels for the item
+        for (auto& [index, panel] : pimpl_->panels_) {
+            Widget* widget = panel->getWidget(name);
+
+            if (widget)
+                return widget;
+        }
+
+        return nullptr;
     }
 
     void TabsContainer::initEvents() {

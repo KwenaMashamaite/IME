@@ -29,6 +29,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
 #include <TGUI/Color.hpp>
+#include <IME/ui/widgets/TabsContainer.h>
 
 namespace ime::utility {
     namespace {
@@ -324,6 +325,11 @@ namespace ime::utility {
                 auto* widgetInContainer = container->getWidget(widgetName);
                 if (widgetInContainer)
                     return widgetInContainer;
+            } else if (auto* tabsContainer = dynamic_cast<ui::TabsContainer*>(widget.second.get()); tabsContainer) {
+                auto* widgetsInTabs = tabsContainer->getWidget(widgetName);
+
+                if (widgetsInTabs)
+                    return widgetsInTabs;
             }
         }
 
