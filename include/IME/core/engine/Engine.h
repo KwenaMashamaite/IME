@@ -432,6 +432,18 @@ namespace ime {
         void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
+         * @brief Execute a function after the engine is initialized
+         * @param callback The function to be executed when after the engine is
+         *                 initialized
+         *
+         * @note Only one callback may be registered at a time. Pass @a nullptr
+         * to remove the @a callback
+         *
+         * By default no callback is registered to this event
+         */
+        void onInit(Callback<> callback);
+
+        /**
          * @brief Execute a function at the start of a frame
          * @param callback Function to executed when a frame starts
          *
@@ -575,6 +587,7 @@ namespace ime {
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
         Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
         Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame
+        Callback<> onInit_;                                //!< Optional function called after the engine is initialized
         EventEmitter eventEmitter_;                        //!< Emits engine events
         TimerManager timerManager_;                        //!< Engine level timer manager
         ui::GuiContainer gui_;                             //!< Engine level gui

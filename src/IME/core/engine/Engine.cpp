@@ -76,6 +76,9 @@ namespace ime {
 
         eventDispatcher_ = EventDispatcher::instance();
         isInitialized_ = true;
+
+        if (onInit_)
+            onInit_();
     }
 
     void Engine::loadSettings() {
@@ -444,6 +447,10 @@ namespace ime {
 
     const Window &Engine::getWindow() const {
         return *window_;
+    }
+
+    void Engine::onInit(Callback<> callback) {
+        onInit_ = std::move(callback);
     }
 
     void Engine::onFrameStart(Callback<> callback) {
