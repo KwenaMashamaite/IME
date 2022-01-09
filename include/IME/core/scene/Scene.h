@@ -153,6 +153,9 @@ namespace ime {
         virtual void onEnter() {};
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Scene::onHandleEvent instead
+         *
          * @brief Handle a system event
          * @param event System event to be handled
          *
@@ -167,9 +170,14 @@ namespace ime {
          * if needed. IME will never put anything inside this function, therefore
          * you don't have to call the base class method in your implementation
          */
+         [[deprecated("Use 'ime::Scene::onHandleEvent(Event)' instead")]]
         virtual void handleEvent(Event event) {IME_UNUSED(event);};
+        virtual void onHandleEvent(Event event) {IME_UNUSED(event);};
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Scene::onUpdate instead
+         *
          * @brief Update the scene
          * @param deltaTime Time passed since last update
          *
@@ -187,9 +195,14 @@ namespace ime {
          *
          * @see fixedUpdate
          */
+         [[deprecated("Use 'ime::Scene::onUpdate(Time)' instead.")]]
         virtual void update(Time deltaTime) {IME_UNUSED(deltaTime);}
+        virtual void onUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Scene::onFixedUpdate instead
+         *
          * @brief Update the scene in fixed time steps
          * @param deltaTime Time passed since last update
          *
@@ -209,9 +222,14 @@ namespace ime {
          *
          * @see update
          */
+         [[deprecated("Use 'ime::Scene::onFixedUpdate(Time)' instead.")]]
         virtual void fixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
+        virtual void onFixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Scene::onPostUpdate instead
+         *
          * @brief Post update the scene
          * @param deltaTime Time passed since last update
          *
@@ -225,7 +243,9 @@ namespace ime {
          * function, therefore you don't have to call the base class method
          * in your implementation
          */
+         [[deprecated("Use 'ime::Scene::onPostUpdate(Time)' instead.")]]
         virtual void postUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
+        virtual void onPostUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
          * @brief Pause the scene

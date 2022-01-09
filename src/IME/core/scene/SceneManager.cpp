@@ -215,6 +215,7 @@ namespace ime::priv {
                 scene->guiContainer_.handleEvent(e);
                 scene->gridMovers().handleEvent(e);
                 scene->handleEvent(e);
+                scene->onHandleEvent(e);
             } else {
                 // Only pass non-input events to the scene
                 if (e.type == Event::Closed || e.type == Event::Resized
@@ -222,6 +223,7 @@ namespace ime::priv {
                     || e.type == Event::LostFocus || e.type == Event::GainedFocus)
                 {
                     scene->handleEvent(e);
+                    scene->onHandleEvent(e);
                     scene->guiContainer_.handleEvent(e);
                 }
             }
@@ -307,6 +309,7 @@ namespace ime::priv {
         if (fixedUpdate) {
             scene->gridMovers().update(deltaTime * scene->getTimescale());
             scene->fixedUpdate(deltaTime * scene->getTimescale());
+            scene->onFixedUpdate(deltaTime * scene->getTimescale());
         } else {
             if (scene->hasTilemap_)
                 scene->tileMap_->update(deltaTime * scene->getTimescale());
@@ -325,12 +328,14 @@ namespace ime::priv {
 
             // Update user scene after all internal updates
             scene->update(deltaTime * scene->getTimescale());
+            scene->onUpdate(deltaTime * scene->getTimescale());
 
             // Emit internal post update
             scene->internalEmitter_.emit("postUpdate", deltaTime * scene->getTimescale());
 
             // Normal update is always called after fixed update: fixedUpdate -> update -> postUpdate
             scene->postUpdate(deltaTime * scene->getTimescale());
+            scene->onPostUpdate(deltaTime * scene->getTimescale());
         }
     }
 
