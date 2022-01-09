@@ -214,6 +214,32 @@ namespace ime {
         void zoom(float factor);
 
         /**
+         * @brief Zoom the camera in
+         * @param factor The zoom factor
+         *
+         * The @a factor argument must be greater than 1 in order to zoom out,
+         * values equal to 1 or less than are ignored
+         *
+         * @note The camera zooms out from its centre
+         *
+         * @see zoomOut, setCenter
+         */
+        void zoomIn(float factor);
+
+        /**
+         * @brief Zoom the camera out
+         * @param factor The zoom out factor
+         *
+         * The @a factor argument must be greater than 1 in order to zoom out,
+         * values equal to 1 or less than are ignored
+         *
+         * @note The camera zooms in at its centre
+         *
+         * @see zoomIn, setCenter
+         */
+        void zoomOut(float factor);
+
+        /**
          * @brief Convert a window coordinate to a world coordinate
          * @param point The window coordinate to be converted
          * @return The converted point in world coordinates

@@ -251,6 +251,16 @@ namespace ime {
         pimpl_->zoom(factor);
     }
 
+    void Camera::zoomIn(float factor) {
+        if (factor > 1)
+            zoom(1.0f / factor);
+    }
+
+    void Camera::zoomOut(float factor) {
+        if (factor > 1)
+            zoom(factor);
+    }
+
     Vector2f Camera::windowCoordToWorldCoord(const Vector2i &point) const {
         return pimpl_->windowCoordToWorldCoord(point);
     }
