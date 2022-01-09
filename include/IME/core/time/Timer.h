@@ -77,7 +77,8 @@ namespace ime {
          *
          * @see start and setRepeat
          */
-        static Timer::Ptr create(Time interval, Callback<> callback, int repeatCounter = 0);
+        static Timer::Ptr create(Time interval, const Callback<>& callback,
+            int repeatCounter = 0);
 
         /**
          * @brief Create a timer
@@ -94,7 +95,8 @@ namespace ime {
          *
          * @see start and setRepeat
          */
-        static Timer::Ptr create(Time interval, Callback<Timer&> callback, int repeatCounter = 0);
+        static Timer::Ptr create(Time interval, const Callback<Timer&>& callback,
+            int repeatCounter = 0);
 
         /**
          * @brief Set the countdown starting point
@@ -177,6 +179,9 @@ namespace ime {
         bool isRepeating() const;
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Timer::onTimeout instead.
+         *
          * @brief Set the function that is executed when the timer reaches zero
          * @param callback Function to execute
          *
@@ -188,9 +193,13 @@ namespace ime {
          *
          * @see start
          */
-        void setTimeoutCallback(Callback<> callback);
+        [[deprecated("Use 'onTimeout' instead.")]]
+        void setTimeoutCallback(const Callback<>& callback);
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::Timer::onTimeout instead.
+         *
          * @brief Set the function that is executed when the timer reaches zero
          * @param callback Function to be executed
          *
@@ -204,24 +213,20 @@ namespace ime {
          *
          * @see start
          */
-        void setTimeoutCallback(Callback<Timer&> callback);
+         [[deprecated("Use 'onTimeout' instead.")]]
+        void setTimeoutCallback(const Callback<Timer&>& callback);
 
         /**
-         * @brief Start the countdown/timer
+         * @brief Start the timer
          *
-         * The callback function will be called when the countdown reaches
-         * zero
+         * This function will start the timer if it was not started
+         * or resume it if it was paused. If start() is called while
+         * the timer is running then, the timer will restart
          *
-         * @note This function will start the countdown if it was not started
-         * or resume it if it was paused. If the timer is paused, onResume()
-         * will be called instead of onStart(). If start() is called while the
-         * timer is running then, the timer will restart
+         * @note Calling this function without a registered timeout callback
+         * is undefined behaviour (see onTimeout())
          *
-         * @warning This function must be called only if the interval is
-         * greater than or equal to zero and the timeout callback is set,
-         * otherwise undefined behavior
-         *
-         * @see onStart, setInterval, setTimeoutCallback, restart and pause
+         * @see onStart, setInterval, onTimeout, restart and pause
          */
         void start();
 
@@ -314,6 +319,24 @@ namespace ime {
          * @return True if the callback was called, otherwise false
          */
         bool isDispatched() const;
+
+        /**
+         * @brief Add the function that is executed when countdown completes
+         * @param callback Function to be executed when the countdown terminates
+         *
+         * @see start
+         */
+        void onTimeout(const Callback<>& callback);
+
+        /**
+         * @brief Add the function that is executed when countdown completes
+         * @param callback Function to be executed when the countdown terminates
+         *
+         * The callback is passed the execution timer as an argument on invocation
+         *
+         * @see start
+         */
+        void onTimeout(const Callback<Timer&>& callback);
 
         /**
          * @brief Add an event listener to a start event

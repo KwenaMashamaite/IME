@@ -34,17 +34,17 @@ namespace ime {
         dispatchCount_{0}
     {}
 
-    Timer::Ptr Timer::create(Time interval, Callback<> callback, int repeatCount) {
+    Timer::Ptr Timer::create(Time interval, const Callback<>& callback, int repeatCount) {
         auto timer = std::make_unique<Timer>();
         timer->setInterval(interval);
         timer->setRepeat(repeatCount);
-        timer->setTimeoutCallback(std::move(callback));
+        timer->onTimeout(callback);
         return timer;
     }
 
-    Timer::Ptr Timer::create(Time interval, Callback<Timer &> callback, int repeatCounter) {
+    Timer::Ptr Timer::create(Time interval, const Callback<Timer &>& callback, int repeatCounter) {
         auto timer = create(interval, []{}, repeatCounter);
-        timer->setTimeoutCallback(std::move(callback));
+        timer->onTimeout(callback);
         return timer;
     }
 
@@ -90,15 +90,12 @@ namespace ime {
         return repeatCount_ > 0 || repeatCount_ == -1;
     }
 
-    void Timer::setTimeoutCallback(Callback<> callback) {
-        onTimeout_ = std::move(callback);
-        dispatchCount_ = 0;
+    void Timer::setTimeoutCallback(const Callback<>& callback) {
+        onTimeout(callback);
     }
 
-    void Timer::setTimeoutCallback(Callback<Timer&> callback) {
-        setTimeoutCallback([this, callback = std::move(callback)] {
-            callback(*this);
-        });
+    void Timer::setTimeoutCallback(const Callback<Timer&>& callback) {
+        onTimeout(callback);
     }
 
     void Timer::start() {
@@ -217,6 +214,17 @@ namespace ime {
 
     bool Timer::isDispatched() const {
         return isDispatched_;
+    }
+
+    void Timer::onTimeout(const Timer::Callback<> &callback) {
+        onTimeout_ = callback;
+        dispatchCount_ = 0;
+    }
+
+    void Timer::onTimeout(const Timer::Callback<Timer &> &callback) {
+        onTimeout([this, callback] {
+            callback(*this);
+        });
     }
 
     void Timer::onStart(const Timer::Callback<Timer&>& callback) {
