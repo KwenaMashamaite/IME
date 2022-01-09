@@ -348,6 +348,34 @@ namespace ime {
         void onClose(const Callback& callback);
 
         /**
+         * @brief Add an event listener to an lose focus event
+         * @param callback The function to be executed when the window loses focus
+         *
+         * Note that only a single event listener may be added to this event.
+         * Adding a new event listener automatically destroys the current one
+         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         *
+         * By default, there is no callback registered to this event
+         *
+         * @see onGainFocus
+         */
+        void onLoseFocus(const Callback& callback);
+
+        /**
+         * @brief Add an event listener to a gain focus event
+         * @param callback The function to be executed when the window gains focus
+         *
+         * Note that only a single event listener may be added to this event.
+         * Adding a new event listener automatically destroys the current one
+         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         *
+         * By default, there is no callback registered to this event
+         *
+         * @see onLoseFocus
+         */
+        void onGainFocus(const Callback& callback);
+
+        /**
          * @brief Check if the window is open or not
          * @return True if the window is open, otherwise false
          */
@@ -376,6 +404,12 @@ namespace ime {
          */
         void emitCloseEvent();
 
+        /**
+         * @brief Emit a focus change event
+         * @param isFocused True if the window gained focus, otherwise false
+         */
+        void emitFocusChange(bool focused);
+
     private:
         priv::RenderTarget& renderTarget_;   //!< Render target
         Uint32 windowStyle_;                 //!< The current style of the window
@@ -386,6 +420,8 @@ namespace ime {
         Vector2u sizeBeforeFullScreen_;      //!< The size of the window before full screen mode
         Callback onWindowClose_;             //!< Function executed when a request to close the window is received
         Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen
+        Callback onLoseFocus_;               //!< Function executed when the window loses focus
+        Callback onGainFocus_;               //!< Function executed when the window gains
         Colour clearColour_;                 //!< The fill colour of the window when cleared
         friend class Engine;                 //!< Needs access to constructor
     };

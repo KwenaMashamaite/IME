@@ -149,6 +149,10 @@ namespace ime {
         while (privWindow_->pollEvent(event)) {
             if (event.type == Event::Closed)
                 window_->emitCloseEvent();
+            else if (event.type == Event::GainedFocus)
+                window_->emitFocusChange(true);
+            else if (event.type == Event::LostFocus)
+                window_->emitFocusChange(false);
 
             gui_.handleEvent(event);
             inputManager_.handleEvent(event);
