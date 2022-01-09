@@ -115,6 +115,17 @@ namespace ime::priv {
         }
     }
 
+    Scene* SceneManager::getActiveScene() {
+        return const_cast<Scene*>(std::as_const(*this).getActiveScene());
+    }
+
+    const Scene *SceneManager::getActiveScene() const {
+        if (scenes_.empty() || !scenes_.top()->isEntered())
+            return nullptr;
+        else
+            return scenes_.top().get();
+    }
+
     std::size_t SceneManager::getSceneCount() const {
         return scenes_.size();
     }

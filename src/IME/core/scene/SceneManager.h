@@ -126,6 +126,13 @@ namespace ime {
             void popScene();
 
             /**
+             * @brief Get the top scene
+             * @return A pointer to the top scene if active otherwise a nullptr
+             */
+            Scene* getActiveScene();
+            const Scene* getActiveScene() const;
+
+            /**
              * @brief Cache a scene
              * @param name The unique scene identifier
              * @param scene The scene to be cached

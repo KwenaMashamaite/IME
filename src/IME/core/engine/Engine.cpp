@@ -286,6 +286,14 @@ namespace ime {
         return sceneManager_->getSceneCount();
     }
 
+    Scene* Engine::getActiveScene() {
+        return sceneManager_->getActiveScene();
+    }
+
+    const Scene* Engine::getActiveScene() const {
+        return sceneManager_->getActiveScene();
+    }
+
     void Engine::postFrameUpdate() {
         audioManager_.removePlayedAudio();
         timerManager_.preUpdate();

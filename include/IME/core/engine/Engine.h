@@ -328,6 +328,14 @@ namespace ime {
         std::size_t getSceneCount() const;
 
         /**
+         * @brief Get access to the active scene
+         * @return A pointer to the active scene if available or a nullptr
+         *         if there is no active scene
+         */
+        Scene* getActiveScene();
+        const Scene* getActiveScene() const;
+
+        /**
          * @brief Get the time passed since the engine was started
          * @return The time passed since the engine was started
          *
