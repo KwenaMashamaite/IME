@@ -76,7 +76,7 @@ $ git clone https://github.com/KwenaMashamaite/IME
 ```
 
 2. Download and Install [CMake 3.17+](https://cmake.org/)
-3. Download and install *IME*'s dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.1](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
+3. Download and install *IME*'s dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.2](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
    The dependencies must have a matching compiler and architecture (e.g, If you intend to build *IME* with <br>
    `Visual C++ 15 2017 (32-bit)`, then *SFML*, *TGUI* and *Box2d* binaries must all be compiled with `Visual C++ 15 2017 (32-bit)`
    <br>

@@ -218,8 +218,8 @@ endif ()
 if (NOT TARGET tgui)
     find_package(TGUI 0.9.1 REQUIRED)
 
-    if (${TGUI_VERSION} VERSION_LESS "0.9.1")
-        message(FATAL_ERROR "IME requires TGUI 0.9.1 or higher")
+    if (${TGUI_VERSION} VERSION_LESS "0.9.2")
+        message(FATAL_ERROR "IME requires TGUI 0.9.2 or higher")
     endif()
 endif()
 
