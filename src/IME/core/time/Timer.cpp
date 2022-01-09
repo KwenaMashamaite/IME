@@ -124,6 +124,13 @@ namespace ime {
         }
     }
 
+    void Timer::forceTimeout() {
+        if (status_ != Status::Stopped && onTimeout_)
+            onTimeout_();
+
+        stop();
+    }
+
     void Timer::pause() {
         if (status_ == Status::Running) {
             status_ = Status::Paused;

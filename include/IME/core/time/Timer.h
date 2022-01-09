@@ -234,14 +234,25 @@ namespace ime {
          * @brief Stop the timer
          *
          * This function resets the remaining duration to the value of the
-         * interval and stops the timer without executing the callback. This
+         * interval and stops the timer @em without executing the callback. This
          * behavior is similar to the restart function except the timer is
          * not immediately started after it has been stooped. The function
          * start must be called to restart the timer after it has been stopped
          *
-         * @see onStop, start and getRemainingDuration
+         * @see onStop, forceTimeout, start and getRemainingDuration
          */
         void stop();
+
+        /**
+         * @brief Stop the timer
+         *
+         * This function resets the remaining duration to the value of the
+         * interval and stops the timer. However unlike stop(), the timeout
+         * callback @em is executed
+         *
+         * @see stop
+         */
+        void forceTimeout();
 
         /**
          * @brief Stop the timer without resetting the remaining duration
