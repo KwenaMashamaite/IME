@@ -49,6 +49,7 @@
 
 namespace ime {
     class Engine;
+    class Window;
     class PhysicsWorld;
 
     /// @internal
@@ -472,6 +473,13 @@ namespace ime {
         const Engine& engine() const;
 
         /**
+         * @brief Get the game window
+         * @return The game window
+         */
+        Window& window();
+        const Window& window() const;
+
+        /**
          * @brief Get the scene level camera
          * @return The scene level camera
          */
@@ -745,6 +753,7 @@ namespace ime {
         friend class priv::SceneManager;      //!< Pre updates the scene
 
         std::unique_ptr<std::reference_wrapper<Engine>> engine_;           //!< A reference to the game engine
+        std::unique_ptr<std::reference_wrapper<Window>> window_;           //!< A reference to the game window
         std::unique_ptr<SpriteContainer> spriteContainer_;                 //!< Stores sprites that belong to the scene
         std::unique_ptr<GameObjectContainer> entityContainer_;             //!< Stores game objects that belong to the scene
         std::unique_ptr<ShapeContainer> shapeContainer_;                   //!< Stores shapes that belong to the scene

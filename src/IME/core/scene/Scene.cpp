@@ -53,6 +53,7 @@ namespace ime {
         if (this != &other) {
             Object::operator=(std::move(other));
             engine_ = std::move(other.engine_);
+            window_ = std::move(other.window_);
             camera_ = std::move(other.camera_);
             cache_ = std::move(other.cache_);
             sCache_ = std::move(other.sCache_);
@@ -88,6 +89,7 @@ namespace ime {
 
     void Scene::init(Engine &engine) {
         engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
+        window_ = std::make_unique<std::reference_wrapper<Window>>(engine.getWindow());
         camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
         cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
         sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
@@ -187,6 +189,14 @@ namespace ime {
 
     const Engine &Scene::engine() const {
         return *engine_;
+    }
+
+    Window &Scene::window() {
+        return *window_;
+    }
+
+    const Window &Scene::window() const {
+        return *window_;
     }
 
     Camera &Scene::camera() {
