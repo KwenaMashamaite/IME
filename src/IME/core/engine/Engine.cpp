@@ -316,6 +316,17 @@ namespace ime {
         return sceneManager_->getActiveScene();
     }
 
+    Scene *Engine::getBackgroundScene() {
+        return const_cast<Scene*>(std::as_const(*this).getBackgroundScene());
+    }
+
+    const Scene *Engine::getBackgroundScene() const {
+        if (isRunning_)
+            return sceneManager_->getBackgroundScene();
+        else
+            return nullptr;
+    }
+
     void Engine::postFrameUpdate() {
         audioManager_.removePlayedAudio();
         timerManager_.preUpdate();

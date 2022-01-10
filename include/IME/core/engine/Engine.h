@@ -331,9 +331,24 @@ namespace ime {
          * @brief Get access to the active scene
          * @return A pointer to the active scene if available or a nullptr
          *         if there is no active scene
+         *
+         * @see getBackgroundScene
          */
         Scene* getActiveScene();
         const Scene* getActiveScene() const;
+
+        /**
+         * @brief Get access to the background scene
+         * @return A pointer to the background scene if available or a nullptr
+         *         if there is no background scene
+         *
+         * This function will also return a nullptr if there is a background
+         * scene but is not visible (see ime::Scene::OnPauseAction::Show)
+         *
+         * @see getActiveScene, ime::Scene::setOnPauseAction
+         */
+        Scene* getBackgroundScene();
+        const Scene* getBackgroundScene() const;
 
         /**
          * @brief Get the time passed since the engine was started

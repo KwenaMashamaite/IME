@@ -126,6 +126,17 @@ namespace ime::priv {
             return scenes_.top().get();
     }
 
+    Scene *SceneManager::getBackgroundActiveScene() {
+        return const_cast<Scene*>(std::as_const(*this).getBackgroundScene());
+    }
+
+    const Scene *SceneManager::getBackgroundScene() const {
+        if (prevScene_ && prevScene_->isVisibleWhenPaused_)
+            return prevScene_;
+
+        return nullptr;
+    }
+
     std::size_t SceneManager::getSceneCount() const {
         return scenes_.size();
     }
