@@ -151,6 +151,9 @@ endif()
 
 ## Set up install rules
 
+# Add version information to folder name
+set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}-${PROJECT_VERSION}")
+
 # Install include files
 install(DIRECTORY include
         DESTINATION .
