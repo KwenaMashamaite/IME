@@ -38,6 +38,7 @@
 #include "IME/core/scene/RenderLayerContainer.h"
 #include "IME/core/scene/DrawableContainer.h"
 #include "IME/core/scene/GridMoverContainer.h"
+#include "IME/core/scene/CameraContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
@@ -448,9 +449,22 @@ namespace ime {
         /**
          * @brief Get the scene level camera
          * @return The scene level camera
+         *
+         * Note that this camera is the default/main camera and is always
+         * the rendered last. You can add other cameras to the scene using
+         * cameras()
+         *
+         * @see cameras
          */
         Camera& camera();
         const Camera& camera() const;
+
+        /**
+         * @brief Get the scene level camera container
+         * @return The scene level camera container
+         */
+        CameraContainer& cameras();
+        const CameraContainer& cameras() const;
 
         /**
          * @brief Get the scene level physics engine/simulation
@@ -753,6 +767,7 @@ namespace ime {
 
         std::unique_ptr<std::reference_wrapper<Engine>> engine_;           //!< A reference to the game engine
         std::unique_ptr<std::reference_wrapper<Window>> window_;           //!< A reference to the game window
+        std::unique_ptr<CameraContainer> cameraContainer_;                 //!< Stores cameras that belong to the scene
         std::unique_ptr<SpriteContainer> spriteContainer_;                 //!< Stores sprites that belong to the scene
         std::unique_ptr<GameObjectContainer> entityContainer_;             //!< Stores game objects that belong to the scene
         std::unique_ptr<ShapeContainer> shapeContainer_;                   //!< Stores shapes that belong to the scene

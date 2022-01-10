@@ -59,6 +59,16 @@ namespace ime {
     class IME_API Camera : public Object {
     public:
         /**
+         * @internal
+         * @brief Constructor
+         * @param window The render target
+         *
+         * @warning This function is intended for internal use only and must
+         * not be called outside of IME
+         */
+        explicit Camera(priv::RenderTarget& window);
+
+        /**
          * @brief Copy constructor
          */
         Camera(const Camera&) = delete;
@@ -348,16 +358,8 @@ namespace ime {
         ~Camera() override;
 
     private:
-        /**
-         * @brief Construct the camera from a rectangle
-         * @param rectangle The rectangle defining the zone to display
-         */
-        explicit Camera(priv::RenderTarget& window);
-
-    private:
         class CameraImpl;
         std::unique_ptr<CameraImpl> pimpl_;
-        friend class Scene; //!< Needs access to constructor
     };
 }
 

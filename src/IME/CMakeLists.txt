@@ -52,6 +52,7 @@ set(IME_SRC
     core/scene/SceneManager.cpp
     core/scene/RenderLayer.cpp
     core/scene/RenderLayerContainer.cpp
+    core/scene/CameraContainer.cpp
     core/scene/GameObjectContainer.cpp
     core/scene/GridMoverContainer.cpp
     core/tilemap/Index.cpp

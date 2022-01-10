@@ -90,7 +90,8 @@ namespace ime {
     void Scene::init(Engine &engine) {
         engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
         window_ = std::make_unique<std::reference_wrapper<Window>>(engine.getWindow());
-        camera_ = std::unique_ptr<Camera>(new Camera(engine.getRenderTarget()));
+        cameraContainer_ = std::make_unique<CameraContainer>(engine.getRenderTarget());
+        camera_ = std::make_unique<Camera>(engine.getRenderTarget());
         cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
         sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
         guiContainer_.setTarget(engine.getRenderTarget());
@@ -205,6 +206,14 @@ namespace ime {
 
     const Camera &Scene::camera() const {
         return *camera_;
+    }
+
+    CameraContainer &Scene::cameras() {
+        return *cameraContainer_;
+    }
+
+    const CameraContainer &Scene::cameras() const {
+        return *cameraContainer_;
     }
 
     PhysicsWorld& Scene::physWorld() {

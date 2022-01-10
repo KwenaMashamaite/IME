@@ -188,9 +188,9 @@ namespace ime::priv {
     }
 
     void SceneManager::render(priv::RenderTarget &window) {
-        auto static renderScene = [](const Scene* scene, priv::RenderTarget& renderWindow) {
-            // Reset the window view to that of the scene that is being rendered
-            const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(scene->camera_->getInternalView()).get();
+        auto static renderScene = [](const Scene* scene, Camera* camera, priv::RenderTarget& renderWindow) {
+            // Reset view so that the scene can be rendered on the current camera
+            const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
             renderWindow.getImpl()->getSFMLWindow().setView(view);
 
             if (scene->hasTilemap_) {
@@ -199,20 +199,31 @@ namespace ime::priv {
             }
 
             scene->renderLayers_.render(renderWindow);
-            scene = nullptr;
+        };
+
+        // Render the scene on each camera to update its view
+        auto static renderEachCam = [](Scene* scene, priv::RenderTarget& renderTarget) {
+            // Render secondary cameras
+            scene->cameras().forEach([scene, &renderTarget](Camera* secondaryCam) {
+                renderScene(scene, secondaryCam, renderTarget);
+            });
+
+            // Render main/default camera
+            renderScene(scene, &scene->camera(), renderTarget);
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
+            // Render background scene
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
-                renderScene(prevScene_, window);
+                renderEachCam(prevScene_, window);
                 prevScene_->gui().draw();
             }
 
-            renderScene(scenes_.top().get(), window);
-            scenes_.top()->internalEmitter_.emit("postRender", std::ref(window));
-
-            // Draw the gui on top of everything
-            scenes_.top()->gui().draw();
+            // Render active scene
+            Scene* activeScene = scenes_.top().get();
+            renderEachCam(activeScene, window);
+            activeScene->internalEmitter_.emit("postRender", std::ref(window));
+            activeScene->gui().draw();
         }
     }
 
