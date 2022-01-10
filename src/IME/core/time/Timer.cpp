@@ -27,6 +27,7 @@
 namespace ime {
     Timer::Timer() :
         status_{Status::Stopped},
+        timescale_{1.0f},
         isExecutionComplete_{false},
         isRestarting_{false},
         isDispatched_{false},
@@ -187,7 +188,7 @@ namespace ime {
         if (status_ != Status::Running)
             return;
 
-        remainingDuration_ -= deltaTime;
+        remainingDuration_ -= (deltaTime * timescale_);
         if (remainingDuration_ < Time::Zero)
             remainingDuration_ = Time::Zero;
 
@@ -221,6 +222,15 @@ namespace ime {
 
     bool Timer::isDispatched() const {
         return isDispatched_;
+    }
+
+    void Timer::setTimescale(float timescale) {
+        if (timescale_ > 0)
+            timescale_ = timescale;
+    }
+
+    float Timer::getTimescale() const {
+        return timescale_;
     }
 
     void Timer::onTimeout(const Timer::Callback<> &callback) {

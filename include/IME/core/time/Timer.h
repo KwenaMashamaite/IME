@@ -332,6 +332,37 @@ namespace ime {
         bool isDispatched() const;
 
         /**
+         * @brief Set the timescale factor
+         * @param timescale The new timescale factor
+         *
+         * A timescale controls the countdown speed of the timer and can
+         * be set to the following values:
+         *
+         * @li 1 = Normal/Real-time countdown
+         * @li < 1 = Slower countdown
+         * @li > 1 = Faster countdown
+         *
+         * For example, a timescale of 2.0f will make the timer countdown
+         * twice as fast whilst a timescale of 0.5f will make the timer
+         * countdown at half its normal countdown speed.
+         *
+         * Note that zero or negative timescale values will be ignored
+         *
+         * By default the timescale is 1.0f (real-time)
+         *
+         * @see getTimescale
+         */
+        void setTimescale(float timescale);
+
+        /**
+         * @brief Get the timescale factor
+         * @return The timescale factor
+         *
+         * @see setTimescale
+         */
+        float getTimescale() const;
+
+        /**
          * @brief Add the function that is executed when countdown completes
          * @param callback Function to be executed when the countdown terminates
          *
@@ -441,6 +472,7 @@ namespace ime {
 
     private:
         Status status_;              //!< The current state of the timer
+        float timescale_;            //!< The timescale factor
         bool isExecutionComplete_;   //!< A flag indicating whether or not the timer has completed the callback execution
         bool isRestarting_;          //!< A flag indicating whether or not the timer is in the middle of a restart
         bool isDispatched_;          //!< A flag indicating whether or not the callback has been invoked
