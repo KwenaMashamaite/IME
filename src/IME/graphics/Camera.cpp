@@ -79,13 +79,13 @@ namespace ime {
         }
 
         void setViewport(const FloatRect &viewport) {
-            view.setViewport({viewport.top, viewport.left, viewport.width, viewport.height});
+            view.setViewport({viewport.left, viewport.top, viewport.width, viewport.height});
             window_.setView(view);
         }
 
         FloatRect getViewport() const {
             auto viewport = view.getViewport();
-            return {viewport.top, viewport.left, viewport.width, viewport.height};
+            return {viewport.left, viewport.top, viewport.width, viewport.height};
         }
 
         void setDrawable(bool drawable) {
@@ -120,7 +120,7 @@ namespace ime {
         }
 
         void reset(const FloatRect &rectangle) {
-            view.reset({rectangle.top, rectangle.left, rectangle.width, rectangle.height});
+            view.reset({rectangle.left, rectangle.top, rectangle.width, rectangle.height});
             window_.setView(view);
         }
 
