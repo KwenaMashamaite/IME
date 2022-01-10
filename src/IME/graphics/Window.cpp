@@ -36,10 +36,12 @@ namespace ime {
         isVSyncEnabled_{false},
         isFullScreen_{false},
         isVisible_{false},
+        isCursorVisible_{false},
         clearColour_{ime::Colour::Black}
     {
         renderTarget.onCreate([this] {
             isVisible_ = true;
+            isCursorVisible_ = true;
         });
     }
 
@@ -166,7 +168,14 @@ namespace ime {
     }
 
     void Window::setMouseCursorVisible(bool visible) {
-        renderTarget_.getImpl()->getSFMLWindow().setMouseCursorVisible(visible);
+        if (isCursorVisible_ != visible) {
+            isCursorVisible_ = visible;
+            renderTarget_.getImpl()->getSFMLWindow().setMouseCursorVisible(visible);
+        }
+    }
+
+    bool Window::isMouseCursorVisible() const {
+        return isCursorVisible_;
     }
 
     void Window::setMouseCursorGrabbed(bool grabbed) {

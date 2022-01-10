@@ -288,8 +288,18 @@ namespace ime {
          * @param visible True to show the mouse cursor, or false to hide it
          *
          * By default, the mouse cursor is visible
+         *
+         * @see isMouseCursorVisible
          */
         void setMouseCursorVisible(bool visible);
+
+        /**
+         * @brief Check if the mouse cursor is visible or not
+         * @return True if it is visible, otherwise false
+         *
+         * @see setMouseCursorVisible
+         */
+        bool isMouseCursorVisible() const;
 
         /**
          * @brief Grab or release the mouse cursor
@@ -533,6 +543,7 @@ namespace ime {
         bool isVSyncEnabled_;                //!< A flag indicating whether or not vertical synchronization is enabled
         bool isFullScreen_;                  //!< A flag indicating whether or not the window is full screen
         bool isVisible_;                     //!< A flag indicating whether or not the window is visible
+        bool isCursorVisible_;               //!< A flag indicating whether or not the mouse cursor is visible
         Vector2u sizeBeforeFullScreen_;      //!< The size of the window before full screen mode
         Callback onWindowClose_;             //!< Function executed when a request to close the window is received
         Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen
