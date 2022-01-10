@@ -37,6 +37,7 @@ namespace ime {
         isFullScreen_{false},
         isVisible_{false},
         isCursorVisible_{false},
+        isCursorGrabbed_{false},
         clearColour_{ime::Colour::Black}
     {
         renderTarget.onCreate([this] {
@@ -179,7 +180,14 @@ namespace ime {
     }
 
     void Window::setMouseCursorGrabbed(bool grabbed) {
-        renderTarget_.getImpl()->getSFMLWindow().setMouseCursorGrabbed(grabbed);
+        if (isCursorGrabbed_ != grabbed) {
+            isCursorGrabbed_ = grabbed;
+            renderTarget_.getImpl()->getSFMLWindow().setMouseCursorGrabbed(grabbed);
+        }
+    }
+
+    bool Window::isMouseCursorGrabbed() const {
+        return isCursorGrabbed_;
     }
 
     void Window::setFrameRateLimit(unsigned int limit) {

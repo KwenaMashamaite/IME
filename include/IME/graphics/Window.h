@@ -308,8 +308,18 @@ namespace ime {
          * If @a grabbed is set to @a true, then the mouse cursor will no
          * longer be able to leave the bounds of the window. Note that
          * the mouse can only be grabbed if the window has focus
+         *
+         * @see isMouseCursorGrabbed
          */
         void setMouseCursorGrabbed(bool grabbed);
+
+        /**
+         * @brief Check if the mouse cursor is grabbed or not
+         * @return True if grabbed, otherwise false
+         *
+         * @see setMouseCursorGrabbed
+         */
+        bool isMouseCursorGrabbed() const;
 
         /**
          * @brief Limit the frame rate to a maximum fixed frequency
@@ -544,6 +554,7 @@ namespace ime {
         bool isFullScreen_;                  //!< A flag indicating whether or not the window is full screen
         bool isVisible_;                     //!< A flag indicating whether or not the window is visible
         bool isCursorVisible_;               //!< A flag indicating whether or not the mouse cursor is visible
+        bool isCursorGrabbed_;               //!< A flag indicating whether or not the mouse cursor is grabbed by the window
         Vector2u sizeBeforeFullScreen_;      //!< The size of the window before full screen mode
         Callback onWindowClose_;             //!< Function executed when a request to close the window is received
         Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen
