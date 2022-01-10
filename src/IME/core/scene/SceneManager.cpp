@@ -26,6 +26,7 @@
 #include "IME/core/physics/PhysicsWorld.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
+#include "IME/graphics/shapes/RectangleShape.h"
 
 namespace ime::priv {
     SceneManager::SceneManager() :
@@ -199,6 +200,17 @@ namespace ime::priv {
             }
 
             scene->renderLayers_.render(renderWindow);
+
+            // Render camera outline
+            static RectangleShape camOutline;
+
+            auto [x, y, width, height] = camera->getBounds();
+            camOutline.setSize({width, height});
+            camOutline.setPosition(x, y);
+            camOutline.setFillColour(Colour::Transparent);
+            camOutline.setOutlineThickness(-camera->getOutlineThickness());
+            camOutline.setOutlineColour(camera->getOutlineColour());
+            renderWindow.draw(camOutline);
         };
 
         // Render the scene on each camera to update its view

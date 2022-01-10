@@ -29,6 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/common/Object.h"
+#include "IME/graphics/Colour.h"
 #include <memory>
 #include <any>
 
@@ -173,6 +174,54 @@ namespace ime {
          * @see setViewPort
          */
         FloatRect getViewport() const;
+
+        /**
+         * @brief Set the outline thickness
+         * @param thickness The new outline thickness (must be >= 0)
+         *
+         * The outline thickness together with the outline colour enables
+         * visualization if the camera bounds
+         *
+         * By default, the outline thickness is 1
+         *
+         * @see setOutlineColour, getOutlineThickness
+         */
+        void setOutlineThickness(float thickness);
+
+        /**
+         * @brief Get the outline thickness of the camera
+         * @return The outline thickness
+         *
+         * @see setOutlineThickness
+         */
+        float getOutlineThickness() const;
+
+        /**
+         * @brief Set the outline colour
+         * @param colour The new outline colour
+         *
+         * The outline colour together with the outline thickness enables
+         * visualization of the camera bounds
+         *
+         * By default the outline colour is ime::Colour::Transparent
+         *
+         * @see setOutlineThickness, getOutlineColour
+         */
+        void setOutlineColour(const Colour& colour);
+
+        /**
+         * @brief Get the outline colour
+         * @return The outline colour
+         *
+         * @see setOutlineColour
+         */
+        Colour getOutlineColour() const;
+
+        /**
+         * @brief Get the camera bounds
+         * @return The bounds of the camera
+         */
+        FloatRect getBounds() const;
 
         /**
          * @brief Reset the camera to the given rectangle

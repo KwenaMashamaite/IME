@@ -39,7 +39,9 @@ namespace ime {
             window_{window.getImpl()->getSFMLWindow()},
             view{window_.getDefaultView()},
             followTarget_{nullptr},
-            posChangeId_{-1}
+            posChangeId_{-1},
+            outlineColour_{Colour::Transparent},
+            outlineThickness_{1}
         {
             window_.setView(view);
         }
@@ -83,6 +85,29 @@ namespace ime {
         FloatRect getViewport() const {
             auto viewport = view.getViewport();
             return {viewport.top, viewport.left, viewport.width, viewport.height};
+        }
+
+        void setOutlineThickness(float thickness) {
+            if (thickness >= 0.0)
+                outlineThickness_ = thickness;
+        }
+
+        float getOutlineThickness() const {
+            return outlineThickness_;
+        }
+
+        void setOutlineColour(const Colour &colour) {
+            outlineColour_ = colour;
+        }
+
+        const Colour& getOutlineColour() const {
+            return outlineColour_;
+        }
+
+        FloatRect getBounds() const {
+            Vector2f size = getSize();
+            auto [leftCoord, topCoord] = getCenter() - size / 2.0f;
+            return {leftCoord, topCoord, size.x, size.y};
         }
 
         void reset(const FloatRect &rectangle) {
@@ -158,6 +183,8 @@ namespace ime {
         GameObject* followTarget_;  //!< The game object to be followed by the camera
         int posChangeId_;           //!< The follow targets position change handler
         Vector2f followOffset_;     //!< The camera's follow offset from the targets position
+        Colour outlineColour_;      //!< The cameras outline colour
+        float outlineThickness_;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -225,6 +252,26 @@ namespace ime {
 
     FloatRect Camera::getViewport() const {
         return pimpl_->getViewport();
+    }
+
+    void Camera::setOutlineThickness(float thickness) {
+        pimpl_->setOutlineThickness(thickness);
+    }
+
+    float Camera::getOutlineThickness() const {
+        return pimpl_->getOutlineThickness();
+    }
+
+    void Camera::setOutlineColour(const Colour &colour) {
+        pimpl_->setOutlineColour(colour);
+    }
+
+    Colour Camera::getOutlineColour() const {
+        return pimpl_->getOutlineColour();
+    }
+
+    FloatRect Camera::getBounds() const {
+        return pimpl_->getBounds();
     }
 
     void Camera::reset(const FloatRect &rectangle) {
