@@ -153,6 +153,10 @@ namespace ime {
                 window_->emitFocusChange(true);
             else if (event.type == Event::LostFocus)
                 window_->emitFocusChange(false);
+            else if (event.type == Event::MouseEntered)
+                window_->emitMouseCursor(true);
+            else if (event.type == Event::MouseLeft)
+                window_->emitMouseCursor(false);
 
             gui_.handleEvent(event);
             inputManager_.handleEvent(event);

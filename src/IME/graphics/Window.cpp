@@ -194,6 +194,14 @@ namespace ime {
         onGainFocus_ = callback;
     }
 
+    void Window::onMouseEnter(const Callback &callback) {
+        onMouseEnter_ = callback;
+    }
+
+    void Window::onMouseExit(const Callback &callback) {
+        onMouseExit_ = callback;
+    }
+
     bool Window::isOpen() const {
         return renderTarget_.getImpl()->isOpen();
     }
@@ -208,6 +216,13 @@ namespace ime {
             onGainFocus_();
         } else if (!focused && onLoseFocus_)
             onLoseFocus_();
+    }
+
+    void Window::emitMouseCursor(bool entered) {
+        if (entered && onMouseEnter_)
+            onMouseEnter_();
+        else if (!entered && onMouseExit_)
+            onMouseExit_();
     }
 
     void Window::onFullScreenToggle(const Callback &callback) {

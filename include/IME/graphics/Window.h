@@ -376,6 +376,36 @@ namespace ime {
         void onGainFocus(const Callback& callback);
 
         /**
+         * @brief Add an event listener to an mouse enter event
+         * @param callback The function to be executed when the mouse cursor
+         *                 enters the window
+         *
+         * Note that only a single event listener may be added to this event.
+         * Adding a new event listener automatically destroys the current one
+         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         *
+         * By default, there is no callback registered to this event
+         *
+         * @see onMouseExit
+         */
+        void onMouseEnter(const Callback& callback);
+
+        /**
+         * @brief Add an event listener to a mouse left event
+         * @param callback The function to be executed when the mouse cursor
+         *                 leaves the window
+         *
+         * Note that only a single event listener may be added to this event.
+         * Adding a new event listener automatically destroys the current one
+         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         *
+         * By default, there is no callback registered to this event
+         *
+         * @see onMouseEnter
+         */
+        void onMouseExit(const Callback& callback);
+
+        /**
          * @brief Check if the window is open or not
          * @return True if the window is open, otherwise false
          */
@@ -410,6 +440,13 @@ namespace ime {
          */
         void emitFocusChange(bool focused);
 
+        /**
+         * @brief Emit a mouse cursor event
+         * @param entered True if the mouse entered the window or false if
+         *                the mouse cursor left the window
+         */
+        void emitMouseCursor(bool entered);
+
     private:
         priv::RenderTarget& renderTarget_;   //!< Render target
         Uint32 windowStyle_;                 //!< The current style of the window
@@ -422,6 +459,8 @@ namespace ime {
         Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen
         Callback onLoseFocus_;               //!< Function executed when the window loses focus
         Callback onGainFocus_;               //!< Function executed when the window gains
+        Callback onMouseEnter_;              //!< Function executed when the mouse cursor enters the window
+        Callback onMouseExit_;               //!< Function executed when the mouse cursor leaves the window
         Colour clearColour_;                 //!< The fill colour of the window when cleared
         friend class Engine;                 //!< Needs access to constructor
     };
