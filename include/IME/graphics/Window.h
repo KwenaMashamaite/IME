@@ -47,6 +47,7 @@ namespace ime {
     class IME_API Window {
     public:
         using Callback = std::function<void()>; // Window callback
+        using ResizeCallback = std::function<void(Vector2u)>; // Window callback
 
         /**
          * @brief Copy constructor
@@ -496,6 +497,24 @@ namespace ime {
         void onMouseExit(const Callback& callback);
 
         /**
+         * @brief Add an event listener to a window resize event
+         * @param callback The function to be executed when the window is
+         *                 resized
+         *
+         * Only one callback may be registered at a time. Adding a new callback
+         * destroys the previous one. Pass @a nullptr to remove the current
+         * callback
+         *
+         * The callback is passed the new size of the window as an argument
+         * on invocation
+         *
+         * By default, there is no callback registered to this event
+         *
+         * @see onMouseEnter
+         */
+        void onResize(const ResizeCallback& callback);
+
+        /**
          * @brief Check if the window is open or not
          * @return True if the window is open, otherwise false
          */
@@ -543,6 +562,12 @@ namespace ime {
          */
         void emitMouseCursor(bool entered);
 
+        /**
+         * @brief Emit a resize event
+         * @param newSize The new size of the window
+         */
+        void emitResize(const Vector2u& newSize);
+
     private:
         priv::RenderTarget& renderTarget_;   //!< Render target
         Vector2u minSize_;                   //!< The windows smallest size
@@ -562,6 +587,7 @@ namespace ime {
         Callback onGainFocus_;               //!< Function executed when the window gains
         Callback onMouseEnter_;              //!< Function executed when the mouse cursor enters the window
         Callback onMouseExit_;               //!< Function executed when the mouse cursor leaves the window
+        ResizeCallback onResize_;            //!< Function executed when the window is resized
         Colour clearColour_;                 //!< The fill colour of the window when cleared
         friend class Engine;                 //!< Needs access to constructor
     };

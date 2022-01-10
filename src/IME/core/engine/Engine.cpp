@@ -152,8 +152,14 @@ namespace ime {
             else if (event.type == Event::Resized) {
                 // A ime::Window may have a min and max size bounds
                 window_->setSize(Vector2u{event.size.width, event.size.height});
-                event.size.width = window_->getSize().x;
-                event.size.height = window_->getSize().y;
+                Vector2u newWinSize = window_->getSize();
+                event.size.width = newWinSize.x;
+                event.size.height = newWinSize.y;
+
+                // Resize for bounds dimension is emitted by Window::setSize
+                if (newWinSize != window_->getMinSize() && newWinSize != window_->getMaxSize())
+                    window_->emitResize({event.size.width, event.size.height});
+
             } else if (event.type == Event::GainedFocus)
                 window_->emitFocusChange(true);
             else if (event.type == Event::LostFocus)

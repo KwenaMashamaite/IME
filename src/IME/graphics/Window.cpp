@@ -89,10 +89,10 @@ namespace ime {
     void Window::setSize(const Vector2u &size) {
         Vector2u boundedSize = boundSize(size);
 
-        if (getSize() == boundedSize)
-            return;
-
-        renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{boundedSize.x, boundedSize.y});
+        if (getSize() != boundedSize) {
+            renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{boundedSize.x, boundedSize.y});
+            emitResize(boundedSize);
+        }
     }
 
     Vector2u Window::getSize() const {
@@ -261,6 +261,10 @@ namespace ime {
         onMouseExit_ = callback;
     }
 
+    void Window::onResize(const Window::ResizeCallback &callback) {
+        onResize_ = callback;
+    }
+
     bool Window::isOpen() const {
         return renderTarget_.getImpl()->isOpen();
     }
@@ -304,6 +308,11 @@ namespace ime {
             onMouseEnter_();
         else if (!entered && onMouseExit_)
             onMouseExit_();
+    }
+
+    void Window::emitResize(const Vector2u &newSize) {
+        if (onResize_)
+            onResize_(newSize);
     }
 
     void Window::onFullScreenToggle(const Callback &callback) {
