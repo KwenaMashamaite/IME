@@ -318,14 +318,6 @@ namespace ime {
         std::string getClassName() const override;
 
         /**
-         * @brief Check if the scene is visible when paused or not
-         * @return True if visible, otherwise false
-         *
-         * @see setVisibleOnPause
-         */
-        bool isVisibleOnPause() const;
-
-        /**
          * @brief Check if the scene has been entered or not
          * @return True if the scene has been entered, otherwise false
          *
@@ -333,40 +325,6 @@ namespace ime {
          */
         bool isEntered() const;
 
-        /**
-         * @internal
-         * @brief Add an event listener to a scene event
-         * @param event Event to add event listener to
-         * @param callback Function to be execute when the event is fired
-         * @return The callback id
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
-         */
-        template<typename ...Args>
-        int on_(const std::string& event, Callback<Args...> callback) {
-            return internalEmitter_.on(event, callback);
-        }
-
-        /**
-         * @internal
-         * @brief Unsubscribe from a scene event
-         * @param event The event to unsubscribe from
-         * @param id The event listeners id
-         * @return True if the event listener was unsubscribed or false if
-         *         @a event does not have a listener with the @a id
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
-         */
-        bool unsubscribe_(const std::string& event, int id);
-
-        /**
-         * @brief Destructor
-         */
-        ~Scene() override;
-
-    protected:
         /**
          * @brief Set which action is taken when the scene is paused
          * @param action Action to be taken
@@ -387,6 +345,14 @@ namespace ime {
          * @see onPause
          */
         void setOnPauseAction(Uint32 action);
+
+        /**
+         * @brief Check if the scene is visible when paused or not
+         * @return True if visible, otherwise false
+         *
+         * @see setVisibleOnPause
+         */
+        bool isVisibleOnPause() const;
 
         /**
          * @brief Enable or disable scene input (keyboard, mouse, etc...)
@@ -728,6 +694,39 @@ namespace ime {
          * @see tilemap
          */
         void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
+
+        /**
+         * @internal
+         * @brief Add an event listener to a scene event
+         * @param event Event to add event listener to
+         * @param callback Function to be execute when the event is fired
+         * @return The callback id
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        template<typename ...Args>
+        int on_(const std::string& event, Callback<Args...> callback) {
+            return internalEmitter_.on(event, callback);
+        }
+
+        /**
+         * @internal
+         * @brief Unsubscribe from a scene event
+         * @param event The event to unsubscribe from
+         * @param id The event listeners id
+         * @return True if the event listener was unsubscribed or false if
+         *         @a event does not have a listener with the @a id
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        bool unsubscribe_(const std::string& event, int id);
+
+        /**
+         * @brief Destructor
+         */
+        ~Scene() override;
 
     private:
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
