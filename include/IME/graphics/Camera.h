@@ -176,6 +176,24 @@ namespace ime {
         FloatRect getViewport() const;
 
         /**
+         * @brief Set whether or not the scene should render the camera
+         * @param drawable True to render the camera, otherwise false
+         *
+         * By default, the camera is drawable
+         *
+         * @see isDrawable
+         */
+        void setDrawable(bool drawable);
+
+        /**
+         * @brief Check if the camera is rendered by the scene
+         * @return True if its contents are rendered, otherwise false
+         *
+         * @see setDrawable
+         */
+        bool isDrawable() const;
+
+        /**
          * @brief Set the outline thickness
          * @param thickness The new outline thickness (must be >= 0)
          *

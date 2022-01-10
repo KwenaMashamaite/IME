@@ -190,6 +190,9 @@ namespace ime::priv {
 
     void SceneManager::render(priv::RenderTarget &window) {
         auto static renderScene = [](const Scene* scene, Camera* camera, priv::RenderTarget& renderWindow) {
+            if (!camera->isDrawable())
+                return;
+
             // Reset view so that the scene can be rendered on the current camera
             const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
             renderWindow.getImpl()->getSFMLWindow().setView(view);

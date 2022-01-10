@@ -41,7 +41,8 @@ namespace ime {
             followTarget_{nullptr},
             posChangeId_{-1},
             outlineColour_{Colour::Transparent},
-            outlineThickness_{1}
+            outlineThickness_{1},
+            isDrawable_{true}
         {
             window_.setView(view);
         }
@@ -85,6 +86,14 @@ namespace ime {
         FloatRect getViewport() const {
             auto viewport = view.getViewport();
             return {viewport.top, viewport.left, viewport.width, viewport.height};
+        }
+
+        void setDrawable(bool drawable) {
+            isDrawable_ = drawable;
+        }
+
+        bool isDrawable() const {
+            return isDrawable_;
         }
 
         void setOutlineThickness(float thickness) {
@@ -185,6 +194,7 @@ namespace ime {
         Vector2f followOffset_;     //!< The camera's follow offset from the targets position
         Colour outlineColour_;      //!< The cameras outline colour
         float outlineThickness_;
+        bool isDrawable_;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -252,6 +262,14 @@ namespace ime {
 
     FloatRect Camera::getViewport() const {
         return pimpl_->getViewport();
+    }
+
+    void Camera::setDrawable(bool drawable) {
+        pimpl_->setDrawable(drawable);
+    }
+
+    bool Camera::isDrawable() const {
+        return pimpl_->isDrawable();
     }
 
     void Camera::setOutlineThickness(float thickness) {
