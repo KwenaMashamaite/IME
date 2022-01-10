@@ -25,6 +25,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
+#include <cmath>
 
 namespace ime {
     Window::Window(priv::RenderTarget &renderTarget) :
@@ -78,12 +79,41 @@ namespace ime {
     }
 
     void Window::setSize(const Vector2u &size) {
-        renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{size.x, size.y});
+        Vector2u boundedSize = boundSize(size);
+
+        if (getSize() == boundedSize)
+            return;
+
+        renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{boundedSize.x, boundedSize.y});
     }
 
     Vector2u Window::getSize() const {
         auto [x, y] = renderTarget_.getImpl()->getSFMLWindow().getSize();
         return {x, y};
+    }
+
+    void Window::setMinSize(const Vector2u &size) {
+        minSize_ = size;
+    }
+
+    Vector2u Window::getMinSize() const {
+        return minSize_;
+    }
+
+    void Window::setMaxSize(const Vector2u &size) {
+        maxSize_ = size;
+    }
+
+    Vector2u Window::getMaxSize() const {
+        return maxSize_;
+    }
+
+    bool Window::hasMinBound() const {
+        return minSize_.x != 0 && minSize_.y != 0;
+    }
+
+    bool Window::hasMaxBound() const {
+        return maxSize_.x != 0 && maxSize_.y != 0;
     }
 
     Vector2u Window::getFullScreenSize() {
@@ -204,6 +234,28 @@ namespace ime {
 
     bool Window::isOpen() const {
         return renderTarget_.getImpl()->isOpen();
+    }
+
+    Vector2u Window::boundSize(const Vector2u &size) const {
+        Vector2u boundedSize = size;
+
+        if (hasMinBound()) {
+            if (size.x < minSize_.x)
+                boundedSize.x = minSize_.x;
+
+            if (size.y < minSize_.y)
+                boundedSize.y = minSize_.y;
+        }
+
+        if (hasMaxBound()) {
+            if (size.x > maxSize_.x)
+                boundedSize.x = maxSize_.x;
+
+            if (boundedSize.y > maxSize_.y)
+                boundedSize.y = maxSize_.y;
+        }
+
+        return boundedSize;
     }
 
     void Window::emitCloseEvent() {

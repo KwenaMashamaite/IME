@@ -149,7 +149,12 @@ namespace ime {
         while (privWindow_->pollEvent(event)) {
             if (event.type == Event::Closed)
                 window_->emitCloseEvent();
-            else if (event.type == Event::GainedFocus)
+            else if (event.type == Event::Resized) {
+                // A ime::Window may have a min and max size bounds
+                window_->setSize(Vector2u{event.size.width, event.size.height});
+                event.size.width = window_->getSize().x;
+                event.size.height = window_->getSize().y;
+            } else if (event.type == Event::GainedFocus)
                 window_->emitFocusChange(true);
             else if (event.type == Event::LostFocus)
                 window_->emitFocusChange(false);

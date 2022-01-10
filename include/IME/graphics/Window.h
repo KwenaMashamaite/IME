@@ -153,6 +153,12 @@ namespace ime {
         /**
          * @brief Set the size of the rendering region of the window
          * @param size The new size in pixels
+         *
+         * If the specified size is less than the minimum required size,
+         * it will be capped to the minimum size and if it is greater
+         * than the maximum size it will be capped to the maximum size
+         *
+         * @see setMinSize and setMaxSize
          */
         void setSize(const Vector2u& size);
 
@@ -165,6 +171,62 @@ namespace ime {
          * @see setSize
          */
         Vector2u getSize() const;
+
+        /**
+         * @brief Set the minimum size of the rendering region of the window
+         * @param size The new minimum size
+         *
+         * Set @a size to Vector2u{0, 0} to remove the min size restriction
+         *
+         * By default the minimum size is Vector2u{0, 0} (unrestricted)
+         *
+         * @see setMaxSize, getMaxSize
+         */
+        void setMinSize(const Vector2u& size);
+
+        /**
+         * @brief Get the minimum size of the rendering region of the window
+         * @return The minimum size of the window
+         *
+         * @see setMinSize
+         */
+        Vector2u getMinSize() const;
+
+        /**
+         * @brief Set the maximum size of the rendering region of the window
+         * @param size The new maximum size
+         *
+         * Set @a size to Vector2u{0, 0} to remove the max size restriction
+         *
+         * By default the maximum size is Vector2u{0, 0} (unrestricted)
+         *
+         * @see setMinSize, getMaxSize, hasMaxBound
+         */
+        void setMaxSize(const Vector2u& size);
+
+        /**
+         * @brief Get the minimum size of the rendering region of the window
+         * @return The minimum size of the window
+         *
+         * @see setMaxSize
+         */
+        Vector2u getMaxSize() const;
+
+        /**
+         * @brief Check if the window has a minimum size requirement
+         * @return True if a minimum size has been set, otherwise false
+         *
+         * @see hasMaxBound, setMinSize
+         */
+        bool hasMinBound() const;
+
+        /**
+         * @brief Check if the window has a maximum size requirement
+         * @return True if a maximum size has been set, otherwise false
+         *
+         * @see hasMinBound, setMaxSize
+         */
+        bool hasMaxBound() const;
 
         /**
          * @brief Get the size of the when viewed in full screen
@@ -419,6 +481,12 @@ namespace ime {
         explicit Window(priv::RenderTarget& renderTarget);
 
         /**
+         * @brief Cap a size withing the window bounds
+         * @param size The restricted size
+         */
+        Vector2u boundSize(const Vector2u& size) const;
+
+        /**
          * @brief Add an event listener to a full screen event
          * @param callback Function to be executed when the window toggles
          *                 full screen
@@ -449,6 +517,8 @@ namespace ime {
 
     private:
         priv::RenderTarget& renderTarget_;   //!< Render target
+        Vector2u minSize_;                   //!< The windows smallest size
+        Vector2u maxSize_;                   //!< The windows largest size
         Uint32 windowStyle_;                 //!< The current style of the window
         Uint32 windowStyleBeforeFullScreen_; //!< The window style before switching to full screen
         unsigned int frameRateLimit_;        //!< The frame rate limit of the window
