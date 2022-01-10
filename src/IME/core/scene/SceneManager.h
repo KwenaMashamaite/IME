@@ -162,11 +162,19 @@ namespace ime {
             bool removeCached(const std::string& name);
 
             /**
-             * @brief Push a cached scene
+             * @brief Move a scene out of the cache
              * @param name The name of the scene to push
              * @return The requested scene if it exists, otherwise a nullptr
              */
-            Scene::Ptr getCached(const std::string& name);
+            Scene::Ptr popCached(const std::string& name);
+
+            /**
+             * @brief Get access to a scene in the cache
+             * @param name The name of the scene to get access to
+             * @return A pointer to the scene if it exists, otherwise a nullptr
+             */
+            Scene* getCached(const std::string& name);
+            const Scene* getCached(const std::string& name) const;
 
             /**
              * @brief Get the current number of scenes

@@ -351,6 +351,14 @@ namespace ime {
         const Scene* getBackgroundScene() const;
 
         /**
+         * @brief Get access to a scene in the cache list
+         * @param name The name of the scene
+         * @return A pointer to the scene is it exists, otherwise a nullptr
+         */
+        Scene* getCachedScene(const std::string& name);
+        const Scene* getCachedScene(const std::string& name) const;
+
+        /**
          * @brief Get the time passed since the engine was started
          * @return The time passed since the engine was started
          *

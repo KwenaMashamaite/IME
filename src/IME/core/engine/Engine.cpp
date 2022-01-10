@@ -268,7 +268,7 @@ namespace ime {
     }
 
     bool Engine::pushCachedScene(const std::string &name) {
-        Scene::Ptr scene = sceneManager_->getCached(name);
+        Scene::Ptr scene = sceneManager_->popCached(name);
 
         if (scene) {
             pushScene(std::move(scene), nullptr);
@@ -325,6 +325,14 @@ namespace ime {
             return sceneManager_->getBackgroundScene();
         else
             return nullptr;
+    }
+
+    Scene *Engine::getCachedScene(const std::string &name) {
+        return sceneManager_->getCached(name);
+    }
+
+    const Scene *Engine::getCachedScene(const std::string &name) const {
+        return sceneManager_->getCached(name);
     }
 
     void Engine::postFrameUpdate() {

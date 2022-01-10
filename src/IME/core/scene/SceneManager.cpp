@@ -53,7 +53,7 @@ namespace ime::priv {
         }
     }
 
-    Scene::Ptr SceneManager::getCached(const std::string &name) {
+    Scene::Ptr SceneManager::popCached(const std::string &name) {
         auto found = cachedScenes_.find(name);
 
         if (found != cachedScenes_.end()) {
@@ -63,6 +63,17 @@ namespace ime::priv {
         }
 
         return nullptr;
+    }
+
+    Scene *SceneManager::getCached(const std::string &name) {
+        return const_cast<Scene*>(std::as_const(*this).getCached(name));
+    }
+
+    const Scene *SceneManager::getCached(const std::string &name) const {
+        if (isCached(name))
+            return cachedScenes_.at(name).get();
+        else
+            return nullptr;
     }
 
     void SceneManager::cache(const std::string &name, Scene::Ptr scene) {
