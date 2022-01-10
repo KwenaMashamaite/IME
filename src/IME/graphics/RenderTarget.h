@@ -79,6 +79,16 @@ namespace ime {
                 unsigned int height, Uint32 style = WindowStyle::Default);
 
             /**
+             * @brief Add a callback to a create event
+             * @param callback The function to be executed after the window is
+             *                 created
+             *
+             * Only one callback may be registered at a time. Pass @a nullptr to
+             * remove the callback
+             */
+            void onCreate(Callback<> callback);
+
+            /**
              * @brief Change the window's icon
              * @param filename Filename of the window icon to set
              *
@@ -129,6 +139,7 @@ namespace ime {
 
         private:
             std::unique_ptr<priv::RenderTargetImpl> pImpl_;
+            Callback<> onCreate_;
         };
     }
 }

@@ -32,6 +32,13 @@ namespace ime::priv {
 
     void RenderTarget::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
         pImpl_->create(title, width, height, style);
+
+        if (onCreate_)
+            onCreate_();
+    }
+
+    void RenderTarget::onCreate(Callback<> callback) {
+        onCreate_ = std::move(callback);
     }
 
     void RenderTarget::setIcon(const std::string &filename) {

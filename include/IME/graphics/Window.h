@@ -276,6 +276,14 @@ namespace ime {
         void setVisible(bool visible);
 
         /**
+         * @brief Check if the window is visible or not
+         * @return True if it is visible, otherwise false
+         *
+         * @see setVisible
+         */
+        bool isVisible() const;
+
+        /**
          * @brief Show or hide the mouse cursor
          * @param visible True to show the mouse cursor, or false to hide it
          *
@@ -524,6 +532,7 @@ namespace ime {
         unsigned int frameRateLimit_;        //!< The frame rate limit of the window
         bool isVSyncEnabled_;                //!< A flag indicating whether or not vertical synchronization is enabled
         bool isFullScreen_;                  //!< A flag indicating whether or not the window is full screen
+        bool isVisible_;                     //!< A flag indicating whether or not the window is visible
         Vector2u sizeBeforeFullScreen_;      //!< The size of the window before full screen mode
         Callback onWindowClose_;             //!< Function executed when a request to close the window is received
         Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen

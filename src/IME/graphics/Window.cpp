@@ -35,8 +35,13 @@ namespace ime {
         frameRateLimit_{60},
         isVSyncEnabled_{false},
         isFullScreen_{false},
+        isVisible_{false},
         clearColour_{ime::Colour::Black}
-    {}
+    {
+        renderTarget.onCreate([this] {
+            isVisible_ = true;
+        });
+    }
 
     void Window::setStyle(Uint32 windowStyle) {
         if (isOpen())
@@ -150,7 +155,14 @@ namespace ime {
     }
 
     void Window::setVisible(bool visible) {
-        renderTarget_.getImpl()->getSFMLWindow().setVisible(visible);
+        if (isVisible_ != visible) {
+            isVisible_ = visible;
+            renderTarget_.getImpl()->getSFMLWindow().setVisible(visible);
+        }
+    }
+
+    bool Window::isVisible() const {
+        return isVisible_;
     }
 
     void Window::setMouseCursorVisible(bool visible) {
