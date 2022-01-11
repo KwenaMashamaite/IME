@@ -47,6 +47,7 @@ namespace tgui {
 namespace sf {
     class Event;
     class Color;
+    class View;
 }
 
 namespace ime {
@@ -103,6 +104,16 @@ namespace ime {
         * the same as the one before the conversion
         */
         extern Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour);
+
+        /**
+         * @internal
+         * @brief Get a letterboxed version of a view
+         * @param view The view to get the letterboxed version of
+         * @param windowWidth The current width of the window
+         * @param windowHeight The current height of the window
+         * @return The letterboxed view
+         */
+        sf::View letterbox(const sf::View& view, unsigned int windowWidth, unsigned int windowHeight);
 
         /**
         * @internal

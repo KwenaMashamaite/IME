@@ -27,6 +27,7 @@
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
 #include "IME/graphics/shapes/RectangleShape.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime::priv {
     SceneManager::SceneManager() :
@@ -256,8 +257,24 @@ namespace ime::priv {
         if (!scenes_.top()->isEntered())
             return;
 
+        // Handle a camera's response to a window resize event
+        static auto updateCameraScale = [](Camera* camera, unsigned int windowWidth, unsigned int windowHeight) {
+            if (camera->getWindowResizeResponse() == Camera::OnWinResize::Letterbox) {
+                const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
+                camera->setInternalView(std::any{utility::letterbox(view, windowWidth, windowHeight)});
+            }
+        };
+
         // Update all system components of a scene
         static auto updateSystem = [](Scene* scene, Event e) {
+            if (e.type == Event::Resized) {
+                scene->cameras().forEach([&e](Camera* camera) {
+                    updateCameraScale(camera, e.size.width, e.size.height);
+                });
+
+                updateCameraScale(&scene->camera(), e.size.width, e.size.height);
+            }
+
             if (scene->isInputEnabled_) {
                 scene->inputManager_.handleEvent(e);
                 scene->guiContainer_.handleEvent(e);

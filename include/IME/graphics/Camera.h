@@ -60,6 +60,25 @@ namespace ime {
     class IME_API Camera : public Object {
     public:
         /**
+         * @brief Defines how the camera response to a window resize event
+         */
+        enum class OnWinResize {
+            /**
+             * This option squeezes/stretches the camera to match the new size
+             * of the window
+             */
+            Stretch,
+
+            /**
+             * This option scales the camera while maintaining its aspect
+             * ratio. If the aspect ratio of the camera and that of the window
+             * do not match, black bars will appear vertically (to the left and
+             * right of the camera) or horizontally (above and below the camera)
+             */
+            Letterbox
+        };
+
+        /**
          * @internal
          * @brief Constructor
          * @param window The render target
@@ -174,6 +193,24 @@ namespace ime {
          * @see setViewPort
          */
         FloatRect getViewport() const;
+
+        /**
+         * @brief Set how the camera responds to the window when it is resized
+         * @param response The on resize event response
+         *
+         * By default, the response is ime::Camera::onWinResize::Stretch
+         *
+         * @see getWindowResizeResponse
+         */
+        void setWindowResizeResponse(OnWinResize response);
+
+        /**
+         * @brief Get the cameras response to a window resize event
+         * @return The window resize response
+         *
+         * @see setWindowResizeResponse
+         */
+        OnWinResize getWindowResizeResponse() const;
 
         /**
          * @brief Set whether or not the scene should render the camera
@@ -408,6 +445,16 @@ namespace ime {
          * @return Th camera's follow target offset
          */
         const Vector2f& getTargetFollowOffset() const;
+
+        /**
+         * @internal
+         * @brief Set a new internal view
+         * @param view The new view
+         *
+         * @warning This function is intended for internal use only and should
+         * never be called outside of IME
+         */
+        void setInternalView(std::any view);
 
         /**
          * @internal

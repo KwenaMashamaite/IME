@@ -28,6 +28,7 @@
 #include <TGUI/Backends/SFML/BackendFontSFML.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <TGUI/Color.hpp>
 #include <IME/ui/widgets/TabsContainer.h>
 
@@ -283,6 +284,30 @@ namespace ime::utility {
 
     Colour convertFrom3rdPartyColour(sf::Color thirdPartyColour) {
         return {thirdPartyColour.r, thirdPartyColour.g, thirdPartyColour.b, thirdPartyColour.a};
+    }
+
+    // The implementation of this function was adapted from the following SFML wiki: https://github.com/SFML/SFML/wiki/Source:-Letterbox-effect-using-a-view
+    sf::View letterbox(const sf::View &view, unsigned int windowWidth, unsigned int windowHeight) {
+        float windowRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+        float viewRatio = view.getSize().x / view.getSize().y;
+        bool horizontalSpacing = windowRatio > viewRatio;
+        float sizeX = 1;
+        float sizeY = 1;
+        float posX = 0;
+        float posY = 0;
+
+        if (horizontalSpacing) { // Place black bars on the left and right side of the view
+            sizeX = viewRatio / windowRatio;
+            posX = (1 - sizeX) / 2.f;
+        } else { // Place black bars at the top and bottom of the view
+            sizeY = windowRatio / viewRatio;
+            posY = (1 - sizeY) / 2.f;
+        }
+
+        sf::View letterboxView = view;
+        letterboxView.setViewport( sf::FloatRect(posX, posY, sizeX, sizeY) );
+
+        return letterboxView;
     }
 
     float pixelsToMetres(float pixels) {

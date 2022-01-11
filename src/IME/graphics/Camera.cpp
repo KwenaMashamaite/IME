@@ -25,6 +25,7 @@
 #include "IME/graphics/Camera.h"
 #include "IME/graphics/RenderTargetImpl.h"
 #include "IME/core/game_object/GameObject.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime {
     class Camera::CameraImpl {
@@ -42,7 +43,8 @@ namespace ime {
             posChangeId_{-1},
             outlineColour_{Colour::Transparent},
             outlineThickness_{1},
-            isDrawable_{true}
+            isDrawable_{true},
+            onWinResize_{OnWinResize::Stretch}
         {
             window_.setView(view);
         }
@@ -86,6 +88,22 @@ namespace ime {
         FloatRect getViewport() const {
             auto viewport = view.getViewport();
             return {viewport.left, viewport.top, viewport.width, viewport.height};
+        }
+
+        void setWindowResizeResponse(Camera::OnWinResize response) {
+            if (onWinResize_ != response) {
+                if (response == OnWinResize::Letterbox) {
+                    view = utility::letterbox(view, window_.getSize().x, window_.getSize().y);
+                    window_.setView(view);
+                } else if (onWinResize_ == OnWinResize::Letterbox)
+                    view.setViewport(sf::FloatRect(0, 0, 1, 1));
+
+                onWinResize_ = response;
+            }
+        }
+
+        Camera::OnWinResize getWindowResizeResponse() const {
+            return onWinResize_;
         }
 
         void setDrawable(bool drawable) {
@@ -182,6 +200,11 @@ namespace ime {
             return followOffset_;
         }
 
+        void setSFMLView(sf::View newView) {
+            view = newView;
+            window_.setView(view);
+        }
+
         const sf::View& getSFMLView() {
             return view;
         }
@@ -195,6 +218,7 @@ namespace ime {
         Colour outlineColour_;      //!< The cameras outline colour
         float outlineThickness_;
         bool isDrawable_;
+        OnWinResize onWinResize_;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -262,6 +286,14 @@ namespace ime {
 
     FloatRect Camera::getViewport() const {
         return pimpl_->getViewport();
+    }
+
+    void Camera::setWindowResizeResponse(Camera::OnWinResize response) {
+        pimpl_->setWindowResizeResponse(response);
+    }
+
+    Camera::OnWinResize Camera::getWindowResizeResponse() const {
+        return pimpl_->getWindowResizeResponse();
     }
 
     void Camera::setDrawable(bool drawable) {
@@ -368,6 +400,10 @@ namespace ime {
 
     const Vector2f &Camera::getTargetFollowOffset() const {
         return pimpl_->getTargetFollowOffset();
+    }
+
+    void Camera::setInternalView(std::any view) {
+        pimpl_->setSFMLView(std::any_cast<sf::View>(view));
     }
 
     std::any Camera::getInternalView() {
