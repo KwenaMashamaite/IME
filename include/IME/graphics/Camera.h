@@ -32,6 +32,7 @@
 #include "IME/graphics/Colour.h"
 #include <memory>
 #include <any>
+#include <limits>
 
 namespace ime {
     class GameObject;
@@ -322,44 +323,50 @@ namespace ime {
 
         /**
          * @brief Resize the camera rectangle relative to its current size
+         * @param zoomPos Position to zoom at (leave unspecified to zoom at center)
          * @param factor The zoom factor to apply
          *
          * Resizing the view simulates a zoom, as the zone displayed on
          * screen grows or shrinks.
+         *
          * @a factor is a multiplier:
          * @li 1 keeps the size unchanged
          * @li > 1 makes the view bigger (objects appear smaller)
          * @li < 1 makes the view smaller (objects appear bigger)
          *
+         * By default the camera zooms in or out at its centre
+         *
          * @see setSize
          */
-        void zoom(float factor);
+        void zoom(float factor, const Vector2i& zoomPos = {std::numeric_limits<int>::max(), std::numeric_limits<int>::max()});
 
         /**
          * @brief Zoom the camera in
+         * @param zoomPos Position to zoom in at (leave unspecified to zoom at center)
          * @param factor The zoom factor
          *
          * The @a factor argument must be greater than 1 in order to zoom out,
          * values equal to 1 or less than are ignored
          *
-         * @note The camera zooms out from its centre
+         * By default, the camera zooms out from its centre
          *
          * @see zoomOut, setCenter
          */
-        void zoomIn(float factor);
+        void zoomIn(float factor, const Vector2i& zoomPos = {std::numeric_limits<int>::max(), std::numeric_limits<int>::max()});
 
         /**
          * @brief Zoom the camera out
+         * @param zoomPos Position to zoom out at (leave unspecified to zoom at center)
          * @param factor The zoom out factor
          *
          * The @a factor argument must be greater than 1 in order to zoom out,
          * values equal to 1 or less than are ignored
          *
-         * @note The camera zooms in at its centre
+         * By default, the camera zooms in at its centre
          *
          * @see zoomIn, setCenter
          */
-        void zoomOut(float factor);
+        void zoomOut(float factor, const Vector2i& zoomPos = {std::numeric_limits<int>::max(), std::numeric_limits<int>::max()});
 
         /**
          * @brief Convert a window coordinate to a world coordinate

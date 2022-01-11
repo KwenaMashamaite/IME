@@ -154,9 +154,18 @@ namespace ime {
             window_.setView(view);
         }
 
-        void zoom(float factor) {
-            view.zoom(factor);
-            window_.setView(view);
+        void zoom(float factor, const Vector2i& zoomPos) {
+            if (zoomPos.x != std::numeric_limits<int>::max() && zoomPos.y != std::numeric_limits<int>::max()) {
+                const Vector2f posBeforeZoom = windowCoordToWorldCoord(zoomPos);
+                view.zoom(factor);
+                window_.setView(view);
+                const Vector2f posAfterZoom = windowCoordToWorldCoord(zoomPos);
+                const Vector2f offset{posBeforeZoom - posAfterZoom};
+                move(offset.x, offset.y);
+            } else {
+                view.zoom(factor);
+                window_.setView(view);
+            }
         }
 
         Vector2f windowCoordToWorldCoord(const Vector2i &point) const {
@@ -346,18 +355,18 @@ namespace ime {
         setRotation(getRotation() + angle);
     }
 
-    void Camera::zoom(float factor) {
-        pimpl_->zoom(factor);
+    void Camera::zoom(float factor, const Vector2i& zoomPos) {
+        pimpl_->zoom(factor, zoomPos);
     }
 
-    void Camera::zoomIn(float factor) {
+    void Camera::zoomIn(float factor, const Vector2i& zoomPos) {
         if (factor > 1)
-            zoom(1.0f / factor);
+            zoom(1.0f / factor, zoomPos);
     }
 
-    void Camera::zoomOut(float factor) {
+    void Camera::zoomOut(float factor, const Vector2i& zoomPos) {
         if (factor > 1)
-            zoom(factor);
+            zoom(factor, zoomPos);
     }
 
     Vector2f Camera::windowCoordToWorldCoord(const Vector2i &point) const {
