@@ -95,7 +95,9 @@ namespace ime {
                 if (response == OnWinResize::Letterbox) {
                     view = utility::letterbox(view, window_.getSize().x, window_.getSize().y);
                     window_.setView(view);
-                } else if (onWinResize_ == OnWinResize::Letterbox)
+                } else if (response == OnWinResize::MaintainSize)
+                    setSFMLView(sf::View(sf::FloatRect{0, 0, static_cast<float>(window_.getSize().x), static_cast<float>(window_.getSize().y)}));
+                else if (onWinResize_ == OnWinResize::Letterbox) // Reset letterboxing
                     view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
                 onWinResize_ = response;

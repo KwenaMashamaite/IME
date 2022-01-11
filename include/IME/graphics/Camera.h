@@ -75,7 +75,15 @@ namespace ime {
              * do not match, black bars will appear vertically (to the left and
              * right of the camera) or horizontally (above and below the camera)
              */
-            Letterbox
+            Letterbox,
+
+            /**
+             * This option updates the size of the camera to that of the window
+             * without squeezing, stretching or scaling. This means that you
+             * will see more or less of the scene depending on the new size of
+             * the window
+             */
+            MaintainSize
         };
 
         /**

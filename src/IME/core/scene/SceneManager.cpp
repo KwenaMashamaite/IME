@@ -259,10 +259,13 @@ namespace ime::priv {
 
         // Handle a camera's response to a window resize event
         static auto updateCameraScale = [](Camera* camera, unsigned int windowWidth, unsigned int windowHeight) {
-            if (camera->getWindowResizeResponse() == Camera::OnWinResize::Letterbox) {
+            Camera::OnWinResize response = camera->getWindowResizeResponse();
+
+            if (response == Camera::OnWinResize::Letterbox) {
                 const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
                 camera->setInternalView(std::any{utility::letterbox(view, windowWidth, windowHeight)});
-            }
+            } else if (response == Camera::OnWinResize::MaintainSize)
+                camera->setInternalView(std::any{sf::View(sf::FloatRect(0, 0, static_cast<float>(windowWidth), static_cast<float>(windowHeight)))});
         };
 
         // Update all system components of a scene
