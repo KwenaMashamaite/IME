@@ -186,6 +186,10 @@ namespace ime {
             posChangeId_ = gameObject->onPropertyChange("position", [this](const Property& position) {
                 setCenter(position.getValue<Vector2f>() + followOffset_);
             });
+
+            gameObject->onDestruction([this] {
+                followTarget_ = nullptr;
+            });
         }
 
         void stopFollow() {
