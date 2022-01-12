@@ -356,6 +356,10 @@ namespace ime {
         bool isVisibleOnPause() const;
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::input::InputManager::setAllInputEnable instead.
+         *             This is accessible through the input() function
+         *
          * @brief Enable or disable scene input (keyboard, mouse, etc...)
          * @param enable True to enable input or false to disable it
          *
@@ -369,14 +373,20 @@ namespace ime {
          *
          * @see input
          */
+        [[deprecated("Use 'void ime::input::InputManager::setAllInputEnable(bool)' instead.")]]
         void setInputEnable(bool enable);
 
         /**
+         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
+         *             ime::input::InputManager::isAllInputEnabled instead.
+         *             This is accessible through the input() function
+         *
          * @brief Check whether or not input is enabled for this scene
          * @return True if input is enabled, otherwise false
          *
          * @see setInputEnable
          */
+        [[deprecated("Use 'bool ime::input::InputManager::isAllInputEnabled() const' instead.")]]
         bool isInputEnabled() const;
 
         /**
