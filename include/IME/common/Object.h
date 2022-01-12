@@ -216,6 +216,27 @@ namespace ime {
         int onEvent(const std::string& event, const Callback<>& callback, bool oneTime = false);
 
         /**
+         * @brief Pause or resume execution of an event listener
+         * @param id The event listeners unique identification number
+         * @param suspend True to suspend/pause or false to unsuspend/resume
+         *
+         * @see isEventListenerSuspended
+         */
+        void suspendedEventListener(int id, bool suspend);
+
+        /**
+         * @brief Check if an event listener is suspended or not
+         * @param id The identification number of the listener to be checked
+         * @return True if suspended, otherwise false
+         *
+         * This function also returns false if the specified event listener
+         * does not exist
+         *
+         * @see suspendedEventListener
+         */
+        bool isEventListenerSuspended(int id) const;
+
+        /**
          * @brief Remove an event listener from an event
          * @param event The name of the event to remove an event listener from
          * @param id The unique id of the event listener to be removed

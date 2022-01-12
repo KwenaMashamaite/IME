@@ -126,6 +126,14 @@ namespace ime {
             return false;
     }
 
+    bool EventEmitter::isEventListenerSuspended(int id) const {
+        std::scoped_lock lock(mutex_);
+
+        return std::any_of(eventList_.begin(), eventList_.end(), [=] (auto& pair) {
+            return isEventListenerSuspended(pair.first, id);
+        });
+    }
+
     bool EventEmitter::hasEventListener(const std::string &event, int id) const {
         return hasListener(event, id).first;
     }

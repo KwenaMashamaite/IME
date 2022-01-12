@@ -81,6 +81,14 @@ namespace ime {
         return utility::addEventListener(eventEmitter_, event, callback, oneTime);
     }
 
+    void Object::suspendedEventListener(int id, bool suspend) {
+        eventEmitter_.suspendEventListener(id, suspend);
+    }
+
+    bool Object::isEventListenerSuspended(int id) const {
+        return eventEmitter_.isEventListenerSuspended(id);
+    }
+
     bool Object::unsubscribe(const std::string &event, int id) {
         if (eventEmitter_.removeEventListener(event + "Change", id))
             return true;
