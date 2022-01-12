@@ -27,6 +27,14 @@
 #include <SFML/Window/Joystick.hpp>
 
 namespace ime::input {
+    void Joystick::setEnable(bool enable) {
+        emitter_.setActive(enable);
+    }
+
+    bool Joystick::isEnabled() const {
+        return emitter_.isActive();
+    }
+
     bool Joystick::isConnected(unsigned int joystick) {
         return sf::Joystick::isConnected(joystick);
     }

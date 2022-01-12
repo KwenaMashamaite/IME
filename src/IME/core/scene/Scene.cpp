@@ -29,7 +29,6 @@
 namespace ime {
     Scene::Scene() :
         timescale_{1.0f},
-        isInputEnabled_{true},
         isEntered_{false},
         isVisibleWhenPaused_{false},
         isTimeUpdatedWhenPaused_{false},
@@ -70,7 +69,6 @@ namespace ime {
             shapeContainer_ = std::move(other.shapeContainer_);
             tileMap_ = std::move(other.tileMap_);
             timescale_ = other.timescale_;
-            isInputEnabled_ = other.isInputEnabled_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
             isTimeUpdatedWhenPaused_ = other.isTimeUpdatedWhenPaused_;
             isEventUpdatedWhenPaused_ = other.isEventUpdatedWhenPaused_;
@@ -140,15 +138,15 @@ namespace ime {
     }
 
     void Scene::setInputEnable(bool enable) {
-        if (isInputEnabled_ == enable)
+        if (enable && input().isAllInputEnabled() || !enable && input().isAllInputDisabled())
             return;
 
-        isInputEnabled_ = enable;
+        input().setAllInputEnable(enable);
         emitChange(Property{"inputEnable", enable});
     }
 
     bool Scene::isInputEnabled() const {
-        return isInputEnabled_;
+        return input().isAllInputEnabled();
     }
 
     void Scene::setCached(bool cache, const std::string& alias) {

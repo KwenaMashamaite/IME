@@ -71,6 +71,27 @@ namespace ime {
             };
 
             /**
+             * @brief Enable or disable the mouse
+             * @param enable True to enabled or false to disable
+             *
+             * When disabled, the mouse will no longer generate mouse up, down
+             * move and scroll events
+             *
+             * By default the mouse is enabled
+             *
+             * @see isEnabled
+             */
+            void setEnable(bool enable);
+
+            /**
+             * @brief Check if the mouse is enabled or not
+             * @return True if enabled, otherwise false
+             *
+             * @see setEnabled
+             */
+            bool isEnabled() const;
+
+            /**
              * @brief Convert an enum Button value to its string representation
              * @param button The button to be converted
              * @return The given button as a string

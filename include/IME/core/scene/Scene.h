@@ -362,6 +362,9 @@ namespace ime {
          * Note that input handlers are not destroyed when input is disabled.
          * Upon input re-enable, input handlers will be invoked as before
          *
+         * This function disables/enables all input types, to disable/enable
+         * a specific input use ime::input::InputManager::setInputEnable
+         *
          * By default, input is enabled
          *
          * @see input
@@ -755,7 +758,6 @@ namespace ime {
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
         std::unique_ptr<TileMap> tileMap_;    //!< Scene level tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
-        bool isInputEnabled_;                 //!< A flag indicating whether or not the scene receives input
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused

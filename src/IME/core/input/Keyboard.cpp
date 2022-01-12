@@ -40,6 +40,14 @@ namespace ime::input {
         }
     }
 
+    void Keyboard::setEnable(bool enable) {
+        eventEmitter_.setActive(enable);
+    }
+
+    bool Keyboard::isEnabled() const {
+        return eventEmitter_.isActive();
+    }
+
     std::string Keyboard::keyToString(Key key) {
         return ime::input::keyToString(key);
     }

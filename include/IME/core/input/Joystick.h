@@ -94,6 +94,27 @@ namespace ime {
             };
 
             /**
+             * @brief Enable or disable the joystick
+             * @param enable True to enabled or false to disable
+             *
+             * When disabled, the joystick will no longer generate connect,
+             * disconnect, button press, button release and axis move events
+             *
+             * By default the joystick is enabled
+             *
+             * @see isEnabled
+             */
+            void setEnable(bool enable);
+
+            /**
+             * @brief Check if the joystick is enabled or not
+             * @return True if enabled, otherwise false
+             *
+             * @see setEnabled
+             */
+            bool isEnabled() const;
+
+            /**
              * @brief Check if a joystick is connected
              * @param joystick Index of the joystick to check
              * @return True if the joystick is connected, otherwise false

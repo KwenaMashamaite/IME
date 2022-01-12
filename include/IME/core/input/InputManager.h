@@ -45,6 +45,15 @@ namespace ime {
         using KeybindAction = Callback<>; //!< An action performed when a key bind is triggered
 
         /**
+         * @brief Type of input
+         */
+        enum class InputType {
+            Keyboard,   //!< Keyboard
+            Mouse,      //!< Mouse
+            Joystick    //!< Joystick
+        };
+
+        /**
          * @brief Manages keyboard and mouse inputs
          *
          * This class is not meant to be instantiated directly, use
@@ -52,6 +61,57 @@ namespace ime {
          */
         class IME_API InputManager {
         public:
+            /**
+             * @brief Enable or disable an input
+             * @param inputType The input to be enabled or disabled
+             * @param enable True to enabled or false to disable
+             *
+             * When disabled, the specified input will no longer generate
+             * input events
+             *
+             * By default all the inputs are enabled
+             *
+             * @see isEnabled, setEnableAll
+             */
+            void setInputEnable(InputType inputType, bool enable);
+
+            /**
+             * @brief Check if an input is enabled or not
+             * @param inputType The type of input to be checked
+             * @return True if enabled, otherwise false
+             *
+             * @see setEnabled, setEnableAll
+             */
+            bool isInputEnabled(InputType inputType) const;
+
+            /**
+             * @brief Enable or disable all input
+             * @param enable True to enable or false to disable
+             *
+             * By default all the inputs are enabled
+             *
+             * @see setEnable, isEnable, isAllInputEnabled, isAllInputDisabled
+             */
+            void setAllInputEnable(bool enable);
+
+            /**
+             * @brief Check if all input is enabled or not
+             * @return True if all the inputs are enabled, or false if at least
+             *         one input is disabled
+             *
+             * @see setAllInputEnable, isAllInputDisabled
+             */
+            bool isAllInputEnabled() const;
+
+            /**
+             * @brief Check if all the inputs are disabled
+             * @return True if all the inputs are disabled or false if at least
+             *         one input is enabled
+             *
+             * @see setAllInputEnable, isAllInputEnabled
+             */
+            bool isAllInputDisabled() const;
+
             /**
              * @brief Check if a key is currently pressed or not
              * @param key Key to be checked

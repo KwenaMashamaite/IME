@@ -25,6 +25,47 @@
 #include "IME/core/input/InputManager.h"
 
 namespace ime::input {
+    void InputManager::setInputEnable(InputType inputType, bool enable) {
+        switch (inputType) {
+            case InputType::Keyboard:
+                keyboard_.setEnable(enable);
+                break;
+            case InputType::Mouse:
+                mouse_.setEnable(enable);
+                break;
+            case InputType::Joystick:
+                joystick_.setEnable(enable);
+                break;
+        }
+    }
+
+    bool InputManager::isInputEnabled(InputType inputType) const {
+        switch (inputType) {
+            case InputType::Keyboard:
+                return keyboard_.isEnabled();
+            case InputType::Mouse:
+                return mouse_.isEnabled();
+            case InputType::Joystick:
+                return joystick_.isEnabled();
+            default:
+                return false;
+        }
+    }
+
+    void InputManager::setAllInputEnable(bool enable) {
+        keyboard_.setEnable(enable);
+        mouse_.setEnable(enable);
+        joystick_.setEnable(enable);
+    }
+
+    bool InputManager::isAllInputEnabled() const {
+        return keyboard_.isEnabled() && mouse_.isEnabled() && joystick_.isEnabled();
+    }
+
+    bool InputManager::isAllInputDisabled() const {
+        return !keyboard_.isEnabled() && !mouse_.isEnabled() && !joystick_.isEnabled();
+    }
+
     bool InputManager::isKeyPressed(Keyboard::Key key) {
         return input::Keyboard::isKeyPressed(key);
     }

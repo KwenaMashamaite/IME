@@ -278,23 +278,35 @@ namespace ime::priv {
                 updateCameraScale(&scene->camera(), e.size.width, e.size.height);
             }
 
-            if (scene->isInputEnabled_) {
-                scene->inputManager_.handleEvent(e);
-                scene->guiContainer_.handleEvent(e);
-                scene->gridMovers().handleEvent(e);
-                scene->handleEvent(e);
-                scene->onHandleEvent(e);
-            } else {
-                // Only pass non-input events to the scene
-                if (e.type == Event::Closed || e.type == Event::Resized
-                    || e.type == Event::MouseEntered || e.type == Event::MouseLeft
-                    || e.type == Event::LostFocus || e.type == Event::GainedFocus)
-                {
-                    scene->handleEvent(e);
-                    scene->onHandleEvent(e);
-                    scene->guiContainer_.handleEvent(e);
-                }
+            // Absorb key event if Keyboard is disabled
+            if (!scene->inputManager_.isInputEnabled(input::InputType::Keyboard) &&
+                (e.type == Event::KeyPressed || e.type == Event::KeyReleased))
+            {
+                return;
             }
+
+            // Absorb mouse event if the Mouse is disabled
+            if (!scene->inputManager_.isInputEnabled(input::InputType::Mouse) &&
+                (e.type == Event::MouseButtonPressed || e.type == Event::MouseButtonReleased
+                || e.type == Event::MouseMoved || e.type == Event::MouseWheelScrolled))
+            {
+                return;
+            }
+
+            // Absorb joystick event if Joystick is disabled
+            if (!scene->inputManager_.isInputEnabled(input::InputType::Joystick) &&
+                (e.type == Event::JoystickButtonPressed || e.type == Event::JoystickButtonReleased ||
+                e.type == Event::JoystickMoved || e.type == Event::JoystickConnected ||
+                e.type == Event::JoystickDisconnected))
+            {
+                return;
+            }
+
+            scene->inputManager_.handleEvent(e);
+            scene->guiContainer_.handleEvent(e);
+            scene->gridMovers().handleEvent(e);
+            scene->handleEvent(e);
+            scene->onHandleEvent(e);
         };
 
         updateSystem(scenes_.top().get(), event);

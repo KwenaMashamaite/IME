@@ -30,6 +30,14 @@
 #include <iostream>
 
 namespace ime::input {
+    void Mouse::setEnable(bool enable) {
+        eventEmitter_.setActive(enable);
+    }
+
+    bool Mouse::isEnabled() const {
+        return eventEmitter_.isActive();
+    }
+
     std::string Mouse::buttonToString(Mouse::Button button) {
         switch (button) {
             case Button::Left:          return "Left";
