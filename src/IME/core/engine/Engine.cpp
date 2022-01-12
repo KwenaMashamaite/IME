@@ -118,14 +118,14 @@ namespace ime {
             privWindow_->setIcon(configs_.getPref("WINDOW_ICON").getValue<std::string>());
 
         // Shutdown engine when window close event is triggered
-        window_->onClose([this] {
+        window_->defaultWinCloseHandlerId_ = window_->onClose([this] {
             quit();
         });
 
         // Because the window is destroyed and recreated when we enter full screen,
         // SFML does not generate a resized event. This cause some issues with
         // TGUI, so we associate a full screen toggle with a resize event
-        window_->onFullScreenToggle([this] {
+        window_->onFullScreenToggle([this] (bool) {
             Event event;
             event.type = Event::Resized;
             event.size.width = window_->getSize().x;

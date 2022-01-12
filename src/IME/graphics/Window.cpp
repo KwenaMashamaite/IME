@@ -25,7 +25,7 @@
 #include "IME/graphics/Window.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
-#include <cmath>
+#include "IME/utility/Helpers.h"
 
 namespace ime {
     Window::Window(priv::RenderTarget &renderTarget) :
@@ -38,7 +38,8 @@ namespace ime {
         isVisible_{false},
         isCursorVisible_{false},
         isCursorGrabbed_{false},
-        clearColour_{ime::Colour::Black}
+        clearColour_{ime::Colour::Black},
+        defaultWinCloseHandlerId_{-1}
     {
         renderTarget.onCreate([this] {
             isVisible_ = true;
@@ -145,8 +146,7 @@ namespace ime {
             renderTarget_.create(getTitle(), sizeBeforeFullScreen_.x, sizeBeforeFullScreen_.y, windowStyleBeforeFullScreen_);
         }
 
-        if (onFullScreenToggle_)
-            onFullScreenToggle_();
+        eventEmitter_.emit("fullScreenToggle", fullScreen);
     }
 
     bool Window::isFullScreen() const {
@@ -241,32 +241,63 @@ namespace ime {
         renderTarget_.getImpl()->getSFMLWindow().close();
     }
 
-    void Window::onClose(const Callback& callback) {
-        onWindowClose_ = callback;
-    }
-
-    void Window::onLoseFocus(const Callback &callback) {
-        onLoseFocus_ = callback;
-    }
-
-    void Window::onGainFocus(const Callback &callback) {
-        onGainFocus_ = callback;
-    }
-
-    void Window::onMouseEnter(const Callback &callback) {
-        onMouseEnter_ = callback;
-    }
-
-    void Window::onMouseExit(const Callback &callback) {
-        onMouseExit_ = callback;
-    }
-
-    void Window::onResize(const Window::ResizeCallback &callback) {
-        onResize_ = callback;
-    }
-
     bool Window::isOpen() const {
         return renderTarget_.getImpl()->isOpen();
+    }
+
+    void Window::suspendedEventListener(int id, bool suspend) {
+        eventEmitter_.suspendEventListener(id, suspend);
+    }
+
+    bool Window::isEventListenerSuspended(int id) const {
+        return eventEmitter_.isEventListenerSuspended(id);
+    }
+
+    void Window::setDefaultOnCloseHandlerEnable(bool enable) {
+        eventEmitter_.suspendEventListener("close", defaultWinCloseHandlerId_, !enable);
+    }
+
+    int Window::onClose(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "close", callback, oneTime);
+    }
+
+    int Window::onLoseFocus(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "loseFocus", callback, oneTime);
+    }
+
+    int Window::onGainFocus(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "gainFocus", callback, oneTime);
+    }
+
+    int Window::onMouseEnter(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "mouseEnter", callback, oneTime);
+    }
+
+    int Window::onMouseExit(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "mouseExit", callback, oneTime);
+    }
+
+    int Window::onFullScreenToggle(const Callback<bool> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "fullScreenToggle", callback, oneTime);
+    }
+
+    int Window::onResize(const Callback<Vector2u>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "resize", callback, oneTime);
+    }
+
+    bool Window::removeEventListener(int id) {
+        if (eventEmitter_.removeEventListener("close", id) ||
+            eventEmitter_.removeEventListener("loseFocus", id) ||
+            eventEmitter_.removeEventListener("gainFocus", id) ||
+            eventEmitter_.removeEventListener("mouseEnter", id) ||
+            eventEmitter_.removeEventListener("mouseExit", id) ||
+            eventEmitter_.removeEventListener("fullScreenToggle", id) ||
+            eventEmitter_.removeEventListener("resize", id))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     Vector2u Window::boundSize(const Vector2u &size) const {
@@ -292,30 +323,24 @@ namespace ime {
     }
 
     void Window::emitCloseEvent() {
-        if (onWindowClose_)
-            onWindowClose_();
+        eventEmitter_.emit("close");
     }
 
     void Window::emitFocusChange(bool focused) {
-        if (focused && onGainFocus_) {
-            onGainFocus_();
-        } else if (!focused && onLoseFocus_)
-            onLoseFocus_();
+        if (focused)
+            eventEmitter_.emit("gainFocus");
+        else
+            eventEmitter_.emit("loseFocus");
     }
 
     void Window::emitMouseCursor(bool entered) {
-        if (entered && onMouseEnter_)
-            onMouseEnter_();
-        else if (!entered && onMouseExit_)
-            onMouseExit_();
+        if (entered)
+            eventEmitter_.emit("mouseEnter");
+        else
+            eventEmitter_.emit("mouseExit");
     }
 
     void Window::emitResize(const Vector2u &newSize) {
-        if (onResize_)
-            onResize_(newSize);
-    }
-
-    void Window::onFullScreenToggle(const Callback &callback) {
-        onFullScreenToggle_ = callback;
+        eventEmitter_.emit("resize", newSize);
     }
 }

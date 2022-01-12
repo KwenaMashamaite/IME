@@ -29,7 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/graphics/WindowStyles.h"
 #include "IME/graphics/Colour.h"
-#include <functional>
+#include "IME/core/event/EventEmitter.h"
 #include <string>
 #include <memory>
 
@@ -46,9 +46,6 @@ namespace ime {
      */
     class IME_API Window {
     public:
-        using Callback = std::function<void()>; // Window callback
-        using ResizeCallback = std::function<void(Vector2u)>; // Window callback
-
         /**
          * @brief Copy constructor
          */
@@ -419,117 +416,157 @@ namespace ime {
         void close();
 
         /**
+         * @brief Check if the window is open or not
+         * @return True if the window is open, otherwise false
+         */
+        bool isOpen() const;
+
+        /**
+         * @brief Pause or resume execution of an event listener
+         * @param id The event listeners unique identification number
+         * @param suspend True to suspend/pause or false to unsuspend/resume
+         *
+         * @see isEventListenerSuspended
+         */
+        void suspendedEventListener(int id, bool suspend);
+
+        /**
+         * @brief Check if an event listener is suspended or not
+         * @param id The identification number of the listener to be checked
+         * @return True if suspended, otherwise false
+         *
+         * This function also returns false if the specified event listener
+         * does not exist
+         *
+         * @see suspendedEventListener
+         */
+        bool isEventListenerSuspended(int id) const;
+
+        /**
+         * @brief Enable or disable the default window close handler
+         * @param enable True to enable of false to disable
+         *
+         * By default, the internal window close handler is enabled. for
+         * more info checkout onClose()
+         *
+         * @see onClose
+         */
+        void setDefaultOnCloseHandlerEnable(bool enable);
+
+        /**
          * @brief Add an event lister to a window close event
          * @param callback Function to be execute when a window close event
          *                 is triggered
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
          * The window close event is triggered when close() is called,
          * when the close window (x) button is clicked or when alt + F4
          * is pressed
          *
-         * @note Only one event listener may be registered to this event.
-         * This means that when a new event listener is added, the previous
-         * one is removed. As a result, adding a window close event listener
-         * overwrites the default behavior. To remove the listener pass
-         * @a nullptr as the argument
+         * By default, this event has an internal event listener which closes
+         * the window and shuts down the engine. To disable it call
+         * setDefaultOnCloseHandlerEnable()
          *
-         * By default, the internal handler closes the window and shuts down
-         * the engine
+         * @see removeEventListener, setDefaultOnCloseHandlerEnable
          */
-        void onClose(const Callback& callback);
+        int onClose(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to an lose focus event
          * @param callback The function to be executed when the window loses focus
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that only a single event listener may be added to this event.
-         * Adding a new event listener automatically destroys the current one
-         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         * You can add any number of event handlers to this event
          *
-         * By default, there is no callback registered to this event
-         *
-         * @see onGainFocus
+         * @see onGainFocus, removeEventListener
          */
-        void onLoseFocus(const Callback& callback);
+        int onLoseFocus(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a gain focus event
          * @param callback The function to be executed when the window gains focus
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that only a single event listener may be added to this event.
-         * Adding a new event listener automatically destroys the current one
-         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         * You can add any number of event handlers to this event
          *
-         * By default, there is no callback registered to this event
-         *
-         * @see onLoseFocus
+         * @see onLoseFocus, removeEventListener
          */
-        void onGainFocus(const Callback& callback);
+        int onGainFocus(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to an mouse enter event
          * @param callback The function to be executed when the mouse cursor
          *                 enters the window
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that only a single event listener may be added to this event.
-         * Adding a new event listener automatically destroys the current one
-         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         * You can add any number of event handlers to this event
          *
-         * By default, there is no callback registered to this event
-         *
-         * @see onMouseExit
+         * @see onMouseExit, removeEventListener
          */
-        void onMouseEnter(const Callback& callback);
+        int onMouseEnter(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a mouse left event
          * @param callback The function to be executed when the mouse cursor
          *                 leaves the window
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that only a single event listener may be added to this event.
-         * Adding a new event listener automatically destroys the current one
-         * if any. Pass @a nullptr as an argument to stop the callback execution.
+         * You can add any number of event handlers to this event
          *
-         * By default, there is no callback registered to this event
-         *
-         * @see onMouseEnter
+         * @see onMouseEnter, removeEventListener
          */
-        void onMouseExit(const Callback& callback);
+        int onMouseExit(const Callback<>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a full screen event
          * @param callback Function to be executed when the window toggles
          *                 full screen
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that only one event listener may be attached to this event
+         * You can add any number of event handlers to this event
          *
-         * By default, there is no full screen listener
+         * The callback is passed a boolean flag indicating whether or not
+         * the window is full screen
+         *
+         * @see onResize, removeEventListener
          */
-        void onFullScreenToggle(const Callback& callback);
+        int onFullScreenToggle(const Callback<bool>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a window resize event
          * @param callback The function to be executed when the window is
          *                 resized
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Only one callback may be registered at a time. Adding a new callback
-         * destroys the previous one. Pass @a nullptr to remove the current
-         * callback
+         * You can add any number of event handlers to this event
          *
-         * The callback is passed the new size of the window as an argument
-         * on invocation
+         * The callback is passed the new size of the window
          *
-         * By default, there is no callback registered to this event
-         *
-         * @see onMouseEnter
+         * @see onFullScreenToggle, removeEventListener
          */
-        void onResize(const ResizeCallback& callback);
+        int onResize(const Callback<Vector2u>& callback, bool oneTime = false);
 
         /**
-         * @brief Check if the window is open or not
-         * @return True if the window is open, otherwise false
+         * @brief Remove an event listener from an event
+         * @param id The unique identification number of the event listener
+         * @return True if the event listener was removed or false if no such
+         *         event listener exists
          */
-        bool isOpen() const;
+        bool removeEventListener(int id);
 
     private:
         /**
@@ -581,14 +618,9 @@ namespace ime {
         bool isCursorVisible_;               //!< A flag indicating whether or not the mouse cursor is visible
         bool isCursorGrabbed_;               //!< A flag indicating whether or not the mouse cursor is grabbed by the window
         Vector2u sizeBeforeFullScreen_;      //!< The size of the window before full screen mode
-        Callback onWindowClose_;             //!< Function executed when a request to close the window is received
-        Callback onFullScreenToggle_;        //!< Function executed when the window toggles full screen
-        Callback onLoseFocus_;               //!< Function executed when the window loses focus
-        Callback onGainFocus_;               //!< Function executed when the window gains
-        Callback onMouseEnter_;              //!< Function executed when the mouse cursor enters the window
-        Callback onMouseExit_;               //!< Function executed when the mouse cursor leaves the window
-        ResizeCallback onResize_;            //!< Function executed when the window is resized
+        EventEmitter eventEmitter_;          //!< Dispatches events
         Colour clearColour_;                 //!< The fill colour of the window when cleared
+        int defaultWinCloseHandlerId_;       //!< The identification number of the default window close event handler
         friend class Engine;                 //!< Needs access to constructor
     };
 }
