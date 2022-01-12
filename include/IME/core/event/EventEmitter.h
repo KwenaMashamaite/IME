@@ -45,7 +45,7 @@ namespace ime {
         /**
          * @brief Default constructor
          */
-        EventEmitter() = default;
+        EventEmitter();
 
         /**
          * @brief Copy constructor
@@ -221,6 +221,27 @@ namespace ime {
          */
         bool hasEventListener(const std::string& event, int id) const;
 
+        /**
+         * @brief Set whether or not the emitter is active
+         * @param active True to activate or false to deactivate
+         *
+         * When the emitter is deactivated, it stops emitting events. This
+         * means than all calls to emit() will be ignored
+         *
+         * By default, the emitter is activated
+         *
+         * @see isEnabled
+         */
+        void setActive(bool active);
+
+        /**
+         * @brief Check if the event emitter is active
+         * @return True if active, otherwise false
+         *
+         * @see setActive
+         */
+        bool isActive() const;
+
     private:
         /**
          * @brief  Add an event listener (callback) to an event
@@ -294,6 +315,7 @@ namespace ime {
         // Data members
         using Listeners = std::vector<std::shared_ptr<IListener>>; //!< Alias
         std::unordered_map<std::string, Listeners> eventList_;     //!< Events container
+        bool isActive_;                                            //!< A flag indicating whether or not the emitter is active
         mutable std::recursive_mutex mutex_;                       //!< Synchronization primitive
     };
 

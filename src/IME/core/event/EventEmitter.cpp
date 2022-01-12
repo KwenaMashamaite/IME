@@ -26,6 +26,10 @@
 #include <algorithm>
 
 namespace ime {
+    EventEmitter::EventEmitter() :
+        isActive_{true}
+    {}
+
     EventEmitter::EventEmitter(const EventEmitter &other) {
         std::scoped_lock lock(other.mutex_);
         auto temp{other.eventList_};
@@ -124,6 +128,14 @@ namespace ime {
 
     bool EventEmitter::hasEventListener(const std::string &event, int id) const {
         return hasListener(event, id).first;
+    }
+
+    void EventEmitter::setActive(bool active) {
+        isActive_ = active;
+    }
+
+    bool EventEmitter::isActive() const {
+        return isActive_;
     }
 
     std::pair<bool, int> EventEmitter::hasListener(const std::string &event, int listenerId) const {
