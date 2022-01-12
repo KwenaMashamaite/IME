@@ -123,6 +123,8 @@ namespace ime {
          * @return True if the event listener was removed from athe specified
          *         event or false if the specified event does exist or it does
          *         not have a listener with the given id
+         *
+         * @see clear
          */
          bool removeEventListener(const std::string &event, int id);
 
@@ -131,8 +133,17 @@ namespace ime {
           * @param  event Event to remove all listeners from
           * @return True if all listeners were removed, false if no such
           *         event exists
+          *
+          * @see clear
           */
          bool removeAllEventListeners(const std::string &event);
+
+         /**
+          * @brief Remove all events and event listeners
+          *
+          * @see removeAllEventListeners, removeAllEventListener
+          */
+         void clear();
 
         /**
          * @brief Fire an event
