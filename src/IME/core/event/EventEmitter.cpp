@@ -34,12 +34,14 @@ namespace ime {
         std::scoped_lock lock(other.mutex_);
         auto temp{other.eventList_};
         std::swap(eventList_, temp);
+        isActive_ = other.isActive_;
     }
 
     EventEmitter &EventEmitter::operator=(const EventEmitter &rhs) {
         if (this != &rhs) {
             std::scoped_lock lock(mutex_, rhs.mutex_);
             eventList_ = rhs.eventList_;
+            isActive_ = rhs.isActive_;
         }
 
         return *this;
@@ -48,12 +50,14 @@ namespace ime {
     EventEmitter::EventEmitter(EventEmitter&& other) noexcept {
         std::scoped_lock lock(other.mutex_);
         std::swap(eventList_, other.eventList_);
+        isActive_ = other.isActive_;
     }
 
     EventEmitter &EventEmitter::operator=(EventEmitter&& rhs) noexcept {
         if (this != &rhs) {
             std::scoped_lock lock(mutex_, rhs.mutex_);
             eventList_ = std::move(rhs.eventList_);
+            isActive_ = rhs.isActive_;
         }
 
         return *this;
