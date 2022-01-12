@@ -497,6 +497,17 @@ namespace ime {
         void onMouseExit(const Callback& callback);
 
         /**
+         * @brief Add an event listener to a full screen event
+         * @param callback Function to be executed when the window toggles
+         *                 full screen
+         *
+         * Note that only one event listener may be attached to this event
+         *
+         * By default, there is no full screen listener
+         */
+        void onFullScreenToggle(const Callback& callback);
+
+        /**
          * @brief Add an event listener to a window resize event
          * @param callback The function to be executed when the window is
          *                 resized
@@ -532,17 +543,6 @@ namespace ime {
          * @param size The restricted size
          */
         Vector2u boundSize(const Vector2u& size) const;
-
-        /**
-         * @brief Add an event listener to a full screen event
-         * @param callback Function to be executed when the window toggles
-         *                 full screen
-         *
-         * Note that only one event listener may be attached to this event
-         *
-         * By default, there is no full screen listener
-         */
-        void onFullScreenToggle(const Callback& callback);
 
         /**
          * @brief Emit the window close event
