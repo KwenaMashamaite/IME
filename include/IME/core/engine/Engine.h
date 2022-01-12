@@ -533,13 +533,35 @@ namespace ime {
         int onStart(const Callback<>& callback);
 
         /**
-         * @brief Execute a callback when the engine is shut down
-         * @param callback The function to be executed when the engine shuts down
+         * @brief Execute a callback when the engine is about to shut down
+         * @param callback The function to be executed when the engine is
+         *                 starts to shut down
          * @return The event listener unique identification number
          *
-         * @see onStart
+         * This event is emitted when the engine is about to begin its
+         * shutdown sequence. To perform an action after the engine has
+         * completed its shutdown sequence, use onShutdownComplete()
+         *
+         * @see onShutdownComplete
          */
         int onShutDown(const Callback<>& callback);
+
+        /**
+         * @brief Add an event listener to a shutdown complete event
+         * @param callback The function to be executed when the engine complete
+         *                 its shutdown sequence
+         * @return The event listeners identification number
+         *
+         * @warning When this event is emitted, the engine will be in an
+         * uninitialized state (see init()). This means that accessing it
+         * without reinitialization is undefined behavior
+         *
+         * @note Only one event listener may registered to this event. Pass
+         * @a nullptr to remove the callback
+         *
+         * @see onShutDown
+         */
+        void onShutdownComplete(const Callback<>& callback);
 
         /**
          * @internal
@@ -649,6 +671,7 @@ namespace ime {
         EventEmitter eventEmitter_;                        //!< Emits engine events
         TimerManager timerManager_;                        //!< Engine level timer manager
         ui::GuiContainer gui_;                             //!< Engine level gui
+        Callback<> onShutdownComplete_;                    //!< An optional callback function executed after an engine shutdown
 
         std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };

@@ -391,6 +391,11 @@ namespace ime {
             scenesPendingPush_.pop();
 
         window_->close();
+
+        if (onShutdownComplete_) {
+            onShutdownComplete_();
+            onShutdownComplete_ = nullptr;
+        }
     }
 
     bool Engine::isRunning() const {
@@ -520,6 +525,10 @@ namespace ime {
 
     int Engine::onShutDown(const Callback<>& callback) {
         return eventEmitter_.addEventListener("shutdown", callback);
+    }
+
+    void Engine::onShutdownComplete(const Callback<> &callback) {
+        onShutdownComplete_ = callback;
     }
 
     Engine::~Engine() = default;
