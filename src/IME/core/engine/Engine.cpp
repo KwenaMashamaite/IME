@@ -27,6 +27,7 @@
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/RenderTarget.h"
+#include "IME/utility/Helpers.h"
 
 namespace ime {
     namespace {
@@ -77,8 +78,7 @@ namespace ime {
         eventDispatcher_ = EventDispatcher::instance();
         isInitialized_ = true;
 
-        if (onInit_)
-            onInit_();
+        eventEmitter_.emit("initialize");
     }
 
     void Engine::loadSettings() {
@@ -199,10 +199,8 @@ namespace ime {
         eventEmitter_.emit("start");
 
         while (window_->isOpen() && isRunning_ && !sceneManager_->isEmpty()) {
+            eventEmitter_.emit("frameStart");
             deltaTime = gameClock.restart();
-            if (onFrameStart_)
-                onFrameStart_();
-
             preUpdate(deltaTime);
             processEvents();
             update(deltaTime);
@@ -211,6 +209,7 @@ namespace ime {
             display();
             postFrameUpdate();
             elapsedTime_ += deltaTime;
+            eventEmitter_.emit("frameEnd");
         }
 
         shutdown();
@@ -364,14 +363,11 @@ namespace ime {
                 scenesPendingPush_.pop();
             }
         }
-
-        // Execute frame end listener
-        if (onFrameEnd_)
-            onFrameEnd_();
     }
 
     void Engine::shutdown() {
         eventEmitter_.emit("shutdown");
+        eventEmitter_.clear();
         audioManager_.stopAll();
         audioManager_.removePlayedAudio();
         isInitialized_ = false;
@@ -390,8 +386,6 @@ namespace ime {
         resourceManager_.reset();
         inputManager_ = input::InputManager();
         eventDispatcher_.reset();
-        onFrameEnd_ = nullptr;
-        onFrameStart_ = nullptr;
 
         while (!scenesPendingPush_.empty())
             scenesPendingPush_.pop();
@@ -479,6 +473,27 @@ namespace ime {
         timerManager_.setInterval(delay, std::move(callback), repeatCount);
     }
 
+    void Engine::suspendedEventListener(int id, bool suspend) {
+        eventEmitter_.suspendEventListener(id, suspend);
+    }
+
+    bool Engine::isEventListenerSuspended(int id) const {
+        return eventEmitter_.isEventListenerSuspended(id);
+    }
+
+    bool Engine::removeEventListener(int id) {
+        if (eventEmitter_.removeEventListener("initialize", id) ||
+            eventEmitter_.removeEventListener("start", id) ||
+            eventEmitter_.removeEventListener("frameStart", id) ||
+            eventEmitter_.removeEventListener("frameEnd", id) ||
+            eventEmitter_.removeEventListener("shutdown", id))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     Window &Engine::getWindow() {
         return *window_;
     }
@@ -487,24 +502,24 @@ namespace ime {
         return *window_;
     }
 
-    void Engine::onInit(Callback<> callback) {
-        onInit_ = std::move(callback);
+    int Engine::onInit(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "initialize", callback, oneTime);
     }
 
-    void Engine::onFrameStart(Callback<> callback) {
-        onFrameStart_ = std::move(callback);
+    int Engine::onFrameStart(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "frameStart", callback, oneTime);
     }
 
-    void Engine::onFrameEnd(Callback<> callback) {
-        onFrameEnd_ = std::move(callback);
+    int Engine::onFrameEnd(const Callback<>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "frameEnd", callback, oneTime);
     }
 
-    void Engine::onStart(Callback<> callback) {
-        eventEmitter_.addEventListener("start", std::move(callback));
+    int Engine::onStart(const Callback<>& callback) {
+        return eventEmitter_.addEventListener("start", callback);
     }
 
-    void Engine::onShutDown(Callback<> callback) {
-        eventEmitter_.addEventListener("shutdown", std::move(callback));
+    int Engine::onShutDown(const Callback<>& callback) {
+        return eventEmitter_.addEventListener("shutdown", callback);
     }
 
     Engine::~Engine() = default;

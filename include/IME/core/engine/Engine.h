@@ -455,53 +455,91 @@ namespace ime {
         void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
 
         /**
-         * @brief Execute a function after the engine is initialized
-         * @param callback The function to be executed when after the engine is
+         * @brief Pause or resume execution of an event listener
+         * @param id The event listeners unique identification number
+         * @param suspend True to suspend/pause or false to unsuspend/resume
+         *
+         * @see isEventListenerSuspended
+         */
+        void suspendedEventListener(int id, bool suspend);
+
+        /**
+         * @brief Check if an event listener is suspended or not
+         * @param id The identification number of the listener to be checked
+         * @return True if suspended, otherwise false
+         *
+         * This function also returns false if the specified event listener
+         * does not exist
+         *
+         * @see suspendedEventListener
+         */
+        bool isEventListenerSuspended(int id) const;
+
+        /**
+         * @brief Remove an event listener from an event
+         * @param id The unique identification number of the event listener
+         * @return True if the event listener was removed or false if no such
+         *         event listener exists
+         */
+        bool removeEventListener(int id);
+
+        /**
+         * @brief Add an event listener to an initialize event
+         * @param callback The function to be executed after the engine is
          *                 initialized
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * @note Only one callback may be registered at a time. Pass @a nullptr
-         * to remove the @a callback
+         * You can add add any number of event listeners to this event
          *
-         * By default no callback is registered to this event
+         * @see removeEventListener
          */
-        void onInit(Callback<> callback);
+        int onInit(const Callback<>& callback, bool oneTime = false);
 
         /**
-         * @brief Execute a function at the start of a frame
-         * @param callback Function to executed when a frame starts
+         * @brief Add an event listener to a current frame start event
+         * @param callback Function to executed when the current frame starts
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * @note Only one callback may be registered at a time. Pass nullptr
-         * to stop the callback from being invoked.
+         * You can add any number of event listeners to this event
          *
-         * By default no callback is registered to this event
+         * @see onFrameEnd
          */
-        void onFrameStart(Callback<> callback);
+        int onFrameStart(const Callback<>& callback, bool oneTime = false);
 
         /**
-         * @brief Execute a function at the end of the current frame
-         * @param callback Function to be executed
+         * @brief Add an event listener to a current frame end event
+         * @param callback Function to be executed when the current frame ends
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * @note Only one callback may be registered at a time. Pass nullptr
-         * to stop the callback from being invoked.
+         * You can add any number of event listeners to this event
          *
-         * By default, no callback is registered to this event
+         * @see onFrameStart
          */
-        void onFrameEnd(Callback<> callback);
+        int onFrameEnd(const Callback<>& callback, bool oneTime = false);
 
         /**
-         * @brief Execute a callback when the engine starts running
-         * @param callback Function to be executed
+         * @brief Add an event listener to an engine start event
+         * @param callback Function to be executed when the engine starts running
+         * @return The event listener unique identification number
+         *
+         * @see onShutdown
          */
-        void onStart(Callback<> callback);
+        int onStart(const Callback<>& callback);
 
         /**
          * @brief Execute a callback when the engine is shut down
-         * @param callback The function to be executed
+         * @param callback The function to be executed when the engine shuts down
+         * @return The event listener unique identification number
          *
-         * This callback is called before the engine executes its shutdown
-         * sequence
+         * @see onStart
          */
-        void onShutDown(Callback<> callback);
+        int onShutDown(const Callback<>& callback);
 
         /**
          * @internal
@@ -608,9 +646,6 @@ namespace ime {
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
         PrefContainer diskDataSaver_;                      //!< Holds data that persists across scenes and can be read/saved from/to a file on the disk
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
-        Callback<> onFrameStart_;                          //!< Optional function called at the start of the current frame
-        Callback<> onFrameEnd_;                            //!< Optional function called at the end of the current frame
-        Callback<> onInit_;                                //!< Optional function called after the engine is initialized
         EventEmitter eventEmitter_;                        //!< Emits engine events
         TimerManager timerManager_;                        //!< Engine level timer manager
         ui::GuiContainer gui_;                             //!< Engine level gui
