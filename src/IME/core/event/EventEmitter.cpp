@@ -92,6 +92,36 @@ namespace ime {
         return eventList_.find(event) != eventList_.end();
     }
 
+    bool EventEmitter::suspendEventListener(const std::string &event, int id, bool suspend) {
+        std::scoped_lock lock(mutex_);
+        IListener* listener = getListener(event, id);
+
+        if (listener) {
+            listener->isSuspended_ = suspend;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool EventEmitter::suspendEventListener(int id, bool suspend) {
+        std::scoped_lock lock(mutex_);
+
+        return std::any_of(eventList_.begin(), eventList_.end(), [=] (auto& pair) {
+            return suspendEventListener(pair.first, id, suspend);
+        });
+    }
+
+    bool EventEmitter::isEventListenerSuspended(const std::string& event, int id) const {
+        std::scoped_lock lock(mutex_);
+        const IListener* listener = getListener(event, id);
+
+        if (listener)
+            return listener->isSuspended_;
+        else
+            return false;
+    }
+
     bool EventEmitter::hasEventListener(const std::string &event, int id) const {
         return hasListener(event, id).first;
     }
@@ -108,5 +138,16 @@ namespace ime {
                 return {true, std::distance(eventListeners.begin(), found)};
         }
         return {false, -1};
+    }
+
+    EventEmitter::IListener* EventEmitter::getListener(const std::string &event, int id) {
+        return dynamic_cast<EventEmitter::IListener*>(const_cast<EventEmitter::IListener*>(std::as_const(*this).getListener(event, id)));
+    }
+
+    const EventEmitter::IListener* EventEmitter::getListener(const std::string& event, int id) const {
+        if (auto [found, index] = hasListener(event, id); found)
+            return eventList_.at(event).at(index).get();
+        else
+            return nullptr;
     }
 }

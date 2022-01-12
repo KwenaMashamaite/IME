@@ -60,7 +60,7 @@ void EventEmitter::emit(const std::string &event, Args... args) {
         auto& listeners = eventList_.at(event);
         for (auto& listenerBase : listeners) {
             auto listener = std::dynamic_pointer_cast<Listener<Args...>>(listenerBase);
-            if (listener && listener->callback_) {
+            if (listener && listener->callback_ && !listener->isSuspended_) {
                 std::invoke(listener->callback_, args...);
                 if (listener->isCalledOnce_)
                     removeEventListener(event, listener->id_);

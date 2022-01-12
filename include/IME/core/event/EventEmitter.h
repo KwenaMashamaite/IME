@@ -143,6 +143,54 @@ namespace ime {
         void emit(const std::string &event, Args...args);
 
         /**
+         * @brief Suspend the execution of an event listener
+         * @param event The name of the event the listener is subscribed to
+         * @param id The event listeners identification number
+         * @param suspend True to suspend or false to unsuspend
+         * @return True if the event listener was suspended or unsuspended, or
+         *         false if either the event or the event listener does not exist
+         *
+         * When suspended, the event listener will be ignored and not invoked/notified
+         * when the event its listening for is emitted/fired
+         *
+         * By default an event listener is not suspended
+         *
+         * @see isEventListenerSuspended, suspendEventListener(int, bool)
+         */
+        bool suspendEventListener(const std::string& event, int id, bool suspend);
+
+        /**
+         * @brief Suspend the execution of an event listener
+         * @param id The event listeners identification number
+         * @param suspend True to suspend or false to unsuspend
+         * @return True if the event listener was suspended or unsuspended, or
+         *         false if either the event or the event listener does not exist
+         *
+         * When suspended, the event listener will be ignored and not invoked/notified
+         * when the event its listening for is emitted/fired.
+         *
+         * Note that this function will search for the event listener in all
+         * events. Therefore it may be slower than suspendEventListener(const std::string&, int, bool)
+         *
+         * By default an event listener is not suspended
+         *
+         * @see isEventListenerSuspended, suspendEventListener(const std::string&, int, bool)
+         */
+        bool suspendEventListener(int id, bool suspend);
+
+        /**
+         * @brief Check if an event listener is suspended or not
+         * @param id The event listeners identifier
+         * @return True if it is suspended, otherwise false
+         *
+         * This function also returns false if the specified event or event
+         * listener do not exist
+         *
+         * @see suspendEventListener(const std::string&, int, bool) and suspendEventListener(int, bool)
+         */
+        bool isEventListenerSuspended(const std::string&, int id) const;
+
+        /**
          * @brief Check if an event exists or not
          * @param event Name of the event to check
          * @return True if event exists or false if the event does not exist
@@ -207,9 +255,15 @@ namespace ime {
          * This allows the template instance to be storable in a container
          */
         struct IListener {
-            explicit IListener(int id) : id_(id){}
+            explicit IListener(int id) :
+                id_(id),
+                isSuspended_(false)
+            {}
+
             virtual ~IListener() = default;
+
             int id_;
+            bool isSuspended_;
         };
 
         /**
@@ -217,13 +271,27 @@ namespace ime {
          */
         template <typename ...Args>
         struct Listener : public IListener {
-            Listener(int id, Callback<Args...> callback, bool isCalledOnce = false)
-                : IListener(id), callback_(callback), isCalledOnce_(isCalledOnce){}
+            Listener(int id, Callback<Args...> callback, bool isCalledOnce = false) :
+                IListener(id),
+                callback_(callback),
+                isCalledOnce_(isCalledOnce)
+            {}
 
             Callback<Args...> callback_;
             bool isCalledOnce_;
         };
 
+        /**
+         * @brief Get an event listener
+         * @param event The event the listener is subscribed to
+         * @param id The identification number of the event listener
+         * @return A pointer to the event listener if it exists, otherwise a
+         *         nullptr
+         */
+        IListener* getListener(const std::string& event, int id);
+        const IListener* getListener(const std::string& event, int id) const;
+
+        // Data members
         using Listeners = std::vector<std::shared_ptr<IListener>>; //!< Alias
         std::unordered_map<std::string, Listeners> eventList_;     //!< Events container
         mutable std::recursive_mutex mutex_;                       //!< Synchronization primitive
