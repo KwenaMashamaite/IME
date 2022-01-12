@@ -327,6 +327,7 @@ namespace ime {
         const IListener* getListener(const std::string& event, int id) const;
 
         // Data members
+        static unsigned int idCounter_;                            //!< Event listener id counter
         using Listeners = std::vector<std::shared_ptr<IListener>>; //!< Alias
         std::unordered_map<std::string, Listeners> eventList_;     //!< Events container
         bool isActive_;                                            //!< A flag indicating whether or not the emitter is active

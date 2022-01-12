@@ -42,8 +42,7 @@ int EventEmitter::addListener(const std::string &event, Callback<Args...> callba
     IME_ASSERT(callback, "Cannot add nullptr as an event listener");
 
     std::scoped_lock lock(mutex_);
-    static auto previousListenerId = 0u;
-    auto listenerId = ++previousListenerId;
+    auto listenerId = ++idCounter_;
     auto listener = std::make_shared<Listener<Args...>>(listenerId, callback, isCalledOnce);
     if (hasEvent(event))
         eventList_.at(event).push_back(std::move(listener));

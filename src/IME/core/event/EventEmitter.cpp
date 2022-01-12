@@ -26,6 +26,8 @@
 #include <algorithm>
 
 namespace ime {
+    unsigned int EventEmitter::idCounter_{0};
+
     EventEmitter::EventEmitter() :
         isActive_{true}
     {}
