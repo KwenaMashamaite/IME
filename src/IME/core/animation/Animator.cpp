@@ -327,6 +327,54 @@ namespace ime {
         return hasStarted_;
     }
 
+    void Animator::suspendedEventListener(int id, bool suspend) {
+        eventEmitter_.suspendEventListener(id, suspend);
+    }
+
+    bool Animator::isEventListenerSuspended(int id) const {
+        return eventEmitter_.isEventListenerSuspended(id);
+    }
+
+    bool Animator::removeEventListener(int id) {
+        return eventEmitter_.removeEventListener(id);
+    }
+
+    int Animator::onAnimStart(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animStart", callback, oneTime);
+    }
+
+    int Animator::onAnimPlay(const Callback<Animation *> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animPlay", callback, oneTime);
+    }
+
+    int Animator::onAnimPause(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animPause", callback, oneTime);
+    }
+
+    int Animator::onAnimResume(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animResume", callback, oneTime);
+    }
+
+    int Animator::onAnimRestart(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animRestart", callback, oneTime);
+    }
+
+    int Animator::onAnimStop(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animStop", callback, oneTime);
+    }
+
+    int Animator::onAnimRepeat(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animRepeat", callback, oneTime);
+    }
+
+    int Animator::onAnimComplete(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animComplete", callback, oneTime);
+    }
+
+    int Animator::onAnimSwitch(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "animSwitch", callback, oneTime);
+    }
+
     void Animator::update(Time deltaTime) {
         IME_ASSERT(target_, "Cannot start Animator without a target to animate")
         if (!currentAnimation_ || !isPlaying_ || isPaused_)
@@ -351,51 +399,45 @@ namespace ime {
         }
     }
 
-    int Animator::on(Animator::Event event, const Callback<Animation::Ptr>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)), callback, oneTime);
-    }
-
-    int Animator::on(Animator::Event event, const Callback<>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)), callback, oneTime);
-    }
-
-    bool Animator::unsubscribe(Animator::Event event, int id) {
-        return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)), id);
-    }
-
-    int Animator::on(Animator::Event event, const std::string &name, const Callback<Animation::Ptr>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)) + name, callback, oneTime);
-    }
-
-    int Animator::on(Animator::Event event, const std::string &name, const Callback<>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, std::to_string(static_cast<int>(event)) + name, callback, oneTime);
-    }
-
-    bool Animator::unsubscribe(Animator::Event event, const std::string &name, int id) {
-        return eventEmitter_.removeEventListener(std::to_string(static_cast<int>(event)) + name, id);
-    }
-
     void Animator::fireEvent(Animator::Event event, const Animation::Ptr& animation) {
         switch (event) {
-            case Event::AnimationPlay:      currentAnimation_->emit("play");        break;
-            case Event::AnimationStart:     currentAnimation_->emit("start");       break;
-            case Event::AnimationPause:     currentAnimation_->emit("pause");       break;
-            case Event::AnimationResume:    currentAnimation_->emit("resume");      break;
-            case Event::AnimationStop:      currentAnimation_->emit("stop");        break;
-            case Event::AnimationComplete:  currentAnimation_->emit("complete");    break;
-            case Event::AnimationRepeat:    currentAnimation_->emit("repeat");      break;
-            case Event::AnimationRestart:   currentAnimation_->emit("restart");     break;
+            case Event::AnimationPlay:
+                animation->emit("play");
+                eventEmitter_.emit("animPlay", animation.get());
+                break;
+            case Event::AnimationStart:
+                animation->emit("start");
+                eventEmitter_.emit("animStart", animation.get());
+                break;
+            case Event::AnimationPause:
+                animation->emit("pause");
+                eventEmitter_.emit("animPause", animation.get());
+                break;
+            case Event::AnimationResume:
+                animation->emit("resume");
+                eventEmitter_.emit("animResume", animation.get());
+                break;
+            case Event::AnimationStop:
+                animation->emit("stop");
+                eventEmitter_.emit("animStop", animation.get());
+                break;
+            case Event::AnimationComplete:
+                animation->emit("complete");
+                eventEmitter_.emit("animComplete", animation.get());
+                break;
+            case Event::AnimationRepeat:
+                animation->emit("repeat");
+                eventEmitter_.emit("animRepeat", animation.get());
+                break;
+            case Event::AnimationRestart:
+                animation->emit("restart");
+                eventEmitter_.emit("animRestart", animation.get());
+                break;
+            case Event::AnimationSwitch:
+                eventEmitter_.emit("animSwitch", animation.get());
             default:
                 break;
         }
-
-        // Specific handlers
-        eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName());
-        eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName(), animation);
-
-        //General handlers
-        eventEmitter_.emit(std::to_string(static_cast<int>(event)));
-        eventEmitter_.emit(std::to_string(static_cast<int>(event)), animation);
     }
 
     void Animator::setCycleDirection() {

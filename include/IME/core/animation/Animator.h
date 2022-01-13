@@ -46,23 +46,6 @@ namespace ime {
     class IME_API Animator {
     public:
         /**
-         * @brief Animation events
-         *
-         * These events are triggered by the current active animation
-         */
-        enum class Event {
-            AnimationPlay,     //!< Emitted when an animation is played
-            AnimationStart,    //!< Emitted when an animation starts to play (Animation may be start delayed)
-            AnimationPause,    //!< Emitted when the animation is paused
-            AnimationResume,   //!< Emitted when the animation is resumed
-            AnimationStop,     //!< Emitted when the animation is stopped
-            AnimationComplete, //!< Emitted when the animation completes playing
-            AnimationRepeat,   //!< Emitted when an animation is repeated
-            AnimationRestart,  //!< Emitted when the animation is restarted from the beginning
-            AnimationSwitch    //!< Emitted when the animation is changed to a different animation
-        };
-
-        /**
          * @brief Default constructor
          *
          * @warning When this constructor is used, you must call setTarget()
@@ -399,74 +382,170 @@ namespace ime {
         bool isAnimationStarted() const;
 
         /**
-         * @brief Subscribe a callback to any animation event
-         * @param event The name of the event to subscribe a callback to
-         * @param callback The function to be executed when the event is fired
+         * @brief Prevent further executions of an event listener
+         * @param id The event listeners unique identification number
+         * @param suspend True to suspend or false to unsuspend
+         *
+         * When suspended an event listener will be ignored when the event
+         * its listening to is fired. Execution will resume once it is
+         * unsuspended
+         *
+         * @see isEventListenerSuspended
+         */
+        void suspendedEventListener(int id, bool suspend);
+
+        /**
+         * @brief Check if an event listener is suspended or not
+         * @param id The identification number of the listener to be checked
+         * @return True if suspended, otherwise false
+         *
+         * This function also returns false if the specified event listener
+         * does not exist
+         *
+         * @see suspendedEventListener
+         */
+        bool isEventListenerSuspended(int id) const;
+
+        /**
+         * @brief Remove an event listener from an event
+         * @param id The unique identification number of the event listener
+         * @return True if the event listener was removed or false if no such
+         *         event listener exists
+         */
+        bool removeEventListener(int id);
+
+        /**
+         * @brief Add an event listener to an animation start event
+         * @param callback The function to be executed when the current animation
+         *                 starts
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
-         * @return The callbacks unique identification number
+         * @return The event listener unique identification number
          *
-         * The callback function is optionally passed the animation that
-         * triggered the event
+         * This event is emitted @em before the start delay timer executes. To
+         * perform an action after the start delay timer expires, use onPlay().
          *
-         * @see unsubscribe
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
+         *
+         * @see onPlay, setStartDelay
          */
-        int on(Event event, const Callback<Animation::Ptr>& callback, bool oneTime = false);
-        int on(Event event, const Callback<>& callback, bool oneTime = false);
+        int onAnimStart(const Callback<Animation*>& callback, bool oneTime = false);
 
         /**
-         * @brief Subscribe a callback to a specific animation event
-         * @param event The event to subscribe a callback to
-         * @param name The name of the animation to subscribe callback to
-         * @param callback The Function to be executed when the event is fired
+         * @brief Add an event listener to an animation play event
+         * @param callback The function to be executed when the current animation
+         *                 starts animating
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
-         * @return The callbacks unique identification number
+         * @return The event listener unique identification number
          *
-         * This function subscribes a callback to events triggered by a
-         * specific animation only. The callback will not be invoked for
-         * events triggered by animations whose name do not match @a name
+         * This event is emitted @em after the start delay expires. At this
+         * point the animation starts to animate. To perform an action before
+         * the start delay executes, use onStart().
          *
-         * To unsubscribe callbacks registered with this function, use the
-         * unsubscribe function that removes only callbacks that were
-         * subscribed to events triggered by specific animation objects
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
          *
-         * The callback function is optionally passed the animation that
-         * triggered the event which in this case its always the animation
-         * specified by @a name
-         *
-         * @see unsubscribe(ime::Animator::Event, const std::string&, ime::Callback)
+         * @see onStart, setStartDelay
          */
-        int on(Event event, const std::string& name, const Callback<Animation::Ptr>& callback, bool oneTime = false);
-        int on(Event event, const std::string& name, const Callback<>& callback, bool oneTime = false);
+        int onAnimPlay(const Callback<Animation*>& callback, bool oneTime = false);
 
         /**
-         * @brief Remove a callback from an animation event
-         * @param event The event to remove the callback from
-         * @param id The unique identification number of the callback
-         * @return True if the callback was removed or false if the given
-         *         event does not have a callback associated with the
-         *         given id
+         * @brief Add an event listener to a pause event
+         * @param callback The function to be executed when the current animation
+         *                 is paused
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * @see on
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
+         *
+         * @see onResume
          */
-        bool unsubscribe(Event event, int id);
+        int onAnimPause(const Callback<Animation*>& callback, bool oneTime = false);
 
         /**
-         * @brief Remove a callback from a specific animation
-         * @param event The type of event to remove the callback from
-         * @param name The name of the animation to remove the callback from
-         * @param id The unique identification number of the callback
-         * @return True if the callback was removed or false if the given
-         *         event does not have a callback associated with the
-         *         given id
+         * @brief Add an event listener to an animation resume event
+         * @param callback The function to be executed when the current
+         *                 animation is resumed from a paused state
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * Note that this function is only applicable to callbacks that were
-         * registered with on(ime::Animator::Event, const std::string&, ime::Callback)
-         * function. For other callbacks, unsubscribe using the
-         * unsubscribe(ime::Animator::Event, int) function
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
+         *
+         * @see onPause
          */
-        bool unsubscribe(Event event, const std::string& name, int id);
+        int onAnimResume(const Callback<Animation*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an animation restart event
+         * @param callback The function to be executed when the current animation
+         *                 is restarted
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
+         *
+         * @see onPlay
+         */
+        int onAnimRestart(const Callback<Animation*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an animation stop event
+         * @param callback The function to be executed when the current
+         *                 animation is stopped from a playing or paused state
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * The callback is passed a pointer to the animation on invocation.
+         * You can add as many event listeners as you like to this event
+         *
+         * @see onPlay, onPause, onResume
+         */
+        int onAnimStop(const Callback<Animation*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an animation repeat event
+         * @param callback The function to be executed when the current
+         *                 animation is repeated
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * You can add as many event listeners as you like to this event
+         */
+        int onAnimRepeat(const Callback<Animation*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an animation complete event
+         * @param callback The function to be executed when the current animation
+         *                 completes
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * You can add as many event listeners as you like to this event
+         */
+        int onAnimComplete(const Callback<Animation*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an animation switch event
+         * @param callback The function to be executed when the current
+         *                 animation is changed (see switchAnimation())
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * You can add as many event listeners as you like to this event
+         */
+        int onAnimSwitch(const Callback<Animation*>& callback, bool oneTime = false);
 
         /**
          * @internal
@@ -479,6 +558,21 @@ namespace ime {
         void update(Time deltaTime);
 
     private:
+        /**
+         * @brief Animation events (triggered by the current event)
+         */
+        enum class Event {
+            AnimationPlay,     //!< Emitted when an animation is played
+            AnimationStart,    //!< Emitted when an animation starts to play (Animation may be start delayed)
+            AnimationPause,    //!< Emitted when the animation is paused
+            AnimationResume,   //!< Emitted when the animation is resumed
+            AnimationStop,     //!< Emitted when the animation is stopped
+            AnimationComplete, //!< Emitted when the animation completes playing
+            AnimationRepeat,   //!< Emitted when an animation is repeated
+            AnimationRestart,  //!< Emitted when the animation is restarted from the beginning
+            AnimationSwitch    //!< Emitted when the animation is changed to a different animation
+        };
+
         /**
          * @brief Handle a start playback request
          *
