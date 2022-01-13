@@ -163,41 +163,6 @@ namespace ime {
         void syncWith(const GridMover& other);
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::GridMover::requestMove instead
-         * @brief Change the direction of the game object
-         * @param newDir The new direction of the game object
-         * @return True if the direction was changed or false if the game
-         *         object is in motion or the grid mover is not in control
-         *         of any game object
-         *
-         * Note that the direction of the game object cannot be changed while
-         * it is moving to another tile. This function only works with predefined
-         * directions. In addition to returning @b true for successful direction
-         * change, the function will emit a "direction" property change event.
-         * Usually property change events are only emitted by setters (functions
-         * that begin with a "set" prefix)
-         *
-         * @attention post v2.6.0, the "direction" property change event will no
-         * longer be emitted. Use ime::GridMover::onDirectionChange() instead.
-         *
-         * @note If the direction change is granted, then the adjacent tile in
-         * the requested direction will be flagged as occupied by the target
-         * before it is moved there
-         *
-         * @code
-         * gridMover.onPropertyChange("direction", [](const ime::Property& p) {
-         *      auto dir = p.getValue<ime::Direction>();
-         *     // Do something - Maybe rotate the game object in the new direction
-         * });
-         * @endcode
-         *
-         * @see update, requestMove
-         */
-         [[deprecated("Use 'ime::GridMover::requestMove(const ime::Direction&)' instead.")]]
-        bool requestDirectionChange(const Direction& newDir);
-
-        /**
          * @brief Request a move in a given direction
          * @param dir The direction to move in
          * @return True if the move was granted or false if the target is

@@ -137,18 +137,6 @@ namespace ime {
             isEventUpdatedWhenPaused_ = false;
     }
 
-    void Scene::setInputEnable(bool enable) {
-        if (enable && input().isAllInputEnabled() || !enable && input().isAllInputDisabled())
-            return;
-
-        input().setAllInputEnable(enable);
-        emitChange(Property{"inputEnable", enable});
-    }
-
-    bool Scene::isInputEnabled() const {
-        return input().isAllInputEnabled();
-    }
-
     void Scene::setCached(bool cache, const std::string& alias) {
         cacheState_.first = cache;
         cacheState_.second = alias;

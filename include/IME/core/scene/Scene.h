@@ -155,9 +155,6 @@ namespace ime {
         virtual void onEnter() {};
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Scene::onHandleEvent instead
-         *
          * @brief Handle a system event
          * @param event System event to be handled
          *
@@ -172,14 +169,9 @@ namespace ime {
          * if needed. IME will never put anything inside this function, therefore
          * you don't have to call the base class method in your implementation
          */
-         [[deprecated("Use 'ime::Scene::onHandleEvent(Event)' instead")]]
-        virtual void handleEvent(Event event) {IME_UNUSED(event);};
         virtual void onHandleEvent(Event event) {IME_UNUSED(event);};
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Scene::onUpdate instead
-         *
          * @brief Update the scene
          * @param deltaTime Time passed since last update
          *
@@ -197,14 +189,9 @@ namespace ime {
          *
          * @see fixedUpdate
          */
-         [[deprecated("Use 'ime::Scene::onUpdate(Time)' instead.")]]
-        virtual void update(Time deltaTime) {IME_UNUSED(deltaTime);}
         virtual void onUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Scene::onFixedUpdate instead
-         *
          * @brief Update the scene in fixed time steps
          * @param deltaTime Time passed since last update
          *
@@ -224,14 +211,9 @@ namespace ime {
          *
          * @see update
          */
-         [[deprecated("Use 'ime::Scene::onFixedUpdate(Time)' instead.")]]
-        virtual void fixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
         virtual void onFixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Scene::onPostUpdate instead
-         *
          * @brief Post update the scene
          * @param deltaTime Time passed since last update
          *
@@ -245,8 +227,6 @@ namespace ime {
          * function, therefore you don't have to call the base class method
          * in your implementation
          */
-         [[deprecated("Use 'ime::Scene::onPostUpdate(Time)' instead.")]]
-        virtual void postUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
         virtual void onPostUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
@@ -354,40 +334,6 @@ namespace ime {
          * @see setVisibleOnPause
          */
         bool isVisibleOnPause() const;
-
-        /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::input::InputManager::setAllInputEnable instead.
-         *             This is accessible through the input() function
-         *
-         * @brief Enable or disable scene input (keyboard, mouse, etc...)
-         * @param enable True to enable input or false to disable it
-         *
-         * Note that input handlers are not destroyed when input is disabled.
-         * Upon input re-enable, input handlers will be invoked as before
-         *
-         * This function disables/enables all input types, to disable/enable
-         * a specific input use ime::input::InputManager::setInputEnable
-         *
-         * By default, input is enabled
-         *
-         * @see input
-         */
-        [[deprecated("Use 'void ime::input::InputManager::setAllInputEnable(bool)' instead.")]]
-        void setInputEnable(bool enable);
-
-        /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::input::InputManager::isAllInputEnabled instead.
-         *             This is accessible through the input() function
-         *
-         * @brief Check whether or not input is enabled for this scene
-         * @return True if input is enabled, otherwise false
-         *
-         * @see setInputEnable
-         */
-        [[deprecated("Use 'bool ime::input::InputManager::isAllInputEnabled() const' instead.")]]
-        bool isInputEnabled() const;
 
         /**
          * @brief Cache or uncahe the scene

@@ -195,10 +195,6 @@ namespace ime {
         return isMoving_;
     }
 
-    bool GridMover::requestDirectionChange(const Direction& newDir) {
-        return requestMove(newDir);
-    }
-
     bool GridMover::requestMove(const Direction &dir) {
         IME_ASSERT(target_, "requestDirectionChange called on a grid mover without a target, call setTarget first")
 
@@ -209,9 +205,6 @@ namespace ime {
             targetDirection_ = dir;
             internalEmitter_.emit("directionChange", dir);
             externalEmitter_.emit("directionChange", dir);
-
-            ///@deprecated since v2.6.0, @todo remove statement in v2.7.0
-            emitChange(Property{"direction", targetDirection_});
 
             return true;
         }

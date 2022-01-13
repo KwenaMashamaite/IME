@@ -102,14 +102,6 @@ namespace ime {
         return repeatCount_ == -1;
     }
 
-    void Timer::setTimeoutCallback(const Callback<>& callback) {
-        onTimeout(callback);
-    }
-
-    void Timer::setTimeoutCallback(const Callback<Timer&>& callback) {
-        onTimeout(callback);
-    }
-
     void Timer::start() {
         IME_ASSERT(onTimeout_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
         if (status_ != Status::Running) {

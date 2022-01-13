@@ -199,44 +199,6 @@ namespace ime {
         bool isLooped() const;
 
         /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Timer::onTimeout instead.
-         *
-         * @brief Set the function that is executed when the timer reaches zero
-         * @param callback Function to execute
-         *
-         * @note The timer will not start the countdown if the start
-         * function is called and there is no callback set for when
-         * the timer reaches zero.
-         *
-         * Note that setting a new callback resets the dispatch count
-         *
-         * @see start
-         */
-        [[deprecated("Use 'onTimeout' instead.")]]
-        void setTimeoutCallback(const Callback<>& callback);
-
-        /**
-         * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
-         *             ime::Timer::onTimeout instead.
-         *
-         * @brief Set the function that is executed when the timer reaches zero
-         * @param callback Function to be executed
-         *
-         * @note The timer will not start the countdown if the start
-         * function is called and there is no callback set for when
-         * the timer reaches zero.
-         *
-         * Note that setting a new callback resets the dispatch count
-         *
-         * The callback is passed the Timer on invocation
-         *
-         * @see start
-         */
-         [[deprecated("Use 'onTimeout' instead.")]]
-        void setTimeoutCallback(const Callback<Timer&>& callback);
-
-        /**
          * @brief Start the timer
          *
          * This function will start the timer if it was not started

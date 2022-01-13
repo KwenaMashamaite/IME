@@ -305,7 +305,6 @@ namespace ime::priv {
             scene->inputManager_.handleEvent(e);
             scene->guiContainer_.handleEvent(e);
             scene->gridMovers().handleEvent(e);
-            scene->handleEvent(e);
             scene->onHandleEvent(e);
         };
 
@@ -388,7 +387,6 @@ namespace ime::priv {
     void SceneManager::updateExternalScene(Scene* scene, const Time& deltaTime, bool fixedUpdate) {
         if (fixedUpdate) {
             scene->gridMovers().update(deltaTime * scene->getTimescale());
-            scene->fixedUpdate(deltaTime * scene->getTimescale());
             scene->onFixedUpdate(deltaTime * scene->getTimescale());
         } else {
             if (scene->hasTilemap_)
@@ -407,14 +405,12 @@ namespace ime::priv {
             });
 
             // Update user scene after all internal updates
-            scene->update(deltaTime * scene->getTimescale());
             scene->onUpdate(deltaTime * scene->getTimescale());
 
             // Emit internal post update
             scene->internalEmitter_.emit("postUpdate", deltaTime * scene->getTimescale());
 
             // Normal update is always called after fixed update: fixedUpdate -> update -> postUpdate
-            scene->postUpdate(deltaTime * scene->getTimescale());
             scene->onPostUpdate(deltaTime * scene->getTimescale());
         }
     }
