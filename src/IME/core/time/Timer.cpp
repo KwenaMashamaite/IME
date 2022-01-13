@@ -38,7 +38,7 @@ namespace ime {
     Timer::Ptr Timer::create(Time interval, const Callback<>& callback, int repeatCount) {
         auto timer = std::make_unique<Timer>();
         timer->setInterval(interval);
-        timer->setRepeat(repeatCount);
+        timer->setRepeatCount(repeatCount);
         timer->onTimeout(callback);
         return timer;
     }
@@ -76,7 +76,7 @@ namespace ime {
         return remainingDuration_;
     }
 
-    void Timer::setRepeat(int repeatCount) {
+    void Timer::setRepeatCount(int repeatCount) {
         if (repeatCount < 0)
             repeatCount_ = -1;
         else

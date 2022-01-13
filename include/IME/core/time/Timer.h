@@ -75,7 +75,7 @@ namespace ime {
          * @note The timer is not started after creation, start function must
          * be called on the returned timer when it is ready to be started
          *
-         * @see start and setRepeat
+         * @see start and setRepeatCount
          */
         static Timer::Ptr create(Time interval, const Callback<>& callback,
             int repeatCounter = 0);
@@ -93,7 +93,7 @@ namespace ime {
          * @note The timer is not started after creation, start function must
          * be called on the returned timer when it is ready to be started
          *
-         * @see start and setRepeat
+         * @see start and setRepeatCount
          */
         static Timer::Ptr create(Time interval, const Callback<Timer&>& callback,
             int repeatCounter = 0);
@@ -156,7 +156,7 @@ namespace ime {
          *
          * @see stop and setInterval
          */
-        void setRepeat(int repeatCount);
+        void setRepeatCount(int repeatCount);
 
         /**
          * @brief Get the number of times the timer restarts before coming
@@ -174,7 +174,7 @@ namespace ime {
          * @brief Check whether or not the timer restarts after reaching zero
          * @return True if the timer restarts, otherwise false
          *
-         * @see setRepeat
+         * @see setRepeatCount
          */
         bool isRepeating() const;
 

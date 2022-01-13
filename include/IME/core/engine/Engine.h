@@ -440,7 +440,7 @@ namespace ime {
          * every @a delay seconds for a specified number of times while
          * the engine is running. By default the repeat counter is -1,
          * this means that the callback will repeat forever. The repetition
-         * can be also be cancelled by calling setRepeat(0) on the returned
+         * can be also be cancelled by calling setRepeatCount(0) on the returned
          * timer
          *
          * Unlike ime::Scene::timer, callbacks registered to this timer
