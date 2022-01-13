@@ -179,6 +179,26 @@ namespace ime {
         bool isRepeating() const;
 
         /**
+         * @brief Set whether or not the timer repeats forever
+         * @param loop True to loop timer, otherwise false
+         *
+         * This function is a simplification of setRepeatCount(). When the
+         * @a loop argument is @a true, the repeat count will be set to -1
+         * and when it is @a false, the repeat count will be set to zero
+         *
+         * @see setRepeatCount, isLooped
+         */
+        void setLoop(bool loop);
+
+        /**
+         * @brief Check if the timer is looped or not
+         * @return True if the timer is looped, otherwise false
+         *
+         * @see setLoop
+         */
+        bool isLooped() const;
+
+        /**
          * @deprecated Since v2.6.0 and will be removed in v2.7.0. Use
          *             ime::Timer::onTimeout instead.
          *

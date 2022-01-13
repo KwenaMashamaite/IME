@@ -91,6 +91,17 @@ namespace ime {
         return repeatCount_ > 0 || repeatCount_ == -1;
     }
 
+    void Timer::setLoop(bool loop) {
+        if (loop)
+            repeatCount_ = -1;
+        else
+            repeatCount_ = 0;
+    }
+
+    bool Timer::isLooped() const {
+        return repeatCount_ == -1;
+    }
+
     void Timer::setTimeoutCallback(const Callback<>& callback) {
         onTimeout(callback);
     }
