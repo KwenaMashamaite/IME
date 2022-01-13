@@ -376,6 +376,19 @@ namespace ime {
     }
 
     void Animator::fireEvent(Animator::Event event, const Animation::Ptr& animation) {
+        switch (event) {
+            case Event::AnimationPlay:      currentAnimation_->emit("play");        break;
+            case Event::AnimationStart:     currentAnimation_->emit("start");       break;
+            case Event::AnimationPause:     currentAnimation_->emit("pause");       break;
+            case Event::AnimationResume:    currentAnimation_->emit("resume");      break;
+            case Event::AnimationStop:      currentAnimation_->emit("stop");        break;
+            case Event::AnimationComplete:  currentAnimation_->emit("complete");    break;
+            case Event::AnimationRepeat:    currentAnimation_->emit("repeat");      break;
+            case Event::AnimationRestart:   currentAnimation_->emit("restart");     break;
+            default:
+                break;
+        }
+
         // Specific handlers
         eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName());
         eventEmitter_.emit(std::to_string(static_cast<int>(event)) + animation->getName(), animation);

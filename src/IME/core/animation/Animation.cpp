@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/animation/Animation.h"
+#include "IME/utility/Helpers.h"
 #include <iterator>
 #include <cmath>
 
@@ -350,8 +351,56 @@ namespace ime {
             return static_cast<float>(currentFrameIndex_) / (frames_.size() - 1.0f);
     }
 
-    void Animation::onFrameSwitch(const Animation::FrameSwitchCallback &callback) {
+    void Animation::suspendedEventListener(int id, bool suspend) {
+        eventEmitter_.suspendEventListener(id, suspend);
+    }
+
+    bool Animation::isEventListenerSuspended(int id) const {
+        return eventEmitter_.isEventListenerSuspended(id);
+    }
+
+    bool Animation::removeEventListener(int id) {
+        return eventEmitter_.removeEventListener(id);
+    }
+
+    void Animation::onFrameSwitch(const Callback<const AnimationFrame&>& callback) {
         onFrameSwitch_ = callback;
+    }
+
+    int Animation::onStart(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "start", callback, oneTime);
+    }
+
+    int Animation::onPlay(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "play", callback, oneTime);
+    }
+
+    int Animation::onPause(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "pause", callback, oneTime);
+    }
+
+    int Animation::onResume(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "resume", callback, oneTime);
+    }
+
+    int Animation::onRestart(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "restart", callback, oneTime);
+    }
+
+    int Animation::onStop(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "stop", callback, oneTime);
+    }
+
+    int Animation::onRepeat(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "repeat", callback, oneTime);
+    }
+
+    int Animation::onComplete(const Callback<Animation*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "complete", callback, oneTime);
+    }
+
+    void Animation::emit(const std::string &event) {
+        eventEmitter_.emit(event, this);
     }
 
     void Animation::setCurrentFrameIndex(unsigned int index) {
