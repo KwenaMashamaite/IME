@@ -487,15 +487,13 @@ namespace ime {
          * @brief Add an event listener to an initialize event
          * @param callback The function to be executed after the engine is
          *                 initialized
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
          * @return The event listener unique identification number
          *
-         * You can add add any number of event listeners to this event
+         * You can add any number of event listeners to this event
          *
          * @see removeEventListener
          */
-        int onInit(const Callback<>& callback, bool oneTime = false);
+        int onInit(const Callback<>& callback);
 
         /**
          * @brief Add an event listener to a current frame start event

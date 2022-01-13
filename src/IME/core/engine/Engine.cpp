@@ -507,8 +507,8 @@ namespace ime {
         return *window_;
     }
 
-    int Engine::onInit(const Callback<>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, "initialize", callback, oneTime);
+    int Engine::onInit(const Callback<>& callback) {
+        return eventEmitter_.addEventListener( "initialize", callback);
     }
 
     int Engine::onFrameStart(const Callback<>& callback, bool oneTime) {
