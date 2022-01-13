@@ -124,9 +124,23 @@ namespace ime {
          *         event or false if the specified event does exist or it does
          *         not have a listener with the given id
          *
-         * @see clear
+         * @see clear, removeEventListener(int);
          */
          bool removeEventListener(const std::string &event, int id);
+
+         /**
+          * @brief Remove an event listener from an event
+          * @param id Identification number of the event listener to be removed
+          * @return True if the event listener was removed or false if no such
+          *         event listener exists
+          *
+          * This function searches for the event listener in all events.
+          * Therefore it may be slower than removeEventListener(const std::string&, int)
+          * which searches in a specific event
+          *
+          * @see removeEventListener(const std::string&, int)
+          */
+         bool removeEventListener(int id);
 
          /**
           * @brief Remove all event listeners of an event

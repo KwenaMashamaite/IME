@@ -76,6 +76,14 @@ namespace ime {
         return false;
     }
 
+    bool EventEmitter::removeEventListener(int id) {
+        std::scoped_lock lock(mutex_);
+
+        return std::any_of(eventList_.begin(), eventList_.end(), [=] (auto& pair) {
+            return removeEventListener(pair.first, id);
+        });
+    }
+
     bool EventEmitter::removeAllEventListeners(const std::string &event) {
         std::scoped_lock lock(mutex_);
         if (hasEvent(event)) {

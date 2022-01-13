@@ -487,16 +487,7 @@ namespace ime {
     }
 
     bool Engine::removeEventListener(int id) {
-        if (eventEmitter_.removeEventListener("initialize", id) ||
-            eventEmitter_.removeEventListener("start", id) ||
-            eventEmitter_.removeEventListener("frameStart", id) ||
-            eventEmitter_.removeEventListener("frameEnd", id) ||
-            eventEmitter_.removeEventListener("shutdown", id))
-        {
-            return true;
-        }
-
-        return false;
+        return eventEmitter_.removeEventListener(id);
     }
 
     Window &Engine::getWindow() {

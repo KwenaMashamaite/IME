@@ -286,18 +286,7 @@ namespace ime {
     }
 
     bool Window::removeEventListener(int id) {
-        if (eventEmitter_.removeEventListener("close", id) ||
-            eventEmitter_.removeEventListener("loseFocus", id) ||
-            eventEmitter_.removeEventListener("gainFocus", id) ||
-            eventEmitter_.removeEventListener("mouseEnter", id) ||
-            eventEmitter_.removeEventListener("mouseExit", id) ||
-            eventEmitter_.removeEventListener("fullScreenToggle", id) ||
-            eventEmitter_.removeEventListener("resize", id))
-        {
-            return true;
-        }
-
-        return false;
+        return eventEmitter_.removeEventListener(id);
     }
 
     Vector2u Window::boundSize(const Vector2u &size) const {
