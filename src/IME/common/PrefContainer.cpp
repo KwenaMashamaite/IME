@@ -246,7 +246,7 @@ namespace ime {
     std::optional<int> PrefContainer::getIndex(const std::string &key) const {
         for (std::size_t index = 0; index < prefs_.size(); index++) {
             if (prefs_[index].getKey() == key)
-                return std::make_optional(index);
+                return std::make_optional(static_cast<int>(index));
         }
 
         return std::nullopt;

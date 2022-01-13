@@ -198,7 +198,7 @@ namespace ime {
     void Animation::addFrame(const Index& index) {
         if (auto frame = spriteSheet_.getFrame(index); frame) {
             frames_.emplace_back(*frame);
-            frames_.back().index_ = frames_.size() - 1;
+            frames_.back().index_ = static_cast<unsigned int>(frames_.size() - 1);
             calculateFrameRate(duration_, isDurationDerived_ ? frameRate_ : 0);
         }
     }

@@ -89,7 +89,7 @@ namespace ime::priv {
     }
 
     bool SceneManager::removeCached(const std::string &name) {
-        int sizeBefore = cachedScenes_.size();
+        std::size_t sizeBefore = cachedScenes_.size();
         cachedScenes_.erase(name);
         return cachedScenes_.size() < sizeBefore;
     }
