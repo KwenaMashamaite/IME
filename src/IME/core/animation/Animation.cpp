@@ -363,8 +363,8 @@ namespace ime {
         return eventEmitter_.removeEventListener(id);
     }
 
-    void Animation::onFrameSwitch(const Callback<const AnimationFrame&>& callback) {
-        onFrameSwitch_ = callback;
+    int Animation::onFrameSwitch(const Callback<AnimationFrame*>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "frameSwitch", callback, oneTime);
     }
 
     int Animation::onStart(const Callback<Animation*>& callback, bool oneTime) {
@@ -409,9 +409,7 @@ namespace ime {
 
         currentFrameIndex_ = index;
         frames_[index].isCurrent_ = true;
-
-        if (onFrameSwitch_)
-            onFrameSwitch_(frames_[index]);
+        eventEmitter_.emit("frameSwitch", &frames_[index]);
     }
 
     void Animation::updateIndexes() {

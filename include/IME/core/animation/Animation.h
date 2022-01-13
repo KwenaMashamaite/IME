@@ -611,13 +611,14 @@ namespace ime {
         /**
          * @brief Add a callback to a frame switch event
          * @param callback The function to be called when the animation frame changes
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
          *
-         * The callback will be passed the new animation frame as the argument.
-         * Pass nullptr to remove the callback
-         *
-         * By default there is no callback registered to this event
+         * The callback is passed a pointer to the new animation frame on invocation.
+         * You can add as many event listeners as you like to this event
          */
-        void onFrameSwitch(const Callback<const AnimationFrame&>& callback);
+        int onFrameSwitch(const Callback<AnimationFrame*>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a start event
@@ -796,7 +797,6 @@ namespace ime {
         int completionFrame_;       //!< The index of the frame to be shown when the animation finishes
         unsigned int currentFrameIndex_; //!< The index of the current frame displayed by the animation
         float timescale_;           //!< Playback speed of the animation
-        Callback<const AnimationFrame&> onFrameSwitch_; //!< A function called when the animation frame changes
         EventEmitter eventEmitter_; //!< Dispatches events
     };
 }
