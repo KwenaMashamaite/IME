@@ -230,6 +230,30 @@ namespace ime {
         virtual void onPostUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
+         * @brief Perform an action before the scene is rendered
+         *
+         * Note that implementing this function is optional and must be
+         * overridden if needed. IME will never put anything inside this
+         * function, therefore you don't have to call the base class method
+         * in your implementation
+         *
+         * @see onPostRender
+         */
+        virtual void onPreRender() {}
+
+        /**
+         * @brief Perform an action after the scene is rendered
+         *
+         * Note that implementing this function is optional and must be
+         * overridden if needed. IME will never put anything inside this
+         * function, therefore you don't have to call the base class method
+         * in your implementation
+         *
+         * @see onPreRender
+         */
+        virtual void onPostRender() {}
+
+        /**
          * @brief Pause the scene
          *
          * This function will be called by the game engine if another scene

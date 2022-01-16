@@ -190,7 +190,9 @@ namespace ime::priv {
     }
 
     void SceneManager::render(priv::RenderTarget &window) {
-        auto static renderScene = [](const Scene* scene, Camera* camera, priv::RenderTarget& renderWindow) {
+        auto static renderScene = [](Scene* scene, Camera* camera, priv::RenderTarget& renderWindow) {
+            scene->onPreRender();
+
             if (!camera->isDrawable())
                 return;
 
@@ -215,6 +217,8 @@ namespace ime::priv {
             camOutline.setOutlineThickness(-camera->getOutlineThickness());
             camOutline.setOutlineColour(camera->getOutlineColour());
             renderWindow.draw(camOutline);
+
+            scene->onPostRender();
         };
 
         // Render the scene on each camera to update its view
