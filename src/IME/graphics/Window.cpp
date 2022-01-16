@@ -238,7 +238,10 @@ namespace ime {
     }
 
     void Window::close() {
-        renderTarget_.getImpl()->getSFMLWindow().close();
+        if (isOpen()) {
+            renderTarget_.getImpl()->getSFMLWindow().close();
+            emitCloseEvent();
+        }
     }
 
     bool Window::isOpen() const {
