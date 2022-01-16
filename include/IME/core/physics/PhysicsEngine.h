@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_PHYSICSWORLD_H
-#define IME_PHYSICSWORLD_H
+#ifndef IME_PHYSICSENGINE_H
+#define IME_PHYSICSENGINE_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
@@ -97,19 +97,19 @@ namespace ime {
      * @brief The physics world is responsible for creating, managing, colliding
      *        and updating all of the bodies within it
      */
-    class IME_API PhysicsWorld final {
+    class IME_API PhysicsEngine final {
     public:
-        using Ptr = std::unique_ptr<PhysicsWorld>;  //!< Unique World pointer
+        using Ptr = std::unique_ptr<PhysicsEngine>;  //!< Unique World pointer
 
         /**
          * @brief Copy constructor
          */
-        PhysicsWorld(const PhysicsWorld&) = delete;
+        PhysicsEngine(const PhysicsEngine&) = delete;
 
         /**
          * @brief Copy assignment operator
          */
-        PhysicsWorld& operator=(const PhysicsWorld&) = delete;
+        PhysicsEngine& operator=(const PhysicsEngine&) = delete;
 
         /**
          * @brief Create the physics simulation
@@ -119,7 +119,7 @@ namespace ime {
          *
          * @note This class does not keep a reference to the created object
          */
-        static PhysicsWorld::Ptr create(Scene& scene, const Vector2f& gravity);
+        static PhysicsEngine::Ptr create(Scene& scene, const Vector2f& gravity);
 
         /**
          * @brief Change the gravity of the world
@@ -468,7 +468,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~PhysicsWorld();
+        ~PhysicsEngine();
 
     private:
         /**
@@ -476,7 +476,7 @@ namespace ime {
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity
          */
-        PhysicsWorld(Scene& scene, Vector2f gravity);
+        PhysicsEngine(Scene& scene, Vector2f gravity);
 
         /**
          * @brief Draw physics entities
@@ -501,4 +501,4 @@ namespace ime {
     };
 }
 
-#endif //IME_PHYSICSWORLD_H
+#endif //IME_PHYSICSENGINE_H

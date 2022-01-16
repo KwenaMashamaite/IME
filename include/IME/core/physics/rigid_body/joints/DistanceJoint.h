@@ -32,7 +32,7 @@
 class b2DistanceJoint;
 
 namespace ime {
-    class PhysicsWorld;
+    class PhysicsEngine;
     class RigidBody;
 
     /**
@@ -240,14 +240,14 @@ namespace ime {
          * mistaken for the body origin when using this function
          * (use Body::getWorldCentre when not sure about the origin)
          */
-        DistanceJoint(const DistanceJointDefinition& definition, PhysicsWorld* world);
+        DistanceJoint(const DistanceJointDefinition& definition, PhysicsEngine* world);
 
     private:
         std::unique_ptr<b2DistanceJoint> joint_;  //!< Internal joint
         PropertyContainer userData_;              //!< Application specific user date
         RigidBody* bodyA_;                        //!< First attached body
         RigidBody* bodyB_;                        //!< Second attached body
-        friend class PhysicsWorld;                       //!< Needs access to constructor
+        friend class PhysicsEngine;                       //!< Needs access to constructor
     };
 }
 

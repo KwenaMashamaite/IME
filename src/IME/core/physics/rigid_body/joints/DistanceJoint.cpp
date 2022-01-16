@@ -25,7 +25,7 @@
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/RigidBody.h"
-#include "IME/core/physics/PhysicsWorld.h"
+#include "IME/core/physics/PhysicsEngine.h"
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_world.h>
 
@@ -64,7 +64,7 @@ namespace ime {
     // DistanceJoint class stuff
     //////////////////////////////////////////////////////////////////////////
 
-    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, PhysicsWorld* world) {
+    DistanceJoint::DistanceJoint(const DistanceJointDefinition& definition, PhysicsEngine* world) {
         IME_ASSERT(definition.bodyA, "Two bodies are needed for a distance joint, Body A is a nullptr")
         IME_ASSERT(definition.bodyB, "Two bodies are needed for a distance joint, Body B is a nullptr")
         IME_ASSERT(definition.bodyA != definition.bodyB, "Cannot self join, bodies to be joined must be different objects")

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/PhysicsWorld.h"
+#include "IME/core/physics/PhysicsEngine.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/graphics/DebugDrawer.h"
@@ -112,7 +112,7 @@ namespace ime {
     ////////////////////////////////////////////////////////////////////////////
 
     // ContactListener wrapper
-    class PhysicsWorld::B2ContactListener : public b2ContactListener {
+    class PhysicsEngine::B2ContactListener : public b2ContactListener {
     public:
         // Called by Box2d when two fixtures begin to overlap
         void BeginContact(b2Contact *contact) override {
@@ -145,7 +145,7 @@ namespace ime {
         }
     };
 
-    PhysicsWorld::PhysicsWorld(Scene& scene, Vector2f gravity) :
+    PhysicsEngine::PhysicsEngine(Scene& scene, Vector2f gravity) :
         scene_{scene},
         world_{std::make_unique<b2World>(b2Vec2{gravity.x, gravity.y})},
         fixedTimeStep_{true},
@@ -169,54 +169,54 @@ namespace ime {
 #endif
     }
 
-    PhysicsWorld::Ptr PhysicsWorld::create(Scene &scene, const Vector2f& gravity) {
-        return PhysicsWorld::Ptr(new PhysicsWorld(scene, gravity));
+    PhysicsEngine::Ptr PhysicsEngine::create(Scene &scene, const Vector2f& gravity) {
+        return PhysicsEngine::Ptr(new PhysicsEngine(scene, gravity));
     }
 
-    void PhysicsWorld::setGravity(const Vector2f& gravity) {
+    void PhysicsEngine::setGravity(const Vector2f& gravity) {
         world_->SetGravity({gravity.x, gravity.y});
     }
 
-    Vector2f PhysicsWorld::getGravity() const {
+    Vector2f PhysicsEngine::getGravity() const {
         return {world_->GetGravity().x, world_->GetGravity().x};
     }
 
-    void PhysicsWorld::setIterations(const PhysIterations &iterations) {
+    void PhysicsEngine::setIterations(const PhysIterations &iterations) {
         iterations_ = iterations;
     }
 
-    const PhysIterations &PhysicsWorld::getIterations() const {
+    const PhysIterations &PhysicsEngine::getIterations() const {
         return iterations_;
     }
 
-    void PhysicsWorld::setTimescale(float timescale) {
+    void PhysicsEngine::setTimescale(float timescale) {
         if (timescale < 0)
             timescale_ = 0.0f;
         else
             timescale_ = timescale;
     }
 
-    float PhysicsWorld::getTimescale() const {
+    float PhysicsEngine::getTimescale() const {
         return timescale_;
     }
 
-    void PhysicsWorld::enableContinuousPhysics(bool enable) {
+    void PhysicsEngine::enableContinuousPhysics(bool enable) {
         world_->SetContinuousPhysics(enable);
     }
 
-    bool PhysicsWorld::isContinuousPhysicsEnabled() const {
+    bool PhysicsEngine::isContinuousPhysicsEnabled() const {
         return world_->GetContinuousPhysics();
     }
 
-    void PhysicsWorld::setFixedStep(bool fixed) {
+    void PhysicsEngine::setFixedStep(bool fixed) {
         fixedTimeStep_ = fixed;
     }
 
-    bool PhysicsWorld::isFixedStep() const {
+    bool PhysicsEngine::isFixedStep() const {
         return fixedTimeStep_;
     }
 
-    RigidBody::Ptr PhysicsWorld::createBody(RigidBody::Type type) {
+    RigidBody::Ptr PhysicsEngine::createBody(RigidBody::Type type) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createBody() called inside a world callback")
             return nullptr;
@@ -225,7 +225,7 @@ namespace ime {
         return RigidBody::Ptr(new RigidBody(this, type));
     }
 
-    Joint::Ptr PhysicsWorld::createJoint(const JointDefinition& definition) {
+    Joint::Ptr PhysicsEngine::createJoint(const JointDefinition& definition) {
         if (world_->IsLocked()) {
             IME_PRINT_WARNING("Operation ignored: createJoint() called inside a world callback")
             return nullptr;
@@ -239,53 +239,53 @@ namespace ime {
         }
     }
 
-    void PhysicsWorld::update(Time deltaTime) {
+    void PhysicsEngine::update(Time deltaTime) {
         world_->Step(deltaTime.asSeconds() * timescale_, static_cast<int32>(iterations_.velocity), static_cast<int32>(iterations_.position));
     }
 
-    void PhysicsWorld::autoClearForceBuffer(bool autoClear) {
+    void PhysicsEngine::autoClearForceBuffer(bool autoClear) {
         world_->SetAutoClearForces(autoClear);
     }
 
-    bool PhysicsWorld::isForceBufferAutoCleared() const {
+    bool PhysicsEngine::isForceBufferAutoCleared() const {
         return world_->GetAutoClearForces();
     }
 
-    void PhysicsWorld::clearForces() {
+    void PhysicsEngine::clearForces() {
         world_->ClearForces();
     }
 
-    void PhysicsWorld::allowSleep(bool sleep) {
+    void PhysicsEngine::allowSleep(bool sleep) {
         world_->SetAllowSleeping(sleep);
     }
 
-    bool PhysicsWorld::isSleepingAllowed() const {
+    bool PhysicsEngine::isSleepingAllowed() const {
         return world_->GetAllowSleeping();
     }
 
-    void PhysicsWorld::enableSubStepping(bool subStep) {
+    void PhysicsEngine::enableSubStepping(bool subStep) {
         world_->SetSubStepping(subStep);
     }
 
-    bool PhysicsWorld::isSubSteppingEnabled() const {
+    bool PhysicsEngine::isSubSteppingEnabled() const {
         return world_->GetSubStepping();
     }
 
-    std::size_t PhysicsWorld::getBodyCount() const {
+    std::size_t PhysicsEngine::getBodyCount() const {
         return world_->GetBodyCount();
     }
 
-    std::size_t PhysicsWorld::getJointCount() const {
+    std::size_t PhysicsEngine::getJointCount() const {
         return world_->GetJointCount();
     }
 
 
-    bool PhysicsWorld::isLocked() const {
+    bool PhysicsEngine::isLocked() const {
         return world_->IsLocked();
     }
 
-    void PhysicsWorld::rayCast(const RayCastCallback &callback, Vector2f startPoint,
-        Vector2f endPoint)
+    void PhysicsEngine::rayCast(const RayCastCallback &callback, Vector2f startPoint,
+                                Vector2f endPoint)
     {
         auto queryCallback = B2RayCastCallback(&callback);
         world_->RayCast(&queryCallback,
@@ -293,16 +293,16 @@ namespace ime {
             {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
-    void PhysicsWorld::queryAABB(const AABBCallback& callback, const AABB &aabb) {
+    void PhysicsEngine::queryAABB(const AABBCallback& callback, const AABB &aabb) {
         auto queryCallback = B2QueryCallback(&callback);
         world_->QueryAABB(&queryCallback, *(aabb.getInternalAABB()));
     }
 
-    Scene &PhysicsWorld::getScene() {
+    Scene &PhysicsEngine::getScene() {
         return scene_;
     }
 
-    void PhysicsWorld::setDebugDrawEnable(bool enable) {
+    void PhysicsEngine::setDebugDrawEnable(bool enable) {
 #if defined(IME_DEBUG)
         isDebugDrawEnabled_ = enable;
 #else
@@ -310,19 +310,19 @@ namespace ime {
 #endif
     }
 
-    bool PhysicsWorld::isDebugDrawEnabled() const {
+    bool PhysicsEngine::isDebugDrawEnabled() const {
         return isDebugDrawEnabled_;
     }
 
-    DebugDrawerFilter &PhysicsWorld::getDebugDrawerFilter() {
+    DebugDrawerFilter &PhysicsEngine::getDebugDrawerFilter() {
         return debugDrawerFilter_;
     }
 
-    const DebugDrawerFilter &PhysicsWorld::getDebugDrawerFilter() const {
+    const DebugDrawerFilter &PhysicsEngine::getDebugDrawerFilter() const {
         return debugDrawerFilter_;
     }
 
-    void PhysicsWorld::debugDraw() {
+    void PhysicsEngine::debugDraw() {
         IME_ASSERT(debugDrawer_, "Cannot debug draw without a debug drawer, call 'createDebugDrawer' function to instantiate one")
 
         // Reset the flags in case of a change since last step
@@ -336,11 +336,11 @@ namespace ime {
         world_->DebugDraw();
     }
 
-    std::unique_ptr<b2World>& PhysicsWorld::getInternalWorld() {
+    std::unique_ptr<b2World>& PhysicsEngine::getInternalWorld() {
         return world_;
     }
 
-    void PhysicsWorld::createDebugDrawer(priv::RenderTarget &renderWindow) {
+    void PhysicsEngine::createDebugDrawer(priv::RenderTarget &renderWindow) {
 #if defined(IME_DEBUG)
         if (!debugDrawer_) {
             debugDrawer_ = std::make_unique<priv::DebugDrawer>(renderWindow);
@@ -351,7 +351,7 @@ namespace ime {
 #endif
     }
 
-    PhysicsWorld::~PhysicsWorld() {
+    PhysicsEngine::~PhysicsEngine() {
 #if defined(IME_DEBUG)
         if (postRenderId_ != -1)
             scene_.unsubscribe_("postRender", postRenderId_);

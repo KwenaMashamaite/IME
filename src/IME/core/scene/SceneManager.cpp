@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/SceneManager.h"
-#include "IME/core/physics/PhysicsWorld.h"
+#include "IME/core/physics/PhysicsEngine.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
 #include "IME/graphics/shapes/RectangleShape.h"

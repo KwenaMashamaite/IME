@@ -24,7 +24,7 @@
 
 #include "IME/core/game_object/GameObject.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/physics/PhysicsWorld.h"
+#include "IME/core/physics/PhysicsEngine.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/grid/GridMover.h"
 

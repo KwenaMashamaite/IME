@@ -51,7 +51,7 @@
 namespace ime {
     class Engine;
     class Window;
-    class PhysicsWorld;
+    class PhysicsEngine;
 
     /// @internal
     namespace priv {
@@ -439,8 +439,8 @@ namespace ime {
          *
          * @see createPhysicEngine
          */
-        PhysicsWorld& getPhysicEngine();
-        const PhysicsWorld& getPhysicsEngine() const;
+        PhysicsEngine& getPhysicEngine();
+        const PhysicsEngine& getPhysicsEngine() const;
 
         /**
          * @brief Get the scenes grid mover container
@@ -703,7 +703,7 @@ namespace ime {
 
     private:
         std::unique_ptr<Camera> camera_;      //!< Scene level camera
-        std::unique_ptr<PhysicsWorld> world_; //!< Scene level physics simulation
+        std::unique_ptr<PhysicsEngine> world_; //!< Scene level physics simulation
         input::InputManager inputManager_;    //!< Scene level input manager
         audio::AudioManager audioManager_;    //!< Scene level audio manager
         EventEmitter eventEmitter_;           //!< scene level event dispatcher

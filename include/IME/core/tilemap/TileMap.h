@@ -82,7 +82,7 @@ namespace ime {
          *
          * @warning This function is intended for internal use only
          */
-        void setPhysicsSimulation(PhysicsWorld* physicsSimulation);
+        void setPhysicsSimulation(PhysicsEngine* physicsSimulation);
 
         /**
          * @brief Get the scene the tilemap belongs to
@@ -161,7 +161,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          */
         void setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider = false);
 
@@ -176,7 +176,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          *
@@ -198,7 +198,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          *
@@ -219,7 +219,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
          * All the tiles with the specified id will be marked as solid tiles
          * if currently marked as empty tiles
@@ -240,7 +240,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          */
@@ -699,7 +699,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GameObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsWorld
+         * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
          * By default, a tile is not collidable
          */
@@ -746,7 +746,7 @@ namespace ime {
         std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
-        PhysicsWorld* physicsSim_;                                     //!< The physics simulation
+        PhysicsEngine* physicsSim_;                                     //!< The physics simulation
 
         friend class Scene;
     };

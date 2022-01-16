@@ -26,7 +26,7 @@
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/PhysicsWorld.h"
+#include "IME/core/physics/PhysicsEngine.h"
 #include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/RenderTarget.h"
 
@@ -56,7 +56,7 @@ namespace ime {
         });
     }
 
-    void TileMap::setPhysicsSimulation(PhysicsWorld* physicsSimulation) {
+    void TileMap::setPhysicsSimulation(PhysicsEngine* physicsSimulation) {
         physicsSim_ = physicsSimulation;
     }
 
