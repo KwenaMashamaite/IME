@@ -170,158 +170,158 @@ namespace ime {
         return timescale_;
     }
 
-    Engine &Scene::engine() {
+    Engine &Scene::getEngine() {
         return *engine_;
     }
 
-    const Engine &Scene::engine() const {
+    const Engine &Scene::getEngine() const {
         return *engine_;
     }
 
-    Window &Scene::window() {
+    Window &Scene::getWindow() {
         return *window_;
     }
 
-    const Window &Scene::window() const {
+    const Window &Scene::getWindow() const {
         return *window_;
     }
 
-    Camera &Scene::camera() {
+    Camera &Scene::getCamera() {
         return *camera_;
     }
 
-    const Camera &Scene::camera() const {
+    const Camera &Scene::getCamera() const {
         return *camera_;
     }
 
-    CameraContainer &Scene::cameras() {
+    CameraContainer &Scene::getCameras() {
         return *cameraContainer_;
     }
 
-    const CameraContainer &Scene::cameras() const {
+    const CameraContainer &Scene::getCameras() const {
         return *cameraContainer_;
     }
 
-    PhysicsWorld& Scene::physWorld() {
+    PhysicsWorld& Scene::getPhysicEngine() {
         return *world_;
     }
 
-    const PhysicsWorld& Scene::physWorld() const {
+    const PhysicsWorld& Scene::getPhysicsEngine() const {
         return *world_;
     }
 
-    GridMoverContainer &Scene::gridMovers() {
+    GridMoverContainer &Scene::getGridMovers() {
         return gridMovers_;
     }
 
-    const GridMoverContainer &Scene::gridMovers() const {
+    const GridMoverContainer &Scene::getGridMovers() const {
         return gridMovers_;
     }
 
-    input::InputManager &Scene::input() {
+    input::InputManager &Scene::getInput() {
         return inputManager_;
     }
 
-    const input::InputManager &Scene::input() const {
+    const input::InputManager &Scene::getInput() const {
         return inputManager_;
     }
 
-    audio::AudioManager &Scene::audio() {
+    audio::AudioManager &Scene::getAudio() {
         return audioManager_;
     }
 
-    const audio::AudioManager &Scene::audio() const {
+    const audio::AudioManager &Scene::getAudio() const {
         return audioManager_;
     }
 
-    TimerManager &Scene::timer() {
+    TimerManager &Scene::getTimer() {
         return timerManager_;
     }
 
-    const TimerManager &Scene::timer() const {
+    const TimerManager &Scene::getTimer() const {
         return timerManager_;
     }
 
-    EventEmitter &Scene::eventEmitter() {
+    EventEmitter &Scene::getEventEmitter() {
         return eventEmitter_;
     }
 
-    const EventEmitter &Scene::eventEmitter() const {
+    const EventEmitter &Scene::getEventEmitter() const {
         return eventEmitter_;
     }
 
-    EventDispatcher &Scene::globalEventEmitter() {
+    EventDispatcher &Scene::getGlobalEventEmitter() {
         return *EventDispatcher::instance();
     }
 
-    PropertyContainer &Scene::cache() {
+    PropertyContainer &Scene::getCache() {
         return *cache_;
     }
 
-    const PropertyContainer &Scene::cache() const {
+    const PropertyContainer &Scene::getCache() const {
         return *cache_;
     }
 
-    PrefContainer &Scene::sCache() {
+    PrefContainer &Scene::getSCache() {
         return *sCache_;
     }
 
-    const PrefContainer &Scene::sCache() const {
+    const PrefContainer &Scene::getSCache() const {
         return *sCache_;
     }
 
-    RenderLayerContainer &Scene::renderLayers() {
+    RenderLayerContainer &Scene::getRenderLayers() {
         return renderLayers_;
     }
 
-    const RenderLayerContainer &Scene::renderLayers() const {
+    const RenderLayerContainer &Scene::getRenderLayers() const {
         return renderLayers_;
     }
 
-    TileMap &Scene::tilemap() {
+    TileMap &Scene::getTilemap() {
         return *tileMap_;
     }
 
-    const TileMap &Scene::tilemap() const {
+    const TileMap &Scene::getTilemap() const {
         return *tileMap_;
     }
 
-    ui::GuiContainer &Scene::gui() {
+    ui::GuiContainer &Scene::getGui() {
         return guiContainer_;
     }
 
-    const ui::GuiContainer &Scene::gui() const {
+    const ui::GuiContainer &Scene::getGui() const {
         return guiContainer_;
     }
 
-    ShapeContainer &Scene::shapes() {
+    ShapeContainer &Scene::getShapes() {
         return *shapeContainer_;
     }
 
-    const ShapeContainer &Scene::shapes() const {
+    const ShapeContainer &Scene::getShapes() const {
         return *shapeContainer_;
     }
 
-    GameObjectContainer &Scene::gameObjects() {
+    GameObjectContainer &Scene::getGameObjects() {
         return *entityContainer_;
     }
 
-    const GameObjectContainer &Scene::gameObjects() const {
+    const GameObjectContainer &Scene::getGameObjects() const {
         return *entityContainer_;
     }
 
-    SpriteContainer &Scene::sprites() {
+    SpriteContainer &Scene::getSprites() {
         return *spriteContainer_;
     }
 
-    const SpriteContainer &Scene::sprites() const {
+    const SpriteContainer &Scene::getSprites() const {
         return *spriteContainer_;
     }
 
-    void Scene::createPhysWorld(const Vector2f& gravity, const PhysIterations& iterations) {
+    void Scene::createPhysicsEngine(const Vector2f& gravity, const PhysIterations& iterations) {
         world_ = PhysicsWorld::create(*this, gravity);
         world_->setIterations(iterations);
-        world_->createDebugDrawer(engine().getRenderTarget());
+        world_->createDebugDrawer(getEngine().getRenderTarget());
         hasPhysicsSim_ = true;
 
         if (hasTilemap_)
@@ -329,7 +329,7 @@ namespace ime {
     }
 
     void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
-        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, renderLayers(), *this);
+        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, getRenderLayers(), *this);
         if (hasPhysicsSim_)
             tileMap_->setPhysicsSimulation(world_.get());
 

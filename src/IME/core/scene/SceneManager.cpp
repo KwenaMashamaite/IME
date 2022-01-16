@@ -220,26 +220,26 @@ namespace ime::priv {
         // Render the scene on each camera to update its view
         auto static renderEachCam = [](Scene* scene, priv::RenderTarget& renderTarget) {
             // Render secondary cameras
-            scene->cameras().forEach([scene, &renderTarget](Camera* secondaryCam) {
+            scene->getCameras().forEach([scene, &renderTarget](Camera* secondaryCam) {
                 renderScene(scene, secondaryCam, renderTarget);
             });
 
             // Render main/default camera
-            renderScene(scene, &scene->camera(), renderTarget);
+            renderScene(scene, &scene->getCamera(), renderTarget);
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
             // Render background scene
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
                 renderEachCam(prevScene_, window);
-                prevScene_->gui().draw();
+                prevScene_->getGui().draw();
             }
 
             // Render active scene
             Scene* activeScene = scenes_.top().get();
             renderEachCam(activeScene, window);
             activeScene->internalEmitter_.emit("postRender", std::ref(window));
-            activeScene->gui().draw();
+            activeScene->getGui().draw();
         }
     }
 
@@ -271,11 +271,11 @@ namespace ime::priv {
         // Update all system components of a scene
         static auto updateSystem = [](Scene* scene, Event e) {
             if (e.type == Event::Resized) {
-                scene->cameras().forEach([&e](Camera* camera) {
+                scene->getCameras().forEach([&e](Camera* camera) {
                     updateCameraScale(camera, e.size.width, e.size.height);
                 });
 
-                updateCameraScale(&scene->camera(), e.size.width, e.size.height);
+                updateCameraScale(&scene->getCamera(), e.size.width, e.size.height);
             }
 
             // Absorb key event if Keyboard is disabled
@@ -304,7 +304,7 @@ namespace ime::priv {
 
             scene->inputManager_.handleEvent(e);
             scene->guiContainer_.handleEvent(e);
-            scene->gridMovers().handleEvent(e);
+            scene->gridMovers_.handleEvent(e);
             scene->onHandleEvent(e);
         };
 
@@ -386,13 +386,13 @@ namespace ime::priv {
 
     void SceneManager::updateExternalScene(Scene* scene, const Time& deltaTime, bool fixedUpdate) {
         if (fixedUpdate) {
-            scene->gridMovers().update(deltaTime * scene->getTimescale());
+            scene->getGridMovers().update(deltaTime * scene->getTimescale());
             scene->onFixedUpdate(deltaTime * scene->getTimescale());
         } else {
             if (scene->hasTilemap_)
                 scene->tileMap_->update(deltaTime * scene->getTimescale());
 
-            scene->gameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
+            scene->getGameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
                 if (gameObject->isActive()) {
                     gameObject->getSprite().updateAnimation(deltaTime * scene->getTimescale());
                     gameObject->update(deltaTime * scene->getTimescale());
@@ -400,7 +400,7 @@ namespace ime::priv {
             });
 
             // Update sprite animations
-            scene->sprites().forEach([&scene, &deltaTime](Sprite* sprite) {
+            scene->getSprites().forEach([&scene, &deltaTime](Sprite* sprite) {
                 sprite->updateAnimation(deltaTime * scene->getTimescale());
             });
 

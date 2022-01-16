@@ -187,7 +187,7 @@ namespace ime {
          * this function, therefore you don't have to call the base class
          * method in your implementation
          *
-         * @see fixedUpdate
+         * @see onFixedUpdate
          */
         virtual void onUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
@@ -209,7 +209,7 @@ namespace ime {
          * function, therefore you don't have to call the base class method
          * in your implementation
          *
-         * @see update
+         * @see onUpdate
          */
         virtual void onFixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
@@ -395,15 +395,15 @@ namespace ime {
          *
          * @warning Do not keep the returned reference
          */
-        Engine& engine();
-        const Engine& engine() const;
+        Engine& getEngine();
+        const Engine& getEngine() const;
 
         /**
          * @brief Get the game window
          * @return The game window
          */
-        Window& window();
-        const Window& window() const;
+        Window& getWindow();
+        const Window& getWindow() const;
 
         /**
          * @brief Get the scene level camera
@@ -411,19 +411,19 @@ namespace ime {
          *
          * Note that this camera is the default/main camera and is always
          * the rendered last. You can add other cameras to the scene using
-         * cameras()
+         * getCameras()
          *
-         * @see cameras
+         * @see getCameras
          */
-        Camera& camera();
-        const Camera& camera() const;
+        Camera& getCamera();
+        const Camera& getCamera() const;
 
         /**
          * @brief Get the scene level camera container
          * @return The scene level camera container
          */
-        CameraContainer& cameras();
-        const CameraContainer& cameras() const;
+        CameraContainer& getCameras();
+        const CameraContainer& getCameras() const;
 
         /**
          * @brief Get the scene level physics engine/simulation
@@ -434,13 +434,13 @@ namespace ime {
          *
          * @warning By default, the scene does not have a physics engine.
          * As a result, calling this function prior to creating the physics
-         * engine is undefined behavior. Use createPhysWorld() to create a
+         * engine is undefined behavior. Use createPhysicsEngine() to create a
          * physics engine
          *
-         * @see createPhysWorld
+         * @see createPhysicEngine
          */
-        PhysicsWorld& physWorld();
-        const PhysicsWorld& physWorld() const;
+        PhysicsWorld& getPhysicEngine();
+        const PhysicsWorld& getPhysicsEngine() const;
 
         /**
          * @brief Get the scenes grid mover container
@@ -450,8 +450,8 @@ namespace ime {
          * can use your own container. The advantage of using this container
          * is that the GridMover instance is updated on your behalf
          */
-        GridMoverContainer& gridMovers();
-        const GridMoverContainer& gridMovers() const;
+        GridMoverContainer& getGridMovers();
+        const GridMoverContainer& getGridMovers() const;
 
         /**
          * @brief Get the scene level event event emitter
@@ -461,10 +461,10 @@ namespace ime {
          * that events registered on it are only dispatched when the
          * scene is active and de-registered when the scene is destroyed.
          *
-         * @see globalEventEmitter
+         * @see getGlobalEventEmitter
          */
-        EventEmitter& eventEmitter();
-        const EventEmitter& eventEmitter() const;
+        EventEmitter& getEventEmitter();
+        const EventEmitter& getEventEmitter() const;
 
         /**
          * @brief Get the global event emitter
@@ -480,7 +480,7 @@ namespace ime {
          *
          * @warning Always remove local event listeners
          */
-        EventDispatcher& globalEventEmitter();
+        EventDispatcher& getGlobalEventEmitter();
 
         /**
          * @brief Get the scene level input manager
@@ -492,8 +492,8 @@ namespace ime {
          *
          * @see ime::Engine::getInputManager
          */
-        input::InputManager& input();
-        const input::InputManager& input() const;
+        input::InputManager& getInput();
+        const input::InputManager& getInput() const;
 
         /**
          * @brief Get the scene level audio manager
@@ -504,8 +504,8 @@ namespace ime {
          *
          * @see ime::Engine::getAudioManager
          */
-        audio::AudioManager& audio();
-        const audio::AudioManager& audio() const;
+        audio::AudioManager& getAudio();
+        const audio::AudioManager& getAudio() const;
 
         /**
          * @brief Get the scene level timer manager
@@ -517,8 +517,8 @@ namespace ime {
          *
          * @see ime::Engine::setTimeout and ime::Engine::setInterval
          */
-        TimerManager& timer();
-        const TimerManager& timer() const;
+        TimerManager& getTimer();
+        const TimerManager& getTimer() const;
 
         /**
          * @brief Get the global cache
@@ -531,10 +531,10 @@ namespace ime {
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @see engine
+         * @see getEngine
          */
-        PropertyContainer& cache();
-        const PropertyContainer& cache() const;
+        PropertyContainer& getCache();
+        const PropertyContainer& getCache() const;
 
         /**
          * @brief Get the global savable cache
@@ -549,10 +549,10 @@ namespace ime {
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @see engine
+         * @see getEngine
          */
-        PrefContainer& sCache();
-        const PrefContainer& sCache() const;
+        PrefContainer& getSCache();
+        const PrefContainer& getSCache() const;
 
         /**
          * @brief Get the scene render layers
@@ -573,8 +573,8 @@ namespace ime {
          * be rendered. Only use this function if the scene does not have
          * a tilemap
          */
-        RenderLayerContainer& renderLayers();
-        const RenderLayerContainer& renderLayers() const;
+        RenderLayerContainer& getRenderLayers();
+        const RenderLayerContainer& getRenderLayers() const;
 
         /**
          * @brief Get the scene level Tilemap
@@ -587,8 +587,8 @@ namespace ime {
          *
          * @see createTilemap
          */
-        TileMap& tilemap();
-        const TileMap& tilemap() const;
+        TileMap& getTilemap();
+        const TileMap& getTilemap() const;
 
         /**
          * @brief Get the scene level gui container
@@ -599,8 +599,8 @@ namespace ime {
          *
          * @see ime::Engine::getGui
          */
-        ui::GuiContainer& gui();
-        const ui::GuiContainer& gui() const;
+        ui::GuiContainer& getGui();
+        const ui::GuiContainer& getGui() const;
 
         /**
          * @brief Get the scene geometry shape container
@@ -612,8 +612,8 @@ namespace ime {
          *
          * @warning Do not keep the returned reference
          */
-        ShapeContainer& shapes();
-        const ShapeContainer& shapes() const;
+        ShapeContainer& getShapes();
+        const ShapeContainer& getShapes() const;
 
         /**
          * @brief Get the scene level game object container
@@ -624,8 +624,8 @@ namespace ime {
          *
          * @warning Do not keep the returned reference
          */
-        GameObjectContainer& gameObjects();
-        const GameObjectContainer& gameObjects() const;
+        GameObjectContainer& getGameObjects();
+        const GameObjectContainer& getGameObjects() const;
 
         /**
          * @brief Get the scene level sprite container
@@ -634,8 +634,8 @@ namespace ime {
          * This class stores the sprites in the scene. The sprite's animator
          * will automatically be updated
          */
-        SpriteContainer& sprites();
-        const SpriteContainer& sprites() const;
+        SpriteContainer& getSprites();
+        const SpriteContainer& getSprites() const;
 
         /**
          * @brief Create a scene level physics simulation
@@ -648,9 +648,9 @@ namespace ime {
          * physics (see ime::GridMover) then there is no need to create the
          * physics world. Grid-based physics do not use a physics engine.
          *
-         * @see physWorld
+         * @see getPhysicsEngine
          */
-        void createPhysWorld(const Vector2f& gravity, const PhysIterations& iterations = {3, 8});
+        void createPhysicsEngine(const Vector2f& gravity, const PhysIterations& iterations = {3, 8});
 
         /**
          * @brief Create the scene level tilemap instance
@@ -664,7 +664,7 @@ namespace ime {
          * @warning Only a single tilemap can be created, therefore calling
          * this function will destroy the previous tilemap
          *
-         * @see tilemap
+         * @see getTilemap
          */
         void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
 
@@ -769,7 +769,7 @@ namespace ime {
  *          ime::ui::Label::Ptr greeting = ime::ui::Label::create("Thank you for using Infinite Motion Engine");
  *          greeting->setOrigin(0.5f, 0.5f);
  *          greeting->setPosition("50%", "50%");
- *          gui().addWidget(std::move(greeting), "lblGreeting");
+ *          getGui().addWidget(std::move(greeting), "lblGreeting");
  *      }
  * }
  *
