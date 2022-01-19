@@ -445,11 +445,11 @@ namespace ime {
             }
 
             void showWithEffect(ui::AnimationType type, Time duration) override {
-                widget_->showWithEffect(static_cast<tgui::ShowAnimationType>(type), duration.asMilliseconds());
+                widget_->showWithEffect(static_cast<tgui::ShowEffectType>(type), duration.asMilliseconds());
             }
 
             void hideWithEffect(ui::AnimationType type, Time duration) override {
-                widget_->hideWithEffect(static_cast<tgui::ShowAnimationType>(type), duration.asMilliseconds());
+                widget_->hideWithEffect(static_cast<tgui::ShowEffectType>(type), duration.asMilliseconds());
             }
 
             bool isAnimationPlaying() const override {

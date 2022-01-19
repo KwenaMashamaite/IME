@@ -260,7 +260,7 @@ namespace ime::ui {
             emit("unfocus");
         });
 
-        widget->onAnimationFinish([this]{
+        widget->onShowEffectFinish([this]{
             emit("animationFinish");
         });
 

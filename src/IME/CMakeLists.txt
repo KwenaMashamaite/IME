@@ -217,10 +217,10 @@ endif ()
 
 # Find TGUI if not build in same project
 if (NOT TARGET tgui)
-    find_package(TGUI 0.9.1 REQUIRED)
+    find_package(TGUI 0.9.3 REQUIRED)
 
-    if (${TGUI_VERSION} VERSION_LESS "0.9.2")
-        message(FATAL_ERROR "IME requires TGUI 0.9.2 or higher")
+    if (${TGUI_VERSION} VERSION_LESS "0.9.3")
+        message(FATAL_ERROR "IME requires TGUI 0.9.3 or higher")
     endif()
 endif()
 
