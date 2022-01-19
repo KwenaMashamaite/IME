@@ -34,6 +34,7 @@ namespace ime {
                 case Preference::Type::Bool:    return "BOOL";
                 case Preference::Type::String:  return "STRING";
                 case Preference::Type::Int:     return "INT";
+                case Preference::Type::UInt:    return "UINT";
                 case Preference::Type::Double:  return "DOUBLE";
                 case Preference::Type::Float:   return  "FLOAT";
                 default:
@@ -47,6 +48,7 @@ namespace ime {
                     case Preference::Type::Bool:    return std::to_string(pref.getValue<bool>());
                     case Preference::Type::String:  return pref.getValue<std::string>();
                     case Preference::Type::Int:     return std::to_string(pref.getValue<int>());
+                    case Preference::Type::UInt:    return std::to_string(pref.getValue<unsigned int>());
                     case Preference::Type::Double:  return std::to_string(pref.getValue<double>());
                     case Preference::Type::Float:   return std::to_string(pref.getValue<float>());
                     default:
