@@ -83,6 +83,29 @@ namespace ime {
             Colour getBackgroundColour() const;
 
             /**
+             * @brief Set the radius for the rounded corners
+             * @param radius Radius of the corners
+             *
+             * This function will round the corners of the panel, @a radius
+             * controls how much rounding is applied to the borders of the
+             * panel.
+             *
+             * By default the radius is 0, meaning the panel is not rounded
+             *
+             * @warning This property is ignored when textures are used as
+             * background
+             */
+            void setRoundedBorderRadius(float radius);
+
+            /**
+             * @brief Get the radius of the rounded corners
+             * @return The radius of the rounded corners
+             *
+             * @see setRoundedBorderRadius
+             */
+            float getRoundedBorderRadius() const;
+
+            /**
              * @brief Set the background image of the panel
              * @param texture The new background image
              *
