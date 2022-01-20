@@ -342,8 +342,7 @@ namespace ime {
          * @return A pointer to the background scene if available or a nullptr
          *         if there is no background scene
          *
-         * This function will also return a nullptr if there is a background
-         * scene but is not visible (see ime::Scene::OnPauseAction::Show)
+         * This function will also return a nullptr if the engine is not running
          *
          * @see getActiveScene, ime::Scene::setOnPauseAction
          */

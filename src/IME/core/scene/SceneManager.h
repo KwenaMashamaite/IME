@@ -137,7 +137,7 @@ namespace ime {
              * @return A pointer to the scene behind the top scene if any
              *         otherwise a nullptr
              */
-            Scene* getBackgroundActiveScene();
+            Scene* getBackgroundScene();
             const Scene* getBackgroundScene() const;
 
             /**
