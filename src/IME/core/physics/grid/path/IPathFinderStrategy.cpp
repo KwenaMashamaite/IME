@@ -30,9 +30,10 @@ namespace ime {
         if (exploredNodes.back().index != targetTile) //Target tile not found
             return std::stack<Index>{};
 
-        auto path = std::stack<Index>{};
+        std::stack<Index> path;
         path.push(exploredNodes.back().index);
-        auto tileParent = exploredNodes.back().parent;
+        Index tileParent = exploredNodes.back().parent;
+
         for (auto i = exploredNodes.size() - 2; i > 0; i--) { //.size() -2 because we already saved the last node
             if (exploredNodes[i].index == tileParent) {
                 path.push(exploredNodes[i].index);

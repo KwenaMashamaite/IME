@@ -39,10 +39,10 @@ namespace ime::priv {
     }
 
     void RenderTargetImpl::setIcon(const std::string &filename) {
-        auto currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
+        std::string currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
         try {
-            auto icon = ResourceManager::getInstance()->getImage(filename);
+            const sf::Image& icon = ResourceManager::getInstance()->getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
         } catch (...) {} // No rethrow, Use current icon if set otherwise use OS icon
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
@@ -63,9 +63,11 @@ namespace ime::priv {
 
     bool RenderTargetImpl::pollEvent(Event& event) {
         sf::Event sfmlEvent;
-        auto eventPopped = window_.pollEvent(sfmlEvent);
+        bool eventPopped = window_.pollEvent(sfmlEvent);
+
         if (eventPopped)
             event = utility::convertToOwnEvent(sfmlEvent);
+
         return eventPopped;
     }
 

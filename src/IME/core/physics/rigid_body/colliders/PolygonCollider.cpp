@@ -39,7 +39,7 @@ namespace ime {
 
     PolygonCollider &PolygonCollider::operator=(const PolygonCollider& rhs) {
         if (this != &rhs) {
-            auto temp{rhs};
+            PolygonCollider temp{rhs};
             Collider::operator=(temp);
             polygon_ = std::move(temp.polygon_);
         }
@@ -69,7 +69,8 @@ namespace ime {
     void PolygonCollider::set(const std::vector<Vector2f>& vertices) {
         IME_ASSERT(vertices.size() < 8, "The number of vertices exceed 8, which is the maximum number of vertices allowed")
         b2Vec2 points[8]; // 8 is the maximum allowed and std::vector.size() is not a constexpr
-        for (auto i = 0u; i < vertices.size(); i++)
+
+        for (std::size_t i = 0u; i < vertices.size(); i++)
             points[i].Set(utility::pixelsToMetres(vertices[i].x), utility::pixelsToMetres(vertices[i].y));
 
         polygon_->Set(points, static_cast<int32>(vertices.size()));

@@ -102,8 +102,8 @@ namespace ime {
 
     Vector2f ConvexShape::getPoint(std::size_t index) const {
         IME_ASSERT(index <= getPointCount() - 1, "Index out of bounds")
-        auto [x, y] = pimpl_->polygon_->getPoint(index);
-        return {x, y};
+        sf::Vector2f point = pimpl_->polygon_->getPoint(index);
+        return Vector2f{point.x, point.y};
     }
 
     ConvexShape::~ConvexShape() {

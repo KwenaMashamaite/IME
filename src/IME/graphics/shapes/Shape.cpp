@@ -188,11 +188,13 @@ namespace ime {
     }
 
     void Shape::setPosition(float x, float y) {
-        if (auto [xPos, yPos] = getPosition(); xPos == x && yPos == y)
+        Vector2f pos = getPosition();
+
+        if (pos.x == x && pos.y == y)
             return;
 
         pimpl_->setPosition(x, y);
-        emitChange({"position", getPosition()});
+        emitChange(Property{"position", getPosition()});
     }
 
     void Shape::setPosition(const Vector2f& position) {
@@ -220,7 +222,8 @@ namespace ime {
     }
 
     void Shape::setScale(float factorX, float factorY) {
-        if (auto [x, y] = getScale(); x == factorX && y == factorY)
+        Vector2f scale = getScale();
+        if (scale.x == factorX && scale.y == factorY)
             return;
 
         pimpl_->setScale(factorX, factorY);
@@ -244,7 +247,9 @@ namespace ime {
     }
 
     void Shape::setOrigin(float x, float y) {
-        if (auto [xO, yO] = getScale(); xO == x && yO == y)
+        Vector2f origin = getOrigin();
+
+        if (origin.x == x && origin.y == y)
             return;
 
         pimpl_->setOrigin(x, y);

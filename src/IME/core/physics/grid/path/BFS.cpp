@@ -37,11 +37,12 @@ namespace ime {
             return std::stack<Index>{};
 
         adjacencyList_.generateFrom(grid);
-        auto exploredPath = std::vector<Node>{};
-        auto nodesToVisit = std::queue<Node>();
+        std::vector<Node> exploredPath;
+        std::queue<Node> nodesToVisit;
         nodesToVisit.push({sourceTile, sourceTile});
+
         while (!nodesToVisit.empty()) {
-            auto node = nodesToVisit.front();
+            Node node = nodesToVisit.front();
             nodesToVisit.pop();
             bfs(node, targetTile, nodesToVisit, exploredPath);
         }

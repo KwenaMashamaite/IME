@@ -27,7 +27,7 @@
 
 namespace ime {
     namespace {
-        auto objectIdCounter = 0u;
+        unsigned int objectIdCounter = 0u;
     }
 
     Object::Object() :

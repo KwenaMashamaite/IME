@@ -79,11 +79,8 @@ namespace ime {
         b2Definition->bodyB = definition.bodyB->getInternalBody().get();
         b2Definition->userData.pointer = getObjectId();
 
-        b2Definition->localAnchorA = {utility::pixelsToMetres(definition.bodyALocalAnchorPoint.x),
-                                      utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
-
-        b2Definition->localAnchorB = {utility::pixelsToMetres(definition.bodyBLocalAnchorPoint.x),
-                                      utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
+        b2Definition->localAnchorA = b2Vec2{utility::pixelsToMetres(definition.bodyALocalAnchorPoint.x), utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
+        b2Definition->localAnchorB = b2Vec2{utility::pixelsToMetres(definition.bodyBLocalAnchorPoint.x), utility::pixelsToMetres(definition.bodyALocalAnchorPoint.y)};
 
         joint_ = std::unique_ptr<b2DistanceJoint>(dynamic_cast<b2DistanceJoint*>(world->getInternalWorld()->CreateJoint(b2Definition.get())));
         IME_ASSERT(joint_, "Internal error: Failed to cast to b2DistanceJoint")
@@ -125,23 +122,23 @@ namespace ime {
     }
 
     Vector2f DistanceJoint::getBodyALocalAnchorPoint() const {
-        auto [x, y] = joint_->GetLocalAnchorA();
-        return {utility::metresToPixels(x), utility::metresToPixels(y)};
+        const b2Vec2& point = joint_->GetLocalAnchorA();
+        return Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)};
     }
 
     Vector2f DistanceJoint::getBodyAWorldAnchorPoint() const {
-        auto [x, y] = joint_->GetAnchorA();
-        return {utility::metresToPixels(x), utility::metresToPixels(y)};
+        const b2Vec2& point = joint_->GetAnchorA();
+        return Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)};
     }
 
     Vector2f DistanceJoint::getBodyBLocalAnchorPoint() const {
-        auto [x, y] = joint_->GetLocalAnchorB();
-        return {utility::metresToPixels(x), utility::metresToPixels(y)};
+        const b2Vec2& point = joint_->GetLocalAnchorB();
+        return Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)};
     }
 
     Vector2f DistanceJoint::getBodyBWorldAnchorPoint() const {
-        auto [x, y] = joint_->GetAnchorB();
-        return {utility::metresToPixels(x), utility::metresToPixels(y)};
+        const b2Vec2& point = joint_->GetAnchorB();
+        return Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)};
     }
 
     JointType DistanceJoint::getType() const {
@@ -165,8 +162,8 @@ namespace ime {
     }
 
     Vector2f DistanceJoint::getReactionForce(float fpsLimit) const {
-        auto [x, y] = joint_->GetReactionForce(fpsLimit);
-        return {x, y};
+        const b2Vec2& force = joint_->GetReactionForce(fpsLimit);
+        return Vector2f{force.x, force.y};
     }
 
     float DistanceJoint::getReactionTorque(float fpsLimit) const {

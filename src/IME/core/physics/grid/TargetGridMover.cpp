@@ -277,15 +277,16 @@ namespace ime {
 
     void TargetGridMover::renderPath(priv::RenderTarget &window) const {
         if (renderPath_) {
-            auto path = pathToTargetTile_;
+            std::stack<Index> path = pathToTargetTile_;
             path.push(getCurrentTileIndex());
             while (!path.empty()) {
-                auto index = path.top();
+                Index index = path.top();
                 path.pop();
-                auto gridTileSize = getGrid().getTileSize();
-                static auto shape = RectangleShape();
-                shape.setSize({static_cast<float>(gridTileSize.x), static_cast<float>(gridTileSize.y)});
+                Vector2u gridTileSize = getGrid().getTileSize();
+                static RectangleShape shape;
+                shape.setSize(Vector2f{static_cast<float>(gridTileSize.x), static_cast<float>(gridTileSize.y)});
                 shape.setPosition(getGrid().getTile(index).getPosition());
+
                 if (!path.empty())
                     shape.setFillColour(pathColour_);
                 else

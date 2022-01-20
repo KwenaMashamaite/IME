@@ -39,7 +39,7 @@ namespace ime {
 
     EdgeCollider &EdgeCollider::operator=(const EdgeCollider& rhs) {
         if (this != &rhs) {
-            auto temp{rhs};
+            EdgeCollider temp{rhs};
             Collider::operator=(temp);
             edgeShape_ = std::move(temp.edgeShape_);
         }
@@ -69,32 +69,32 @@ namespace ime {
     void EdgeCollider::setOneSided(const Vector2f& v0, const Vector2f& v1, const Vector2f& v2, const Vector2f& v3)
     {
         edgeShape_->SetOneSided(
-            {utility::pixelsToMetres(v0.x), utility::pixelsToMetres(v0.y)},
-            {utility::pixelsToMetres(v1.x), utility::pixelsToMetres(v1.y)},
-            {utility::pixelsToMetres(v2.x), utility::pixelsToMetres(v2.y)},
-            {utility::pixelsToMetres(v3.x), utility::pixelsToMetres(v3.y)});
+            b2Vec2{utility::pixelsToMetres(v0.x), utility::pixelsToMetres(v0.y)},
+            b2Vec2{utility::pixelsToMetres(v1.x), utility::pixelsToMetres(v1.y)},
+            b2Vec2{utility::pixelsToMetres(v2.x), utility::pixelsToMetres(v2.y)},
+            b2Vec2{utility::pixelsToMetres(v3.x), utility::pixelsToMetres(v3.y)});
     }
 
     void EdgeCollider::setTwoSided(const Vector2f& v1, const Vector2f& v2) {
-        edgeShape_->SetTwoSided({utility::pixelsToMetres(v1.x), utility::pixelsToMetres(v1.y)},
-            {utility::pixelsToMetres(v2.x), utility::pixelsToMetres(v2.y)});
+        edgeShape_->SetTwoSided(b2Vec2{utility::pixelsToMetres(v1.x), utility::pixelsToMetres(v1.y)},
+                                b2Vec2{utility::pixelsToMetres(v2.x), utility::pixelsToMetres(v2.y)});
     }
 
     std::pair<Vector2f, Vector2f> EdgeCollider::getEdgeVertices() const {
-        return {getFirstVertex(), getSecondVertex()};
+        return std::pair{getFirstVertex(), getSecondVertex()};
     }
 
     Vector2f EdgeCollider::getFirstVertex() const {
-        return utility::metresToPixels({edgeShape_->m_vertex1.x, edgeShape_->m_vertex1.y});
+        return utility::metresToPixels(Vector2f{edgeShape_->m_vertex1.x, edgeShape_->m_vertex1.y});
     }
 
     Vector2f EdgeCollider::getSecondVertex() const {
-        return utility::metresToPixels({edgeShape_->m_vertex2.x, edgeShape_->m_vertex2.y});
+        return utility::metresToPixels(Vector2f{edgeShape_->m_vertex2.x, edgeShape_->m_vertex2.y});
     }
 
     std::pair<Vector2f, Vector2f> EdgeCollider::getGhostVertices() const {
-        return {{utility::metresToPixels(edgeShape_->m_vertex0.x), utility::metresToPixels(edgeShape_->m_vertex0.y)},
-                {utility::metresToPixels(edgeShape_->m_vertex3.x), utility::metresToPixels(edgeShape_->m_vertex3.y)}};
+        return std::pair{Vector2f{utility::metresToPixels(edgeShape_->m_vertex0.x), utility::metresToPixels(edgeShape_->m_vertex0.y)},
+                         Vector2f{utility::metresToPixels(edgeShape_->m_vertex3.x), utility::metresToPixels(edgeShape_->m_vertex3.y)}};
     }
 
     bool EdgeCollider::isOneSided() const {

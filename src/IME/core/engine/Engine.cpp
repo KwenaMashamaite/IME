@@ -230,8 +230,8 @@ namespace ime {
         if (isPaused_)
             return;
 
-        auto const frameTime = seconds( 1.0f / window_->getFrameRateLimit());
-        auto static accumulator = Time::Zero;
+        const Time frameTime = seconds( 1.0f / window_->getFrameRateLimit());
+        static Time accumulator = Time::Zero;
 
         // Fixed update
         accumulator += deltaTime;
@@ -353,7 +353,7 @@ namespace ime {
 
             if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
                 sceneManager_->pushScene(std::move(scenesPendingPush_.front().first), true);
-                if (auto& callback = scenesPendingPush_.front().second; callback)
+                if (Callback<>& callback = scenesPendingPush_.front().second; callback)
                     callback();
 
                 scenesPendingPush_.pop();

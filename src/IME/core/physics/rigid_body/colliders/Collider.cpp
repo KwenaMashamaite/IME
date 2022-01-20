@@ -162,8 +162,7 @@ namespace ime {
     }
 
     bool Collider::containsPoint(const Vector2f& point) const {
-        return fixture_->TestPoint({utility::pixelsToMetres(point.x),
-            utility::pixelsToMetres(point.y)});
+        return fixture_->TestPoint(b2Vec2{utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)});
     }
 
     void Collider::setDensity(float density) {
@@ -243,17 +242,17 @@ namespace ime {
         else if (event == "contactStay" && onContactStay_)
             onContactStay_(this, other);
 
-        auto gameObjectA = body_->getGameObject();
-        auto gameObjectB = other->getBody()->getGameObject();
-        if (gameObjectA && gameObjectB) {
+        GameObject* gameObjectA = body_->getGameObject();
+        GameObject*  gameObjectB = other->getBody()->getGameObject();
+
+        if (gameObjectA && gameObjectB)
             gameObjectA->emitCollisionEvent(event, gameObjectB);
-        }
 
         gameObjectA = gameObjectB = nullptr;
     }
 
     void Collider::updateCollisionFilter() {
-        auto b2FilterData = b2Filter();
+        b2Filter b2FilterData;
         b2FilterData.categoryBits = filterData_.categoryBitMask;
         b2FilterData.maskBits = filterData_.collisionBitMask;
         b2FilterData.groupIndex = filterData_.groupIndex;

@@ -42,7 +42,7 @@ namespace ime {
 
     BoxCollider &BoxCollider::operator=(const BoxCollider& rhs) {
         if (this != &rhs) {
-            auto temp(rhs);
+            BoxCollider temp(rhs);
             Collider::operator=(temp);
             size_ = temp.size_;
             box_ = std::move(temp.box_);
@@ -78,7 +78,7 @@ namespace ime {
         IME_ASSERT(width >= 0.1f, "The width of the rectangle must be greater than or equal to the minimum value of 0.1f")
         IME_ASSERT(height >= 0.1f, "The height of the rectangle must be greater than or equal to the minimum value of 0.1f")
 
-        size_ = {width, height};
+        size_ = Vector2f{width, height};
         box_->SetAsBox(utility::pixelsToMetres(width / 2.0f),
             utility::pixelsToMetres(height / 2.0f));
 

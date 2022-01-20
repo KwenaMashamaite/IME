@@ -28,16 +28,17 @@
 
 namespace ime {
     TileMapParser::Map TileMapParser::parse(const std::string &filename, char separator) {
-        auto map = Map();
-        auto mapData = std::stringstream();
+        Map map;
+        std::stringstream mapData;
         utility::DiskFileReader().readFileInto(filename, mapData);
-        auto line = std::string("");
+        std::string line;
+
         while (std::getline(mapData, line)) {
             ////Skip lines that are empty or begin with a comment
             if (line.empty() || line[0] == '#')
                 continue;
 
-            auto row = std::vector<char>();
+            std::vector<char> row;
             for (const auto& character : line) {
                 if (character != separator)
                     row.push_back(character);

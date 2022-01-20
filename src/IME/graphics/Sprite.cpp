@@ -51,7 +51,7 @@ namespace ime {
 
         SpriteImpl& operator=(const SpriteImpl& rhs) {
             if (this != &rhs) {
-                auto temp{rhs};
+                SpriteImpl temp{rhs};
                 swap(temp);
             }
 
@@ -248,7 +248,7 @@ namespace ime {
 
     Sprite &Sprite::operator=(const Sprite& other) {
         if (this != &other) {
-            auto temp{other};
+            Sprite temp{other};
             std::swap(pImpl_, temp.pImpl_);
             pImpl_->setAnimationTarget(*this);
         }
@@ -307,7 +307,9 @@ namespace ime {
     }
 
     void Sprite::setPosition(float x, float y) {
-        if (auto [xPos, yPos] = getPosition(); xPos == x && yPos == y)
+        Vector2f pos = getPosition();
+
+        if (pos.x == x && pos.y == y)
             return;
 
         pImpl_->setPosition(x, y);
@@ -419,7 +421,9 @@ namespace ime {
     }
 
     void Sprite::setOrigin(float x, float y) {
-        if (auto [xO, yO] = getOrigin(); xO == x && yO == y)
+        Vector2f origin = getOrigin();
+
+        if(origin.x == x && origin.y == y)
             return;
 
         pImpl_->setOrigin(x, y);

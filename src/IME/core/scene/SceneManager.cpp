@@ -44,7 +44,7 @@ namespace ime::priv {
         }
 
         scenes_.push(std::move(scene));
-        auto* activeScene = scenes_.top().get();
+        Scene* activeScene = scenes_.top().get();
 
         if (activeScene->isEntered()) {
             if (activeScene->isCached())
@@ -59,7 +59,7 @@ namespace ime::priv {
         auto found = cachedScenes_.find(name);
 
         if (found != cachedScenes_.end()) {
-            auto scene = std::move(found->second);
+            Scene::Ptr scene = std::move(found->second);
             cachedScenes_.erase(found);
             return scene;
         }
@@ -102,7 +102,7 @@ namespace ime::priv {
 
         // Call onExit() after removing state from container because onExit may
         // push a scene and the new scene will be removed instead of this one
-        auto poppedScene = std::move(scenes_.top());
+        Scene::Ptr poppedScene = std::move(scenes_.top());
         scenes_.pop();
 
         if (poppedScene->isEntered())
@@ -113,7 +113,7 @@ namespace ime::priv {
 
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
-                auto currentScene = std::move(scenes_.top());
+                Scene::Ptr currentScene = std::move(scenes_.top());
                 scenes_.pop();
                 prevScene_ = scenes_.top().get();
                 scenes_.push(std::move(currentScene));
@@ -167,7 +167,7 @@ namespace ime::priv {
     void SceneManager::clearAllExceptActive() {
         if (!scenes_.empty()) {
             if (scenes_.top()->isEntered()) {
-                auto activeScene = std::move(scenes_.top());
+                Scene::Ptr activeScene = std::move(scenes_.top());
                 clear();
                 scenes_.push(std::move(activeScene));
             } else

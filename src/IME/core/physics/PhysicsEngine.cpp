@@ -93,8 +93,8 @@ namespace ime {
             {
                 using namespace utility;
                 return (*callback_)(convertFixtureToCollider(b2_fixture),
-                        {metresToPixels(point.x), metresToPixels(point.y)},
-                        {metresToPixels(normal.x), metresToPixels(normal.y)},
+                        Vector2f{metresToPixels(point.x), metresToPixels(point.y)},
+                        Vector2f{metresToPixels(normal.x), metresToPixels(normal.y)},
                         fraction);
             }
 
@@ -174,11 +174,11 @@ namespace ime {
     }
 
     void PhysicsEngine::setGravity(const Vector2f& gravity) {
-        world_->SetGravity({gravity.x, gravity.y});
+        world_->SetGravity(b2Vec2{gravity.x, gravity.y});
     }
 
     Vector2f PhysicsEngine::getGravity() const {
-        return {world_->GetGravity().x, world_->GetGravity().x};
+        return Vector2f{world_->GetGravity().x, world_->GetGravity().x};
     }
 
     void PhysicsEngine::setIterations(const PhysIterations &iterations) {
@@ -289,8 +289,8 @@ namespace ime {
     {
         auto queryCallback = B2RayCastCallback(&callback);
         world_->RayCast(&queryCallback,
-            {utility::pixelsToMetres(startPoint.x), utility::pixelsToMetres(startPoint.y)},
-            {utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
+            b2Vec2{utility::pixelsToMetres(startPoint.x), utility::pixelsToMetres(startPoint.y)},
+            b2Vec2{utility::pixelsToMetres(endPoint.x), utility::pixelsToMetres(endPoint.y)});
     }
 
     void PhysicsEngine::queryAABB(const AABBCallback& callback, const AABB &aabb) {

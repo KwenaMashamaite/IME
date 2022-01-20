@@ -87,7 +87,8 @@ namespace ime {
     Animation::Ptr Animator::createAnimation(const std::string &name,
         const SpriteSheet& spriteSheet, const Time& duration)
     {
-        auto animation = Animation::create(name, spriteSheet, duration);
+        Animation::Ptr animation = Animation::create(name, spriteSheet, duration);
+
         if (addAnimation(animation))
             return animation;
         else
@@ -202,14 +203,17 @@ namespace ime {
         if (chains_.empty())
             return false;
 
-        auto sizeBeforeOp = chains_.size();
-        auto newChains = std::queue<Animation::Ptr>{};
+        std::size_t sizeBeforeOp = chains_.size();
+        std::queue<Animation::Ptr> newChains;
+
         while (!chains_.empty()) {
             if (chains_.front()->getName() != name)
                 newChains.push(std::move(chains_.front()));
+
             chains_.pop();
         }
         chains_.swap(newChains);
+
         return chains_.size() < sizeBeforeOp;
     }
 

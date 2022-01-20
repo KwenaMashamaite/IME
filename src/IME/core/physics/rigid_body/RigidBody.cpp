@@ -54,9 +54,8 @@ namespace ime {
     RigidBody &RigidBody::operator=(RigidBody &&) noexcept = default;
 
     RigidBody::Ptr RigidBody::copy() const {
-        auto body = world_->createBody(getType());
-
         // b2Body does not have any public constructors, so we use setters to simulate a copy
+        RigidBody::Ptr body = world_->createBody(getType());
         body->setPosition(getPosition());
         body->setRotation(getRotation());
         body->setFixedRotation(isFixedRotation());
@@ -150,7 +149,7 @@ namespace ime {
     }
 
     Vector2f RigidBody::getLocalCenter() const {
-        return {utility::metresToPixels(body_->GetLocalCenter().x),
+        return Vector2f{utility::metresToPixels(body_->GetLocalCenter().x),
                 utility::metresToPixels(body_->GetLocalCenter().y)};
     }
 
@@ -163,7 +162,7 @@ namespace ime {
     }
 
     Vector2f RigidBody::getLinearVelocity() const {
-        return {utility::metresToPixels(body_->GetLinearVelocity().x), utility::metresToPixels(body_->GetLinearVelocity().y)};
+        return Vector2f{utility::metresToPixels(body_->GetLinearVelocity().x), utility::metresToPixels(body_->GetLinearVelocity().y)};
     }
 
     void RigidBody::setAngularVelocity(float degrees) {
@@ -179,13 +178,13 @@ namespace ime {
     }
 
     void RigidBody::applyForce(const Vector2f& force, const Vector2f& point, bool wake) {
-        body_->ApplyForce({force.x, force.y},
-            {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
+        body_->ApplyForce(b2Vec2{force.x, force.y},
+            b2Vec2{utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
     void RigidBody::applyForceToCenter(const Vector2f& force, bool wake) {
-        body_->ApplyForceToCenter({force.x, force.y}, wake);
+        body_->ApplyForceToCenter(b2Vec2{force.x, force.y}, wake);
     }
 
     void RigidBody::applyTorque(float torque, bool wake) {
@@ -193,13 +192,13 @@ namespace ime {
     }
 
     void RigidBody::applyLinearImpulse(const Vector2f& impulse, const Vector2f& point, bool wake) {
-        body_->ApplyLinearImpulse({impulse.x, impulse.y},
-            {utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
+        body_->ApplyLinearImpulse(b2Vec2{impulse.x, impulse.y},
+            b2Vec2{utility::pixelsToMetres(point.x), utility::pixelsToMetres(point.y)},
             wake);
     }
 
     void RigidBody::applyLinearImpulseToCenter(const Vector2f& impulse, bool wake) {
-        body_->ApplyLinearImpulseToCenter({impulse.x, impulse.y}, wake);
+        body_->ApplyLinearImpulseToCenter(b2Vec2{impulse.x, impulse.y}, wake);
     }
 
     void RigidBody::applyAngularImpulse(float impulse, bool wake) {
@@ -215,49 +214,39 @@ namespace ime {
     }
 
     Vector2f RigidBody::getWorldPoint(const Vector2f& localPoint) const {
-        auto worldPoint = body_->GetWorldPoint({utility::pixelsToMetres(localPoint.x),
-            utility::pixelsToMetres(localPoint.y)});
+        b2Vec2 worldPoint = body_->GetWorldPoint(b2Vec2{utility::pixelsToMetres(localPoint.x), utility::pixelsToMetres(localPoint.y)});
 
-        return {utility::metresToPixels(worldPoint.x),
-                utility::metresToPixels(worldPoint.y)};
+        return Vector2f{utility::metresToPixels(worldPoint.x), utility::metresToPixels(worldPoint.y)};
     }
 
     Vector2f RigidBody::getWorldRotation(const Vector2f& localVector) const {
-        auto worldVector = body_->GetWorldVector({utility::pixelsToMetres(localVector.x),
-            utility::pixelsToMetres(localVector.y)});
+        b2Vec2 worldVector = body_->GetWorldVector(b2Vec2{utility::pixelsToMetres(localVector.x), utility::pixelsToMetres(localVector.y)});
 
-        return {utility::radToDeg(worldVector.x),
-                utility::radToDeg(worldVector.y)};
+        return Vector2f{utility::radToDeg(worldVector.x), utility::radToDeg(worldVector.y)};
     }
 
     Vector2f RigidBody::getLocalPoint(const Vector2f& worldPoint) const {
-        auto localPoint = body_->GetLocalPoint({utility::pixelsToMetres(worldPoint.x),
-            utility::pixelsToMetres(worldPoint.y)});
+        b2Vec2 localPoint = body_->GetLocalPoint(b2Vec2{utility::pixelsToMetres(worldPoint.x), utility::pixelsToMetres(worldPoint.y)});
 
-        return {utility::metresToPixels(localPoint.x),
-                utility::metresToPixels(localPoint.y)};
+        return Vector2f{utility::metresToPixels(localPoint.x), utility::metresToPixels(localPoint.y)};
     }
 
     Vector2f RigidBody::getLocalRotation(const Vector2f& worldVector) const {
-        auto localVector = body_->GetLocalVector({utility::pixelsToMetres(worldVector.x),
-            utility::pixelsToMetres(worldVector.y)});
+        b2Vec2 localVector = body_->GetLocalVector(b2Vec2{utility::pixelsToMetres(worldVector.x), utility::pixelsToMetres(worldVector.y)});
 
-        return {utility::radToDeg(localVector.x),
-                utility::radToDeg(localVector.y)};
+        return Vector2f{utility::radToDeg(localVector.x), utility::radToDeg(localVector.y)};
     }
 
     Vector2f RigidBody::getLinearVelocityFromWorldPoint(const Vector2f& worldPoint) const {
-        auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(worldPoint.x),
-            utility::pixelsToMetres(worldPoint.y)});
+        b2Vec2 velocity = body_->GetLinearVelocityFromLocalPoint(b2Vec2{utility::pixelsToMetres(worldPoint.x), utility::pixelsToMetres(worldPoint.y)});
 
-        return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
+        return Vector2f{utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
     Vector2f RigidBody::getLinearVelocityFromLocalPoint(const Vector2f& localPoint) const {
-        auto velocity = body_->GetLinearVelocityFromLocalPoint({utility::pixelsToMetres(localPoint.x),
-            utility::pixelsToMetres(localPoint.y)});
+        b2Vec2 velocity = body_->GetLinearVelocityFromLocalPoint(b2Vec2{utility::pixelsToMetres(localPoint.x), utility::pixelsToMetres(localPoint.y)});
 
-        return {utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
+        return Vector2f{utility::metresToPixels(velocity.x), utility::metresToPixels(velocity.y)};
     }
 
     void RigidBody::setLinearDamping(float damping) {

@@ -61,7 +61,7 @@ namespace ime::priv {
         }
 
         CircleShape& createCircle(float radius, const b2Vec2& position, const b2Color& fillColour) {
-            auto static circle = CircleShape(utility::metresToPixels(radius));
+            static CircleShape circle{utility::metresToPixels(radius)};
             circle.setOrigin(circle.getLocalBounds().width / 2.0f, circle.getLocalBounds().height / 2.0f);
             circle.setPosition(utility::metresToPixels({position.x, position.y}));
             circle.setFillColour(convertToOwnColour(fillColour));
@@ -73,9 +73,10 @@ namespace ime::priv {
         void drawPolygon(const b2Vec2 *vertices, int32 vertexCount, const b2Color &fillColour,
             const b2Color &outlineColour, RenderTarget& window)
         {
-            auto static polygon = ConvexShape();
+            static ConvexShape polygon;
             polygon.setPointCount(vertexCount);
-            for (auto i = 0; i < vertexCount; ++i)
+
+            for (int32 i = 0; i < vertexCount; ++i)
                 polygon.setPoint(i, {utility::metresToPixels(vertices[i].x),
                     utility::metresToPixels(vertices[i].y)});
 
@@ -99,13 +100,13 @@ namespace ime::priv {
     }
 
     void DebugDrawer::DrawCircle(const b2Vec2 &center, float radius, const b2Color &colour) {
-        auto& circle = createCircle(radius, center, colour);
+        CircleShape& circle = createCircle(radius, center, colour);
         circle.setOutlineThickness(-1.f);
         window_.draw(circle);
     }
 
     void DebugDrawer::DrawSolidCircle(const b2Vec2 &center, float radius, const b2Vec2 &axis, const b2Color &colour) {
-        auto& circle = createCircle(radius, center, {colour.r, colour.g, colour.b, 60.0f / 255.0f});
+        CircleShape& circle = createCircle(radius, center, {colour.r, colour.g, colour.b, 60.0f / 255.0f});
         circle.setOutlineThickness(1.f);
         circle.setOutlineColour(convertToOwnColour(colour));
         window_.draw(circle);
@@ -124,7 +125,7 @@ namespace ime::priv {
     }
 
     void DebugDrawer::DrawTransform(const b2Transform &transform) {
-        auto lineLength = 0.4f;
+        float lineLength = 0.4f;
 
         b2Vec2 xAxis = transform.p + lineLength * transform.q.GetXAxis();
         DrawSegment(transform.p, xAxis, {1, 0, 0, 1});
@@ -134,8 +135,8 @@ namespace ime::priv {
     }
 
     void DebugDrawer::DrawPoint(const b2Vec2 &point, float, const b2Color &colour) {
-        auto p = sf::Vertex({utility::metresToPixels(point.x), utility::metresToPixels(point.y)},
-                            utility::convertToSFMLColour(convertToOwnColour(colour)));
+        sf::Vertex p{sf::Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)},
+                            utility::convertToSFMLColour(convertToOwnColour(colour))};
 
         window_.getImpl()->getSFMLWindow().draw(&p, 1, sf::Points);
     }

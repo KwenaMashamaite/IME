@@ -88,8 +88,8 @@ namespace ime {
     }
 
     Vector2f RectangleShape::getSize() const {
-        auto [x, y] = pimpl_->rectangle_->getSize();
-        return {x, y};
+        const sf::Vector2f& size = pimpl_->rectangle_->getSize();
+        return Vector2f{size.x, size.y};
     }
 
     RectangleShape::~RectangleShape() {

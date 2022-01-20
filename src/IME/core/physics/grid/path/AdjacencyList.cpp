@@ -28,7 +28,7 @@
 namespace ime {
     namespace {
         bool tileHasObstacle(const TileMap& grid, Index index) {
-            auto hasObstacle = false;
+            bool hasObstacle = false;
             grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GameObject* child) {
                 if (child->isObstacle() && child->isActive()) {
                     hasObstacle = true;
@@ -41,7 +41,7 @@ namespace ime {
 
     void AdjacencyList::generateFrom(const TileMap &tileMap) {
         adjacencyList_.clear();
-        auto static addNeighbour = [](auto& tilemap, auto& neighboursVec, int row, int colm) {
+        auto static addNeighbour = [](const TileMap& tilemap, std::vector<Index>& neighboursVec, int row, int colm) {
             if (tilemap.isIndexValid({row, colm})
                 && !tilemap.getTile(Index{row, colm}).isCollidable()
                 && !tileHasObstacle(tilemap, Index{row, colm}))
@@ -54,7 +54,8 @@ namespace ime {
             for (auto j = 0 ; j < static_cast<int>(tileMap.getSizeInTiles().x); j++) {
                 if (tileMap.getTile(Index{i, j}).isCollidable() || tileHasObstacle(tileMap, Index{i, j}))
                     continue;
-                auto neighbours = std::vector<Index>{};
+
+                std::vector<Index> neighbours;
                 addNeighbour(tileMap, neighbours, i - 1, j); //Left neighbour
                 addNeighbour(tileMap, neighbours, i, j - 1); //Top neighbour
                 addNeighbour(tileMap, neighbours, i + 1, j); //Right neighbour

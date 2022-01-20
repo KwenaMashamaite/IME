@@ -124,7 +124,7 @@ namespace ime::ui {
         }
 
         Widget* getWidgetBelowMouseCursor(Vector2f mousePos) const {
-            auto widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
+            tgui::Widget::Ptr widget = sfmlGui_.getWidgetBelowMouseCursor({static_cast<int>(mousePos.x), static_cast<int>(mousePos.y)});
 
             if (widget)
                 return getWidget(widget->getWidgetName().toStdString());
@@ -189,14 +189,16 @@ namespace ime::ui {
         }
 
         Widget* getFocusedWidget() const {
-            auto widget = sfmlGui_.getFocusedChild();
+            tgui::Widget::Ptr widget = sfmlGui_.getFocusedChild();
+
             if (widget)
                 return widgets_.at(widget->getWidgetName().toStdString()).get();
+
             return nullptr;
         }
 
         Widget* getFocusedLeaf() const {
-            auto widget = sfmlGui_.getFocusedLeaf();
+            tgui::Widget::Ptr widget = sfmlGui_.getFocusedLeaf();
 
             if (widget)
                 return getWidget(widget->getWidgetName().toStdString());
@@ -205,7 +207,7 @@ namespace ime::ui {
         }
 
         Widget* getWidgetAtPosition(Vector2f pos) const {
-            auto widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
+            tgui::Widget::Ptr widget = sfmlGui_.getWidgetAtPosition({pos.x, pos.y});
 
             if (widget)
                 return getWidget(widget->getWidgetName().toStdString());

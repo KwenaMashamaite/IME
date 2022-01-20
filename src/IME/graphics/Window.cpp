@@ -53,8 +53,8 @@ namespace ime {
         else
             windowStyle_ = windowStyle;
 
-        auto [width, height] = getSize();
-        renderTarget_.create(getTitle(), width, height, windowStyle);
+        Vector2u size = getSize();
+        renderTarget_.create(getTitle(), size.x, size.y, windowStyle);
     }
 
     Uint32 Window::getStyle() const {
@@ -74,8 +74,8 @@ namespace ime {
     }
 
     Vector2i Window::getPosition() const {
-        auto [x, y] = renderTarget_.getImpl()->getSFMLWindow().getPosition();
-        return {x, y};
+        sf::Vector2i pos = renderTarget_.getImpl()->getSFMLWindow().getPosition();
+        return Vector2i{pos.x, pos.y};
     }
 
     void Window::setRelativeMousePosition(const Vector2i &position) {
@@ -97,8 +97,8 @@ namespace ime {
     }
 
     Vector2u Window::getSize() const {
-        auto [x, y] = renderTarget_.getImpl()->getSFMLWindow().getSize();
-        return {x, y};
+        sf::Vector2u size = renderTarget_.getImpl()->getSFMLWindow().getSize();
+        return Vector2u{size.x, size.y};
     }
 
     void Window::setMinSize(const Vector2u &size) {
@@ -139,8 +139,8 @@ namespace ime {
             windowStyleBeforeFullScreen_ = windowStyle_;
             sizeBeforeFullScreen_ = getSize();
             windowStyle_ = WindowStyle::Fullscreen;
-            auto[width, height] = Window::getFullScreenSize();
-            renderTarget_.create(getTitle(), width, height, windowStyle_);
+            Vector2u fullScreenSize = Window::getFullScreenSize();
+            renderTarget_.create(getTitle(), fullScreenSize.x, fullScreenSize.y, windowStyle_);
         } else {
             windowStyle_ = windowStyleBeforeFullScreen_;
             renderTarget_.create(getTitle(), sizeBeforeFullScreen_.x, sizeBeforeFullScreen_.y, windowStyleBeforeFullScreen_);

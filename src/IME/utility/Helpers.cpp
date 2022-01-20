@@ -39,7 +39,7 @@ namespace ime::utility {
     }
 
     Event convertToOwnEvent(const sf::Event &SFML_Event) {
-        auto IME_Event = Event();
+        Event IME_Event;
         switch (SFML_Event.type) {
             case sf::Event::Closed:
                 IME_Event.type = Event::Type::Closed;
@@ -173,7 +173,7 @@ namespace ime::utility {
     }
 
     sf::Event convertToSFMLEvent(const Event &IME_Event) {
-        auto SFML_Event = sf::Event();
+        sf::Event SFML_Event;
         switch (IME_Event.type) {
             case Event::Closed:
                 SFML_Event.type = sf::Event::EventType::Closed;

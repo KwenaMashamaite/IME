@@ -53,7 +53,7 @@ namespace ime {
         sizeInFrames_ = ime::Vector2u{static_cast<unsigned int>(std::round(numerator.x / denominator.x)),
                                       static_cast<unsigned int>(std::round(numerator.y / denominator.y))};
 
-        auto currentPos = spacing_;
+        Vector2u currentPos = spacing_;
         for (auto i = 0u; i < sizeInFrames_.y; ++i) {
             for (auto j = 0u; j < sizeInFrames_.x; ++j) {
                 frames_.insert({{static_cast<int>(i), static_cast<int>(j)},
@@ -104,25 +104,28 @@ namespace ime {
     }
 
     std::vector<SpriteSheet::Frame> SpriteSheet::getFramesInRange(Index start, Index end) const {
-        auto frames = std::vector<SpriteSheet::Frame>{};
+        std::vector<SpriteSheet::Frame> frames;
+
         if (hasFrame(start) && hasFrame(end)) {
             if (start.row == end.row) {
-                for (auto colm = start.colm; colm <= end.colm; ++colm)
+                for (int colm = start.colm; colm <= end.colm; ++colm)
                     frames.push_back(frames_.at({ start.row, colm}));
             } else if (start.colm == end.colm) {
-                for (auto row = start.row; row <= end.row; ++row)
+                for (int row = start.row; row <= end.row; ++row)
                     frames.push_back(frames_.at({row, start.colm}));
             }
         }
+
         return frames;
     }
 
     std::vector<SpriteSheet::Frame> SpriteSheet::getAllFrames() const {
-        auto frames = std::vector<Frame>{};
+        std::vector<Frame> frames;
         for (auto row = 0u; row < sizeInFrames_.x; ++row) {
-            auto framesOnRow = getFramesOnRow(row);
+            std::vector<UIntRect> framesOnRow = getFramesOnRow(row);
             std::move(framesOnRow.begin(), framesOnRow.end(), std::back_inserter(frames));
         }
+
         return frames;
     }
 
@@ -161,25 +164,29 @@ namespace ime {
     }
 
     std::vector<Sprite> SpriteSheet::getSpritesInRange(Index start, Index end) const {
-        auto sprites = std::vector<Sprite>{};
+        std::vector<Sprite> sprites;
+
         if (hasFrame(start) && hasFrame(end)) {
             if (start.row == end.row) {
-                for (auto colm = start.colm; colm <= end.colm; ++colm)
+                for (int colm = start.colm; colm <= end.colm; ++colm)
                     sprites.emplace_back(getTexture(), frames_.at({ start.row, colm}));
             } else if (start.colm == end.colm) {
-                for (auto row = start.row; row <= end.row; ++row)
+                for (int row = start.row; row <= end.row; ++row)
                     sprites.emplace_back(getTexture(), frames_.at({row, start.colm}));
             }
         }
+
         return sprites;
     }
 
     std::vector<Sprite> SpriteSheet::getAllSprites() const {
-        auto sprites = std::vector<Sprite>{};
+        std::vector<Sprite> sprites;
+
         for (auto row = 0u; row < sizeInFrames_.x; ++row) {
-            auto spritesOnRow = getSpritesOnRow(row);
+            std::vector<Sprite> spritesOnRow = getSpritesOnRow(row);
             std::move(spritesOnRow.begin(), spritesOnRow.end(), std::back_inserter(sprites));
         }
+
         return sprites;
     }
 

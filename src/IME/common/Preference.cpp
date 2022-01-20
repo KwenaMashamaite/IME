@@ -97,7 +97,7 @@ namespace ime {
     void savePref(const Preference &pref, const std::string &filename) {
         std::string entry{pref.getDescription().empty() ? "\n\n" : "\n\n# " + pref.getDescription() + "\n"};
         entry += pref.getKey() + ":" + convertToString(pref.getType()) + "=" + convertToString(pref.getType(), pref);
-        auto configurations = std::stringstream{entry};
+        std::stringstream configurations{entry};
         utility::DiskFileReader().writeToFile(configurations, filename, utility::WriteMode::Append);
     }
 }

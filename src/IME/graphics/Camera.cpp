@@ -86,8 +86,8 @@ namespace ime {
         }
 
         FloatRect getViewport() const {
-            auto viewport = view.getViewport();
-            return {viewport.left, viewport.top, viewport.width, viewport.height};
+            sf::FloatRect viewport = view.getViewport();
+            return FloatRect{viewport.left, viewport.top, viewport.width, viewport.height};
         }
 
         void setWindowResizeResponse(Camera::OnWinResize response) {
@@ -117,7 +117,7 @@ namespace ime {
         }
 
         void setOutlineThickness(float thickness) {
-            if (thickness >= 0.0)
+            if (thickness >= 0.0f)
                 outlineThickness_ = thickness;
         }
 
@@ -169,13 +169,13 @@ namespace ime {
         }
 
         Vector2f windowCoordToWorldCoord(const Vector2i &point) const {
-            auto worldCoord = window_.mapPixelToCoords({point.x, point.y});
-            return {worldCoord.x, worldCoord.y};
+            sf::Vector2f worldCoord = window_.mapPixelToCoords(sf::Vector2i{point.x, point.y});
+            return Vector2f{worldCoord.x, worldCoord.y};
         }
 
         Vector2i worldCoordToWindowCoord(const Vector2f &point) const {
-            auto windowCoord = window_.mapCoordsToPixel({point.x, point.y});
-            return {windowCoord.x, windowCoord.y};
+            sf::Vector2i windowCoord = window_.mapCoordsToPixel(sf::Vector2f{point.x, point.y});
+            return Vector2i{windowCoord.x, windowCoord.y};
         }
 
         void startFollow(GameObject* gameObject, const Vector2f& offset) {
@@ -247,8 +247,8 @@ namespace ime {
     }
 
     void Camera::setCenter(float x, float y) {
-        auto [xC, yC] = getCenter();
-        if (xC == x && yC == y)
+        Vector2f center = getCenter();
+        if (center.x == x && center.y == y)
             return;
 
         pimpl_->setCenter(x, y);
@@ -264,7 +264,9 @@ namespace ime {
     }
 
     void Camera::setSize(float width, float height) {
-        if (auto [w, h] = getSize(); w == width && h == height)
+        Vector2f size = getSize();
+
+        if (size.x == width && size.y == height)
             return;
 
         pimpl_->setSize(width, height);

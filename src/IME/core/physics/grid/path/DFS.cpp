@@ -37,13 +37,15 @@ namespace ime {
             return std::stack<Index>{};
 
         adjacencyList_.generateFrom(grid);
-        auto exploredPath = std::vector<Node>{};
-        auto nodesToVisit = std::stack<Node>();
+        std::vector<Node> exploredPath;
+        std::stack<Node> nodesToVisit;
         nodesToVisit.push({sourceTile, sourceTile});
+
         while (!nodesToVisit.empty()) {
-            auto node = nodesToVisit.top();
+            Node node = nodesToVisit.top();
             visited_[node.index.row][node.index.colm] = true;
             nodesToVisit.pop();
+
             if (node.index == targetTile) {
                 exploredPath.push_back(node);
                 break;

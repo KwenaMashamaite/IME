@@ -41,7 +41,7 @@ namespace ime {
 
     CircleCollider &CircleCollider::operator=(const CircleCollider& rhs) {
         if (this != &rhs) {
-            auto temp{rhs};
+            CircleCollider temp{rhs};
             Collider::operator=(rhs);
             circle_ = std::move(temp.circle_);
         }
@@ -78,7 +78,7 @@ namespace ime {
     }
 
     Vector2f CircleCollider::getPosition() const {
-        return {utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
+        return Vector2f{utility::metresToPixels(circle_->m_p.x), utility::metresToPixels(circle_->m_p.y)};
     }
 
     void CircleCollider::setRadius(float radius) {
