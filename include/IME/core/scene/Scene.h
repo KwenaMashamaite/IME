@@ -285,7 +285,21 @@ namespace ime {
         virtual void onResume() {};
 
         /**
-         * @brief Handle a reactivation from
+         * @brief Handle a cached event
+         *
+         * This function is called after the scene is cached, see setCached
+         * and ime::Engine::cacheScene
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
+         *
+         * @see onResumeFromCache
+         */
+        virtual void onCache() {}
+
+        /**
+         * @brief Handle a reactivation from the cache
          *
          * This function is called when this scene is reactivated from the cache
          * (see ime::Engine::PushCachedScene)
@@ -294,7 +308,7 @@ namespace ime {
          * if needed. IME will never put anything inside this function, therefore
          * you don't have to call the base class method in your implementation
          *
-         * @see ime::Engine::PushCachedScene, onPause, onResume
+         * @see onCache, ime::Engine::PushCachedScene, onPause, onResume
          */
         virtual void onResumeFromCache() {};
 

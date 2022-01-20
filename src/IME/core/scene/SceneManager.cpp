@@ -80,8 +80,12 @@ namespace ime::priv {
 
     void SceneManager::cache(const std::string &name, Scene::Ptr scene) {
         IME_ASSERT(scene, "Cached scene must not be a nullptr")
-        scene->setCached(true, name);
-        cachedScenes_.insert({name, std::move(scene)});
+        auto [iter, inserted] = cachedScenes_.insert(std::pair{name, std::move(scene)});
+
+        if (inserted) {
+            iter->second->setCached(true, name);
+            iter->second->onCache();
+        }
     }
 
     bool SceneManager::isCached(const std::string &name) const {
@@ -109,7 +113,7 @@ namespace ime::priv {
             poppedScene->onExit();
 
         if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached)
-            cachedScenes_.insert({cacheAlias, std::move(poppedScene)});
+            cache(cacheAlias, std::move(poppedScene));
 
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
