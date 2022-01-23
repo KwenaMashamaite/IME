@@ -753,6 +753,7 @@ namespace ime {
         std::unique_ptr<TileMap> tileMap_;    //!< Scene level tilemap
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
+        bool isInitialized_;                  //!< A flag indicating whether or not the scene has been initialized
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused
         bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused

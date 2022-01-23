@@ -30,6 +30,7 @@ namespace ime {
     Scene::Scene() :
         timescale_{1.0f},
         isEntered_{false},
+        isInitialized_{false},
         isVisibleWhenPaused_{false},
         isTimeUpdatedWhenPaused_{false},
         isEventUpdatedWhenPaused_{false},
@@ -75,7 +76,8 @@ namespace ime {
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasTilemap_ = other.hasTilemap_;
             cacheState_ = other.cacheState_;
-            isEntered_ = false;
+            isEntered_ = other.isEntered_;
+            isInitialized_ = other.isInitialized_;
         }
 
         return *this;
@@ -86,14 +88,17 @@ namespace ime {
     }
 
     void Scene::init(Engine &engine) {
-        engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
-        window_ = std::make_unique<std::reference_wrapper<Window>>(engine.getWindow());
-        cameraContainer_ = std::make_unique<CameraContainer>(engine.getRenderTarget());
-        camera_ = std::make_unique<Camera>(engine.getRenderTarget());
-        cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
-        sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
-        guiContainer_.setTarget(engine.getRenderTarget());
-        onInit();
+        if (!isInitialized_) {
+            isInitialized_ = true;
+            engine_ = std::make_unique<std::reference_wrapper<Engine>>(engine);
+            window_ = std::make_unique<std::reference_wrapper<Window>>(engine.getWindow());
+            cameraContainer_ = std::make_unique<CameraContainer>(engine.getRenderTarget());
+            camera_ = std::make_unique<Camera>(engine.getRenderTarget());
+            cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
+            sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
+            guiContainer_.setTarget(engine.getRenderTarget());
+            onInit();
+        }
     }
 
     bool Scene::unsubscribe_(const std::string &event, int id) {
