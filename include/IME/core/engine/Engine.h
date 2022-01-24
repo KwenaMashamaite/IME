@@ -225,12 +225,11 @@ namespace ime {
          * @warning If multiple scenes are pushed to the engine in the same
          * frame, the last scene to be received before the frame end will be
          * the active scene. All the other scenes will be pushed without
-         * initialization. This means that only the optional callback attached
-         * to the last scene will be invoked
+         * initialization
          *
          * @see popScene
          */
-        void pushScene(Scene::Ptr scene, Callback<> callback = nullptr);
+        void pushScene(Scene::Ptr scene);
 
         /**
          * @brief Push a cached scene
@@ -495,6 +494,19 @@ namespace ime {
         int onInit(const Callback<>& callback);
 
         /**
+         * @brief Add an event listener to a scene activation event
+         * @param callback Function to be executed when a scene becomes active
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listener unique identification number
+         *
+         * This event is emitted when a scene becomes active. The callback is
+         * passed a pointer to the scene that was activated. You can add any
+         * number of event listeners to this event
+         */
+        int onSceneActivate(const Callback<Scene*>& callback, bool oneTime = false);
+
+        /**
          * @brief Add an event listener to a current frame start event
          * @param callback Function to executed when the current frame starts
          * @param oneTime True to execute the callback one-time or false to
@@ -670,7 +682,7 @@ namespace ime {
         ui::GuiContainer gui_;                             //!< Engine level gui
         Callback<> onShutdownComplete_;                    //!< An optional callback function executed after an engine shutdown
 
-        std::queue<std::pair<Scene::Ptr, Callback<>>> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
+        std::queue<Scene::Ptr> scenesPendingPush_; //!< Holds scenes to be pushed to the engine at the end of the current frame
     };
 }
 

@@ -193,10 +193,11 @@ namespace ime {
         });
 
         isRunning_ = true;
-        sceneManager_->enterTopScene();
         Time deltaTime;
         Clock gameClock;
         eventEmitter_.emit("start");
+        sceneManager_->enterTopScene();
+        eventEmitter_.emit("sceneActivate", sceneManager_->getActiveScene());
 
         while (window_->isOpen() && isRunning_ && !sceneManager_->isEmpty()) {
             eventEmitter_.emit("frameStart");
@@ -258,19 +259,19 @@ namespace ime {
         privWindow_->display();
     }
 
-    void Engine::pushScene(Scene::Ptr scene, Callback<> callback) {
+    void Engine::pushScene(Scene::Ptr scene) {
         IME_ASSERT(scene, "A scene pushed to the engine cannot be a nullptr")
         if (!isRunning_)
             sceneManager_->pushScene(std::move(scene));
         else
-            scenesPendingPush_.push({std::move(scene), std::move(callback)});
+            scenesPendingPush_.push(std::move(scene));
     }
 
     bool Engine::pushCachedScene(const std::string &name) {
         Scene::Ptr scene = sceneManager_->popCached(name);
 
         if (scene) {
-            pushScene(std::move(scene), nullptr);
+            pushScene(std::move(scene));
             return true;
         }
 
@@ -348,20 +349,21 @@ namespace ime {
             bool isPrevSceneResumed = popCounter_ == 1 && scenesPendingPush_.empty();
             sceneManager_->popScene(isPrevSceneResumed);
             popCounter_--;
+
+            if (isPrevSceneResumed && !sceneManager_->isEmpty())
+                eventEmitter_.emit("sceneActivate", sceneManager_->getActiveScene());
         }
 
         while (!scenesPendingPush_.empty()) {
-            scenesPendingPush_.front().first->init(*this);
+            scenesPendingPush_.front()->init(*this);
 
             if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
-                sceneManager_->pushScene(std::move(scenesPendingPush_.front().first), true);
-                if (Callback<>& callback = scenesPendingPush_.front().second; callback)
-                    callback();
-
+                sceneManager_->pushScene(std::move(scenesPendingPush_.front()), true);
                 scenesPendingPush_.pop();
+                eventEmitter_.emit("sceneActivate", sceneManager_->getActiveScene());
                 break;
             } else {
-                sceneManager_->pushScene(std::move(scenesPendingPush_.front().first));
+                sceneManager_->pushScene(std::move(scenesPendingPush_.front()));
                 scenesPendingPush_.pop();
             }
         }
@@ -502,6 +504,10 @@ namespace ime {
 
     int Engine::onInit(const Callback<>& callback) {
         return eventEmitter_.addEventListener( "initialize", callback);
+    }
+
+    int Engine::onSceneActivate(const Callback<Scene*> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "sceneActivate", callback, oneTime);
     }
 
     int Engine::onFrameStart(const Callback<>& callback, bool oneTime) {
