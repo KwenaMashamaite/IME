@@ -236,7 +236,7 @@ namespace ime {
          * the speed must be the same for both the x and y axis, otherwise
          * undefined behaviour
          *
-         * By default, the speed is ime::Vector2f{0, 0}
+         * By default, the speed is ime::Vector2f{60, 60}
          *
          * @see getSpeed
          */

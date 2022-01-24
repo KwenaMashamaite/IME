@@ -40,7 +40,7 @@ namespace ime {
         type_{type},
         tileMap_(tileMap),
         target_{nullptr},
-        maxSpeed_{Vector2f {0, 0}},
+        maxSpeed_{Vector2f{60.f, 60.f}},
         targetDirection_{Unknown},
         targetTile_{nullptr},
         prevTile_{nullptr},
