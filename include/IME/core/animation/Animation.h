@@ -192,14 +192,14 @@ namespace ime {
          * @brief Set the speed factor of the animation
          * @param speed The new speed factor
          *
-         * The speed factor controls the playback speed of the animation.
-         * For example, a speed of 2.0f will make the animation play twice
-         * as fast, a speed of 0.5f will make the animation play at half
-         * its normal playback speed and a speed of 0.0f will freeze the
-         * animation. Note that if @a speed is negative then the speed
-         * will be set to 1.0f (real-time)
+         * The @a speed factor controls the playback speed of the animation.
+         * For example, a speed of 2.0f will make the animation play at
+         * 2x its normal speed, a speed of 0.5f will make the animation
+         * play at half its normal speed and a speed of 0.0f will freeze
+         * the animation in time. Note that a negative playback speed will
+         * be ignored
          *
-         * By default the speed is 1.0f (real-time/normal)
+         * By default the speed is 1.0f (normal speed)
          *
          * @see getPlaybackSpeed
          */

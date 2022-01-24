@@ -103,9 +103,7 @@ namespace ime {
     }
 
     void Animation::setPlaybackSpeed(float speed) {
-        if (speed < 0.0f)
-            timescale_ = 1.0f;
-        else
+        if (speed >= 0.0f)
             timescale_ = speed;
     }
 
