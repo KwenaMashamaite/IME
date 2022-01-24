@@ -102,14 +102,14 @@ namespace ime {
         return duration_;
     }
 
-    void Animation::setTimescale(float timescale) {
-        if (timescale < 0.0f)
+    void Animation::setPlaybackSpeed(float speed) {
+        if (speed < 0.0f)
             timescale_ = 1.0f;
         else
-            timescale_ = timescale;
+            timescale_ = speed;
     }
 
-    float Animation::getTimescale() const {
+    float Animation::getPlaybackSpeed() const {
         return timescale_;
     }
 

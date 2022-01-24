@@ -189,27 +189,29 @@ namespace ime {
         const Time& getDuration() const;
 
         /**
-         * @brief Set the timescale factor of the animation
-         * @param timescale The new timescale factor
+         * @brief Set the speed factor of the animation
+         * @param speed The new speed factor
          *
-         * The timescale factor controls the playback speed of the animation.
-         * For example, a timescale of 2.0f will make the animation play twice
-         * as fast, a timescale of 0.5f will make the animation play at half
-         * its normal playback speed and a timescale of 0.0f will freeze the
-         * animation. Note that if @a timescale is negative then the timescale
+         * The speed factor controls the playback speed of the animation.
+         * For example, a speed of 2.0f will make the animation play twice
+         * as fast, a speed of 0.5f will make the animation play at half
+         * its normal playback speed and a speed of 0.0f will freeze the
+         * animation. Note that if @a speed is negative then the speed
          * will be set to 1.0f (real-time)
          *
-         * By default the timescale is 1.0f (real-time)
+         * By default the speed is 1.0f (real-time/normal)
+         *
+         * @see getPlaybackSpeed
          */
-        void setTimescale(float timescale);
+        void setPlaybackSpeed(float speed);
 
         /**
-         * @brief Get the timescale factor
-         * @return The timescale factor
+         * @brief Get the speed factor
+         * @return The speed factor
          *
-         * @see setTimescale
+         * @see setPlaybackSpeed
          */
-        float getTimescale() const;
+        float getPlaybackSpeed() const;
 
         /**
          * @brief Set the frame rate playback of the animation
