@@ -251,6 +251,31 @@ namespace ime {
         const Vector2f& getSpeed() const;
 
         /**
+         * @brief Set a speed multiplier
+         * @param multiplier The new speed multiplier
+         *
+         * A speed multiplier increases or decreases the speed of the target
+         * without affecting its default speed. For example,  A multiplier of
+         * 2.0f makes the target move twice as fast, a multiplier of 0.5f makes
+         * the target move at half its normal speed and a multiplier of 0.0f
+         * stops the target from moving. Note that a negative multiplier will
+         * be ignored
+         *
+         * By default, the multiplier is 1.0f (normal)
+         *
+         * @see getSpeedMultiplier
+         */
+        void setSpeedMultiplier(float multiplier);
+
+        /**
+         * @brief Get the speed multiplier
+         * @return The speed multiplier
+         *
+         * @see setSpeedMultiplier
+         */
+        float getSpeedMultiplier() const;
+
+        /**
          * @brief Restrict the movement of the game object to certain directions
          * @param moveRestriction Permitted direction of travel
          *
@@ -686,6 +711,7 @@ namespace ime {
         TileMap& tileMap_;             //!< Grid to move entity in
         GameObject* target_;           //!< Target to be moved in the grid
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
+        float speedMultiplier_;        //!< A normal speed multiplier
         Direction targetDirection_;    //!< The direction in which the game object wishes to go in
         Direction currentDirection_;   //!< The current direction of the game object
         Direction prevDirection_;      //!< The previous direction of the game object

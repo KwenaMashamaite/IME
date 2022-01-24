@@ -41,6 +41,7 @@ namespace ime {
         tileMap_(tileMap),
         target_{nullptr},
         maxSpeed_{Vector2f{60.f, 60.f}},
+        speedMultiplier_{1.0f},
         targetDirection_{Unknown},
         targetTile_{nullptr},
         prevTile_{nullptr},
@@ -76,6 +77,8 @@ namespace ime {
             targetDirection_ = other.targetDirection_;
             currentDirection_ = other.currentDirection_;
             prevDirection_ = other.prevDirection_;
+            maxSpeed_ = other.maxSpeed_;
+            speedMultiplier_ = other.speedMultiplier_;
             targetTile_ = &getGrid().getTile(other.targetTile_->getIndex());
             prevTile_ = &getGrid().getTile(other.prevTile_->getIndex());
         }
@@ -140,6 +143,15 @@ namespace ime {
 
     const Vector2f& GridMover::getSpeed() const {
         return maxSpeed_;
+    }
+
+    void GridMover::setSpeedMultiplier(float multiplier) {
+        if (multiplier >= 0.0f)
+            speedMultiplier_ = multiplier;
+    }
+
+    float GridMover::getSpeedMultiplier() const {
+        return speedMultiplier_;
     }
 
     void GridMover::setMovementRestriction(GridMover::MoveRestriction moveRestriction) {
@@ -278,7 +290,8 @@ namespace ime {
                     snapTargetToTargetTile();
                     onDestinationReached();
                 } else {
-                    target_->getTransform().move({(maxSpeed_.x * targetDirection_.x) * deltaTime.asSeconds(), (maxSpeed_.y * targetDirection_.y) * deltaTime.asSeconds()});
+                    target_->getTransform().move(maxSpeed_.x * targetDirection_.x * deltaTime.asSeconds() * speedMultiplier_,
+                                                 maxSpeed_.y * targetDirection_.y * deltaTime.asSeconds() * speedMultiplier_);
                 }
             }
         }
@@ -420,7 +433,7 @@ namespace ime {
 
     bool GridMover::isTargetTileReached(Time deltaTime) {
         auto distanceToTile = target_->getTransform().getPosition().distanceTo(targetTile_->getWorldCentre());
-        auto distanceMoved = maxSpeed_ * deltaTime.asSeconds();
+        auto distanceMoved = maxSpeed_ * deltaTime.asSeconds() * speedMultiplier_;
 
         // Horizontally movement
         if (targetDirection_.x != 0 && std::fabs(distanceMoved.x) >= distanceToTile) {
