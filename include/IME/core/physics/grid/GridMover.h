@@ -226,24 +226,29 @@ namespace ime {
         GameObject* getTarget() const;
 
         /**
-         * @brief Set the maximum linear speed of the game object
-         * @param speed The new maximum speed
+         * @brief Set the speed of the game object
+         * @param speed The new speed
          *
          * If the game object is currently moving, the speed will be set
          * after it reaches its current target tile
          *
-         * @warning When using a grid mover the velocity of the game object
-         * must not be set directly but rather through this function. Setting
-         * the velocity directly will transfer movement management of the game
-         * object from the grid mover to the physics engine
+         * Note that for a ime::MoveRestriction::Diagonal or ime::MoveRestriction::None,
+         * the speed must be the same for both the x and y axis, otherwise
+         * undefined behaviour
+         *
+         * By default, the speed is ime::Vector2f{0, 0}
+         *
+         * @see getSpeed
          */
-        void setMaxLinearSpeed(const Vector2f& speed);
+        void setSpeed(const Vector2f& speed);
 
         /**
-         * @brief Get the maximum speed of the game object
-         * @return The maximum speed of the game object
+         * @brief Get the speed of the target
+         * @return The speed of the target
+         *
+         * @see setSpeed
          */
-        const Vector2f& getMaxLinearSpeed() const;
+        const Vector2f& getSpeed() const;
 
         /**
          * @brief Restrict the movement of the game object to certain directions
