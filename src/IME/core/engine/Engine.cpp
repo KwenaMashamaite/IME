@@ -344,7 +344,9 @@ namespace ime {
                 popCounter_ = 0;
                 break;
             }
-            sceneManager_->popScene();
+
+            bool isPrevSceneResumed = popCounter_ == 1 && scenesPendingPush_.empty();
+            sceneManager_->popScene(isPrevSceneResumed);
             popCounter_--;
         }
 

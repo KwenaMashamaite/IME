@@ -38,8 +38,10 @@ namespace ime::priv {
         IME_ASSERT(scene, "Scene must not be a nullptr")
         if (!scenes_.empty()) {
             prevScene_ = scenes_.top().get();
-            if (scenes_.top()->isEntered()) {
-                scenes_.top()->onPause();
+
+            if (prevScene_->isEntered() && !prevScene_->isPaused()) {
+                prevScene_->isPaused_ = true;
+                prevScene_->onPause();
             }
         }
 
@@ -98,7 +100,7 @@ namespace ime::priv {
         return cachedScenes_.size() < sizeBefore;
     }
 
-    void SceneManager::popScene() {
+    void SceneManager::popScene(bool resumePrev) {
         if (scenes_.empty())
             return;
 
@@ -123,9 +125,10 @@ namespace ime::priv {
                 scenes_.push(std::move(currentScene));
             }
 
-            if (scenes_.top()->isEntered())
+            if (scenes_.top()->isEntered() && resumePrev) {
+                scenes_.top()->isPaused_ = false;
                 scenes_.top()->onResume();
-            else {
+            } else if (resumePrev) {
                 scenes_.top()->isEntered_ = true;
                 scenes_.top()->onEnter();
             }

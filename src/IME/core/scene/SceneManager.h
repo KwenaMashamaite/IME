@@ -122,8 +122,9 @@ namespace ime {
 
             /**
              * @brief Remove the current active scene
+             * @param resumePrev True to resume the previous scene, otherwise false
              */
-            void popScene();
+            void popScene(bool resumePrev = true);
 
             /**
              * @brief Get the top scene

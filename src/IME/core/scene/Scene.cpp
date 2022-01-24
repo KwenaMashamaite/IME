@@ -31,6 +31,7 @@ namespace ime {
         timescale_{1.0f},
         isEntered_{false},
         isInitialized_{false},
+        isPaused_{false},
         isVisibleWhenPaused_{false},
         isTimeUpdatedWhenPaused_{false},
         isEventUpdatedWhenPaused_{false},
@@ -78,6 +79,7 @@ namespace ime {
             cacheState_ = other.cacheState_;
             isEntered_ = other.isEntered_;
             isInitialized_ = other.isInitialized_;
+            isPaused_ = other.isPaused_;
         }
 
         return *this;
@@ -157,6 +159,10 @@ namespace ime {
 
     bool Scene::isEntered() const {
         return isEntered_;
+    }
+
+    bool Scene::isPaused() const {
+        return isPaused_;
     }
 
     void Scene::setTimescale(float timescale) {

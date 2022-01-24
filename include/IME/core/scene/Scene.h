@@ -345,6 +345,14 @@ namespace ime {
         bool isEntered() const;
 
         /**
+         * @brief Check if the scene is paused or not
+         * @return True if paused, otherwise false
+         *
+         * @see onPause
+         */
+        bool isPaused() const;
+
+        /**
          * @brief Set which action is taken when the scene is paused
          * @param action Action to be taken
          *
@@ -754,6 +762,7 @@ namespace ime {
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isInitialized_;                  //!< A flag indicating whether or not the scene has been initialized
+        bool isPaused_;                       //!< A flag indicating whether or not the scene is paused
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused
         bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused
