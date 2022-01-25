@@ -62,7 +62,7 @@ namespace ime {
         isInitialized_{false},
         isRunning_{false},
         isPaused_{false},
-        sceneManager_{std::make_unique<priv::SceneManager>()},
+        sceneManager_{std::make_unique<priv::SceneManager>(this)},
         popCounter_{0}
     {}
 
@@ -184,14 +184,6 @@ namespace ime {
         IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized")
         IME_ASSERT(!sceneManager_->isEmpty(), "Failed to start engine because it has no states")
 
-        // Initialize scenes that were added to the engine before it was ran. Scenes
-        // that are added while the engine is running are initialized before they are
-        // pushed to the scene manager whilst scenes that are added before the engine
-        // ran are immediately added to the scene manager and await late initialization
-        sceneManager_->forEachScene([this](const Scene::Ptr& scene) {
-            scene->init(*this);
-        });
-
         isRunning_ = true;
         Time deltaTime;
         Clock gameClock;
@@ -287,7 +279,6 @@ namespace ime {
 
     void Engine::cacheScene(const std::string &name, Scene::Ptr scene) {
         IME_ASSERT(scene, "A cached scene cannot be a nullptr")
-        scene->init(*this);
         sceneManager_->cache(name, std::move(scene));
     }
 
@@ -355,17 +346,13 @@ namespace ime {
         }
 
         while (!scenesPendingPush_.empty()) {
-            scenesPendingPush_.front()->init(*this);
+            Scene::Ptr scene = std::move(scenesPendingPush_.front());
+            scenesPendingPush_.pop();
+            bool isLastScene = scenesPendingPush_.empty();
+            sceneManager_->pushScene(std::move(scene), isLastScene);
 
-            if (scenesPendingPush_.size() == 1) { // Add scene and immediately enter it
-                sceneManager_->pushScene(std::move(scenesPendingPush_.front()), true);
-                scenesPendingPush_.pop();
+            if (isLastScene)
                 eventEmitter_.emit("sceneActivate", sceneManager_->getActiveScene());
-                break;
-            } else {
-                sceneManager_->pushScene(std::move(scenesPendingPush_.front()));
-                scenesPendingPush_.pop();
-            }
         }
     }
 

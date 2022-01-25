@@ -30,9 +30,12 @@
 #include "IME/utility/Helpers.h"
 
 namespace ime::priv {
-    SceneManager::SceneManager() :
+    SceneManager::SceneManager(Engine* engine) :
+        engine_{engine},
         prevScene_{nullptr}
-    {}
+    {
+        IME_ASSERT(engine, "Engine pointer cannot be a nullptr")
+    }
 
     void SceneManager::pushScene(Scene::Ptr scene, bool enterScene) {
         IME_ASSERT(scene, "Scene must not be a nullptr")
@@ -52,6 +55,7 @@ namespace ime::priv {
             if (activeScene->isCached())
                 activeScene->onResumeFromCache();
         } else if (enterScene) {
+            activeScene->init(*engine_);
             activeScene->isEntered_ = true;
             activeScene->onEnter();
         }
@@ -129,6 +133,7 @@ namespace ime::priv {
                 scenes_.top()->isPaused_ = false;
                 scenes_.top()->onResume();
             } else if (resumePrev) {
+                scenes_.top()->init(*engine_);
                 scenes_.top()->isEntered_ = true;
                 scenes_.top()->onEnter();
             }
@@ -184,6 +189,7 @@ namespace ime::priv {
             return;
 
         if (!scenes_.top()->isEntered()) {
+            scenes_.top()->init(*engine_);
             scenes_.top()->isEntered_ = true;
             scenes_.top()->onEnter();
         }

@@ -61,9 +61,10 @@ namespace ime {
         class IME_API SceneManager final {
         public:
             /**
-             * @brief Default constructor
+             * @brief Constructor
+             * @param engine Game Engine
              */
-            SceneManager();
+            explicit SceneManager(Engine* engine);
 
             /**
              * @brief Copy constructor
@@ -293,6 +294,7 @@ namespace ime {
             void updatePhysicsWorld(Scene* scene, const Time& deltaTime, bool fixedUpdate);
 
         private:
+            Engine* engine_;                //!< Pointer to the game engine
             std::stack<Scene::Ptr> scenes_; //!< Scenes container
             Scene* prevScene_;              //!< Pointer to the active scene before a push operation
             std::unordered_map<std::string, Scene::Ptr> cachedScenes_;
