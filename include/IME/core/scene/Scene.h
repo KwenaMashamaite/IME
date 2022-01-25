@@ -572,7 +572,7 @@ namespace ime {
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
-         * The data can also be accessed using ime::Engine::getPersistentData
+         * The data can also be accessed using ime::Engine::getCache
          *
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed

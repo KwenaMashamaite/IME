@@ -180,8 +180,8 @@ namespace ime {
          *
          * @see getSavablePersistentData
          */
-        PropertyContainer& getPersistentData();
-        const PropertyContainer& getPersistentData() const;
+        PropertyContainer& getCache();
+        const PropertyContainer& getCache() const;
 
         /**
          * @brief Get persistent data
@@ -194,7 +194,7 @@ namespace ime {
          *
          * @warning The data is destroyed when the engine is shutdown
          *
-         * @see getPersistentData
+         * @see getCache
          */
         PrefContainer& getSavablePersistentData();
         const PrefContainer& getSavablePersistentData() const;

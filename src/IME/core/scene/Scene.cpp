@@ -96,7 +96,7 @@ namespace ime {
             window_ = std::make_unique<std::reference_wrapper<Window>>(engine.getWindow());
             cameraContainer_ = std::make_unique<CameraContainer>(engine.getRenderTarget());
             camera_ = std::make_unique<Camera>(engine.getRenderTarget());
-            cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getPersistentData());
+            cache_ = std::make_unique<std::reference_wrapper<PropertyContainer>>(engine.getCache());
             sCache_ = std::make_unique<std::reference_wrapper<PrefContainer>>(engine.getSavablePersistentData());
             guiContainer_.setTarget(engine.getRenderTarget());
             onInit();

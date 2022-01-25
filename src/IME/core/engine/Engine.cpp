@@ -438,11 +438,11 @@ namespace ime {
         return gameTitle_;
     }
 
-    PropertyContainer &Engine::getPersistentData() {
+    PropertyContainer &Engine::getCache() {
         return dataSaver_;
     }
 
-    const PropertyContainer &Engine::getPersistentData() const {
+    const PropertyContainer &Engine::getCache() const {
         return dataSaver_;
     }
 
