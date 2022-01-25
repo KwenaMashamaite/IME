@@ -67,7 +67,7 @@
 #include "IME/core/physics/grid/RandomGridMover.h"
 #include "IME/core/physics/grid/TargetGridMover.h"
 #include "IME/core/physics/grid/CyclicGridMover.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/core/resources/ResourceLoader.h"
 #include "IME/core/scene/Scene.h"
 #include "IME/core/scene/DrawableContainer.h"

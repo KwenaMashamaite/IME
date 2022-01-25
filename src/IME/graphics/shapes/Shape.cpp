@@ -24,7 +24,7 @@
 
 #include "IME/graphics/shapes/Shape.h"
 #include "IME/core/scene/Scene.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/graphics/shapes/ShapeImpl.h"
 
 namespace ime {

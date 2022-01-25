@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/scene/SceneManager.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"

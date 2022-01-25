@@ -26,7 +26,7 @@
 #include "IME/core/tilemap/TileMapParser.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/core/game_object/GameObject.h"
 #include "IME/graphics/RenderTarget.h"
 

@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/graphics/DebugDrawer.h"

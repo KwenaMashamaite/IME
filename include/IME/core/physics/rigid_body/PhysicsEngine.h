@@ -30,9 +30,9 @@
 #include "IME/core/time/Time.h"
 #include "IME/core/physics/rigid_body/RigidBody.h"
 #include "IME/core/physics/rigid_body/AABB.h"
-#include "IME/core/physics/DebugDrawerFilter.h"
+#include "DebugDrawerFilter.h"
 #include "IME/core/physics/rigid_body/joints/Joint.h"
-#include "IME/core/physics/PhysicsIterations.h"
+#include "PhysicsIterations.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>

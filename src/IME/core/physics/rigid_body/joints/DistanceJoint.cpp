@@ -25,7 +25,7 @@
 #include "IME/core/physics/rigid_body/joints/DistanceJoint.h"
 #include "IME/utility/Helpers.h"
 #include "IME/core/physics/rigid_body/RigidBody.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_world.h>
 

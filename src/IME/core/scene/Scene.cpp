@@ -24,7 +24,7 @@
 
 #include "IME/core/scene/Scene.h"
 #include "IME/core/engine/Engine.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 
 namespace ime {
     Scene::Scene() :

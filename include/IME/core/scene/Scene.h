@@ -43,7 +43,7 @@
 #include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
 #include "IME/core/tilemap/TileMap.h"
-#include "IME/core/physics/PhysicsIterations.h"
+#include "IME/core/physics/rigid_body/PhysicsIterations.h"
 #include <string>
 #include <memory>
 #include <vector>

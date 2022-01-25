@@ -25,7 +25,7 @@
 #include "IME/graphics/Tile.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
-#include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/physics/rigid_body/PhysicsEngine.h"
 
 namespace ime {
     Tile::Tile(Vector2u size, Vector2f position) :
