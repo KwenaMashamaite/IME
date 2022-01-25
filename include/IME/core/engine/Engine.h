@@ -636,6 +636,7 @@ namespace ime {
         bool isRunning_;                                   //!< A flag indicating whether or not the engine is running
         bool isPaused_;                                    //!< A flag indicating whether or not the engine is paused
         Time elapsedTime_;                                 //!< The time passed since the engine started running
+        EventEmitter eventEmitter_;                        //!< Emits engine events
         std::unique_ptr<priv::SceneManager> sceneManager_; //!< The scene manager
         audio::AudioManager audioManager_;                 //!< The engine level audio manager
         input::InputManager inputManager_;                 //!< The engine level input manager
@@ -644,7 +645,6 @@ namespace ime {
         PropertyContainer dataSaver_;                      //!< Holds Data that persists across scenes
         PrefContainer diskDataSaver_;                      //!< Holds data that persists across scenes and can be read/saved from/to a file on the disk
         int popCounter_;                                   //!< Holds the number of scenes to be removed from the engine at the end of the current frame
-        EventEmitter eventEmitter_;                        //!< Emits engine events
         TimerManager timerManager_;                        //!< Engine level timer manager
         ui::GuiContainer gui_;                             //!< Engine level gui
         Callback<> onShutdownComplete_;                    //!< An optional callback function executed after an engine shutdown

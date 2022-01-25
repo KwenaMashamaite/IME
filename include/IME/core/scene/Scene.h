@@ -331,6 +331,28 @@ namespace ime {
         virtual void onExit() {};
 
         /**
+         * @brief Perform an action at the start of the current frame
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
+         *
+         * @see onFrameEnd
+         */
+        virtual void onFrameBegin() {};
+
+        /**
+         * @brief Perform an action at the end of the current frame
+         *
+         * Note that implementing this function is optional and must be overridden
+         * if needed. IME will never put anything inside this function, therefore
+         * you don't have to call the base class method in your implementation
+         *
+         * @see onFrameBegin
+         */
+        virtual void onFrameEnd() {}
+
+        /**
          * @brief Get the name of this class
          * @return The name of this class
          */

@@ -24,6 +24,7 @@
 
 #include "IME/core/scene/SceneManager.h"
 #include "IME/core/physics/PhysicsEngine.h"
+#include "IME/core/engine/Engine.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/graphics/RenderTargetImpl.h"
 #include "IME/graphics/shapes/RectangleShape.h"
@@ -35,6 +36,16 @@ namespace ime::priv {
         prevScene_{nullptr}
     {
         IME_ASSERT(engine, "Engine pointer cannot be a nullptr")
+
+        engine->onFrameStart([this] {
+            if (!scenes_.empty() && scenes_.top()->isEntered())
+                scenes_.top()->onFrameBegin();
+        });
+
+        engine->onFrameEnd([this] {
+            if (!scenes_.empty() && scenes_.top()->isEntered())
+                scenes_.top()->onFrameEnd();
+        });
     }
 
     void SceneManager::pushScene(Scene::Ptr scene, bool enterScene) {
