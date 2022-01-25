@@ -409,48 +409,15 @@ namespace ime {
         const input::InputManager& getInputManager() const;
 
         /**
-         * @brief Schedule a callback to be executed after a delay
-         * @param delay Time to wait before executing the callback
-         * @param callback Function to be executed when the delay expires
+         * @brief Get the engine level timer manager
+         * @return The engine level timer manager
          *
-         * This function will execute a callback function once after
-         * @a delay seconds. To execute a callback repeatedly every
-         * interval, use the setInterval() function
-         *
-         * Unlike ime::Scene::timer, callbacks registered to this timer
-         * are executed regardless of which scene is active and are only
-         * destroyed when the engine is shutdown or the timer has expired
-         *
-         * @warning The timer will be destroyed after the callback is invoked
-         * or if it is externally stopped before the callback is invoked
-         *
-         * @see setInterval
+         * Unlike ime::Scene::getTimer, event listeners registered to this
+         * timer manager are executed regardless of which scene is active
+         * and are destroyed when the engine is shutdown
          */
-        void setTimeout(Time delay, ime::Callback<Timer&> callback);
-
-        /**
-         * @brief Schedule a callback to be executed every interval
-         * @param delay Time to wait before executing the callback
-         * @param callback Function to be executed
-         * @param repeatCount The number of times to repeat the interval
-         *
-         * Unlike setTimeout(), this function will execute a callback
-         * every @a delay seconds for a specified number of times while
-         * the engine is running. By default the repeat counter is -1,
-         * this means that the callback will repeat forever. The repetition
-         * can be also be cancelled by calling setRepeatCount(0) on the returned
-         * timer
-         *
-         * Unlike ime::Scene::timer, callbacks registered to this timer
-         * are executed regardless of which scene is active and are only
-         * destroyed when the engine is shutdown or the timer has expired
-         *
-         * @warning The timer will be destroyed if the timer is externally
-         * stopped or the repetition is cancelled
-         *
-         * @see setTimeout
-         */
-        void setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount = -1);
+        TimerManager& getTimer();
+        const TimerManager& getTimer() const;
 
         /**
          * @brief Pause or resume execution of an event listener

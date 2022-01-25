@@ -470,16 +470,16 @@ namespace ime {
         return inputManager_;
     }
 
+    TimerManager &Engine::getTimer() {
+        return timerManager_;
+    }
+
+    const TimerManager &Engine::getTimer() const {
+        return timerManager_;
+    }
+
     priv::RenderTarget &Engine::getRenderTarget() {
         return *privWindow_;
-    }
-
-    void Engine::setTimeout(Time delay, ime::Callback<Timer&> callback) {
-        timerManager_.setTimeout(delay, std::move(callback));
-    }
-
-    void Engine::setInterval(Time delay, ime::Callback<Timer&> callback, int repeatCount) {
-        timerManager_.setInterval(delay, std::move(callback), repeatCount);
     }
 
     void Engine::suspendedEventListener(int id, bool suspend) {
