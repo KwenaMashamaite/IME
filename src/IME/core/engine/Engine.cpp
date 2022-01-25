@@ -446,11 +446,11 @@ namespace ime {
         return dataSaver_;
     }
 
-    PrefContainer &Engine::getSavablePersistentData() {
+    PrefContainer &Engine::getSavableCache() {
         return diskDataSaver_;
     }
 
-    const PrefContainer &Engine::getSavablePersistentData() const {
+    const PrefContainer &Engine::getSavableCache() const {
         return diskDataSaver_;
     }
 

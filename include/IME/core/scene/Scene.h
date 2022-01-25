@@ -590,7 +590,7 @@ namespace ime {
          * that another scene can access or modify data stored by another scene.
          * Unlike ime::Scene::cache, this cache can be initialized with data
          * read from a file and can also be saved to a file. The data can also
-         * be accessed using ime::Engine::getSavablePersistentData
+         * be accessed using ime::Engine::getSavableCache
          *
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed

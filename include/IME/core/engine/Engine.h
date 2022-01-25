@@ -178,7 +178,7 @@ namespace ime {
          *
          * @warning The data is destroyed when the engine is shutdown
          *
-         * @see getSavablePersistentData
+         * @see getSavableCache
          */
         PropertyContainer& getCache();
         const PropertyContainer& getCache() const;
@@ -196,8 +196,8 @@ namespace ime {
          *
          * @see getCache
          */
-        PrefContainer& getSavablePersistentData();
-        const PrefContainer& getSavablePersistentData() const;
+        PrefContainer& getSavableCache();
+        const PrefContainer& getSavableCache() const;
 
         /**
          * @brief Get the name of the game run by the engine
