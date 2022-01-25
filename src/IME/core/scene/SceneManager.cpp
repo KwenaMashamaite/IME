@@ -384,6 +384,7 @@ namespace ime::priv {
             return;
 
         if (!fixedUpdate) {
+            scene->inputManager_.update();
             scene->timerManager_.update(deltaTime * scene->getTimescale());
             scene->guiContainer_.update(deltaTime);
         }

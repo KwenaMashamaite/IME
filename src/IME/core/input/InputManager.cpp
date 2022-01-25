@@ -177,6 +177,10 @@ namespace ime::input {
         return joystick_.onButtonRelease(callback);
     }
 
+    int InputManager::onJoyButtonHeld(const Callback<unsigned int, unsigned int> &callback) {
+        return joystick_.onButtonHeld(callback);
+    }
+
     int InputManager::onJoyAxisMove(const Callback<unsigned int, Joystick::Axis, float> &callback) {
         return joystick_.onAxisMove(callback);
     }
@@ -189,5 +193,9 @@ namespace ime::input {
         keyboard_.handleEvent(event);
         mouse_.handleEvent(event);
         joystick_.handleEvent(event);
+    }
+
+    void InputManager::update() {
+        joystick_.update();
     }
 }

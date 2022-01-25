@@ -351,6 +351,20 @@ namespace ime {
             int onJoyButtonRelease(const Callback<unsigned int, unsigned int>& callback);
 
             /**
+             * @w
+             * @brief Add an event listener to button held event
+             * @param callback The function to be executed when a joystick button
+             *                 is held
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick and the button
+             * that is held respectively
+             *
+             * @warning This function is experimental
+             */
+            int onJoyButtonHeld(const Callback<unsigned int, unsigned int>& callback);
+
+            /**
              * @brief Add an event listener to an joystick axis move event
              * @param callback The function to be executed when the axis of
              *                 a joystick is moved
@@ -380,6 +394,15 @@ namespace ime {
              * should never be called outside of IME
              */
             void handleEvent(Event event);
+
+            /**
+             * @internal
+             * @brief Update
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
+             */
+            void update();
 
         private:
             Keyboard keyboard_; //!< Managed keyboard

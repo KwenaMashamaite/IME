@@ -40,6 +40,7 @@ namespace ime {
             Disconnect,     //!< Fired when a joystick is disconnected
             ButtonPress,    //!< Fired when a joystick button is pressed
             ButtonRelease,  //!< Fired when a joystick button is released
+            ButtonHeld,     //!< Fired when a joystick button is held
             AxisMove        //!< Fired when the axis of a joystick is moved
         };
 
@@ -92,6 +93,11 @@ namespace ime {
                 unsigned int vendorId;  //!< Manufacturer identifier
                 unsigned int productId; //!< Product identifier
             };
+
+            /**
+             * @brief Default constructor
+             */
+            Joystick();
 
             /**
              * @brief Enable or disable the joystick
@@ -205,6 +211,8 @@ namespace ime {
              *
              * The callback is passed the index of the joystick and the button
              * that was pressed respectively
+             *
+             * @see onButtonRelease, onButtonHeld
              */
             int onButtonPress(const Callback<unsigned int, unsigned int>& callback);
 
@@ -215,8 +223,24 @@ namespace ime {
              *
              * The callback is passed the index of the joystick and the button
              * that was released respectively
+             *
+             * @see onButtonPress, onButtonHeld
              */
             int onButtonRelease(const Callback<unsigned int, unsigned int>& callback);
+
+            /**
+             * @brief Add an event listener to button held event
+             * @param callback The function to be executed when a button is held
+             * @return The event listeners identification number
+             *
+             * The callback is passed the index of the joystick and the button
+             * that is held respectively
+             *
+             * @warning This function is experimental
+             *
+             * @see onButtonPress, onButtonRelease
+             */
+            int onButtonHeld(const Callback<unsigned int, unsigned int>& callback);
 
             /**
              * @brief Add an event listener to an axis move event
@@ -248,8 +272,19 @@ namespace ime {
              */
             void handleEvent(Event event);
 
+            /**
+             * @internal
+             * @brief Update
+             *
+             * @warning This function is intended for internal use only and
+             * should never be called outside of IME
+             */
+            void update();
+
         private:
-            EventEmitter emitter_; //!<
+            unsigned int id_;                                //!< Joystick identifier
+            EventEmitter emitter_;                           //!< Emits events
+            std::unordered_map<unsigned int, bool> wasDown_; //!< The state of a button in the previous frame
         };
     }
 }

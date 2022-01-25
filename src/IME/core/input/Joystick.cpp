@@ -27,6 +27,11 @@
 #include <SFML/Window/Joystick.hpp>
 
 namespace ime::input {
+    void resetMap(std::unordered_map<unsigned int, bool>& map) {
+        for (auto& pair : map)
+            pair.second = false;
+    }
+
     void Joystick::setEnable(bool enable) {
         emitter_.setActive(enable);
     }
@@ -70,6 +75,16 @@ namespace ime::input {
         productId{0}
     {}
 
+    Joystick::Joystick() {
+        for (auto i = 0u; i < Joystick::ButtonCount - 1; ++i)
+            wasDown_[i] = false;
+
+        onConnect([this](unsigned int id) {
+            resetMap(wasDown_);
+            id_ = id;
+        });
+    }
+
     int Joystick::onConnect(const Callback<unsigned int>& callback) {
         return emitter_.on("connect", callback);
     }
@@ -86,6 +101,10 @@ namespace ime::input {
         return emitter_.on("buttonRelease", callback);
     }
 
+    int Joystick::onButtonHeld(const Callback<unsigned int, unsigned int> &callback) {
+        return emitter_.on("buttonHeld", callback);
+    }
+
     int Joystick::onAxisMove(const Callback<unsigned int, Joystick::Axis, float> &callback) {
         return emitter_.on("axisMove", callback);
     }
@@ -100,6 +119,8 @@ namespace ime::input {
                 return emitter_.removeEventListener("buttonPress", id);
             case JoystickEvent::ButtonRelease:
                 return emitter_.removeEventListener("buttonRelease", id);
+            case JoystickEvent::ButtonHeld:
+                return emitter_.removeEventListener("buttonHeld", id);
             case JoystickEvent::AxisMove:
                 return emitter_.removeEventListener("axisMove", id);
             default:
@@ -110,9 +131,13 @@ namespace ime::input {
     void Joystick::handleEvent(Event event) {
         switch (event.type) {
             case Event::JoystickButtonPressed:
-                emitter_.emit("buttonPress", event.joystickButton.joystickId, event.joystickButton.button);
+                if (!wasDown_[event.joystickButton.button]) {
+                    wasDown_[event.joystickButton.button] = true;
+                    emitter_.emit("buttonPress", event.joystickButton.joystickId, event.joystickButton.button);
+                }
                 break;
             case Event::JoystickButtonReleased:
+                wasDown_[event.joystickButton.button] = false;
                 emitter_.emit("buttonRelease", event.joystickButton.joystickId, event.joystickButton.button);
                 break;
             case Event::JoystickMoved:
@@ -126,6 +151,15 @@ namespace ime::input {
                 break;
             default:
                 return;
+        }
+    }
+
+    void Joystick::update() {
+        if (isEnabled()) {
+            for (auto& [button, wasBtnDown] : wasDown_) {
+                if (wasBtnDown && isButtonPressed(id_, button))
+                    emitter_.emit("buttonHeld", id_, button);
+            }
         }
     }
 }

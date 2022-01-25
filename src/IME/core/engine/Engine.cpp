@@ -234,6 +234,7 @@ namespace ime {
         }
 
         // Normal update
+        inputManager_.update();
         timerManager_.update(deltaTime);
         sceneManager_->update(deltaTime);
     }
