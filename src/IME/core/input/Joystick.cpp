@@ -125,7 +125,7 @@ namespace ime::input {
     }
 
     void Joystick::handleEvent(Event event) {
-        if (event.joystickButton.joystickId == index_) {
+        if (isEnabled() && event.joystickButton.joystickId == index_) {
             switch (event.type) {
                 case Event::JoystickButtonPressed:
                     if (!wasDown_[event.joystickButton.button]) {

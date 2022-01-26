@@ -238,13 +238,19 @@ namespace ime::input {
 
         switch (event.type) {
             case Event::JoystickButtonPressed:
-                eventEmitter_.emit("anyJoystickButtonPress", event.joystickButton.joystickId, event.joystickButton.button);
+                if (getJoystick(event.joystickButton.joystickId).isEnabled())
+                    eventEmitter_.emit("anyJoystickButtonPress", event.joystickButton.joystickId, event.joystickButton.button);
+
                 break;
             case Event::JoystickButtonReleased:
-                eventEmitter_.emit("anyJoystickButtonRelease", event.joystickButton.joystickId, event.joystickButton.button);
+                if (getJoystick(event.joystickButton.joystickId).isEnabled())
+                    eventEmitter_.emit("anyJoystickButtonRelease", event.joystickButton.joystickId, event.joystickButton.button);
+
                 break;
             case Event::JoystickMoved:
-                eventEmitter_.emit("anyJoystickAxisMove", event.joystickButton.joystickId, event.joystickMove.axis, event.joystickMove.position);
+                if (getJoystick(event.joystickButton.joystickId).isEnabled())
+                    eventEmitter_.emit("anyJoystickAxisMove", event.joystickButton.joystickId, event.joystickMove.axis, event.joystickMove.position);
+
                 break;
             case Event::JoystickConnected:
                 eventEmitter_.emit("anyJoystickConnect", event.joystickButton.joystickId);

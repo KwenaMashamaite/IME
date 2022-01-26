@@ -118,26 +118,28 @@ namespace ime::input {
     }
 
     void Mouse::handleEvent(Event event) {
-        switch (event.type) {
-            case Event::MouseWheelScrolled:
-                eventEmitter_.emit("mouseWheelScroll", event.mouseWheelScroll.wheel,
-                    event.mouseWheelScroll.delta, event.mouseWheelScroll.x, event.mouseWheelScroll.y);
-                break;
-            case Event::MouseButtonPressed:
-                eventEmitter_.emit("mouseDown", event.mouseButton.button);
-                eventEmitter_.emit("mouseDown", event.mouseButton.button,
-                    event.mouseButton.x, event.mouseButton.y);
-                break;
-            case Event::MouseButtonReleased:
-                eventEmitter_.emit("mouseUp", event.mouseButton.button);
-                eventEmitter_.emit("mouseUp", event.mouseButton.button,
-                    event.mouseButton.x, event.mouseButton.y);
-                break;
-            case Event::MouseMoved:
-                eventEmitter_.emit("mouseMove", event.mouseMove.x, event.mouseMove.y);
-                break;
-            default:
-                break;
+        if (isEnabled()) {
+            switch (event.type) {
+                case Event::MouseWheelScrolled:
+                    eventEmitter_.emit("mouseWheelScroll", event.mouseWheelScroll.wheel,
+                        event.mouseWheelScroll.delta, event.mouseWheelScroll.x, event.mouseWheelScroll.y);
+                    break;
+                case Event::MouseButtonPressed:
+                    eventEmitter_.emit("mouseDown", event.mouseButton.button);
+                    eventEmitter_.emit("mouseDown", event.mouseButton.button,
+                        event.mouseButton.x, event.mouseButton.y);
+                    break;
+                case Event::MouseButtonReleased:
+                    eventEmitter_.emit("mouseUp", event.mouseButton.button);
+                    eventEmitter_.emit("mouseUp", event.mouseButton.button,
+                        event.mouseButton.x, event.mouseButton.y);
+                    break;
+                case Event::MouseMoved:
+                    eventEmitter_.emit("mouseMove", event.mouseMove.x, event.mouseMove.y);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -91,21 +91,23 @@ namespace ime::input {
     }
 
     void Keyboard::handleEvent(Event event) {
-        switch (event.type) {
-            case Event::KeyPressed:
-                if (wasDown_[static_cast<int>(event.key.code)])
-                    eventEmitter_.emit("keyHeld", event.key.code);
-                else {
-                    wasDown_[static_cast<int>(event.key.code)] = true;
-                    eventEmitter_.emit("keyDown", event.key.code);
-                }
-                break;
-            case Event::KeyReleased:
-                wasDown_[static_cast<int>(event.key.code)] = false;
-                eventEmitter_.emit("keyUp", event.key.code);
-                break;
-            default:
-                break;
+        if (isEnabled()) {
+            switch (event.type) {
+                case Event::KeyPressed:
+                    if (wasDown_[static_cast<int>(event.key.code)])
+                        eventEmitter_.emit("keyHeld", event.key.code);
+                    else {
+                        wasDown_[static_cast<int>(event.key.code)] = true;
+                        eventEmitter_.emit("keyDown", event.key.code);
+                    }
+                    break;
+                case Event::KeyReleased:
+                    wasDown_[static_cast<int>(event.key.code)] = false;
+                    eventEmitter_.emit("keyUp", event.key.code);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
