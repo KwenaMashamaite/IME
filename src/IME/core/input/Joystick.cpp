@@ -28,6 +28,7 @@
 
 namespace ime::input {
     Joystick::Joystick(unsigned int index) :
+        isEnabled_{true},
         index_{index}
     {
         for (auto i = 0u; i < Joystick::ButtonCount - 1; ++i)
@@ -39,11 +40,11 @@ namespace ime::input {
     }
 
     void Joystick::setEnable(bool enable) {
-        emitter_.setActive(enable);
+        isEnabled_ = enable;
     }
 
     bool Joystick::isEnabled() const {
-        return emitter_.isActive();
+        return isEnabled_;
     }
 
     bool Joystick::isConnected() const{
@@ -125,29 +126,27 @@ namespace ime::input {
     }
 
     void Joystick::handleEvent(Event event) {
-        if (isEnabled() && event.joystickButton.joystickId == index_) {
-            switch (event.type) {
-                case Event::JoystickButtonPressed:
-                    if (!wasDown_[event.joystickButton.button]) {
-                        wasDown_[event.joystickButton.button] = true;
-                        emitter_.emit("buttonPress", event.joystickButton.button);
-                    }
-                    break;
-                case Event::JoystickButtonReleased:
-                    wasDown_[event.joystickButton.button] = false;
-                    emitter_.emit("buttonRelease", event.joystickButton.button);
-                    break;
-                case Event::JoystickMoved:
-                    emitter_.emit("axisMove", event.joystickMove.axis, event.joystickMove.position);
-                    break;
-                case Event::JoystickConnected:
-                    emitter_.emit("connect");
-                    break;
-                case Event::JoystickDisconnected:
-                    emitter_.emit("disconnect");
-                    break;
-                default:
-                    return;
+        if (event.joystickButton.joystickId == index_) {
+            if (event.type == Event::JoystickConnected || event.type == Event::JoystickDisconnected) {
+                emitter_.emit(event.type == Event::JoystickConnected ? "connect" : "disconnect");
+            } else if (isEnabled_) {
+                switch (event.type) {
+                    case Event::JoystickButtonPressed:
+                        if (!wasDown_[event.joystickButton.button]) {
+                            wasDown_[event.joystickButton.button] = true;
+                            emitter_.emit("buttonPress", event.joystickButton.button);
+                        }
+                        break;
+                    case Event::JoystickButtonReleased:
+                        wasDown_[event.joystickButton.button] = false;
+                        emitter_.emit("buttonRelease", event.joystickButton.button);
+                        break;
+                    case Event::JoystickMoved:
+                        emitter_.emit("axisMove", event.joystickMove.axis, event.joystickMove.position);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

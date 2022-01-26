@@ -114,8 +114,9 @@ namespace ime {
              * @brief Enable or disable the joystick
              * @param enable True to enabled or false to disable
              *
-             * When disabled, the joystick will no longer generate connect,
-             * disconnect, button press, button release and axis move events
+             * When disabled, the joystick will no longer generate button press,
+             * button release and axis move events. Connect and disconnect events
+             * are dispatched regardless of the 'enable' state of the joystick
              *
              * By default the joystick is enabled
              *
@@ -283,6 +284,7 @@ namespace ime {
             void update();
 
         private:
+            bool isEnabled_;                                 //!< A flag indicating whether or not the joystick is enabled
             unsigned int index_;                             //!< Joystick identifier
             EventEmitter emitter_;                           //!< Emits events
             std::unordered_map<unsigned int, bool> wasDown_; //!< The state of a button in the previous frame

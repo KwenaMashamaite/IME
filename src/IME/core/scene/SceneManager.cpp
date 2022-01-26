@@ -321,8 +321,7 @@ namespace ime::priv {
             // Absorb joystick event if Joystick is disabled
             if (!scene->inputManager_.isInputEnabled(input::InputType::Joystick) &&
                 (e.type == Event::JoystickButtonPressed || e.type == Event::JoystickButtonReleased ||
-                e.type == Event::JoystickMoved || e.type == Event::JoystickConnected ||
-                e.type == Event::JoystickDisconnected))
+                e.type == Event::JoystickMoved))
             {
                 return;
             }
