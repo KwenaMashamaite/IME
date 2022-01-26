@@ -62,6 +62,7 @@ namespace ime {
         isInitialized_{false},
         isRunning_{false},
         isPaused_{false},
+        fixedUpdateFPS_{60},
         sceneManager_{std::make_unique<priv::SceneManager>(this)},
         popCounter_{0}
     {}
@@ -223,11 +224,15 @@ namespace ime {
         if (isPaused_)
             return;
 
-        const Time frameTime = seconds( 1.0f / window_->getFrameRateLimit());
+        const Time frameTime = seconds( 1.0f / static_cast<float>(fixedUpdateFPS_));
         static Time accumulator = Time::Zero;
 
         // Fixed update
+        if (deltaTime.asSeconds() > 0.25f)
+            deltaTime = seconds(0.25f);
+
         accumulator += deltaTime;
+
         while (accumulator >= frameTime) {
             sceneManager_->fixedUpdate(frameTime);
             accumulator -= frameTime;
@@ -400,6 +405,14 @@ namespace ime {
 
     bool Engine::isPaused() const {
         return isPaused_;
+    }
+
+    void Engine::setFixedUpdateFrameRate(unsigned int fixedUpdateFps) {
+        fixedUpdateFPS_ = fixedUpdateFps;
+    }
+
+    unsigned int Engine::getFixedUpdateFrameRate() const {
+        return fixedUpdateFPS_;
     }
 
     Time Engine::getElapsedTime() const {

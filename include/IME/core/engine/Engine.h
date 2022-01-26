@@ -158,6 +158,24 @@ namespace ime {
          */
         bool isPaused() const;
 
+        /**
+         * @brief Set the fixed update frame rate
+         * @param fixedUpdateFps The new fixed update frame rate
+         *
+         * By default the fixed update frame rate is 60 fps
+         *
+         * @see getFixedUpdateFrameRate
+         */
+        void setFixedUpdateFrameRate(unsigned int fixedUpdateFps);
+
+        /**
+         * @brief Get the fixed update frame rate
+         * @return The fixed update frame rate
+         *
+         * @see setFixedUpdateFrameRate
+         */
+        unsigned int getFixedUpdateFrameRate() const;
+
          /**
           * @brief Get the engines settings
           * @return The engines settings
@@ -635,6 +653,7 @@ namespace ime {
         bool isInitialized_;                               //!< A flag indicating whether or not the engine has been initialized
         bool isRunning_;                                   //!< A flag indicating whether or not the engine is running
         bool isPaused_;                                    //!< A flag indicating whether or not the engine is paused
+        unsigned int fixedUpdateFPS_;                      //!< The frame rate of a fixed update
         Time elapsedTime_;                                 //!< The time passed since the engine started running
         EventEmitter eventEmitter_;                        //!< Emits engine events
         std::unique_ptr<priv::SceneManager> sceneManager_; //!< The scene manager
