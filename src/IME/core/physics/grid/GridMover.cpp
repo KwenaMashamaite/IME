@@ -46,6 +46,7 @@ namespace ime {
         targetTile_{nullptr},
         prevTile_{nullptr},
         isMoving_{false},
+        isMoveFrozen_{false},
         moveRestrict_{MoveRestriction::None},
         targetDestructionId_{-1},
         isInternalHandler_{false}
@@ -72,6 +73,7 @@ namespace ime {
     void GridMover::syncWith(const GridMover &other) {
         if (this != &other && other.isMoving_) {
             isMoving_ = true;
+            isMoveFrozen_ = other.isMoveFrozen_;
             targetDirection_ = other.targetDirection_;
             currentDirection_ = other.currentDirection_;
             prevDirection_ = other.prevDirection_;
@@ -173,6 +175,18 @@ namespace ime {
         return moveRestrict_;
     }
 
+    void GridMover::setMovementFreeze(bool freeze) {
+        if (isMoveFrozen_ != freeze) {
+            isMoveFrozen_ = freeze;
+
+            emitChange(Property{"movementFreeze", isMoveFrozen_});
+        }
+    }
+
+    bool GridMover::isMovementFrozen() const {
+        return isMoveFrozen_;
+    }
+
     Index GridMover::getCurrentTileIndex() const {
         return targetTile_->getIndex();
     }
@@ -245,7 +259,7 @@ namespace ime {
     }
 
     void GridMover::update(Time deltaTime) {
-        if (target_) {
+        if (target_ && !isMoveFrozen_) {
             IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
             IME_ASSERT(!target_->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
 
