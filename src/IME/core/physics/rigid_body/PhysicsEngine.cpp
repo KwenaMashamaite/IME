@@ -200,7 +200,7 @@ namespace ime {
         return timescale_;
     }
 
-    void PhysicsEngine::enableContinuousPhysics(bool enable) {
+    void PhysicsEngine::setContinuousPhysicsEnable(bool enable) {
         world_->SetContinuousPhysics(enable);
     }
 
@@ -243,11 +243,11 @@ namespace ime {
         world_->Step(deltaTime.asSeconds() * timescale_, static_cast<int32>(iterations_.velocity), static_cast<int32>(iterations_.position));
     }
 
-    void PhysicsEngine::autoClearForceBuffer(bool autoClear) {
+    void PhysicsEngine::setAutoClearForcesEnable(bool autoClear) {
         world_->SetAutoClearForces(autoClear);
     }
 
-    bool PhysicsEngine::isForceBufferAutoCleared() const {
+    bool PhysicsEngine::isAutoClearForcesEnabled() const {
         return world_->GetAutoClearForces();
     }
 
@@ -255,15 +255,15 @@ namespace ime {
         world_->ClearForces();
     }
 
-    void PhysicsEngine::allowSleep(bool sleep) {
+    void PhysicsEngine::setSleepEnable(bool sleep) {
         world_->SetAllowSleeping(sleep);
     }
 
-    bool PhysicsEngine::isSleepingAllowed() const {
+    bool PhysicsEngine::isSleepEnabled() const {
         return world_->GetAllowSleeping();
     }
 
-    void PhysicsEngine::enableSubStepping(bool subStep) {
+    void PhysicsEngine::setSubSteppingEnable(bool subStep) {
         world_->SetSubStepping(subStep);
     }
 

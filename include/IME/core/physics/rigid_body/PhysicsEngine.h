@@ -184,13 +184,13 @@ namespace ime {
          *
          * By default the physics engine uses continues physics
          */
-        void enableContinuousPhysics(bool enable);
+        void setContinuousPhysicsEnable(bool enable);
 
         /**
          * @brief Check whether continuous physics is enabled or not
          * @return True if enabled, otherwise false
          *
-         * @see enableContinuousPhysics
+         * @see setContinuousPhysicsEnable
          */
         bool isContinuousPhysicsEnabled() const;
 
@@ -265,9 +265,9 @@ namespace ime {
          * call to update. You can disable automatic force buffer clearance
          * if you want to use subStepping
          *
-         * @see enableSubStepping and clearForces
+         * @see setSubSteppingEnable and clearForces
          */
-        void autoClearForceBuffer(bool autoClear);
+        void setAutoClearForcesEnable(bool autoClear);
 
         /**
          * @brief Check whether or not the force buffer on all bodies is
@@ -275,9 +275,9 @@ namespace ime {
          * @return True if the force buffer is automatically cleared, otherwise
          *          false
          *
-         * @see autoClearForceBuffer
+         * @see setAutoClearForcesEnable
          */
-        bool isForceBufferAutoCleared() const;
+        bool isAutoClearForcesEnabled() const;
 
         /**
          * @brief Manually clear the force buffer on all bodies
@@ -290,27 +290,27 @@ namespace ime {
          * clearing of forces and instead call clearForces after all sub-steps
          * are complete in one pass of your game loop.
          *
-         * @see enableSubStepping and autoClearForceBuffer
+         * @see setSubSteppingEnable and setAutoClearForcesEnable
          */
         void clearForces();
 
         /**
-         * @brief Set whether or not the world isSleepingAllowed
+         * @brief Set whether or not the world sleeps
          * @param sleep True to enable sleeping or false to disable
          */
-        void allowSleep(bool sleep);
+        void setSleepEnable(bool sleep);
 
         /**
          * @brief Check if the world can sleep or not
          * @return True if the world can sleep, otherwise false
          */
-        bool isSleepingAllowed() const;
+        bool isSleepEnabled() const;
 
         /**
          * @brief Enable or disable sub-stepping
          * @param subStep True to enable sub-stepping, otherwise false
          */
-        void enableSubStepping(bool subStep);
+        void setSubSteppingEnable(bool subStep);
 
         /**
          * @brief Check if sub-stepping is enabled or not
