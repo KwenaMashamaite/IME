@@ -62,6 +62,11 @@ namespace ime {
         class IME_API InputManager {
         public:
             /**
+             * @brief Default constructor
+             */
+            InputManager();
+
+            /**
              * @brief Enable or disable an input
              * @param inputType The input to be enabled or disabled
              * @param enable True to enabled or false to disable
@@ -334,8 +339,8 @@ namespace ime {
              *
              * A button press event does not fire while the button is held down
              *
-             * The callback is passed the index of the joystick and the button
-             * that was pressed respectively
+             * The callback is passed the index of the pressed joystick and
+             * the button that was pressed respectively
              */
             int onJoyButtonPress(const Callback<unsigned int, unsigned int>& callback);
 
@@ -345,24 +350,10 @@ namespace ime {
              *                 button is released
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick and the button
-             * that was released respectively
+             * The callback is passed the index of the joystick the button was
+             * released and the button that was released respectively
              */
             int onJoyButtonRelease(const Callback<unsigned int, unsigned int>& callback);
-
-            /**
-             * @w
-             * @brief Add an event listener to button held event
-             * @param callback The function to be executed when a joystick button
-             *                 is held
-             * @return The event listeners identification number
-             *
-             * The callback is passed the index of the joystick and the button
-             * that is held respectively
-             *
-             * @warning This function is experimental
-             */
-            int onJoyButtonHeld(const Callback<unsigned int, unsigned int>& callback);
 
             /**
              * @brief Add an event listener to an joystick axis move event
@@ -370,10 +361,19 @@ namespace ime {
              *                 a joystick is moved
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick, the axis that
-             * was moved and its new position respectively
+             * The callback is passed the index of the joystick whose axis was
+             * moved, the axis tha was moved and its new position respectively
              */
             int onJoyAxisMove(const Callback<unsigned int, Joystick::Axis, float>& callback);
+
+            /**
+             * @brief Get a joystick
+             * @param index The index of the joystick in range [0, ime::Joystick::Count - 1]
+             * @return The joystick with the specified index
+             * @throws ime::InvalidArgument if the specified index is out of bounds
+             */
+            Joystick& getJoystick(unsigned int index);
+            const Joystick& getJoystick(unsigned int index) const;
 
             /**
              * @brief Remove an event listener from a joystick event
@@ -405,9 +405,10 @@ namespace ime {
             void update();
 
         private:
-            Keyboard keyboard_; //!< Managed keyboard
-            Mouse mouse_;       //!< Managed Mouse
-            Joystick joystick_; //!< Managed Joystick
+            Keyboard keyboard_;               //!< Managed keyboard
+            Mouse mouse_;                     //!< Managed Mouse
+            std::vector<Joystick> joysticks_; //!< Managed Joysticks
+            EventEmitter eventEmitter_;       //!< Event dispatcher
         };
     }
 }

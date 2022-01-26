@@ -27,9 +27,15 @@
 #include <SFML/Window/Joystick.hpp>
 
 namespace ime::input {
-    void resetMap(std::unordered_map<unsigned int, bool>& map) {
-        for (auto& pair : map)
-            pair.second = false;
+    Joystick::Joystick(unsigned int index) :
+        index_{index}
+    {
+        for (auto i = 0u; i < Joystick::ButtonCount - 1; ++i)
+            wasDown_[i] = false;
+    }
+
+    unsigned int Joystick::getIndex() const {
+        return index_;
     }
 
     void Joystick::setEnable(bool enable) {
@@ -40,28 +46,28 @@ namespace ime::input {
         return emitter_.isActive();
     }
 
-    bool Joystick::isConnected(unsigned int joystick) {
-        return sf::Joystick::isConnected(joystick);
+    bool Joystick::isConnected() const{
+        return sf::Joystick::isConnected(index_);
     }
 
-    unsigned int Joystick::getButtonCount(unsigned int joystick) {
-        return sf::Joystick::getButtonCount(joystick);
+    unsigned int Joystick::getButtonCount() const {
+        return sf::Joystick::getButtonCount(index_);
     }
 
-    bool Joystick::hasAxis(unsigned int joystick, Joystick::Axis axis) {
-        return sf::Joystick::hasAxis(joystick, static_cast<sf::Joystick::Axis>(axis));
+    bool Joystick::hasAxis(Joystick::Axis axis) const {
+        return sf::Joystick::hasAxis(index_, static_cast<sf::Joystick::Axis>(axis));
     }
 
-    bool Joystick::isButtonPressed(unsigned int joystick, unsigned int button) {
-        return sf::Joystick::isButtonPressed(joystick, button);
+    bool Joystick::isButtonPressed(unsigned int button) const {
+        return sf::Joystick::isButtonPressed(index_, button);
     }
 
-    float Joystick::getAxisPosition(unsigned int joystick, Joystick::Axis axis) {
-        return sf::Joystick::getAxisPosition(joystick, static_cast<sf::Joystick::Axis>(axis));
+    float Joystick::getAxisPosition(Joystick::Axis axis) const {
+        return sf::Joystick::getAxisPosition(index_, static_cast<sf::Joystick::Axis>(axis));
     }
 
-    Joystick::Identification Joystick::getIdentification(unsigned int joystick) {
-        sf::Joystick::Identification sfId = sf::Joystick::getIdentification(joystick);
+    Joystick::Identification Joystick::getIdentification() const {
+        sf::Joystick::Identification sfId = sf::Joystick::getIdentification(index_);
         Identification id{};
         id.name = sfId.name;
         id.vendorId = sfId.vendorId;
@@ -75,37 +81,27 @@ namespace ime::input {
         productId{0}
     {}
 
-    Joystick::Joystick() {
-        for (auto i = 0u; i < Joystick::ButtonCount - 1; ++i)
-            wasDown_[i] = false;
-
-        onConnect([this](unsigned int id) {
-            resetMap(wasDown_);
-            id_ = id;
-        });
-    }
-
-    int Joystick::onConnect(const Callback<unsigned int>& callback) {
+    int Joystick::onConnect(const Callback<>& callback) {
         return emitter_.on("connect", callback);
     }
 
-    int Joystick::onDisconnect(const Callback<unsigned int>& callback) {
+    int Joystick::onDisconnect(const Callback<>& callback) {
         return emitter_.on("disconnect", callback);
     }
 
-    int Joystick::onButtonPress(const Callback<unsigned int, unsigned int>& callback) {
+    int Joystick::onButtonPress(const Callback<unsigned int>& callback) {
         return emitter_.on("buttonPress", callback);
     }
 
-    int Joystick::onButtonRelease(const Callback<unsigned int, unsigned int>& callback) {
+    int Joystick::onButtonRelease(const Callback<unsigned int>& callback) {
         return emitter_.on("buttonRelease", callback);
     }
 
-    int Joystick::onButtonHeld(const Callback<unsigned int, unsigned int> &callback) {
+    int Joystick::onButtonHeld(const Callback<unsigned int> &callback) {
         return emitter_.on("buttonHeld", callback);
     }
 
-    int Joystick::onAxisMove(const Callback<unsigned int, Joystick::Axis, float> &callback) {
+    int Joystick::onAxisMove(const Callback<Joystick::Axis, float> &callback) {
         return emitter_.on("axisMove", callback);
     }
 
@@ -129,36 +125,38 @@ namespace ime::input {
     }
 
     void Joystick::handleEvent(Event event) {
-        switch (event.type) {
-            case Event::JoystickButtonPressed:
-                if (!wasDown_[event.joystickButton.button]) {
-                    wasDown_[event.joystickButton.button] = true;
-                    emitter_.emit("buttonPress", event.joystickButton.joystickId, event.joystickButton.button);
-                }
-                break;
-            case Event::JoystickButtonReleased:
-                wasDown_[event.joystickButton.button] = false;
-                emitter_.emit("buttonRelease", event.joystickButton.joystickId, event.joystickButton.button);
-                break;
-            case Event::JoystickMoved:
-                emitter_.emit("axisMove", event.joystickMove.joystickId, event.joystickMove.axis, event.joystickMove.position);
-                break;
-            case Event::JoystickConnected:
-                emitter_.emit("connect", event.joystickConnect.joystickId);
-                break;
-            case Event::JoystickDisconnected:
-                emitter_.emit("disconnect", event.joystickConnect.joystickId);
-                break;
-            default:
-                return;
+        if (event.joystickButton.joystickId == index_) {
+            switch (event.type) {
+                case Event::JoystickButtonPressed:
+                    if (!wasDown_[event.joystickButton.button]) {
+                        wasDown_[event.joystickButton.button] = true;
+                        emitter_.emit("buttonPress", event.joystickButton.button);
+                    }
+                    break;
+                case Event::JoystickButtonReleased:
+                    wasDown_[event.joystickButton.button] = false;
+                    emitter_.emit("buttonRelease", event.joystickButton.button);
+                    break;
+                case Event::JoystickMoved:
+                    emitter_.emit("axisMove", event.joystickMove.axis, event.joystickMove.position);
+                    break;
+                case Event::JoystickConnected:
+                    emitter_.emit("connect");
+                    break;
+                case Event::JoystickDisconnected:
+                    emitter_.emit("disconnect");
+                    break;
+                default:
+                    return;
+            }
         }
     }
 
     void Joystick::update() {
-        if (isEnabled()) {
+        if (isEnabled() && isConnected()) {
             for (auto& [button, wasBtnDown] : wasDown_) {
-                if (wasBtnDown && isButtonPressed(id_, button))
-                    emitter_.emit("buttonHeld", id_, button);
+                if (wasBtnDown && isButtonPressed(button))
+                    emitter_.emit("buttonHeld", button);
             }
         }
     }

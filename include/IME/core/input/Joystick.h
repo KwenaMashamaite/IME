@@ -95,9 +95,20 @@ namespace ime {
             };
 
             /**
-             * @brief Default constructor
+             * @internal
+             * @brief Constructor
+             * @param index The index of the joystick
              */
-            Joystick();
+            explicit Joystick(unsigned int index);
+
+            /**
+             * @brief Check if the joystick is connected or not
+             * @return True if the joystick is connected, otherwise false
+             *
+             * This function checks the state of the joystick in real time,
+             * unlike all the other function which are event-based
+             */
+            bool isConnected() const;
 
             /**
              * @brief Enable or disable the joystick
@@ -121,86 +132,79 @@ namespace ime {
             bool isEnabled() const;
 
             /**
-             * @brief Check if a joystick is connected
-             * @param joystick Index of the joystick to check
-             * @return True if the joystick is connected, otherwise false
-             *
-             * This function checks the state of a key in real time, unlike
-             * all the other function which are event-based
+             * @brief Get the id of the joystick
+             * @return The id of the joystick
              */
-            static bool isConnected(unsigned int joystick);
+            unsigned int getIndex() const;
 
             /**
-             * @brief Get the number of buttons supported by a joystick
-             * @param joystick Index of the joystick
+             * @brief Get the number of buttons supported by the joystick
              * @return The number of buttons supported by the joystick
              *
              * If the joystick is not connected, this function returns 0.
              */
-            static unsigned int getButtonCount(unsigned int joystick);
+            unsigned int getButtonCount() const;
 
             /**
              * @brief Check if a joystick supports a given axis
-             * @param joystick Index of the joystick
              * @param axis The axis to be checked
              * @return True if the joystick supports the axis, otherwise false
              *
              * If the joystick is not connected, this function returns false
              */
-            static bool hasAxis(unsigned int joystick, Axis axis);
+            bool hasAxis(Axis axis) const;
 
             /**
-             * @brief Check if a joystick button is pressed
-             * @param joystick Index of the joystick
+             * @brief Check if a button is pressed or not
              * @param button Button to be checked
              * @return True if the button is pressed, otherwise false
              *
              * If the joystick is not connected, this function returns false
              *
-             * This function checks the state of a key in real time, unlike
+             * This function checks the state of a button in real time, unlike
              * all the other function which are event-based
              */
-            static bool isButtonPressed(unsigned int joystick, unsigned int button);
+            bool isButtonPressed(unsigned int button) const;
 
             /**
-             * @brief Get the current position of a joystick axis
-             * @param joystick Index of the joystick
-             * @param axis The axis to be checked
+             * @brief Get the current position of an axis
+             * @param axis The axis to get the position of
              * @return The current position of the axis, in range [-100 .. 100]
              *
              * If the joystick is not connected, this function returns 0
              *
-             * This function checks the state of a key in real time, unlike
+             * This function checks the position in real time, unlike
              * all the other function which are event-based
              */
-            static float getAxisPosition(unsigned int joystick, Axis axis);
+            float getAxisPosition(Axis axis) const;
 
             /**
              * @brief Get the joystick's identification information
              * @param joystick Index of the joystick
              * @return A joystick's identification information
              */
-            static Identification getIdentification(unsigned int joystick);
+            Identification getIdentification() const;
 
             /**
              * @brief Add an event listener to a connection event
-             * @param callback Function to be executed when a joystick is
-             *                 connected
+             * @param callback Function to be executed when the joystick
+             *                 is connected
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick on invocation
+             * @note If the joystick is already connected by the time the Engine
+             * starts running, then this event will not be dispatched
+             *
+             * @see ime::Engine::run
              */
-            int onConnect(const Callback<unsigned int>& callback);
+            int onConnect(const Callback<>& callback);
 
             /**
              * @brief Add an event listener to a disconnection event
              * @param callback Function to be executed when a joystick is
              *                 disconnected
              * @return The event listeners identification number
-             *
-             * The callback is passed the index of the joystick on invocation
              */
-            int onDisconnect(const Callback<unsigned int>& callback);
+            int onDisconnect(const Callback<>& callback);
 
             /**
              * @brief Add an event listener to a button press event
@@ -209,48 +213,45 @@ namespace ime {
              *
              * A button press event does not fire while the button is held down
              *
-             * The callback is passed the index of the joystick and the button
-             * that was pressed respectively
+             * The callback is passed the button that was pressed
              *
              * @see onButtonRelease, onButtonHeld
              */
-            int onButtonPress(const Callback<unsigned int, unsigned int>& callback);
+            int onButtonPress(const Callback<unsigned int>& callback);
 
             /**
              * @brief Add an event listener to button release event
              * @param callback The function to be executed when a button is released
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick and the button
-             * that was released respectively
+             * The callback is passed the button that was released
              *
              * @see onButtonPress, onButtonHeld
              */
-            int onButtonRelease(const Callback<unsigned int, unsigned int>& callback);
+            int onButtonRelease(const Callback<unsigned int>& callback);
 
             /**
              * @brief Add an event listener to button held event
              * @param callback The function to be executed when a button is held
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick and the button
-             * that is held respectively
+             * The callback is passed the button that is held
              *
              * @warning This function is experimental
              *
              * @see onButtonPress, onButtonRelease
              */
-            int onButtonHeld(const Callback<unsigned int, unsigned int>& callback);
+            int onButtonHeld(const Callback<unsigned int>& callback);
 
             /**
              * @brief Add an event listener to an axis move event
              * @param callback The function to be executed when an axis is moved
              * @return The event listeners identification number
              *
-             * The callback is passed the index of the joystick, the axis that
-             * was moved and its new position respectively
+             * The callback is passed the axis that was moved and its new position
+             * respectively
              */
-            int onAxisMove(const Callback<unsigned int, Axis, float>& callback);
+            int onAxisMove(const Callback<Axis, float>& callback);
 
             /**
              * @brief Remove an event listener from a joystick event
@@ -282,7 +283,7 @@ namespace ime {
             void update();
 
         private:
-            unsigned int id_;                                //!< Joystick identifier
+            unsigned int index_;                             //!< Joystick identifier
             EventEmitter emitter_;                           //!< Emits events
             std::unordered_map<unsigned int, bool> wasDown_; //!< The state of a button in the previous frame
         };
