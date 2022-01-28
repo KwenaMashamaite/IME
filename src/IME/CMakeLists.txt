@@ -121,7 +121,6 @@ set(IME_SRC
     graphics/DebugDrawer.cpp
     graphics/Camera.cpp
     graphics/SpriteImage.cpp
-    graphics/TextureAtlas.cpp
     utility/ConsoleLogger.cpp
     utility/DiskFileLogger.cpp
     utility/DiskFileReader.cpp
