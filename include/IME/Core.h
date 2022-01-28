@@ -40,7 +40,7 @@
 #include "IME/core/animation/Animator.h"
 #include "IME/core/audio/SoundEffect.h"
 #include "IME/core/audio/Music.h"
-#include "IME/core/game_object/GameObject.h"
+#include "IME/core/object/GameObject.h"
 #include "IME/core/event/Event.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/event/EventDispatcher.h"

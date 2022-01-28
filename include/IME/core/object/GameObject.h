@@ -32,7 +32,7 @@
 #include "IME/common/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
-#include "IME/core/game_object/ExcludeList.h"
+#include "IME/core/object/ExcludeList.h"
 #include <stack>
 
 namespace ime {

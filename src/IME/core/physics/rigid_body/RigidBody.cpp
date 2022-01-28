@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/rigid_body/RigidBody.h"
-#include "IME/core/game_object/GameObject.h"
+#include "IME/core/object/GameObject.h"
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/utility/Helpers.h"
 #include <box2d/b2_body.h>

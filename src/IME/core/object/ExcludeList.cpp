@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/game_object/ExcludeList.h"
+#include "IME/core/object/ExcludeList.h"
 
 namespace ime {
     void ExcludeList::add(const std::string &group) {

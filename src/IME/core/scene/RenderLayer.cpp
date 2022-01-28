@@ -25,7 +25,6 @@
 #include "IME/core/scene/RenderLayer.h"
 #include "IME/graphics/Drawable.h"
 #include "IME/graphics/RenderTarget.h"
-#include "IME/core/game_object/GameObject.h"
 #include <algorithm>
 
 namespace ime {

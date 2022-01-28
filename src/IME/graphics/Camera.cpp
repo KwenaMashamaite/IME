@@ -24,7 +24,7 @@
 
 #include "IME/graphics/Camera.h"
 #include "IME/graphics/RenderTargetImpl.h"
-#include "IME/core/game_object/GameObject.h"
+#include "IME/core/object/GameObject.h"
 #include "IME/utility/Helpers.h"
 
 namespace ime {
