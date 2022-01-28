@@ -23,47 +23,102 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/RenderTarget.h"
-#include "IME/graphics/RenderTargetImpl.h"
+#include "IME/core/resources/ResourceManager.h"
+#include "IME/utility/Helpers.h"
+#include <SFML/Window/Event.hpp>
 
 namespace ime::priv {
-    RenderTarget::RenderTarget() :
-        pImpl_{std::make_unique<priv::RenderTargetImpl>()}
-    {}
+    bool RenderTarget::isInstantiated_{false};
+
+    RenderTarget::RenderTarget() {
+        IME_ASSERT(!isInstantiated_, "Only a single instance of ime::Window can be instantiated")
+        isInstantiated_ = true;
+    }
 
     void RenderTarget::create(const std::string& title, unsigned int width, unsigned int height, Uint32 style) {
-        pImpl_->create(title, width, height, style);
+        title_ = title;
+        window_.create(sf::VideoMode(width, height), title, static_cast<sf::Uint32>(style));
 
         if (onCreate_)
             onCreate_();
     }
 
-    void RenderTarget::onCreate(Callback<> callback) {
-        onCreate_ = std::move(callback);
+    void RenderTarget::setTitle(const std::string &title) {
+        title_ = title;
+        window_.setTitle(title);
+    }
+
+    const std::string &RenderTarget::getTitle() const {
+        return title_;
     }
 
     void RenderTarget::setIcon(const std::string &filename) {
-        pImpl_->setIcon(filename);
+        std::string currentImageDir = ResourceManager::getInstance()->getPathFor(ResourceType::Image);
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, "");
+
+        try {
+            const sf::Image& icon = ResourceManager::getInstance()->getImage(filename);
+            window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+        }
+        catch (...)
+        {
+            // No rethrow, Use current icon if set otherwise use OS icon
+        }
+
+        ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
+    }
+
+    Vector2u RenderTarget::getSize() {
+        return ime::Vector2u{window_.getSize().x, window_.getSize().y};
+    }
+
+    bool RenderTarget::isOpen() const {
+        return window_.isOpen();
     }
 
     bool RenderTarget::pollEvent(Event& event) {
-        return pImpl_->pollEvent(event);
+        sf::Event sfmlEvent;
+        bool eventPopped = window_.pollEvent(sfmlEvent);
+
+        if (eventPopped)
+            event = utility::convertToOwnEvent(sfmlEvent);
+
+        return eventPopped;
     }
 
-    void RenderTarget::display() {
-        pImpl_->display();
+    void RenderTarget::close() {
+        window_.close();
     }
 
-    void RenderTarget::clear(Colour colour) {
-        pImpl_->clear(colour);
-    }
-
-    const std::unique_ptr<priv::RenderTargetImpl> &RenderTarget::getImpl() const {
-        return pImpl_;
+    void RenderTarget::draw(const sf::Drawable &drawable) {
+        window_.draw(drawable);
     }
 
     void RenderTarget::draw(const Drawable &drawable) {
         drawable.draw(*this);
     }
 
-    RenderTarget::~RenderTarget() = default;
+    void RenderTarget::clear(Colour colour) {
+        window_.clear(utility::convertToSFMLColour(colour));
+    }
+
+    void RenderTarget::display() {
+        window_.display();
+    }
+
+    sf::RenderWindow &RenderTarget::getThirdPartyWindow() {
+        return window_;
+    }
+
+    const sf::RenderWindow &RenderTarget::getThirdPartyWindow() const {
+        return window_;
+    }
+
+    void RenderTarget::onCreate(Callback<> callback) {
+        onCreate_ = std::move(callback);
+    }
+
+    RenderTarget::~RenderTarget() {
+        isInstantiated_ = false;
+    }
 }

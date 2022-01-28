@@ -24,8 +24,9 @@
 
 #include "IME/graphics/Window.h"
 #include "IME/graphics/RenderTarget.h"
-#include "IME/graphics/RenderTargetImpl.h"
+#include "IME/graphics/Texture.h"
 #include "IME/utility/Helpers.h"
+#include <SFML/Window/Mouse.hpp>
 
 namespace ime {
     Window::Window(priv::RenderTarget &renderTarget) :
@@ -62,28 +63,28 @@ namespace ime {
     }
 
     void Window::setTitle(const std::string &title) {
-       renderTarget_.getImpl()->setTitle(title);
+       renderTarget_.setTitle(title);
     }
 
     const std::string &Window::getTitle() const {
-        return renderTarget_.getImpl()->getTitle();
+        return renderTarget_.getTitle();
     }
 
     void Window::setPosition(const Vector2i &position) {
-        renderTarget_.getImpl()->getSFMLWindow().setPosition(sf::Vector2i{position.x, position.y});
+        renderTarget_.getThirdPartyWindow().setPosition(sf::Vector2i{position.x, position.y});
     }
 
     Vector2i Window::getPosition() const {
-        sf::Vector2i pos = renderTarget_.getImpl()->getSFMLWindow().getPosition();
+        sf::Vector2i pos = renderTarget_.getThirdPartyWindow().getPosition();
         return Vector2i{pos.x, pos.y};
     }
 
     void Window::setRelativeMousePosition(const Vector2i &position) {
-        sf::Mouse::setPosition({position.x, position.y}, renderTarget_.getImpl()->getSFMLWindow());
+        sf::Mouse::setPosition(sf::Vector2i{position.x, position.y}, renderTarget_.getThirdPartyWindow());
     }
 
     Vector2i Window::getRelativeMousePosition() const {
-        sf::Vector2i position = sf::Mouse::getPosition(renderTarget_.getImpl()->getSFMLWindow());
+        sf::Vector2i position = sf::Mouse::getPosition(renderTarget_.getThirdPartyWindow());
         return {position.x, position.y};
     }
 
@@ -91,13 +92,13 @@ namespace ime {
         Vector2u boundedSize = boundSize(size);
 
         if (getSize() != boundedSize) {
-            renderTarget_.getImpl()->getSFMLWindow().setSize(sf::Vector2u{boundedSize.x, boundedSize.y});
+            renderTarget_.getThirdPartyWindow().setSize(sf::Vector2u{boundedSize.x, boundedSize.y});
             emitResize(boundedSize);
         }
     }
 
     Vector2u Window::getSize() const {
-        sf::Vector2u size = renderTarget_.getImpl()->getSFMLWindow().getSize();
+        sf::Vector2u size = renderTarget_.getThirdPartyWindow().getSize();
         return Vector2u{size.x, size.y};
     }
 
@@ -160,7 +161,7 @@ namespace ime {
     void Window::setVisible(bool visible) {
         if (isVisible_ != visible) {
             isVisible_ = visible;
-            renderTarget_.getImpl()->getSFMLWindow().setVisible(visible);
+            renderTarget_.getThirdPartyWindow().setVisible(visible);
         }
     }
 
@@ -171,7 +172,7 @@ namespace ime {
     void Window::setMouseCursorVisible(bool visible) {
         if (isCursorVisible_ != visible) {
             isCursorVisible_ = visible;
-            renderTarget_.getImpl()->getSFMLWindow().setMouseCursorVisible(visible);
+            renderTarget_.getThirdPartyWindow().setMouseCursorVisible(visible);
         }
     }
 
@@ -182,7 +183,7 @@ namespace ime {
     void Window::setMouseCursorGrabbed(bool grabbed) {
         if (isCursorGrabbed_ != grabbed) {
             isCursorGrabbed_ = grabbed;
-            renderTarget_.getImpl()->getSFMLWindow().setMouseCursorGrabbed(grabbed);
+            renderTarget_.getThirdPartyWindow().setMouseCursorGrabbed(grabbed);
         }
     }
 
@@ -197,7 +198,7 @@ namespace ime {
             throw InvalidArgument("The frame rate limit of ime::Window must be greater than 0");
 
         frameRateLimit_ = limit;
-        renderTarget_.getImpl()->getSFMLWindow().setFramerateLimit(limit);
+        renderTarget_.getThirdPartyWindow().setFramerateLimit(limit);
     }
 
     unsigned int Window::getFrameRateLimit() const {
@@ -209,7 +210,7 @@ namespace ime {
             return;
 
         isVSyncEnabled_ = vSyncEnable;
-        renderTarget_.getImpl()->getSFMLWindow().setVerticalSyncEnabled(vSyncEnable);
+        renderTarget_.getThirdPartyWindow().setVerticalSyncEnabled(vSyncEnable);
     }
 
     bool Window::isVerticalSyncEnabled() const {
@@ -239,13 +240,13 @@ namespace ime {
 
     void Window::close() {
         if (isOpen()) {
-            renderTarget_.getImpl()->getSFMLWindow().close();
+            renderTarget_.getThirdPartyWindow().close();
             emitCloseEvent();
         }
     }
 
     bool Window::isOpen() const {
-        return renderTarget_.getImpl()->isOpen();
+        return renderTarget_.isOpen();
     }
 
     void Window::suspendedEventListener(int id, bool suspend) {

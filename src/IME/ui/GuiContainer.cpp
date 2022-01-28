@@ -41,7 +41,6 @@
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include "IME/ui/widgets/TabsContainer.h"
 #include <TGUI/Backends/SFML/GuiSFML.hpp>
 #include <unordered_map>
@@ -56,7 +55,7 @@ namespace ime::ui {
         GuiContainerImpl() = default;
 
         explicit GuiContainerImpl(priv::RenderTarget &window) :
-            sfmlGui_{window.getImpl()->getSFMLWindow()}
+            sfmlGui_{window.getThirdPartyWindow()}
         {
             sfmlGui_.setDrawingUpdatesTime(false);
         }
@@ -119,7 +118,7 @@ namespace ime::ui {
         }
 
         void setTarget(priv::RenderTarget &window) {
-            sfmlGui_.setTarget(window.getImpl()->getSFMLWindow());
+            sfmlGui_.setTarget(window.getThirdPartyWindow());
             sfmlGui_.setDrawingUpdatesTime(false);
         }
 

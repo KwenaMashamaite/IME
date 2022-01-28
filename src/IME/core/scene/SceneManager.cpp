@@ -26,7 +26,6 @@
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/graphics/RenderTarget.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/utility/Helpers.h"
 
@@ -219,7 +218,7 @@ namespace ime::priv {
 
             // Reset view so that the scene can be rendered on the current camera
             const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
-            renderWindow.getImpl()->getSFMLWindow().setView(view);
+            renderWindow.getThirdPartyWindow().setView(view);
 
             if (scene->hasTilemap_) {
                 scene->tileMap_->draw(renderWindow);

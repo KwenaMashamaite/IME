@@ -28,7 +28,6 @@
 #include "IME/common/ITransformable.h"
 #include "IME/graphics/Colour.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include "IME/graphics/RenderTarget.h"
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
@@ -339,7 +338,7 @@ namespace ime {
             }
 
             void draw(priv::RenderTarget &renderTarget) const override {
-                renderTarget.getImpl()->getSFMLWindow().draw(*shape_);
+                renderTarget.getThirdPartyWindow().draw(*shape_);
             }
 
             std::shared_ptr<sf::Shape> getInternalPtr() override {

@@ -25,7 +25,6 @@
 #include "IME/graphics/Texture.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/RenderTarget.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include <SFML/Graphics/Texture.hpp>
 
 namespace ime {
@@ -118,9 +117,9 @@ namespace ime {
 
         void update(const priv::RenderTarget &renderTarget, unsigned int x, unsigned y) {
             if (x == 0 && y == 0)
-                texture_->update(renderTarget.getImpl()->getSFMLWindow());
+                texture_->update(renderTarget.getThirdPartyWindow());
             else
-                texture_->update(renderTarget.getImpl()->getSFMLWindow(), x, y);
+                texture_->update(renderTarget.getThirdPartyWindow(), x, y);
         }
 
         const sf::Texture& getSFMLTexture() const {

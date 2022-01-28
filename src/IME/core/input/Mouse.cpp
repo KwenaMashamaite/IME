@@ -25,7 +25,6 @@
 #include "IME/core/input/Mouse.h"
 #include "IME/core/event/Event.h"
 #include "IME/graphics/RenderTarget.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include <SFML/Window/Mouse.hpp>
 #include <iostream>
 

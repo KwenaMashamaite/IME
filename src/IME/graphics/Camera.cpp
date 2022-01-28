@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/graphics/Camera.h"
-#include "IME/graphics/RenderTargetImpl.h"
 #include "IME/core/object/GameObject.h"
+#include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
 
 namespace ime {
@@ -37,7 +37,7 @@ namespace ime {
          * @param size Size of the zone to display
          */
         explicit CameraImpl(priv::RenderTarget& window) :
-            window_{window.getImpl()->getSFMLWindow()},
+            window_{window.getThirdPartyWindow()},
             view{window_.getDefaultView()},
             followTarget_{nullptr},
             posChangeId_{-1},

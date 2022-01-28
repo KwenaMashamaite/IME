@@ -25,7 +25,7 @@
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/RenderTargetImpl.h"
+#include "IME/core/resources/ResourceManager.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 
@@ -142,7 +142,7 @@ namespace ime {
 
         void draw(priv::RenderTarget &renderTarget) const {
             if (isVisible_)
-                renderTarget.getImpl()->getSFMLWindow().draw(sprite_);
+                renderTarget.getThirdPartyWindow().draw(sprite_);
         }
 
         void setColour(Colour colour) {

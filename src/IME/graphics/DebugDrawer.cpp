@@ -48,7 +48,6 @@
 #include "IME/graphics/shapes/ConvexShape.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
-#include "IME/graphics/RenderTargetImpl.h"
 
 namespace ime::priv {
     namespace {
@@ -121,7 +120,7 @@ namespace ime::priv {
             sf::Vertex({utility::metresToPixels(endPoint.x), utility::metresToPixels(endPoint.y)}, utility::convertToSFMLColour(convertToOwnColour(colour))),
         };
 
-        window_.getImpl()->getSFMLWindow().draw(line, 2, sf::Lines);
+        window_.getThirdPartyWindow().draw(line, 2, sf::Lines);
     }
 
     void DebugDrawer::DrawTransform(const b2Transform &transform) {
@@ -138,7 +137,7 @@ namespace ime::priv {
         sf::Vertex p{sf::Vector2f{utility::metresToPixels(point.x), utility::metresToPixels(point.y)},
                             utility::convertToSFMLColour(convertToOwnColour(colour))};
 
-        window_.getImpl()->getSFMLWindow().draw(&p, 1, sf::Points);
+        window_.getThirdPartyWindow().draw(&p, 1, sf::Points);
     }
 
     DebugDrawer::~DebugDrawer() = default;
