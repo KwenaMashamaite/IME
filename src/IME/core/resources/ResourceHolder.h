@@ -26,7 +26,6 @@
 #define IME_RESOURCEHOLDER_H
 
 #include "IME/core/exceptions/Exceptions.h"
-#include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Texture.h"
 #include <unordered_map>
 #include <string>
@@ -38,7 +37,7 @@ namespace ime {
      * @brief Class template for a resource container
      */
     template <class T>
-    class ResourceHolder : public utility::NonCopyable {
+    class ResourceHolder {
     public:
         using Ptr = std::shared_ptr<T>; //!< Shared T pointer
 
@@ -47,6 +46,16 @@ namespace ime {
          * @param filePath Path to the resource to store
          */
         explicit ResourceHolder(const std::string &filePath);
+
+        /**
+         * @brief Copy constructor
+         */
+        ResourceHolder(const ResourceHolder<T>&) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         */
+        ResourceHolder<T>& operator=(const ResourceHolder<T>&) = delete;
 
         /**
          * @brief Change the path where resources are located on the disk

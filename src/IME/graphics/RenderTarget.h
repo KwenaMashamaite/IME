@@ -25,7 +25,6 @@
 #ifndef IME_RENDERTARGET_H
 #define IME_RENDERTARGET_H
 
-#include "IME/utility/NonCopyable.h"
 #include "IME/common/Vector2.h"
 #include "IME/core/event/Event.h"
 #include "IME/graphics/Drawable.h"
@@ -47,7 +46,7 @@ namespace ime {
          * user is not supposed to call. Both ime::RenderTarget and ime::Window
          * operate on the same third party window instance
          */
-        class RenderTarget : utility::NonCopyable {
+        class RenderTarget {
         public:
             /**
              * @brief Constructor
@@ -57,6 +56,16 @@ namespace ime {
              * instance will terminate the program
              */
             RenderTarget();
+
+            /**
+             * @brief Copy constructor
+             */
+            RenderTarget(const RenderTarget&) = delete;
+
+            /**
+             * @brief Copy assignment operator
+             */
+            RenderTarget& operator=(const RenderTarget&) = delete;
 
             /**
              * @brief Move constructor

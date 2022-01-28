@@ -40,7 +40,6 @@
 #include "IME/core/scene/GridMoverContainer.h"
 #include "IME/core/scene/CameraContainer.h"
 #include "IME/ui/GuiContainer.h"
-#include "IME/utility/NonCopyable.h"
 #include "IME/graphics/Camera.h"
 #include "IME/core/tilemap/TileMap.h"
 #include "IME/core/physics/rigid_body/PhysicsIterations.h"
