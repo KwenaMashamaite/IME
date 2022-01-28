@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/physics/grid/GridMover.h"
-#include "IME/common/ObjectContainer.h"
+#include "IME/core/object/ObjectContainer.h"
 #include "IME/core/event/Event.h"
 #include "IME/core/time/Time.h"
 

@@ -30,7 +30,7 @@
 #include "IME/core/object/GameObject.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 
 namespace ime {
 

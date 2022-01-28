@@ -29,7 +29,7 @@
 #include "IME/common/Vector2.h"
 #include "IME/common/Transform.h"
 #include "IME/common/PropertyContainer.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/core/object/ExcludeList.h"

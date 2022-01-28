@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "JointDefinition.h"
 
 class b2Joint;

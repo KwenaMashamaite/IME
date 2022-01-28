@@ -8,7 +8,7 @@ set(IME_SRC
     common/Preference.cpp
     common/PrefContainer.cpp
     common/Transform.cpp
-    common/Object.cpp
+    core/object/Object.cpp
     core/animation/Animation.cpp
     core/animation/AnimationFrame.cpp
     core/animation/Animator.cpp

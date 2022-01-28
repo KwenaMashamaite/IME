@@ -25,7 +25,7 @@
 #ifndef IME_DRAWABLECONTAINER_H
 #define IME_DRAWABLECONTAINER_H
 
-#include "IME/common/ObjectContainer.h"
+#include "IME/core/object/ObjectContainer.h"
 #include "IME/graphics/Drawable.h"
 #include "IME/core/scene/RenderLayerContainer.h"
 

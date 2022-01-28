@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/core/audio/Audio.h"
 #include "IME/core/event/EventEmitter.h"
-#include "IME/common/ObjectContainer.h"
+#include "IME/core/object/ObjectContainer.h"
 #include <string>
 
 namespace ime {

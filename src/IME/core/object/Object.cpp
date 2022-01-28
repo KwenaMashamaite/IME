@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "IME/utility/Helpers.h"
 
 namespace ime {

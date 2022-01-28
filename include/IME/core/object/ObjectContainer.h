@@ -26,7 +26,7 @@
 #define IME_OBJECTCONTAINER_H
 
 #include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include <memory>
 #include <list>
 #include <algorithm>
@@ -345,7 +345,7 @@ namespace ime {
         std::unordered_map<std::string, std::unique_ptr<ObjectContainer<T>>> groups_;
     };
 
-    #include "IME/common/ObjectContainer.inl"
+    #include "ObjectContainer.inl"
 }
 
 /**

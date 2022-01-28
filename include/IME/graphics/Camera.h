@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "IME/graphics/Colour.h"
 #include <memory>
 #include <any>

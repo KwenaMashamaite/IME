@@ -26,7 +26,7 @@
 #define IME_AUDIO_H
 
 #include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
 #include <string>

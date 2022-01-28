@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/graphics/Camera.h"
-#include "IME/common/ObjectContainer.h"
+#include "IME/core/object/ObjectContainer.h"
 
 namespace ime {
     /// @internal

@@ -26,7 +26,7 @@
 #define IME_TEXTURECONTAINER_H
 
 #include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include "IME/graphics/Texture.h"
 #include "IME/core/tilemap/Index.h"
 #include "IME/common/Vector2.h"

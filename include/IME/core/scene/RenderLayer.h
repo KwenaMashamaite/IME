@@ -26,7 +26,7 @@
 #define IME_RENDERLAYER_H
 
 #include "IME/Config.h"
-#include "IME/common/Object.h"
+#include "IME/core/object/Object.h"
 #include <memory>
 #include <map>
 
