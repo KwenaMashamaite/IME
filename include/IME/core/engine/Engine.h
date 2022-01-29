@@ -160,13 +160,14 @@ namespace ime {
 
         /**
          * @brief Set the fixed update frame rate
-         * @param fixedUpdateFps The new fixed update frame rate
+         * @param frameRate The new physics update frame rate
+         * @throws InvalidArgument if the specified frame rate is 0
          *
-         * By default the fixed update frame rate is 60 fps
+         * By default the physics update frame rate is 60 fps
          *
          * @see getPhysicsUpdateFrameRate
          */
-        void setPhysicsUpdateFrameRate(unsigned int fixedUpdateFps);
+        void setPhysicsUpdateFrameRate(unsigned int frameRate);
 
         /**
          * @brief Get the fixed update frame rate
