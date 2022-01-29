@@ -47,6 +47,7 @@ namespace ime {
          * @param gameObject The game object to be added
          * @param renderOrder The render order of the game object
          * @param renderLayer The render layer the game object belongs to
+         * @return A pointer to the game object after its added to the container
          *
          * If the render layer is unspecified or the specified layer cannot
          * be found then the game object will be added to the @a default layer.
@@ -58,6 +59,29 @@ namespace ime {
          */
         GameObject* add(GameObject::Ptr gameObject, int renderOrder = 0u,
              const std::string& renderLayer = "default");
+
+        /**
+         * @brief Add a game object to the container
+         * @param gameObject The game object to be added
+         * @param renderOrder The render order of the game object
+         * @param renderLayer The render layer the game object belongs to
+         * @return A pointer casted to type T after the or a nullptr if the object is
+         *         not convertible to T
+         *
+         * If the render layer is unspecified or the specified layer cannot
+         * be found then the game object will be added to the @a default layer.
+         * The @a default layer is created by the Scene when you instantiate
+         * it. Note that the @a default layer may be deleted from the scenes
+         * render layers, however you must make sure that the layer you specify
+         * during a call to this function already exists otherwise undefined
+         * behavior
+         */
+        template <typename T>
+        T* add(GameObject::Ptr gameObject, int renderOrder = 0u,
+               const std::string& renderLayer = "default")
+        {
+            return dynamic_cast<T*>(add(std::move(gameObject), renderOrder, renderLayer));
+        }
 
         /**
          * @brief Add a game object to a group in the container
