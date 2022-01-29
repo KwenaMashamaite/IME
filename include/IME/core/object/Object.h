@@ -39,7 +39,7 @@ namespace ime {
      */
     class IME_API Object {
     public:
-        using Ptr = std::shared_ptr<Object>; //!< Shared object pointer
+        using Ptr = std::unique_ptr<Object>; //!< Unique object pointer
 
         /**
          * @brief Default constructor
@@ -184,38 +184,6 @@ namespace ime {
         int onPropertyChange(const Callback<Property>& callback, bool oneTime = false);
 
         /**
-         * @brief Add an event listener to an action event
-         * @param event The name of the event to add an an event listener to
-         * @param callback The function to be executed when the event takes place
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The unique identification number of the event listener
-         *
-         * Unlike onPropertyChange(), this function registers event listeners
-         * to events that occur when something happens to the object, or when
-         * the object does something (action events). The name of the event or
-         * action is the name of the function:
-         *
-         * @code
-         * // Add event listeners to the object
-         * object.onEvent("attachRigidBody", [] {
-         *     std::cout << "Rigid body attached to object << std::endl;
-         * });
-         *
-         * object.onEvent("removeRigidBody", [] {
-         *     std::cout << "Rigid body removed from object << std::endl;
-         * });
-         *
-         * // Invokes event listener(s)
-         * object.attachRigidBody(body);
-         * object.removeRigidBody();
-         * @endcode
-         *
-         * @see onPropertyChange and unsubscribe
-         */
-        int onEvent(const std::string& event, const Callback<>& callback, bool oneTime = false);
-
-        /**
          * @brief Pause or resume execution of an event listener
          * @param id The event listeners unique identification number
          * @param suspend True to suspend/pause or false to unsuspend/resume
@@ -250,29 +218,18 @@ namespace ime {
          * });
          *
          * // Stop displaying the tag of the object when it changes
-         * object.unsubscribe("tag", tagChangeId);
+         * object.removeEventListener("tag", tagChangeId);
          * @endcode
-         *
-         * @see unsubscribeAll
          */
-        bool unsubscribe(const std::string& event, int id);
+        bool removeEventListener(const std::string& event, int id);
 
         /**
-         * @brief Remove all event listeners from an event
-         * @param event The name of the event to remove event listeners from
-         * @return True if all event listeners were removed or false if the
-         *         event does not exist
-         *
-         * The following example removes all the event listener of the "tag"
-         * property
-         *
-         * @code
-         * object.unsubscribeAll("tag");
-         * @endcode
-         *
-         * @see unsubscribe
+         * @brief Remove an event listener
+         * @param id The id of the event listener to be removed
+         * @return True if the event listener was removed or false if no
+         *         such handler exists
          */
-        bool unsubscribeAll(const std::string& event);
+        bool removeEventListener(int id);
 
         /**
          * @brief Add a destruction listener
@@ -288,21 +245,10 @@ namespace ime {
          * by the time the callback is invoked. In such an event, the behavior
          * is undefined
          *
-         * @see removeDestructionListener
+         * @see removeEventListener
          */
         int onDestruction(const Callback<>& callback);
         int onDestruction(const Callback<>& callback) const;
-
-        /**
-         * @brief Remove a destruction listener form the object
-         * @param id The unique id of the destruction listener to be removed
-         * @return True if the destruction listener was removed or false if
-         *         the destruction listener with the given id does not exist
-         *
-         * @see addDestructionListener
-         */
-        bool removeDestructionListener(int id);
-        bool removeDestructionListener(int id) const;
 
         /**
          * @brief Check if another object is the same instance as this object
@@ -342,10 +288,12 @@ namespace ime {
          */
         void emit(const std::string& event);
 
+        // Members
+        mutable EventEmitter eventEmitter_; //!< Event dispatcher
+
     private:
-        unsigned int id_;                   //!< The id of the object
-        std::string tag_;                   //!< The object's tag
-        mutable EventEmitter eventEmitter_; //!< Dispatches object events
+        unsigned int id_;   //!< The id of the object
+        std::string tag_;   //!< The object's tag
     };
 }
 

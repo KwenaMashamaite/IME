@@ -51,7 +51,7 @@ namespace ime {
     };
 
     /**
-     * @brief Moves a GameObject in the grid using the keyboard as a movement
+     * @brief Moves a GridObject in the grid using the keyboard as a movement
      *        trigger
      */
     class IME_API KeyboardGridMover : public GridMover {
@@ -72,7 +72,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit KeyboardGridMover(TileMap &tileMap, GameObject* target = nullptr);
+        explicit KeyboardGridMover(TileMap &tileMap, GridObject* target = nullptr);
 
         /**
          * @brief Create a KeyboardGridMover
@@ -88,7 +88,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static KeyboardGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
+        static KeyboardGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

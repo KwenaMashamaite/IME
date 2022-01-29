@@ -36,7 +36,7 @@ namespace ime {
     }
 
     /**
-     * @brief Moves a GameObject to a specific position in the TileMap
+     * @brief Moves a GridObject to a specific position in the TileMap
      */
     class IME_API TargetGridMover : public GridMover {
     public:
@@ -55,7 +55,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit TargetGridMover(TileMap &tileMap, GameObject* target = nullptr);
+        explicit TargetGridMover(TileMap &tileMap, GridObject* target = nullptr);
 
         /**
          * @brief Create a TargetGridMover
@@ -71,7 +71,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static TargetGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
+        static TargetGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

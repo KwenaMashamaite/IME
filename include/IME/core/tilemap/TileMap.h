@@ -44,7 +44,7 @@
 namespace ime {
     using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
 
-    class GameObject;
+    class GridObject;
 
     /// @internal
     namespace priv {
@@ -159,7 +159,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          */
@@ -174,7 +174,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
@@ -196,7 +196,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
@@ -217,7 +217,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
@@ -238,7 +238,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
@@ -413,7 +413,7 @@ namespace ime {
 
         /**
          * @brief Add an entity to the tilemap
-         * @param child GameObject to add to the tilemap
+         * @param child GridObject to add to the tilemap
          * @param index Index of the tile to add the entity to
          * @return True if the entity has been added or false if the index is
          *         invalid or the entity already exists in the tilemap
@@ -422,7 +422,7 @@ namespace ime {
          * as a visitor of that tile. Note that @a child will always be placed
          * at the centre point of the tile.
          */
-        bool addChild(GameObject* child, const Index& index);
+        bool addChild(GridObject* child, const Index& index);
 
         /**
          * @brief Get the child in the tilemap with a certain id
@@ -430,14 +430,14 @@ namespace ime {
          * @return The child with the specified id or a nullptr if the child
          *         with the specified id does not exist in the tilemap
          */
-        GameObject* getChildWithId(std::size_t id) const;
+        GridObject* getChildWithId(std::size_t id) const;
 
         /**
          * @brief Check if the tilemap has a certain child or not
          * @param child Child to search for in the tilemap
          * @return True if the tilemap has the child, otherwise false
          */
-        bool hasChild(const GameObject* child);
+        bool hasChild(const GridObject* child);
 
         /**
          * @brief Remove a child from a tile
@@ -446,7 +446,7 @@ namespace ime {
          * @return True if the child was removed or false if the child is not
          *         in the specified tile
          */
-        bool removeChildFromTile(const Tile& tile, const GameObject* child);
+        bool removeChildFromTile(const Tile& tile, GridObject* child);
 
         /**
          * @brief Remove an occupant of a tile
@@ -475,7 +475,7 @@ namespace ime {
          * @return True if the child was removed or false if the child does
          *         not exist in the grid
          */
-        bool removeChild(const GameObject* child);
+        bool removeChild(GridObject* child);
 
         /**
          * @brief Remove children from the grid using a condition
@@ -485,7 +485,7 @@ namespace ime {
          * All children for which @a callback returns true are removed
          * from the grid
          */
-        void removeChildrenIf(const std::function<bool(GameObject*)>& callback);
+        void removeChildrenIf(const std::function<bool(GridObject*)>& callback);
 
         /**
          * @brief Remove all the visitors of a tile
@@ -521,7 +521,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject* child, const Index& index);
+        void moveChild(GridObject* child, const Index& index);
 
         /**
          * @brief Move child to a different tile
@@ -533,7 +533,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GameObject* child, const Tile& tile);
+        void moveChild(GridObject* child, const Tile& tile);
 
         /**
          * @brief Get the tile occupied by a child of the tilemap
@@ -543,7 +543,7 @@ namespace ime {
          *
          * An invalid tile has a negative index
          */
-        const Tile& getTileOccupiedByChild(const GameObject* child) const;
+        const Tile& getTileOccupiedByChild(const GridObject* child) const;
 
         /**
          * @brief Check if tile is occupied or not
@@ -591,13 +591,13 @@ namespace ime {
          *
          * @see forEachTile(Tile&, Callback)
          */
-        GameObject* getOccupant(const Tile& tile);
+        GridObject* getOccupant(const Tile& tile);
 
         /**
          * @brief Execute a callback for each child in the tilemap
          * @param callback Function to execute
          */
-        void forEachChild(const Callback<GameObject*>& callback) const;
+        void forEachChild(const Callback<GridObject*>& callback) const;
 
         /**
          * @brief Execute a callback for each child in a tile
@@ -608,7 +608,7 @@ namespace ime {
          * child being the occupant of the tile. The callback will be ignored
          * if the specified index is invalid or the tile is not occupied
          */
-        void forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) const;
+        void forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const;
 
         /**
          * @brief Get the number of occupants in a tile
@@ -697,7 +697,7 @@ namespace ime {
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
-         * a GameObject with a RigidBody that has a Collider attached to it
+         * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
          * attached if the Scene this TileMap belongs to has a PhysicsEngine
          *
@@ -721,13 +721,13 @@ namespace ime {
          * @brief Remove a destruction listener from a game object
          * @param child The game object to remove the destruction listener from
          */
-        void unsubscribeDestructionListener(const GameObject* child);
+        void unsubscribeDestructionListener(GridObject* child);
 
         /**
          * @brief Remove destruction listeners and clear vector
          * @param vector The vector to be cleared
          */
-        void clearVector(std::vector<GameObject*> &vector);
+        void clearVector(std::vector<GridObject*> &vector);
 
     private:
         Scene& scene_;                       //!< The scene the tilemap belongs to
@@ -743,7 +743,7 @@ namespace ime {
         RenderLayerContainer& renderLayers_; //!< Render layers for this scene
         RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
 
-        std::unordered_map<Index, std::vector<GameObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
+        std::unordered_map<Index, std::vector<GridObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
         PhysicsEngine* physicsSim_;                                     //!< The physics simulation

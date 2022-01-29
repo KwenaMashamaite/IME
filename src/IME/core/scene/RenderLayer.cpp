@@ -65,15 +65,15 @@ namespace ime {
         return name_;
     }
 
-    void RenderLayer::add(const Drawable& drawable, int renderOrder) {
+    void RenderLayer::add(Drawable& drawable, int renderOrder) {
         if (has(drawable))
             return;
 
-        auto handlerId = drawable.onDestruction([this, drawableRef = std::cref(drawable)] {
+        int handlerId = drawable.onDestruction([this, drawableRef = std::ref(drawable)] {
             remove(drawableRef);
         });
 
-        drawables_.insert({renderOrder, std::pair{std::cref(drawable), handlerId}});
+        drawables_.insert({renderOrder, std::pair{std::ref(drawable), handlerId}});
     }
 
     bool RenderLayer::has(const Drawable &drawable) const {
@@ -82,14 +82,14 @@ namespace ime {
         });
     }
 
-    bool RenderLayer::remove(const Drawable &drawable) {
+    bool RenderLayer::remove(Drawable &drawable) {
         for (auto& [renderOrder, interDrawable] : drawables_) {
             if (drawable.isSameObjectAs(interDrawable.first)) {
                 auto range = drawables_.equal_range(renderOrder);
                 for (auto iter = range.first; iter != range.second; ++iter) {
                     auto& [drawableRef, destructionId] = iter->second;
                     if (drawableRef.get().isSameObjectAs(drawable)) {
-                        drawableRef.get().removeDestructionListener(destructionId);
+                        drawableRef.get().removeEventListener(destructionId);
                         drawables_.erase(iter);
                         return true;
                     }
@@ -116,7 +116,7 @@ namespace ime {
 
     void RenderLayer::removeDestructionHandlers() {
         std::for_each(drawables_.begin(), drawables_.end(), [](auto& pair) {
-            pair.second.first.get().removeDestructionListener(pair.second.second);
+            pair.second.first.get().removeEventListener(pair.second.second);
         });
     }
 

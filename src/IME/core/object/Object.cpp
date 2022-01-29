@@ -35,9 +35,9 @@ namespace ime {
     {}
 
     Object::Object(const Object& other) :
+        eventEmitter_{other.eventEmitter_},
         id_{objectIdCounter++},
-        tag_{other.tag_},
-        eventEmitter_{other.eventEmitter_}
+        tag_{other.tag_}
     {}
 
     Object &Object::operator=(const Object & other) {
@@ -70,15 +70,11 @@ namespace ime {
     }
 
     int Object::onPropertyChange(const std::string &property, const Callback<Property>& callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, property + "Change", callback, oneTime);
+        return utility::addEventListener(eventEmitter_, "Object_" + property + "Change", callback, oneTime);
     }
 
     int Object::onPropertyChange(const Callback<Property> &callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, "propertyChange", callback, oneTime);
-    }
-
-    int Object::onEvent(const std::string &event, const Callback<> &callback, bool oneTime) {
-        return utility::addEventListener(eventEmitter_, event, callback, oneTime);
+        return utility::addEventListener(eventEmitter_, "Object_propertyChange", callback, oneTime);
     }
 
     void Object::suspendedEventListener(int id, bool suspend) {
@@ -89,34 +85,26 @@ namespace ime {
         return eventEmitter_.isEventListenerSuspended(id);
     }
 
-    bool Object::unsubscribe(const std::string &event, int id) {
-        if (eventEmitter_.removeEventListener(event + "Change", id))
+    bool Object::removeEventListener(const std::string &event, int id) {
+        if ((eventEmitter_.removeEventListener("Object_" + event, id)) ||
+            (eventEmitter_.removeEventListener("Object_" + event + "Change", id)))
+        {
             return true;
+        }
         else
             return eventEmitter_.removeEventListener(event, id);
     }
 
-    bool Object::unsubscribeAll(const std::string &event) {
-        if (eventEmitter_.removeAllEventListeners(event + "Change"))
-            return true;
-        else
-            return eventEmitter_.removeAllEventListeners(event);
+    bool Object::removeEventListener(int id) {
+        return eventEmitter_.removeEventListener(id);
     }
 
     int Object::onDestruction(const Callback<>& callback) {
-        return eventEmitter_.addEventListener("destruction", callback);
+        return eventEmitter_.addEventListener("Object_destruction", callback);
     }
 
     int Object::onDestruction(const Callback<> &callback) const {
-        return eventEmitter_.addEventListener("destruction", callback);
-    }
-
-    bool Object::removeDestructionListener(int id) {
-        return eventEmitter_.removeEventListener("destruction", id);
-    }
-
-    bool Object::removeDestructionListener(int id) const {
-        return eventEmitter_.removeEventListener("destruction", id);
+        return eventEmitter_.addEventListener("Object_destruction", callback);
     }
 
     bool Object::isSameObjectAs(const Object &other) const {
@@ -124,12 +112,12 @@ namespace ime {
     }
 
     void Object::emitChange(const Property &property) {
-        eventEmitter_.emit(property.getName() + "Change", property);
-        eventEmitter_.emit("propertyChange", property);
+        eventEmitter_.emit("Object_" + property.getName() + "Change", property);
+        eventEmitter_.emit("Object_propertyChange", property);
     }
 
     void Object::emit(const std::string &event) {
-        eventEmitter_.emit(event);
+        eventEmitter_.emit("Object_" + event);
     }
 
     Object::~Object() = default;

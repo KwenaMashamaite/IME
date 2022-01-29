@@ -154,7 +154,7 @@ namespace ime {
          * therefore, it must remain alive for as long as it is used by the
          * render layer
          */
-        void add(const Drawable& drawable, int renderOrder = 0);
+        void add(Drawable& drawable, int renderOrder = 0);
 
         /**
          * @brief Check if the render layer has a given drawable or not
@@ -174,7 +174,7 @@ namespace ime {
          * When a drawable is removed from the render layer, it will no longer
          * be rendered by the scene, hence it won't appear on the game window
          */
-        bool remove(const Drawable& drawable);
+        bool remove(Drawable& drawable);
 
         /**
          * @brief Remove all drawables from the render layer
@@ -227,7 +227,7 @@ namespace ime {
         bool shouldRender_;                //!< A flag indicating whether the layer should be rendered or not
         friend class RenderLayerContainer; //!< Needs access to constructor
 
-        using DrawableRef = std::reference_wrapper<const Drawable>;
+        using DrawableRef = std::reference_wrapper<Drawable>;
         using DrawableIdPair = std::pair<DrawableRef, int>;
         std::multimap<int, DrawableIdPair> drawables_; //!< Stores a drawable along with its render order
     };

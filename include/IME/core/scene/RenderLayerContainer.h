@@ -116,8 +116,7 @@ namespace ime {
          * you should use the container classes found in the Scene class, the
          * drawable will be automatically added to the specified render layer
          */
-        void add(const Drawable& drawable, int renderOrder = 0u,
-             const std::string& renderLayer = "default");
+        void add(Drawable& drawable, int renderOrder = 0u, const std::string& renderLayer = "default");
 
         /**
          * @brief Get the name of this class

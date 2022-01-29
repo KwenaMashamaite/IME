@@ -26,30 +26,26 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    RandomGridMover::RandomGridMover(TileMap &tileMap, GameObject* target) :
+    RandomGridMover::RandomGridMover(TileMap &tileMap, GridObject* target) :
         GridMover(Type::Random, tileMap, target),
         movementStarted_{false}
     {
-        // Invoke internal event handlers first before raising event externally
-        setHandlerIntakeAsInternal(true);
-
+        // Automatically move the new target
         onPropertyChange("target", [this](const Property& property) {
-            if (auto* newTarget = property.getValue<GameObject*>(); newTarget) {
+            if (auto* newTarget = property.getValue<GridObject*>(); newTarget) {
                 if (movementStarted_)
                     generateNewDirection();
             }
         });
 
-        onAdjacentMoveEnd([this](Index) {
+        // Automatically keep the target moving
+        onMoveEnd([this](Index) {
            if (movementStarted_)
                 generateNewDirection();
         });
-
-        // Register subsequent event handlers as external
-        setHandlerIntakeAsInternal(false);
     }
 
-    RandomGridMover::Ptr RandomGridMover::create(TileMap &tileMap, GameObject *target) {
+    RandomGridMover::Ptr RandomGridMover::create(TileMap &tileMap, GridObject *target) {
         return std::make_unique<RandomGridMover>(tileMap, target);
     }
 

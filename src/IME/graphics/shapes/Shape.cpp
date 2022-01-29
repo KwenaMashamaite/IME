@@ -101,7 +101,7 @@ namespace ime {
 
             onDestruction([this] {
                 if (destructionId_ != -1 && body_) {
-                    body_->getWorld()->getScene().removeDestructionListener(destructionId_);
+                    body_->getWorld()->getScene().removeEventListener(destructionId_);
                     destructionId_ = -1;
                 }
             });
@@ -123,7 +123,7 @@ namespace ime {
                 body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
                 postStepId_ = -1;
             } else {
-                unsubscribe("propertyChange", propertyChangeId_);
+                removeEventListener("propertyChange", propertyChangeId_);
                 propertyChangeId_ = -1;
             }
 
@@ -285,6 +285,6 @@ namespace ime {
             body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
 
         if (destructionId_ != -1)
-            body_->getWorld()->getScene().removeDestructionListener(destructionId_);
+            body_->getWorld()->getScene().removeEventListener(destructionId_);
     }
 }

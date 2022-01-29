@@ -29,7 +29,7 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    TargetGridMover::TargetGridMover(TileMap &tileMap, GameObject* target) :
+    TargetGridMover::TargetGridMover(TileMap &tileMap, GridObject* target) :
         GridMover(Type::Target, tileMap, target),
         pathFinder_(std::make_unique<BFS>(tileMap.getSizeInTiles())),
         targetTileIndex_{-1, -1},
@@ -42,28 +42,25 @@ namespace ime {
     {
         IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
 
-        // Invoke internal event handlers first before raising event externally
-        setHandlerIntakeAsInternal(true);
-
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
 
-        setAdaptiveMoveEnable(false);
-
+        // Clear path when the target is manually moved to a new grid tile
         onTargetTileReset([this](Index index) {
             targetTileIndex_ = index;
             clearPath();
         });
 
+        // Generate a new path when a new target is set
         onPropertyChange("target", [this](const Property& property) {
-            if (property.getValue<GameObject*>() && movementStarted_) {
+            if (property.getValue<GridObject*>() && movementStarted_) {
                 generatePath();
                 moveTarget();
             }
         });
 
         // Automatically keep target moving until it reaches its destination
-        onAdjacentMoveEnd([this](ime::Index) {
+        onMoveEnd([this](ime::Index) {
             if (isPendingMove_)
                 isPendingMove_ = false;
             else if (isAdaptiveMoveEnabled_)
@@ -78,6 +75,7 @@ namespace ime {
             moveTarget();
         });
 
+        // Regenerate path if the target's path is blocked by a collidable tile
         onTileCollision([this](Index) {
             if (getTarget()) {
                 generatePath();
@@ -85,18 +83,16 @@ namespace ime {
             }
         });
 
-        onGameObjectCollision([this](GameObject*, GameObject* other) {
+        // Regenerate path if the target's path is blocked by an obstacle
+        onObjectCollision([this](GridObject*, GridObject* other) {
             if (other->isObstacle()) {
                 generatePath();
                 moveTarget();
             }
         });
-
-        // Register subsequent event handlers as external
-        setHandlerIntakeAsInternal(false);
     }
 
-    TargetGridMover::Ptr TargetGridMover::create(TileMap &tileMap, GameObject *target) {
+    TargetGridMover::Ptr TargetGridMover::create(TileMap &tileMap, GridObject *target) {
         return std::make_unique<TargetGridMover>(tileMap, target);
     }
 
@@ -249,18 +245,10 @@ namespace ime {
     }
 
     int TargetGridMover::onDestinationReached(Callback<Index> callback) {
-        // Make handler be invoked first before external handlers for the same event
-        setHandlerIntakeAsInternal(true);
-
-        int id = onAdjacentMoveEnd([this, callback = std::move(callback)](Index index) {
+        return onMoveEnd([this, callback = std::move(callback)](Index index) {
             if (targetTileIndex_ == index)
                 callback(index);
         });
-
-        // Register subsequent event handlers as external
-        setHandlerIntakeAsInternal(false);
-
-        return id;
     }
 
     void TargetGridMover::setPathViewEnable(bool showPath) {

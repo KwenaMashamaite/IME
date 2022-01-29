@@ -246,7 +246,7 @@ namespace ime {
         GameObject*  gameObjectB = other->getBody()->getGameObject();
 
         if (gameObjectA && gameObjectB)
-            gameObjectA->emitCollisionEvent(event, gameObjectB);
+            gameObjectA->emitRigidBodyCollisionEvent(event, gameObjectB);
 
         gameObjectA = gameObjectB = nullptr;
     }

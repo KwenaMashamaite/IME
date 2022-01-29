@@ -37,7 +37,7 @@ namespace ime {
         return layer;
     }
 
-    void RenderLayerContainer::add(const Drawable &drawable, int renderOrder,
+    void RenderLayerContainer::add(Drawable &drawable, int renderOrder,
         const std::string &renderLayer)
     {
         auto found = std::find_if(layers_.begin(), layers_.end(), [&drawable](auto& pair) {

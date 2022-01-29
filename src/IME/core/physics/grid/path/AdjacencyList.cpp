@@ -23,13 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/grid/path/AdjacencyList.h"
+#include "IME/core/object/GridObject.h"
 #include "IME/core/tilemap/TileMap.h"
 
 namespace ime {
     namespace {
         bool tileHasObstacle(const TileMap& grid, Index index) {
             bool hasObstacle = false;
-            grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GameObject* child) {
+            grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GridObject* child) {
                 if (child->isObstacle() && child->isActive()) {
                     hasObstacle = true;
                     return;

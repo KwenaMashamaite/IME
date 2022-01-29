@@ -16,6 +16,7 @@ set(IME_SRC
     core/audio/Music.cpp
     core/audio/SoundEffect.cpp
     core/object/GameObject.cpp
+    core/object/GridObject.cpp
     core/object/ExcludeList.cpp
     core/event/EventEmitter.cpp
     core/event/EventDispatcher.cpp

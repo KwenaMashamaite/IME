@@ -25,15 +25,13 @@
 #include "IME/core/physics/grid/CyclicGridMover.h"
 
 namespace ime {
-    CyclicGridMover::CyclicGridMover(TileMap &tilemap, GameObject *target) :
+    CyclicGridMover::CyclicGridMover(TileMap &tilemap, GridObject *target) :
         GridMover(Type::Cyclic, tilemap, target),
         direction_{CycleDirection::Clockwise},
         isMovementStarted_{false}
     {
-        setHandlerIntakeAsInternal(true);
-
-        ///@brief Move the target in the next possible direction
-        onAdjacentMoveEnd([this](ime::Index) {
+        // Automatically move the target in the next possible direction
+        onMoveEnd([this](ime::Index) {
             static auto swapValues = [](const Vector2i& dir) {
                 return Vector2i{dir.y, dir.x};
             };
@@ -45,18 +43,16 @@ namespace ime {
                 moveTarget(getDirection(), std::abs(currentDir.x) == 1 ? swapValues(currentDir) * -1 : swapValues(currentDir));
         });
 
-        /// Automatically move the new target if the previous target was also moving
+        // Automatically move the new target if the previous target was moving
         onPropertyChange("target", [this](const Property& property) {
-            if (property.getValue<GameObject*>() && isMovementStarted_) {
+            if (property.getValue<GridObject*>() && isMovementStarted_) {
                 isMovementStarted_ = false;
                 startMovement();
             }
         });
-
-        setHandlerIntakeAsInternal(false);
     }
 
-    CyclicGridMover::Ptr CyclicGridMover::create(TileMap &tileMap, GameObject *target) {
+    CyclicGridMover::Ptr CyclicGridMover::create(TileMap &tileMap, GridObject *target) {
         return std::make_unique<CyclicGridMover>(tileMap, target);
     }
 

@@ -26,18 +26,14 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/utility/Helpers.h"
-#include "IME/core/physics/grid/GridMover.h"
 
 namespace ime {
     GameObject::GameObject(Scene& scene) :
         scene_{scene},
         state_{-1},
-        isObstacle_{false},
         isActive_{true},
         postStepId_{-1},
-        destructionId_{-1},
-        collisionId_{0},
-        gridMover_{nullptr}
+        destructionId_{-1}
     {
         initEvents();
     }
@@ -46,16 +42,11 @@ namespace ime {
         Object(other),
         scene_{other.scene_},
         state_{other.state_},
-        isObstacle_{other.isObstacle_},
         isActive_{other.isActive_},
         transform_{other.transform_},
         sprite_{other.sprite_},
         postStepId_{-1},
-        destructionId_{-1},
-        emitter_{other.emitter_},
-        collisionGroup_{other.collisionGroup_},
-        collisionId_{other.collisionId_},
-        gridMover_{nullptr}
+        destructionId_{-1}
     {
         initEvents();
 
@@ -82,11 +73,9 @@ namespace ime {
     }
 
     GameObject &GameObject::operator=(GameObject&& rhs) noexcept {
-        // We don't want to copy event listeners of the rhs object
         if (this != &rhs) {
             Object::operator=(std::move(rhs));
             swap(rhs);
-            gridMover_ = nullptr;
         }
 
         return *this;
@@ -95,17 +84,13 @@ namespace ime {
     void GameObject::swap(GameObject &other) {
         std::swap(scene_, other.scene_);
         std::swap(state_, other.state_);
-        std::swap(isObstacle_, other.isObstacle_);
         std::swap(isActive_, other.isActive_);
         std::swap(transform_, other.transform_);
         std::swap(sprite_, other.sprite_);
         std::swap(body_, other.body_);
         std::swap(userData_, other.userData_);
         std::swap(postStepId_, other.postStepId_);
-        std::swap(emitter_, other.emitter_);
         std::swap(destructionId_, other.destructionId_);
-        std::swap(collisionGroup_, other.collisionGroup_);
-        std::swap(collisionId_, other.collisionId_);
     }
 
     GameObject::Ptr GameObject::create(Scene &scene) {
@@ -144,46 +129,6 @@ namespace ime {
         return isActive_;
     }
 
-    void GameObject::setCollisionId(int id) {
-        if (collisionId_ == id)
-            return;
-
-        collisionId_ = id;
-        emitChange(Property{"collisionId", collisionId_});
-    }
-
-    int GameObject::getCollisionId() const {
-        return collisionId_;
-    }
-
-    void GameObject::setCollisionGroup(const std::string &name) {
-        if (collisionGroup_ == name)
-            return;
-
-        collisionGroup_ = name;
-        emitChange(Property{"collisionGroup", collisionGroup_});
-    }
-
-    const std::string &GameObject::getCollisionGroup() const {
-        return collisionGroup_;
-    }
-
-    ExcludeList &GameObject::getCollisionExcludeList() {
-        return excludeList_;
-    }
-
-    const ExcludeList &GameObject::getCollisionExcludeList() const {
-        return excludeList_;
-    }
-
-    ExcludeList &GameObject::getObstacleCollisionFilter() {
-        return obstacleColFilter_;
-    }
-
-    const ExcludeList &GameObject::getObstacleCollisionFilter() const {
-        return obstacleColFilter_;
-    }
-
     PropertyContainer& GameObject::getUserData() {
         return userData_;
     }
@@ -198,18 +143,6 @@ namespace ime {
 
     std::string GameObject::getClassType() const {
         return "GameObject";
-    }
-
-    void GameObject::setAsObstacle(bool isObstacle) {
-        if (isObstacle_ == isObstacle)
-            return;
-
-        isObstacle_ = isObstacle;
-        emitChange(Property{"asObstacle", isObstacle_});
-    }
-
-    bool GameObject::isObstacle() const {
-        return isObstacle_;
     }
 
     void GameObject::attachRigidBody(RigidBody::Ptr body) {
@@ -239,23 +172,15 @@ namespace ime {
         }
     }
 
-    int GameObject::onCollision(const CollisionCallback& callback, bool oneTime) {
-        return utility::addEventListener(emitter_, "collision", callback, oneTime);
-    }
-
-    bool GameObject::removeCollisionListener(int id) {
-        return emitter_.removeEventListener("collision", id);
-    }
-
-    void GameObject::onCollisionStart(const CollisionCallback& callback) {
+    void GameObject::onRigidBodyCollisionStart(const CollisionCallback& callback) {
         onContactBegin_ = callback;
     }
 
-    void GameObject::onCollisionEnd(const CollisionCallback& callback) {
+    void GameObject::onRigidBodyCollisionEnd(const CollisionCallback& callback) {
         onContactEnd_ = callback;
     }
 
-    void GameObject::onCollisionStay(const CollisionCallback &callback) {
+    void GameObject::onRigidBodyCollisionStay(const CollisionCallback &callback) {
         onContactStay_ = callback;
     }
 
@@ -291,19 +216,7 @@ namespace ime {
         return sprite_;
     }
 
-    GridMover *GameObject::getGridMover() {
-        return gridMover_;
-    }
-
-    const GridMover *GameObject::getGridMover() const {
-        return gridMover_;
-    }
-
-    void GameObject::setGridMover(GridMover *gridMover) {
-        gridMover_ = gridMover;
-    }
-
-    void GameObject::emitCollisionEvent(const std::string &event, GameObject* other) {
+    void GameObject::emitRigidBodyCollisionEvent(const std::string &event, GameObject* other) {
         IME_ASSERT(other, "Internal Error, cannot collide with nullptr")
 
         // Prevent self collisions
@@ -316,16 +229,6 @@ namespace ime {
             onContactEnd_(this, other);
         else if (event == "contactStay" && onContactStay_)
             onContactStay_(this, other);
-    }
-
-    void GameObject::emitCollisionEvent(GameObject *other) {
-        IME_ASSERT(other, "Internal Error, cannot collide with nullptr")
-
-        // Prevent self collisions
-        if (this == other)
-            return;
-
-        emitter_.emit("collision", this, other);
     }
 
     void GameObject::initEvents() {
@@ -369,7 +272,7 @@ namespace ime {
             scene_.get().unsubscribe_("postStep", postStepId_);
 
         if (destructionId_ != -1)
-            scene_.get().removeDestructionListener(destructionId_);
+            scene_.get().removeEventListener(destructionId_);
 
         if (body_)
             body_->setGameObject(nullptr);

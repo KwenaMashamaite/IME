@@ -27,7 +27,7 @@
 
 #include "IME/Config.h"
 #include "IME/core/tilemap/TileMap.h"
-#include "IME/core/object/GameObject.h"
+#include "IME/core/object/GridObject.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
 #include "IME/core/object/Object.h"
@@ -56,7 +56,6 @@ namespace ime {
     class IME_API GridMover : public Object {
     public:
         using Ptr = std::unique_ptr<GridMover>; //!< Unique grid mover pointer
-        using CollisionCallback = Callback<GameObject*, GameObject*>; //!< Called when collision takes place
 
         /**
          * @brief Types of grid movers
@@ -95,7 +94,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit GridMover(TileMap& tilemap, GameObject* gameObject = nullptr);
+        explicit GridMover(TileMap& tilemap, GridObject* gameObject = nullptr);
 
         /**
          * @brief Copy constructor
@@ -121,7 +120,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static GridMover::Ptr create(TileMap& tilemap, GameObject* gameObject = nullptr);
+        static GridMover::Ptr create(TileMap& tilemap, GridObject* gameObject = nullptr);
 
         /**
          * @brief Get the name of this class
@@ -188,11 +187,11 @@ namespace ime {
          *         by a game object
          *
          * This function will return true if the target is blocked by a
-         * collidable tile or an obstacle (see ime::GameObject::setAsObstacle),
+         * collidable tile or an obstacle (see ime::GridObject::setObstacle),
          * or if a move in the given direction will place it outside the bounds
          * of the grid
          */
-        std::pair<bool, GameObject*> isBlockedInDirection(const Direction& direction) const;
+        std::pair<bool, GridObject*> isBlockedInDirection(const Direction& direction) const;
 
         /**
          * @brief Get the current direction of the game object
@@ -216,14 +215,14 @@ namespace ime {
          * in the TileMap and must not have a RigidBody attached to it,
          * otherwise undefined behavior
          */
-        void setTarget(GameObject* target);
+        void setTarget(GridObject* target);
 
         /**
          * @brief Get access to the controlled entity
          * @return The controlled entity, or a nullptr if there is no entity to
          *         control
          */
-        GameObject* getTarget() const;
+        GridObject* getTarget() const;
 
         /**
          * @brief Set the speed of the game object
@@ -375,113 +374,6 @@ namespace ime {
         void teleportTargetToDestination();
 
         /**
-         * @brief Add an event listener to a move begin event
-         * @param callback The function to be executed when the game object
-         *                 starts moving
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The event listeners unique identification number
-         *
-         * This event is emitted when the game object starts moving from its
-         * current tile to one of its adjacent tile. The callback is passed
-         * the index of the tile that the game object is currently moving to
-         *
-         * @note When controlled by a grid mover, the game object will always
-         * move one tile at a time, regardless of how fast it's moving
-         *
-         * @see onAdjacentMoveEnd
-         */
-        int onAdjacentMoveBegin(const Callback<Index>& callback, bool oneTime = false);
-
-        /**
-         * @brief Add an event listener to an adjacent tile reached event
-         * @param callback Function to execute when the target reaches its
-         *        target tile
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target moves from its current tile
-         * to any of its adjacent tiles.
-         *
-         * @note When controlled by a grid mover, the target will always move
-         * one tile at a time, regardless of how fast the target is moving
-         *
-         * The callback is passed the index of the tile the target moved to
-         *
-         * @see onAdjacentMoveBegin
-         */
-        int onAdjacentMoveEnd(const Callback<Index>& callback, bool oneTime = false);
-
-        /**
-         * @brief Add an event listener to a tilemap border collision event
-         * @param callback Function to execute when the collision takes place
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target tries to go beyond the bounds
-         * of the grid. By default the event is handled internally before it's
-         * emitted to the outside. The internal handler prevents the target
-         * from leaving the grid. That is, the target will occupy the same tile
-         * it occupied before the collision. This behaviour is not removable,
-         * however, it may be overridden since the internal handler is called
-         * first before alerting external handlers
-         *
-         * @see unsubscribe
-         */
-        int onGridBorderCollision(const Callback<>& callback, bool oneTime = false);
-
-        /**
-         * @brief Add an event listener to a tile collision event
-         * @param callback Function to execute when the collision takes place
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The event listeners identification number
-         *
-         * This event is emitted when the target collides with a solid tile
-         * in the grid (Solid tiles are always collidable). By default, the
-         * event is handled internally before its emitted to the outside. The
-         * internal handler prevents the target from occupying the solid tile
-         * by moving it back to its previous tile after the collision
-         *
-         * The callback is passed the index of the tile the target collided with
-         *
-         * @see unsubscribe
-         */
-        int onTileCollision(const Callback<Index>& callback, bool oneTime = false);
-
-        /**
-         * @brief Add an event listener to a game object collision
-         * @param callback The function to be executed when the collision take place
-         * @param oneTime True to execute the callback one-time or false to
-         *                execute it every time the event is triggered
-         * @return The event listeners unique identifier
-         *
-         * The callback is invoked when the target collides with another game
-         * object. On invocation, the callback is passed the target and
-         * the game object it collided with respectively. In addition, note
-         * that the callback is invoked only if the target is active and its
-         * collision group and collision id are configured such that it can
-         * collide with other game objects (see ime::GameObject::setActive,
-         * ime::GameObject::setCollisionGroup and ime::GameObject::setCollisionId)
-         *
-         * @note A grid mover registers a collision between two game objects
-         * only when they occupy the same tile. That is, a collision will not
-         * be raised when the two game objects start overlapping. For contact
-         * based collision detection use ime::RigidBody physics. In addition,
-         * the callback is called only when the target collides with another
-         * game object and not when it is collided with. For that you can use
-         * the instigators grid mover callback or ime::GameObject::onCollision
-         *
-         * When a collision takes place, the invocation order is as follows:
-         * ime::GridMover::onGameObjectCollision -> ime::GameObject::onCollision
-         *
-         * @see unsubscribe
-         */
-        int onGameObjectCollision(const CollisionCallback& callback, bool oneTime = false);
-
-        /**
          * @brief Add an event listener to a target direction change
          * @param callback The function to be executed when target direction changes
          * @param oneTime True to execute the callback one-time or false to
@@ -493,33 +385,6 @@ namespace ime {
          * @see requestMove
          */
         int onDirectionChange(const Callback<Direction>& callback, bool oneTime = false);
-
-        /**
-         * @brief Remove an event listener from the grid movers event list
-         * @param handlerId The unique identification number of the listener
-         * @return True if the event listener was removed or false if no such
-         *         listener exist in the grid movers event list
-         *
-         * @see removeAllEventListeners
-         */
-        bool unsubscribe(int handlerId);
-
-        /**
-         * @brief Remove all registered event listeners
-         *
-         * @see unsubscribe
-         */
-        void removeAllEventListeners();
-
-        /**
-         * @brief Copy external event listeners of another grid mover
-         * @param other The grid mover whose external event listeners should be
-         *              copied
-         *
-         * This function is useful if you want to switch between different
-         * types of grid movers without losing event responses
-         */
-        void copyExternEventListeners(const GridMover& other);
 
         /**
          * @brief Reset the target tile to be the same as the entity tile
@@ -642,7 +507,7 @@ namespace ime {
          * @param tile The tile to get an obstacle from
          * @return Pointer to the obstacle object or a nullptr if none exists
          */
-        GameObject* getObstacleInTile(const Tile& tile) const;
+        GridObject* getObstacleInTile(const Tile& tile) const;
 
         /**
          * @brief Perfectly align target with the target destination
@@ -662,23 +527,14 @@ namespace ime {
          * @param other The game object to be checked
          * @return True if the two can collide, otherwise false
          */
-        bool canCollide(GameObject* other) const;
-
-        /**
-         * @brief Remove an event handler
-         * @param name The name of the event to remove the handler from
-         * @param id The id of the event handler
-         * @return True if the handler was removed or false if the handler
-         *         does not exist
-         */
-        bool removeEventListener(const std::string& name, int id);
+        bool canCollide(GridObject* other) const;
 
     protected:
         /**
          * @brief Create a grid mover
          * @param type The type of the grid mover
          * @param tileMap Grid to move a target entity in
-         * @param target GameObject to be moved in the grid
+         * @param target GridObject to be moved in the grid
          *
          * Note that this constructor is intended to be used by derived
          * classes such that the user cannot change the type of the grid
@@ -690,26 +546,93 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must be placed
          * in the grid prior to instantiation of this class
          */
-        GridMover(Type type, TileMap &tileMap, GameObject* target);
+        GridMover(Type type, TileMap &tileMap, GridObject* target);
 
         /**
-         * @internal
-         * @brief Set whether or not event handlers should be treated as internal
-         * @param internal True to treat handler as internal, otherwise false
+         * @brief Add an event listener to a move begin event
+         * @param callback The function to be executed when the game object
+         *                 starts moving
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identification number
          *
-         * When @a internal is set to @a true, any event handler registered
-         * to the grid mover will be treated as an internal handler. Internal
-         * handlers are invoked before external handlers for the same event
+         * This event is emitted when the game object starts moving from its
+         * current tile to one of its adjacent tile. The callback is passed
+         * the index of the tile that the game object is currently moving to
          *
-         * By default, all event handlers are treated as external and will
-         * be invoked in no specific order
+         * @note When controlled by a grid mover, the game object will always
+         * move one tile at a time, regardless of how fast it's moving
+         *
+         * @see onAdjacentMoveEnd
          */
-        void setHandlerIntakeAsInternal(bool internal);
+        int onMoveBegin(const Callback<Index>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to an adjacent tile reached event
+         * @param callback Function to execute when the target reaches its
+         *        target tile
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
+         *
+         * This event is emitted when the target moves from its current tile
+         * to any of its adjacent tiles.
+         *
+         * @note When controlled by a grid mover, the target will always move
+         * one tile at a time, regardless of how fast the target is moving
+         *
+         * The callback is passed the index of the tile the target moved to
+         *
+         * @see onAdjacentMoveBegin
+         */
+        int onMoveEnd(const Callback<Index>& callback, bool oneTime = false);
+
+        int onMoveFreeze(const Callback<bool>& callback, bool oneTime = false);
+
+        int onObjectCollision(const Callback<GridObject*, GridObject*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to a tilemap border collision event
+         * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
+         *
+         * This event is emitted when the target tries to go beyond the bounds
+         * of the grid. By default the event is handled internally before it's
+         * emitted to the outside. The internal handler prevents the target
+         * from leaving the grid. That is, the target will occupy the same tile
+         * it occupied before the collision. This behaviour is not removable,
+         * however, it may be overridden since the internal handler is called
+         * first before alerting external handlers
+         *
+         * @see unsubscribe
+         */
+        int onBorderCollision(const Callback<>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to a tile collision event
+         * @param callback Function to execute when the collision takes place
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
+         *
+         * This event is emitted when the target collides with a solid tile
+         * in the grid (Solid tiles are always collidable). By default, the
+         * event is handled internally before its emitted to the outside. The
+         * internal handler prevents the target from occupying the solid tile
+         * by moving it back to its previous tile after the collision
+         *
+         * The callback is passed the index of the tile the target collided with
+         *
+         * @see unsubscribe
+         */
+        int onTileCollision(const Callback<Index>& callback, bool oneTime = false);
 
     private:
         Type type_;                    //!< The type of the grid mover
         TileMap& tileMap_;             //!< Grid to move entity in
-        GameObject* target_;           //!< Target to be moved in the grid
+        GridObject* target_;           //!< Target to be moved in the grid
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
         float speedMultiplier_;        //!< A normal speed multiplier
         Direction targetDirection_;    //!< The direction in which the game object wishes to go in
@@ -717,8 +640,6 @@ namespace ime {
         Direction prevDirection_;      //!< The previous direction of the game object
         const Tile* targetTile_;       //!< The grid tile the target wishes to reach
         const Tile* prevTile_;         //!< Tile target was in before moving to adjacent tile
-        EventEmitter externalEmitter_; //!< External event publisher
-        EventEmitter internalEmitter_; //!< Internal event publisher
         bool isMoving_;                //!< A flag indicating whether or not the game object is moving
         bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object

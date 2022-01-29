@@ -26,17 +26,14 @@
 #include "IME/core/event/Event.h"
 
 namespace ime {
-    KeyboardGridMover::KeyboardGridMover(TileMap &tileMap, GameObject* target) :
+    KeyboardGridMover::KeyboardGridMover(TileMap &tileMap, GridObject* target) :
         GridMover(Type::KeyboardControlled, tileMap, target),
         trigger_(MovementTrigger::None),
         onTriggerHandlerId_{-1, -1},
         triggerKeys_{Key::A, Key::D, Key::W, Key::S}
     {
-
-        // Invoke internal event handlers first before raising event externally
-        setHandlerIntakeAsInternal(true);
-
-        onAdjacentMoveEnd([this](Index) {
+        // Execute pending direction switches
+        onMoveEnd([this](Index) {
             if (auto& [changeDir, newDir] = newDir_; changeDir) { //Direction switch was requested while target was moving
                 changeDir = false;
                 requestMove(newDir);
@@ -45,12 +42,9 @@ namespace ime {
         });
 
         setMovementTrigger(MovementTrigger::OnKeyDown);
-
-        // Register subsequent event handlers as external
-        setHandlerIntakeAsInternal(false);
     }
 
-    KeyboardGridMover::Ptr KeyboardGridMover::create(TileMap &tileMap, GameObject *target) {
+    KeyboardGridMover::Ptr KeyboardGridMover::create(TileMap &tileMap, GridObject *target) {
         return std::make_unique<KeyboardGridMover>(tileMap, target);
     }
 

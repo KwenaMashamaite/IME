@@ -32,7 +32,7 @@ namespace ime {
     /**
      * @brief Moves a game object in the grid along a cyclic path
      *
-     * When there is a an obstacle game object (see ime::GameObject::setAsObstacle)
+     * When there is a an obstacle game object (see ime::GridObject::setObstacle)
      * or a collidable tile in the targets direction of cycle, this grid mover
      * basically behaves like a wall follower (when the cycle direction is set
      * to clockwise, it behaves like a right wall follower and when the cycle
@@ -70,7 +70,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit CyclicGridMover(TileMap& tilemap, GameObject* target = nullptr);
+        explicit CyclicGridMover(TileMap& tilemap, GridObject* target = nullptr);
 
         /**
          * @brief Create a CyclicGridMover
@@ -86,7 +86,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static CyclicGridMover::Ptr create(TileMap &tileMap, GameObject* target = nullptr);
+        static CyclicGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

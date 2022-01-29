@@ -194,7 +194,7 @@ namespace ime {
 
         void stopFollow() {
             if (followTarget_) {
-                followTarget_->unsubscribe("position", posChangeId_);
+                followTarget_->removeEventListener("position", posChangeId_);
                 followTarget_ = nullptr;
             }
         }

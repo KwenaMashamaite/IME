@@ -27,7 +27,7 @@
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
-#include "IME/core/object/GameObject.h"
+#include "IME/core/object/GridObject.h"
 #include "IME/graphics/RenderTarget.h"
 
 namespace ime {
@@ -195,7 +195,7 @@ namespace ime {
 
     void TileMap::createObjectList() {
         forEachTile([this](const Tile& tile) {
-            children_.emplace(tile.getIndex(), std::vector<GameObject*>{});
+            children_.emplace(tile.getIndex(), std::vector<GridObject*>{});
         });
     }
 
@@ -254,9 +254,10 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::addChild(GameObject* child, const Index& index) {
+    bool TileMap::addChild(GridObject* child, const Index& index) {
         IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && !hasChild(child)) {
+            child->setGrid(this);
             child->getTransform().setPosition(getTile(index).getWorldCentre());
 
             int destructionId = child->onDestruction([this, id = child->getObjectId()]{
@@ -272,7 +273,7 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::hasChild(const GameObject* child) {
+    bool TileMap::hasChild(const GridObject* child) {
         if (!child)
             return false;
 
@@ -285,7 +286,7 @@ namespace ime {
         return false;
     }
 
-    GameObject* TileMap::getChildWithId(std::size_t id) const {
+    GridObject* TileMap::getChildWithId(std::size_t id) const {
         for (const auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id)
@@ -316,26 +317,26 @@ namespace ime {
         return false;
     }
 
-    GameObject* TileMap::getOccupant(const Tile& tile) {
+    GridObject* TileMap::getOccupant(const Tile& tile) {
         if (isTileOccupied(tile))
             return children_[tile.getIndex()].front();
 
         return nullptr;
     }
 
-    void TileMap::forEachChild(const Callback<GameObject*>& callback) const {
+    void TileMap::forEachChild(const Callback<GridObject*>& callback) const {
         std::for_each(children_.begin(), children_.end(), [&callback](auto& childList) {
             std::for_each(childList.second.begin(), childList.second.end(),
-                [&callback] (GameObject* child) {
+                [&callback] (GridObject* child) {
                     callback(child);
             });
         });
     }
 
-    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GameObject*>& callback) const {
+    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const {
         if (isTileOccupied(tile)) {
             std::for_each(children_.at(tile.getIndex()).begin(), children_.at(tile.getIndex()).end(),
-                [&callback](GameObject* child) {
+                [&callback](GridObject* child) {
                     callback(child)
             ;});
         }
@@ -352,13 +353,14 @@ namespace ime {
 
     }
 
-    bool TileMap::removeChildFromTile(const Tile& tile, const GameObject* child) {
+    bool TileMap::removeChildFromTile(const Tile& tile, GridObject* child) {
         if (isTileOccupied(tile)) {
             if (!tileHasVisitors(tile) && getOccupant(tile) == child)
                 return removeOccupant(tile);
 
             for (auto i = 0u; i < children_[tile.getIndex()].size(); ++i) {
                 if (children_[tile.getIndex()][i] == child) {
+                    children_[tile.getIndex()][i]->setGrid(nullptr);
                     unsubscribeDestructionListener(child);
                     children_[tile.getIndex()].erase(children_[tile.getIndex()].begin() + i);
                     return true;
@@ -371,6 +373,7 @@ namespace ime {
 
     bool TileMap::removeOccupant(const Tile &tile) {
         if (isTileOccupied(tile)) {
+            children_[tile.getIndex()].front()->setGrid(nullptr);
             unsubscribeDestructionListener(*(children_[tile.getIndex()].begin()));
             children_[tile.getIndex()].erase(children_[tile.getIndex()].begin());
             return true;
@@ -383,6 +386,7 @@ namespace ime {
         for (auto& childList : children_) {
             for (auto i = 0u; i < childList.second.size(); ++i)
                 if (childList.second[i]->getObjectId() == id) {
+                    childList.second[i]->setGrid(nullptr);
                     unsubscribeDestructionListener(*(childList.second.begin() + i));
                     childList.second.erase(childList.second.begin() + i);
                     return true;
@@ -392,18 +396,19 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::removeChild(const GameObject* child) {
+    bool TileMap::removeChild(GridObject* child) {
         if (!child)
             return false;
 
         return removeChildWithId(child->getObjectId());
     }
 
-    void TileMap::removeChildrenIf(const std::function<bool(GameObject*)>& callback) {
+    void TileMap::removeChildrenIf(const std::function<bool(GridObject*)>& callback) {
         for (auto& childList : children_) {
             childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(),
-                [this, &callback](GameObject* gameObject) {
+                [this, &callback](GridObject* gameObject) {
                     if (callback(gameObject)) {
+                        gameObject->setGrid(nullptr);
                         unsubscribeDestructionListener(gameObject);
                         return true;
                     } else
@@ -416,9 +421,11 @@ namespace ime {
         if (!tileHasVisitors(tile))
             return false;
         else {
-            auto occupant = children_[tile.getIndex()].front();
+            GridObject* occupant = children_[tile.getIndex()].front();
             clearVector(children_[tile.getIndex()]);
+            occupant->setGrid(this);
             children_[tile.getIndex()].push_back(occupant);
+
             return true;
         }
     }
@@ -426,20 +433,21 @@ namespace ime {
     bool TileMap::removeAllChildren(const Tile &tile) {
         if (isTileOccupied(tile)) {
             clearVector(children_[tile.getIndex()]);
+
             return true;
         }
 
         return false;
     }
 
-    void TileMap::moveChild(GameObject* child, const Index& index) {
+    void TileMap::moveChild(GridObject* child, const Index& index) {
         if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
             removeChildFromTile(getTileOccupiedByChild(child), child);
             addChild(child, index);
         }
     }
 
-    void TileMap::moveChild(GameObject* child, const Tile &tile) {
+    void TileMap::moveChild(GridObject* child, const Tile &tile) {
         moveChild(child, tile.getIndex());
     }
 
@@ -515,7 +523,7 @@ namespace ime {
         return {numOfColms_, numOfRows_};
     }
 
-    const Tile& TileMap::getTileOccupiedByChild(const GameObject* child) const {
+    const Tile& TileMap::getTileOccupiedByChild(const GridObject* child) const {
         return getTile(child->getTransform().getPosition());
     }
 
@@ -544,13 +552,14 @@ namespace ime {
             backgroundTile_.setFillColour(property.getValue<Colour>());
     }
 
-    void TileMap::unsubscribeDestructionListener(const GameObject *child) {
-        child->removeDestructionListener(destructionIds_[child->getObjectId()]);
+    void TileMap::unsubscribeDestructionListener(GridObject *child) {
+        child->removeEventListener(destructionIds_[child->getObjectId()]);
         destructionIds_.erase(child->getObjectId());
     }
 
-    void TileMap::clearVector(std::vector<GameObject *> &vector) {
-        vector.erase(std::remove_if(vector.begin(), vector.end(), [this](GameObject* gameObject) {
+    void TileMap::clearVector(std::vector<GridObject *> &vector) {
+        vector.erase(std::remove_if(vector.begin(), vector.end(), [this](GridObject* gameObject) {
+            gameObject->setGrid(nullptr);
             unsubscribeDestructionListener(gameObject);
             return true;
         }), vector.end());
