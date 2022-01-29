@@ -164,17 +164,17 @@ namespace ime {
          *
          * By default the fixed update frame rate is 60 fps
          *
-         * @see getFixedUpdateFrameRate
+         * @see getPhysicsUpdateFrameRate
          */
-        void setFixedUpdateFrameRate(unsigned int fixedUpdateFps);
+        void setPhysicsUpdateFrameRate(unsigned int fixedUpdateFps);
 
         /**
          * @brief Get the fixed update frame rate
          * @return The fixed update frame rate
          *
-         * @see setFixedUpdateFrameRate
+         * @see setPhysicsUpdateFrameRate
          */
-        unsigned int getFixedUpdateFrameRate() const;
+        unsigned int getPhysicsUpdateFrameRate() const;
 
          /**
           * @brief Get the engines settings

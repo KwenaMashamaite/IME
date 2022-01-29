@@ -407,11 +407,11 @@ namespace ime {
         return isPaused_;
     }
 
-    void Engine::setFixedUpdateFrameRate(unsigned int fixedUpdateFps) {
+    void Engine::setPhysicsUpdateFrameRate(unsigned int fixedUpdateFps) {
         fixedUpdateFPS_ = fixedUpdateFps;
     }
 
-    unsigned int Engine::getFixedUpdateFrameRate() const {
+    unsigned int Engine::getPhysicsUpdateFrameRate() const {
         return fixedUpdateFPS_;
     }
 
