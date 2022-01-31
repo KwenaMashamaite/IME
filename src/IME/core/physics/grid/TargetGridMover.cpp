@@ -285,7 +285,5 @@ namespace ime {
         }
     }
 
-    TargetGridMover::~TargetGridMover() {
-        emit("destruction");
-    }
+    TargetGridMover::~TargetGridMover() = default;
 }

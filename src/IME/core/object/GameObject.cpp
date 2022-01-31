@@ -153,8 +153,6 @@ namespace ime {
         resetSpriteOrigin();
         body_->setPosition(transform_.getPosition());
         body_->setRotation(transform_.getRotation());
-
-        emit("attachRigidBody");
     }
 
     RigidBody* GameObject::getRigidBody() {
@@ -168,7 +166,6 @@ namespace ime {
     void GameObject::removeRigidBody() {
         if (body_) {
             body_.reset();
-            emit("removeRigidBody");
         }
     }
 
@@ -276,7 +273,5 @@ namespace ime {
 
         if (body_)
             body_->setGameObject(nullptr);
-
-        emit("destruction");
     }
 }

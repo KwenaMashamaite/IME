@@ -88,7 +88,6 @@ namespace ime {
         if (!world_->isLocked()) {
             collider->setBody(this);
             auto insertionPair = colliders_.insert({collider->getObjectId(), std::move(collider)}).first;
-            emit("attachCollider");
             return insertionPair->second.get();
         } else {
             IME_PRINT_WARNING("Operation ignored: AttachCollider() called inside a world callback")
@@ -110,7 +109,6 @@ namespace ime {
         if (!world_->isLocked()) {
             if (colliders_.find(static_cast<int>(id)) != colliders_.end()) {
                 colliders_.erase(static_cast<int>(id));
-                emit("removeCollider");
             }
         } else {
             IME_PRINT_WARNING("Operation ignored: removeColliderWithId() called inside a world callback")
@@ -411,7 +409,6 @@ namespace ime {
     }
 
     RigidBody::~RigidBody() {
-        emit("destruction");
         gameObject_ = nullptr;
     }
 }

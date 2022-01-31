@@ -59,15 +59,12 @@ namespace ime {
         if (!movementStarted_) {
             movementStarted_ = true;
             generateNewDirection();
-            emit("startMovement");
         }
     }
 
     void RandomGridMover::stopMovement() {
-        if (movementStarted_) {
+        if (movementStarted_)
             movementStarted_ = false;
-            emit("stopMovement");
-        }
     }
 
     void RandomGridMover::generateNewDirection() {
@@ -128,7 +125,5 @@ namespace ime {
         } while(true);
     }
 
-    RandomGridMover::~RandomGridMover() {
-        emit("destruction");
-    }
+    RandomGridMover::~RandomGridMover() = default;
 }

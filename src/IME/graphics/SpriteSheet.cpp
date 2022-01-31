@@ -204,7 +204,5 @@ namespace ime {
         return false;
     }
 
-    SpriteSheet::~SpriteSheet() {
-        emit("destruction");
-    }
+    SpriteSheet::~SpriteSheet() = default;
 }

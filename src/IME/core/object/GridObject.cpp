@@ -227,7 +227,5 @@ namespace ime {
         }
     }
 
-    GridObject::~GridObject() {
-        emit("destruction");
-    }
+    GridObject::~GridObject() = default;
 }

@@ -77,14 +77,12 @@ namespace ime {
         if (!isMovementStarted_) {
             isMovementStarted_ = true;
             requestMove(direction_ == CycleDirection::Clockwise ? ime::Right : ime::Left);
-            emit("startMovement");
         }
     }
 
     void CyclicGridMover::stopMovement() {
         if (isMovementStarted_) {
             isMovementStarted_ = false;
-            emit("stopMovement");
         }
     }
 

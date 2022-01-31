@@ -92,7 +92,5 @@ namespace ime {
         return pimpl_->circle_->getRadius();
     }
 
-    CircleShape::~CircleShape() {
-        emit("destruction");
-    }
+    CircleShape::~CircleShape() = default;
 }

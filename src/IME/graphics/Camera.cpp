@@ -388,7 +388,6 @@ namespace ime {
             return;
 
         pimpl_->startFollow(gameObject, offset);
-        emit("startFollow");
     }
 
     void Camera::stopFollow() {
@@ -396,7 +395,6 @@ namespace ime {
             return;
 
         pimpl_->stopFollow();
-        emit("stopFollow");
     }
 
     bool Camera::isFollowingTarget() const {
@@ -429,6 +427,5 @@ namespace ime {
 
     Camera::~Camera() {
         stopFollow();
-        emit("destruction");
     }
 }

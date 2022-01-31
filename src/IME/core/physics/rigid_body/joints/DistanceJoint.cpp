@@ -190,7 +190,5 @@ namespace ime {
         return joint_.get();
     }
 
-    DistanceJoint::~DistanceJoint() {
-        emit("destruction");
-    }
+    DistanceJoint::~DistanceJoint() = default;
 }

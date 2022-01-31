@@ -93,20 +93,17 @@ namespace ime::audio {
 
         void play() {
             soundEffect_.play();
-            parent_->emit("play");
         }
 
         void pause() {
             if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
                 soundEffect_.pause();
-                parent_->emit("pause");
             }
         }
 
         void stop() {
             if (soundEffect_.getStatus() == sf::Sound::Status::Playing) {
                 soundEffect_.stop();
-                parent_->emit("stop");
             }
         }
 

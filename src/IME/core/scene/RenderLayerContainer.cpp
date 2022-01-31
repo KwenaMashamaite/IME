@@ -240,7 +240,5 @@ namespace ime {
         });
     }
 
-    RenderLayerContainer::~RenderLayerContainer() {
-        emit("destruction");
-    }
+    RenderLayerContainer::~RenderLayerContainer() = default;
 }

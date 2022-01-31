@@ -83,7 +83,6 @@ namespace ime {
     }
 
     AABB::~AABB() {
-        emit("destruction");
         delete aabb_;
         aabb_ = nullptr;
     }

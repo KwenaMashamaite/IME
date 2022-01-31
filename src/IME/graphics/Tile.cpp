@@ -227,7 +227,5 @@ namespace ime {
         return tile_.getFillColour();
     }
 
-    Tile::~Tile() {
-        emit("destruction");
-    }
+    Tile::~Tile() = default;
 }

@@ -92,7 +92,5 @@ namespace ime {
         return Vector2f{size.x, size.y};
     }
 
-    RectangleShape::~RectangleShape() {
-        emit("destruction");
-    }
+    RectangleShape::~RectangleShape() = default;
 }

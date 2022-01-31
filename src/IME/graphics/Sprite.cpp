@@ -458,7 +458,5 @@ namespace ime {
         pImpl_->updateAnimation(deltaTime);
     }
 
-    Sprite::~Sprite() {
-        emit("destruction");
-    }
+    Sprite::~Sprite() = default;
 }

@@ -248,7 +248,6 @@ namespace ime {
          * @see removeEventListener
          */
         int onDestruction(const Callback<>& callback);
-        int onDestruction(const Callback<>& callback) const;
 
         /**
          * @brief Check if another object is the same instance as this object
@@ -275,21 +274,8 @@ namespace ime {
          */
         void emitChange(const Property& property);
 
-        /**
-         * @brief Dispatch an action event
-         * @param event The name of the event to be dispatched
-         *
-         * This function will invoke all event listeners of the specified
-         * event. The function should be used for events that represent an
-         * action, rather than those that represent a property change
-         * (Use emitChange() for that)
-         *
-         * @see emitChange
-         */
-        void emit(const std::string& event);
-
         // Members
-        mutable EventEmitter eventEmitter_; //!< Event dispatcher
+        EventEmitter eventEmitter_; //!< Event dispatcher
 
     private:
         unsigned int id_;   //!< The id of the object

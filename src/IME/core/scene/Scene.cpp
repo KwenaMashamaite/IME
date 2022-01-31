@@ -347,7 +347,5 @@ namespace ime {
         hasTilemap_ = true;
     }
 
-    Scene::~Scene() {
-        emit("destruction");
-    }
+    Scene::~Scene() = default;
 }

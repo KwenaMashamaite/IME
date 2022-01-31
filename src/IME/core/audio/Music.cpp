@@ -69,8 +69,10 @@ namespace ime::audio {
         }
 
         void setPitch(float pitch) {
-            if (song_)
+            if (song_ && pitch != getPitch()) {
                 song_->setPitch(pitch);
+                parent_->emitChange(Property{"pitch", pitch});
+            }
         }
 
         float getPitch() const {
@@ -93,10 +95,8 @@ namespace ime::audio {
         }
 
         void seek(const Time& position) {
-            if (song_) {
+            if (song_)
                 song_->setPlayingOffset(sf::microseconds(position.asMicroseconds()));
-                parent_->emitChange(Property{"seek", position});
-            }
         }
 
         Time getPlayingPosition() const {
@@ -106,24 +106,18 @@ namespace ime::audio {
         }
 
         void play() {
-            if (song_) {
+            if (song_)
                 song_->play();
-                parent_->emit("play");
-            }
         }
 
         void pause() {
-            if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
+            if (song_ && song_->getStatus() == sf::Music::Status::Playing)
                 song_->pause();
-                parent_->emit("pause");
-            }
         }
 
         void stop() {
-            if (song_ && song_->getStatus() == sf::Music::Status::Playing) {
+            if (song_ && song_->getStatus() == sf::Music::Status::Playing)
                 song_->stop();
-                parent_->emit("stop");
-            }
         }
 
         Time getDuration() const {

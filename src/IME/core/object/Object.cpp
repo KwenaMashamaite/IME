@@ -103,10 +103,6 @@ namespace ime {
         return eventEmitter_.addEventListener("Object_destruction", callback);
     }
 
-    int Object::onDestruction(const Callback<> &callback) const {
-        return eventEmitter_.addEventListener("Object_destruction", callback);
-    }
-
     bool Object::isSameObjectAs(const Object &other) const {
         return id_ == other.id_;
     }
@@ -116,9 +112,7 @@ namespace ime {
         eventEmitter_.emit("Object_propertyChange", property);
     }
 
-    void Object::emit(const std::string &event) {
-        eventEmitter_.emit("Object_" + event);
+    Object::~Object() {
+        eventEmitter_.emit("Object_destruction");
     }
-
-    Object::~Object() = default;
 }
