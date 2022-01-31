@@ -308,6 +308,34 @@ namespace ime {
         const GridMover* getGridMover() const;
 
         /**
+         * @brief Add an event listener to a grid enter event
+         * @param callback The function to be executed when the game object
+         *                 is added to a TileMap
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identification number
+         *
+         * The callback is passed this game object on invocation
+         *
+         * @see onGridExit
+         */
+        int onGridEnter(const Callback<ime::GridObject*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to a grid exit event
+         * @param callback The function to be executed when the game object
+         *                 is removed from a TileMap
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identification number
+         *
+         * The callback is passed this game object on invocation
+         *
+         * @see onGridEnter
+         */
+        int onGridExit(const Callback<GridObject*>& callback, bool oneTime = false);
+
+        /**
          * @brief Add an event listener to a move begin event
          * @param callback The function to be executed when the game object
          *                 starts moving

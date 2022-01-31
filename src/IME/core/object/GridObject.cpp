@@ -182,6 +182,14 @@ namespace ime {
         return gridMover_;
     }
 
+    int GridObject::onGridEnter(const Callback<GridObject*> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GridObject_gridEnter", callback, oneTime);
+    }
+
+    int GridObject::onGridExit(const Callback<GridObject*> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GridObject_gridExit", callback, oneTime);
+    }
+
     int GridObject::onGridMoveBegin(const Callback<GridObject*>& callback, bool oneTime) {
         return utility::addEventListener(eventEmitter_, "GridObject_moveBegin", callback, oneTime);
     }
@@ -207,7 +215,18 @@ namespace ime {
     }
 
     void GridObject::setGrid(TileMap *grid) {
-        grid_ = grid;
+        if (grid_ != grid) {
+            if (grid) {
+                if (grid_)
+                    setGrid(nullptr);
+
+                grid_ = grid;
+                eventEmitter_.emit("GridObject_gridEnter", this);
+            } else if (grid_) {
+                grid_ = nullptr;
+                eventEmitter_.emit("GridObject_gridExit", this);
+            }
+        }
     }
 
     void GridObject::emitGridEvent(const Property& property) {
