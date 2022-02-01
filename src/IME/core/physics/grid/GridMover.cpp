@@ -36,9 +36,9 @@ namespace ime {
         }
     }
 
-    GridMover::GridMover(Type type, TileMap &tileMap, GridObject* target) :
+    GridMover::GridMover(Type type, Grid2D &grid, GridObject* target) :
         type_{type},
-        tileMap_(tileMap),
+        grid_(grid),
         target_{nullptr},
         maxSpeed_{Vector2f{60.f, 60.f}},
         speedMultiplier_{1.0f},
@@ -54,12 +54,12 @@ namespace ime {
         setTarget(target);
     }
 
-    GridMover::GridMover(TileMap& tilemap, GridObject* gameObject) :
-        GridMover(Type::Manual, tilemap, gameObject)
+    GridMover::GridMover(Grid2D& grid, GridObject* gameObject) :
+        GridMover(Type::Manual, grid, gameObject)
     {}
 
-    GridMover::Ptr GridMover::create(TileMap &tilemap, GridObject *gameObject) {
-        return std::make_unique<GridMover>(tilemap, gameObject);
+    GridMover::Ptr GridMover::create(Grid2D &grid, GridObject *gameObject) {
+        return std::make_unique<GridMover>(grid, gameObject);
     }
 
     std::string GridMover::getClassType() const {
@@ -90,7 +90,7 @@ namespace ime {
         else if (target) {
             IME_ASSERT(!target->getGridMover(), "A game object can only be controlled by one grid mover at a time, call setTarget(nullptr) on the current grid mover")
             IME_ASSERT(!target->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
-            IME_ASSERT(tileMap_.hasChild(target), "The game object must already be in the grid/tilemap before adding it to a grid mover")
+            IME_ASSERT(grid_.hasChild(target), "The game object must already be in the grid/grid before adding it to a grid mover")
 
             if (target_) {
                 target_->removeEventListener(targetDestructionId_);
@@ -108,7 +108,7 @@ namespace ime {
                 IME_ASSERT(maxSpeed_.x == maxSpeed_.y, "Cannot have different x and y linear speeds if target can move diagonally")
             }
 
-            prevTile_ = targetTile_ = &tileMap_.getTile(target->getTransform().getPosition());
+            prevTile_ = targetTile_ = &grid_.getTile(target->getTransform().getPosition());
             target_ = target;
             target_->setGridMover(this);
         } else { // Detaching the target from the grid mover
@@ -197,12 +197,12 @@ namespace ime {
         return prevTile_->getIndex();
     }
 
-    TileMap &GridMover::getGrid() {
-        return tileMap_;
+    Grid2D &GridMover::getGrid() {
+        return grid_;
     }
 
-    const TileMap &GridMover::getGrid() const {
-        return tileMap_;
+    const Grid2D &GridMover::getGrid() const {
+        return grid_;
     }
 
     bool GridMover::isTargetMoving() const {
@@ -240,8 +240,8 @@ namespace ime {
         IME_ASSERT(!(dir.x == 0 && dir.y == 0), "Invalid direction, at least one value must be -1 or 1")
 
         auto [row, colm] = targetTile_->getIndex();
-        if (tileMap_.isIndexValid(Index{row + dir.y, colm + dir.x})) {
-            const Tile& adjacentTile = tileMap_.getTile(Index{row + dir.y, colm + dir.x});
+        if (grid_.isIndexValid(Index{row + dir.y, colm + dir.x})) {
+            const Tile& adjacentTile = grid_.getTile(Index{row + dir.y, colm + dir.x});
             if (!adjacentTile.isCollidable()) {
                 GridObject* obstacle = getObstacleInTile(adjacentTile);
 
@@ -262,7 +262,7 @@ namespace ime {
 
     void GridMover::update(Time deltaTime) {
         if (target_ && !isMoveFrozen_) {
-            IME_ASSERT(tileMap_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
+            IME_ASSERT(grid_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
             IME_ASSERT(!target_->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
 
             if (!isMoving_ && targetDirection_ != Unknown && maxSpeed_ != Vector2f{0.0f, 0.0f}) {
@@ -277,9 +277,9 @@ namespace ime {
 
                 // Move target to target tile ahead of time
                 Vector2f currentPosition = target_->getTransform().getPosition();
-                tileMap_.moveChild(target_, targetTile_->getIndex());
+                grid_.moveChild(target_, targetTile_->getIndex());
 
-                // TileMap::addChild modifies the position of the target such that it's at
+                // Grid2D::addChild modifies the position of the target such that it's at
                 // the centre of the tile, however we don't want it to teleport, we want it
                 // to smoothly move there
                 target_->getTransform().setPosition(currentPosition);
@@ -405,7 +405,7 @@ namespace ime {
 
     GridObject* GridMover::getObstacleInTile(const Tile& tile) const {
         GridObject* obstacle = nullptr;
-        tileMap_.forEachChildInTile(tile, [&obstacle, this](GridObject* child) {
+        grid_.forEachChildInTile(tile, [&obstacle, this](GridObject* child) {
             if (child->isObstacle() && child->isActive() && child != target_) {
                 obstacle = child;
                 return;
@@ -447,7 +447,7 @@ namespace ime {
 
     void GridMover::onDestinationReached() {
         // Collide target with occupants of target tile
-        tileMap_.forEachChildInTile(*targetTile_, [this](GridObject* gameObject) {
+        grid_.forEachChildInTile(*targetTile_, [this](GridObject* gameObject) {
             if (!canCollide(gameObject))
                 return;
 
@@ -463,28 +463,28 @@ namespace ime {
     void GridMover::setTargetTile() {
         prevTile_ = targetTile_;
         if (targetDirection_ == Left)
-            targetTile_ = &tileMap_.getTileLeftOf(*targetTile_);
+            targetTile_ = &grid_.getTileLeftOf(*targetTile_);
         else if (targetDirection_ == UpLeft)
-            targetTile_ = &tileMap_.getTileAbove(tileMap_.getTileLeftOf(*targetTile_));
+            targetTile_ = &grid_.getTileAbove(grid_.getTileLeftOf(*targetTile_));
         else if (targetDirection_ == Up)
-            targetTile_ = &tileMap_.getTileAbove(*targetTile_);
+            targetTile_ = &grid_.getTileAbove(*targetTile_);
         else if (targetDirection_ == UpRight)
-            targetTile_ = &tileMap_.getTileAbove(tileMap_.getTileRightOf(*targetTile_));
+            targetTile_ = &grid_.getTileAbove(grid_.getTileRightOf(*targetTile_));
         else if (targetDirection_ == Right)
-            targetTile_ = &tileMap_.getTileRightOf(*targetTile_);
+            targetTile_ = &grid_.getTileRightOf(*targetTile_);
         else if (targetDirection_ == DownRight)
-            targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileRightOf(*targetTile_));
+            targetTile_ = &grid_.getTileBelow(grid_.getTileRightOf(*targetTile_));
         else if (targetDirection_ == Down)
-            targetTile_ = &tileMap_.getTileBelow(*targetTile_);
+            targetTile_ = &grid_.getTileBelow(*targetTile_);
         else if (targetDirection_ == DownLeft)
-            targetTile_ = &tileMap_.getTileBelow(tileMap_.getTileLeftOf(*targetTile_));
+            targetTile_ = &grid_.getTileBelow(grid_.getTileLeftOf(*targetTile_));
     }
 
     void GridMover::resetTargetTile() {
         if (target_ && !isTargetMoving() && targetTile_->getIndex()
-            != tileMap_.getTileOccupiedByChild(target_).getIndex())
+            != grid_.getTileOccupiedByChild(target_).getIndex())
         {
-            targetTile_ = &tileMap_.getTileOccupiedByChild(target_);
+            targetTile_ = &grid_.getTileOccupiedByChild(target_);
             eventEmitter_.emit("GridMover_targetTileReset", targetTile_);
         }
     }

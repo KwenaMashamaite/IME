@@ -220,8 +220,8 @@ namespace ime::priv {
             const sf::View& view = std::any_cast<std::reference_wrapper<const sf::View>>(camera->getInternalView()).get();
             renderWindow.getThirdPartyWindow().setView(view);
 
-            if (scene->hasTilemap_) {
-                scene->tileMap_->draw(renderWindow);
+            if (scene->hasGrid2D_) {
+                scene->grid2D_->draw(renderWindow);
                 scene->gridMovers_.render(renderWindow);
             }
 
@@ -413,8 +413,8 @@ namespace ime::priv {
             scene->getGridMovers().update(deltaTime * scene->getTimescale());
             scene->onFixedUpdate(deltaTime * scene->getTimescale());
         } else {
-            if (scene->hasTilemap_)
-                scene->tileMap_->update(deltaTime * scene->getTimescale());
+            if (scene->grid2D_)
+                scene->grid2D_->update(deltaTime * scene->getTimescale());
 
             scene->getGameObjects().forEach([&scene, &deltaTime](GameObject* gameObject) {
                 if (gameObject->isActive()) {

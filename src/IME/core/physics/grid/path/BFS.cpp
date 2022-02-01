@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/grid/path/BFS.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 #include <algorithm>
 
 namespace ime {
@@ -31,7 +31,7 @@ namespace ime {
         visited_ = std::vector<std::vector<bool>>(gridSize.y, std::vector<bool>(gridSize.x, false));
     }
 
-    std::stack<Index> BFS::findPath(const TileMap& grid, const Index& sourceTile, const Index& targetTile) {
+    std::stack<Index> BFS::findPath(const Grid2D& grid, const Index& sourceTile, const Index& targetTile) {
         if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
             || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};

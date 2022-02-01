@@ -26,11 +26,11 @@
 #define IME_ADJACENCYLIST_H
 
 #include "IME/Config.h"
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 #include <vector>
 
 namespace ime {
-    class TileMap;
+    class Grid2D;
 
     /**
      * @brief Construct a list of neighbours for each accessible node/cell
@@ -42,14 +42,14 @@ namespace ime {
     class IME_API AdjacencyList {
     public:
         /**
-         * @brief Generate adjacency list from a tilemap
-         * @param tilemap Tilemap to generate adjacency list for
+         * @brief Generate adjacency list from a grid
+         * @param grid grid to generate adjacency list for
          *
          * This function will generate a list of neighbouring tiles for
-         * each node/tile in the tilemap. This functions assumes that the
+         * each node/tile in the grid. This functions assumes that the
          * grid nodes are bidirectional
          */
-        void generateFrom(const TileMap& tilemap);
+        void generateFrom(const Grid2D& grid);
 
         /**
          * @brief Get the neighbours of a node at a certain position in the grid

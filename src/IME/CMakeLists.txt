@@ -56,10 +56,10 @@ set(IME_SRC
     core/scene/CameraContainer.cpp
     core/scene/GameObjectContainer.cpp
     core/scene/GridMoverContainer.cpp
-    core/tilemap/Index.cpp
-    core/tilemap/TileMap.cpp
-    core/tilemap/TileMapParser.cpp
-    core/tilemap/TileMapRenderer.cpp
+    core/grid/Index.cpp
+    core/grid/Grid2D.cpp
+    core/grid/Grid2DParser.cpp
+    core/grid/Grid2DRenderer.cpp
     core/time/Clock.cpp
     core/time/Timer.cpp
     core/time/TimerManager.cpp

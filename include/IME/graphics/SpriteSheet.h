@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 #include "IME/graphics/SpriteImage.h"
 #include <vector>
 #include <string>

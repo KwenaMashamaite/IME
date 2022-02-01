@@ -41,7 +41,7 @@
 #include "IME/core/scene/CameraContainer.h"
 #include "IME/ui/GuiContainer.h"
 #include "IME/graphics/Camera.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 #include "IME/core/physics/rigid_body/PhysicsIterations.h"
 #include <string>
 #include <memory>
@@ -633,29 +633,23 @@ namespace ime {
          * the "default" layer from the render layer container, however you
          * mus not forget to reallocate the objects in the "default" layer to
          * another layer, otherwise they will not be drawn to the screen
-         *
-         * @note When the scene contains a tilemap (createTilemap called),
-         * the scene uses the tilemap's render layers instead of its own.
-         * This means that drawables added using this function will not
-         * be rendered. Only use this function if the scene does not have
-         * a tilemap
          */
         RenderLayerContainer& getRenderLayers();
         const RenderLayerContainer& getRenderLayers() const;
 
         /**
-         * @brief Get the scene level Tilemap
-         * @return The scene level tilemap
+         * @brief Get the scene level grid
+         * @return The scene level grid
          *
-         * Note that only one tilemap can be created per scene
+         * Note that only one grid can be created per scene
          *
-         * @warning The tilemap must be created before it is used. Calling
-         * this function before the tilemap is created is undefined behavior
+         * @warning The grid must be created before it is used. Calling
+         * this function before the grid is created is undefined behavior
          *
-         * @see createTilemap
+         * @see createGrid2D
          */
-        TileMap& getTilemap();
-        const TileMap& getTilemap() const;
+        Grid2D& getGrid();
+        const Grid2D& getGrid() const;
 
         /**
          * @brief Get the scene level gui container
@@ -720,20 +714,20 @@ namespace ime {
         void createPhysicsEngine(const Vector2f& gravity, const PhysIterations& iterations = {3, 8});
 
         /**
-         * @brief Create the scene level tilemap instance
-         * @param tileWidth The width of the tilemap
-         * @param tileHeight The height of the tilemap
+         * @brief Create the scene level grid instance
+         * @param tileWidth The width of the grid
+         * @param tileHeight The height of the grid
          *
-         * Note that this function only creates a tilemap instance so that
-         * it can be used. You still need to construct the tilemap using
+         * Note that this function only creates a grid instance so that
+         * it can be used. You still need to construct the grid using
          * the appropriate member function
          *
-         * @warning Only a single tilemap can be created, therefore calling
-         * this function will destroy the previous tilemap
+         * @warning Only a single grid can be created, therefore calling
+         * this function will destroy the previous grid
          *
-         * @see getTilemap
+         * @see getGrid
          */
-        void createTilemap(unsigned int tileWidth, unsigned int tileHeight);
+        void createGrid2D(unsigned int tileWidth, unsigned int tileHeight);
 
         /**
          * @internal
@@ -779,7 +773,7 @@ namespace ime {
         ui::GuiContainer guiContainer_;       //!< Scene level gui container
         RenderLayerContainer renderLayers_;   //!< Render layers for this scene
         GridMoverContainer gridMovers_;       //!< Stores grid movers that belong to the scene
-        std::unique_ptr<TileMap> tileMap_;    //!< Scene level tilemap
+        std::unique_ptr<Grid2D> grid2D_;      //!< Scene level grid
         float timescale_;                     //!< Controls the speed of the scene without affecting the render fps
         bool isEntered_;                      //!< A flag indicating whether or not the scene has been entered
         bool isInitialized_;                  //!< A flag indicating whether or not the scene has been initialized
@@ -788,7 +782,7 @@ namespace ime {
         bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused
         bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
-        bool hasTilemap_;                     //!< A flag indicating whether or not the scene has a tilemap
+        bool hasGrid2D_;                      //!< A flag indicating whether or not the scene has a grid
         std::pair<bool, std::string> cacheState_;
         friend class priv::SceneManager;      //!< Pre updates the scene
 

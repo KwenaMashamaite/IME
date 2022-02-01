@@ -33,7 +33,7 @@
 
 namespace ime {
     /**
-     * @brief Finds a path in a TileMap using the Breadth First Search algorithm
+     * @brief Finds a path in a Grid2D using the Breadth First Search algorithm
      */
     class IME_API BFS : public IPathFinderStrategy {
     public:
@@ -51,7 +51,7 @@ namespace ime {
          * @return The path from the source to the destination if reachable,
          *         otherwise an empty path
          */
-        std::stack<Index> findPath(const TileMap& grid, const Index& sourceTile,
+        std::stack<Index> findPath(const Grid2D& grid, const Index& sourceTile,
             const Index& targetTile) override;
 
         /**

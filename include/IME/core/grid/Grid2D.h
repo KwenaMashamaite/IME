@@ -22,23 +22,20 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_TILEMAP_H
-#define IME_TILEMAP_H
+#ifndef IME_GRID2D_H
+#define IME_GRID2D_H
 
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Rect.h"
 #include "IME/graphics/Tile.h"
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/graphics/shapes/RectangleShape.h"
-#include "IME/core/scene/RenderLayerContainer.h"
-#include "IME/core/scene/DrawableContainer.h"
 #include "IME/core/scene/GameObjectContainer.h"
-#include "IME/core/tilemap/TileMapRender.h"
+#include "IME/core/grid/Grid2DRenderer.h"
 #include <unordered_map>
 #include <vector>
-#include <tuple>
 #include <unordered_set>
 
 namespace ime {
@@ -52,25 +49,23 @@ namespace ime {
     }
 
     /**
-     * @brief Class for creating a visual 2D grid.
-     *
-     * The grid if made up of tiles for visual representation
+     * @brief A 2D visual grid
      */
-    class IME_API TileMap {
+    class IME_API Grid2D {
     public:
         /**
          * @internal
-         * @brief Create an empty tilemap
+         * @brief Create an empty grid
          * @param tileWidth Width of each tile in the map
          * @param tileHeight height of each tile in the map
          * @param renderLayers The scenes render layer
-         * @param scene The scene the tilemap belongs to
+         * @param scene The scene the grid belongs to
          *
-         * The tile map has the position (0, 0) by default
+         * The grid has the position (0, 0) by default
          *
          * This constructor is intended for internal use only
          */
-        TileMap(unsigned int tileWidth, unsigned int tileHeight, Scene& scene);
+        Grid2D(unsigned int tileWidth, unsigned int tileHeight, Scene& scene);
 
         /**
          * @internal
@@ -82,8 +77,8 @@ namespace ime {
         void setPhysicsEngine(PhysicsEngine* engine);
 
         /**
-         * @brief Get the scene the tilemap belongs to
-         * @return The scene the tilemap belongs to
+         * @brief Get the scene the grid belongs to
+         * @return The scene the grid belongs to
          */
         Scene& getScene();
         const Scene& getScene() const;
@@ -105,44 +100,45 @@ namespace ime {
         unsigned int getColumnCount() const;
 
         /**
-         * @brief Get the tilemaps renderer
-         * @return The tilemaps renderer
+         * @brief Get the grids renderer
+         * @return The grids renderer
          *
          * The renderer gives access to functions that determine how the
-         * tilemap is displayed. It allows you to manipulate things such
+         * grid is displayed. It allows you to manipulate things such
          * as the tile colour, grid line colour etc...
          */
-        TileMapRenderer& getRenderer();
+        Grid2DRenderer& getRenderer();
+        const Grid2DRenderer& getRenderer() const;
 
         /**
-         * @brief Set the position of the tile map
-         * @param x X coordinate of the tile map
-         * @param y Y coordinate of the tile map
+         * @brief Set the position of the grid
+         * @param x X coordinate of the grid
+         * @param y Y coordinate of the grid
          *
          * The position is (0, 0) by default
          */
         void setPosition(int x, int y);
 
         /**
-         * @brief Get the position of the tilemap in pixels
-         * @return The position of the tilemap pixels
+         * @brief Get the position of the grid in pixels
+         * @return The position of the grid pixels
          */
         Vector2f getPosition() const;
 
         /**
-        * @brief Check if the index is within bounds of the tilemap or not
+        * @brief Check if the index is within bounds of the grid or not
         * @param index Index to check
         * @return True if the index is within bounds, otherwise false
         */
         bool isIndexValid(const Index &index) const;
 
         /**
-         * @brief Construct a tilemap
+         * @brief Construct a grid
          * @param id The id of each tile
-         * @param size The size of the tilemap in tiles
+         * @param size The size of the grid in tiles
          *
          * This function should be used when there are no special tiles
-         * in the tilemap, that is, when all tiles have the same id. The
+         * in the grid, that is, when all tiles have the same id. The
          * x component of @a size is the number of rows whilst the y
          * component is the number of columns
          *
@@ -151,14 +147,14 @@ namespace ime {
         void construct(const Vector2u& size, char id);
 
         /**
-         * @brief Construct the tilemap from data located on a file on the disk
+         * @brief Construct the grid from data located on a file on the disk
          * @param filename Name of the file that contains the map data
          * @param separator Character used to separate map data
          */
         void loadFromFile(const std::string& filename, const char& separator = '\0');
 
         /**
-         * @brief Construct the tilemap form a vector that contains map data
+         * @brief Construct the grid form a vector that contains map data
          * @param map Vector to construct map from
          */
         void loadFromVector(Map map);
@@ -174,7 +170,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          */
         void setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider = false);
 
@@ -189,7 +185,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          *
@@ -211,7 +207,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          *
@@ -232,7 +228,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          *
          * All the tiles with the specified id will be marked as solid tiles
          * if currently marked as empty tiles
@@ -253,7 +249,7 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          *
          * By default, tiles are not collidable
          */
@@ -268,14 +264,14 @@ namespace ime {
         bool isCollidable(const Index& index) const;
 
         /**
-         * @brief Get the size of the tilemap in pixels
-         * @return Size of the tilemap in pixels
+         * @brief Get the size of the grid in pixels
+         * @return Size of the grid in pixels
          */
         Vector2u getSize() const;
 
         /**
-         * @brief Get the size of the tilemap in tiles
-         * @return Size of the tilemap in tiles
+         * @brief Get the size of the grid in tiles
+         * @return Size of the grid in tiles
          *
          * @warning The x component is the number of columns whilst the y
          * component is the number of rows
@@ -303,7 +299,7 @@ namespace ime {
          * @brief Get a tile at a certain index
          * @param index Index of the tile to get
          * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
+         *         specified index is out of bounds of the grid
          *
          * A tile is invalid if it has a negative index
          */
@@ -313,7 +309,7 @@ namespace ime {
          * @brief Get the tile at at certain position
          * @param position Position of the tile to retrieve
          * @return The tile at the specified position or an invalid tile if
-         *         the specified position does not lie within the tilemap
+         *         the specified position does not lie within the grid
          *         bounds
          *
          * A tile is invalid if it has a negative index
@@ -376,7 +372,7 @@ namespace ime {
         void forEachTileExcept(char id, const Callback<const Tile&>& callback) const;
 
         /**
-         * @brief Execute a callback on all the tiles of the tilemap
+         * @brief Execute a callback on all the tiles of the grid
          * @param callback Function to execute for each tile
          */
         void forEachTile(const Callback<const Tile&>& callback) const;
@@ -394,10 +390,10 @@ namespace ime {
 
         /**
          * @internal
-         * @brief Render tilemap on a render target
-         * @param renderTarget Target to render tilemap on
+         * @brief Render grid on a render target
+         * @param renderTarget Target to render grid on
          *
-         * The tilemap's tiles do not belong to any render layer and are
+         * The grid's tiles do not belong to any render layer and are
          * always drawn behind everything. That is, they are drawn first
          * before the first render layer (layer at index 0) is drawn.
          *
@@ -407,11 +403,11 @@ namespace ime {
         void draw(priv::RenderTarget &renderTarget) const;
 
         /**
-         * @brief Add an entity to the tilemap
-         * @param child GridObject to add to the tilemap
+         * @brief Add an entity to the grid
+         * @param child GridObject to add to the grid
          * @param index Index of the tile to add the entity to
          * @return True if the entity has been added or false if the index is
-         *         invalid or the entity already exists in the tilemap
+         *         invalid or the entity already exists in the grid
          *
          * If the specified tile is already occupied, the child will be added
          * as a visitor of that tile. Note that @a child will always be placed
@@ -420,25 +416,25 @@ namespace ime {
         bool addChild(GridObject* child, const Index& index);
 
         /**
-         * @brief Get the child in the tilemap with a certain id
+         * @brief Get the child in the grid with a certain id
          * @param id Id of the child to get access to
          * @return The child with the specified id or a nullptr if the child
-         *         with the specified id does not exist in the tilemap
+         *         with the specified id does not exist in the grid
          */
         GridObject* getChildWithId(std::size_t id) const;
 
         /**
-         * @brief Check if the tilemap has a certain child or not
-         * @param child Child to search for in the tilemap
-         * @return True if the tilemap has the child, otherwise false
+         * @brief Check if the grid has a certain child or not
+         * @param child Child to search for in the grid
+         * @return True if the grid has the child, otherwise false
          */
         bool hasChild(const GridObject* child) const;
 
         /**
-         * @brief Remove a child with a certain id from the tilemap
+         * @brief Remove a child with a certain id from the grid
          * @param id Id of the child to be removed
          * @return True if the child was removed or false if the child with
-         *         the specified id does not exist in the tilemap
+         *         the specified id does not exist in the grid
          */
         bool removeChildWithId(std::size_t id);
 
@@ -466,11 +462,11 @@ namespace ime {
         void removeAllChildren();
 
         /**
-         * @brief Move child to a different position in the tilemap
+         * @brief Move child to a different position in the grid
          * @param child Child to move
          * @param index New position of the child
          *
-         * The child is ignored if it does not exist in the tilemap or the
+         * The child is ignored if it does not exist in the grid or the
          * specified index is invalid
          *
          * @see addChild
@@ -482,7 +478,7 @@ namespace ime {
          * @param child Child to be moved
          * @param tile Tile to move child to
          *
-         * The child is ignored if it does not exist in the tilemap or the
+         * The child is ignored if it does not exist in the grid or the
          * specified tile is invalid
          *
          * @see addChild
@@ -490,10 +486,10 @@ namespace ime {
         void moveChild(GridObject* child, const Tile& tile);
 
         /**
-         * @brief Get the tile occupied by a child of the tilemap
+         * @brief Get the tile occupied by a child of the grid
          * @param child Child whose occupation tile is to be retrieved
          * @return The tile occupied by the specified child or an invalid tile
-         *         if the child is not in the tilemap
+         *         if the child is not in the grid
          *
          * An invalid tile has a negative index
          */
@@ -524,7 +520,7 @@ namespace ime {
         bool isTileOccupied(const Index& index) const;
 
         /**
-         * @brief Execute a callback for each child in the tilemap
+         * @brief Execute a callback for each child in the grid
          * @param callback Function to execute
          */
         void forEachChild(const Callback<GridObject*>& callback) const;
@@ -542,7 +538,7 @@ namespace ime {
 
         /**
          * @internal
-         * @brief Update tilemap
+         * @brief Update grid
          * @param deltaTime Time passed since last update
          *
          * @warning This function is intended for internal use only and should
@@ -553,7 +549,7 @@ namespace ime {
         /**
          * @brief Destructor
          */
-        ~TileMap();
+        ~Grid2D();
 
     private:
         /**
@@ -572,7 +568,7 @@ namespace ime {
          * @brief Get the tile above a tile at a given location
          * @param index Index of the tile to get the tile above
          * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
+         *         specified index is out of bounds of the grid
          *
          * A tile is invalid if it has a negative index
          */
@@ -582,7 +578,7 @@ namespace ime {
          * @brief Get the tile below a tile at a given location
          * @param index Location of the tile to get the tile below
          * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
+         *         specified index is out of bounds of the grid
          *
          * A tile is invalid if it has a negative index
          */
@@ -592,7 +588,7 @@ namespace ime {
          * @brief Get the tile to the left of a tile at a given location
          * @param index Location of the tile to get the tile to the left of
          * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
+         *         specified index is out of bounds of the grid
          *
          * A tile is invalid if it has a negative index
          */
@@ -602,7 +598,7 @@ namespace ime {
          * @brief Get the tile to the right of a tile at a given location
          * @param index Location of the tile to get the tile to the right of
          * @return The tile at the specified index or an invalid tile if the
-         *         specified index is out of bounds of the tilemap
+         *         specified index is out of bounds of the grid
          *
          * A tile is invalid if it has a negative index
          */
@@ -619,20 +615,20 @@ namespace ime {
          * GridMover can collide with the tile. Attaching a collider makes
          * a GridObject with a RigidBody that has a Collider attached to it
          * able to collide with the tile. Note that a collider can only be
-         * attached if the Scene this TileMap belongs to has a PhysicsEngine
+         * attached if the Scene this Grid2D belongs to has a PhysicsEngine
          *
          * By default, a tile is not collidable
          */
         void setCollidable(Tile& tile, bool collidable, bool attacheCollider = false);
 
         /**
-         * @brief Execute a callback on all the tiles of the tilemap
+         * @brief Execute a callback on all the tiles of the grid
          * @param callback Function to execute for each tile
          */
         void forEachTile_(const Callback<Tile&>& callback);
 
         /**
-         * @brief Update the tilemap when a render property changes
+         * @brief Update the grid when a render property changes
          * @param property The render property that changed
          */
         void onRenderChange(const Property& property);
@@ -644,19 +640,19 @@ namespace ime {
         void unsubscribeDestructionListener(GridObject* child);
 
     private:
-        Scene& scene_;                       //!< The scene the tilemap belongs to
+        Scene& scene_;                       //!< The scene the grid belongs to
         unsigned int tileSpacing_;           //!< Spacing between tiles in all directions
         Vector2u tileSize_;                  //!< The Size of each tile
-        Vector2u mapSizeInPixels_;           //!< The Size of the tilemap in pixels
-        Vector2f mapPos_;                    //!< The Position of the tilemap in pixels
-        unsigned int numOfRows_;             //!< The width of the tilemap in tiles
-        unsigned int numOfColms_;            //!< The height of the tilemap in tiles
+        Vector2u mapSizeInPixels_;           //!< The Size of the grid in pixels
+        Vector2f mapPos_;                    //!< The Position of the grid in pixels
+        unsigned int numOfRows_;             //!< The width of the grid in tiles
+        unsigned int numOfColms_;            //!< The height of the grid in tiles
         Map mapData_;                        //!< Map data used to identify different tiles
         Tile invalidTile_;                   //!< Tile returned when an invalid index is provided
-        TileMapRenderer renderer_;           //!< Determines the look of the grid
-        RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
+        Grid2DRenderer renderer_;           //!< Determines the look of the grid
+        RectangleShape backgroundTile_;      //!< Dictates the background colour of the grid
 
-        std::unordered_set<GridObject*> children_; //!< Stores the id's of game objects that belong to the tilemap
+        std::unordered_set<GridObject*> children_; //!< Stores the id's of game objects that belong to the grid
         std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
         PhysicsEngine* physicsSim_;                                     //!< The physics simulation
@@ -665,4 +661,4 @@ namespace ime {
     };
 }
 
-#endif // IME_TILEMAP_H
+#endif // IME_GRID2D_H

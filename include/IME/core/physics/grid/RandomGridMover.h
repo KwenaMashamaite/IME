@@ -30,7 +30,7 @@
 
 namespace ime {
     /**
-     * @brief Moves a GridObject randomly in a TileMap
+     * @brief Moves a GridObject randomly in a Grid2D
      *
      * Note that the target cannot move backwards because it may be
      * stuck in a loop where it switches between the same two tiles.
@@ -43,7 +43,7 @@ namespace ime {
 
         /**
          * @brief Constructor
-         * @param tileMap Grid to move target in
+         * @param grid Grid to move target in
          * @param target Game object to be moved in the grid
          *
          * @warning If @a target is left as @a nullptr, then setTarget()
@@ -54,11 +54,11 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit RandomGridMover(TileMap &tileMap, GridObject* target = nullptr);
+        explicit RandomGridMover(Grid2D &grid, GridObject* target = nullptr);
 
         /**
          * @brief Create a RandomGridMover
-         * @param tileMap The grid to move the target in
+         * @param grid The grid to move the target in
          * @param target Game object to be moved in the grid
          * @return The created grid mover
          *
@@ -70,7 +70,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static RandomGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
+        static RandomGridMover::Ptr create(Grid2D &grid, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

@@ -356,7 +356,7 @@ namespace ime {
 
         //!> Needs access to the constructor
         friend class Scene;
-        friend class TileMap;
+        friend class Grid2D;
     };
 }
 

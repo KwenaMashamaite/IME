@@ -25,7 +25,7 @@
 #ifndef IME_TILE_H
 #define IME_TILE_H
 
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 #include "IME/common/Vector2.h"
 #include "IME/graphics/shapes/RectangleShape.h"
 #include "IME/graphics/Drawable.h"
@@ -36,7 +36,7 @@ namespace ime {
     class BoxCollider;
 
     /**
-     * @brief A Tilemap tile
+     * @brief A Grid2D tile
      */
     class IME_API Tile : public Drawable {
     public:
@@ -129,20 +129,20 @@ namespace ime {
         bool isVisible() const;
 
         /**
-         * @brief Set the index of the tile in the tilemap
-         * @param index The index of the tile in the tilemap
+         * @brief Set the index of the tile in the grid
+         * @param index The index of the tile in the grid
          *
-         * The index corresponds to the position of the tile in the tilemap
+         * The index corresponds to the position of the tile in the grid
          *
          * By default, the index is (-1, -1)
          */
         void setIndex(Index index);
 
         /**
-         * @brief Get the index of the tile in the tilemap
-         * @return The index of the tile in the tilemap
+         * @brief Get the index of the tile in the grid
+         * @return The index of the tile in the grid
          *
-         * Note that each tile in the tilemap has a unique index
+         * Note that each tile in the grid has a unique index
          */
         Index getIndex() const;
 
@@ -301,7 +301,7 @@ namespace ime {
 
     private:
         char id_;               //!< Tile id
-        Index index_;           //!< Position of the tile in the tilemap
+        Index index_;           //!< Position of the tile in the grid
         RectangleShape tile_;   //!< Tile
         Colour prevFillColour_; //!< Tiles fill colour before it was hidden
         bool isCollidable_;     //!< A flag indicating whether or not the tile is collidable

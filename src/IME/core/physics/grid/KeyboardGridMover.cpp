@@ -26,8 +26,8 @@
 #include "IME/core/event/Event.h"
 
 namespace ime {
-    KeyboardGridMover::KeyboardGridMover(TileMap &tileMap, GridObject* target) :
-        GridMover(Type::KeyboardControlled, tileMap, target),
+    KeyboardGridMover::KeyboardGridMover(Grid2D &grid, GridObject* target) :
+        GridMover(Type::KeyboardControlled, grid, target),
         trigger_(MovementTrigger::None),
         onTriggerHandlerId_{-1, -1},
         triggerKeys_{Key::A, Key::D, Key::W, Key::S}
@@ -44,8 +44,8 @@ namespace ime {
         setMovementTrigger(MovementTrigger::OnKeyDown);
     }
 
-    KeyboardGridMover::Ptr KeyboardGridMover::create(TileMap &tileMap, GridObject *target) {
-        return std::make_unique<KeyboardGridMover>(tileMap, target);
+    KeyboardGridMover::Ptr KeyboardGridMover::create(Grid2D &grid, GridObject *target) {
+        return std::make_unique<KeyboardGridMover>(grid, target);
     }
 
     std::string KeyboardGridMover::getClassName() const {

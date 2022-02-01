@@ -150,11 +150,11 @@ namespace ime {
             return {-1, -1};
     }
 
-    TileMap *GridObject::getGrid() {
+    Grid2D *GridObject::getGrid() {
         return grid_;
     }
 
-    const TileMap *GridObject::getGrid() const {
+    const Grid2D *GridObject::getGrid() const {
         return grid_;
     }
 
@@ -214,7 +214,7 @@ namespace ime {
         gridMover_ = gridMover;
     }
 
-    void GridObject::setGrid(TileMap *grid) {
+    void GridObject::setGrid(Grid2D *grid) {
         if (grid_ != grid) {
             if (grid) {
                 if (grid_)

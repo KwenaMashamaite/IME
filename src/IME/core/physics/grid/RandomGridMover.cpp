@@ -26,8 +26,8 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    RandomGridMover::RandomGridMover(TileMap &tileMap, GridObject* target) :
-        GridMover(Type::Random, tileMap, target),
+    RandomGridMover::RandomGridMover(Grid2D &grid, GridObject* target) :
+        GridMover(Type::Random, grid, target),
         movementStarted_{false}
     {
         // Automatically move the new target
@@ -45,8 +45,8 @@ namespace ime {
         });
     }
 
-    RandomGridMover::Ptr RandomGridMover::create(TileMap &tileMap, GridObject *target) {
-        return std::make_unique<RandomGridMover>(tileMap, target);
+    RandomGridMover::Ptr RandomGridMover::create(Grid2D &grid, GridObject *target) {
+        return std::make_unique<RandomGridMover>(grid, target);
     }
 
     std::string RandomGridMover::getClassName() const {

@@ -24,11 +24,11 @@
 
 #include "IME/core/physics/grid/path/AdjacencyList.h"
 #include "IME/core/object/GridObject.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 
 namespace ime {
     namespace {
-        bool tileHasObstacle(const TileMap& grid, Index index) {
+        bool tileHasObstacle(const Grid2D& grid, Index index) {
             bool hasObstacle = false;
             grid.forEachChildInTile(grid.getTile(index), [&hasObstacle](const GridObject* child) {
                 if (child->isObstacle() && child->isActive()) {
@@ -40,27 +40,27 @@ namespace ime {
         }
     }
 
-    void AdjacencyList::generateFrom(const TileMap &tileMap) {
+    void AdjacencyList::generateFrom(const Grid2D &grid) {
         adjacencyList_.clear();
-        auto static addNeighbour = [](const TileMap& tilemap, std::vector<Index>& neighboursVec, int row, int colm) {
-            if (tilemap.isIndexValid({row, colm})
-                && !tilemap.getTile(Index{row, colm}).isCollidable()
-                && !tileHasObstacle(tilemap, Index{row, colm}))
+        auto static addNeighbour = [](const Grid2D& grid2D, std::vector<Index>& neighboursVec, int row, int colm) {
+            if (grid2D.isIndexValid({row, colm})
+                && !grid2D.getTile(Index{row, colm}).isCollidable()
+                && !tileHasObstacle(grid2D, Index{row, colm}))
             {
                 neighboursVec.push_back({row, colm});
             }
         };
 
-        for (auto i = 0; i < static_cast<int>(tileMap.getSizeInTiles().y); i++) {
-            for (auto j = 0 ; j < static_cast<int>(tileMap.getSizeInTiles().x); j++) {
-                if (tileMap.getTile(Index{i, j}).isCollidable() || tileHasObstacle(tileMap, Index{i, j}))
+        for (auto i = 0; i < static_cast<int>(grid.getSizeInTiles().y); i++) {
+            for (auto j = 0 ; j < static_cast<int>(grid.getSizeInTiles().x); j++) {
+                if (grid.getTile(Index{i, j}).isCollidable() || tileHasObstacle(grid, Index{i, j}))
                     continue;
 
                 std::vector<Index> neighbours;
-                addNeighbour(tileMap, neighbours, i - 1, j); //Left neighbour
-                addNeighbour(tileMap, neighbours, i, j - 1); //Top neighbour
-                addNeighbour(tileMap, neighbours, i + 1, j); //Right neighbour
-                addNeighbour(tileMap, neighbours, i, j + 1); //Bottom neighbour
+                addNeighbour(grid, neighbours, i - 1, j); //Left neighbour
+                addNeighbour(grid, neighbours, i, j - 1); //Top neighbour
+                addNeighbour(grid, neighbours, i + 1, j); //Right neighbour
+                addNeighbour(grid, neighbours, i, j + 1); //Bottom neighbour
                 adjacencyList_.push_back({{i, j}, neighbours});
             }
         }

@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_TILEMAPRENDER_H
-#define IME_TILEMAPRENDER_H
+#ifndef IME_GRID2DRENDERER_H
+#define IME_GRID2DRENDERER_H
 
 #include "IME/Config.h"
 #include "IME/graphics/Colour.h"
@@ -32,28 +32,28 @@
 
 namespace ime {
     /**
-     * @brief Defines the render properties of a TileMap
+     * @brief Defines the render properties of a Grid2D
      *
-     * This class determines how a tilemap looks
+     * This class determines how a grid looks
      */
-    class IME_API TileMapRenderer {
+    class IME_API Grid2DRenderer {
     public:
         using Callback = std::function<void(const Property&)>; //!< Property change callback
 
         /**
          * @brief Default constructor
          */
-        TileMapRenderer();
+        Grid2DRenderer();
 
         /**
-         * @brief Set the colour of the tilemap tiles
+         * @brief Set the colour of the grid tiles
          * @param colour The new colour of the grid tiles
          */
         void setTileColour(const Colour& colour);
 
         /**
-         * @brief Get the colour of the tilemap tile
-         * @return The colour of the tilemap tile
+         * @brief Get the colour of the grid tile
+         * @return The colour of the grid tile
          */
         Colour getTileColour() const;
 
@@ -66,10 +66,10 @@ namespace ime {
          *
          * @see setTileColour
          */
-        void setCollidableTleColour(const Colour& colour);
+        void setCollidableTileColour(const Colour& colour);
 
         /**
-         * @brief Get the colour of a tilemap tile when it is collidable
+         * @brief Get the colour of a grid tile when it is collidable
          * @return The colour of a collidable tile
          */
         Colour getCollidableTileColour() const;
@@ -87,10 +87,10 @@ namespace ime {
         Colour getGridLineColour() const;
 
         /**
-         * @brief Show or hide the tilemap
+         * @brief Show or hide the grid
          * @param visible True to show it or false to hide it
          *
-         * By default, the tilemap is visible
+         * By default, the grid is visible
          */
         void setVisible(bool visible);
 
@@ -101,9 +101,9 @@ namespace ime {
         bool isVisible() const;
 
         /**
-         * @brief Toggle the visibility of the tilemap
+         * @brief Toggle the visibility of the grid
          *
-         * This function will show the tilemap if it is currently visible
+         * This function will show the grid if it is currently visible
          * or hide it if its currently visible
          */
         void toggleVisibility();
@@ -129,12 +129,12 @@ namespace ime {
         void emit(const Property& property);
 
     private:
-        Colour tileColour_;           //!< The colour of each non-collidable tile in the tilemap
-        Colour collidableTileColour_; //!< The colour of each collidable tile in the tilemap
-        Colour gridLinesColour_;      //!< The colour of the grid lines of the tilemap
-        bool isVisible_;              //!< A flag indicating whether or not the tilemap is visible
+        Colour tileColour_;           //!< The colour of each non-collidable tile in the grid
+        Colour collidableTileColour_; //!< The colour of each collidable tile in the grid
+        Colour gridLinesColour_;      //!< The colour of the grid lines of the grid
+        bool isVisible_;              //!< A flag indicating whether or not the grid is visible
         Callback onPropertyChange_;   //!< Property change event emitter
     };
 }
 
-#endif //IME_TILEMAPRENDER_H
+#endif //IME_GRID2DRENDERER_H

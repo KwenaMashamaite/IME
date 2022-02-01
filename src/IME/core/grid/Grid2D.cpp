@@ -22,8 +22,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/tilemap/TileMap.h"
-#include "IME/core/tilemap/TileMapParser.h"
+#include "IME/core/grid/Grid2D.h"
+#include "IME/core/grid/Grid2DParser.h"
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/core/physics/rigid_body/colliders/BoxCollider.h"
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
@@ -40,7 +40,7 @@ namespace ime {
         return false;
     }
 
-    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight, Scene& scene) :
+    Grid2D::Grid2D(unsigned int tileWidth, unsigned int tileHeight, Scene& scene) :
         scene_{scene},
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
@@ -63,31 +63,35 @@ namespace ime {
         });
     }
 
-    void TileMap::setPhysicsEngine(PhysicsEngine* engine) {
+    void Grid2D::setPhysicsEngine(PhysicsEngine* engine) {
         physicsSim_ = engine;
     }
 
-    Scene &TileMap::getScene() {
+    Scene &Grid2D::getScene() {
         return scene_;
     }
 
-    const Scene &TileMap::getScene() const {
+    const Scene &Grid2D::getScene() const {
         return scene_;
     }
 
-    unsigned int TileMap::getRowCount() const {
+    unsigned int Grid2D::getRowCount() const {
         return numOfRows_;
     }
 
-    unsigned int TileMap::getColumnCount() const {
+    unsigned int Grid2D::getColumnCount() const {
         return numOfColms_;
     }
 
-    TileMapRenderer &TileMap::getRenderer() {
+    Grid2DRenderer &Grid2D::getRenderer() {
         return renderer_;
     }
 
-    const Tile& TileMap::getTile(const Vector2f &position) const {
+    const Grid2DRenderer &Grid2D::getRenderer() const {
+        return renderer_;
+    }
+
+    const Tile& Grid2D::getTile(const Vector2f &position) const {
         for (auto& tileRows : tiledMap_) {
             for (auto& tile : tileRows) {
                 if (tile.contains(position))
@@ -98,28 +102,28 @@ namespace ime {
         return invalidTile_;
     }
 
-    const Tile &TileMap::getTileAbove(const Tile &tile) const {
+    const Tile &Grid2D::getTileAbove(const Tile &tile) const {
         return getTileAbove(tile.getIndex());
     }
 
-    const Tile &TileMap::getTileBelow(const Tile &tile) const {
+    const Tile &Grid2D::getTileBelow(const Tile &tile) const {
         return getTileBelow(tile.getIndex());
     }
 
-    const Tile &TileMap::getTileLeftOf(const Tile &tile) const {
+    const Tile &Grid2D::getTileLeftOf(const Tile &tile) const {
         return getTileLeftOf(tile.getIndex());
     }
 
-    const Tile& TileMap::getTileRightOf(const Tile &tile) const {
+    const Tile& Grid2D::getTileRightOf(const Tile &tile) const {
         return getTileRightOf(tile.getIndex());
     }
 
-    bool TileMap::isIndexValid(const Index &index) const {
+    bool Grid2D::isIndexValid(const Index &index) const {
         auto [row, colm] = index;
         return !(row >= static_cast<int>(numOfRows_) || row < 0 || colm >= static_cast<int>(numOfColms_) || colm < 0);
     }
 
-    void TileMap::construct(const Vector2u& size, char id) {
+    void Grid2D::construct(const Vector2u& size, char id) {
         for (auto i = 0u; i < size.x; ++i) {
             auto innerVector = std::vector<char>(size.y, id);
             mapData_.push_back(std::move(innerVector));
@@ -129,19 +133,19 @@ namespace ime {
         createTiledMap();
     }
 
-    void TileMap::loadFromFile(const std::string &filename, const char& separator) {
-        mapData_ = TileMapParser::parse(filename, separator);
+    void Grid2D::loadFromFile(const std::string &filename, const char& separator) {
+        mapData_ = Grid2DParser::parse(filename, separator);
         computeDimensions();
         createTiledMap();
     }
 
-    void TileMap::loadFromVector(Map map) {
+    void Grid2D::loadFromVector(Map map) {
         mapData_ = std::move(map);
         computeDimensions();
         createTiledMap();
     }
 
-    void TileMap::computeDimensions() {
+    void Grid2D::computeDimensions() {
         numOfRows_ = static_cast<unsigned int>(mapData_.size());
         numOfColms_ = static_cast<unsigned int>(mapData_[0].size());
         mapSizeInPixels_.x = numOfColms_ * tileSize_.y + (numOfColms_ + 1) * tileSpacing_;
@@ -149,7 +153,7 @@ namespace ime {
         backgroundTile_.setSize({static_cast<float>(mapSizeInPixels_.x), static_cast<float>(mapSizeInPixels_.y)});
     }
 
-    void TileMap::setCollidable(Tile &tile, bool collidable, bool attachCollider) {
+    void Grid2D::setCollidable(Tile &tile, bool collidable, bool attachCollider) {
         if (tile.isCollidable() == collidable)
             return;
         else if (collidable && !tile.hasCollider() && attachCollider && physicsSim_) {
@@ -165,7 +169,7 @@ namespace ime {
             tile.setFillColour(renderer_.getTileColour());
     }
 
-    void TileMap::setPosition(int x, int y) {
+    void Grid2D::setPosition(int x, int y) {
         mapPos_.x = static_cast<float>(x);
         mapPos_.y = static_cast<float>(y);
         backgroundTile_.setPosition(mapPos_);
@@ -182,11 +186,11 @@ namespace ime {
         }
     }
 
-    Vector2f TileMap::getPosition() const {
+    Vector2f Grid2D::getPosition() const {
         return mapPos_;
     }
 
-    void TileMap::createTiledMap() {
+    void Grid2D::createTiledMap() {
         for (auto i = 0u; i < mapData_.size(); i++) {
             auto row = std::vector<Tile>{};
             for (auto j = 0u; j < mapData_[i].size(); j++) {
@@ -207,7 +211,7 @@ namespace ime {
         }
     }
 
-    void TileMap::draw(priv::RenderTarget &renderTarget) const {
+    void Grid2D::draw(priv::RenderTarget &renderTarget) const {
         if (renderer_.isVisible()) {
             renderTarget.draw(backgroundTile_);
             forEachTile([&renderTarget](const Tile &tile) {
@@ -216,53 +220,53 @@ namespace ime {
         }
     }
 
-    void TileMap::setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider) {
+    void Grid2D::setCollidableByIndex(const Index &index, bool isCollidable, bool attachCollider) {
         if (isIndexValid(index))
             setCollidable(tiledMap_[index.row][index.colm], isCollidable, attachCollider);
     }
 
-    void TileMap::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable, bool attachCollider) {
+    void Grid2D::setCollidableByIndex(const std::initializer_list<Index> &locations, bool isCollidable, bool attachCollider) {
         std::for_each(locations.begin(), locations.end(), [=](const Index& index) {
             setCollidableByIndex(index, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable, bool attachCollider) {
+    void Grid2D::setCollidableByIndex(Index startPos, Index endPos, bool isCollidable, bool attachCollider) {
         if (isIndexValid(startPos) && isIndexValid(endPos)){
             for (auto i = startPos.colm; i < endPos.colm; i++)
                 setCollidableByIndex({startPos.row, i}, isCollidable, attachCollider);
         }
     }
 
-    void TileMap::setCollidableById(char id, bool isCollidable, bool attachCollider) {
+    void Grid2D::setCollidableById(char id, bool isCollidable, bool attachCollider) {
         forEachTile_([=](Tile& tile) {
             if (tile.getId() == id)
                 setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
-    void TileMap::setCollidableByExclusion(char id, bool isCollidable, bool attachCollider) {
+    void Grid2D::setCollidableByExclusion(char id, bool isCollidable, bool attachCollider) {
         forEachTile_([=](Tile& tile) {
             if (tile.getId() != id)
                 setCollidable(tile, isCollidable, attachCollider);
         });
     }
 
-    const Tile& TileMap::getTile(const Index &index) const {
+    const Tile& Grid2D::getTile(const Index &index) const {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm];
 
         return invalidTile_;
     }
 
-    bool TileMap::isCollidable(const Index &index) const {
+    bool Grid2D::isCollidable(const Index &index) const {
         if (isIndexValid(index))
             return tiledMap_[index.row][index.colm].isCollidable();
 
         return false;
     }
 
-    bool TileMap::addChild(GridObject* child, const Index& index) {
+    bool Grid2D::addChild(GridObject* child, const Index& index) {
         IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && children_.insert(child).second) {
             destructionIds_[child->getObjectId()] = child->onDestruction([this, id = child->getObjectId()]{
@@ -278,11 +282,11 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::hasChild(const GridObject* child) const {
+    bool Grid2D::hasChild(const GridObject* child) const {
         return std::find(children_.begin(), children_.end(), child) != children_.end();
     }
 
-    GridObject* TileMap::getChildWithId(std::size_t id) const {
+    GridObject* Grid2D::getChildWithId(std::size_t id) const {
         for (const auto& child : children_) {
             if (child->getObjectId() == id)
                 return child;
@@ -291,24 +295,24 @@ namespace ime {
         return nullptr;
     }
 
-    void TileMap::forEachChild(const Callback<GridObject*>& callback) const {
+    void Grid2D::forEachChild(const Callback<GridObject*>& callback) const {
         std::for_each(children_.begin(), children_.end(), [&callback](auto& child) {
             callback(child);
         });
     }
 
-    void TileMap::forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const {
+    void Grid2D::forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const {
         forEachChild([&](GridObject* child) {
             if (isInTile(child, tile))
                 callback(child);
         });
     }
 
-    void TileMap::update(Time) {
+    void Grid2D::update(Time) {
 
     }
 
-    bool TileMap::removeChildWithId(std::size_t id) {
+    bool Grid2D::removeChildWithId(std::size_t id) {
         for (auto& child : children_) {
             if (child->getObjectId() == id) {
                 unsubscribeDestructionListener(child);
@@ -322,14 +326,14 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::removeChild(GridObject* child) {
+    bool Grid2D::removeChild(GridObject* child) {
         if (!child)
             return false;
 
         return removeChildWithId(child->getObjectId());
     }
 
-    void TileMap::removeChildIf(const std::function<bool(GridObject*)>& callback) {
+    void Grid2D::removeChildIf(const std::function<bool(GridObject*)>& callback) {
         for (auto iter = children_.begin(); iter != children_.end(); ) {
             if (callback(*iter)) {
                 GridObject* gameObject = *iter;
@@ -341,52 +345,52 @@ namespace ime {
         }
     }
 
-    void TileMap::removeAllChildren() {
+    void Grid2D::removeAllChildren() {
         removeChildIf([](GridObject*) {
             return true;
         });
     }
 
-    void TileMap::moveChild(GridObject* child, const Index& index) {
+    void Grid2D::moveChild(GridObject* child, const Index& index) {
         if (hasChild(child) && isIndexValid(index))
             child->getTransform().setPosition(getTile(index).getWorldCentre());
     }
 
-    void TileMap::moveChild(GridObject* child, const Tile &tile) {
+    void Grid2D::moveChild(GridObject* child, const Tile &tile) {
         moveChild(child, tile.getIndex());
     }
 
-    Vector2u TileMap::getTileSize() const {
+    Vector2u Grid2D::getTileSize() const {
         return tileSize_;
     }
 
-    void TileMap::forEachTile(const Callback<const Tile&>& callback) const {
+    void Grid2D::forEachTile(const Callback<const Tile&>& callback) const {
         std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
             std::for_each(row.begin(), row.end(), callback);
         });
     }
 
-    void TileMap::forEachTile_(const Callback<Tile&> &callback) {
+    void Grid2D::forEachTile_(const Callback<Tile&> &callback) {
         std::for_each(tiledMap_.begin(), tiledMap_.end(), [&callback](auto& row) {
             std::for_each(row.begin(), row.end(), callback);
         });
     }
 
-    void TileMap::forEachTileWithId(char id, const Callback<const Tile&>& callback) const {
+    void Grid2D::forEachTileWithId(char id, const Callback<const Tile&>& callback) const {
         forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() == id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileExcept(char id, const Callback<const Tile&>& callback) const {
+    void Grid2D::forEachTileExcept(char id, const Callback<const Tile&>& callback) const {
         forEachTile([&callback, id](const Tile& tile) {
             if (tile.getId() != id)
                 callback(tile);
         });
     }
 
-    void TileMap::forEachTileInRange(Index startPos, Index endPos, const Callback<const Tile&>& callback) const {
+    void Grid2D::forEachTileInRange(Index startPos, Index endPos, const Callback<const Tile&>& callback) const {
         if (isIndexValid(startPos) && isIndexValid(endPos)) {
             std::for_each(tiledMap_[startPos.row].begin() + startPos.colm,
                 tiledMap_[startPos.row].begin() + endPos.colm,
@@ -396,52 +400,52 @@ namespace ime {
         }
     }
 
-    const Tile& TileMap::getTileAbove(const Index &index) const {
+    const Tile& Grid2D::getTileAbove(const Index &index) const {
         return getTile(Index{index.row - 1, index.colm});
     }
 
-    const Tile& TileMap::getTileBelow(const Index &index) const {
+    const Tile& Grid2D::getTileBelow(const Index &index) const {
         return getTile(Index{index.row + 1, index.colm});
     }
 
-    const Tile& TileMap::getTileLeftOf(const Index &index) const {
+    const Tile& Grid2D::getTileLeftOf(const Index &index) const {
         return getTile(Index{index.row, index.colm - 1});
     }
 
-    const Tile& TileMap::getTileRightOf(const Index &index) const {
+    const Tile& Grid2D::getTileRightOf(const Index &index) const {
         return getTile(Index{index.row, index.colm + 1});
     }
 
-    Vector2u TileMap::getSize() const {
+    Vector2u Grid2D::getSize() const {
         return mapSizeInPixels_;
     }
 
-    unsigned int TileMap::getSpaceBetweenTiles() const {
+    unsigned int Grid2D::getSpaceBetweenTiles() const {
         return tileSpacing_;
     }
 
-    Vector2u TileMap::getSizeInTiles() const {
+    Vector2u Grid2D::getSizeInTiles() const {
         return {numOfColms_, numOfRows_};
     }
 
-    const Tile& TileMap::getTileOccupiedByChild(const GridObject* child) const {
+    const Tile& Grid2D::getTileOccupiedByChild(const GridObject* child) const {
         if (child && hasChild(child))
             return getTile(child->getTransform().getPosition());
         else
             return invalidTile_;
     }
 
-    bool TileMap::isTileOccupied(const Tile &tile) const {
+    bool Grid2D::isTileOccupied(const Tile &tile) const {
         return isTileOccupied(tile.getIndex());
     }
 
-    bool TileMap::isTileOccupied(const Index &index) const {
+    bool Grid2D::isTileOccupied(const Index &index) const {
         return std::any_of(children_.begin(), children_.end(), [this, &index] (GridObject* child) {
             return isInTile(child, tiledMap_[index.row][index.colm]);
         });
     }
 
-    void TileMap::onRenderChange(const Property &property) {
+    void Grid2D::onRenderChange(const Property &property) {
         if (property.getName() == "visible") {
             auto visible = property.getValue<bool>();
             forEachTile_([visible](Tile& tile) {
@@ -466,12 +470,12 @@ namespace ime {
             backgroundTile_.setFillColour(property.getValue<Colour>());
     }
 
-    void TileMap::unsubscribeDestructionListener(GridObject *child) {
+    void Grid2D::unsubscribeDestructionListener(GridObject *child) {
         child->removeEventListener(destructionIds_[child->getObjectId()]);
         destructionIds_.erase(child->getObjectId());
     }
 
-    TileMap::~TileMap() {
+    Grid2D::~Grid2D() {
         removeAllChildren();
     }
 }

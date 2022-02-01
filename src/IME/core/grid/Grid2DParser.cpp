@@ -22,12 +22,12 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/tilemap/TileMapParser.h"
+#include "IME/core/grid/Grid2DParser.h"
 #include "IME/utility/DiskFileReader.h"
 #include <sstream>
 
 namespace ime {
-    TileMapParser::Map TileMapParser::parse(const std::string &filename, char separator) {
+    Grid2DParser::Map Grid2DParser::parse(const std::string &filename, char separator) {
         Map map;
         std::stringstream mapData;
         utility::DiskFileReader().readFileInto(filename, mapData);

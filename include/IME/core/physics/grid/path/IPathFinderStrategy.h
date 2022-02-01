@@ -26,12 +26,12 @@
 #define IME_GRIDPATHFINDER_H
 
 #include "IME/Config.h"
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 #include <stack>
 #include <string>
 
 namespace ime {
-    class TileMap;
+    class Grid2D;
 
     /**
      * @brief Interface for grid path finder algorithms
@@ -47,7 +47,7 @@ namespace ime {
          *         destination is reachable from the source, otherwise
          *         an empty path
          */
-        virtual std::stack<Index> findPath(const TileMap& grid, const Index& sourceNode,
+        virtual std::stack<Index> findPath(const Grid2D& grid, const Index& sourceNode,
             const Index& source) = 0;
 
         /**

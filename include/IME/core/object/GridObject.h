@@ -28,14 +28,14 @@
 #include "IME/Config.h"
 #include "IME/core/object/GridObject.h"
 #include "IME/core/object/ExcludeList.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 #include <memory>
 
 namespace ime {
     class GridMover;
 
     /**
-     * @brief An object that can be placed in a TileMap
+     * @brief An object that can be placed in a Grid2D
      */
     class IME_API GridObject : public GameObject {
     public:
@@ -259,8 +259,8 @@ namespace ime {
          * @brief Get access to the grid in which the target is moved in
          * @return The grid in which the target is being moved in
          */
-        TileMap* getGrid();
-        const TileMap* getGrid() const;
+        Grid2D* getGrid();
+        const Grid2D* getGrid() const;
 
         /**
          * @brief Get the game objects collision exclude list
@@ -310,7 +310,7 @@ namespace ime {
         /**
          * @brief Add an event listener to a grid enter event
          * @param callback The function to be executed when the game object
-         *                 is added to a TileMap
+         *                 is added to a Grid2D
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
          * @return The event listeners unique identification number
@@ -324,7 +324,7 @@ namespace ime {
         /**
          * @brief Add an event listener to a grid exit event
          * @param callback The function to be executed when the game object
-         *                 is removed from a TileMap
+         *                 is removed from a Grid2D
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
          * @return The event listeners unique identification number
@@ -379,14 +379,14 @@ namespace ime {
         /**
          * @brief Add an event listener to a grid object collision event
          * @param callback Function to be executed when this game object
-         *                 collides with another game object in a TileMap
+         *                 collides with another game object in a Grid2D
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
          * @return The event listeners unique identification number
          *
          * This event is triggered when this grid object collides with another
          * grid object or vice versa. A collision is registered between two
-         * grid objects when the occupy the same TileMap tile
+         * grid objects when the occupy the same Grid2D tile
          *
          * The callback is passed this game object and the game object it is
          * in collision with respectively.
@@ -455,7 +455,7 @@ namespace ime {
          * @warning This function is intended for internal use only and should
          * never be called outside of IME
          */
-        void setGrid(TileMap* grid);
+        void setGrid(Grid2D* grid);
 
         /**
          * @internal
@@ -473,7 +473,7 @@ namespace ime {
         ~GridObject() override;
 
     private:
-        TileMap* grid_;                     //!< The grid the object is in
+        Grid2D* grid_;                     //!< The grid the object is in
         bool isObstacle_;                   //!< A flag indicating whether or not the object is an obstacle
         Vector2i direction_;                //!< The current direction of the object
         Vector2f speed_;                    //!< The speed of the game object

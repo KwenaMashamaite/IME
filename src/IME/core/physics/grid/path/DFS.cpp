@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/physics/grid/path/DFS.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 
 namespace ime {
     DFS::DFS(const Vector2u& gridSize) {
@@ -31,7 +31,7 @@ namespace ime {
     }
 
     std::stack<Index>
-    DFS::findPath(const TileMap &grid, const Index& sourceTile, const Index& targetTile) {
+    DFS::findPath(const Grid2D &grid, const Index& sourceTile, const Index& targetTile) {
         if (sourceTile == targetTile || !grid.isIndexValid(sourceTile)
             || !grid.isIndexValid(targetTile))
             return std::stack<Index>{};

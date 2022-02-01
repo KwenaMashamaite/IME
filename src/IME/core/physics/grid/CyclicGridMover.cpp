@@ -25,8 +25,8 @@
 #include "IME/core/physics/grid/CyclicGridMover.h"
 
 namespace ime {
-    CyclicGridMover::CyclicGridMover(TileMap &tilemap, GridObject *target) :
-        GridMover(Type::Cyclic, tilemap, target),
+    CyclicGridMover::CyclicGridMover(Grid2D &grid, GridObject *target) :
+        GridMover(Type::Cyclic, grid, target),
         direction_{CycleDirection::Clockwise},
         isMovementStarted_{false}
     {
@@ -52,8 +52,8 @@ namespace ime {
         });
     }
 
-    CyclicGridMover::Ptr CyclicGridMover::create(TileMap &tileMap, GridObject *target) {
-        return std::make_unique<CyclicGridMover>(tileMap, target);
+    CyclicGridMover::Ptr CyclicGridMover::create(Grid2D &grid, GridObject *target) {
+        return std::make_unique<CyclicGridMover>(grid, target);
     }
 
     void CyclicGridMover::setCycleDirection(CyclicGridMover::CycleDirection direction) {

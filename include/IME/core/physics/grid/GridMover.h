@@ -26,7 +26,7 @@
 #define IME_GRIDMOVER_H
 
 #include "IME/Config.h"
-#include "IME/core/tilemap/TileMap.h"
+#include "IME/core/grid/Grid2D.h"
 #include "IME/core/object/GridObject.h"
 #include "IME/core/event/EventEmitter.h"
 #include "IME/core/time/Time.h"
@@ -83,7 +83,7 @@ namespace ime {
 
         /**
          * @brief Create a manually controlled grid mover
-         * @param tilemap The grid the game object is in
+         * @param grid The grid the game object is in
          * @param gameObject The game object to be controlled by the grid mover
          *
          * @warning If @a gameObject is left as @a nullptr, then setTarget()
@@ -94,7 +94,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit GridMover(TileMap& tilemap, GridObject* gameObject = nullptr);
+        explicit GridMover(Grid2D& grid, GridObject* gameObject = nullptr);
 
         /**
          * @brief Copy constructor
@@ -108,7 +108,7 @@ namespace ime {
 
         /**
          * @brief Create the grid mover
-         * @param tilemap The grid the game object is in
+         * @param grid The grid the game object is in
          * @param gameObject The game object to be controlled by the grid mover
          * @return The created grid mover
          *
@@ -120,7 +120,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static GridMover::Ptr create(TileMap& tilemap, GridObject* gameObject = nullptr);
+        static GridMover::Ptr create(Grid2D& grid, GridObject* gameObject = nullptr);
 
         /**
          * @brief Get the name of this class
@@ -212,7 +212,7 @@ namespace ime {
          * Provide nullptr as argument to remove current target
          *
          * @warning if the @a target is not a @a nullptr, then it must exist
-         * in the TileMap and must not have a RigidBody attached to it,
+         * in the Grid2D and must not have a RigidBody attached to it,
          * otherwise undefined behavior
          */
         void setTarget(GridObject* target);
@@ -349,8 +349,8 @@ namespace ime {
          * @brief Get access to the grid in which the target is moved in
          * @return The grid in which the target is being moved in
          */
-        TileMap& getGrid();
-        const TileMap& getGrid() const;
+        Grid2D& getGrid();
+        const Grid2D& getGrid() const;
 
         /**
          * @brief Check if target is moving or not
@@ -390,7 +390,7 @@ namespace ime {
          * @brief Reset the target tile to be the same as the entity tile
          *
          * @note This function must be called every time the target is
-         * manually moved in the Tilemap so that the grid mover can register
+         * manually moved in the grid so that the grid mover can register
          * the new position of the target. If not called, the GridMover will
          * lose control of the target and the targets movement behavior is
          * undefined in such a case. In addition, note that the target tile
@@ -398,7 +398,7 @@ namespace ime {
          *
          * @code
          * // Let the grid mover be responsible for moving the player object
-         * tilemap.addChild(player, ime::Index{4, 5});
+         * grid.addChild(player, ime::Index{4, 5});
          * gridMover.setTarget(player);
          *
          * ...
@@ -498,7 +498,7 @@ namespace ime {
          int onObjectCollision(const Callback<GridObject*, GridObject*>& callback, bool oneTime = false);
 
         /**
-         * @brief Add an event listener to a tilemap border collision event
+         * @brief Add an event listener to a grid border collision event
          * @param callback Function to execute when the collision takes place
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
@@ -544,7 +544,7 @@ namespace ime {
         /**
          * @brief Create a grid mover
          * @param type The type of the grid mover
-         * @param tileMap Grid to move a target entity in
+         * @param grid Grid to move a target entity in
          * @param target GridObject to be moved in the grid
          *
          * Note that this constructor is intended to be used by derived
@@ -557,7 +557,7 @@ namespace ime {
          * @warning if the target is not a nullptr, then it must be placed
          * in the grid prior to instantiation of this class
          */
-        GridMover(Type type, TileMap &tileMap, GridObject* target);
+        GridMover(Type type, Grid2D &grid, GridObject* target);
 
     private:
         /**
@@ -582,7 +582,7 @@ namespace ime {
          * @return True if the collision was resolved or false if such a
          *         collision is not taking place
          *
-         * This function will prevent the target from leaving the tilemap
+         * This function will prevent the target from leaving the grid
          */
         bool handleGridBorderCollision();
 
@@ -637,7 +637,7 @@ namespace ime {
 
     private:
         Type type_;                    //!< The type of the grid mover
-        TileMap& tileMap_;             //!< Grid to move entity in
+        Grid2D& grid_;             //!< Grid to move entity in
         GridObject* target_;           //!< Target to be moved in the grid
         Vector2f maxSpeed_;            //!< The maximum speed of the game object
         float speedMultiplier_;        //!< A normal speed multiplier

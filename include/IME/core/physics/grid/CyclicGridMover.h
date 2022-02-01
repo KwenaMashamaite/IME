@@ -41,8 +41,8 @@ namespace ime {
      * will switch between four adjacent tiles in the chosen cycle direction.
      *
      * Note that this grid mover cannot get the target out of a dead-end. If
-     * the TileMap contains dead-ends and you intend for the target to never
-     * get stuck at any point in the tilemap, then you should consider removing
+     * the Grid2D contains dead-ends and you intend for the target to never
+     * get stuck at any point in the grid, then you should consider removing
      * them or using a different GridMover.
      */
     class IME_API CyclicGridMover : public GridMover {
@@ -59,7 +59,7 @@ namespace ime {
 
         /**
          * @brief Constructor
-         * @param tilemap The grid to move the target in
+         * @param grid The grid to move the target in
          * @param target The target to be moved in the grid
          *
          * @warning If @a target is left as @a nullptr, then setTarget()
@@ -70,11 +70,11 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit CyclicGridMover(TileMap& tilemap, GridObject* target = nullptr);
+        explicit CyclicGridMover(Grid2D& grid, GridObject* target = nullptr);
 
         /**
          * @brief Create a CyclicGridMover
-         * @param tilemap The grid to move the target in
+         * @param grid The grid to move the target in
          * @param target The target to be moved in the grid
          * @return The created grid mover
          *
@@ -86,7 +86,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static CyclicGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
+        static CyclicGridMover::Ptr create(Grid2D &grid, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class

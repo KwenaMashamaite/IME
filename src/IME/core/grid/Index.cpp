@@ -22,7 +22,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/tilemap/Index.h"
+#include "IME/core/grid/Index.h"
 
 namespace ime {
     Index::Index() :

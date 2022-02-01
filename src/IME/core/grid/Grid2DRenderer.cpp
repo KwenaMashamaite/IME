@@ -22,70 +22,70 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "IME/core/tilemap/TileMapRender.h"
+#include "IME/core/grid/Grid2DRenderer.h"
 
 namespace ime {
-    TileMapRenderer::TileMapRenderer() :
+    Grid2DRenderer::Grid2DRenderer() :
         tileColour_{36, 37, 38},
         collidableTileColour_{120, 80, 39},
         gridLinesColour_{Colour::Grey},
         isVisible_{true}
     {}
 
-    void TileMapRenderer::setTileColour(const Colour &colour) {
+    void Grid2DRenderer::setTileColour(const Colour &colour) {
         if (tileColour_ != colour) {
             tileColour_ = colour;
             emit(Property{"tileColour", tileColour_});
         }
     }
 
-    Colour TileMapRenderer::getTileColour() const {
+    Colour Grid2DRenderer::getTileColour() const {
         return tileColour_;
     }
 
-    void TileMapRenderer::setCollidableTleColour(const Colour &colour) {
+    void Grid2DRenderer::setCollidableTileColour(const Colour &colour) {
         if (collidableTileColour_ != colour) {
             collidableTileColour_ = colour;
             emit(Property{"collidableTileColour", collidableTileColour_});
         }
     }
 
-    Colour TileMapRenderer::getCollidableTileColour() const {
+    Colour Grid2DRenderer::getCollidableTileColour() const {
         return collidableTileColour_;
     }
 
-    void TileMapRenderer::setGridLineColour(const Colour &colour) {
+    void Grid2DRenderer::setGridLineColour(const Colour &colour) {
         if (gridLinesColour_ != colour) {
             gridLinesColour_ = colour;
             emit(Property{"gridLineColour", gridLinesColour_});
         }
     }
 
-    Colour TileMapRenderer::getGridLineColour() const {
+    Colour Grid2DRenderer::getGridLineColour() const {
         return gridLinesColour_;
     }
 
-    void TileMapRenderer::setVisible(bool visible) {
+    void Grid2DRenderer::setVisible(bool visible) {
         if (isVisible_ != visible) {
             isVisible_ = visible;
             emit(Property{"visible", isVisible_});
         }
     }
 
-    bool TileMapRenderer::isVisible() const {
+    bool Grid2DRenderer::isVisible() const {
         return isVisible_;
     }
 
-    void TileMapRenderer::toggleVisibility() {
+    void Grid2DRenderer::toggleVisibility() {
         setVisible(!isVisible_);
     }
 
-    void TileMapRenderer::emit(const Property &property) {
+    void Grid2DRenderer::emit(const Property &property) {
         if (onPropertyChange_)
             onPropertyChange_(property);
     }
 
-    void TileMapRenderer::onPropertyChange(const Callback &callback) {
+    void Grid2DRenderer::onPropertyChange(const Callback &callback) {
         onPropertyChange_ = callback;
     }
 }

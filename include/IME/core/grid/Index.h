@@ -22,30 +22,62 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_TILEMAPPARSER_H
-#define IME_TILEMAPPARSER_H
+#ifndef IME_INDEX_H
+#define IME_INDEX_H
 
-#include <vector>
-#include <string>
+#include "IME/Config.h"
+#include <functional>
 
 namespace ime {
     /**
-     * @brief Reads a file containing the tilemap data and returns it in grid form
+     * @brief Represents a position Grid2D Tile
      */
-    class TileMapParser {
-    public:
-        using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
+    struct IME_API Index {
+        /**
+         * @brief Default constructor
+         *
+         * Constructs Index with row = 0, and colm = 0
+         */
+        Index();
 
         /**
-         * @brief Parse a map file
-         * @param filename Name of the map file
-         * @param separator Character used to separate column entries
-         * @return Tile map data
-         *
-         * This function parses a map file and returns a map object created
-         * form the parsed date
+         * @brief Constructor
+         * @param row Y coordinate of the tile
+         * @param colm X coordinate of the tile
          */
-        static Map parse(const std::string& filename, char separator = ',');
+        Index(int row, int colm);
+
+        int row;    //!< Y coordinate of the tile
+        int colm;   //!< X coordinate of the tile
+    };
+
+    /**
+     * @brief Overload of binary operator ==
+     * @param lhs Left operand
+     * @param rhs Right operand
+     * @return True if @a lhs is equal to @a rhs
+     */
+    IME_API extern bool operator==(const Index& lhs, const Index& rhs);
+
+    /**
+     * @brief Overload of binary operator !=
+     * @param lhs Left operand
+     * @param rhs Right operand
+     * @return True if @a lhs is not equal to @a rhs
+     */
+    IME_API extern bool operator!=(const Index& lhs, const Index& rhs);
+}
+
+namespace std {
+    /**
+     * @brief Hash specialization for ime::Index so that it can be used
+     *        as a key in an std::unordered_map
+     */
+    template <>
+    struct hash<ime::Index> {
+        size_t operator()(const ime::Index& index) const {
+            return hash<int>()(index.row) + hash<int>()(index.colm);
+        }
     };
 }
 

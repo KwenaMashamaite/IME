@@ -36,7 +36,7 @@ namespace ime {
     }
 
     /**
-     * @brief Moves a GridObject to a specific position in the TileMap
+     * @brief Moves a GridObject to a specific position in the Grid2D
      */
     class IME_API TargetGridMover : public GridMover {
     public:
@@ -44,7 +44,7 @@ namespace ime {
 
         /**
          * @brief Constructor
-         * @param tileMap Grid to move target in
+         * @param grid Grid to move target in
          * @param target The game object to be moved in the grid
          *
          * @warning If @a target is left as @a nullptr, then setTarget()
@@ -55,11 +55,11 @@ namespace ime {
          *
          * @see setTarget
          */
-        explicit TargetGridMover(TileMap &tileMap, GridObject* target = nullptr);
+        explicit TargetGridMover(Grid2D &grid, GridObject* target = nullptr);
 
         /**
          * @brief Create a TargetGridMover
-         * @param tileMap The grid the target will be moved in
+         * @param grid The grid the target will be moved in
          * @param target The game object to be moved in the grid
          * @return The created grid mover
          *
@@ -71,7 +71,7 @@ namespace ime {
          *
          * @see setTarget
          */
-        static TargetGridMover::Ptr create(TileMap &tileMap, GridObject* target = nullptr);
+        static TargetGridMover::Ptr create(Grid2D &grid, GridObject* target = nullptr);
 
         /**
          * @brief Get the name of this class
@@ -158,7 +158,7 @@ namespace ime {
          * @return True if the destination is reachable from the targets
          *         current position otherwise false
          *
-         * @warning This function is expensive when the tilemap has a lot of
+         * @warning This function is expensive when the grid has a lot of
          * accessible tiles because the path is regenerated every time the
          * function is called to accommodate changes in position since the
          * destination was set
@@ -173,7 +173,7 @@ namespace ime {
          * @return True if the destination is reachable from the targets
          *         current position otherwise false
          *
-         * @warning This function is expensive when the tilemap has a lot of
+         * @warning This function is expensive when the grid has a lot of
          * accessible tiles because the path is regenerated every time the
          * function is called to accommodate changes in position since the
          * destination was set

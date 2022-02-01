@@ -36,7 +36,7 @@ namespace ime {
         isTimeUpdatedWhenPaused_{false},
         isEventUpdatedWhenPaused_{false},
         hasPhysicsSim_{false},
-        hasTilemap_{false},
+        hasGrid2D_{false},
         cacheState_{false, ""},
         spriteContainer_{std::make_unique<SpriteContainer>(renderLayers_)},
         entityContainer_{std::make_unique<GameObjectContainer>(renderLayers_)},
@@ -69,13 +69,13 @@ namespace ime {
             entityContainer_ = std::move(other.entityContainer_);
             gridMovers_ = std::move(other.gridMovers_);
             shapeContainer_ = std::move(other.shapeContainer_);
-            tileMap_ = std::move(other.tileMap_);
+            grid2D_ = std::move(other.grid2D_);
             timescale_ = other.timescale_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
             isTimeUpdatedWhenPaused_ = other.isTimeUpdatedWhenPaused_;
             isEventUpdatedWhenPaused_ = other.isEventUpdatedWhenPaused_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
-            hasTilemap_ = other.hasTilemap_;
+            hasGrid2D_ = other.hasGrid2D_;
             cacheState_ = other.cacheState_;
             isEntered_ = other.isEntered_;
             isInitialized_ = other.isInitialized_;
@@ -289,12 +289,12 @@ namespace ime {
         return renderLayers_;
     }
 
-    TileMap &Scene::getTilemap() {
-        return *tileMap_;
+    Grid2D &Scene::getGrid() {
+        return *grid2D_;
     }
 
-    const TileMap &Scene::getTilemap() const {
-        return *tileMap_;
+    const Grid2D &Scene::getGrid() const {
+        return *grid2D_;
     }
 
     ui::GuiContainer &Scene::getGui() {
@@ -335,17 +335,17 @@ namespace ime {
         world_->createDebugDrawer(getEngine().getRenderTarget());
         hasPhysicsSim_ = true;
 
-        if (hasTilemap_)
-            tileMap_->setPhysicsEngine(world_.get());
+        if (hasGrid2D_)
+            grid2D_->setPhysicsEngine(world_.get());
     }
 
-    void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
-        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, *this);
+    void Scene::createGrid2D(unsigned int tileWidth, unsigned int tileHeight) {
+        grid2D_ = std::make_unique<Grid2D>(tileWidth, tileHeight, *this);
 
         if (hasPhysicsSim_)
-            tileMap_->setPhysicsEngine(world_.get());
+            grid2D_->setPhysicsEngine(world_.get());
 
-        hasTilemap_ = true;
+        hasGrid2D_ = true;
     }
 
     Scene::~Scene() = default;

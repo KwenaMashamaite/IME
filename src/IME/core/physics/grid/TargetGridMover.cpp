@@ -29,9 +29,9 @@
 #include "IME/utility/Utils.h"
 
 namespace ime {
-    TargetGridMover::TargetGridMover(TileMap &tileMap, GridObject* target) :
-        GridMover(Type::Target, tileMap, target),
-        pathFinder_(std::make_unique<BFS>(tileMap.getSizeInTiles())),
+    TargetGridMover::TargetGridMover(Grid2D &grid, GridObject* target) :
+        GridMover(Type::Target, grid, target),
+        pathFinder_(std::make_unique<BFS>(grid.getSizeInTiles())),
         targetTileIndex_{-1, -1},
         pathColour_{utility::generateRandomColour()},
         renderPath_{false},
@@ -40,7 +40,7 @@ namespace ime {
         isAdaptiveMoveEnabled_{false},
         isPendingMove_{false}
     {
-        IME_ASSERT((tileMap.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed tilemap")
+        IME_ASSERT((grid.getSizeInTiles() != Vector2u{0u, 0u}), "A target grid mover must be instantiated with a fully constructed grid")
 
         if (getTarget())
             targetTileIndex_ = getGrid().getTileOccupiedByChild(getTarget()).getIndex();
@@ -92,8 +92,8 @@ namespace ime {
         });
     }
 
-    TargetGridMover::Ptr TargetGridMover::create(TileMap &tileMap, GridObject *target) {
-        return std::make_unique<TargetGridMover>(tileMap, target);
+    TargetGridMover::Ptr TargetGridMover::create(Grid2D &grid, GridObject *target) {
+        return std::make_unique<TargetGridMover>(grid, target);
     }
 
     std::string TargetGridMover::getClassName() const {
