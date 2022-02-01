@@ -213,7 +213,7 @@ namespace ime {
         return *cameraContainer_;
     }
 
-    PhysicsEngine& Scene::getPhysicEngine() {
+    PhysicsEngine& Scene::getPhysicsEngine() {
         return *world_;
     }
 

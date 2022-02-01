@@ -506,7 +506,7 @@ namespace ime {
          *
          * @see createPhysicEngine
          */
-        PhysicsEngine& getPhysicEngine();
+        PhysicsEngine& getPhysicsEngine();
         const PhysicsEngine& getPhysicsEngine() const;
 
         /**
