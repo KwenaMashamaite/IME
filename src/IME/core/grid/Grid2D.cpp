@@ -269,8 +269,10 @@ namespace ime {
     bool Grid2D::addChild(GridObject* child, const Index& index) {
         IME_ASSERT(child, "Child cannot be a nullptr")
         if (isIndexValid(index) && children_.insert(child).second) {
-            destructionIds_[child->getObjectId()] = child->onDestruction([this, id = child->getObjectId()]{
-                removeChildWithId(id);
+            // Automatically remove the child from the grid when it is destroyed
+            destructionIds_[child->getObjectId()] = child->onDestruction([this, child] {
+                destructionIds_.erase(child->getObjectId());
+                children_.erase(child);
             });
 
             child->getTransform().setPosition(getTile(index).getWorldCentre());
@@ -316,8 +318,9 @@ namespace ime {
         for (auto& child : children_) {
             if (child->getObjectId() == id) {
                 unsubscribeDestructionListener(child);
+                GridObject* copy = child;
                 children_.erase(child);
-                child->setGrid(nullptr);
+                copy->setGrid(nullptr);
 
                 return true;
             }
