@@ -277,7 +277,7 @@ namespace ime {
 
                 // Move target to target tile ahead of time
                 Vector2f currentPosition = target_->getTransform().getPosition();
-                grid_.moveChild(target_, targetTile_->getIndex());
+                grid_.changeTile(target_, targetTile_->getIndex());
 
                 // Grid2D::addChild modifies the position of the target such that it's at
                 // the centre of the tile, however we don't want it to teleport, we want it

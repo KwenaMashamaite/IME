@@ -471,7 +471,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GridObject* child, const Index& index);
+        void changeTile(GridObject* child, const Index& index);
 
         /**
          * @brief Move child to a different tile
@@ -483,7 +483,7 @@ namespace ime {
          *
          * @see addChild
          */
-        void moveChild(GridObject* child, const Tile& tile);
+        void changeTile(GridObject* child, const Tile& tile);
 
         /**
          * @brief Get the tile occupied by a child of the grid

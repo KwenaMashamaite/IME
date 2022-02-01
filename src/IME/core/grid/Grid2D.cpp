@@ -351,13 +351,13 @@ namespace ime {
         });
     }
 
-    void Grid2D::moveChild(GridObject* child, const Index& index) {
+    void Grid2D::changeTile(GridObject* child, const Index& index) {
         if (hasChild(child) && isIndexValid(index))
             child->getTransform().setPosition(getTile(index).getWorldCentre());
     }
 
-    void Grid2D::moveChild(GridObject* child, const Tile &tile) {
-        moveChild(child, tile.getIndex());
+    void Grid2D::changeTile(GridObject* child, const Tile &tile) {
+        changeTile(child, tile.getIndex());
     }
 
     Vector2u Grid2D::getTileSize() const {
