@@ -468,6 +468,8 @@ namespace ime {
             });
         } else if (property.getName() == "gridLineColour")
             backgroundTile_.setFillColour(property.getValue<Colour>());
+        else if (property.getName() == "backgroundTexture")
+            backgroundTile_.setTexture(property.getValue<std::string>());
     }
 
     void Grid2D::unsubscribeDestructionListener(GridObject *child) {

@@ -32,6 +32,10 @@ namespace ime {
         isVisible_{true}
     {}
 
+    void Grid2DRenderer::setBackgroundTexture(const std::string &filename) {
+        emit(Property{"backgroundTexture", filename});
+    }
+
     void Grid2DRenderer::setTileColour(const Colour &colour) {
         if (tileColour_ != colour) {
             tileColour_ = colour;

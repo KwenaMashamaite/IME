@@ -31,6 +31,8 @@
 #include <functional>
 
 namespace ime {
+    class Texture;
+
     /**
      * @brief Defines the render properties of a Grid2D
      *
@@ -44,6 +46,13 @@ namespace ime {
          * @brief Default constructor
          */
         Grid2DRenderer();
+
+        /**
+         * @brief Set the background texture of the grid
+         * @param filename The file name of the texture to be set
+         * @throws FileNotFound if the specified file cannot be loaded from the disk
+         */
+        void setBackgroundTexture(const std::string& filename);
 
         /**
          * @brief Set the colour of the grid tiles
