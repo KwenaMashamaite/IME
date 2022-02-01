@@ -131,12 +131,12 @@ namespace ime {
         }
     }
 
-    const RigidBody::Ptr& Shape::getRigidBody() {
-        return body_;
+    RigidBody* Shape::getRigidBody() {
+        return body_.get();
     }
 
-    const RigidBody::Ptr& Shape::getRigidBody() const {
-        return body_;
+    const RigidBody* Shape::getRigidBody() const {
+        return body_.get();
     }
 
     bool Shape::hasRigidBody() const {
