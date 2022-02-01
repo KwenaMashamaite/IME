@@ -29,6 +29,8 @@
 #include "IME/graphics/Colour.h"
 #include "IME/utility/Helpers.h"
 #include "IME/graphics/RenderTarget.h"
+#include "IME/graphics/Texture.h"
+#include "IME/core/resources/ResourceManager.h"
 #include <SFML/Graphics/Shape.hpp>
 #include <memory>
 
@@ -53,6 +55,34 @@ namespace ime {
              * own implementation
              */
             virtual std::unique_ptr<IShapeImpl> clone() = 0;
+
+            /**
+             * @brief Set the texture of the shape
+             * @param filename The file name of the texture to be set
+             * @throws FileNotFound if the @a filename cannot be found on the disk
+             *
+             * @see getTexture
+             */
+            virtual void setTexture(const std::string& filename) = 0;
+
+            /**
+             * @brief Set the texture of the shape from a source texture
+             * @param texture The source texture
+             *
+             * The @a texture is copied
+             *
+             * @see getTexture
+             */
+            virtual void setTexture(const Texture& texture) = 0;
+
+            /**
+             * @brief Get the shapes texture
+             * @return The texture of the shape or a nullptr if there is no set texture
+             *
+             * @see setTexture
+             */
+            virtual Texture* getTexture() = 0;
+            virtual const Texture* getTexture() const = 0;
 
             /**
              * @brief Set the position of the shape
@@ -245,11 +275,15 @@ namespace ime {
 
             ShapeImpl(const ShapeImpl& other) :
                 shape_{std::make_shared<T>(*other.shape_)}
-            {}
+            {
+                if (other.texture_)
+                    texture_ = std::make_shared<Texture>(*other.texture_);
+            }
 
             ShapeImpl& operator=(const ShapeImpl& rhs) {
                 if (this != &rhs) {
                     shape_ = rhs.shape_;
+                    texture_ = rhs.texture_;
                 }
 
                 return *this;
@@ -262,6 +296,7 @@ namespace ime {
             ShapeImpl& operator=(ShapeImpl&& rhs) noexcept {
                 if (this != &rhs) {
                     shape_ = std::move(rhs.shape_);
+                    texture_ = std::move(rhs.texture_);
                 }
 
                 return *this;
@@ -269,6 +304,26 @@ namespace ime {
 
             std::unique_ptr<IShapeImpl> clone() override {
                 return std::make_unique<ShapeImpl<T>>(*this);
+            }
+
+            void setTexture(const std::string &filename) override {
+                texture_ = std::make_shared<Texture>(ResourceManager::getInstance()->getTexture(filename));
+                shape_->setTexture(&texture_->getInternalTexture(), true);
+            }
+
+            void setTexture(const Texture &texture) override {
+                if (*texture_ != texture) {
+                    *texture_ = *std::make_shared<Texture>(texture);
+                    shape_->setTexture(&texture_->getInternalTexture(), true);
+                }
+            }
+
+            Texture *getTexture() override {
+                return texture_.get();
+            }
+
+            const Texture *getTexture() const override {
+                return texture_.get();
             }
 
             void setPosition(float x, float y) override {
@@ -348,7 +403,8 @@ namespace ime {
             ~ShapeImpl() override = default;
 
         private:
-            std::shared_ptr<T> shape_; //!< Pointer to third party shape
+            std::shared_ptr<T> shape_;         //!< Pointer to third party shape
+            std::shared_ptr<Texture> texture_; //!< Keeps texture alive for third party shape
         };
     }
 }

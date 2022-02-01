@@ -143,6 +143,22 @@ namespace ime {
         return body_ != nullptr;
     }
 
+    void Shape::setTexture(const std::string &filename) {
+        pimpl_->setTexture(filename);
+    }
+
+    void Shape::setTexture(const Texture &texture) {
+        pimpl_->setTexture(texture);
+    }
+
+    Texture *Shape::getTexture() {
+        return pimpl_->getTexture();
+    }
+
+    const Texture *Shape::getTexture() const {
+        return pimpl_->getTexture();
+    }
+
     void Shape::setFillColour(const Colour &colour) {
         if (getFillColour() == colour)
             return;

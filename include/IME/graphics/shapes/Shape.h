@@ -28,6 +28,7 @@
 #include "IME/common/ITransformable.h"
 #include "IME/graphics/Drawable.h"
 #include "IME/graphics/Colour.h"
+#include "IME/graphics/Texture.h"
 #include "IME/common/Rect.h"
 #include "IME/core/physics/rigid_body/RigidBody.h"
 #include <memory>
@@ -146,6 +147,34 @@ namespace ime {
          *         false
          */
         bool hasRigidBody() const;
+
+        /**
+         * @brief Set the texture of the shape
+         * @param filename The file name of the texture to be set
+         * @throws FileNotFound if the @a filename cannot be found on the disk
+         *
+         * @see getTexture
+         */
+        void setTexture(const std::string& filename);
+
+        /**
+         * @brief Set the texture of the shape from a source texture
+         * @param texture The source texture
+         *
+         * Note that the source texture is copied
+         *
+         * @see getTexture
+         */
+        void setTexture(const Texture& texture);
+
+        /**
+         * @brief Get the shapes texture
+         * @return The shapes texture or a nullptr if there is no set texture
+         *
+         * @see setTexture
+         */
+        Texture* getTexture();
+        const Texture* getTexture() const;
 
         /**
          * @brief Set the fill colour of the shape
