@@ -336,13 +336,14 @@ namespace ime {
         hasPhysicsSim_ = true;
 
         if (hasTilemap_)
-            tileMap_->setPhysicsSimulation(world_.get());
+            tileMap_->setPhysicsEngine(world_.get());
     }
 
     void Scene::createTilemap(unsigned int tileWidth, unsigned int tileHeight) {
-        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, getRenderLayers(), *this);
+        tileMap_ = std::make_unique<TileMap>(tileWidth, tileHeight, *this);
+
         if (hasPhysicsSim_)
-            tileMap_->setPhysicsSimulation(world_.get());
+            tileMap_->setPhysicsEngine(world_.get());
 
         hasTilemap_ = true;
     }

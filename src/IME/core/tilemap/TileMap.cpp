@@ -29,14 +29,21 @@
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
 #include "IME/core/object/GridObject.h"
 #include "IME/graphics/RenderTarget.h"
+#include <algorithm>
 
 namespace ime {
-    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight,
-            RenderLayerContainer& renderLayers, Scene& scene) :
+    bool isInTile(GridObject* child, const Tile& tile) {
+        if (child) {
+            return tile.contains(child->getTransform().getPosition());
+        }
+
+        return false;
+    }
+
+    TileMap::TileMap(unsigned int tileWidth, unsigned int tileHeight, Scene& scene) :
         scene_{scene},
         tileSpacing_{1u},
         invalidTile_({0, 0}, {-1, -1}),
-        renderLayers_{renderLayers},
         physicsSim_{nullptr}
     {
         invalidTile_.setIndex({-1, -1});
@@ -56,8 +63,8 @@ namespace ime {
         });
     }
 
-    void TileMap::setPhysicsSimulation(PhysicsEngine* physicsSimulation) {
-        physicsSim_ = physicsSimulation;
+    void TileMap::setPhysicsEngine(PhysicsEngine* engine) {
+        physicsSim_ = engine;
     }
 
     Scene &TileMap::getScene() {
@@ -68,16 +75,26 @@ namespace ime {
         return scene_;
     }
 
+    unsigned int TileMap::getRowCount() const {
+        return numOfRows_;
+    }
+
+    unsigned int TileMap::getColumnCount() const {
+        return numOfColms_;
+    }
+
     TileMapRenderer &TileMap::getRenderer() {
         return renderer_;
     }
 
     const Tile& TileMap::getTile(const Vector2f &position) const {
         for (auto& tileRows : tiledMap_) {
-            for (auto& tile : tileRows)
+            for (auto& tile : tileRows) {
                 if (tile.contains(position))
                     return tile;
+            }
         }
+
         return invalidTile_;
     }
 
@@ -110,21 +127,18 @@ namespace ime {
 
         computeDimensions();
         createTiledMap();
-        createObjectList();
     }
 
     void TileMap::loadFromFile(const std::string &filename, const char& separator) {
         mapData_ = TileMapParser::parse(filename, separator);
         computeDimensions();
         createTiledMap();
-        createObjectList();
     }
 
     void TileMap::loadFromVector(Map map) {
         mapData_ = std::move(map);
         computeDimensions();
         createTiledMap();
-        createObjectList();
     }
 
     void TileMap::computeDimensions() {
@@ -193,12 +207,6 @@ namespace ime {
         }
     }
 
-    void TileMap::createObjectList() {
-        forEachTile([this](const Tile& tile) {
-            children_.emplace(tile.getIndex(), std::vector<GridObject*>{});
-        });
-    }
-
     void TileMap::draw(priv::RenderTarget &renderTarget) const {
         if (renderer_.isVisible()) {
             renderTarget.draw(backgroundTile_);
@@ -256,16 +264,13 @@ namespace ime {
 
     bool TileMap::addChild(GridObject* child, const Index& index) {
         IME_ASSERT(child, "Child cannot be a nullptr")
-        if (isIndexValid(index) && !hasChild(child)) {
-            child->setGrid(this);
-            child->getTransform().setPosition(getTile(index).getWorldCentre());
-
-            int destructionId = child->onDestruction([this, id = child->getObjectId()]{
+        if (isIndexValid(index) && children_.insert(child).second) {
+            destructionIds_[child->getObjectId()] = child->onDestruction([this, id = child->getObjectId()]{
                 removeChildWithId(id);
             });
 
-            destructionIds_[child->getObjectId()] = destructionId;
-            children_[index].push_back(child);
+            child->getTransform().setPosition(getTile(index).getWorldCentre());
+            child->setGrid(this);
 
             return true;
         }
@@ -273,124 +278,45 @@ namespace ime {
         return false;
     }
 
-    bool TileMap::hasChild(const GridObject* child) {
-        if (!child)
-            return false;
-
-        for (auto& childList : children_) {
-            for (auto i = 0u; i < childList.second.size(); ++i)
-                if (childList.second[i] == child)
-                    return true;
-        }
-
-        return false;
+    bool TileMap::hasChild(const GridObject* child) const {
+        return std::find(children_.begin(), children_.end(), child) != children_.end();
     }
 
     GridObject* TileMap::getChildWithId(std::size_t id) const {
-        for (const auto& childList : children_) {
-            for (auto i = 0u; i < childList.second.size(); ++i)
-                if (childList.second[i]->getObjectId() == id)
-                    return childList.second[i];
+        for (const auto& child : children_) {
+            if (child->getObjectId() == id)
+                return child;
         }
-
-        return nullptr;
-    }
-
-    bool TileMap::isTileOccupied(const Tile& tile) const {
-        if (isIndexValid(tile.getIndex()))
-            return !children_.at(tile.getIndex()).empty();
-
-        return false;
-    }
-
-    bool TileMap::isTileOccupied(const Index &index) const {
-        if (isIndexValid(index))
-            return !children_.at(index).empty();
-
-        return false;
-    }
-
-    bool TileMap::tileHasVisitors(const Tile &tile) const {
-        if (isIndexValid(tile.getIndex()))
-            return children_.at(tile.getIndex()).size() > 1;
-
-        return false;
-    }
-
-    GridObject* TileMap::getOccupant(const Tile& tile) {
-        if (isTileOccupied(tile))
-            return children_[tile.getIndex()].front();
 
         return nullptr;
     }
 
     void TileMap::forEachChild(const Callback<GridObject*>& callback) const {
-        std::for_each(children_.begin(), children_.end(), [&callback](auto& childList) {
-            std::for_each(childList.second.begin(), childList.second.end(),
-                [&callback] (GridObject* child) {
-                    callback(child);
-            });
+        std::for_each(children_.begin(), children_.end(), [&callback](auto& child) {
+            callback(child);
         });
     }
 
     void TileMap::forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const {
-        if (isTileOccupied(tile)) {
-            std::for_each(children_.at(tile.getIndex()).begin(), children_.at(tile.getIndex()).end(),
-                [&callback](GridObject* child) {
-                    callback(child)
-            ;});
-        }
-    }
-
-    std::size_t TileMap::getNumOfOccupants(const Tile &tile) const {
-        if (isTileOccupied(tile))
-            return children_.at(tile.getIndex()).size();
-
-        return 0;
+        forEachChild([&](GridObject* child) {
+            if (isInTile(child, tile))
+                callback(child);
+        });
     }
 
     void TileMap::update(Time) {
 
     }
 
-    bool TileMap::removeChildFromTile(const Tile& tile, GridObject* child) {
-        if (isTileOccupied(tile)) {
-            if (!tileHasVisitors(tile) && getOccupant(tile) == child)
-                return removeOccupant(tile);
-
-            for (auto i = 0u; i < children_[tile.getIndex()].size(); ++i) {
-                if (children_[tile.getIndex()][i] == child) {
-                    children_[tile.getIndex()][i]->setGrid(nullptr);
-                    unsubscribeDestructionListener(child);
-                    children_[tile.getIndex()].erase(children_[tile.getIndex()].begin() + i);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    bool TileMap::removeOccupant(const Tile &tile) {
-        if (isTileOccupied(tile)) {
-            children_[tile.getIndex()].front()->setGrid(nullptr);
-            unsubscribeDestructionListener(*(children_[tile.getIndex()].begin()));
-            children_[tile.getIndex()].erase(children_[tile.getIndex()].begin());
-            return true;
-        }
-
-        return false;
-    }
-
     bool TileMap::removeChildWithId(std::size_t id) {
-        for (auto& childList : children_) {
-            for (auto i = 0u; i < childList.second.size(); ++i)
-                if (childList.second[i]->getObjectId() == id) {
-                    childList.second[i]->setGrid(nullptr);
-                    unsubscribeDestructionListener(*(childList.second.begin() + i));
-                    childList.second.erase(childList.second.begin() + i);
-                    return true;
-                }
+        for (auto& child : children_) {
+            if (child->getObjectId() == id) {
+                unsubscribeDestructionListener(child);
+                children_.erase(child);
+                child->setGrid(nullptr);
+
+                return true;
+            }
         }
 
         return false;
@@ -403,48 +329,27 @@ namespace ime {
         return removeChildWithId(child->getObjectId());
     }
 
-    void TileMap::removeChildrenIf(const std::function<bool(GridObject*)>& callback) {
-        for (auto& childList : children_) {
-            childList.second.erase(std::remove_if(childList.second.begin(), childList.second.end(),
-                [this, &callback](GridObject* gameObject) {
-                    if (callback(gameObject)) {
-                        gameObject->setGrid(nullptr);
-                        unsubscribeDestructionListener(gameObject);
-                        return true;
-                    } else
-                        return false;
-            }), childList.second.end());
+    void TileMap::removeChildIf(const std::function<bool(GridObject*)>& callback) {
+        for (auto iter = children_.begin(); iter != children_.end(); ) {
+            if (callback(*iter)) {
+                GridObject* gameObject = *iter;
+                unsubscribeDestructionListener(gameObject);
+                iter = children_.erase(iter);
+                gameObject->setGrid(nullptr);
+            } else
+                ++iter;
         }
     }
 
-    bool TileMap::removeAllVisitors(const Tile &tile) {
-        if (!tileHasVisitors(tile))
-            return false;
-        else {
-            GridObject* occupant = children_[tile.getIndex()].front();
-            clearVector(children_[tile.getIndex()]);
-            occupant->setGrid(this);
-            children_[tile.getIndex()].push_back(occupant);
-
+    void TileMap::removeAllChildren() {
+        removeChildIf([](GridObject*) {
             return true;
-        }
-    }
-
-    bool TileMap::removeAllChildren(const Tile &tile) {
-        if (isTileOccupied(tile)) {
-            clearVector(children_[tile.getIndex()]);
-
-            return true;
-        }
-
-        return false;
+        });
     }
 
     void TileMap::moveChild(GridObject* child, const Index& index) {
-        if (hasChild(child) && isIndexValid(index) && index != getTileOccupiedByChild(child).getIndex()) {
-            removeChildFromTile(getTileOccupiedByChild(child), child);
-            addChild(child, index);
-        }
+        if (hasChild(child) && isIndexValid(index))
+            child->getTransform().setPosition(getTile(index).getWorldCentre());
     }
 
     void TileMap::moveChild(GridObject* child, const Tile &tile) {
@@ -453,10 +358,6 @@ namespace ime {
 
     Vector2u TileMap::getTileSize() const {
         return tileSize_;
-    }
-
-    RenderLayerContainer &TileMap::renderLayers() {
-        return renderLayers_;
     }
 
     void TileMap::forEachTile(const Callback<const Tile&>& callback) const {
@@ -524,7 +425,20 @@ namespace ime {
     }
 
     const Tile& TileMap::getTileOccupiedByChild(const GridObject* child) const {
-        return getTile(child->getTransform().getPosition());
+        if (child && hasChild(child))
+            return getTile(child->getTransform().getPosition());
+        else
+            return invalidTile_;
+    }
+
+    bool TileMap::isTileOccupied(const Tile &tile) const {
+        return isTileOccupied(tile.getIndex());
+    }
+
+    bool TileMap::isTileOccupied(const Index &index) const {
+        return std::any_of(children_.begin(), children_.end(), [this, &index] (GridObject* child) {
+            return isInTile(child, tiledMap_[index.row][index.colm]);
+        });
     }
 
     void TileMap::onRenderChange(const Property &property) {
@@ -557,11 +471,7 @@ namespace ime {
         destructionIds_.erase(child->getObjectId());
     }
 
-    void TileMap::clearVector(std::vector<GridObject *> &vector) {
-        vector.erase(std::remove_if(vector.begin(), vector.end(), [this](GridObject* gameObject) {
-            gameObject->setGrid(nullptr);
-            unsubscribeDestructionListener(gameObject);
-            return true;
-        }), vector.end());
+    TileMap::~TileMap() {
+        removeAllChildren();
     }
 }

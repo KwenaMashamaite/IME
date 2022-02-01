@@ -39,7 +39,7 @@
 #include <unordered_map>
 #include <vector>
 #include <tuple>
-#include <map>
+#include <unordered_set>
 
 namespace ime {
     using Map = std::vector<std::vector<char>>; //!< Alias for 2D vector of chars
@@ -58,8 +58,6 @@ namespace ime {
      */
     class IME_API TileMap {
     public:
-        using Ptr = std::shared_ptr<TileMap>; // Shared tilemap pointer
-
         /**
          * @internal
          * @brief Create an empty tilemap
@@ -72,17 +70,16 @@ namespace ime {
          *
          * This constructor is intended for internal use only
          */
-        TileMap(unsigned int tileWidth, unsigned int tileHeight,
-                RenderLayerContainer& renderLayers, Scene& scene);
+        TileMap(unsigned int tileWidth, unsigned int tileHeight, Scene& scene);
 
         /**
          * @internal
-         * @brief Set the physics simulation
-         * @param physicsSimulation The simulation to be set
+         * @brief Set the physics engine
+         * @param engine The physics engine to be set
          *
          * @warning This function is intended for internal use only
          */
-        void setPhysicsSimulation(PhysicsEngine* physicsSimulation);
+        void setPhysicsEngine(PhysicsEngine* engine);
 
         /**
          * @brief Get the scene the tilemap belongs to
@@ -90,6 +87,22 @@ namespace ime {
          */
         Scene& getScene();
         const Scene& getScene() const;
+
+        /**
+         * @brief Get the number of rows
+         * @return The number of rows
+         *
+         * @see getColumnCount
+         */
+        unsigned int getRowCount() const;
+
+        /**
+         * @brief Get the number of columns
+         * @return The number of columns
+         *
+         * @see getRowCount
+         */
+        unsigned int getColumnCount() const;
 
         /**
          * @brief Get the tilemaps renderer
@@ -380,24 +393,6 @@ namespace ime {
             const Callback<const Tile&>& callback) const;
 
         /**
-         * @brief Get the tilemap render layers
-         * @return The tilemap render layers
-         *
-         * Render layers allow the tilemap to be rendered in separate layers
-         * which are then composed back together. By default the tilemap has
-         * a "default" layer at index 0. When a drawable object is added to
-         * the scene without an explicit layer, it will be added to the default
-         * layer. You can add objects to the "default" layer or even remove
-         * the "default" layer from the render layer container, however you
-         * must not forget to reallocate the objects in the "default" layer to
-         * another layer, otherwise they will not be drawn to the screen
-         *
-         * @note The returned object is the same as that returned by
-         * ime::Scene::renderLayers
-         */
-        RenderLayerContainer& renderLayers();
-
-        /**
          * @internal
          * @brief Render tilemap on a render target
          * @param renderTarget Target to render tilemap on
@@ -437,29 +432,7 @@ namespace ime {
          * @param child Child to search for in the tilemap
          * @return True if the tilemap has the child, otherwise false
          */
-        bool hasChild(const GridObject* child);
-
-        /**
-         * @brief Remove a child from a tile
-         * @param tile Tile to remove child from
-         * @param child Child to be removed
-         * @return True if the child was removed or false if the child is not
-         *         in the specified tile
-         */
-        bool removeChildFromTile(const Tile& tile, GridObject* child);
-
-        /**
-         * @brief Remove an occupant of a tile
-         * @param tile Tile to remove occupant from
-         * @return True if the occupant was removed or false if the tile is
-         *         not occupied or it is invalid
-         *
-         * Recall, an occupant is the first child to occupy a tile, if removed,
-         * the first visitor will become the new occupant. Subsequent calls to
-         * this function will result in visitors taking turns as occupants until
-         * the tile is no longer occupied
-         */
-        bool removeOccupant(const Tile &tile);
+        bool hasChild(const GridObject* child) const;
 
         /**
          * @brief Remove a child with a certain id from the tilemap
@@ -485,31 +458,12 @@ namespace ime {
          * All children for which @a callback returns true are removed
          * from the grid
          */
-        void removeChildrenIf(const std::function<bool(GridObject*)>& callback);
+        void removeChildIf(const std::function<bool(GridObject*)>& callback);
 
         /**
-         * @brief Remove all the visitors of a tile
-         * @param tile Tile whose visitors are to be removed
-         * @return True if all visitors have been removed or false if the
-         *         tile has no visitors
-         *
-         * This function will remove all children currently occupying a tile
-         * except the occupant of the tile. In this context the occupant is
-         * the child that got to the tile before other children
-         *
-         * @see tileHasVisitors
+         * @brief Remove all children from the grid
          */
-        bool removeAllVisitors(const Tile& tile);
-
-        /**
-         * @brief Remove all children in a tile
-         * @param tile Tile to remove all children from
-         * @return True if all children were removed, or false if the
-         *         tile is not occupied
-         *
-         * @see removeAllVisitors and removeOccupant
-         */
-        bool removeAllChildren(const Tile& tile);
+        void removeAllChildren();
 
         /**
          * @brief Move child to a different position in the tilemap
@@ -570,30 +524,6 @@ namespace ime {
         bool isTileOccupied(const Index& index) const;
 
         /**
-         * @brief Check if the tile at a specified index has visitors or not
-         * @param tile Tile to be checked
-         * @return True if the tile has visitors, otherwise false
-         *
-         * A tile has visitors if its currently occupied by more than one
-         * child. The first child to occupy the tile is the occupant of
-         * that tile whilst other entities are visitors
-         */
-        bool tileHasVisitors(const Tile& tile) const;
-
-        /**
-         * @brief Get the occupant of a tile
-         * @param tile Tile to get the occupant of
-         * @return The occupant of the specified tile if the tile is occupied,
-         *         otherwise a nullptr
-         *
-         * An occupant is the first child to occupy a tile, subsequent children
-         * are considered visitors
-         *
-         * @see forEachTile(Tile&, Callback)
-         */
-        GridObject* getOccupant(const Tile& tile);
-
-        /**
          * @brief Execute a callback for each child in the tilemap
          * @param callback Function to execute
          */
@@ -611,13 +541,6 @@ namespace ime {
         void forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const;
 
         /**
-         * @brief Get the number of occupants in a tile
-         * @param tile Tile to get the number of occupants for
-         * @return The number of occupants in a tile
-         */
-        std::size_t getNumOfOccupants(const Tile& tile) const;
-
-        /**
          * @internal
          * @brief Update tilemap
          * @param deltaTime Time passed since last update
@@ -627,19 +550,16 @@ namespace ime {
          */
         void update(Time deltaTime);
 
+        /**
+         * @brief Destructor
+         */
+        ~TileMap();
+
     private:
         /**
          * @brief Create the visual gird
          */
         void createTiledMap();
-
-        /**
-         * @brief Create an empty vector of children for each tile of the
-         *        tilemap
-         *
-         * This vector will store the children of that specific tile
-         */
-        void createObjectList();
 
         /**
          * @brief Calculate size related attributes
@@ -723,12 +643,6 @@ namespace ime {
          */
         void unsubscribeDestructionListener(GridObject* child);
 
-        /**
-         * @brief Remove destruction listeners and clear vector
-         * @param vector The vector to be cleared
-         */
-        void clearVector(std::vector<GridObject*> &vector);
-
     private:
         Scene& scene_;                       //!< The scene the tilemap belongs to
         unsigned int tileSpacing_;           //!< Spacing between tiles in all directions
@@ -740,10 +654,9 @@ namespace ime {
         Map mapData_;                        //!< Map data used to identify different tiles
         Tile invalidTile_;                   //!< Tile returned when an invalid index is provided
         TileMapRenderer renderer_;           //!< Determines the look of the grid
-        RenderLayerContainer& renderLayers_; //!< Render layers for this scene
         RectangleShape backgroundTile_;      //!< Dictates the background colour of the tilemap
 
-        std::unordered_map<Index, std::vector<GridObject*>> children_; //!< Stores the id's of game objects that belong to the tilemap
+        std::unordered_set<GridObject*> children_; //!< Stores the id's of game objects that belong to the tilemap
         std::unordered_map<unsigned int, int> destructionIds_;         //!< Holds the id of the destruction listeners (key = object id, value = destruction id)
         std::vector<std::vector<Tile>> tiledMap_;                      //!< Tiles container
         PhysicsEngine* physicsSim_;                                     //!< The physics simulation

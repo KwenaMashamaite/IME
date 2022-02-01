@@ -276,9 +276,8 @@ namespace ime {
                 isMoving_ = true;
 
                 // Move target to target tile ahead of time
-                tileMap_.removeChildFromTile(*prevTile_, target_);
-                auto currentPosition = target_->getTransform().getPosition();
-                tileMap_.addChild(target_, targetTile_->getIndex());
+                Vector2f currentPosition = target_->getTransform().getPosition();
+                tileMap_.moveChild(target_, targetTile_->getIndex());
 
                 // TileMap::addChild modifies the position of the target such that it's at
                 // the centre of the tile, however we don't want it to teleport, we want it
