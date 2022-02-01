@@ -114,8 +114,8 @@ namespace ime {
 } // namespace ime
 
 // Version of the library
-#define IME_VERSION_MAJOR 2
-#define IME_VERSION_MINOR 6
+#define IME_VERSION_MAJOR 3
+#define IME_VERSION_MINOR 0
 #define IME_VERSION_PATCH 0
 
 #endif // IME_CONFIG_H

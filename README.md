@@ -30,33 +30,31 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-_**Note that from `v2.4.0`, IME no longer provides precompiled `MinGW 7.3.0` binaries**_
-
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v2.5.0).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v3.0.0).
 To use the library you must have a supported (GCC or VC++) C++17 compliant compiler.
-Available binaries are compiled with `GCC MinGW 10.3.0` and `Microsoft Visual C++ 16 2019`
+Available binaries are compiled with `GCC MinGW 10.3.0` and `Microsoft Visual C++ 16`
 compilers. This means that in order to use them, you must have the exact compiler on your system.
-If you want to use different versions of the above compilers, then you have to [build](#Build) the
+If you want to use different versions of the above compilers, then you'll have to [build](#Build) the
 library yourself.
 
 ## Installation
 
-_**Note that from `v2.4.0`, IME no longer provides `static` binaries nor support it**_.
-
 1. Using CMake
 
-If you install IME in a known location, usually `Program Files (x86)`, you don't have to
+If you extracted IME to a location known to *CMAKE*, you don't have to
 set `IME_DIR`, *CMake* will automatically find the library
 
 ```cmake
 # Find IME
 set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if IME installed in known location
-find_package(IME 2.5.0 REQUIRED)
+find_package(IME 3.0.0 REQUIRED)
 
 # Link IME
 target_link_libraries (myGame PRIVATE ime)
 ```
 <br>
+
+<em>Note:</em>
 
 After successfully building your game executable, copy the contents of `IME/bin` folder to the
 folder in which your game executable resides. If your current `BUILD_TYPE` is **Debug**, then copy
@@ -92,12 +90,12 @@ cmake --install . --prefix "directory_where_you_want_the_library_to_be_installed
 ```
 
 You can leave out `--prefix "installation_directory"` and *CMake* will install the library to a known
-location, usually `Program Files (x86)\IME`. However, this may require admin privileges
+location, usually `Program Files`. However, this may require admin privileges
 
 ## Learn
 
 * [Tutorials](#Learn) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v2.5.0/html/index.html)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v3.0.0/html/index.html)
 
 ## Platform
 
