@@ -4,6 +4,7 @@ include_directories("${PROJECT_SOURCE_DIR}/extlibs/doctest")
 # Set unit tests source files
 set(IME_TEST_SRC
         Test_Main.cpp
+        Test_Colour.cpp
     )
 
 # Change executable output directory
