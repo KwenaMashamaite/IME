@@ -34,7 +34,7 @@ namespace ime::input {
     }
 
     Keyboard::Keyboard() {
-        for (auto i = 0; i < static_cast<int>(Key::KeyCount) - 1; ++i) {
+        for (auto i = 0; i < static_cast<int>(Key::KeyCount); ++i) {
             wasDown_[i] = false;
             stringKeyPairs_.insert({keyToString(static_cast<Key>(i)), static_cast<Key>(i)});
         }
