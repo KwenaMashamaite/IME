@@ -67,8 +67,8 @@ inline float Vector2<T>::angleTo(const Vector2<T>& otherVec) const {
 }
 
 template <typename T>
-inline Vector2<T> Vector2<T>::asUnitVector() const {
-    return Vector2<T>{x / magnitude(), y / magnitude()};
+inline Vector2<float> Vector2<T>::asUnitVector() const {
+    return {x / magnitude(), y / magnitude()};
 }
 
 template <typename T>
