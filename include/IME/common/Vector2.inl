@@ -47,6 +47,11 @@ inline float Vector2<T>::dot(const Vector2<T>& otherVec) const {
 }
 
 template <typename T>
+inline T Vector2<T>::cross(const Vector2<T>& otherVec) const {
+    return x * otherVec.y - y * otherVec.x;
+}
+
+template <typename T>
 inline float Vector2<T>::distanceTo(const Vector2<T>& otherVec) const {
     auto distanceVec = otherVec - *this;
     return distanceVec.magnitude();

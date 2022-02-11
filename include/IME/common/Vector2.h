@@ -73,6 +73,13 @@ namespace ime {
         float dot(const Vector2<T>& otherVec) const;
 
         /**
+         * @brief Get the cross product of this vector and anther vector
+         * @param otherVec The vector to cross with this vector
+         * @return The cross product between the two vectors
+         */
+        T cross(const Vector2<T>& otherVec) const;
+
+        /**
          * @brief Get the distance between this vector and another vector
          * @param otherVec The vector to get the distance to
          * @return The distance between this vector and @a otherVec
