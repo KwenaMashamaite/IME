@@ -22,6 +22,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
+namespace {
+    auto constexpr PI = 3.14159265358979323846f;
+}
+
 template <typename T>
 inline Vector2<T>::Vector2() : x(0), y(0)
 {}
@@ -59,8 +63,7 @@ inline float Vector2<T>::distanceTo(const Vector2<T>& otherVec) const {
 
 template <typename T>
 inline float Vector2<T>::angleTo(const Vector2<T>& otherVec) const {
-    static const auto PI = 3.1415926f;
-    return ((static_cast<float>(acos(dot(otherVec))) / magnitude() * otherVec.magnitude()) * 180.0f) / PI;
+    return std::fabs(static_cast<float>(atan2(cross(otherVec), dot(otherVec))) * 180.0f / PI);
 }
 
 template <typename T>
