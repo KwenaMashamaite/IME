@@ -62,6 +62,16 @@ inline float Vector2<T>::distanceTo(const Vector2<T>& otherVec) const {
 }
 
 template <typename T>
+inline float Vector2<T>::angle() const {
+    auto angle = static_cast<float>(atan2(y, x));
+
+    if (angle < 0)
+        angle += 2 * PI;
+
+    return angle * 180.0f / PI;
+}
+
+template <typename T>
 inline float Vector2<T>::angleTo(const Vector2<T>& otherVec) const {
     return std::fabs(static_cast<float>(atan2(cross(otherVec), dot(otherVec))) * 180.0f / PI);
 }

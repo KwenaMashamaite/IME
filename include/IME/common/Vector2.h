@@ -87,6 +87,12 @@ namespace ime {
         float distanceTo(const Vector2<T>& otherVec) const;
 
         /**
+         * @brief Get the angle between the vector and the positive x-axis, in degrees
+         * @return The angle between this vector and the positive x-axis
+         */
+        float angle() const;
+
+        /**
          * @brief Get the angle between this vector and another vector
          * @param otherVec The vector to get the angle to
          * @return The angle between this vector and @a otherVect

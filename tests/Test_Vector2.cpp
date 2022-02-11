@@ -233,6 +233,19 @@ TEST_CASE("ime::Vector2 class template")
         CHECK_EQ(v2.distanceTo(v1), 10.0f);
     }
 
+    SUBCASE("angle()")
+    {
+        CHECK_EQ(static_cast<int>(ime::Vector2i(0, 0).angle()), 0);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(7, 0).angle()), 0);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(0, 3).angle()), 90);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(-10, 0).angle()), 180);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(0, -30).angle()), 270);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(4, 4).angle()), 45);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(-4, -4).angle()), 225);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(-7, 10).angle()), 124);
+        CHECK_EQ(static_cast<int>(ime::Vector2i(15, -3).angle()), 348);
+    }
+
     SUBCASE("angleTo()")
     {
         ime::Vector2i v1(0, 7);
