@@ -5,7 +5,7 @@ include_directories("${PROJECT_SOURCE_DIR}/extlibs/doctest")
 set(IME_TEST_SRC
         Test_Main.cpp
         Test_Colour.cpp
-    )
+        Test_Vector2.cpp)
 
 # Change executable output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
