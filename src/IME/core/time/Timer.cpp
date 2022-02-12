@@ -228,7 +228,7 @@ namespace ime {
     }
 
     void Timer::setTimescale(float timescale) {
-        if (timescale_ > 0)
+        if (timescale > 0.0f)
             timescale_ = timescale;
     }
 
