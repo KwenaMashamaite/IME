@@ -6,7 +6,8 @@ set(IME_TEST_SRC
         Test_Main.cpp
         Test_Colour.cpp
         Test_Vector2.cpp
-        Test_Keyboard.cpp)
+        Test_Keyboard.cpp
+        Test_Mouse.cpp)
 
 # Change executable output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
