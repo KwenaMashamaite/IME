@@ -10,7 +10,8 @@ set(IME_TEST_SRC
         Test_Mouse.cpp
         Test_Timer.cpp
         Test_Property.cpp
-        Test_Rect.cpp)
+        Test_Rect.cpp
+        Test_Preference.cpp)
 
 # Change executable output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
