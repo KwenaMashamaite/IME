@@ -119,7 +119,7 @@ namespace ime {
          * @brief Apply a callback to each property in the container
          * @param callback The function to be applied
          */
-        void forEachProperty(const Callback<Property&>& callback) const;
+        void forEachProperty(const Callback<Property&>& callback);
 
         /**
          * @brief Subscribe a callback to a value change event
