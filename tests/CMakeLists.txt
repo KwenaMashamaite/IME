@@ -15,7 +15,8 @@ set(IME_TEST_SRC
         Test_PrefContainer.cpp
         Test_PropertyContainer.cpp
         Test_Transform.cpp
-        Test_EventEmitter.cpp)
+        Test_EventEmitter.cpp
+        Test_Object.cpp)
 
 # Change executable output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
