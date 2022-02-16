@@ -89,8 +89,18 @@ namespace ime {
             return;
         else if (target) {
             IME_ASSERT(!target->getGridMover(), "A game object can only be controlled by one grid mover at a time, call setTarget(nullptr) on the current grid mover")
-            IME_ASSERT(!target->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
             IME_ASSERT(grid_.hasChild(target), "The game object must already be in the grid/grid before adding it to a grid mover")
+
+            if (target->hasRigidBody())
+            {
+                IME_ASSERT(target->getRigidBody()->getType() == RigidBody::Type::Kinematic, "A grid mover can only control game objects with a ime::RigidBody::Type::Kinematic rigid body")
+                Vector2f velocity = target->getRigidBody()->getLinearVelocity();
+
+                if (velocity != Vector2f(0.0f, 0.0f))
+                    maxSpeed_ = {std::fabs(velocity.x), std::fabs(velocity.y)};
+
+                target->getRigidBody()->setLinearVelocity({0, 0});
+            }
 
             if (target_) {
                 target_->removeEventListener(targetDestructionId_);
@@ -181,6 +191,11 @@ namespace ime {
         if (isMoveFrozen_ != freeze) {
             isMoveFrozen_ = freeze;
 
+            if (!isMoveFrozen_ && isMoving_)
+                target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
+            else
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+
             emitChange(Property{"movementFreeze", isMoveFrozen_});
         }
     }
@@ -263,7 +278,11 @@ namespace ime {
     void GridMover::update(Time deltaTime) {
         if (target_ && !isMoveFrozen_) {
             IME_ASSERT(grid_.hasChild(target_), "Target removed from the grid while still controlled by a grid mover")
-            IME_ASSERT(!target_->hasRigidBody(), "Game objects controlled by a grid mover must not have a rigid body attached to them")
+
+            if (target_->hasRigidBody())
+            {
+                IME_ASSERT(target_->getRigidBody()->getType() == RigidBody::Type::Kinematic, "A grid mover can only control game objects with a ime::RigidBody::Type::Kinematic rigid body")
+            }
 
             if (!isMoving_ && targetDirection_ != Unknown && maxSpeed_ != Vector2f{0.0f, 0.0f}) {
                 setTargetTile();
@@ -274,6 +293,12 @@ namespace ime {
                 prevDirection_ = currentDirection_;
                 currentDirection_ = targetDirection_;
                 isMoving_ = true;
+
+                // The position of the target is updated by the physics engine
+                if (target_->hasRigidBody()) {
+                    target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x * speedMultiplier_, 
+                                                                maxSpeed_.y * targetDirection_.y * speedMultiplier_});
+                }
 
                 // Move target to target tile ahead of time
                 Vector2f currentPosition = target_->getTransform().getPosition();
@@ -291,7 +316,7 @@ namespace ime {
                 if (isTargetTileReached(deltaTime)) {
                     snapTargetToTargetTile();
                     onDestinationReached();
-                } else {
+                } else if (!target_->hasRigidBody()) {
                     target_->getTransform().move(maxSpeed_.x * targetDirection_.x * deltaTime.asSeconds() * speedMultiplier_,
                                                  maxSpeed_.y * targetDirection_.y * deltaTime.asSeconds() * speedMultiplier_);
                 }
@@ -306,6 +331,12 @@ namespace ime {
     void GridMover::snapTargetToTargetTile() {
         isMoving_ = false;
         targetDirection_ = Unknown;
+
+        if (target_->hasRigidBody())
+        {
+            target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+        }
+
         target_->getTransform().setPosition(targetTile_->getWorldCentre());
     }
 
@@ -372,6 +403,10 @@ namespace ime {
             const Tile* hitTile = targetTile_;
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
+
+            if (target_->hasRigidBody())
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+
             eventEmitter_.emit("GridMover_tileCollision", hitTile->getIndex());
             target_->emitGridEvent(Property{"tileCollision", hitTile->getIndex()});
 
@@ -392,6 +427,9 @@ namespace ime {
 
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
+
+            if (target_->hasRigidBody())
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
 
             eventEmitter_.emit("GridMover_objectCollision", target_, obstacle);
             target_->emitGridEvent(Property{"objectCollision", obstacle});
@@ -420,6 +458,10 @@ namespace ime {
         if (targetTile_->getIndex().row < 0 || targetTile_->getIndex().colm < 0) {
             targetTile_ = prevTile_;
             targetDirection_ = Unknown;
+
+            if (target_->hasRigidBody())
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+
             eventEmitter_.emit("GridMover_borderCollision", targetTile_->getIndex());
             target_->emitGridEvent(Property{"borderCollision"});
 
@@ -521,6 +563,9 @@ namespace ime {
         if (target_) {
             if (targetDestructionId_ != -1)
                 target_->removeEventListener(targetDestructionId_);
+
+            if (target_->getRigidBody())
+                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
 
             target_->setGridMover(nullptr);
         }
