@@ -101,6 +101,8 @@ namespace ime {
         return *circle_;
     }
 
-    CircleCollider::~CircleCollider() = default;
+    CircleCollider::~CircleCollider() {
+        emitDestruction();
+    }
 }
 

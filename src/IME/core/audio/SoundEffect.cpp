@@ -225,5 +225,7 @@ namespace ime::audio {
         return pImpl_->getPitch();
     }
 
-    SoundEffect::~SoundEffect() = default;
+    SoundEffect::~SoundEffect() {
+        emitDestruction();
+    }
 }

@@ -348,5 +348,7 @@ namespace ime {
         hasGrid2D_ = true;
     }
 
-    Scene::~Scene() = default;
+    Scene::~Scene() {
+        emitDestruction();
+    }
 }

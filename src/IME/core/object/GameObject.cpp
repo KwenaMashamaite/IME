@@ -265,6 +265,8 @@ namespace ime {
     }
 
     GameObject::~GameObject() {
+        emitDestruction();
+        
         if (postStepId_ != -1)
             scene_.get().unsubscribe_("postStep", postStepId_);
 

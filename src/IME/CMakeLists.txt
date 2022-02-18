@@ -119,6 +119,7 @@ set(IME_SRC
     graphics/shapes/CircleShape.cpp
     graphics/shapes/ConvexShape.cpp
     graphics/DebugDrawer.cpp
+    graphics/Drawable.cpp
     graphics/Camera.cpp
     graphics/SpriteImage.cpp
     utility/ConsoleLogger.cpp

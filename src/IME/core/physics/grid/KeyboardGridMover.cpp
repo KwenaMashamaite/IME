@@ -178,7 +178,9 @@ namespace ime {
         keyboard_.handleEvent(event);
     }
 
-    KeyboardGridMover::~KeyboardGridMover() = default;
+    KeyboardGridMover::~KeyboardGridMover() {
+        emitDestruction();
+    }
 
     bool operator==(const ime::TriggerKeys &lhs, const ime::TriggerKeys &rhs) {
         return (lhs.leftKey == rhs.leftKey) &&

@@ -426,6 +426,7 @@ namespace ime {
     }
 
     Camera::~Camera() {
+        emitDestruction();
         stopFollow();
     }
 }

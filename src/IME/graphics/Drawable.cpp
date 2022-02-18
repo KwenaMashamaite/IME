@@ -22,48 +22,15 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IME_DRAWABLE_H
-#define IME_DRAWABLE_H
-
-#include "IME/Config.h"
-#include "IME/core/object/Object.h"
+#include "IME/graphics/Drawable.h"
 
 namespace ime {
-
-    /// @internal
-    namespace priv {
-        class RenderTarget;
+    std::string Drawable::getClassType() const {
+        return "Drawable";
     }
 
-    /**
-     * @brief Interface for drawable objects
-     */
-    class IME_API Drawable : public Object {
-    public:
-        /**
-         * @brief Get the name of this class
-         * @return The name of this class
-         *
-         * Note that this function is only overridden by child classes
-         * of Object which also serve as a base class for other classes
-         *
-         * @see Object::getClassType and Object::getClassName
-         */
-        std::string getClassType() const override;
-
-        /**
-         * @brief Draw object on a render target
-         * @param renderTarget Target to draw object on
-         *
-         * @note This function is intended for internal use only
-         */
-        virtual void draw(priv::RenderTarget &renderTarget) const = 0;
-
-        /**
-         * @brief Destructor
-         */
-        ~Drawable() override;
-    };
+    Drawable::~Drawable() {
+        emitDestruction();
+    }
 }
 
-#endif // IME_DRAWABLE_H

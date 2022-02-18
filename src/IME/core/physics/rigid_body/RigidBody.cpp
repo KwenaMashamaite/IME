@@ -409,6 +409,6 @@ namespace ime {
     }
 
     RigidBody::~RigidBody() {
-        gameObject_ = nullptr;
+        emitDestruction();
     }
 }

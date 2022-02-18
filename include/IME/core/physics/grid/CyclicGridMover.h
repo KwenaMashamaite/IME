@@ -132,6 +132,11 @@ namespace ime {
          */
         CycleDirection getCycleDirection() const;
 
+        /**
+         * @brief Destructor
+         */
+        ~CyclicGridMover() override;
+
     private:
         /**
          * @brief Move the target

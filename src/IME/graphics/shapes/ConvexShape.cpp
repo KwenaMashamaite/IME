@@ -106,5 +106,7 @@ namespace ime {
         return Vector2f{point.x, point.y};
     }
 
-    ConvexShape::~ConvexShape() = default;
+    ConvexShape::~ConvexShape() {
+        emitDestruction();
+    }
 }

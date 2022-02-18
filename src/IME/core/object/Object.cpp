@@ -112,7 +112,11 @@ namespace ime {
         eventEmitter_.emit("Object_propertyChange", property);
     }
 
-    Object::~Object() {
+    void Object::emitDestruction() {
         eventEmitter_.emit("Object_destruction");
+    }
+
+    Object::~Object() {
+        emitDestruction();
     }
 }

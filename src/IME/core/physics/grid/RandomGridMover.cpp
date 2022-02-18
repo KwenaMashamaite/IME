@@ -125,5 +125,7 @@ namespace ime {
         } while(true);
     }
 
-    RandomGridMover::~RandomGridMover() = default;
+    RandomGridMover::~RandomGridMover() {
+        emitDestruction();
+    }
 }

@@ -274,6 +274,17 @@ namespace ime {
          */
         void emitChange(const Property& property);
 
+        /**
+         * @brief Emit a destruction event
+         *
+         * @note This function must be the first statement in the definition
+         * of a destructor to avoid undefined behavior. In addition, note that
+         * destruction listeners are invoked once. Therefore, multiple classes
+         * in a hierarchy may call this function but the class that makes the
+         * call first will be the one that invokes the destruction listeners
+         */
+        void emitDestruction();
+
         // Members
         EventEmitter eventEmitter_; //!< Event dispatcher
 

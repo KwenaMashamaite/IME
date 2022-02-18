@@ -297,6 +297,8 @@ namespace ime {
     }
 
     Shape::~Shape() {
+        emitDestruction();
+
         if (postStepId_ != -1)
             body_->getWorld()->getScene().unsubscribe_("postStep", postStepId_);
 

@@ -27,6 +27,8 @@
 
 class TestObject : public ime::Object {
 public:
+    using ime::Object::emitDestruction;
+
     std::string getClassName() const override {
         return "TestObject";
     }
@@ -80,16 +82,39 @@ TEST_CASE("ime::Object class")
     {
         SUBCASE("onDestruction()")
         {
-            auto object = std::make_unique<TestObject>();
+            SUBCASE("Destruction listeners are invoked when the object goes out of scope")
+            {
+                auto object = std::make_unique<TestObject>();
 
-            bool isInvoked = false;
-            object->onDestruction([&isInvoked] {
-                isInvoked = true;
-            });
+                bool isInvoked = false;
+                object->onDestruction([&isInvoked] {
+                    isInvoked = true;
+                });
 
-            object.reset(); // Destroy object
+                object.reset(); // Destroy object
 
-            CHECK(isInvoked);
+                CHECK(isInvoked);
+            }
+
+            SUBCASE("Destruction listeners are invoked once")
+            {
+                auto object = std::make_unique<TestObject>();
+
+                bool isInvoked = false;
+                int invocationCount = 0;
+                object->onDestruction([&isInvoked, &invocationCount] {
+                    isInvoked = true;
+                    invocationCount++;
+                });
+
+                object->emitDestruction();
+                object->emitDestruction();
+                object->emitDestruction();
+                object->emitDestruction();
+
+                REQUIRE(isInvoked);
+                CHECK_EQ(invocationCount, 1);
+            }
         }
 
         SUBCASE("onPropertyChange(property, callback, oneTime = false)")

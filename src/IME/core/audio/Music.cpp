@@ -223,5 +223,7 @@ namespace ime::audio {
         return pImpl_->getPlayingPosition();
     }
 
-    Music::~Music() = default;
+    Music::~Music() {
+        emitDestruction();
+    }
 }

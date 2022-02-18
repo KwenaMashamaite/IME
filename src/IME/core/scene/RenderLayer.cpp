@@ -121,6 +121,7 @@ namespace ime {
     }
 
     RenderLayer::~RenderLayer() {
+        emitDestruction();
         removeDestructionHandlers();
     }
 }

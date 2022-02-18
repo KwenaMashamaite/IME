@@ -560,6 +560,8 @@ namespace ime {
     }
 
     GridMover::~GridMover() {
+        emitDestruction();
+        
         if (target_) {
             if (targetDestructionId_ != -1)
                 target_->removeEventListener(targetDestructionId_);

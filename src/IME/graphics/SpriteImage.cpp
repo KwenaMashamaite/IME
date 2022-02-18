@@ -65,5 +65,7 @@ namespace ime {
         return (point.x <= texture_->getSize().x && point.y <= texture_->getSize().y);
     }
 
-    SpriteImage::~SpriteImage() = default;
+    SpriteImage::~SpriteImage() {
+        emitDestruction();
+    }
 }

@@ -259,5 +259,7 @@ namespace ime {
         fixture_->SetFilterData(b2FilterData);
     }
 
-    Collider::~Collider() = default;
+    Collider::~Collider() {
+        emitDestruction();
+    }
 }

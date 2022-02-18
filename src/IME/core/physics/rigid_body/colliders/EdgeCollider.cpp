@@ -109,5 +109,7 @@ namespace ime {
         return *edgeShape_;
     }
 
-    EdgeCollider::~EdgeCollider() = default;
+    EdgeCollider::~EdgeCollider() {
+        emitDestruction();
+    }
 }

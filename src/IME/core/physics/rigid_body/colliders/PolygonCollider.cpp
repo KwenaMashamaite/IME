@@ -84,5 +84,7 @@ namespace ime {
         return *polygon_;
     }
 
-    PolygonCollider::~PolygonCollider() = default;
+    PolygonCollider::~PolygonCollider() {
+        emitDestruction();
+    }
 }

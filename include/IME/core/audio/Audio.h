@@ -222,6 +222,11 @@ namespace ime {
              */
             virtual Status getStatus() const = 0;
 
+            /**
+             * @brief Destructor
+             */
+            ~Audio() override;
+
         private:
             bool isMuted_;           //!< Mute state
             float volumeBeforeMute_; //!< Volume before audio was muted

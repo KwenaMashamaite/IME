@@ -97,4 +97,8 @@ namespace ime {
         else
             requestMove(newDir * -1);
     }
+
+    CyclicGridMover::~CyclicGridMover() {
+        emitDestruction();
+    }
 }

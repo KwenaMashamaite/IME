@@ -63,4 +63,8 @@ namespace ime::audio {
     void Audio::restart() {
         seek(Time::Zero);
     }
+
+    Audio::~Audio() {
+        emitDestruction();
+    }
 }
