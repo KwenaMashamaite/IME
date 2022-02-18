@@ -38,13 +38,16 @@ namespace ime {
         eventEmitter_{other.eventEmitter_},
         id_{objectIdCounter++},
         tag_{other.tag_}
-    {}
+    {
+        eventEmitter_.removeAllEventListeners("Object_destruction");
+    }
 
     Object &Object::operator=(const Object & other) {
         // We don't want to assign the object id, each must have a unique one
         if (this != &other) {
             tag_ = other.tag_;
             eventEmitter_ = other.eventEmitter_;
+            eventEmitter_.removeAllEventListeners("Object_destruction");
         }
 
         return *this;
