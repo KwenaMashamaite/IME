@@ -100,7 +100,7 @@ namespace ime {
     }
 
     int Object::onDestruction(const Callback<>& callback) {
-        return eventEmitter_.addEventListener("Object_destruction", callback);
+        return eventEmitter_.addOnceEventListener("Object_destruction", callback);
     }
 
     bool Object::isSameObjectAs(const Object &other) const {
