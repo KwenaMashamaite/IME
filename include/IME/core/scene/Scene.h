@@ -459,8 +459,8 @@ namespace ime {
         /**
          * @brief Get a reference to the game engine
          * @return A reference to the game engine
-         *
-         * @warning Do not keep the returned reference
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          */
         Engine& getEngine();
         const Engine& getEngine() const;
@@ -468,6 +468,8 @@ namespace ime {
         /**
          * @brief Get the game window
          * @return The game window
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          */
         Window& getWindow();
         const Window& getWindow() const;
@@ -475,6 +477,8 @@ namespace ime {
         /**
          * @brief Get the scene level camera
          * @return The scene level camera
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          *
          * Note that this camera is the default/main camera and is always
          * the rendered last. You can add other cameras to the scene using
@@ -488,6 +492,8 @@ namespace ime {
         /**
          * @brief Get the scene level camera container
          * @return The scene level camera container
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          */
         CameraContainer& getCameras();
         const CameraContainer& getCameras() const;
@@ -495,6 +501,8 @@ namespace ime {
         /**
          * @brief Get the scene level physics engine/simulation
          * @return The scene level physics engine/simulation
+         * @throws AccessViolationException If this function is called without
+         *         creating the physics engine first
          *
          * The physics simulation is responsible for creating, managing,
          * colliding and updating all of the RigidBody's in it.
@@ -590,6 +598,8 @@ namespace ime {
         /**
          * @brief Get the global cache
          * @return The global cache
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
@@ -606,6 +616,8 @@ namespace ime {
         /**
          * @brief Get the global savable cache
          * @return Global savable cache
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
@@ -640,6 +652,8 @@ namespace ime {
         /**
          * @brief Get the scene level grid
          * @return The scene level grid
+         * @throws AccessViolationException If this function is called without
+         *         creating the grid first
          *
          * Note that only one grid can be created per scene
          *
@@ -654,6 +668,8 @@ namespace ime {
         /**
          * @brief Get the scene level gui container
          * @return The scene level gui container
+         * @throws AccessViolationException If this function is called before
+         *         the scene is initialized
          *
          * The gui container is local to the scene. This means that all widgets
          * in it are destroyed when the scene is destroyed

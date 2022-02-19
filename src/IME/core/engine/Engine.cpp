@@ -28,6 +28,7 @@
 #include "IME/core/resources/ResourceManager.h"
 #include "IME/graphics/RenderTarget.h"
 #include "IME/utility/Helpers.h"
+#include "IME/core/exceptions/Exceptions.h"
 
 namespace ime {
     namespace {
@@ -182,8 +183,11 @@ namespace ime {
             return;
         }
 
-        IME_ASSERT(isInitialized_, "Failed to start engine because its not initialized")
-        IME_ASSERT(!sceneManager_->isEmpty(), "Failed to start engine because it has no states")
+        if (!isInitialized_)
+            throw AccessViolationException("ime::Engine must be initialized (see ime::Engine::initialize()) first before calling ime::Engine::run()");
+
+        if (sceneManager_->isEmpty())
+            throw AccessViolationException("ime::Engine must have at least one ime::Scene pushed to it before calling ime::Engine::run(), see ime::Engine::pushScene()");
 
         isRunning_ = true;
         Time deltaTime;
@@ -423,19 +427,25 @@ namespace ime {
     }
 
     ui::GuiContainer &Engine::getGui() {
-        return gui_;
+        return const_cast<ui::GuiContainer&>(std::as_const(*this).getGui());
     }
 
     const ui::GuiContainer &Engine::getGui() const {
-        return gui_;
+        if (!isInitialized_)
+            throw AccessViolationException("ime::Engine::getGui() must not be called before the engine is initialized, see ime::Engine::initialize()");
+        else
+            return gui_;
     }
 
     PrefContainer &Engine::getConfigs() {
-        return configs_;
+        return const_cast<PrefContainer&>(std::as_const(*this).getConfigs());
     }
 
     const PrefContainer &Engine::getConfigs() const {
-        return configs_;
+        if (!isInitialized_)
+            throw AccessViolationException("ime::Engine::getConfigs() must not be called before the engine is initialized, see ime::Engine::initialize()");
+        else
+            return configs_;
     }
 
     const std::string &Engine::getGameName() const {
@@ -499,11 +509,14 @@ namespace ime {
     }
 
     Window &Engine::getWindow() {
-        return *window_;
+        return const_cast<Window&>(std::as_const(*this).getWindow());
     }
 
     const Window &Engine::getWindow() const {
-        return *window_;
+        if (!isInitialized_)
+            throw AccessViolationException("ime::Engine::getWindow() must not be called before the engine is initialized, see ime::Engine::initialize()");
+        else
+            return *window_;
     }
 
     int Engine::onInit(const Callback<>& callback) {

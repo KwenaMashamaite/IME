@@ -52,6 +52,18 @@ namespace ime {
          */
         explicit InvalidArgument(const std::string& message) : std::runtime_error(message) {}
     };
+
+    /**
+     * @brief Exception thrown when a data access condition is not satisfied
+     */
+    class AccessViolationException : public std::runtime_error {
+    public:
+        /**
+         * @brief Constructor
+         * @param message Exception message
+         */
+        explicit AccessViolationException(const std::string& message) : std::runtime_error(message) {}
+    };
 }
 
 #endif // IME_EXCEPTIONS_H

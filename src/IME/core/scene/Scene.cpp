@@ -25,6 +25,7 @@
 #include "IME/core/scene/Scene.h"
 #include "IME/core/engine/Engine.h"
 #include "IME/core/physics/rigid_body/PhysicsEngine.h"
+#include "IME/core/exceptions/Exceptions.h"
 
 namespace ime {
     Scene::Scene() :
@@ -182,43 +183,58 @@ namespace ime {
     }
 
     Engine &Scene::getEngine() {
-        return *engine_;
+        return const_cast<Engine&>(std::as_const(*this).getEngine());
     }
 
     const Engine &Scene::getEngine() const {
-        return *engine_;
+        if (!engine_)
+            throw AccessViolationException("ime::Scene::getEngine() must not be called before the scene is initialized");
+        else
+            return *engine_;
     }
 
     Window &Scene::getWindow() {
-        return *window_;
+        return const_cast<Window&>(std::as_const(*this).getWindow());
     }
 
     const Window &Scene::getWindow() const {
-        return *window_;
+        if (!window_)
+            throw AccessViolationException("ime::Scene::getWindow() must not be called before the scene is initialized");
+        else
+            return *window_;
     }
 
     Camera &Scene::getCamera() {
-        return *camera_;
+        return const_cast<Camera&>(std::as_const(*this).getCamera());
     }
 
     const Camera &Scene::getCamera() const {
-        return *camera_;
+        if (!camera_)
+            throw AccessViolationException("ime::Scene::getCamera() must not be called before the scene is initialized");
+        else
+            return *camera_;
     }
 
     CameraContainer &Scene::getCameras() {
-        return *cameraContainer_;
+        return const_cast<CameraContainer&>(std::as_const(*this).getCameras());
     }
 
     const CameraContainer &Scene::getCameras() const {
-        return *cameraContainer_;
+        if (!cameraContainer_)
+            throw AccessViolationException("ime::Scene::getCameras() must not be called before the scene is initialized");
+        else
+            return *cameraContainer_;
     }
 
     PhysicsEngine& Scene::getPhysicsEngine() {
-        return *world_;
+        return const_cast<PhysicsEngine&>(std::as_const(*this).getPhysicsEngine());
     }
 
     const PhysicsEngine& Scene::getPhysicsEngine() const {
-        return *world_;
+        if (!world_)
+            throw AccessViolationException("ime::Scene::createPhysicsEngine() must be called first before calling ime::Scene::getPhysicsEngine()");
+        else
+            return *world_;
     }
 
     GridMoverContainer &Scene::getGridMovers() {
@@ -266,19 +282,25 @@ namespace ime {
     }
 
     PropertyContainer &Scene::getCache() {
-        return *cache_;
+        return const_cast<PropertyContainer&>(std::as_const(*this).getCache());
     }
 
     const PropertyContainer &Scene::getCache() const {
-        return *cache_;
+        if (!cache_)
+            throw AccessViolationException("ime::Scene::getCache() must not be called before the scene is initialized");
+        else
+            return *cache_;
     }
 
     PrefContainer &Scene::getSCache() {
-        return *sCache_;
+        return const_cast<PrefContainer&>(std::as_const(*this).getSCache());
     }
 
     const PrefContainer &Scene::getSCache() const {
-        return *sCache_;
+        if (!sCache_)
+            throw AccessViolationException("ime::Scene::getSCache() must not be called before the scene is initialized");
+        else
+            return *sCache_;
     }
 
     RenderLayerContainer &Scene::getRenderLayers() {
@@ -290,19 +312,25 @@ namespace ime {
     }
 
     Grid2D &Scene::getGrid() {
-        return *grid2D_;
+        return const_cast<Grid2D&>(std::as_const(*this).getGrid());
     }
 
     const Grid2D &Scene::getGrid() const {
-        return *grid2D_;
+        if (!grid2D_)
+            throw AccessViolationException("ime::Scene::createGrid2D() must be called first before calling ime::Scene::getGrid()");
+        else
+            return *grid2D_;
     }
 
     ui::GuiContainer &Scene::getGui() {
-        return guiContainer_;
+        return const_cast<ui::GuiContainer&>(std::as_const(*this).getGui());
     }
 
     const ui::GuiContainer &Scene::getGui() const {
-        return guiContainer_;
+        if (!guiContainer_.isTargetSet())
+            throw AccessViolationException("ime::Scene::getGui() must not be called before the scene is initialized");
+        else
+            return guiContainer_;
     }
 
     ShapeContainer &Scene::getShapes() {

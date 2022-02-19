@@ -103,12 +103,15 @@ namespace ime {
 
         /**
          * @brief Start the main loop
+         * @throws AccessViolationException If this function is called before
+         *         the engine is initialized or before at least one Scene is
+         *         pushed to the engine
          *
          * @warning The engine must be initialized this function is called. In
          * addition, there must be at least one scene added to the engine for
          * the it to run
          *
-         * @see initialize and pushScene
+         * @see initialize and pushScene, pushCachedScene
          */
         void run();
 
@@ -180,6 +183,10 @@ namespace ime {
          /**
           * @brief Get the engines settings
           * @return The engines settings
+          * @throws AccessViolationException If this function is called before
+          *         the engine is initialized
+          *
+          * @see initialize
           */
          PrefContainer& getConfigs();
          const PrefContainer& getConfigs() const;
@@ -387,6 +394,8 @@ namespace ime {
         /**
          * @brief Get access to the engines game window
          * @return The engines game window
+         * @throws AccessViolationException If this function is called before
+         *         the engine is initialized
          *
          * @see initialize
          */
@@ -396,11 +405,15 @@ namespace ime {
         /**
          * @brief Get the engine level gui
          * @return The engine level gui
+         * @throws AccessViolationException If this function is called before
+         *         the engine is initialized
          *
          * Unlike ime::Scene::gui, this gui is not destroyed when the scene
          * is destroyed, but rather when the engine is shutdown. It may be
          * useful when the same UI is required across multiple scenes. Note
          * that this gui is rendered on top of the scene level gui
+         *
+         * @see initialize
          */
         ui::GuiContainer& getGui();
         const ui::GuiContainer& getGui() const;
