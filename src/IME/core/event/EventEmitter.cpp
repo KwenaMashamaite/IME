@@ -156,6 +156,15 @@ namespace ime {
         return hasListener(event, id).first;
     }
 
+    std::vector<std::string> EventEmitter::getEvents() const {
+        std::vector<std::string> events;
+
+        for (const auto& pair : eventList_)
+            events.emplace_back(pair.first);
+
+        return events;
+    }
+
     void EventEmitter::setActive(bool active) {
         isActive_ = active;
     }

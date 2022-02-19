@@ -24,6 +24,7 @@
 
 #include "IME/core/event/EventEmitter.h"
 #include <doctest.h>
+#include <algorithm>
 
 TEST_CASE("ime::EventEmitter class")
 {
@@ -49,6 +50,27 @@ TEST_CASE("ime::EventEmitter class")
 
             eventEmitter.setActive(true);
             CHECK(eventEmitter.isActive());
+        }
+
+        SUBCASE("getEvents()")
+        {
+            ime::EventEmitter eventEmitter;
+
+            eventEmitter.addEventListener("event1", ime::Callback<>([] {}));
+            eventEmitter.addEventListener("event2", ime::Callback<>([] {}));
+            eventEmitter.addEventListener("event3", ime::Callback<>([] {}));
+
+            REQUIRE(eventEmitter.hasEvent("event1"));
+            REQUIRE(eventEmitter.hasEvent("event2"));
+            REQUIRE(eventEmitter.hasEvent("event3"));
+
+            std::vector<std::string> events = eventEmitter.getEvents();
+
+            CHECK_EQ(events.size(), 3);
+            CHECK(std::find(events.begin(), events.end(), "event1") != events.end());
+            CHECK(std::find(events.begin(), events.end(), "event2") != events.end());
+            CHECK(std::find(events.begin(), events.end(), "event3") != events.end());
+            CHECK_FALSE(std::find(events.begin(), events.end(), "event4") != events.end());
         }
     }
 

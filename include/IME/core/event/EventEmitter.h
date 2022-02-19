@@ -261,6 +261,12 @@ namespace ime {
         bool hasEventListener(const std::string& event, int id) const;
 
         /**
+         * @brief Get the list of registered events
+         * @return A list of event names currently registered with the emitter
+         */
+        std::vector<std::string> getEvents() const;
+
+        /**
          * @brief Set whether or not the emitter is active
          * @param active True to activate or false to deactivate
          *
