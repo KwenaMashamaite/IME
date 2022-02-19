@@ -49,6 +49,7 @@ namespace ime {
         isMoveFrozen_{false},
         moveRestrict_{MoveRestriction::None},
         targetDestructionId_{-1},
+        targetPropertyChangeId_{-1},
         isInternalHandler_{false}
     {
         setTarget(target);
@@ -104,14 +105,29 @@ namespace ime {
 
             if (target_) {
                 target_->removeEventListener(targetDestructionId_);
-                targetDestructionId_ = -1;
+                target_->removeEventListener(targetPropertyChangeId_);
+                targetDestructionId_ = targetPropertyChangeId_ = -1;
                 teleportTargetToDestination();
                 target_->setGridMover(nullptr);
             }
 
             targetDestructionId_ = target->onDestruction([this] {
                 setTarget(nullptr);
-                targetDestructionId_ = -1;
+                targetDestructionId_ = targetPropertyChangeId_ = -1;
+            });
+
+            targetPropertyChangeId_ = target->onPropertyChange([this](const Property& property) {
+                if (property.getName() == "speed") {
+                    maxSpeed_ = property.getValue<Vector2f>();
+
+                    // The position of the target is updated by the physics engine and not by the grid mover
+                    if (target_->hasRigidBody()) {
+                        target_->getRigidBody()->setLinearVelocity(
+                            Vector2f{maxSpeed_.x * targetDirection_.x * speedMultiplier_,
+                                     maxSpeed_.y * targetDirection_.y * speedMultiplier_}
+                        );
+                    }
+                }
             });
 
             if (moveRestrict_ == MoveRestriction::None || moveRestrict_ == MoveRestriction::Diagonal) {
@@ -565,6 +581,9 @@ namespace ime {
         if (target_) {
             if (targetDestructionId_ != -1)
                 target_->removeEventListener(targetDestructionId_);
+
+            if (targetPropertyChangeId_ != -1)
+                target_->removeEventListener(targetPropertyChangeId_);
 
             if (target_->getRigidBody())
                 target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});

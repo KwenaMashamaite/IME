@@ -650,6 +650,7 @@ namespace ime {
         bool isMoveFrozen_;            //!< A flag indicating whether or not the targets movement is frozen
         MoveRestriction moveRestrict_; //!< Specified permitted directions of travel for the game object
         int targetDestructionId_;      //!< Target destruction handler id
+        int targetPropertyChangeId_;   //!< Target property change listener id
         bool isInternalHandler_;       //!< A flag indicating whether or not an event handler is internal
     };
 }
