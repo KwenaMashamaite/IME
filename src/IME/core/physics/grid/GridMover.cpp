@@ -208,9 +208,10 @@ namespace ime {
             isMoveFrozen_ = freeze;
 
             if (target_->hasRigidBody()) {
-                if (!isMoveFrozen_ && isMoving_)
-                    target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
-                else
+                if (!isMoveFrozen_ && isMoving_) {
+                    target_->getRigidBody()->setLinearVelocity(Vector2f{maxSpeed_.x * targetDirection_.x * speedMultiplier_,
+                                                                maxSpeed_.y * targetDirection_.y * speedMultiplier_});
+                } else
                     target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
             }
 
