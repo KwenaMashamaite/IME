@@ -207,10 +207,12 @@ namespace ime {
         if (isMoveFrozen_ != freeze) {
             isMoveFrozen_ = freeze;
 
-            if (!isMoveFrozen_ && isMoving_)
-                target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
-            else
-                target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+            if (target_->hasRigidBody()) {
+                if (!isMoveFrozen_ && isMoving_)
+                    target_->getRigidBody()->setLinearVelocity({maxSpeed_.x * targetDirection_.x, maxSpeed_.y * targetDirection_.y});
+                else
+                    target_->getRigidBody()->setLinearVelocity({0.0f, 0.0f});
+            }
 
             emitChange(Property{"movementFreeze", isMoveFrozen_});
         }
