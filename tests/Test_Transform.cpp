@@ -180,7 +180,7 @@ TEST_CASE("ime::Transform class")
         ime::Transform transform;
 
         bool isInvoked = false;
-        transform.onPropertyChange([&isInvoked](const ime::Property& property) {
+        transform.onPropertyChange([&isInvoked](const ime::Property&) {
             isInvoked = true;
         });
 

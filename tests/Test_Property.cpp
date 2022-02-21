@@ -106,7 +106,7 @@ TEST_CASE("ime::Property class")
                 ime::Property property("");
 
                 bool isInvoked = false;
-                int valueChangeListener = property.onValueChange([&isInvoked](ime::Property* p) {
+                int valueChangeListener = property.onValueChange([&isInvoked](ime::Property*) {
                     isInvoked = true;
                 });
 
