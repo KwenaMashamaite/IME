@@ -60,8 +60,8 @@ namespace ime {
         explicit Vector2(const Vector2<U> &vector);
 
         /**
-         * @brief Get the magnitude of the vector
-         * @return The magnitude of the vector
+         * @brief Get the magnitude/length of the vector
+         * @return The magnitude/length of the vector
          */
         float magnitude() const;
 
@@ -75,7 +75,7 @@ namespace ime {
         /**
          * @brief Get the cross product of this vector and anther vector
          * @param otherVec The vector to cross with this vector
-         * @return The cross product between the two vectors
+         * @return The cross product of this vector and @a otherVec
          */
         T cross(const Vector2<T>& otherVec) const;
 
@@ -93,9 +93,9 @@ namespace ime {
         float angle() const;
 
         /**
-         * @brief Get the angle between this vector and another vector
+         * @brief Get the angle between this vector and another vector, in degrees
          * @param otherVec The vector to get the angle to
-         * @return The angle between this vector and @a otherVect
+         * @return The angle between this vector and @a otherVec, in degrees
          */
         float angleTo(const Vector2<T>& otherVec) const;
 

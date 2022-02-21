@@ -38,7 +38,7 @@
 
 namespace ime {
     /**
-     * @brief Defines how the frames are arranged on a spritesheet
+     * @brief Defines how the Animation frames are arranged on a spritesheet
      */
     enum class FrameArrangement {
         Horizontal, //!< Horizontal frame alignment
@@ -46,7 +46,7 @@ namespace ime {
     };
 
     /**
-     * @brief A SpriteSheet based animation
+     * @brief A SpriteSheet/frame based animation
      */
     class IME_API Animation {
     public:
@@ -63,16 +63,15 @@ namespace ime {
         };
 
        /**
-         * @brief Construct an animation
+         * @brief Constructor
          * @param name The name of the animation
          * @param spriteSheet The spritesheet containing the animation frames
-         * @param duration How long the animation should play for before it
-         *                 stops or loops around
+         * @param duration The duration of the animation before it completes or loops
+         *                 around
          *
-         * If the @a duration argument is unspecified (i.e left as ime::Time::Zero)
-         * the duration will be derived from the frame rate. If the duration is
-         * specified then the frame rate will be overridden and derived from the
-         * given duration
+         * If the @a duration argument is unspecified (i.e left as ime::Time::Zero),
+         * then it will be derived from the frame rate. If the duration is specified
+         * then the frame rate will be overridden and derived from the given duration
          *
          * @see setFrameRate
          */
@@ -80,17 +79,16 @@ namespace ime {
             const Time& duration = Time::Zero);
 
         /**
-         * @brief Create a new animation object
+         * @brief Create a new Animation object
          * @param name The name of the animation
          * @param spriteSheet The spritesheet containing the animation frames
-         * @param duration How long the animation should play for before it
-         *                 stops or loops around
-         * @return The new animation object
+         * @param duration The duration of the animation before it completes or loops
+         *                 around
+         * @return The newly created Animation object
          *
-         * If the @a duration argument is unspecified (i.e left as ime::Time::Zero)
-         * the duration will be derived from the frame rate. If the duration is
-         * specified then the frame rate will be overridden and derived from the
-         * given duration
+         * If the @a duration argument is unspecified (i.e left as ime::Time::Zero),
+         * then it will be derived from the frame rate. If the duration is specified
+         * then the frame rate will be overridden and derived from the given duration
          */
         static Animation::Ptr create(const std::string &name, const SpriteSheet& spriteSheet,
             const Time& duration = Time::Zero);
@@ -114,8 +112,7 @@ namespace ime {
          * then the repeat count will be set to '0', meaning that the animation
          * will not repeat
          *
-         * By default, the animation does not repeat (repeat count is 0), it
-         * plays once then completes
+         * By default, the animation does not repeat
          *
          * @see setLoop
          */
@@ -125,7 +122,7 @@ namespace ime {
          * @brief Get the number of times the animation repeats before completing
          * @return The number of times the animation is repeated
          *
-         * The return value of this function imply the following:
+         * The returned value of this function implies the following:
          *
          * -1 = The animation repeats forever and never completes
          *  0 = The animation does not repeat
@@ -144,7 +141,7 @@ namespace ime {
         bool isRepeating() const;
 
         /**
-         * @brief Set whether or not the animation should be repeated continuously
+         * @brief Set whether or not the animation should repeat indefinitely
          * @param loop True to loop animation, otherwise false
          *
          * This function is a simplification of setRepeatCount(). When the
@@ -164,10 +161,10 @@ namespace ime {
         bool isLooped() const;
 
         /**
-         * @brief Change the duration of the animation
+         * @brief Set the duration of the animation
          * @param duration The new duration of the animation
          *
-         * By default the duration is determined by the frame rate. When
+         * By default, the duration is determined by the frame rate. When
          * the duration is explicitly set, the frame rate is overridden
          * and derived from the given duration. Therefore you only need
          * to set either the frame rate or the duration
@@ -178,13 +175,15 @@ namespace ime {
          * @e time of more than @a 1 second, the frame @e rate will be set
          * to @a zero.
          *
-         * @see setFrameRate and getFrameTime
+         * @see getDuration, setFrameRate and getFrameTime
          */
         void setDuration(const Time& duration);
 
         /**
          * @brief Get the duration of the animation
          * @return The duration of the animation
+         *
+         * @see setDuration
          */
         const Time& getDuration() const;
 
@@ -196,8 +195,9 @@ namespace ime {
          * For example, a speed of 2.0f will make the animation play at
          * 2x its normal speed, a speed of 0.5f will make the animation
          * play at half its normal speed and a speed of 0.0f will freeze
-         * the animation in time. Note that a negative playback speed will
-         * be ignored
+         * the animation in time.
+         *
+         * Note that a negative or zero playback speed value will be ignored
          *
          * By default the speed is 1.0f (normal speed)
          *
@@ -225,13 +225,15 @@ namespace ime {
          *
          * By default, the frame rate is 24 frames per second
          *
-         * @see setDuration
+         * @see setDuration, getFrameRate
          */
         void setFrameRate(unsigned int frameRate);
 
         /**
          * @brief Get the animations playback frame rate
          * @return The animations playback frame rate
+         *
+         * @see setFrameRate
          */
         unsigned int getFrameRate() const;
 
@@ -239,11 +241,9 @@ namespace ime {
          * @brief Set the direction in which the animation should be played
          * @param direction The animations direction of play
          *
-         * Note that if the animation is set to alternate but not repeat, then
-         * it will play once like a normal forward or reverse animation
-         * (depending on the initial direction of alternation)
-         *
          * By default the direction of play is ime::Animation::Direction::Forward
+         *
+         * @see getDirection
          */
         void setDirection(Direction direction);
 
@@ -271,9 +271,11 @@ namespace ime {
          *
          * Note that @a oneTime parameter only applies if the animation is
          * repeating (see setRepeat()). For non-repeating animations, the
-         * start delay will always be applied
+         * start delay will always be applied if it's set
          *
          * By default, the animation plays immediately
+         *
+         * @see getStartDelay
          */
         void setStartDelay(const Time& delay, bool oneTime = false);
 
@@ -286,8 +288,8 @@ namespace ime {
         const Time& getStartDelay() const;
 
         /**
-         * @param Check if the start delay is applied when the animation restarts
-         * @return True if it is applied, or false if it is applied once
+         * @brief Check whether or not the animation is start delayed once
+         * @return True if the animation is start delayed once, otherwise false
          *
          * @see setStartDelay
          */
@@ -376,9 +378,10 @@ namespace ime {
          * @param startPos Position of the first frame on the spritesheet
          * @param numOfFrames Number of frames to add to the animation
          * @param arrangement How the frames are arranged on the spritesheet
+         * @throws InvalidArgumentException If @a startPos or @a numFrames is invalid
          *
-         * Note that if left unspecified, this function assumes that the
-         * animation frames are contiguously arranged horizontally on the
+         * Note that if @a arrangement is left unspecified, this function assumes
+         * that the animation frames are contiguously arranged horizontally on the
          * spritesheet
          *
          * @warning The position of the first and the last frame must be within
@@ -464,8 +467,7 @@ namespace ime {
         unsigned int getFrameCount() const;
 
         /**
-         * @brief Get the time spent on the current frame before switching
-         *        to the next animation frame
+         * @brief Get the time spent on each frame in the animation sequence
          * @return The time spent on the current frame before changing to the
          *         next frame
          */
@@ -480,9 +482,11 @@ namespace ime {
         bool hasFrameAtIndex(unsigned int index) const;
 
         /**
-         * @brief Remove the first frame from the animation
+         * @brief Remove the first frame from the animation sequence
          *
          * The function has no effect if the animation has no frames
+         *
+         * @see removeLastFrame
          */
         void removeFirstFrame();
 
@@ -490,6 +494,8 @@ namespace ime {
          * @brief Remove the last frame from the animation
          *
          * The function has no effect if the animation has no frames
+         *
+         * @see removeFirstFrame
          */
         void removeLastFrame();
 
@@ -498,6 +504,8 @@ namespace ime {
          * @param index The index of the animation frame to be removed
          *
          * The function has no effect if the animation has no frames
+         *
+         * @see removeFirstFrame, removeLastFrame
          */
         void removeFrameAt(unsigned int index);
 
@@ -514,13 +522,13 @@ namespace ime {
          * frames in the animation sequence and the default behavior will take
          * place when the animation finishes. When set to a negative value, the
          * animation will end on the last frame, otherwise it will end of the
-         * frame specified by @ index
+         * frame specified by @a index
          *
          * By default, the animation finishes on the last frame
          *
          * @note If the current completion frame is not the last or the first
          * frame then this function must be called every time a frame is removed
-         * from the sequence
+         * or added from/to the sequence
          */
         void finishOnFrame(int index);
 
@@ -529,7 +537,7 @@ namespace ime {
          *
          * By default, the animation finishes on the last frame
          *
-         * @see finishOnFrame
+         * @see finishOnLastFrame
          */
         void finishOnFirstFrame();
 
@@ -538,7 +546,7 @@ namespace ime {
          *
          * By default, the animation finishes on the last frame
          *
-         * @see finishOnFrame
+         * @see finishOnFirstFrame
          */
         void finishOnLastFrame();
 
@@ -553,6 +561,8 @@ namespace ime {
         /**
          * @brief Get the current frame
          * @return The current frame or nullptr if the animation does not have any frames
+         *
+         * @see getNextFrame, getPreviousFrame
          */
         AnimationFrame* getCurrentFrame();
         const AnimationFrame* getCurrentFrame() const;
@@ -560,6 +570,8 @@ namespace ime {
         /**
          * @brief Get the frame that comes after the current frame
          * @return The next frame or nullptr if there is no next frame
+         *
+         * @see getCurrentFrame, getPreviousFrame
          */
         AnimationFrame* getNextFrame();
         const AnimationFrame* getNextFrame() const;
@@ -567,6 +579,8 @@ namespace ime {
         /**
          * @brief Get the frame that comes before the current frame
          * @return The previous frame or nullptr if there is no previous frame
+         *
+         * @see getCurrentFrame, getNextFrame
          */
         AnimationFrame* getPreviousFrame();
         const AnimationFrame* getPreviousFrame() const;
@@ -612,7 +626,7 @@ namespace ime {
 
         /**
          * @brief Add a callback to a frame switch event
-         * @param callback The function to be called when the animation frame changes
+         * @param callback The function to be called when the animations current frame changes
          * @param oneTime True to execute the callback one-time or false to
          *                execute it every time the event is triggered
          * @return The event listener unique identification number
@@ -759,7 +773,7 @@ namespace ime {
          * By default the index is 0
          *
          * @warning This function is intended for internal use only and
-         * should never be called outside of IME
+         * must not be called outside of IME
          */
         void setCurrentFrameIndex(unsigned int index);
 

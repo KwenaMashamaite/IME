@@ -57,12 +57,16 @@ namespace ime {
         /**
          * @brief Set the colour of the grid tiles
          * @param colour The new colour of the grid tiles
+         *
+         * @see getTileColour
          */
         void setTileColour(const Colour& colour);
 
         /**
          * @brief Get the colour of the grid tile
          * @return The colour of the grid tile
+         *
+         * @see setTileColour
          */
         Colour getTileColour() const;
 
@@ -73,25 +77,31 @@ namespace ime {
          * When the tile is no longer collidable, it will be set to the
          * normal tile colour
          *
-         * @see setTileColour
+         * @see getCollidableTileColour
          */
         void setCollidableTileColour(const Colour& colour);
 
         /**
          * @brief Get the colour of a grid tile when it is collidable
          * @return The colour of a collidable tile
+         *
+         * @see setCollidableTileColour
          */
         Colour getCollidableTileColour() const;
 
         /**
-         * @brief Set the colour of the
-         * @param colour
+         * @brief Set the colour of the grid lines
+         * @param colour The colour of the grid lines
+         *
+         * @see getGridLineColour
          */
         void setGridLineColour(const Colour& colour);
 
         /**
-         * @brief Get the colour of the grid lines colour
+         * @brief Get the colour of the grid lines
          * @return The colour of the grid lines
+         *
+         * @see setGridLineColour
          */
         Colour getGridLineColour() const;
 
@@ -100,12 +110,16 @@ namespace ime {
          * @param visible True to show it or false to hide it
          *
          * By default, the grid is visible
+         *
+         * @see isVisible
          */
         void setVisible(bool visible);
 
         /**
          * @brief Check if the grid is visible or not
          * @return True if the grid is visible, otherwise false
+         *
+         * @see setVisible
          */
         bool isVisible() const;
 
@@ -114,6 +128,8 @@ namespace ime {
          *
          * This function will show the grid if it is currently visible
          * or hide it if its currently visible
+         *
+         * @see setVisible, isVisible
          */
         void toggleVisibility();
 

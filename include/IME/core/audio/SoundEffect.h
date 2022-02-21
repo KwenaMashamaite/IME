@@ -217,5 +217,6 @@ namespace ime {
  * with this class you might experience audio latency and other related issues.
  * It is advised to use ime::audio::Music for long sounds such as background music
  *
- * Ideally you should instantiate ime::audio::SoundEffect and pass it to ime::Scene::audio
+ * This class is not meant to be instantiated directly, use ime::Scene::getAudio
+ * or ime::Engine::getAudioManager
  */

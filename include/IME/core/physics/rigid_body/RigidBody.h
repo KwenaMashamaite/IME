@@ -68,7 +68,7 @@ namespace ime {
      * drawing is enabled, rigid bodies without colliders will not be rendered
      * on the render window
      *
-     * A body is not constructed directly, use the World::createBody function
+     * A body is not constructed directly, use the PhysicsEngine::createBody function
      * to construct a rigid body
      */
     class IME_API RigidBody final : public Object {

@@ -51,7 +51,7 @@ namespace ime {
         ////////////////////////////////////////////////////////////////////////
 
         /**
-         * @brief World::AABBCallback wrapper
+         * @brief PhysicsEngine::AABBCallback wrapper
          */
         class B2QueryCallback : public b2QueryCallback {
         public:
@@ -78,7 +78,7 @@ namespace ime {
         ////////////////////////////////////////////////////////////////////////
 
         /**
-         * @brief World::RayCastCallback wrapper
+         * @brief PhysicsEngine::RayCastCallback wrapper
          */
         class B2RayCastCallback : public b2RayCastCallback {
         public:
@@ -108,7 +108,7 @@ namespace ime {
     } // anonymous namespace
 
     /////////////////////////////////////////////////////////////////////////////
-    // World class implementation
+    // PhysicsEngine class implementation
     ////////////////////////////////////////////////////////////////////////////
 
     // ContactListener wrapper

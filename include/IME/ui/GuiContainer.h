@@ -50,8 +50,8 @@ namespace ime {
          * indirectly (added to a container widget which is then added to
          * the gui container)
          *
-         * This class is not meant to be instantiated directly, use ime::Scene::gui
-         * or ime::Engine::getGui
+         * This class is not meant to be instantiated directly, use
+         * ime::Scene::getGui or ime::Engine::getGui
          */
         class IME_API GuiContainer {
         public:

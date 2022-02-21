@@ -79,6 +79,7 @@ namespace ime {
 
         /**
          * @brief Create a new GameObject instance
+         * @param scene The scene the object belongs to
          * @return The created instance
          */
         static GameObject::Ptr create(Scene& scene);

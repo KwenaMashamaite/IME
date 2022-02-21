@@ -208,7 +208,7 @@ namespace ime {
  *
  * Note that ime::audio::AudioManager is not meant to be instantiated directly,
  * each ime::Scene instance has its own audio manager which can be accessed with
- * ime::Scene::audio. To play audio globally (Audio that keeps playing regardless
+ * ime::Scene::getAudio. To play audio globally (audio that keeps playing regardless
  * of which scene is currently active) use ime::Engine::getAudioManager
  *
  * @see ime::audio::Music and ime::audio::SoundEffect

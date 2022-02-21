@@ -55,8 +55,8 @@ namespace ime {
      * viewport, its contents will be stretched to fit in
      *
      * You do not instantiate a camera directly, it is created when you
-     * instantiate a scene and it is accessible within the scene. Each
-     * scene instance has its own camera
+     * instantiate a scene and it is accessed with ime::Scene::getCamera or
+     * ime::Scene::getCameras
      */
     class IME_API Camera : public Object {
     public:

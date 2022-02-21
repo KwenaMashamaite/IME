@@ -205,7 +205,7 @@ namespace ime {
 
         /**
          * @brief Check if an event listener is suspended or not
-         * @param The name of the event the event listener is subscribed to
+         * @param event The name of the event the event listener is subscribed to
          * @param id The event listeners identifier
          * @return True if it is suspended, otherwise false
          *

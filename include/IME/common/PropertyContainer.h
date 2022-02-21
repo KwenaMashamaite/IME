@@ -123,7 +123,7 @@ namespace ime {
 
         /**
          * @brief Subscribe a callback to a value change event
-         * @param The name of the property to add the callback to
+         * @param name The name of the property to add the callback to
          * @param callback The function to be executed when the value changes
          * @return The unique identification of the callback
          *

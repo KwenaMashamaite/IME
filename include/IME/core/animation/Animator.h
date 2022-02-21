@@ -64,7 +64,7 @@ namespace ime {
         explicit Animator(Sprite& target);
 
         /**
-         * @brief Construct the animator from an existing animator
+         * @brief Copy constructor
          * @param other The animator to construct this animator from
          *
          * @warning The target of @a other will not be copied because an
@@ -121,7 +121,7 @@ namespace ime {
          * @note The timescale of the animator is multiplied with the timescale
          * of the current animation. For example, if the timescale of the current
          * animation is 2.0f and the timescale of the animator is 2.0f, then
-         * the current animation will play 4 times as fast
+         * the current animation will play at 4x its normal speed
          *
          * By default the timescale is 1.0f (real-time)
          */
@@ -166,8 +166,7 @@ namespace ime {
 
         /**
          * @brief Get the animation that's currently playing
-         * @return Pointer to the current active animation if there is one,
-         *         otherwise a nullptr
+         * @return Pointer to the active animation if there's any, otherwise a nullptr
          */
         Animation::Ptr getActiveAnimation() const;
 
@@ -175,6 +174,8 @@ namespace ime {
          * @brief Get the frame that is currently displayed by the active animation
          * @return The current frame of the active animation or a nullptr if
          *         there is no active animation
+         *
+         * @see getNextFrame, getPreviousFrame
          */
         AnimationFrame* getCurrentFrame();
         const AnimationFrame* getCurrentFrame() const;
@@ -184,6 +185,8 @@ namespace ime {
          *        displayed by the active animation
          * @return The next frame of the active animation or a nullptr if
          *         there is no active animation or the is no next frame
+         *
+         * @see getCurrentFrame, getPreviousFrame
          */
         AnimationFrame* getNextFrame();
         const AnimationFrame* getNextFrame() const;
@@ -193,6 +196,8 @@ namespace ime {
          *        displayed by the active animation
          * @return The current frame of the active animation or a nullptr if
          *         there is no active animation or there is no previous frame
+         *
+         * @see getCurrentFrame, getNextFrame
          */
         AnimationFrame* getPreviousFrame();
         const AnimationFrame* getPreviousFrame() const;
@@ -233,6 +238,8 @@ namespace ime {
          * then this @a animation will be set as the current animation and
          * played. If the current animation is chained to another animation
          * then then the given animation will be chained to that animation
+         *
+         * @see unchain
          */
         void chainAnimation(Animation::Ptr animation);
 
@@ -245,6 +252,8 @@ namespace ime {
          * then this @a animation will be set as the current animation and
          * played. If the current animation is chained to another animation
          * then then the given animation will be chained to that animation
+         *
+         * @see unchain
          */
         void chainAnimation(const std::string& name);
 
@@ -273,7 +282,7 @@ namespace ime {
          * @return True if the animation was switched, of false if it
          *         does not exist in the animator
          *
-         * This function does not start the animation, it only sets the current
+         * @note This function does not start the animation, it only sets the current
          * active animation to the specified animation such that when play()
          * is called, the given animation is played. To switch and immediately
          * play an animation use the startAnimation() function
@@ -294,9 +303,9 @@ namespace ime {
          * will continue playing
          *
          * Note that by default, animations that were pending to be chained
-         * to the active animation prior to function call will be chained to
-         * the specified animation. This property can be override by setting
-         * @a unchain to true
+         * to the active animation prior to this function call will be chained
+         * to the specified animation. This property can be overridden by setting
+         * the @a unchain argument to @a true
          *
          * To switch the animation without playing it, use the switchAnimation()
          * function
@@ -306,10 +315,10 @@ namespace ime {
         void startAnimation(const std::string& name, bool unchain = false);
 
         /**
-         * @brief Play the current animation if any
+         * @brief Play the current animation
          *
          * This function will start playing the current animation if it was
-         * pending a start. If the animation is paused, you have to call resume
+         * pending a start. If the animation is paused, you have to call resume()
          * to play it.
          *
          * This function has no effect if there is no active animation waiting
@@ -329,7 +338,7 @@ namespace ime {
         /**
          * @brief Resume a paused animation
          *
-         * see play, pause and stop
+         * @see play, pause and stop
          */
         void resume();
 
@@ -452,7 +461,7 @@ namespace ime {
         int onAnimPlay(const Callback<Animation*>& callback, bool oneTime = false);
 
         /**
-         * @brief Add an event listener to a pause event
+         * @brief Add an event listener to an animation pause event
          * @param callback The function to be executed when the current animation
          *                 is paused
          * @param oneTime True to execute the callback one-time or false to

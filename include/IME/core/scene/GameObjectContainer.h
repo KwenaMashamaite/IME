@@ -89,6 +89,7 @@ namespace ime {
          * @param gameObject The game object to be added
          * @param renderOrder The render order of the game object
          * @param renderLayer The render layer the game object belongs to
+         * @return A pointer to the object in the container
          *
          * * If the render layer is unspecified or the specified layer cannot
          * be found then the game object will be added to the @a default layer.

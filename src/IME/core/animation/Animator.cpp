@@ -466,7 +466,7 @@ namespace ime {
         /// My focus was on getting it to work so code quality out the window
         /// I intended on refactoring it later that day after getting some rest.
         /// Well it is true what they say, "A temporary solution tends to be a
-        /// permanent one more often than not" - It's been 3 months :) as of this text
+        /// permanent one more often than not" - It's been 9 months :) as of this text
 
         // Handle end of sequence
         if ((cycleDirection_ == Direction::Backward && currentFrameIndex_ == 0)

@@ -106,6 +106,7 @@ namespace ime {
 
         /**
          * @brief Get the value of the preference
+         * @return The value stored in the property
          * @throws InvalidArgumentException if @a T is not the same as the ime::Preference::Type
          *                         given in the constructor or the preference does
          *                         not have a value
@@ -175,7 +176,7 @@ namespace ime {
      * In addition, the file to append data to is searched relative to the
      * game executable
      */
-    void IME_API savePref(const Preference& pref, const std::string& filename);
+    IME_API void savePref(const Preference& pref, const std::string& filename);
 }
 
 #endif //IME_PREFERENCE_H

@@ -76,6 +76,7 @@ namespace ime {
 
         /**
          * @brief Get the perimeter of the AABB
+         * @return The perimeter of the AABB
          */
         float getPerimeter() const;
 
@@ -102,7 +103,8 @@ namespace ime {
 
         /**
          * @brief Check if this AABB contains another AABB
-         * @brief aabb The AABB to be checked
+         * @param aabb The AABB to be checked
+         * @return True if this object contains @a aabb
          */
         bool contains(const AABB& aabb) const;
 

@@ -31,7 +31,7 @@
 
 namespace ime {
     /**
-     * @brief An animation frame
+     * @brief An Animation frame
      */
     class IME_API AnimationFrame {
     public:

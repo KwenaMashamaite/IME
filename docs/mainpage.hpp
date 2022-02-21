@@ -8,9 +8,10 @@
 /// \section example Getting started
 /// IME is state based, which means that the game flow is controlled by pushing
 /// and popping game states at appropriate times. In IME everything lives in a
-/// ime::Scene. To get started, you must create a scene (or state), then create
-/// the ime::Engine and initialize it. Finally, add a scene or scenes to the
-/// engine and run it. This will start the main game loop.
+/// ime::Scene. To get started, you must create a scene (or state), then instantiate
+/// a ime::Engine and initialize it (see ime::Engine::initialize). Finally, add
+/// a scene to the engine (see ime::Engine::pushScene) and run it (see ime::Engine::run).
+/// This will start the main game loop.
 ///
 /// Here is the minimal and complete code to achieve the above steps:
 ///  @code
@@ -18,10 +19,9 @@
 ///  // once you know whats going on
 ///  #include <IME/IME.h>
 ///
-/// // Step 1: Create a scene (or state)
+/// // Step 1: Create a ime::Scene
 /// // You define the behavior of your game by overriding ime::Scene functions.
-/// // These functions will be called by the engine at appropriate times. ime::Scene
-/// // functions are overridden on a need to use case.
+/// // These functions will be called IME at appropriate times.
 ///
 /// // This scene displays a welcome message at the centre of the screen
 /// class StartUpScene : public ime::Scene {
@@ -32,21 +32,21 @@
 ///          greeting->setOrigin(0.5f, 0.5f);
 ///          greeting->setPosition("50%", "50%");
 ///          greeting->getRenderer()->setTextColour(ime::Colour::White);
-///          gui().addWidget(std::move(greeting));
+///          getGui().addWidget(std::move(greeting));
 ///
 ///           // Quit the game when "Esc" key is pressed
-///           input().onKeyUp([this](ime::Keyboard::Key key) {
+///           getInput().onKeyUp([this](ime::Keyboard::Key key) {
 ///                 if (key == ime::Keyboard::Key::Escape)
-///                     engine().quit();
+///                     getEngine().quit();
 ///           });
 ///     }
 /// };
 ///
 /// int main()
 /// {
-///    // Step 2: Creating the game engine
+///    // Step 2: Instantiating a ime::Engine
 ///
-///    // 2.1 - First we need to specify settings required by the engine. These
+///    // 2.1 - First we need to specify settings required by ime::Engine. These
 ///    //       settings are optional. When not specified the engine will use
 ///    //       default values
 ///    ime::PrefContainer settings;
@@ -63,10 +63,10 @@
 ///    settings.addPref({"MUSIC_DIR", ime::PrefType::String, std::string("assets/music/")});
 ///
 ///    // Step 2.2 - Instantiating and initializing the engine
-///    ime::Engine engine = ime::Engine("Name of game here", settings);
+///    ime::Engine engine("My Awesome Game v1", settings);
 ///    engine.initialize();
 ///
-///    // Step 3: Push the initial state and start the game loop
+///    // Step 3: Push a ime::Scene and start the main game loop
 ///    engine.pushScene(std::make_unique<StartUpScene>());
 ///    engine.run();
 ///

@@ -47,7 +47,7 @@ namespace ime {
          * @brief Captures mouse inputs from the user
          *
          * This class is not meant to be instantiated directly, use
-         * ime::Scene::input or ime::Engine::getInputManager
+         * ime::Scene::getInput or ime::Engine::getInputManager
          */
         class IME_API Mouse {
         public:

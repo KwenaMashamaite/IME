@@ -57,7 +57,7 @@ namespace ime {
          * @brief Manages keyboard and mouse inputs
          *
          * This class is not meant to be instantiated directly, use
-         * ime::Scene::input or ime::Engine::getInputManager
+         * ime::Scene::getInput or ime::Engine::getInputManager
          */
         class IME_API InputManager {
         public:

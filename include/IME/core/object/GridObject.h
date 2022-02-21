@@ -69,6 +69,7 @@ namespace ime {
 
         /**
          * @brief Create a new GridObject instance
+         * @param scene The scene the object belongs to
          * @return The created instance
          */
         static GridObject::Ptr create(Scene& scene);
@@ -393,7 +394,7 @@ namespace ime {
          *
          * @see removeCollisionListener
          */
-        int onGridObjectCollision(const Callback<GridObject*, GridObject*>& callback, bool onetime = false);
+        int onGridObjectCollision(const Callback<GridObject*, GridObject*>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a grid border collision event

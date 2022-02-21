@@ -48,7 +48,7 @@ namespace ime {
          * @brief Give access to the state of the joysticks
          *
          * This class is not meant to be instantiated directly, use
-         * ime::Scene::input or ime::Engine::getInputManager
+         * ime::Scene::getInput or ime::Engine::getInputManager
          */
         class IME_API Joystick {
         public:

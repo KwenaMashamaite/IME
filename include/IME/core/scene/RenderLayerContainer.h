@@ -41,7 +41,7 @@ namespace ime {
      * the index of its render layer in the render layer container.
      *
      * Render layers are added to the container in ascending order with an
-     * index of 0 representing the the furthest background. Therefore the
+     * index of 0 representing the the furthest background. Therefore, the
      * last added render layer will always be the foreground. The layers
      * are drawn from index 0 going upwards. Note that you cannot change
      * the index of a layer (indexes will always be arranged in ascending
@@ -50,11 +50,12 @@ namespace ime {
      * using appropriate member function. For example if you add a mountain
      * sprite to a render layer at index 5 and a tree sprite to a render layer
      * at index 6, then the mountain will be rendered first followed by the
-     * tree and vice versa.
+     * tree
      *
      * This class is not directly instantiatable, it is created when you
      * instantiate a Scene object. Each scene instance has its own render
-     * layers and a single render layer container
+     * layers and a single render layer container accessed with
+     * ime::Scene::getRenderLayers
      */
     class IME_API RenderLayerContainer : public Object {
     public:
@@ -82,7 +83,7 @@ namespace ime {
 
         /**
          * @brief Create a layer
-         * @name The name of the layer to be created
+         * @param name The name of the layer to be created
          * @return The created layer
          *
          * Note that the container keeps a pointer to the layer after it is
@@ -111,10 +112,7 @@ namespace ime {
          * to this function already exists in the container otherwise undefined
          * behavior
          *
-         * @note You should only use this function if you don't want to the
-         * scene to keep an instance of the drawable on your behalf, otherwise
-         * you should use the container classes found in the Scene class, the
-         * drawable will be automatically added to the specified render layer
+         * @see ime::Scene::getRenderLayers
          */
         void add(Drawable& drawable, int renderOrder = 0u, const std::string& renderLayer = "default");
 

@@ -47,6 +47,7 @@ namespace ime {
          * @param drawable The drawable object to be added
          * @param renderOrder The render order of the object in the render layer
          * @param renderLayer The RenderLayer the object belongs to
+         * @return A pointer to the drawable in the container
          *
          * If the render layer is unspecified or the specified layer cannot be
          * found then the drawable will be added to the 'default' layer. The

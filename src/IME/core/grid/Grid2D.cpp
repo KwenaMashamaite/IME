@@ -156,7 +156,10 @@ namespace ime {
     void Grid2D::setCollidable(Tile &tile, bool collidable, bool attachCollider) {
         if (tile.isCollidable() == collidable)
             return;
-        else if (collidable && !tile.hasCollider() && attachCollider && physicsSim_) {
+        else if (collidable && !tile.hasCollider() && attachCollider) {
+            if (!physicsSim_)
+                throw InvalidArgumentException("The 'ime::Scene' that an 'ime::Grid2D' belongs to must have 'ime::PhysicsEngine' before attaching a collider to a tile");
+
             tile.setBody(physicsSim_->createBody(RigidBody::Type::Static));
             tile.attachCollider(BoxCollider::create(Vector2f{static_cast<float>(tile.getSize().x), static_cast<float>(tile.getSize().y)}));
         }

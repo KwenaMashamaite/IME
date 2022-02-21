@@ -238,7 +238,7 @@ namespace ime {
          * Remember that the coordinates of the anchor points are in world
          * coordinates and not local coordinates, sometimes {0, 0} is
          * mistaken for the body origin when using this function
-         * (use Body::getWorldCentre when not sure about the origin)
+         * (use RigidBody::getWorldCentre when not sure about the origin)
          */
         DistanceJoint(const DistanceJointDefinition& definition, PhysicsEngine* world);
 

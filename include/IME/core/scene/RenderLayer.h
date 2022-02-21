@@ -59,7 +59,7 @@ namespace ime {
      * are drawn in the order in which they were added to the layer
      *
      * A layer is not instantiated directly but rather using a
-     * RenderLayerContainer
+     * ime::RenderLayerContainer::create
      */
     class IME_API RenderLayer : public Object {
     public:

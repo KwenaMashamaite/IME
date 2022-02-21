@@ -85,7 +85,7 @@ namespace ime {
          * 3. bb is the blue component
          * 4. aa is the alpha component
          *
-         * For the #rrggbb format, the alpha component is implicitly set to FF.
+         * For the "#rrggbb" format, the alpha component is implicitly set to FF.
          * Note that the hex colour code must begin with a '#' symbol
          *
          * @code

@@ -218,7 +218,8 @@ namespace ime {
  * the disk for as long as its being used. You can use ime::audio::SoundEffect
  * to play short sounds such as gun shots and explosions
  *
- * Ideally you should instantiate ime::audio::Music and pass it to ime::Scene::audio
+ * This class is not meant to be instantiated directly, use ime::Scene::getAudio
+ * or ime::Engine::getAudioManager
  */
 
 #endif // IME_MUSIC_H

@@ -99,7 +99,7 @@ namespace ime {
      */
     class IME_API PhysicsEngine final {
     public:
-        using Ptr = std::unique_ptr<PhysicsEngine>;  //!< Unique World pointer
+        using Ptr = std::unique_ptr<PhysicsEngine>;  //!< Unique PhysicsEngine pointer
 
         /**
          * @brief Copy constructor
@@ -116,20 +116,22 @@ namespace ime {
          * @param scene The scene this world belongs to
          * @param gravity The acceleration of bodies due to gravity
          * @return The created physics world
-         *
-         * @note This class does not keep a reference to the created object
          */
         static PhysicsEngine::Ptr create(Scene& scene, const Vector2f& gravity);
 
         /**
          * @brief Change the gravity of the world
          * @param gravity The new gravity
+         *
+         * @see getGravity
          */
         void setGravity(const Vector2f& gravity);
 
         /**
          * @brief Get the gravity of the world
          * @return The gravity of the world
+         *
+         * @see getGravity
          */
         Vector2f getGravity() const;
 
@@ -140,7 +142,7 @@ namespace ime {
          * By default, the position and velocity iterations are 3 and 8
          * respectively
          *
-         * @see ime::PhysIterations
+         * @see ime::PhysIterations, getIterations
          */
         void setIterations(const PhysIterations& iterations);
 
@@ -167,6 +169,8 @@ namespace ime {
          * of the scene this simulation belongs to. If the scenes timescale
          * is set to 2.0f and the simulation timescale is 2.0f, then the
          * simulation will run 4 times as fast
+         *
+         * @see getTimescale
          */
         void setTimescale(float timescale);
 
@@ -183,6 +187,8 @@ namespace ime {
          * @param enable True to enable otherwise false
          *
          * By default the physics engine uses continues physics
+         *
+         * @see getContinuousPhysicsEnable
          */
         void setContinuousPhysicsEnable(bool enable);
 
@@ -203,6 +209,8 @@ namespace ime {
          * time steps for consistent physics
          *
          * By default, the world is updated using a fixed time step
+         *
+         * @see isFixedStep
          */
         void setFixedStep(bool fixed);
 
@@ -222,24 +230,25 @@ namespace ime {
          *
          * By default, this function creates a static body
          *
-         * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to create a body inside a callback
-         * dispatched by the world (Callbacks are dispatched during a step)
+         * @warning This function is locked a
+         *
+         * @see getBodyCount
          */
         RigidBody::Ptr createBody(RigidBody::Type type = RigidBody::Type::Static);
 
         /**
          * @brief Create a joint
          * @param definition Definition to create a joint from
-         * @return The created joint or a nullptr if this function is called
-         *          inside a world callback
+         * @return The created joint
          *
          * @note If the joined bodies are set to not collide, they will stop
          * colliding after the joint is created
          *
          * @warning This function is locked during callbacks. This usually
-         * means you should not attempt to create a joint inside a callback
+         * means  should not attempt to create a joint inside a callback
          * dispatched by the world (Callbacks are dispatched during a step)
+         *
+         * @see getJointCount
          */
         Joint::Ptr createJoint(const JointDefinition& definition);
 
@@ -297,36 +306,48 @@ namespace ime {
         /**
          * @brief Set whether or not the world sleeps
          * @param sleep True to enable sleeping or false to disable
+         *
+         * @see isSleepEnabled
          */
         void setSleepEnable(bool sleep);
 
         /**
          * @brief Check if the world can sleep or not
          * @return True if the world can sleep, otherwise false
+         *
+         * @see setSleepEnable
          */
         bool isSleepEnabled() const;
 
         /**
          * @brief Enable or disable sub-stepping
          * @param subStep True to enable sub-stepping, otherwise false
+         *
+         * @see isSubSteppingEnabled
          */
         void setSubSteppingEnable(bool subStep);
 
         /**
          * @brief Check if sub-stepping is enabled or not
          * @return True if enabled, or false if disabled
+         *
+         * @see setSubSteppingEnable
          */
         bool isSubSteppingEnabled() const;
 
         /**
          * @brief Get the number of bodies in the world
          * @return The number of bodies in th world
+         *
+         * @see createBody
          */
         std::size_t getBodyCount() const;
 
         /**
          * @brief Get the number of joints in the world
          * @return The number of joints in the world
+         *
+         * @see createJoint
          */
         std::size_t getJointCount() const;
 

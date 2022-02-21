@@ -58,7 +58,7 @@ namespace ime {
     }
 
     /**
-     * @brief An Abstract Base Class (ABC) for game scenes
+     * @brief A base class for game scenes
      */
     class IME_API Scene : public Object {
     public:
@@ -66,6 +66,8 @@ namespace ime {
 
         /**
          * @brief Defines what happens to the scene when it is paused
+         *
+         * @see setOnPauseAction
          */
         enum OnPauseAction {
             Default      = 0,      //!< The scene is hidden and does not receive time and system updates
@@ -101,108 +103,82 @@ namespace ime {
         Scene& operator=(Scene&&) noexcept ;
 
         /**
-         * @internal
-         * @brief Initialize the scene
-         * @param engine The engine that runs the scene
-         *
-         * This function initializes all scene components that depend on the
-         * engine for their functionality. This function is called before the
-         * scene is entered
-         *
-         * @warning This function is intended for internal use and should
-         * never be called outside of IME
-         */
-        void init(Engine& engine);
-
-        /**
          * @brief Create an empty scene
          * @return The created scene
          */
         static Scene::Ptr create();
 
         /**
-         * @brief Initialize scene
+         * @brief Handle a scene initialization
          *
-         * This function is called by the game engine when the base scene is ready
+         * This function is called by IME when the base scene is ready
          * to be used. It is called once after the constructor but before
-         * onEnter(). Note that IME scene functions cannot be called in the
+         * onEnter(). Note that ime::Scene functions cannot be called in the
          * constructor, doing so is undefined behavior. Thus, this function is
          * intended for situation where IME scene functions need to be accessed
-         * before the scene is entered. In addition, unlike onEnter(), this
-         * function is called after the scene is pushed to the engine. This
-         * means that it will be invoked regardless of the running state of
-         * the engine
+         * before the scene is entered.
          *
-         * Note that IME will never put anything inside this function,
-         * therefore you don't have to call the base class method in your
-         * implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          */
         virtual void onInit() {};
 
         /**
-         * @brief Enter the scene
+         * @brief Handle a scene enter
          *
-         * This function will be called by the game engine when the scene
-         * is entered for the first time. Note that a scene cannot be entered
-         * more than once, in other words this function will only be called
-         * once
+         * This function is called once by IME when the scene is entered for
+         * the first time
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          */
         virtual void onEnter() {};
 
         /**
-         * @brief Handle a system event
-         * @param event System event to be handled
+         * @brief Handle a scene system event
+         * @param event A system event to be handled
          *
-         * This function will be called by the game engine before the scene
-         * is updated. Override this function if you want to handle a window
-         * specific events such as window resize event. Do not use it to
-         * handle input related events. Use the scenes input manager or the
-         * global input manager found in the Engine. The function is called
-         * once per frame
+         * This function is called by IME when a system event is triggered.
+         * It is called before the scene is updated and rendered.
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          */
         virtual void onHandleEvent(Event event) {IME_UNUSED(event);};
 
         /**
-         * @brief Update the scene
-         * @param deltaTime Time passed since last update
+         * @brief Handle a scene frame-rate dependent update
+         * @param deltaTime The time passed since the last update
          *
-         * This function will be called by the game engine after the scene
-         * has handled system events and external inputs (Keyboard and mouse).
-         * The function is called once per frame and the delta passed to it
+         * This function is called by IME once per frame. The delta passed to it
          * is frame rate dependent. This means that it depends on how long the
-         * previous frame took to complete.
+         * previous frame took to complete. Note that this function is called
+         * after onFixedUpdate()
          *
          * All updates that should be synced with the render fps must be
-         * in this function. Note that implementing this function is optional
-         * and must be overridden if needed. IME will never put anything inside
-         * this function, therefore you don't have to call the base class
-         * method in your implementation
+         * done in this function.
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onFixedUpdate
          */
         virtual void onUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @brief Update the scene in fixed time steps
-         * @param deltaTime Time passed since last update
+         * @brief Handle a scene frame-rate independent update
+         * @param deltaTime The time passed since last update
          *
-         * This function will be called by the game engine after the scene
-         * has handled system events and external inputs (Keyboard and mouse).
-         * The function may be called once per frame, multiple times per frame
-         * or not called at all. The delta passed to it is always the same and
-         * is independent of the games frame rate. The delta time is always
-         * 1.0f / FPS_LIMIT,  where FPS_LIMIT is the games Frames Per Second
-         * limit
+         * This function is called by IME every fixed frame-rate frame. It is
+         * called before onUpdate() and may be called once per frame, multiple
+         * times per frame or not called at all. The delta passed to it is always
+         * the same and is independent of the render fps.  see ime::Engine::setPhysicsUpdateFrameRate
+         * to determine the delta
          *
-         * Updates that are frame-rate independent must be in this function.
          * Note that implementing this function is optional and must be
          * overridden if needed. IME will never put anything inside this
          * function, therefore you don't have to call the base class method
@@ -213,139 +189,143 @@ namespace ime {
         virtual void onFixedUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @brief Post update the scene
-         * @param deltaTime Time passed since last update
+         * @brief Handle a scene post-update update
+         * @param deltaTime The time passed since the last update
          *
-         * This function is called after fixed update and update but
-         * before the scene is rendered. It may be useful if you want to do
-         * something after all time updates (timer updates, physics updates,
-         * animation updates, gui updates etc...) have completed.
+         * This function is called by IME once per frame. It is called after
+         * onUpdate() and onFixedUpdate(). It may be useful if you want to do
+         * something after all normal updates have completed such as tracking
+         * the position of an object whose position may have changed in
+         * onFixedUpdate() or onUpdate().
          *
-         * Note that implementing this function is optional and must be
-         * overridden if needed. IME will never put anything inside this
-         * function, therefore you don't have to call the base class method
-         * in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          */
         virtual void onPostUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
 
         /**
-         * @brief Perform an action before the scene is rendered
+         * @brief Handle a scene pre-render event
          *
-         * Note that implementing this function is optional and must be
-         * overridden if needed. IME will never put anything inside this
-         * function, therefore you don't have to call the base class method
-         * in your implementation
+         * This function is called by IME once per frame before the scene is
+         * rendered
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onPostRender
          */
         virtual void onPreRender() {}
 
         /**
-         * @brief Perform an action after the scene is rendered
+         * @brief Handle a scene post-render event
          *
-         * Note that implementing this function is optional and must be
-         * overridden if needed. IME will never put anything inside this
-         * function, therefore you don't have to call the base class method
-         * in your implementation
+         * This function is called by IME once per frame after the scene is
+         * rendered.
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onPreRender
          */
         virtual void onPostRender() {}
 
         /**
-         * @brief Pause the scene
+         * @brief Handle a scene pause event
          *
-         * This function will be called by the game engine if another scene
-         * is pushed while this scene is active
+         * This function is called by IME if another scene is pushed over this
+         * scene while it was active (see ime::Engine::pushScene)
          *
-         * Note that implementing this function is optional and must be
-         * overridden if you want to do something when the scene is paused.
-         * IME will never put anything inside this function, therefore you
-         * don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onResume
          */
         virtual void onPause() {};
 
         /**
-         * @brief Resume scene
+         * @brief Handle a scene resume event
          *
-         * This function will be called by the game engine when the
-         * current active scene is removed and this scene was paused
+         * This function is called by IME when this scene is resumed from a
+         * paused state. This occurs when a scene that was pushed over this
+         * scene is removed from the Engine (see ime::Engine::popScene)
          *
-         * Note that implementing this function is optional and must
-         * be overridden if you want to do something when the scene is
-         * resumed. IME will never put anything inside this function,
-         * therefore you don't have to call the base class method in
-         * your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onPause
          */
         virtual void onResume() {};
 
         /**
-         * @brief Handle a cached event
+         * @brief Handle a scene cache event
          *
-         * This function is called after the scene is cached, see setCached
-         * and ime::Engine::cacheScene
+         * This function is called by IME when this scene is cached.
+         * (see setCached() and ime::Engine::cacheScene)
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onResumeFromCache
          */
         virtual void onCache() {}
 
         /**
-         * @brief Handle a reactivation from the cache
+         * @brief Handle a scene 'resume from cache' event
          *
-         * This function is called when this scene is reactivated from the cache
-         * (see ime::Engine::PushCachedScene)
+         * This function is called by IME when this scene is pushed to the
+         * Engine from the engines scene cache list (see ime::Engine::PushCachedScene)
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onCache, ime::Engine::PushCachedScene, onPause, onResume
          */
         virtual void onResumeFromCache() {};
 
         /**
-         * @brief Exit a scene
+         * @brief Handle a scene exit event
          *
-         * This function will be called by the game engine before the
-         * scene is removed from the game. The function is optional and
-         * may be overridden if you want to perform cleanup or something
-         * before the scene is destroyed
+         * This function is called by IME when the scene is removed from the
+         * engine (either by destruction or by caching). See ime::Engine::popScene
          *
-         * Note that implementing this function is optional and must be
-         * overridden if you want to do something when the scene is resumed.
-         * IME will never put anything inside this function. therefore you
-         * don't have to call the base class method in your implementation
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
-         * @warning This function is not a replacement for the destructor,
-         * it will be called first, then the destructor immediately after
+         * @see setCached, ime::Engine::cacheScene
          */
         virtual void onExit() {};
 
         /**
-         * @brief Perform an action at the start of the current frame
+         * @brief Handle a scene frame begin event
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * This function is called by IME when the current frame begins while
+         * this scene is active
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onFrameEnd
          */
         virtual void onFrameBegin() {};
 
         /**
-         * @brief Perform an action at the end of the current frame
+         * @brief Handle a scene frame end event
          *
-         * Note that implementing this function is optional and must be overridden
-         * if needed. IME will never put anything inside this function, therefore
-         * you don't have to call the base class method in your implementation
+         * This function is called by IME when the current frame ends and this
+         * scene is active
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
          *
          * @see onFrameBegin
          */
@@ -354,6 +334,8 @@ namespace ime {
         /**
          * @brief Get the name of this class
          * @return The name of this class
+         *
+         * @see getClassType
          */
         std::string getClassName() const override;
 
@@ -379,7 +361,7 @@ namespace ime {
          *
          * Mote that actions can be combined using bitwise OR combination
          * of ime::OnPauseAction enumerations. For example, to make the
-         * scene shown behind the current active scene and receive updates,
+         * scene visible behind the current active scene and receive updates,
          * you do as follows:
          *
          * @code
@@ -387,10 +369,9 @@ namespace ime {
          * @endcode
          *
          * By default the scene is hidden when it is paused and it does
-         * not receive time and system (Window events, Input, etc...)
-         * updates
+         * not receive time and system updates
          *
-         * @see onPause
+         * @see onPause, OnPauseAction
          */
         void setOnPauseAction(Uint32 action);
 
@@ -398,7 +379,7 @@ namespace ime {
          * @brief Check if the scene is visible when paused or not
          * @return True if visible, otherwise false
          *
-         * @see setVisibleOnPause
+         * @see setOnPauseAction
          */
         bool isVisibleOnPause() const;
 
@@ -432,27 +413,27 @@ namespace ime {
         bool isCached() const;
 
         /**
-         * @brief Set the scene timescale
-         * @param timescale The new scene timescale
+         * @brief Set the scene timescale factor
+         * @param timescale The new scene timescale factor
          *
-         * The timescale can be used to speed up or slow down the scene
-         * without changing the FPS limit. Values above 1.0f speed up the
-         * scene whilst values below 1.0f slow it down  A timescale of
-         * zero freezes the scene.
+         * A timescale factor affects everything that requires a time
+         * update. This includes timers, animations, physics etc...
          *
-         * @note A scenes timescale affects everything that requires a time
-         * update. This includes timers, animations, dynamic bodies etc...
          * For example, if the timescale is set to 2.0f, then scene timers
          * will count twice as fast, animations will play twice as fast,
-         * dynamic bodies will move twice as fast etc..
+         * physics objects will move twice as fast etc..
          *
          * By default the timescale is 1.0f (real-time)
+         *
+         * @see getTimescale
          */
         void setTimescale(float timescale);
 
         /**
-         * @brief Get the scenes timescale
-         * @return The scenes timescale
+         * @brief Get the scenes timescale factor
+         * @return The scenes timescale factor
+         *
+         * @see setTimescale
          */
         float getTimescale() const;
 
@@ -461,6 +442,8 @@ namespace ime {
          * @return A reference to the game engine
          * @throws AccessViolationException If this function is called before
          *         the scene is initialized
+         *
+         * Note that all scenes refer to the same Engine instance
          */
         Engine& getEngine();
         const Engine& getEngine() const;
@@ -470,6 +453,8 @@ namespace ime {
          * @return The game window
          * @throws AccessViolationException If this function is called before
          *         the scene is initialized
+         *
+         * Note that all scenes refer to the same game Window instance
          */
         Window& getWindow();
         const Window& getWindow() const;
@@ -481,7 +466,7 @@ namespace ime {
          *         the scene is initialized
          *
          * Note that this camera is the default/main camera and is always
-         * the rendered last. You can add other cameras to the scene using
+         * rendered last. You can add other cameras to the scene using
          * getCameras()
          *
          * @see getCameras
@@ -494,6 +479,8 @@ namespace ime {
          * @return The scene level camera container
          * @throws AccessViolationException If this function is called before
          *         the scene is initialized
+         *
+         * @see getCamera
          */
         CameraContainer& getCameras();
         const CameraContainer& getCameras() const;
@@ -504,13 +491,13 @@ namespace ime {
          * @throws AccessViolationException If this function is called without
          *         creating the physics engine first
          *
-         * The physics simulation is responsible for creating, managing,
+         * The physics engine is responsible for creating, managing,
          * colliding and updating all of the RigidBody's in it.
          *
          * @warning By default, the scene does not have a physics engine.
          * As a result, calling this function prior to creating the physics
-         * engine is undefined behavior. Use createPhysicsEngine() to create a
-         * physics engine
+         * engine is undefined behavior. Use createPhysicsEngine() to
+         * instantiate a scene level physics engine
          *
          * @see createPhysicEngine
          */
@@ -518,18 +505,14 @@ namespace ime {
         const PhysicsEngine& getPhysicsEngine() const;
 
         /**
-         * @brief Get the scenes grid mover container
-         * @return The scenes grid mover container
-         *
-         * Note that you can use this container to store a GridMover or you
-         * can use your own container. The advantage of using this container
-         * is that the GridMover instance is updated on your behalf
+         * @brief Get the scene level GridMover container
+         * @return The scene level grid mover container
          */
         GridMoverContainer& getGridMovers();
         const GridMoverContainer& getGridMovers() const;
 
         /**
-         * @brief Get the scene level event event emitter
+         * @brief Get the scene level event EventEmitter
          * @return The scene level event event emitter
          *
          * The event emitter is local to the scene instance. This means
@@ -590,14 +573,14 @@ namespace ime {
          * callbacks scheduled on it will only be dispatched when the scene
          * is active
          *
-         * @see ime::Engine::setTimeout and ime::Engine::setInterval
+         * @see ime::Engine::getTimer
          */
         TimerManager& getTimer();
         const TimerManager& getTimer() const;
 
         /**
-         * @brief Get the global cache
-         * @return The global cache
+         * @brief Get the engine level cache
+         * @return The engine level cache
          * @throws AccessViolationException If this function is called before
          *         the scene is initialized
          *
@@ -608,27 +591,27 @@ namespace ime {
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @see getEngine
+         * @see getSCache
          */
         PropertyContainer& getCache();
         const PropertyContainer& getCache() const;
 
         /**
-         * @brief Get the global savable cache
-         * @return Global savable cache
+         * @brief Get the engine level savable cache
+         * @return The engine level savable cache
          * @throws AccessViolationException If this function is called before
          *         the scene is initialized
          *
          * Data stored in the cache persists from scene to scene. This means
          * that another scene can access or modify data stored by another scene.
-         * Unlike ime::Scene::cache, this cache can be initialized with data
+         * Unlike ime::Scene::getCache, this cache can be initialized with data
          * read from a file and can also be saved to a file. The data can also
          * be accessed using ime::Engine::getSavableCache
          *
          * @note The cache only stores data, while the engine is running. When
          * the engine is shutdown, the data in the cache is destroyed
          *
-         * @see getEngine
+         * @see getCache
          */
         PrefContainer& getSCache();
         const PrefContainer& getSCache() const;
@@ -744,6 +727,20 @@ namespace ime {
          * @see getGrid
          */
         void createGrid2D(unsigned int tileWidth, unsigned int tileHeight);
+
+        /**
+         * @internal
+         * @brief Initialize the scene
+         * @param engine The engine that runs the scene
+         *
+         * This function initializes all scene components that depend on the
+         * engine for their functionality. This function is called before the
+         * scene is entered
+         *
+         * @warning This function is intended for internal use and should
+         * never be called outside of IME
+         */
+        void init(Engine& engine);
 
         /**
          * @internal

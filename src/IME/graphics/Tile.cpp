@@ -198,8 +198,8 @@ namespace ime {
     }
 
     void Tile::setBody(RigidBody::Ptr body) {
-        IME_ASSERT(body, "The physWorld body must not be a nullptr")
-        IME_ASSERT(body->getType() == RigidBody::Type::Static, "The physWorld body of a tile must be of type ime::RigidBody::Type::Static")
+        IME_ASSERT(body, "'ime::Tile::setBody() must not be called with a nullptr argument")
+        IME_ASSERT(body->getType() == RigidBody::Type::Static, "An 'ime::RigidBody' of a 'ime::Tile' must be of type 'ime::RigidBody::Type::Static'")
         tile_.attachRigidBody(std::move(body));
         tile_.setOrigin(0, 0);
         tile_.getRigidBody()->setPosition(getWorldCentre());

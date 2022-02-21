@@ -88,7 +88,7 @@ namespace ime {
         virtual void rotate(float angle) = 0;
 
         /**
-         * @brief Get the orientation of the object
+         * @brief Get the orientation of the object, in degrees
          * @return Current rotation, in degrees
          *
          * The rotation is always in the range [0, 360]

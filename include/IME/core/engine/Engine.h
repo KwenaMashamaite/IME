@@ -57,19 +57,17 @@ namespace ime {
         /**
          * @brief Constructor
          * @param gameTitle The name of the game run by the engine
-         * @param settingsFile Filename of the file that contains the engines
+         * @param settingsFilename The name of the file that contains the engine
          *                     settings
          *
-         * @a settingsFile must have the filename preceded by the path to the
-         * file. The path must be relative to the directory that contains the
-         * game executable. If @a settingsFile is left unspecified the engine
+         * If the @a settingsFilename argument is left unspecified the engine
          * will be constructed with default settings
          */
-        explicit Engine(const std::string &gameTitle, const std::string &settingsFile = "default");
+        explicit Engine(const std::string &gameTitle, const std::string &settingsFilename = "default");
 
         /**
          * @brief Constructor
-         * @param gameName The name of the game
+         * @param gameName The name of the game run by the engine
          * @param settings Settings to construct the engine with
          */
         Engine(const std::string& gameName, const PrefContainer& settings);
@@ -97,7 +95,10 @@ namespace ime {
         /**
          * @brief Initialize the engine
          *
-         * @warning This function must be called before the engine is run()
+         * @warning This function must be called before the engine is run, otherwise
+         * undefined behaviour
+         *
+         * @see run
          */
         void initialize();
 
@@ -107,9 +108,9 @@ namespace ime {
          *         the engine is initialized or before at least one Scene is
          *         pushed to the engine
          *
-         * @warning The engine must be initialized this function is called. In
-         * addition, there must be at least one scene added to the engine for
-         * the it to run
+         * @warning The engine must be initialized before this function is
+         * called. In addition, there must be at least one scene added to
+         * the engine for it to run
          *
          * @see initialize and pushScene, pushCachedScene
          */
@@ -136,20 +137,16 @@ namespace ime {
          * @brief Pause or resume the engine
          * @param pause True to pause the engine or false to resume it
          *
-         * When the engine is paused, it keeps running, this means that the
-         * isRunning() function will return true if the engine was started.
-         * However, the current scene will not receive time updates. This
-         * effectively pauses all time dependent operations such as animations,
-         * physics, movements, time-based callbacks and so on... The same
-         * effect can be achieved by setting the scenes timescale to 0. The
-         * difference between the two is that the latter invokes the scenes
-         * update functions with a delta time of ime::Time::Zero whilst the
-         * former does not invoke the update functions at all.
+         * Pausing the engine suspends all time based updates such as
+         * animations, physics, movements, timers. The same effect can be
+         * achieved by setting a scenes timescale to 0. The difference between
+         * the two is that the latter invokes the scenes update functions with
+         * a delta time of ime::Time::Zero whilst the former does not invoke
+         * the update functions at all.
          *
-         * Note that events are dispatched when the engine is paused, thus
-         * user input is not blocked
+         * By default, the engine is not paused
          *
-         * By default the engine is not paused
+         * @see isPaused
          */
         void setPause(bool pause);
 
@@ -162,9 +159,14 @@ namespace ime {
         bool isPaused() const;
 
         /**
-         * @brief Set the fixed update frame rate
+         * @brief Set the physics update frame rate
          * @param frameRate The new physics update frame rate
-         * @throws InvalidArgumentException if the specified frame rate is 0
+         * @throws InvalidArgumentException If the specified frame rate is 0
+         *
+         * Physics based components are updated using a fixed timestep defined
+         * by the formula:
+         *
+         *  timestep = 1.0f / physicsUpdateFrameRate
          *
          * By default the physics update frame rate is 60 fps
          *
@@ -186,23 +188,36 @@ namespace ime {
           * @throws AccessViolationException If this function is called before
           *         the engine is initialized
           *
+          * Note that this function returns the settings that were used during the
+          * initialization of the engine. Modifying then after the engine has been
+          * initialized has no effect
+          *
           * @see initialize
           */
          PrefContainer& getConfigs();
          const PrefContainer& getConfigs() const;
 
         /**
-         * @brief Get persistent data
-         * @return Persistent data
+         * @brief Get the engine level persistent data
+         * @return The engine level persistent data
          *
-         * Data stored in the this object persists from scene to scene.
-         * This means that the data is preserved during a scene push or
-         * pop. This is useful if you want share data between scenes. For
-         * example, a scene may save data before its destroyed/paused and
-         * the next scene can access the data and update for the next scene
-         * or for the previous scene when it is resumed
+         * Data stored in this object persists from scene to scene. This
+         * means that the data is preserved during a scene push or a scene
+         * pop operation. The data stored inside the cache can be of any type.
          *
-         * @warning The data is destroyed when the engine is shutdown
+         * For example, the code below saves the current level of the game in
+         * the cache such that it can be accessed in any ime::Scene
+         *
+         * @code
+         * // Saving data to the cache
+         * engine.getCache().addProperty({"Current_Level", 1});
+         *
+         * // Accessing the cache within a ime::Scene
+         * auto level = getEngine().getCache().getValue<int>("Current_Level");
+         * @endcode
+         *
+         * @note Data in the cache is destroyed when the engine is shutdown,
+         * see quit()
          *
          * @see getSavableCache
          */
@@ -210,13 +225,15 @@ namespace ime {
         const PropertyContainer& getCache() const;
 
         /**
-         * @brief Get persistent data
-         * @return Persistent data
+         * @brief Get the engine level savable persistent data
+         * @return The engine level savable persistent data
          *
-         * Data stored in the this object persists from scene to scene.
-         * This means that the data is preserved during a scene push or
-         * pop. In addition, the data can be read/saved from/to a file
-         * on the disk
+         * The savable cache behaves exactly the same way as the normal
+         * cahce (see getCache()). The difference between them is that
+         * the savable cache can only store data of a known type and can
+         * be saved/read to/from the disk. Its main purpose is to save
+         * player preferences. For example, you can use it to save the
+         * players desired audio levels
          *
          * @warning The data is destroyed when the engine is shutdown
          *
@@ -229,42 +246,34 @@ namespace ime {
          * @brief Get the name of the game run by the engine
          * @return The name of the game run by the engine
          *
-         * This is the name provided during construction of the engine
+         * This name is provided as an argument to the engines constructor(s)
          */
         const std::string& getGameName() const;
 
         /**
-         * @brief Add a scene to the engine
-         * @param scene Scene to be added
-         * @param callback Optional function to be executed after the scene
-         *                 is added
+         * @brief Add a Scene to the engine
+         * @param scene The scene to be added
          *
-         * If the engine is running, then the scene will NOT be pushed immediately
-         * but rather at the end of the current frame. Any operation performed
-         * on the engine before the end of the current frame will reflect on
-         * the current scene and not the scene to be pushed. A callback must
-         * be provided if the need to perform an operation immediately after
-         * a scene is pushed arises. If the engine is NOT running, then the
-         * scene will be pushed immediately and the callback function is
-         * ignored
+         * If the engine is running, the scene will @e not be pushed immediately
+         * but rather at the end of the current frame. You can push multiple
+         * scenes in the same frame, the last scene to be pushed will become
+         * the active scene. All the other scenes will be pushed without being
+         * entered
          *
-         * @warning If multiple scenes are pushed to the engine in the same
-         * frame, the last scene to be received before the frame end will be
-         * the active scene. All the other scenes will be pushed without
-         * initialization
+         * To be notified when a scene becomes active, see onSceneActivate()
          *
          * @see popScene
          */
         void pushScene(Scene::Ptr scene);
 
         /**
-         * @brief Push a cached scene
-         * @param name The name of the scene to push
-         * @return True if the scene was pushed or false if the scene with
+         * @brief Add a cached scene to the engine
+         * @param name The name of the scene to add
+         * @return True if the scene was added or false if the scene with
          *         the given name does not exist in the cache list
          *
          * Note that after the push, the scene is removed from the cache and
-         * will be added back once its popped (if the cache state is still true)
+         * will be added back once its popped (if its cache state is still true)
          *
          * @see cacheScene, ime::Scene::setCached and popScene
          */
@@ -292,7 +301,7 @@ namespace ime {
          *
          * @endcode
          *
-         * Note that Calling this function when the engine has no scenes
+         * Note that calling this function when the engine has no scenes
          * has no effect
          *
          * @see pushScene and pushCachedScene
@@ -377,9 +386,8 @@ namespace ime {
         std::size_t getSceneCount() const;
 
         /**
-         * @brief Get access to the active scene
-         * @return A pointer to the active scene if available or a nullptr
-         *         if there is no active scene
+         * @brief Get the active scene
+         * @return A pointer to the active scene if it exists, otherwise a nullptr
          *
          * @see getBackgroundScene
          */
@@ -387,11 +395,9 @@ namespace ime {
         const Scene* getActiveScene() const;
 
         /**
-         * @brief Get access to the background scene
-         * @return A pointer to the background scene if available or a nullptr
-         *         if there is no background scene
-         *
-         * This function will also return a nullptr if the engine is not running
+         * @brief Get the background scene
+         * @return A pointer to the background scene if it exists, otherwise
+         *         a nullptr
          *
          * @see getActiveScene, ime::Scene::setOnPauseAction
          */
@@ -410,13 +416,15 @@ namespace ime {
          * @brief Get the time passed since the engine was started
          * @return The time passed since the engine was started
          *
-         * @note The elapsed time will reset to zero when the engine is
+         * The elapsed time starts counting after run() is called.
+         *
+         * @note The elapsed time will reset to zero after the engine is
          * shutdown
          */
         Time getElapsedTime() const;
 
         /**
-         * @brief Get access to the engines game window
+         * @brief Get the engines game window
          * @return The engines game window
          * @throws AccessViolationException If this function is called before
          *         the engine is initialized
@@ -432,7 +440,7 @@ namespace ime {
          * @throws AccessViolationException If this function is called before
          *         the engine is initialized
          *
-         * Unlike ime::Scene::gui, this gui is not destroyed when the scene
+         * Unlike ime::Scene::getGui, this gui is not destroyed when the scene
          * is destroyed, but rather when the engine is shutdown. It may be
          * useful when the same UI is required across multiple scenes. Note
          * that this gui is rendered on top of the scene level gui
@@ -446,7 +454,7 @@ namespace ime {
          * @brief Get the engine level audio manager
          * @return The engine level audio manager
          *
-         * Unlike ime::Scene::audio, this audio manager is not destroyed
+         * Unlike ime::Scene::getAudio, this audio manager is not destroyed
          * when the scene is destroyed, but rather when the engine is
          * shutdown
          */
@@ -457,7 +465,7 @@ namespace ime {
          * @brief Get the engine level input manager
          * @return The engine level input manager
          *
-         * Unlike ime::Scene::input, event listeners registered to this input
+         * Unlike ime::Scene::getInput, event listeners registered to this input
          * manager are executed regardless of which scene is active and are
          * only destroyed when the engine is shutdown
          */
@@ -524,8 +532,9 @@ namespace ime {
          * @return The event listener unique identification number
          *
          * This event is emitted when a scene becomes active. The callback is
-         * passed a pointer to the scene that was activated. You can add any
-         * number of event listeners to this event
+         * passed a pointer to the scene that was activated.
+         *
+         * You can add any number of event listeners to this event
          */
         int onSceneActivate(const Callback<Scene*>& callback, bool oneTime = false);
 
@@ -560,6 +569,8 @@ namespace ime {
          * @param callback Function to be executed when the engine starts running
          * @return The event listener unique identification number
          *
+         * You can add any number of event listeners to this event
+         *
          * @see onShutdown
          */
         int onStart(const Callback<>& callback);
@@ -574,6 +585,8 @@ namespace ime {
          * shutdown sequence. To perform an action after the engine has
          * completed its shutdown sequence, use onShutdownComplete()
          *
+         * You can add any number of event listeners to this event
+         *
          * @see onShutdownComplete
          */
         int onShutDown(const Callback<>& callback);
@@ -582,11 +595,9 @@ namespace ime {
          * @brief Add an event listener to a shutdown complete event
          * @param callback The function to be executed when the engine complete
          *                 its shutdown sequence
-         * @return The event listeners identification number
          *
          * @warning When this event is emitted, the engine will be in an
-         * uninitialized state (see init()). This means that accessing it
-         * without reinitialization is undefined behavior
+         * uninitialized state (see initialize())
          *
          * @note Only one event listener may registered to this event. Pass
          * @a nullptr to remove the callback
@@ -601,7 +612,7 @@ namespace ime {
          * @return The engines render target
          *
          * @warning This function must be called after the engine has been
-         *          initialized
+         *          initialized, otherwise undefined behaviour
          *
          * Note that this function is intended for internal use only
          *
@@ -723,7 +734,7 @@ namespace ime {
  * // The engine needs at least one scene in order to run
  * class TestScene : public ime::Scene {
  *      public:
- *          void onEnter() override {//Init scene}
+ *          void onEnter() override {}
  * };
  *
  * ime::Engine engine{"My awesome game"};

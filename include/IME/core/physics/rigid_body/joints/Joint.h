@@ -39,8 +39,7 @@ namespace ime {
      * Joints are used to constrain rigid bodies to the world or to each other
      * e.g a pulley
      *
-     * Note that joints are not constructed directly, use the createJoint
-     * method on a World instance to create a joint
+     * Note that joints are not constructed directly, use ime::PhysicsEngine::createJoint
      */
     class IME_API Joint : public Object {
     public:

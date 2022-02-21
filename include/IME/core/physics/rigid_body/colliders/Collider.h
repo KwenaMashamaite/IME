@@ -119,7 +119,7 @@ namespace ime {
     class IME_API Collider : public Object {
     public:
         using Ptr = std::unique_ptr<Collider>; //!< Unique collider pointer
-        using CollisionCallback = std::function<void(Collider*, Collider*)>;
+        using CollisionCallback = std::function<void(Collider*, Collider*)>; //!< RigidBody collision callback
 
         /**
          * @brief The type of the collider
