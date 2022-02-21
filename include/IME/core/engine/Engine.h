@@ -164,7 +164,7 @@ namespace ime {
         /**
          * @brief Set the fixed update frame rate
          * @param frameRate The new physics update frame rate
-         * @throws InvalidArgument if the specified frame rate is 0
+         * @throws InvalidArgumentException if the specified frame rate is 0
          *
          * By default the physics update frame rate is 60 fps
          *
@@ -593,7 +593,7 @@ namespace ime {
     private:
         /**
          * @brief Load engine settings from the disk
-         * @throws InvalidArgument if anu of settings entries are invalid
+         * @throws InvalidArgumentException if anu of settings entries are invalid
          */
         void loadSettings();
 

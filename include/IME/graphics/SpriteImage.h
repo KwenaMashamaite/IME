@@ -67,7 +67,7 @@ namespace ime {
          * @brief Constructor
          * @param sourceTexture The filename of the sprite image on the disk
          * @param area Sub-rectangle to construct sprite image from
-         * @throws FileNotFound If the image could not be found on the disk
+         * @throws FileNotFoundException If the image could not be found on the disk
          * 
          * The @a area can be used to construct the sprite image from a
          * sub-rectangle of the @a sourceTexture. To construct the sprite 
@@ -82,7 +82,7 @@ namespace ime {
          * @brief Create the sprite image
          * @param sourceTexture The filename of the sprite image on the disk
          * @param area Sub-rectangle to construct sprite image from
-         * @throws FileNotFound If the image could not be found on the disk
+         * @throws FileNotFoundException If the image could not be found on the disk
          *
          * The @a area can be used to construct the sprite image from a
          * sub-rectangle of the @a sourceTexture. To construct the sprite

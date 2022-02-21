@@ -55,7 +55,7 @@ namespace ime {
 
                 auto music = std::make_shared<sf::Music>();
                 if (!music->openFromFile(musicPath_ + filename))
-                    throw FileNotFound("cannot find file \"" + musicPath_ + filename + "\"");
+                    throw FileNotFoundException("cannot find file \"" + musicPath_ + filename + "\"");
 
                 return musicHolder_.insert({filename, std::move(music)}).second;
             } default:

@@ -134,28 +134,28 @@ namespace ime {
             /**
              * @brief Set the image of the track
              * @param filename Filename of the image to set
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              */
             void setTrackTexture(const std::string& filename);
 
             /**
              * @brief Set the image of the track when the mouse enters it
              * @param filename Filename of the image to set
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              */
             void setTrackHoverTexture(const std::string& filename);
 
             /**
              * @brief Set the image of the thumb
              * @param filename Filename of the image to set
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              */
             void setThumbTexture(const std::string& filename);
 
             /**
              * @brief Set the image of the thumb when the mouse enters it
              * @param filename Filename of the image to set
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              */
             void setThumbHoverTexture(const std::string& filename);
 
@@ -210,7 +210,7 @@ namespace ime {
             /**
              * @brief Change the widgets font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string& filename) override;
 

@@ -49,7 +49,7 @@ namespace ime {
              * @brief Read data from a file on the disk
              * @param filename Name of the file to read data from
              * @param buffer Stores the contents of the read file
-             * @throws FileNotFound If the file cannot be found on the disk
+             * @throws FileNotFoundException If the file cannot be found on the disk
              *
              * @note The file name must be preceded by the path to the file
              */
@@ -60,7 +60,7 @@ namespace ime {
              * @param buffer Contents to write to file
              * @param filename Name of the file to write data to
              * @param mode Mode in which file is opened in
-             * @throws FileNotFound If the file cannot be found on the disk
+             * @throws FileNotFoundException If the file cannot be found on the disk
              *
              * @note The file name must be preceded by the path to the file
              */

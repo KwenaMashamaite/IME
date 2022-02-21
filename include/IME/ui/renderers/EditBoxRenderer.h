@@ -343,7 +343,7 @@ namespace ime {
             /**
              * @brief Set the background image of the edit box
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When this image is set then the background colour property will
              * be ignored
@@ -353,7 +353,7 @@ namespace ime {
             /**
              * @brief Set the image when the mouse enters the edit box
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When this image is set then the background colour property will
              * be ignored
@@ -363,7 +363,7 @@ namespace ime {
             /**
              * @brief Set the image when the edit box is disabled
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When this image is set then the background colour property will
              * be ignored
@@ -373,7 +373,7 @@ namespace ime {
             /**
              * @brief Set the image when the edit box is focused but not hovered
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When this image is set then the background colour property will
              * be ignored
@@ -417,7 +417,7 @@ namespace ime {
             /**
              * @brief Change the widgets font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string &filename) override;
 

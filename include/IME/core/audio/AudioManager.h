@@ -75,7 +75,7 @@ namespace ime {
              * @brief Play an audio file
              * @param audioType Type of the audio file to play
              * @param filename The filename of the audio to play
-             * @throws FileNotFound if the audio file cannot be found on the disk
+             * @throws FileNotFoundException if the audio file cannot be found on the disk
              * @return Pointer to the audio file after it starts playing
              *
              * The audio files are played in a separate thread. This means

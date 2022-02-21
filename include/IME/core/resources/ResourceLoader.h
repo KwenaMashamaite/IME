@@ -67,7 +67,7 @@ namespace ime {
          * @brief Load a resource from the disk
          * @param type Type of the resource to be loaded
          * @param filename Filename of the resource to be loaded
-         * @throws FileNotFound If the resource cannot be found on the disk
+         * @throws FileNotFoundException If the resource cannot be found on the disk
          * @return Returns true when the resource was loaded successfully
          *
          * This function will cache any resource that is successfully
@@ -82,7 +82,7 @@ namespace ime {
          * @param filenames Filenames of the resources to be loaded
          * @param callback Function to execute after successful load of each
          *        resource
-         * @throws FileNotFound If one of the files cannot be found on the disk
+         * @throws FileNotFoundException If one of the files cannot be found on the disk
          *
          * The callback is passed the name of the resource that was loaded
          */

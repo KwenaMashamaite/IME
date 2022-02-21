@@ -73,7 +73,7 @@ TEST_CASE("ime::Property class")
             SUBCASE("getValue() throws ime::InvalidArgument when the template argument does not match the contained type")
             {
                 property.setValue(25);
-                CHECK_THROWS_AS(property.getValue<bool>(), ime::InvalidArgument);
+                CHECK_THROWS_AS(property.getValue<bool>(), ime::InvalidArgumentException);
             }
         }
 

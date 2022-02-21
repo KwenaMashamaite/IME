@@ -223,7 +223,7 @@ namespace ime {
         * @internal
         * @brief Get a TGUI font
         * @param filename Filename of the font
-        * @throws FileNotFound If the font cannot be found on the disk
+        * @throws FileNotFoundException If the font cannot be found on the disk
         * @return TGUI font
         */
         extern tgui::Font get_TGUI_Font(const std::string& filename);

@@ -413,7 +413,7 @@ namespace ime {
 
     void Engine::setPhysicsUpdateFrameRate(unsigned int frameRate) {
         if (frameRate == 0)
-            throw InvalidArgument("Physics update frame rate cannot be zero");
+            throw InvalidArgumentException("Physics update frame rate cannot be zero");
 
         fixedUpdateFPS_ = frameRate;
     }

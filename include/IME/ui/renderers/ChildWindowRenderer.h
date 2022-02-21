@@ -217,7 +217,7 @@ namespace ime {
             /**
              * @brief Set the image of the title bar
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              *
              * When this image is set, the title bar colour property will be
              * ignored
@@ -227,7 +227,7 @@ namespace ime {
             /**
              * @brief Set the background image
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              *
              * When this image is set, the background colour property will be
              * ignored
@@ -271,7 +271,7 @@ namespace ime {
             /**
              * @brief Change the widgets font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string &filename) override;
 

@@ -55,7 +55,7 @@ namespace ime {
                         return "UNSUPPORTED";
                 }
             } catch (...) {
-                throw InvalidArgument("The value of '" + pref.getKey() + "' is not a '" + convertToString(type) + "'");
+                throw InvalidArgumentException("The value of '" + pref.getKey() + "' is not a '" + convertToString(type) + "'");
             }
         }    
     }
@@ -65,10 +65,10 @@ namespace ime {
         type_{type}
     {
         if (property_.getName().empty())
-            throw InvalidArgument("Preference key cannot be an an empty string");
+            throw InvalidArgumentException("Preference key cannot be an an empty string");
         
         if (property_.getName().find_first_of(' ') != std::string::npos)
-            throw InvalidArgument("Preference key must not have whitespaces");
+            throw InvalidArgumentException("Preference key must not have whitespaces");
     }
 
     Preference::Type Preference::getType() const {
@@ -85,7 +85,7 @@ namespace ime {
 
     void Preference::setDescription(const std::string &description) {
         if (description.find_first_of('\n') != std::string::npos)
-            throw InvalidArgument("Preference description must not be multiline");
+            throw InvalidArgumentException("Preference description must not be multiline");
         
         description_ = description;
     }

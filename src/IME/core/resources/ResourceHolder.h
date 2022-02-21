@@ -78,7 +78,7 @@ namespace ime {
         /**
          * @brief Load a resource from the disk and store it in a buffer
          * @param filename Filename of the resource to load
-         * @throws FileNotFound If the file cannot be found on the disk
+         * @throws FileNotFoundException If the file cannot be found on the disk
          * @return True if resource was loaded successfully, otherwise false
          *
          * This function will look for the resource in the file path specified
@@ -105,7 +105,7 @@ namespace ime {
         /**
          * @brief Get a resource
          * @param filename Filename of the resource to be retrieved
-         * @throws FileNotFound If the the file cannot be found on the disk
+         * @throws FileNotFoundException If the the file cannot be found on the disk
          * @return Shared pointer to a resource in a buffer
          *
          * If the specified resource does not exist in the resource holder, an

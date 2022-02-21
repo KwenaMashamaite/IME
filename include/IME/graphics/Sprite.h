@@ -118,7 +118,7 @@ namespace ime {
         /**
          * @brief Set the texture of the object
          * @param filename Filename of the texture to set
-         * @throws FileNotFound if the specified texture cannot be found
+         * @throws FileNotFoundException if the specified texture cannot be found
          *         in the images path
          *
          * This function will set the texture to the whole image

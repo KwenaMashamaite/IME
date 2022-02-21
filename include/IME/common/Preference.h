@@ -70,7 +70,7 @@ namespace ime {
          * @param type The type of the value in the key-value pair
          * @param value The value of the preference
          * @param description An optional message describing the key-value pair
-         * @throws InvalidArgument If the type of the @a value argument does not
+         * @throws InvalidArgumentException If the type of the @a value argument does not
          *                         correspond to the type specified by @a type
          *                         argument
          *
@@ -86,7 +86,7 @@ namespace ime {
         /**
          * @brief Set the value of the preference
          * @param value The value to be set
-         * @throws InvalidArgument if the type of @a value does not correspond
+         * @throws InvalidArgumentException if the type of @a value does not correspond
          *                         to the ime::Preference::Type given in the
          *                         constructor
          *
@@ -106,7 +106,7 @@ namespace ime {
 
         /**
          * @brief Get the value of the preference
-         * @throws InvalidArgument if @a T is not the same as the ime::Preference::Type
+         * @throws InvalidArgumentException if @a T is not the same as the ime::Preference::Type
          *                         given in the constructor or the preference does
          *                         not have a value
          *
@@ -161,7 +161,7 @@ namespace ime {
      * @brief Save a Preference to the disk
      * @param pref The preference to be saved
      * @param filename The name of the file to save the preference to
-     * @throws FileNotFound if the specified file cannot be opened for
+     * @throws FileNotFoundException if the specified file cannot be opened for
      *                      writing
      *
      * The preference will be saved using the following format:

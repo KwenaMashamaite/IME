@@ -61,7 +61,7 @@ namespace ime {
          * @brief Construct the texture
          * @param filename Filename of the image file to load
          * @param area Area of the image to load
-         * @throws FileNotFound if the @a filename cannot be found on the disk
+         * @throws FileNotFoundException if the @a filename cannot be found on the disk
          *
          * The @a area can be used to construct the texture from a
          * sub-rectangle of the whole image. To construct the texture from
@@ -132,7 +132,7 @@ namespace ime {
          * @brief Load the texture from an image on the disk
          * @param filename Filename of the image file to load
          * @param area Area of the image to load
-         * @throws FileNotFound if the @a filename cannot be found on the disk
+         * @throws FileNotFoundException if the @a filename cannot be found on the disk
          *
          * The @a area can be used to construct the texture from a sub-rectangle
          * of the whole image. To construct the texture from the whole image

@@ -47,7 +47,7 @@ namespace ime {
             /**
              * @brief Change the image that is displayed
              * @param filename Filename of the new texture
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              *
              * The filename must be relative to the executable path
              */
@@ -90,7 +90,7 @@ namespace ime {
             /**
              * @brief Change the widgets font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string &filename) override;
 

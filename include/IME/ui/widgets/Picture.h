@@ -80,7 +80,7 @@ namespace ime {
              * @param transparentTexture True to pass mouse events to the
              *          widget behind the picture on transparent parts of
              *          the picture, otherwise false
-             * @throws FileNotFound if the image cannot be found on the disk
+             * @throws FileNotFoundException if the image cannot be found on the disk
              * @return The new picture widget
              *
              * By default, the widget is the same size as the image
@@ -95,7 +95,7 @@ namespace ime {
              * @param transparentTexture True to pass mouse events to the
              *          widget behind the picture on transparent parts of
              *          the picture, otherwise false
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * @return The new picture widget
              *
              * The @a frame is in the form {top, left, width, height}
@@ -176,7 +176,7 @@ namespace ime {
              * @param transparentTexture True to pass mouse events to the
              *          widget behind the picture on transparent parts of
              *          the picture, otherwise false
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              *
              * By default, the widget is the same size as the image
              */
@@ -189,7 +189,7 @@ namespace ime {
              * @param transparentTexture True to pass mouse events to the
              *          widget behind the picture on transparent parts of
              *          the picture, otherwise false
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              *
              * The @a frame is in the form {top, left, width, height}
              *

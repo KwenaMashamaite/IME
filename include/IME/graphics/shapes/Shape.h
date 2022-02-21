@@ -151,7 +151,7 @@ namespace ime {
         /**
          * @brief Set the texture of the shape
          * @param filename The file name of the texture to be set
-         * @throws FileNotFound if the @a filename cannot be found on the disk
+         * @throws FileNotFoundException if the @a filename cannot be found on the disk
          *
          * @see getTexture
          */

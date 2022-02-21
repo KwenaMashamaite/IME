@@ -237,7 +237,7 @@ namespace ime {
             /**
              * @brief Change the global font
              * @param filename Filename of the new global font
-             * @throws FileNotFound if the font cannot be found on the disk
+             * @throws FileNotFoundException if the font cannot be found on the disk
              */
             void setFont(const std::string& filename);
 

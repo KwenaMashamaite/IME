@@ -37,7 +37,7 @@ bool ResourceHolder<T>::loadFromFile(const std::string &filename) {
         return true;
     auto resource = std::make_shared<T>();
     if (!(*resource).loadFromFile(filePath_ + filename))
-        throw FileNotFound(R"(cannot find file ")" + filePath_ + filename + R"(")");
+        throw FileNotFoundException(R"(cannot find file ")" + filePath_ + filename + R"(")");
     return resourceHolder_.insert({filename, std::move(resource)}).second;
 }
 

@@ -30,27 +30,27 @@
 
 namespace ime {
     /**
-     * @brief Exception class for when a file cannot be found
+     * @brief Exception thrown when a file cannot be found
      */
-    class FileNotFound : public std::runtime_error {
+    class FileNotFoundException : public std::runtime_error {
     public:
         /**
          * @brief Constructor
          * @param message Exception message
          */
-        explicit FileNotFound(const std::string &message) : std::runtime_error(message) {}
+        explicit FileNotFoundException(const std::string &message) : std::runtime_error(message) {}
     };
 
     /**
-     * @brief Exception class for when an argument is invalid
+     * @brief Exception thrown when an argument is invalid
      */
-    class InvalidArgument: public std::runtime_error {
+    class InvalidArgumentException : public std::runtime_error {
     public:
         /**
          * @brief Constructor
          * @param message Exception message
          */
-        explicit InvalidArgument(const std::string& message) : std::runtime_error(message) {}
+        explicit InvalidArgumentException(const std::string& message) : std::runtime_error(message) {}
     };
 
     /**

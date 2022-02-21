@@ -66,7 +66,7 @@ namespace ime {
          * @brief Load a resource from the disk
          * @param type Type of the resource to be loaded
          * @param filename Filename of the resource to be loaded
-         * @throws FileNotFound If the resource cannot be found on the disk
+         * @throws FileNotFoundException If the resource cannot be found on the disk
          * @return Returns true when the resource was loaded successfully
          *
          * This function will cache any resource that is successfully
@@ -81,7 +81,7 @@ namespace ime {
          * @param filenames Filenames of the resources to be loaded
          * @param callback Function to execute after successful load of each
          *        resource
-         * @throws FileNotFound If one of the files cannot be found on the disk
+         * @throws FileNotFoundException If one of the files cannot be found on the disk
          *
          * The callback is passed the name of the resource that was loaded
          */
@@ -132,7 +132,7 @@ namespace ime {
         /**
          * @brief Get a font
          * @param fileName Filename of the font
-         * @throws FileNotFound If the font cannot be found on the disk
+         * @throws FileNotFoundException If the font cannot be found on the disk
          * @return Requested font
          */
         const sf::Font &getFont(const std::string &fileName);
@@ -140,7 +140,7 @@ namespace ime {
         /**
          * @brief Get a texture
          * @param fileName Filename of the texture
-         * @throws FileNotFound If the texture cannot be found on the disk
+         * @throws FileNotFoundException If the texture cannot be found on the disk
          * @return The requested texture
          */
         const Texture &getTexture(const std::string &fileName);
@@ -148,7 +148,7 @@ namespace ime {
         /**
          * @brief Get a sound buffer
          * @param fileName File name of the sound buffer
-         * @throws FileNotFound If the sound buffer cannot be found on the disk
+         * @throws FileNotFoundException If the sound buffer cannot be found on the disk
          * @return The requested sound buffer
          */
         const sf::SoundBuffer &getSoundBuffer(const std::string &fileName);
@@ -156,7 +156,7 @@ namespace ime {
         /**
          * @brief Get an image
          * @param fileName File name of the image
-         * @throws FileNotFound If the image cannot be found on the disk
+         * @throws FileNotFoundException If the image cannot be found on the disk
          * @return The requested image
          */
         const sf::Image &getImage(const std::string &fileName);
@@ -164,7 +164,7 @@ namespace ime {
         /**
          * @brief Get music
          * @param fileName Filename of the music
-         * @throws FileNotFound If the music cannot be found on the disk
+         * @throws FileNotFoundException If the music cannot be found on the disk
          * @return Pointer to the requested music
          */
         std::shared_ptr<sf::Music> getMusic(const std::string &fileName);

@@ -50,7 +50,7 @@ namespace ime {
         /**
          * @brief Set the background texture of the grid
          * @param filename The file name of the texture to be set
-         * @throws FileNotFound if the specified file cannot be loaded from the disk
+         * @throws FileNotFoundException if the specified file cannot be loaded from the disk
          */
         void setBackgroundTexture(const std::string& filename);
 

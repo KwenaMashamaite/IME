@@ -33,7 +33,7 @@ Preference::Preference(const std::string& key, Type type, T value, const std::st
 template <typename T>
 void Preference::setValue(T value) {
     static auto throwException = [](const std::string& key, const std::string& type) {
-        throw InvalidArgument("IME Type Mismatch: The preference \"" + key + "\" can only store values of type \"" + type + "\"");
+        throw InvalidArgumentException("IME Type Mismatch: The preference \"" + key + "\" can only store values of type \"" + type + "\"");
     };
 
     switch (type_) {

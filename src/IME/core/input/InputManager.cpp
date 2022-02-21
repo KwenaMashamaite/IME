@@ -201,7 +201,7 @@ namespace ime::input {
         if (index < joysticks_.size())
             return joysticks_.at(index);
         else
-            throw InvalidArgument("Joystick index out of bounds");
+            throw InvalidArgumentException("Joystick index out of bounds");
     }
 
     bool InputManager::unsubscribe(JoystickEvent event, int id) {

@@ -73,7 +73,7 @@ TEST_CASE("ime::Preference class")
 
             SUBCASE("getValue() throws ime::InvalidArgument when the template argument does not match the contained type")
             {
-                CHECK_THROWS_AS(preference.getValue<bool>(), ime::InvalidArgument);
+                CHECK_THROWS_AS(preference.getValue<bool>(), ime::InvalidArgumentException);
             }
         }
 

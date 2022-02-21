@@ -107,7 +107,7 @@ namespace ime {
             /**
              * @brief Set the image that should be displayed next to the text
              * @param filename Filename of the image to display
-             * @throws FileNotFound if the specified image cannot be found on
+             * @throws FileNotFoundException if the specified image cannot be found on
              *         the disk
              */
             void setImage(const std::string& filename);

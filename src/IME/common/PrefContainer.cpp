@@ -53,7 +53,7 @@ namespace ime {
             else if (type == "FLOAT")
                 return Preference::Type::Float;
 
-            throw InvalidArgument("Invalid preference entry: (The type ')" + type + "' is not a supported type");
+            throw InvalidArgumentException("Invalid preference entry: (The type ')" + type + "' is not a supported type");
         }
 
         std::string convertTypeToStr(Preference::Type type) {
@@ -147,23 +147,23 @@ namespace ime {
                     std::string value = typeAndValue.substr(equalSignPos + 1);
 
                     if (key.empty())
-                        throw InvalidArgument(errorMessage("It's missing a key"));
+                        throw InvalidArgumentException(errorMessage("It's missing a key"));
 
                     if (value.empty() && type != "STRING")
-                        throw InvalidArgument(errorMessage(R"(Only values of type 'STRING' can be left unspecified)"));
+                        throw InvalidArgumentException(errorMessage(R"(Only values of type 'STRING' can be left unspecified)"));
 
                     if (hasWhiteSpace(key) || hasWhiteSpace(type))
-                        throw InvalidArgument(errorMessage("key or type contains whitespace(s)"));
+                        throw InvalidArgumentException(errorMessage("key or type contains whitespace(s)"));
 
                     if (hasWhiteSpace(value) && type != "STRING")
-                        throw InvalidArgument(errorMessage("the value contains whitespace(s) and its not of type STRING"));
+                        throw InvalidArgumentException(errorMessage("the value contains whitespace(s) and its not of type STRING"));
 
                     if (!addPref(createPref(key, type, value, prefDescription)))
-                        throw InvalidArgument(errorMessage("The key '" + key + "' is a duplicate, keys must be unique"));
+                        throw InvalidArgumentException(errorMessage("The key '" + key + "' is a duplicate, keys must be unique"));
                 } else
-                    throw InvalidArgument(errorMessage(R"(type and value not separated by '=')"));
+                    throw InvalidArgumentException(errorMessage(R"(type and value not separated by '=')"));
             } else
-                throw InvalidArgument(errorMessage(R"(key and type are not separated by ':')"));
+                throw InvalidArgumentException(errorMessage(R"(key and type are not separated by ':')"));
 
             prefDescription.clear();
         }
@@ -193,7 +193,7 @@ namespace ime {
         try {
             return prefs_.at(getIndex(key).value());
         } catch (...)  {
-            throw InvalidArgument("A preference with the key \'" + key + "\" does not exist in the container");
+            throw InvalidArgumentException("A preference with the key \'" + key + "\" does not exist in the container");
         }
     }
 

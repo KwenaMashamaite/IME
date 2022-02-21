@@ -31,7 +31,7 @@ namespace ime::utility {
     {
         inFile_.open(filename);
         if(!inFile_.good())
-            throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
+            throw FileNotFoundException(R"(Cannot find file ")" + filename + R"(")");
         buffer << inFile_.rdbuf(); //Read file content
         inFile_.close();
     }
@@ -51,7 +51,7 @@ namespace ime::utility {
         }
 
         if (!outFile_.good())
-            throw FileNotFound(R"(Cannot find file ")" + filename + R"(")");
+            throw FileNotFoundException(R"(Cannot find file ")" + filename + R"(")");
         outFile_ << buffer.str(); //Write data to file
         outFile_.close();
     }

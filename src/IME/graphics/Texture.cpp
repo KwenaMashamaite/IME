@@ -58,7 +58,7 @@ namespace ime {
                 // above
                 try {
                     image_ = &ResourceManager::getInstance()->getImage(other.filename_);
-                } catch (const ime::FileNotFound&) {
+                } catch (const ime::FileNotFoundException&) {
                     image_ = nullptr;
                 }
             }

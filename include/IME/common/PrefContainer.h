@@ -44,7 +44,7 @@ namespace ime {
         /**
          * @brief Load preferences from the disk
          * @param filename The name of the file to load the preferences from
-         * @throws FileNotFound If @a filename cannot be opened for reading
+         * @throws FileNotFoundException If @a filename cannot be opened for reading
          *
          * @note All current data is destroyed on subsequent function calls
          *
@@ -110,7 +110,7 @@ namespace ime {
         /**
          * @brief Save preferences to the disk
          * @param filename The name of the file to save the preferences to
-         * @throws FileNotFound If @a filename cannot be opened for writing
+         * @throws FileNotFoundException If @a filename cannot be opened for writing
          *
          * If @a filename is left unspecified, the engine will attempt to
          * write the data to the same file as the load file.

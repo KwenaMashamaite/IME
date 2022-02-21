@@ -110,7 +110,7 @@ namespace ime {
             /**
              * @brief Set the background image of the menu bar
              * @param filename The filename of the image to set
-             * @throws FileNotFound if @a filename cannot be found on the disk
+             * @throws FileNotFoundException if @a filename cannot be found on the disk
              * 
              * When this image is set, the background colour property will be
              * ignored
@@ -178,7 +178,7 @@ namespace ime {
             /**
              * @brief Change the menu bars font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string &filename) override;
 

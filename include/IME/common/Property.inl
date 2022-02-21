@@ -39,6 +39,6 @@ T Property::getValue() const {
     try {
         return std::any_cast<T>(value_);
     } catch(...) {
-        throw InvalidArgument("IME Type Mismatch: T in ime::Property::getValue<T>() must be the same type as the value stored by the property");
+        throw InvalidArgumentException("IME Type Mismatch: T in ime::Property::getValue<T>() must be the same type as the value stored by the property");
     }
 }

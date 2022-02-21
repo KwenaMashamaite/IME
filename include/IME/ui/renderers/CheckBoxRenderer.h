@@ -407,7 +407,7 @@ namespace ime {
              * @brief Set the image that is displayed when the checkbox is not 
              *      checked
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When checked and unchecked images are set, the background and 
              * check colour properties will be ignored
@@ -417,7 +417,7 @@ namespace ime {
             /**
              * @brief Set the image that is displayed when the checkbox is checked
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * When checked and unchecked images are set, the background and 
              * check colour properties will be ignored.
@@ -428,7 +428,7 @@ namespace ime {
              * @brief Set the image that is displayed when the checkbox is not 
              *         checked and the mouse is on top of the checkbox
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set
@@ -439,7 +439,7 @@ namespace ime {
              * @brief Set the image that is displayed when the checkbox is
              *         checked and the mouse is on top of the checkbox
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set
@@ -450,7 +450,7 @@ namespace ime {
              * @brief Set the image that is displayed when the checkbox is not
              *         checked and it's disabled
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set
@@ -461,7 +461,7 @@ namespace ime {
              * @brief Set the image that is displayed when the checkbox is
              *         checked and it's disabled
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set
@@ -472,7 +472,7 @@ namespace ime {
              * @brief Set the image that is displayed on top of the checkbox 
              *          when it is unchecked and focused
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set. Pass an empty texture to unset the image
@@ -483,7 +483,7 @@ namespace ime {
              * @brief Set the image that is displayed on top of the checkbox 
              *          when it is checked and focused
              * @param filename Filename of the image to be set
-             * @throws FileNotFound If the image cannot be found on the disk
+             * @throws FileNotFoundException If the image cannot be found on the disk
              * 
              * This only has effect when the normal checked and unchecked images 
              * are also set. Pass an empty texture to unset the image
@@ -551,7 +551,7 @@ namespace ime {
             /**
              * @brief Change the widgets font
              * @param filename Filename of the new font
-             * @throws FileNotFound If the font cannot be found on the disk
+             * @throws FileNotFoundException If the font cannot be found on the disk
              */
             void setFont(const std::string &filename) override;
 
