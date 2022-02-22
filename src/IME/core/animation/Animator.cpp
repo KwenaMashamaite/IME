@@ -25,6 +25,7 @@
 #include "IME/core/animation/Animator.h"
 #include "IME/graphics/Sprite.h"
 #include "IME/utility/Helpers.h"
+#include "IME/core/exceptions/Exceptions.h"
 #include <algorithm>
 #include <memory>
 
@@ -380,7 +381,9 @@ namespace ime {
     }
 
     void Animator::update(Time deltaTime) {
-        IME_ASSERT(target_, "Cannot start Animator without a target to animate")
+        if (!target_)
+            throw AccessViolationException("An 'ime::Animator' cannot be started without an animation target, see 'ime::Animator::setTarget()'");
+
         if (!currentAnimation_ || !isPlaying_ || isPaused_)
             return;
 
