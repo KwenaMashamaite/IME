@@ -372,9 +372,12 @@ namespace ime::priv {
         };
 
         update(scenes_.top().get(), deltaTime);
+        scenes_.top()->onPreUpdate(deltaTime * scenes_.top()->getTimescale());
 
-        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
+        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_) {
             update(prevScene_, deltaTime);
+            prevScene_->onPreUpdate(deltaTime * prevScene_->getTimescale());
+        }
     }
 
     void SceneManager::updateScene(const Time& deltaTime, Scene* scene, bool fixedUpdate) {

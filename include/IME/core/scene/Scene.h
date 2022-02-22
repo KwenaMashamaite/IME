@@ -150,6 +150,20 @@ namespace ime {
         virtual void onHandleEvent(Event event) {IME_UNUSED(event);};
 
         /**
+         * @brief @brief Handle a scene pre-update
+         * @param deltaTime The time passed since the last update
+         *
+         * This function is called by IME before the scene is updated. This
+         * include physics, animations, timer updates etc. It is called before
+         * onUpdate() and onFixedUpdate()
+         *
+         * Note that implementing this function is optional. IME will never put
+         * anything inside this function, therefore you don't have to call the
+         * base class method in your implementation
+         */
+        virtual void onPreUpdate(Time deltaTime) {IME_UNUSED(deltaTime);}
+
+        /**
          * @brief Handle a scene frame-rate dependent update
          * @param deltaTime The time passed since the last update
          *
