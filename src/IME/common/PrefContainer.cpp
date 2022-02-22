@@ -53,7 +53,7 @@ namespace ime {
             else if (type == "FLOAT")
                 return Preference::Type::Float;
 
-            throw InvalidArgumentException("Invalid preference entry: (The type ')" + type + "' is not a supported type");
+            throw InvalidParseException("Invalid preference entry: (The type ')" + type + "' is not a supported type");
         }
 
         std::string convertTypeToStr(Preference::Type type) {
@@ -147,23 +147,23 @@ namespace ime {
                     std::string value = typeAndValue.substr(equalSignPos + 1);
 
                     if (key.empty())
-                        throw InvalidArgumentException(errorMessage("It's missing a key"));
+                        throw InvalidParseException(errorMessage("It's missing a key"));
 
                     if (value.empty() && type != "STRING")
-                        throw InvalidArgumentException(errorMessage(R"(Only values of type 'STRING' can be left unspecified)"));
+                        throw InvalidParseException(errorMessage(R"(Only values of type 'STRING' can be left unspecified)"));
 
                     if (hasWhiteSpace(key) || hasWhiteSpace(type))
-                        throw InvalidArgumentException(errorMessage("key or type contains whitespace(s)"));
+                        throw InvalidParseException(errorMessage("key or type contains whitespace(s)"));
 
                     if (hasWhiteSpace(value) && type != "STRING")
-                        throw InvalidArgumentException(errorMessage("the value contains whitespace(s) and its not of type STRING"));
+                        throw InvalidParseException(errorMessage("the value contains whitespace(s) and its not of type STRING"));
 
                     if (!addPref(createPref(key, type, value, prefDescription)))
-                        throw InvalidArgumentException(errorMessage("The key '" + key + "' is a duplicate, keys must be unique"));
+                        throw InvalidParseException(errorMessage("The key '" + key + "' is a duplicate, keys must be unique"));
                 } else
-                    throw InvalidArgumentException(errorMessage(R"(type and value not separated by '=')"));
+                    throw InvalidParseException(errorMessage(R"(type and value not separated by '=')"));
             } else
-                throw InvalidArgumentException(errorMessage(R"(key and type are not separated by ':')"));
+                throw InvalidParseException(errorMessage(R"(key and type are not separated by ':')"));
 
             prefDescription.clear();
         }

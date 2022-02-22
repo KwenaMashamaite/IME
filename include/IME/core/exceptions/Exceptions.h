@@ -64,6 +64,18 @@ namespace ime {
          */
         explicit AccessViolationException(const std::string& message) : std::runtime_error(message) {}
     };
+
+    /**
+     * @brief Exception thrown when parsed data read from the disk is invalid
+     */
+    class InvalidParseException : public std::runtime_error {
+    public:
+        /**
+         * @brief Constructor
+         * @param message Exception message
+         */
+        explicit InvalidParseException(const std::string& message) : std::runtime_error(message) {}
+    };
 }
 
 #endif // IME_EXCEPTIONS_H

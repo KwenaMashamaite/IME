@@ -133,29 +133,34 @@ namespace ime {
         bool isIndexValid(const Index &index) const;
 
         /**
-         * @brief Construct a grid
-         * @param id The id of each tile
+         * @brief Construct the grid from its dimensions
          * @param size The size of the grid in tiles
+         * @param id The id of each tile
          *
-         * This function should be used when there are no special tiles
-         * in the grid, that is, when all tiles have the same id. The
-         * x component of @a size is the number of rows whilst the y
-         * component is the number of columns
+         * Note that the x component of the @a size argument is the number of
+         * rows whilst the y component is the number of columns
          *
          * @see loadFromFile and loadFromVector
          */
-        void construct(const Vector2u& size, char id);
+        void construct(const Vector2u& size, char id = '\0');
 
         /**
          * @brief Construct the grid from data located on a file on the disk
          * @param filename Name of the file that contains the map data
          * @param separator Character used to separate map data
+         * @throws FileNotFoundException If @a filename cannot be opened for reading
+         * @throws InvalidParseException If the contents of @a filename cannot
+         *         be successfully parsed into Grid2D map data
+         *
+         * @see loadFromVector
          */
         void loadFromFile(const std::string& filename, const char& separator = '\0');
 
         /**
          * @brief Construct the grid form a vector that contains map data
-         * @param map Vector to construct map from
+         * @param map The vector to construct the map from
+         *
+         * @see loadFromFile
          */
         void loadFromVector(Map map);
 
@@ -165,6 +170,8 @@ namespace ime {
          * @param isCollidable True to enable collision, otherwise false
          * @param attachCollider True to attach a Collider to the tile, otherwise
          *                       false
+         * @throws InvalidArgumentException If @a attachCollider is @a true and
+         *         the Scene this grid belongs to does not have a PhysicsEngine
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
@@ -180,6 +187,8 @@ namespace ime {
          * @param isCollidable True to enable collision, otherwise false
          * @param attachCollider True to attach a Collider to the tile, otherwise
          *                       false
+         * @throws InvalidArgumentException If @a attachCollider is @a true and
+         *         the Scene this grid belongs to does not have a PhysicsEngine
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
@@ -202,6 +211,8 @@ namespace ime {
          * @param isCollidable True to set collidable, otherwise false
          * @param attachCollider True to attach a Collider to the tile, otherwise
          *                       false
+         * @throws InvalidArgumentException If @a attachCollider is @a true and
+         *         the Scene this grid belongs to does not have a PhysicsEngine
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
@@ -223,6 +234,8 @@ namespace ime {
          * @param isCollidable True to enable collision, otherwise false
          * @param attachCollider True to attach a Collider to the tile, otherwise
          *                       false
+         * @throws InvalidArgumentException If @a attachCollider is @a true and
+         *         the Scene this grid belongs to does not have a PhysicsEngine
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
@@ -244,6 +257,8 @@ namespace ime {
          * @param isCollidable True to enable collision, otherwise false
          * @param attachCollider True to attach a Collider to the tile, otherwise
          *                       false
+         * @throws InvalidArgumentException If @a attachCollider is @a true and
+         *         the Scene this grid belongs to does not have a PhysicsEngine
          *
          * Without a Collider, only game objects that are controlled by a
          * GridMover can collide with the tile. Attaching a collider makes
@@ -264,13 +279,13 @@ namespace ime {
         bool isCollidable(const Index& index) const;
 
         /**
-         * @brief Get the size of the grid in pixels
+         * @brief Get the size of the grid, in pixels
          * @return Size of the grid in pixels
          */
         Vector2u getSize() const;
 
         /**
-         * @brief Get the size of the grid in tiles
+         * @brief Get the size of the grid, in tiles
          * @return Size of the grid in tiles
          *
          * @warning The x component is the number of columns whilst the y
@@ -403,21 +418,19 @@ namespace ime {
         void draw(priv::RenderTarget &renderTarget) const;
 
         /**
-         * @brief Add an entity to the grid
+         * @brief Add an GridObject to the grid
          * @param child GridObject to add to the grid
-         * @param index Index of the tile to add the entity to
-         * @return True if the entity has been added or false if the index is
-         *         invalid or the entity already exists in the grid
+         * @param index Index of the tile to add the grid object to
+         * @return True if the grid object has been added or false if the index is
+         *         invalid or the grid object already exists in the grid
          *
-         * If the specified tile is already occupied, the child will be added
-         * as a visitor of that tile. Note that @a child will always be placed
-         * at the centre point of the tile.
+         * Note that the @a child is placed at the centre of the tile.
          */
         bool addChild(GridObject* child, const Index& index);
 
         /**
          * @brief Get the child in the grid with a certain id
-         * @param id Id of the child to get access to
+         * @param id The id of the child to be retrieved
          * @return The child with the specified id or a nullptr if the child
          *         with the specified id does not exist in the grid
          */
@@ -451,7 +464,7 @@ namespace ime {
          * @param callback Function that determines if the condition is
          *        satisfied or not
          *
-         * All children for which @a callback returns true are removed
+         * All children for which the @a callback returns true are removed
          * from the grid
          */
         void removeChildIf(const std::function<bool(GridObject*)>& callback);
@@ -529,10 +542,6 @@ namespace ime {
          * @brief Execute a callback for each child in a tile
          * @param tile Tile to execute callback on
          * @param callback Function to execute
-         *
-         * The callback will be passed the children of the tile, with the first
-         * child being the occupant of the tile. The callback will be ignored
-         * if the specified index is invalid or the tile is not occupied
          */
         void forEachChildInTile(const Tile& tile, const Callback<GridObject*>& callback) const;
 

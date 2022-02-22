@@ -41,6 +41,8 @@ namespace ime {
          * @param filename Name of the map file
          * @param separator Character used to separate column entries
          * @return Tile map data
+         * @throws InvalidParseException If the contents of @a filename cannot
+         *         be successfully parsed into Grid2D map data
          *
          * This function parses a map file and returns a map object created
          * form the parsed date

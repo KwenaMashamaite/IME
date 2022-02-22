@@ -45,6 +45,8 @@ namespace ime {
          * @brief Load preferences from the disk
          * @param filename The name of the file to load the preferences from
          * @throws FileNotFoundException If @a filename cannot be opened for reading
+         * @throws InvalidParseException If the contents of @a filename cannot
+         *         be successfully parsed
          *
          * @note All current data is destroyed on subsequent function calls
          *

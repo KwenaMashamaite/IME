@@ -24,6 +24,7 @@
 
 #include "IME/core/grid/Grid2DParser.h"
 #include "IME/utility/DiskFileReader.h"
+#include "IME/core/exceptions/Exceptions.h"
 #include <sstream>
 
 namespace ime {
@@ -45,6 +46,10 @@ namespace ime {
             }
             map.push_back(row);
         }
+
+        if (map.empty())
+            throw InvalidParseException("Failed to parse \'" + filename + "\', 'ime::Grid2D' map data not found. Recall empty lines and comments (lines that start with a '#') are ignored.");
+
         return map;
     }
 }
