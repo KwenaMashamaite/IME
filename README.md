@@ -17,9 +17,10 @@ IME is a state-based game engine for developing 2D games. It is written in C++17
 * **Sound** - Music and Sound effects support
 * **Event system** - Thread safe event system
 * **Asset management** - Automated resource management system
+* **Scene management** - Last In First Out (LIFO) scene management
 * **Time** - Schedule one time, repeating or indefinite callbacks
 
-*IME does not support an Editor by default*
+*IME does not support an Editor*
 
 ## Demos
 
@@ -30,7 +31,7 @@ Here is a list of games developed with IME:
 
 ## Downloads
 
-The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v3.0.0).
+The latest official precompiled IME binaries can be downloaded [here](https://github.com/KwenaMashamaite/IME/releases/tag/v3.1.0).
 To use the library you must have a supported (GCC or VC++) C++17 compliant compiler.
 Available binaries are compiled with `GCC MinGW 10.3.0` and `Microsoft Visual C++ 16`
 compilers. This means that in order to use them, you must have the exact compiler on your system.
@@ -47,7 +48,7 @@ set `IME_DIR`, *CMake* will automatically find the library
 ```cmake
 # Find IME
 set(IME_DIR "your_path_to_IME_directory_here/lib/cmake/IME") # Skip if IME installed in known location
-find_package(IME 3.0.0 REQUIRED)
+find_package(IME 3.1.0 REQUIRED)
 
 # Link IME
 target_link_libraries (myGame PRIVATE ime)
@@ -74,7 +75,7 @@ $ git clone https://github.com/KwenaMashamaite/IME
 ```
 
 2. Download and Install [CMake 3.17+](https://cmake.org/)
-3. Download and install *IME*'s dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.2](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
+3. Download and install *IME*'s dependencies: [SFML 2.5.1](https://www.sfml-dev.org/index.php), [TGUI 0.9.3](https://tgui.eu/), and [Box2d 2.4.1](https://box2d.org/) <br>
    The dependencies must have a matching compiler and architecture (e.g, If you intend to build *IME* with <br>
    `Visual C++ 15 2017 (32-bit)`, then *SFML*, *TGUI* and *Box2d* binaries must all be compiled with `Visual C++ 15 2017 (32-bit)`
    <br>
@@ -95,7 +96,7 @@ location, usually `Program Files`. However, this may require admin privileges
 ## Learn
 
 * [Tutorials](#Learn) (Coming soon)
-* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v3.0.0/html/index.html)
+* [API Documentation](https://kwenamashamaite.github.io/IME/docs/v3.1.0/html/index.html)
 
 ## Platform
 
