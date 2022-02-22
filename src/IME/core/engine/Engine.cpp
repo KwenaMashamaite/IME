@@ -280,11 +280,13 @@ namespace ime {
         return false;
     }
 
-    void Engine::popScene() {
-        if (!isRunning_)
-            sceneManager_->popScene();
-        else
-            popCounter_++;
+    void Engine::popScene(int numScenes) {
+        while (numScenes-- > 0) {
+            if (!isRunning_)
+                sceneManager_->popScene();
+            else
+                popCounter_++;
+        }
     }
 
     void Engine::cacheScene(const std::string &name, Scene::Ptr scene) {

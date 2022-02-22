@@ -271,18 +271,33 @@ namespace ime {
         bool pushCachedScene(const std::string& name);
 
         /**
-         * @brief Remove the current scene from the engine
+         * @brief Remove scenes from the engine
+         * @param numScenes The number of scenes to remove
          *
-         * If the engine is not running, the scene will be removed immediately,
-         * otherwise the scene will be removed at the end of the current frame.
-         * Note that multiple scenes may be removed in the same frame by calling
-         * this function as many times as the number of scenes to be removed.
-         * In addition, Calling this function when the engine has no scenes
+         * If the engine is not running, the scene(s) will be removed immediately,
+         * otherwise they will be removed at the end of the current frame.
+         *
+         * You can remove multiple scenes in the same frame by calling this
+         * function as many times as the number of scenes to be removed or
+         * by specifying the number of scenes to be removed. For example
+         * the code below removes all scenes from the engine:
+         *
+         * @code
+         * engine.popScene(engine.getSceneCount());
+         *
+         * // OR
+         *
+         * while (engine.getSceneCount() > 0)
+         *      engine.popScene();
+         *
+         * @endcode
+         *
+         * Note that Calling this function when the engine has no scenes
          * has no effect
          *
          * @see pushScene and pushCachedScene
          */
-        void popScene();
+        void popScene(int numScenes = 1);
 
         /**
          * @brief Add a scene to the cache list
