@@ -343,23 +343,32 @@ namespace ime {
          * @brief Remove all the scenes from the engine except the current
          *        active scene
          *
-         * Note that if this function is called whilst the engine is NOT
+         * Note that if this function is called whilst the engine is @e not
          * running, then all the scenes will be removed from the engine.
-         * Since the engine must always have at least one scene to run,
-         * scenes cannot be removed all at once while the engine is running.
-         * However you can use the following workaround to do so:
-         *
-         * @code
-         * engine.removeAllScenesExceptActive();
-         * engine.popScene(); // Remove remaining active scene at the end of the frame
-         * @endcode
          *
          * @note ime::Scene::onExit is not invoked on scenes that are removed
          * using this function
          *
-         * @see pushScene, popScene, run and quit
+         * @see removeAllScenes
          */
         void removeAllScenesExceptActive();
+
+        /**
+         * @brief Remove all the scenes from the engine
+         *
+         * If a scene is not pushed in the same frame as this function call,
+         * then the engine will automatically shutdown since it must have
+         * at least one scene to run.
+         *
+         * This function is an alias to the following code:
+         *
+         * @code
+         * engine.popScene(engine.getSceneCount());
+         * @endcode
+         *
+         * @see removeAllScenesExceptActive
+         */
+        void removeAllScenes();
 
         /**
          * @brief Get the number of scenes in the engine

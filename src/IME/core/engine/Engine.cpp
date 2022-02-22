@@ -307,6 +307,10 @@ namespace ime {
         popCounter_ = 0;
     }
 
+    void Engine::removeAllScenes() {
+        popScene(static_cast<int>(sceneManager_->getSceneCount()));
+    }
+
     std::size_t Engine::getSceneCount() const {
         return sceneManager_->getSceneCount();
     }
