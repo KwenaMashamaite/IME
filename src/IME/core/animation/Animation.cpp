@@ -24,6 +24,7 @@
 
 #include "IME/core/animation/Animation.h"
 #include "IME/utility/Helpers.h"
+#include "IME/core/exceptions/Exceptions.h"
 #include <iterator>
 #include <cmath>
 
@@ -181,12 +182,14 @@ namespace ime {
 
     void Animation::addFrames(const Index& startPos, unsigned int numOfFrames, FrameArrangement arrangement) {
         auto newFrames = std::vector<SpriteSheet::Frame>{};
+
         if (arrangement == FrameArrangement::Horizontal)
             newFrames = spriteSheet_.getFramesInRange(startPos, {startPos.row, (startPos.colm + static_cast<int>(numOfFrames)) - 1});
         else
             newFrames = spriteSheet_.getFramesInRange(startPos, {(startPos.row + static_cast<int>(numOfFrames)) - 1, startPos.colm});
 
-        IME_ASSERT(!newFrames.empty(), "Failed to construct frames, either start position or number of frames is invalid")
+        if (newFrames.empty())
+            throw InvalidArgumentException("'ime::Animation::addFrames()' - Failed to add frames from the spritesheet to the animation, either start position or number of frames is invalid");
 
         std::move(newFrames.begin(), newFrames.end(), std::back_inserter(frames_));
         updateIndexes();
