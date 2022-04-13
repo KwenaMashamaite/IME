@@ -80,14 +80,6 @@ namespace ime::ui {
         setEnabled(!isEnabled());
     }
 
-    void ClickableWidget::setFocused(bool isFocused) {
-        pimpl_->widget_->setFocused(isFocused);
-    }
-
-    bool ClickableWidget::isFocused() const {
-        return pimpl_->widget_->isFocused();
-    }
-
     void ClickableWidget::initEvents() {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){

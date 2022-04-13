@@ -89,18 +89,6 @@ namespace ime {
             void toggleEnabled();
 
             /**
-             * @brief Focus or unfocus widget
-             * @param isFocused True to focus or false to unfocus widget
-             */
-            void setFocused(bool isFocused);
-
-            /**
-             * @brief Check if widget is focused or not
-             * @return True if widget is focused. Otherwise, false
-             */
-            bool isFocused() const;
-
-            /**
              * @brief Destructor
              */
             ~ClickableWidget() override;

@@ -494,6 +494,30 @@ namespace ime {
             void setHeight(const std::string& height);
 
             /**
+             * @brief Focus or unfocus widget
+             * @param isFocused True to focus or false to unfocus widget
+             *
+             * When the widget is focused, a previously focused widget will
+             * be unfocused
+             *
+             * @note This function only works properly if the widget has
+             * already been added to the gui (see ime::ui::GuiContainer)
+             *
+             * By default, the widget is not focused
+             *
+             * @see isFocused
+             */
+            void setFocused(bool isFocused);
+
+            /**
+             * @brief Check if widget is focused or not
+             * @return True if widget is focused. Otherwise, false
+             *
+             * @see setFocused
+             */
+            bool isFocused() const;
+
+            /**
              * @brief Set the mouse cursor that is displayed when the mouse
              *        is on top of the widget
              * @param cursor The cursor to be shown

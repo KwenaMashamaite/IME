@@ -189,6 +189,14 @@ namespace ime::ui {
         pimpl_->setHeight(height);
     }
 
+    void Widget::setFocused(bool isFocused) {
+        pimpl_->setFocused(isFocused);
+    }
+
+    bool Widget::isFocused() const {
+        return pimpl_->isFocused();
+    }
+
     void Widget::setMouseCursor(CursorType cursor) {
         pimpl_->setMouseCursor(cursor);
     }

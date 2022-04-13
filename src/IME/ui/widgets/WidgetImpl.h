@@ -215,6 +215,27 @@ namespace ime {
             virtual void setHeight(const std::string& height) = 0;
 
             /**
+             * @brief Focus or unfocus widget
+             * @param isFocused True to focus or false to unfocus widget
+             *
+             * When the widget is focused, a previously focused widget will
+             * be unfocused
+             *
+             * By default, the widget is not focused
+             *
+             * @see isFocused
+             */
+            virtual void setFocused(bool isFocused) = 0;
+
+            /**
+             * @brief Check if widget is focused or not
+             * @return True if widget is focused. Otherwise, false
+             *
+             * @see setFocused
+             */
+            virtual bool isFocused() const = 0;
+
+            /**
              * @brief Set the mouse cursor that is displayed when the mouse
              *        is on top of the widget
              * @param cursor The cursor to be shown
@@ -434,6 +455,14 @@ namespace ime {
 
             void setHeight(const std::string &height) override {
                 widget_->setHeight(height.c_str());
+            }
+
+            void setFocused(bool isFocused) override {
+                widget_->setFocused(isFocused);
+            }
+
+            bool isFocused() const override {
+                return widget_->isFocused();
             }
 
             void setMouseCursor(CursorType cursor) override {
