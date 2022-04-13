@@ -30,6 +30,25 @@
 #include "IME/utility/Helpers.h"
 
 namespace ime::priv {
+    namespace {
+        void resetGui(ui::GuiContainer& gui) {
+            // Reset focus state
+            gui.unfocusAllWidgets();
+
+            // Reset hover state
+            ime::Event event;
+            event.type = ime::Event::MouseMoved;
+            event.mouseMove.x = -9999;
+            gui.handleEvent(event);
+
+            // Reset left mouse down state
+            event.type = ime::Event::MouseButtonReleased;
+            event.mouseButton.button = ime::input::Mouse::Button::Left;
+            event.mouseButton.x = -9999;
+            gui.handleEvent(event);
+        }
+    }
+
     SceneManager::SceneManager(Engine* engine) :
         engine_{engine},
         prevScene_{nullptr}
@@ -54,6 +73,7 @@ namespace ime::priv {
 
             if (prevScene_->isEntered() && !prevScene_->isPaused()) {
                 prevScene_->isPaused_ = true;
+                resetGui(prevScene_->getGui());
                 prevScene_->onPause();
             }
         }
@@ -128,8 +148,10 @@ namespace ime::priv {
         if (poppedScene->isEntered())
             poppedScene->onExit();
 
-        if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached)
+        if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached) {
+            resetGui(poppedScene->getGui());
             cache(cacheAlias, std::move(poppedScene));
+        }
 
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
