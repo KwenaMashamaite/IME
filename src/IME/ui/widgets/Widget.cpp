@@ -197,6 +197,18 @@ namespace ime::ui {
         return pimpl_->isFocused();
     }
 
+    void Widget::setEnabled(bool isEnable) {
+        pimpl_->setEnabled(isEnable);
+    }
+
+    bool Widget::isEnabled() const {
+        return pimpl_->isEnabled();
+    }
+
+    void Widget::toggleEnabled() {
+        setEnabled(!isEnabled());
+    }
+
     void Widget::setMouseCursor(CursorType cursor) {
         pimpl_->setMouseCursor(cursor);
     }

@@ -67,28 +67,6 @@ namespace ime {
             ClickableWidget& operator=(ClickableWidget&&) noexcept;
 
             /**
-             * @brief Enable or disable the widget
-             * @param isEnable Set true to enable the widget, false to
-             *        disable the widget
-             *
-             * The widget is enabled by default
-             *
-             * @note Disabling the widget cancels all the interaction events
-             */
-            void setEnabled(bool isEnable);
-
-            /**
-              * @brief Check if widget is enabled or disabled
-              * @return True if widget is enabled, false if widget is disabled
-              */
-            bool isEnabled() const;
-
-            /**
-             * @brief Disable widget if its currently enabled and vice versa
-             */
-            void toggleEnabled();
-
-            /**
              * @brief Destructor
              */
             ~ClickableWidget() override;

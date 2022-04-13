@@ -68,18 +68,6 @@ namespace ime::ui {
     ClickableWidget::ClickableWidget(ClickableWidget&& other) noexcept = default;
     ClickableWidget& ClickableWidget::operator=(ClickableWidget &&rhs) noexcept = default;
 
-    void ClickableWidget::setEnabled(bool isEnable) {
-        pimpl_->widget_->setEnabled(isEnable);
-    }
-
-    bool ClickableWidget::isEnabled() const {
-        return pimpl_->widget_->isEnabled();
-    }
-
-    void ClickableWidget::toggleEnabled() {
-        setEnabled(!isEnabled());
-    }
-
     void ClickableWidget::initEvents() {
         //Events triggered by left mouse button
         pimpl_->widget_->onClick([this](tgui::Vector2f mousePos){

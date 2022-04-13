@@ -236,6 +236,28 @@ namespace ime {
             virtual bool isFocused() const = 0;
 
             /**
+             * @brief Enable or disable the widget
+             * @param isEnable Set true to enable the widget or false to
+             *        disable the widget
+             *
+             * If the widget is disabled, it wont not receive events and hence
+             * does won't dispatch callbacks
+             *
+             * By default, the widget is enabled
+             *
+             * @see isEnabled
+             */
+            virtual void setEnabled(bool isEnable) = 0;
+
+            /**
+              * @brief Check if widget is enabled or disabled
+              * @return True if widget is enabled, false if widget is disabled
+              *
+              * @see setEnabled
+              */
+            virtual bool isEnabled() const = 0;
+
+            /**
              * @brief Set the mouse cursor that is displayed when the mouse
              *        is on top of the widget
              * @param cursor The cursor to be shown
@@ -463,6 +485,14 @@ namespace ime {
 
             bool isFocused() const override {
                 return widget_->isFocused();
+            }
+
+            void setEnabled(bool isEnable) override {
+                widget_->setEnabled(isEnable);
+            }
+
+            bool isEnabled() const override {
+                return widget_->isEnabled();
             }
 
             void setMouseCursor(CursorType cursor) override {
