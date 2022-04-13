@@ -667,12 +667,58 @@ namespace ime {
              * @param callback Function to execute when the event is fired
              * @return The event listeners identification number
              *
-             * The id must if the event listener is to be removed later
+             * The callback is passed event arguments (if any) on invocation.
+             * Here is an example demonstrating an event listener listening
+             * to an event with and arguments
+             *
+             * @code
+             * // Event without arguments
+             * widget.on("mouseEnter", ime::Callback<>([] {
+             *      std::cout << "Mouse entered widget" << "\n";
+             * }));
+             *
+             * // Event with arguments
+             * widget.on("positionChange", ime::Callback<ime::Vector2f>([](ime::Vector2f pos) {
+             *      std::cout << "Widget moved to {" << pos.x << ", " << pos.y << "}" << "\n";
+             * })):
+             * @endcode
              *
              * @see unsubscribe
              */
             template<typename... Args>
             int on(const std::string& event, Callback<Args...> callback) {
+                return eventEmitter_.on(event, std::move(callback));
+            }
+
+            /**
+             * @brief Add an event listener to a widget event
+             * @param event Event to add an event listener to
+             * @param callback Function to execute when the event is fired
+             * @return The event listeners identification number
+             *
+             * The callback is passed a pointer to the widget as the
+             * first argument followed by the event arguments (if any)
+             * on invocation
+             *
+             * @code
+             * // Event without arguments
+             * widget.on("mouseEnter", ime::Callback<ime::ui::Widget*>([](ime::ui::Widget* widget) {
+             *      std::cout << "Mouse entered " << widget->getName() << "\n";
+             * }));
+             *
+             * // Event with arguments
+             * widget.on("positionChange", ime::Callback<ime::ui::Widget*, ime::Vector2f>([](ime::ui::Widget* widget, ime::Vector2f pos) {
+             *      std::cout << "Widget " << widget->getName() << " moved to {" << pos.x << ", " << pos.y << "}" << "\n";
+             * })):
+             * @endcode
+             *
+             * @note Event listeners without the context/widget pointer are
+             * invoked first
+             *
+             * @see unsubscribe
+             */
+            template<typename... Args>
+            int on(const std::string& event, Callback<Widget*, Args...> callback) {
                 return eventEmitter_.on(event, std::move(callback));
             }
 
@@ -692,6 +738,7 @@ namespace ime {
             template<typename... Args>
             void emit(const std::string& event, Args&& ...args) {
                 eventEmitter_.emit(event, std::forward<Args>(args)...);
+                eventEmitter_.emit(event, this, std::forward<Args>(args)...);
             }
 
             /**
@@ -874,6 +921,10 @@ namespace ime {
  * @code
  * widget.on("mouseEnter", ime::Callback<>([] {
  *      std::cout << "Mouse entered widget" << "\n";
+ * }));
+ *
+ * widget.on("mouseEnter", ime::Callback<ime::ui::Widget*>([](ime::ui::Widget* widget) {
+ *      std::cout << widget->getName() << "\n";
  * }));
  *
  * widget.on("positionChange", ime::Callback<ime::Vector2f>([](ime::Vector2f pos) {
