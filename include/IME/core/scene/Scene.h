@@ -393,9 +393,31 @@ namespace ime {
          * @brief Check if the scene is visible when paused or not
          * @return True if visible, otherwise false
          *
+         * By default, the scene is hidden when it is paused
+         *
          * @see setOnPauseAction
          */
         bool isVisibleOnPause() const;
+
+        /**
+         * @brief Check if the scene is time update when it is paused
+         * @return True if it is time updates, otherwise false
+         *
+         * By default, the scene is not time updated when paused
+         *
+         * @see setOnPauseAction
+         */
+        bool isTimeUpdatedOnPause() const;
+
+        /**
+         * @brief Check if the scene is system updated when it is paused
+         * @return True if it is system updated, otherwise false
+         *
+         * By default, the scene is not system updated when paused
+         *
+         * @see setOnPauseAction
+         */
+        bool isSystemUpdatedOnPause() const;
 
         /**
          * @brief Cache or uncahe the scene

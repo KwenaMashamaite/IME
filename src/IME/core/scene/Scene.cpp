@@ -158,6 +158,14 @@ namespace ime {
         return isVisibleWhenPaused_;
     }
 
+    bool Scene::isTimeUpdatedOnPause() const {
+        return isTimeUpdatedWhenPaused_;
+    }
+
+    bool Scene::isSystemUpdatedOnPause() const {
+        return isEventUpdatedWhenPaused_;
+    }
+
     bool Scene::isEntered() const {
         return isEntered_;
     }
