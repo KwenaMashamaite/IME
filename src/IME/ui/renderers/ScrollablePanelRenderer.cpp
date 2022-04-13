@@ -56,6 +56,14 @@ namespace ime::ui {
         return utility::convertFrom3rdPartyColour(panelRenderer_->getBackgroundColor());
     }
 
+    void ScrollablePanelRenderer::setRoundedBorderRadius(float radius) {
+        panelRenderer_->setRoundedBorderRadius(radius);
+    }
+
+    float ScrollablePanelRenderer::getRoundedBorderRadius() const {
+        return panelRenderer_->getRoundedBorderRadius();
+    }
+
     void ScrollablePanelRenderer::setBackgroundTexture(const std::string &texture) {
         panelRenderer_->setTextureBackground(
             ime::ResourceManager::getInstance()->getTexture(texture).getInternalTexture());
