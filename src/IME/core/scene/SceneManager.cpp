@@ -56,13 +56,27 @@ namespace ime::priv {
         IME_ASSERT(engine, "Engine pointer cannot be a nullptr")
 
         engine->onFrameStart([this] {
-            if (!scenes_.empty() && scenes_.top()->isEntered())
-                scenes_.top()->onFrameBegin();
+            if (!scenes_.empty() && scenes_.top()->isEntered()) {
+                ime::Scene* activeScene = scenes_.top().get();
+                ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+                if (bgScene)
+                    bgScene->onFrameBegin();
+
+                activeScene->onFrameBegin();
+            }
         });
 
         engine->onFrameEnd([this] {
-            if (!scenes_.empty() && scenes_.top()->isEntered())
-                scenes_.top()->onFrameEnd();
+            if (!scenes_.empty() && scenes_.top()->isEntered()) {
+                ime::Scene* activeScene = scenes_.top().get();
+                ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+                if (bgScene)
+                    bgScene->onFrameEnd();
+
+                activeScene->onFrameEnd();
+            }
         });
     }
 
@@ -74,6 +88,15 @@ namespace ime::priv {
             if (prevScene_->isEntered() && !prevScene_->isPaused()) {
                 prevScene_->isPaused_ = true;
                 resetGui(prevScene_->getGui());
+
+                ime::Scene* bgScene = prevScene_->getBackgroundScene();
+
+                if (bgScene) {
+                    resetGui(bgScene->getGui());
+                    bgScene->isPaused_ = true;
+                    bgScene->onPause();
+                }
+
                 prevScene_->onPause();
             }
         }
@@ -82,8 +105,17 @@ namespace ime::priv {
         Scene* activeScene = scenes_.top().get();
 
         if (activeScene->isEntered()) {
-            if (activeScene->isCached())
+            if (activeScene->isCached()) {
+                activeScene->isPaused_ = false;
+                ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+                if (bgScene) {
+                    bgScene->isPaused_ = false;
+                    bgScene->onResumeFromCache();
+                }
+
                 activeScene->onResumeFromCache();
+            }
         } else if (enterScene) {
             activeScene->init(*engine_);
             activeScene->isEntered_ = true;
@@ -120,6 +152,14 @@ namespace ime::priv {
 
         if (inserted) {
             iter->second->setCached(true, name);
+
+            ime::Scene* bgScene = iter->second->getBackgroundScene();
+
+            if (bgScene) {
+                bgScene->setCached(true, name + "BackgroundScene");
+                bgScene->onCache();
+            }
+
             iter->second->onCache();
         }
     }
@@ -145,14 +185,27 @@ namespace ime::priv {
         Scene::Ptr poppedScene = std::move(scenes_.top());
         scenes_.pop();
 
-        if (poppedScene->isEntered())
-            poppedScene->onExit();
+        // Notify popped scene that it's removed from the engine
+        if (poppedScene->isEntered()) {
+            ime::Scene* bgScene = poppedScene->getBackgroundScene();
 
+            if (bgScene)
+                bgScene->onExit();
+
+            poppedScene->onExit();
+        }
+
+        // Attempt to cache the removed scene
         if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached) {
             resetGui(poppedScene->getGui());
+
+            if (ime::Scene* bgScene = poppedScene->getBackgroundScene(); bgScene)
+                resetGui(bgScene->getGui());
+
             cache(cacheAlias, std::move(poppedScene));
         }
 
+        // Activate a new scene
         if (!scenes_.empty()) {
             if (scenes_.size() >= 2) {
                 Scene::Ptr currentScene = std::move(scenes_.top());
@@ -161,13 +214,23 @@ namespace ime::priv {
                 scenes_.push(std::move(currentScene));
             }
 
-            if (scenes_.top()->isEntered() && resumePrev) {
-                scenes_.top()->isPaused_ = false;
-                scenes_.top()->onResume();
+            ime::Scene* activeScene = scenes_.top().get();
+
+            if (activeScene->isEntered() && resumePrev) {
+                activeScene->isPaused_ = false;
+
+                ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+                if (bgScene) {
+                    bgScene->isPaused_ = false;
+                    bgScene->onResume();
+                }
+
+                activeScene->onResume();
             } else if (resumePrev) {
-                scenes_.top()->init(*engine_);
-                scenes_.top()->isEntered_ = true;
-                scenes_.top()->onEnter();
+                activeScene->init(*engine_);
+                activeScene->isEntered_ = true;
+                activeScene->onEnter();
             }
         }
     }
@@ -183,12 +246,28 @@ namespace ime::priv {
             return scenes_.top().get();
     }
 
+    Scene *SceneManager::getPreviousScene() {
+        return const_cast<Scene*>(std::as_const(*this).getPreviousScene());
+    }
+
+    const Scene *SceneManager::getPreviousScene() const {
+        if (prevScene_ && prevScene_->isEntered())
+            return prevScene_;
+
+        return nullptr;
+    }
+
     Scene *SceneManager::getBackgroundScene() {
         return const_cast<Scene*>(std::as_const(*this).getBackgroundScene());
     }
 
     const Scene *SceneManager::getBackgroundScene() const {
-        return prevScene_;
+        const ime::Scene* activeScene = getActiveScene();
+
+        if (activeScene)
+            return activeScene->getBackgroundScene();
+        else
+            return nullptr;
     }
 
     std::size_t SceneManager::getSceneCount() const {
@@ -249,6 +328,9 @@ namespace ime::priv {
 
             scene->renderLayers_.render(renderWindow);
 
+            // render gui
+            scene->guiContainer_.draw();
+
             // Render camera outline
             static RectangleShape camOutline;
 
@@ -261,6 +343,9 @@ namespace ime::priv {
             renderWindow.draw(camOutline);
 
             scene->onPostRender();
+
+            // Notify scene rendering process is complete
+            scene->internalEmitter_.emit("postRender", std::ref(renderWindow));
         };
 
         // Render the scene on each camera to update its view
@@ -275,25 +360,30 @@ namespace ime::priv {
         };
 
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
-            // Render background scene
+            // Render previous scene
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
+                ime::Scene* bgScene = prevScene_->getBackgroundScene();
+
+                if (bgScene)
+                    renderEachCam(bgScene, window);
+
                 renderEachCam(prevScene_, window);
-                prevScene_->getGui().draw();
             }
 
-            // Render active scene
+            // Render the active scenes background scene
             Scene* activeScene = scenes_.top().get();
+            ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+            if(bgScene)
+                renderEachCam(bgScene, window);
+
+            // Render the active scene
             renderEachCam(activeScene, window);
-            activeScene->internalEmitter_.emit("postRender", std::ref(window));
-            activeScene->getGui().draw();
         }
     }
 
     void SceneManager::update(Time deltaTime) {
-        updateScene(deltaTime, scenes_.top().get(), false);
-
-        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
-            updateScene(deltaTime, prevScene_, false);
+        update(deltaTime, false);
     }
 
     void SceneManager::handleEvent(Event event) {
@@ -354,16 +444,10 @@ namespace ime::priv {
         };
 
         updateSystem(scenes_.top().get(), event);
-
-        if (prevScene_ && prevScene_->isEntered() && prevScene_->isEventUpdatedWhenPaused_)
-            updateSystem(prevScene_, event);
     }
 
     void SceneManager::fixedUpdate(Time deltaTime) {
-        updateScene(deltaTime, scenes_.top().get(), true);
-
-        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_)
-            updateScene(deltaTime, prevScene_, true);
+        update(deltaTime, true);
     }
 
     void SceneManager::forEachScene(const Callback<const Scene::Ptr&>& callback) {
@@ -393,19 +477,34 @@ namespace ime::priv {
             scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
         };
 
-        update(scenes_.top().get(), deltaTime);
-        scenes_.top()->onPreUpdate(deltaTime * scenes_.top()->getTimescale());
+        ime::Scene* activeScene = scenes_.top().get();
 
-        if (prevScene_ && prevScene_->isEntered() && prevScene_->isTimeUpdatedWhenPaused_) {
-            update(prevScene_, deltaTime);
-            prevScene_->onPreUpdate(deltaTime * prevScene_->getTimescale());
+        // Update the active scenes background scene
+        ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+        if (bgScene && activeScene->isBackgroundSceneUpdated()) {
+            update(bgScene, deltaTime);
+            bgScene->onPreUpdate(deltaTime * bgScene->getTimescale());
+        }
+
+        // Update active scene
+        update(activeScene, deltaTime);
+        activeScene->onPreUpdate(deltaTime * activeScene->getTimescale());
+    }
+
+    void SceneManager::update(const Time &deltaTime, bool fixedUpdate) {
+        if (!scenes_.empty() && scenes_.top()->isEntered()) {
+            ime::Scene* activeScene = scenes_.top().get();
+            ime::Scene* bgScene = activeScene->getBackgroundScene();
+
+            if (bgScene && activeScene->isBackgroundSceneUpdated())
+                updateScene(deltaTime, bgScene, fixedUpdate);
+
+            updateScene(deltaTime, activeScene, fixedUpdate);
         }
     }
 
     void SceneManager::updateScene(const Time& deltaTime, Scene* scene, bool fixedUpdate) {
-        if (!(!scenes_.empty() && scenes_.top()->isEntered()))
-            return;
-
         if (!fixedUpdate) {
             scene->inputManager_.update();
             scene->timerManager_.update(deltaTime * scene->getTimescale());

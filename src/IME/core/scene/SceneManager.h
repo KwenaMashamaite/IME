@@ -135,6 +135,14 @@ namespace ime {
             const Scene* getActiveScene() const;
 
             /**
+             * @brief Get the scene that was previously active
+             * @return A pointer to a previously active scene it it exists,
+             *         otherwise a nullptr
+             */
+            Scene* getPreviousScene();
+            const Scene* getPreviousScene() const;
+
+            /**
              * @brief Get the scene behind the top scene
              * @return A pointer to the scene behind the top scene if any
              *         otherwise a nullptr
@@ -269,6 +277,13 @@ namespace ime {
             ~SceneManager();
 
         private:
+            /**
+             * @brief Update the active scene
+             * @param deltaTime Time passed since the last update
+             * @param fixedUpdate True if its a fixed update, otherwise false
+             */
+            void update(const Time& deltaTime, bool fixedUpdate);
+
             /**
              * @brief Update time based components of a scene
              * @param scene The scene to be updated

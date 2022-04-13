@@ -323,13 +323,13 @@ namespace ime {
         return sceneManager_->getActiveScene();
     }
 
-    Scene *Engine::getBackgroundScene() {
-        return const_cast<Scene*>(std::as_const(*this).getBackgroundScene());
+    Scene *Engine::getPreviousScene() {
+        return const_cast<Scene*>(std::as_const(*this).getPreviousScene());
     }
 
-    const Scene *Engine::getBackgroundScene() const {
+    const Scene *Engine::getPreviousScene() const {
         if (isRunning_)
-            return sceneManager_->getBackgroundScene();
+            return sceneManager_->getPreviousScene();
         else
             return nullptr;
     }

@@ -389,20 +389,25 @@ namespace ime {
          * @brief Get the active scene
          * @return A pointer to the active scene if it exists, otherwise a nullptr
          *
-         * @see getBackgroundScene
+         * @see getPreviousScene
          */
         Scene* getActiveScene();
         const Scene* getActiveScene() const;
 
         /**
-         * @brief Get the background scene
-         * @return A pointer to the background scene if it exists, otherwise
-         *         a nullptr
+         * @brief Get the scene that was previously active
+         * @return A pointer to the previously active scene if it exists,
+         *         otherwise a nullptr
          *
-         * @see getActiveScene, ime::Scene::setOnPauseAction
+         * Note that after a push operation, the previously active scene is
+         * the scene that was pushed over and after a pop operation, it is
+         * the scene that will be active is the current active scene is
+         * popped
+         *
+         * @see getActiveScene
          */
-        Scene* getBackgroundScene();
-        const Scene* getBackgroundScene() const;
+        Scene* getPreviousScene();
+        const Scene* getPreviousScene() const;
 
         /**
          * @brief Get access to a scene in the cache list

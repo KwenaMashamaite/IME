@@ -34,11 +34,11 @@ namespace ime {
         isInitialized_{false},
         isPaused_{false},
         isVisibleWhenPaused_{false},
-        isTimeUpdatedWhenPaused_{false},
-        isEventUpdatedWhenPaused_{false},
+        isBackgroundSceneUpdated_{true},
         hasPhysicsSim_{false},
         hasGrid2D_{false},
         cacheState_{false, ""},
+        parentScene_{nullptr},
         spriteContainer_{std::make_unique<SpriteContainer>(renderLayers_)},
         entityContainer_{std::make_unique<GameObjectContainer>(renderLayers_)},
         shapeContainer_{std::make_unique<ShapeContainer>(renderLayers_)}
@@ -73,14 +73,15 @@ namespace ime {
             grid2D_ = std::move(other.grid2D_);
             timescale_ = other.timescale_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
-            isTimeUpdatedWhenPaused_ = other.isTimeUpdatedWhenPaused_;
-            isEventUpdatedWhenPaused_ = other.isEventUpdatedWhenPaused_;
+            isBackgroundSceneUpdated_ = other.isBackgroundSceneUpdated_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasGrid2D_ = other.hasGrid2D_;
             cacheState_ = other.cacheState_;
             isEntered_ = other.isEntered_;
             isInitialized_ = other.isInitialized_;
             isPaused_ = other.isPaused_;
+            parentScene_ = other.parentScene_;
+            backgroundScene_ = std::move(other.backgroundScene_);
         }
 
         return *this;
@@ -112,39 +113,6 @@ namespace ime {
         return "Scene";
     }
 
-    void Scene::setOnPauseAction(Uint32 action) {
-        if (action & OnPauseAction::Default) {
-            isVisibleWhenPaused_ = false;
-            isEventUpdatedWhenPaused_ = false;
-            isTimeUpdatedWhenPaused_ = false;
-            return;
-        }
-
-        if (action & OnPauseAction::Show)
-            isVisibleWhenPaused_ = true;
-        else
-            isVisibleWhenPaused_ = false;
-
-        if (action & OnPauseAction::UpdateAll) {
-            isEventUpdatedWhenPaused_ = true;
-            isTimeUpdatedWhenPaused_ = true;
-            return;
-        } else {
-            isEventUpdatedWhenPaused_ = false;
-            isTimeUpdatedWhenPaused_ = false;
-        }
-
-        if (action & OnPauseAction::UpdateTime)
-            isTimeUpdatedWhenPaused_ = true;
-        else
-            isTimeUpdatedWhenPaused_ = false;
-
-        if (action & OnPauseAction::UpdateSystem)
-            isEventUpdatedWhenPaused_ = true;
-        else
-            isEventUpdatedWhenPaused_ = false;
-    }
-
     void Scene::setCached(bool cache, const std::string& alias) {
         cacheState_.first = cache;
         cacheState_.second = alias;
@@ -154,16 +122,71 @@ namespace ime {
         return cacheState_.first;
     }
 
+    void Scene::setVisibleOnPause(bool visible) {
+        if (isVisibleWhenPaused_ != visible) {
+            isVisibleWhenPaused_ = visible;
+
+            emitChange(Property("visibleOnPause", isVisibleWhenPaused_));
+        }
+    }
+
     bool Scene::isVisibleOnPause() const {
         return isVisibleWhenPaused_;
     }
 
-    bool Scene::isTimeUpdatedOnPause() const {
-        return isTimeUpdatedWhenPaused_;
+    void Scene::setBackgroundScene(Scene::Ptr scene) {
+        if (!isInitialized_)
+            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the scene is initialized");
+
+        if (!isEntered_)
+            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the scene is entered");
+
+        if (backgroundScene_ != scene) {
+            if (backgroundScene_)
+                backgroundScene_->onExit();
+
+            backgroundScene_ = std::move(scene);
+
+            if (backgroundScene_) {
+                backgroundScene_->parentScene_ = this;
+                backgroundScene_->init(*engine_);
+
+                backgroundScene_->isEntered_ = true;
+                backgroundScene_->onEnter();
+            }
+        }
     }
 
-    bool Scene::isSystemUpdatedOnPause() const {
-        return isEventUpdatedWhenPaused_;
+    Scene *Scene::getBackgroundScene() {
+        return backgroundScene_.get();
+    }
+
+    const Scene *Scene::getBackgroundScene() const {
+        return backgroundScene_.get();
+    }
+
+    Scene *Scene::getParentScene() {
+        return parentScene_;
+    }
+
+    const Scene *Scene::getParentScene() const {
+        return parentScene_;
+    }
+
+    bool Scene::isBackgroundScene() const {
+        return parentScene_ != nullptr;
+    }
+
+    void Scene::setBackgroundSceneUpdates(bool update) {
+        if (isBackgroundSceneUpdated_ != update) {
+            isBackgroundSceneUpdated_ = update;
+
+            emitChange(Property("backgroundSceneUpdates", isBackgroundSceneUpdated_));
+        }
+    }
+
+    bool Scene::isBackgroundSceneUpdated() const {
+        return isBackgroundSceneUpdated_;
     }
 
     bool Scene::isEntered() const {

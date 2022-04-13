@@ -65,19 +65,6 @@ namespace ime {
         using Ptr = std::unique_ptr<Scene>; //!< Unique Scene pointer
 
         /**
-         * @brief Defines what happens to the scene when it is paused
-         *
-         * @see setOnPauseAction
-         */
-        enum OnPauseAction {
-            Default      = 0,      //!< The scene is hidden and does not receive time and system updates
-            Show         = 1 << 0, //!< The scene is rendered behind the current active scene but does not receives time and system updates
-            UpdateTime   = 1 << 1, //!< The scene is hidden and receives time updates only (timer, physics, animation updates, etc ...)
-            UpdateSystem = 1 << 2, //!< The scene is hidden and receives system updates only (Window events, Input updates, etc ...)
-            UpdateAll    = 1 << 3  //!< The scene is hidden and receives both time and system updates
-        };
-
-        /**
          * @brief Default Constructor
          */
         Scene();
@@ -370,54 +357,90 @@ namespace ime {
         bool isPaused() const;
 
         /**
-         * @brief Set which action is taken when the scene is paused
-         * @param action Action to be taken
-         *
-         * Mote that actions can be combined using bitwise OR combination
-         * of ime::OnPauseAction enumerations. For example, to make the
-         * scene visible behind the current active scene and receive updates,
-         * you do as follows:
-         *
-         * @code
-         * setOnPauseAction(ime::Scene::Show | ime::Scene::UpdateAll)
-         * @endcode
-         *
-         * By default the scene is hidden when it is paused and it does
-         * not receive time and system updates
-         *
-         * @see onPause, OnPauseAction
-         */
-        void setOnPauseAction(Uint32 action);
-
-        /**
-         * @brief Check if the scene is visible when paused or not
-         * @return True if visible, otherwise false
+         * @brief Set whether or not the scene is visible when it is paused
+         * @param visible True to set visible, otherwise false
          *
          * By default, the scene is hidden when it is paused
          *
-         * @see setOnPauseAction
+         * @see onPause
+         */
+        void setVisibleOnPause(bool visible);
+
+        /**
+         * @brief Check if the scene is visible when paused
+         * @return True if visible, otherwise false
+         *
+         * @see setVisibleOnPause
          */
         bool isVisibleOnPause() const;
 
         /**
-         * @brief Check if the scene is time update when it is paused
-         * @return True if it is time updates, otherwise false
+         * @brief Add a background scene
+         * @param scene The scene to be the background of this scene
+         * * @throws AccessViolationException If this function is called before
+         *         the scene is initialized or entered
          *
-         * By default, the scene is not time updated when paused
+         * Note that the scene manages the lifecycle of its background scene.
+         * That is, the background scene is destroyed when its parent scene
+         * is destroyed. Furthermore, a scene can only have one background
+         * scene at a time. Setting a new background scene destroys the previous
+         * scene. Pass nullptr to remove the background scene.
          *
-         * @see setOnPauseAction
+         * By default, the scene does not have a background scene
+         *
+         * @see onInit, onEnter
          */
-        bool isTimeUpdatedOnPause() const;
+        void setBackgroundScene(Scene::Ptr scene);
 
         /**
-         * @brief Check if the scene is system updated when it is paused
-         * @return True if it is system updated, otherwise false
+         * @brief Get the scene this scene is a background of
+         * @return Pointer to the parent scene if this scene is a background
+         *         scene, otherwise a nullptr
          *
-         * By default, the scene is not system updated when paused
-         *
-         * @see setOnPauseAction
+         * @see setBackgroundScene
          */
-        bool isSystemUpdatedOnPause() const;
+        Scene* getParentScene();
+        const Scene* getParentScene() const;
+
+        /**
+         * @brief Get the background scene of this scene
+         * @return A pointer to the background scene if it exists, otherwise a
+         *         nullptr
+         *
+         * @see setBackgroundScene
+         */
+        Scene* getBackgroundScene();
+        const Scene* getBackgroundScene() const;
+
+        /**
+         * @brief Check if the scene is in a background scene
+         * @return True if it is a background scene, otherwise false
+         *
+         * @see setBackgroundScene
+         */
+        bool isBackgroundScene() const;
+
+        /**
+         * @brief Set whether or not the scenes background scene receives time updates
+         * @param update True to enable background scene time updates, otherwise false
+         *
+         * When updates for a background scene is disabled, its onUpdate(),
+         * onFixedUpdate(), onPreUpdate() and onPostUpdate() functions
+         * are not invoked
+         *
+         * By default, the background scene is updated
+         *
+         * @see setBackgroundScene, isBackgroundSceneUpdated
+         */
+        void setBackgroundSceneUpdates(bool update);
+
+        /**
+         * @brief Check if the scenes background scene receives time updates or not
+         * @return True if it receives time updates, otherwise false
+         *
+         * @see setBackgroundSceneUpdates
+         */
+        bool isBackgroundSceneUpdated() const;
 
         /**
          * @brief Cache or uncahe the scene
@@ -828,11 +851,12 @@ namespace ime {
         bool isInitialized_;                  //!< A flag indicating whether or not the scene has been initialized
         bool isPaused_;                       //!< A flag indicating whether or not the scene is paused
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
-        bool isTimeUpdatedWhenPaused_;        //!< A flag indicating whether or not the scene receives time updates when it is paused
-        bool isEventUpdatedWhenPaused_;       //!< A flag indicating whether or not the scene receives system events when it is paused
+        bool isBackgroundSceneUpdated_;       //!< A flag indicating whether or not the scenes background scene receives time updates
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasGrid2D_;                      //!< A flag indicating whether or not the scene has a grid
         std::pair<bool, std::string> cacheState_;
+        Scene* parentScene_;                  //!< The parent scene of this scene when it is in the background of another scene
+        Scene::Ptr backgroundScene_;          //!< The background scene of this scene
         friend class priv::SceneManager;      //!< Pre updates the scene
 
         std::unique_ptr<std::reference_wrapper<Engine>> engine_;           //!< A reference to the game engine
