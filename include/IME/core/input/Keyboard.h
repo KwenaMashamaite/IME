@@ -261,6 +261,17 @@ namespace ime {
             int onKeyHeld(Callback<Key> callback);
 
             /**
+             * @brief Suspend an event listener
+             * @param suspend True to suspend the listener or false to unsuspend it
+             * @param event The event the listener is registered to
+             * @param id The id number of the event listener to be suspended
+             *
+             * A suspended event listener is not invoked when the event it is
+             * listening for is fired
+             */
+            void suspend(bool suspend, KeyboardEvent event, int id);
+
+            /**
              * @brief Remove an event listener from a key down or key up event
              * @param event Event to remove event listener from
              * @param id Identification number of the listener to be removed

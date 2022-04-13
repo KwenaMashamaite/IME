@@ -215,6 +215,17 @@ namespace ime {
             bool unsubscribe(KeyboardEvent event, int id);
 
             /**
+             * @brief Suspend an event listener from a keyboard event
+             * @param suspend True to suspend the listener or false to unsuspend it
+             * @param event The event the listener is registered to
+             * @param id The id number of the event listener to be suspended
+             *
+             * A suspended event listener is not invoked when the event it is
+             * listening for is fired
+             */
+            void suspend(bool suspend, KeyboardEvent event, int id);
+
+            /**
              * @brief Check if a mouse button is currently pressed or not
              * @param button Mouse button to check
              * @return True if the mouse button is pressed, otherwise false

@@ -141,6 +141,10 @@ namespace ime::input {
         return keyboard_.unsubscribe(event, id);
     }
 
+    void InputManager::suspend(bool suspend, KeyboardEvent event, int id) {
+        keyboard_.suspend(suspend, event, id);
+    }
+
     bool InputManager::isMouseDown(Mouse::Button button) {
         return input::Mouse::isButtonPressed(button);
     }

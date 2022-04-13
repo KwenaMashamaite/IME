@@ -77,6 +77,20 @@ namespace ime::input {
         return eventEmitter_.on("keyHeld", std::move(callback));
     }
 
+    void Keyboard::suspend(bool suspend, KeyboardEvent event, int id) {
+        switch(event) {
+            case KeyboardEvent::KeyUp:
+                eventEmitter_.suspendEventListener("keyUp", id, suspend);
+                break;
+            case KeyboardEvent::KeyDown:
+                eventEmitter_.suspendEventListener("keyDown", id, suspend);
+                break;
+            case KeyboardEvent::KeyHeld:
+                eventEmitter_.suspendEventListener("keyHeld", id, suspend);
+                break;
+        }
+    }
+
     bool Keyboard::unsubscribe(KeyboardEvent event, int id) {
         switch (event) {
             case KeyboardEvent::KeyDown:
