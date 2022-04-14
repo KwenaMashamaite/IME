@@ -35,6 +35,7 @@ namespace ime {
         isPaused_{false},
         isVisibleWhenPaused_{false},
         isBackgroundSceneUpdated_{true},
+        isBackgroundSceneEventsEnabled_{false},
         hasPhysicsSim_{false},
         hasGrid2D_{false},
         cacheState_{false, ""},
@@ -74,6 +75,7 @@ namespace ime {
             timescale_ = other.timescale_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
             isBackgroundSceneUpdated_ = other.isBackgroundSceneUpdated_;
+            isBackgroundSceneEventsEnabled_ = other.isBackgroundSceneEventsEnabled_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
             hasGrid2D_ = other.hasGrid2D_;
             cacheState_ = other.cacheState_;
@@ -187,6 +189,18 @@ namespace ime {
 
     bool Scene::isBackgroundSceneUpdated() const {
         return isBackgroundSceneUpdated_;
+    }
+
+    void Scene::setBackgroundSceneEventsEnable(bool enable) {
+        if (isBackgroundSceneEventsEnabled_ != enable) {
+            isBackgroundSceneEventsEnabled_ = enable;
+
+            emitChange(Property("backgroundSceneEventsEnable", enable));
+        }
+    }
+
+    bool Scene::isBackgroundSceneEventsEnabled() const {
+        return isBackgroundSceneEventsEnabled_;
     }
 
     bool Scene::isEntered() const {

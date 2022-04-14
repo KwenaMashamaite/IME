@@ -443,6 +443,29 @@ namespace ime {
         bool isBackgroundSceneUpdated() const;
 
         /**
+         * @brief Enable or disable events for the scenes background scene
+         * @param enable True to enable background scene events, otherwise false
+         *
+         * When events for a background scene are disabled, the background
+         * scene does not receive system updates such as input (keyboard,
+         * mouse, joystick etc), window events etc. Furthermore its
+         * onHandleEvent() function is not invoked
+         *
+         * By default, background scene events are disabled
+         *
+         * @see isBackgroundSceneEventsEnabled
+         */
+        void setBackgroundSceneEventsEnable(bool enable);
+
+        /**
+         * @brief Check if events are enabled for the background scene or not
+         * @return True if events are enabled, otherwise false
+         *
+         * @see setBackgroundSceneEventsEnable
+         */
+        bool isBackgroundSceneEventsEnabled() const;
+
+        /**
          * @brief Cache or uncahe the scene
          * @param cache True to cache or false to uncache
          * @param alias A unique name for identification during retrieval
@@ -852,6 +875,7 @@ namespace ime {
         bool isPaused_;                       //!< A flag indicating whether or not the scene is paused
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
         bool isBackgroundSceneUpdated_;       //!< A flag indicating whether or not the scenes background scene receives time updates
+        bool isBackgroundSceneEventsEnabled_; //!< A flag indicating whether or not the scenes background scene receives system events
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
         bool hasGrid2D_;                      //!< A flag indicating whether or not the scene has a grid
         std::pair<bool, std::string> cacheState_;

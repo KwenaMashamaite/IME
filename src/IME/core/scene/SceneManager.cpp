@@ -443,7 +443,13 @@ namespace ime::priv {
             scene->onHandleEvent(e);
         };
 
-        updateSystem(scenes_.top().get(), event);
+        Scene* activeScene = scenes_.top().get();
+        Scene* bgScene = activeScene->getBackgroundScene();
+
+        if (bgScene && activeScene->isBackgroundSceneEventsEnabled())
+            updateSystem(bgScene, event);
+
+        updateSystem(activeScene, event);
     }
 
     void SceneManager::fixedUpdate(Time deltaTime) {
