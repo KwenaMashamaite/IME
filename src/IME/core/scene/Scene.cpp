@@ -179,6 +179,10 @@ namespace ime {
         return parentScene_ != nullptr;
     }
 
+    bool Scene::hasBackgroundScene() const {
+        return backgroundScene_ != nullptr;
+    }
+
     void Scene::setBackgroundSceneUpdates(bool update) {
         if (isBackgroundSceneUpdated_ != update) {
             isBackgroundSceneUpdated_ = update;

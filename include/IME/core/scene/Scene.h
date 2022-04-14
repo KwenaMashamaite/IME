@@ -421,6 +421,14 @@ namespace ime {
         bool isBackgroundScene() const;
 
         /**
+         * @brief Check if the scene has a background scene or not
+         * @return True if it has a background scene, otherwise false
+         *
+         * @see setBackgroundScene
+         */
+        bool hasBackgroundScene() const;
+
+        /**
          * @brief Set whether or not the scenes background scene receives time updates
          * @param update True to enable background scene time updates, otherwise false
          *
