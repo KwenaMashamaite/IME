@@ -220,19 +220,14 @@ namespace ime {
         pImpl_{std::make_unique<SpriteImpl>(*this)}
     {}
 
-    Sprite::Sprite(const std::string &texture) :
+    Sprite::Sprite(const std::string &texture, const UIntRect& rectangle) :
         Sprite()
     {
         pImpl_->setTexture(texture);
+        setTextureRect(rectangle);
     }
 
-    Sprite::Sprite(const Texture &texture) :
-        Sprite()
-    {
-        pImpl_->setTexture(texture);
-    }
-
-    Sprite::Sprite(const Texture &texture, const UIntRect &rectangle) :
+    Sprite::Sprite(const Texture &texture, const UIntRect& rectangle) :
         Sprite()
     {
         pImpl_->setTexture(texture);
@@ -270,6 +265,18 @@ namespace ime {
         }
 
         return *this;
+    }
+
+    Sprite::Ptr Sprite::create(const std::string &texture, const UIntRect &rectangle) {
+        return std::make_unique<Sprite>(texture, rectangle);
+    }
+
+    Sprite::Ptr Sprite::create(const Texture &texture, const UIntRect &rectangle) {
+        return std::make_unique<Sprite>(texture, rectangle);
+    }
+
+    Sprite::Ptr Sprite::copy() const {
+        return std::make_unique<Sprite>(*this);
     }
 
     std::string Sprite::getClassName() const {

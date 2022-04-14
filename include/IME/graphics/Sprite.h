@@ -58,36 +58,25 @@ namespace ime {
         /**
          * @brief Construct a sprite from a texture
          * @param texture Filename of the texture to construct the sprite from
+         * @param rectangle A sub-rectangle of the texture to assign to the sprite
+         * @throws FileNotFoundException if the specified texture cannot be loaded
          *
-         * @see setTextureRect
+         * The @a rectangle can be used to construct the sprite from a
+         * sub-rectangle of the whole texture. To construct the sprite from
+         * the whole texture (default), leave the @a rectangle argument unspecified
          */
-        explicit Sprite(const std::string& texture);
+        explicit Sprite(const std::string& texture, const UIntRect& rectangle = {});
 
         /**
          * @brief Construct a sprite from a texture
          * @param texture Texture to construct sprite from
+         * @param rectangle A sub-rectangle of the texture to assign to the sprite
          *
-         * @see setTextureRect
+         * The @a rectangle can be used to construct the sprite from a
+         * sub-rectangle of the whole texture. To construct the sprite from
+         * the whole texture (default), leave the @a rectangle argument unspecified
          */
-        explicit Sprite(const Texture& texture);
-
-        /**
-         * @brief Construct the sprite from a sub-rectangle of a source texture
-         * @param texture The source texture
-         * @param rectangle Sub-rectangle of the texture to assign to the sprite
-         *
-         * @a texture is copied
-         * This function is a shortcut for:
-         *
-         * @code
-         * auto sprite = Sprite();
-         * sprite.setTexture(texture);
-         * sprite.setTextureRect(rectangle);
-         * @endcode
-         *
-         * @see setTexture and setTextureRect
-         */
-        Sprite(const Texture& texture, const UIntRect& rectangle);
+        explicit Sprite(const Texture& texture, const UIntRect& rectangle = {});
 
         /**
          * @brief Copy constructor
@@ -108,6 +97,43 @@ namespace ime {
          * @brief Move assignment operator
          */
         Sprite& operator=(Sprite&&) noexcept;
+
+        /**
+         * @brief Create a new Sprite instance
+         * @param texture Filename of the texture to construct the sprite from
+         * @param rectangle A sub-rectangle of the texture to assign to the sprite
+         * @return The created Sprite instance
+         * @throws FileNotFoundException if the specified texture cannot be loaded
+         *
+         * The @a rectangle can be used to construct the sprite from a
+         * sub-rectangle of the whole texture. To construct the sprite from
+         * the whole texture (default), leave the @a rectangle argument unspecified
+         *
+         * @see copy
+         */
+        static Sprite::Ptr create(const std::string& texture, const UIntRect& rectangle = {});
+
+        /**
+         * @brief Construct the sprite from a sub-rectangle of a source texture
+         * @param texture The source texture
+         * @param rectangle Sub-rectangle of the texture to assign to the sprite
+         *
+         * The @a texture is copied, so theres no need to keep it alive.
+         * The @a rectangle can be used to construct the sprite from a
+         * sub-rectangle of the whole texture. To construct the sprite from
+         * the whole texture (default), leave the @a rectangle argument unspecified
+         *
+         * @see copy
+         */
+        static Sprite::Ptr create(const Texture& texture, const UIntRect& rectangle);
+
+        /**
+         * @brief Create a copy of the sprite
+         * @return A copy of the sprite
+         *
+         * @see create
+         */
+        Sprite::Ptr copy() const;
 
         /**
          * @brief Get the name of this class
