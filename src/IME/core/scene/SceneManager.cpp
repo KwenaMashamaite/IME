@@ -364,7 +364,7 @@ namespace ime::priv {
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
                 Scene* bgScene = prevScene_->getBackgroundScene();
 
-                if (bgScene)
+                if (bgScene && prevScene_->isBackgroundSceneDrawable())
                     renderEachCam(bgScene, window);
 
                 renderEachCam(prevScene_, window);
@@ -374,7 +374,7 @@ namespace ime::priv {
             Scene* activeScene = scenes_.top().get();
             Scene* bgScene = activeScene->getBackgroundScene();
 
-            if(bgScene)
+            if(bgScene && activeScene->isBackgroundSceneDrawable())
                 renderEachCam(bgScene, window);
 
             // Render the active scene

@@ -34,6 +34,7 @@ namespace ime {
         isInitialized_{false},
         isPaused_{false},
         isVisibleWhenPaused_{false},
+        isBackgroundSceneDrawable_{true},
         isBackgroundSceneUpdated_{true},
         isBackgroundSceneEventsEnabled_{false},
         hasPhysicsSim_{false},
@@ -74,6 +75,7 @@ namespace ime {
             grid2D_ = std::move(other.grid2D_);
             timescale_ = other.timescale_;
             isVisibleWhenPaused_ = other.isVisibleWhenPaused_;
+            isBackgroundSceneDrawable_ = other.isBackgroundSceneDrawable_;
             isBackgroundSceneUpdated_ = other.isBackgroundSceneUpdated_;
             isBackgroundSceneEventsEnabled_ = other.isBackgroundSceneEventsEnabled_;
             hasPhysicsSim_ = other.hasPhysicsSim_;
@@ -192,6 +194,18 @@ namespace ime {
 
     bool Scene::hasBackgroundScene() const {
         return backgroundScene_ != nullptr;
+    }
+
+    void Scene::setBackgroundSceneDrawable(bool drawable) {
+        if (isBackgroundSceneDrawable_ != drawable) {
+            isBackgroundSceneDrawable_ = drawable;
+
+            emitChange(Property("backgroundSceneDrawable", drawable));
+        }
+    }
+
+    bool Scene::isBackgroundSceneDrawable() const {
+        return isBackgroundSceneDrawable_;
     }
 
     void Scene::setBackgroundSceneUpdates(bool update) {

@@ -449,6 +449,29 @@ namespace ime {
         bool hasBackgroundScene() const;
 
         /**
+         * @brief Set whether or not the scenes background scene is rendered
+         * @param drawable True to render the background scene, otherwise false
+         *
+         * When the @a drawable argument is set to @a false, the background
+         * scene is not rendered when this scene is rendered and when it is
+         * set to @a true, the background scene is rendered behind this scene
+         *
+         * By default, the background scene is rendered when the parent scene
+         * is rendered
+         *
+         * @see isBackgroundSceneDrawable
+         */
+        void setBackgroundSceneDrawable(bool drawable);
+
+        /**
+         * @brief Check if the scenes background scene is rendered
+         * @return True if the background scene is rendered, otherwise false
+         *
+         * @see setBackgroundSceneDrawable
+         */
+        bool isBackgroundSceneDrawable() const;
+
+        /**
          * @brief Set whether or not the scenes background scene receives time updates
          * @param update True to enable background scene time updates, otherwise false
          *
@@ -902,6 +925,7 @@ namespace ime {
         bool isInitialized_;                  //!< A flag indicating whether or not the scene has been initialized
         bool isPaused_;                       //!< A flag indicating whether or not the scene is paused
         bool isVisibleWhenPaused_;            //!< A flag indicating whether or not the scene is rendered behind the active scene when it is paused
+        bool isBackgroundSceneDrawable_;      //!< A flag indicating whether or not the scenes background scene is rendered
         bool isBackgroundSceneUpdated_;       //!< A flag indicating whether or not the scenes background scene receives time updates
         bool isBackgroundSceneEventsEnabled_; //!< A flag indicating whether or not the scenes background scene receives system events
         bool hasPhysicsSim_;                  //!< A flag indicating whether or not the scene has a physics simulation
