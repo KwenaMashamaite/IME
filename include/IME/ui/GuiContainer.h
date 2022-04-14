@@ -535,7 +535,7 @@ namespace ime {
              * @warning This function is intended for internal use only and
              * should never be called outside of IME
              */
-            void update(ime::Time deltaTime);
+            void update(Time deltaTime);
 
             /**
              * @brief Destructor

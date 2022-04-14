@@ -252,7 +252,7 @@ namespace ime {
         };
     }
 
-    using Mouse = ime::input::Mouse; //!< ime::input::Mouse alias
+    using Mouse = input::Mouse; //!< ime::input::Mouse alias
 }
 
 #endif // IME_MOUSE_H

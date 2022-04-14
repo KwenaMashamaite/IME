@@ -320,7 +320,7 @@ namespace ime {
          *
          * @see onGridExit
          */
-        int onGridEnter(const Callback<ime::GridObject*>& callback, bool oneTime = false);
+        int onGridEnter(const Callback<GridObject*>& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a grid exit event

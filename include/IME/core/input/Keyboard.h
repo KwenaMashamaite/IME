@@ -298,8 +298,8 @@ namespace ime {
         };
     }
 
-    using Keyboard = ime::input::Keyboard; //!< ime::input::Keyboard alias
-    using Key = ime::input::Keyboard::Key; //!< ime::input::Keyboard::Key alias
+    using Keyboard = input::Keyboard; //!< ime::input::Keyboard alias
+    using Key = input::Keyboard::Key; //!< ime::input::Keyboard::Key alias
 }
 
 #endif // IME_KEYBOARD_H

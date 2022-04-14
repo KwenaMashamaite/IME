@@ -36,14 +36,14 @@ namespace ime::priv {
             gui.unfocusAllWidgets();
 
             // Reset hover state
-            ime::Event event;
-            event.type = ime::Event::MouseMoved;
+            Event event;
+            event.type = Event::MouseMoved;
             event.mouseMove.x = -9999;
             gui.handleEvent(event);
 
             // Reset left mouse down state
-            event.type = ime::Event::MouseButtonReleased;
-            event.mouseButton.button = ime::input::Mouse::Button::Left;
+            event.type = Event::MouseButtonReleased;
+            event.mouseButton.button = input::Mouse::Button::Left;
             event.mouseButton.x = -9999;
             gui.handleEvent(event);
         }
@@ -57,8 +57,8 @@ namespace ime::priv {
 
         engine->onFrameStart([this] {
             if (!scenes_.empty() && scenes_.top()->isEntered()) {
-                ime::Scene* activeScene = scenes_.top().get();
-                ime::Scene* bgScene = activeScene->getBackgroundScene();
+                Scene* activeScene = scenes_.top().get();
+                Scene* bgScene = activeScene->getBackgroundScene();
 
                 if (bgScene)
                     bgScene->onFrameBegin();
@@ -69,8 +69,8 @@ namespace ime::priv {
 
         engine->onFrameEnd([this] {
             if (!scenes_.empty() && scenes_.top()->isEntered()) {
-                ime::Scene* activeScene = scenes_.top().get();
-                ime::Scene* bgScene = activeScene->getBackgroundScene();
+                Scene* activeScene = scenes_.top().get();
+                Scene* bgScene = activeScene->getBackgroundScene();
 
                 if (bgScene)
                     bgScene->onFrameEnd();
@@ -89,7 +89,7 @@ namespace ime::priv {
                 prevScene_->isPaused_ = true;
                 resetGui(prevScene_->getGui());
 
-                ime::Scene* bgScene = prevScene_->getBackgroundScene();
+                Scene* bgScene = prevScene_->getBackgroundScene();
 
                 if (bgScene) {
                     resetGui(bgScene->getGui());
@@ -107,7 +107,7 @@ namespace ime::priv {
         if (activeScene->isEntered()) {
             if (activeScene->isCached()) {
                 activeScene->isPaused_ = false;
-                ime::Scene* bgScene = activeScene->getBackgroundScene();
+                Scene* bgScene = activeScene->getBackgroundScene();
 
                 if (bgScene) {
                     bgScene->isPaused_ = false;
@@ -153,7 +153,7 @@ namespace ime::priv {
         if (inserted) {
             iter->second->setCached(true, name);
 
-            ime::Scene* bgScene = iter->second->getBackgroundScene();
+            Scene* bgScene = iter->second->getBackgroundScene();
 
             if (bgScene) {
                 bgScene->setCached(true, name + "BackgroundScene");
@@ -187,7 +187,7 @@ namespace ime::priv {
 
         // Notify popped scene that it's removed from the engine
         if (poppedScene->isEntered()) {
-            ime::Scene* bgScene = poppedScene->getBackgroundScene();
+            Scene* bgScene = poppedScene->getBackgroundScene();
 
             if (bgScene)
                 bgScene->onExit();
@@ -199,7 +199,7 @@ namespace ime::priv {
         if (const auto& [isCached, cacheAlias] = poppedScene->cacheState_; isCached) {
             resetGui(poppedScene->getGui());
 
-            if (ime::Scene* bgScene = poppedScene->getBackgroundScene(); bgScene)
+            if (Scene* bgScene = poppedScene->getBackgroundScene(); bgScene)
                 resetGui(bgScene->getGui());
 
             cache(cacheAlias, std::move(poppedScene));
@@ -214,12 +214,12 @@ namespace ime::priv {
                 scenes_.push(std::move(currentScene));
             }
 
-            ime::Scene* activeScene = scenes_.top().get();
+            Scene* activeScene = scenes_.top().get();
 
             if (activeScene->isEntered() && resumePrev) {
                 activeScene->isPaused_ = false;
 
-                ime::Scene* bgScene = activeScene->getBackgroundScene();
+                Scene* bgScene = activeScene->getBackgroundScene();
 
                 if (bgScene) {
                     bgScene->isPaused_ = false;
@@ -262,7 +262,7 @@ namespace ime::priv {
     }
 
     const Scene *SceneManager::getBackgroundScene() const {
-        const ime::Scene* activeScene = getActiveScene();
+        const Scene* activeScene = getActiveScene();
 
         if (activeScene)
             return activeScene->getBackgroundScene();
@@ -362,7 +362,7 @@ namespace ime::priv {
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
             // Render previous scene
             if (prevScene_ && prevScene_->isEntered() && prevScene_->isVisibleOnPause()) {
-                ime::Scene* bgScene = prevScene_->getBackgroundScene();
+                Scene* bgScene = prevScene_->getBackgroundScene();
 
                 if (bgScene)
                     renderEachCam(bgScene, window);
@@ -372,7 +372,7 @@ namespace ime::priv {
 
             // Render the active scenes background scene
             Scene* activeScene = scenes_.top().get();
-            ime::Scene* bgScene = activeScene->getBackgroundScene();
+            Scene* bgScene = activeScene->getBackgroundScene();
 
             if(bgScene)
                 renderEachCam(bgScene, window);
@@ -483,10 +483,10 @@ namespace ime::priv {
             scene->internalEmitter_.emit("preUpdate", dt * scene->getTimescale());
         };
 
-        ime::Scene* activeScene = scenes_.top().get();
+        Scene* activeScene = scenes_.top().get();
 
         // Update the active scenes background scene
-        ime::Scene* bgScene = activeScene->getBackgroundScene();
+        Scene* bgScene = activeScene->getBackgroundScene();
 
         if (bgScene && activeScene->isBackgroundSceneUpdated()) {
             update(bgScene, deltaTime);
@@ -500,8 +500,8 @@ namespace ime::priv {
 
     void SceneManager::update(const Time &deltaTime, bool fixedUpdate) {
         if (!scenes_.empty() && scenes_.top()->isEntered()) {
-            ime::Scene* activeScene = scenes_.top().get();
-            ime::Scene* bgScene = activeScene->getBackgroundScene();
+            Scene* activeScene = scenes_.top().get();
+            Scene* bgScene = activeScene->getBackgroundScene();
 
             if (bgScene && activeScene->isBackgroundSceneUpdated())
                 updateScene(deltaTime, bgScene, fixedUpdate);
