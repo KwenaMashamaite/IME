@@ -138,10 +138,21 @@ namespace ime {
 
     void Scene::setBackgroundScene(Scene::Ptr scene) {
         if (!isInitialized_)
-            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the scene is initialized");
+            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the parent scene is initialized");
 
         if (!isEntered_)
-            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the scene is entered");
+            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called before the parent scene is entered");
+
+        if (isBackgroundScene())
+            throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called on a background scene, nested background scenes are not supported");
+
+        if (scene) {
+            if (scene->isBackgroundScene())
+                throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called with a scene that is already a background of another scene");
+
+            if (scene->hasBackgroundScene())
+                throw AccessViolationException("ime::Scene::setBackgroundScene() must not be called with a scene that has a background scene, nested background scenes are not supported");
+        }
 
         if (backgroundScene_ != scene) {
             if (backgroundScene_)

@@ -375,16 +375,25 @@ namespace ime {
         bool isVisibleOnPause() const;
 
         /**
-         * @brief Add a background scene
+         * @brief Add a background scene to this scene
          * @param scene The scene to be the background of this scene
-         * * @throws AccessViolationException If this function is called before
-         *         the scene is initialized or entered
+         * @throws AccessViolationException If this function is called before
+         *         this scene is initialized or entered. Furthermore, the exception
+         *         is thrown if this scene is a background scene or the scene
+         *         that is passed in is as an argument is already a background
+         *         scene of another scene or it has a background scene
          *
          * Note that the scene manages the lifecycle of its background scene.
          * That is, the background scene is destroyed when its parent scene
          * is destroyed. Furthermore, a scene can only have one background
          * scene at a time. Setting a new background scene destroys the previous
          * scene. Pass nullptr to remove the background scene.
+         *
+         * @warning IME does not support nested background scene. That is, a
+         * background scene of another scene cannot itself have a background
+         * scene. Setting a scene that has a background scene as a background
+         * scene for another scene throws a ime::AccessViolationException
+         * exception
          *
          * By default, the scene does not have a background scene
          *
@@ -396,6 +405,12 @@ namespace ime {
          * @brief Get the scene this scene is a background of
          * @return Pointer to the parent scene if this scene is a background
          *         scene, otherwise a nullptr
+         *
+         * The scene has a parent scene when it is set as the background of
+         * another scene. The scene it is set as the background of becomes
+         * its parent scene
+         *
+         * By default, the scene does not have a parent scene
          *
          * @see setBackgroundScene
          */
@@ -415,6 +430,11 @@ namespace ime {
         /**
          * @brief Check if the scene is in a background scene
          * @return True if it is a background scene, otherwise false
+         *
+         * The scene becomes a background scene when it is set as the
+         * background of another scene
+         *
+         * By default, the scene is not a background scene
          *
          * @see setBackgroundScene
          */
