@@ -194,6 +194,14 @@ namespace ime {
         return utility::addEventListener(eventEmitter_, "GridObject_moveBegin", callback, oneTime);
     }
 
+    int GridObject::onGridPreMove(const Callback<GridObject *> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GridObject_preMove", callback, oneTime);
+    }
+
+    int GridObject::onGridPostMove(const Callback<GridObject *> &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GridObject_postMove", callback, oneTime);
+    }
+
     int GridObject::onGridMoveEnd(const Callback<GridObject*>& callback, bool oneTime) {
         return utility::addEventListener(eventEmitter_, "GridObject_moveEnd", callback, oneTime);
     }
@@ -232,7 +240,9 @@ namespace ime {
     void GridObject::emitGridEvent(const Property& property) {
         if ((property.getName() == "borderCollision") ||
             (property.getName() == "moveBegin") ||
-            (property.getName() == "moveEnd"))
+            (property.getName() == "moveEnd") ||
+            (property.getName() == "preMove") ||
+            (property.getName() == "postMove"))
         {
             eventEmitter_.emit("GridObject_" + property.getName(), this);
         }

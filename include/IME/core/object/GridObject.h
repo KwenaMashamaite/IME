@@ -358,6 +358,56 @@ namespace ime {
         int onGridMoveBegin(const Callback<GridObject*>& callback, bool oneTime = false);
 
         /**
+         * @brief Add an event listener to a pre move event
+         * @param callback The function to be executed before the object is
+         *                 moved in the grid
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identification number
+         *
+         * This event is fired every time the object is about to move in the
+         * grid. The difference between onGridMoveBegin() and onGridPreMove()
+         * is that the former is called once per tile movement and the latter
+         * is called every time the objects position is about to be updated
+         * while in transit to its target tile. In other words, onGridMoveBegin()
+         * is called at the beginning of the tile movement and onGridPreMove()
+         * is called until the object completes its tile movement.
+         *
+         * You can add as many event listeners as you want to this event.
+         * Furthermore, the callback is passed this game object on invocation
+         *
+         * @note This event is only fired if the object does not have a
+         * RigidBody attached to it. see GameObject::attachRigidBody
+         *
+         * @see onGridMove
+         */
+        int onGridPreMove(const Callback<GridObject*>& callback, bool oneTime = false);
+
+        /**
+         * @brief Add an event listener to a grid move event
+         * @param callback The function to be executed after the object moves
+         *                  in the grid
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners unique identification number
+         *
+         * This event is fired every time after the object moves in the grid.
+         * The difference between onGridMoveEnd() and onGridPostMove() is that
+         * the former is called once at the end of the tile movement and the
+         * latter is called every time after the objects position is updated
+         * while in transit to its target tile.
+         *
+         * You can add as many event listeners as you want to this event.
+         * Furthermore, the callback is passed this game object on invocation
+         *
+         * @note This event is only fired if the object does not have a
+         * RigidBody attached to it. see GameObject::attachRigidBody
+         *
+         * @see onGridPreMove, onGridMoveBegin, onGridMoveEnd
+         */
+        int onGridPostMove(const Callback<GridObject*>& callback, bool oneTime = false);
+
+        /**
          * @brief Add an event listener to an adjacent tile reached event
          * @param callback Function to execute when the target reaches its
          *        target tile

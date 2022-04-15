@@ -336,8 +336,14 @@ namespace ime {
                     snapTargetToTargetTile();
                     onDestinationReached();
                 } else if (!target_->hasRigidBody()) {
+                    eventEmitter_.emit("GridMover_preMove");
+                    target_->emitGridEvent(Property("preMove"));
+
                     target_->getTransform().move(maxSpeed_.x * targetDirection_.x * deltaTime.asSeconds() * speedMultiplier_,
                                                  maxSpeed_.y * targetDirection_.y * deltaTime.asSeconds() * speedMultiplier_);
+
+                    eventEmitter_.emit("GridMover_postMove");
+                    target_->emitGridEvent(Property("postMove"));
                 }
             }
         }
