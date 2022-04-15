@@ -473,7 +473,7 @@ namespace ime {
 
         /**
          * @brief Set whether or not the scenes background scene receives time updates
-         * @param update True to enable background scene time updates, otherwise false
+         * @param enable True to enable background scene time updates, otherwise false
          *
          * When updates for a background scene is disabled, its onUpdate(),
          * onFixedUpdate(), onPreUpdate() and onPostUpdate() functions
@@ -481,17 +481,17 @@ namespace ime {
          *
          * By default, the background scene is updated
          *
-         * @see setBackgroundScene, isBackgroundSceneUpdated
+         * @see setBackgroundScene, isBackgroundSceneUpdateEnabled
          */
-        void setBackgroundSceneUpdates(bool update);
+        void setBackgroundSceneUpdateEnable(bool enable);
 
         /**
          * @brief Check if the scenes background scene receives time updates or not
          * @return True if it receives time updates, otherwise false
          *
-         * @see setBackgroundSceneUpdates
+         * @see setBackgroundSceneUpdateEnable
          */
-        bool isBackgroundSceneUpdated() const;
+        bool isBackgroundSceneUpdateEnabled() const;
 
         /**
          * @brief Enable or disable events for the scenes background scene

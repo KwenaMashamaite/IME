@@ -208,15 +208,15 @@ namespace ime {
         return isBackgroundSceneDrawable_;
     }
 
-    void Scene::setBackgroundSceneUpdates(bool update) {
-        if (isBackgroundSceneUpdated_ != update) {
-            isBackgroundSceneUpdated_ = update;
+    void Scene::setBackgroundSceneUpdateEnable(bool enable) {
+        if (isBackgroundSceneUpdated_ != enable) {
+            isBackgroundSceneUpdated_ = enable;
 
-            emitChange(Property("backgroundSceneUpdates", isBackgroundSceneUpdated_));
+            emitChange(Property("backgroundSceneUpdateEnable", isBackgroundSceneUpdated_));
         }
     }
 
-    bool Scene::isBackgroundSceneUpdated() const {
+    bool Scene::isBackgroundSceneUpdateEnabled() const {
         return isBackgroundSceneUpdated_;
     }
 

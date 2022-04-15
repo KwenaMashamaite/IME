@@ -488,7 +488,7 @@ namespace ime::priv {
         // Update the active scenes background scene
         Scene* bgScene = activeScene->getBackgroundScene();
 
-        if (bgScene && activeScene->isBackgroundSceneUpdated()) {
+        if (bgScene && activeScene->isBackgroundSceneUpdateEnabled()) {
             update(bgScene, deltaTime);
             bgScene->onPreUpdate(deltaTime * bgScene->getTimescale());
         }
@@ -503,7 +503,7 @@ namespace ime::priv {
             Scene* activeScene = scenes_.top().get();
             Scene* bgScene = activeScene->getBackgroundScene();
 
-            if (bgScene && activeScene->isBackgroundSceneUpdated())
+            if (bgScene && activeScene->isBackgroundSceneUpdateEnabled())
                 updateScene(deltaTime, bgScene, fixedUpdate);
 
             updateScene(deltaTime, activeScene, fixedUpdate);
