@@ -102,6 +102,7 @@ namespace ime {
 
         body_ = body;
         hasRigidBody_ = true;
+        updateCollisionFilter();
 
         emitChange(Property{"body", body_});
     }
