@@ -181,6 +181,7 @@ namespace ime::priv {
 
     private:
         sf::RenderWindow window_;      //!< Render window
+        std::string icon_;             //!< The icon of the window
         std::string title_;            //!< The title of the window
         static bool isInstantiated_;   //!< Instantiation state
         Callback<> onCreate_;

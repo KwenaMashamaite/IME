@@ -39,6 +39,9 @@ namespace ime::priv {
         title_ = title;
         window_.create(sf::VideoMode(width, height), title, static_cast<sf::Uint32>(style));
 
+        if (!icon_.empty())
+            setIcon(icon_);
+
         if (onCreate_)
             onCreate_();
     }
@@ -59,6 +62,7 @@ namespace ime::priv {
         try {
             const sf::Image& icon = ResourceManager::getInstance()->getImage(filename);
             window_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+            icon_ = filename;
         }
         catch (...)
         {
