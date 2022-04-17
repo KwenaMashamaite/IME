@@ -70,6 +70,14 @@ namespace ime {
         return renderTarget_.getTitle();
     }
 
+    void Window::setIcon(const std::string &filename) {
+        renderTarget_.setIcon(filename);
+    }
+
+    std::string Window::getIcon() const {
+        return renderTarget_.getIcon();
+    }
+
     void Window::setPosition(const Vector2i &position) {
         renderTarget_.getThirdPartyWindow().setPosition(sf::Vector2i{position.x, position.y});
     }

@@ -111,6 +111,33 @@ namespace ime {
         const std::string& getTitle() const;
 
         /**
+         * @brief Change the window's icon
+         * @param filename Filename of the window icon to set
+         *
+         * Note that if the specified icon cannot be found, the current icon
+         * will remain set. If the current icon is not a user specified icon,
+         * then the Operating System (OS) icon will be used. In addition, the
+         * icon must be in 32-bits RGBA format
+         *
+         * By default, the OS icon is used
+         *
+         * @see getIcon
+         */
+        void setIcon(const std::string &filename);
+
+        /**
+         * @brief Get the filename of the windows icon
+         * @return The filename of the window icon
+         *
+         * This function will return an empty string if the windows icon
+         * is not user specified. That is, when the window uses the
+         * operating systems default icon
+         *
+         * @see setIcon
+         */
+        std::string getIcon() const;
+
+        /**
          * @brief Set the position of thw window on the screen
          * @param position The new position in pixels
          *

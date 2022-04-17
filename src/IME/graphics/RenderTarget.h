@@ -109,6 +109,14 @@ namespace ime::priv {
         void setIcon(const std::string &filename);
 
         /**
+         * @brief Get the window icon filename
+         * @return The filename of the window icon
+         *
+         * The filename will be an empty string if the window uses the OS icon
+         */
+        const std::string& getIcon() const;
+
+        /**
          * @brief Get the dimensions of the window
          * @return Dimensions of the window
          */

@@ -72,6 +72,10 @@ namespace ime::priv {
         ResourceManager::getInstance()->setPathFor(ResourceType::Image, currentImageDir);
     }
 
+    const std::string &RenderTarget::getIcon() const {
+        return icon_;
+    }
+
     Vector2u RenderTarget::getSize() {
         return ime::Vector2u{window_.getSize().x, window_.getSize().y};
     }
