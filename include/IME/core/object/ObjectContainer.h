@@ -327,6 +327,26 @@ namespace ime {
         void forEachInGroup(const std::string& name, const Callback<T*>& callback) const;
 
         /**
+         * @brief Apply a callback to each object in specific groups
+         * @param groups The name of the groups to apply the callback on
+         * @param callback The function to be applied to each object in the
+         *                 groups
+         *
+         * For example, the following code deactivates all the game objects in
+         * the groups "bombs" and "guns":
+         *
+         * @code
+         * gameObjects.forEachInGroups({"bombs", "guns"}, [](ime::GameObject* object) {
+         *      object->setActive(false);
+         * });
+         * @endcode
+         *
+         * @see forEach, forEachInGroup, ForEachNotInGroup
+         */
+        void forEachInGroups(const std::initializer_list<std::string>& groups,
+            const Callback<T*>& callback) const;
+
+        /**
          * @brief Apply a callback to all objects that do not belong to a group
          * @param callback The function to be applied to each object in the
          *                 container that does not belong to any group

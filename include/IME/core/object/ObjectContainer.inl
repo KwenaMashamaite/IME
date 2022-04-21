@@ -226,6 +226,12 @@ inline void ObjectContainer<T>::forEachInGroup(const std::string& name, const Ca
 }
 
 template <typename T>
+inline void ObjectContainer<T>::forEachInGroups(const std::initializer_list<std::string>& groups, const Callback<T*>& callback) const {
+    for (auto& group : groups)
+        forEachInGroup(group, callback);
+}
+
+template <typename T>
 inline void ObjectContainer<T>::forEachNotInGroup(const Callback<T*>& callback) const {
     std::for_each(objects_.begin(), objects_.end(), [&callback](const std::unique_ptr<T>& uniquePtr) {
         callback(uniquePtr.get());
