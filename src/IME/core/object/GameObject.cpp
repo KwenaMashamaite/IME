@@ -169,16 +169,16 @@ namespace ime {
         }
     }
 
-    void GameObject::onRigidBodyCollisionStart(const CollisionCallback& callback) {
-        onContactBegin_ = callback;
+    int GameObject::onRigidBodyCollisionStart(const CollisionCallback& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GameObject_contactBegin", callback, oneTime);
     }
 
-    void GameObject::onRigidBodyCollisionEnd(const CollisionCallback& callback) {
-        onContactEnd_ = callback;
+    int GameObject::onRigidBodyCollisionEnd(const CollisionCallback& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GameObject_contactEnd", callback, oneTime);
     }
 
-    void GameObject::onRigidBodyCollisionStay(const CollisionCallback &callback) {
-        onContactStay_ = callback;
+    int GameObject::onRigidBodyCollisionStay(const CollisionCallback &callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "GameObject_contactStay", callback, oneTime);
     }
 
     bool GameObject::hasRigidBody() const {
@@ -220,12 +220,7 @@ namespace ime {
         if (this == other)
             return;
 
-        if (event == "contactBegin" && onContactBegin_)
-            onContactBegin_(this, other);
-        else if (event == "contactEnd" && onContactEnd_)
-            onContactEnd_(this, other);
-        else if (event == "contactStay" && onContactStay_)
-            onContactStay_(this, other);
+        eventEmitter_.emit("GameObject_" + event, this, other);
     }
 
     void GameObject::initEvents() {

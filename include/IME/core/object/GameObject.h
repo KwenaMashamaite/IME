@@ -221,12 +221,14 @@ namespace ime {
 
         /**
          * @brief Add an event listener to a rigid body collision begin event
-         * @param callback The function to be executed when event is fired
+         * @param callback The function to be executed when the event is fired
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
          *
          * The callback function is called when two game objects begin to
          * overlap. The callback is passed this game object and the game
-         * object that collided with this game object respectively. Pass
-         * nullptr to remove the current callback
+         * object that collided with this game object respectively.
          *
          * A collision begin handler may be registered on the game object or on
          * the collider that is attached to the game objects rigid body or on
@@ -238,21 +240,21 @@ namespace ime {
          * rigid body attached to it and the rigid body has a Collider attached
          * to it
          *
-         * @warning Don't keep the pointers passed to the callback, they are
-         * invalidated when the callback execution terminates
-         *
          * @see attachRigidBody, onCollisionStay and onCollisionEnd
          */
-        void onRigidBodyCollisionStart(const CollisionCallback& callback);
+        int onRigidBodyCollisionStart(const CollisionCallback& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a rigid body collision end event
-         * @param callback The function to be executed when event is fired
+         * @param callback The function to be executed when the event is fired
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
          *
          * The callback function is called when two game objects stop
          * overlapping. The callback is passed this game object and the
          * game object that stopped overlapping with this game object
-         * respectively. Pass nullptr to remove the current callback.
+         * respectively.
          *
          * A collision end handler may be registered on the game object or on
          * the collider that is attached to the game objects rigid body or on
@@ -264,21 +266,21 @@ namespace ime {
          * rigid body attached to it and the rigid body has a Collider attached
          * to it
          *
-         * @warning Don't keep the pointers passed to the callback, they are
-         * invalidated when the callback execution terminates
-         *
          * @see attachRigidBody, onCollisionStart and onCollisionStay
          */
-        void onRigidBodyCollisionEnd(const CollisionCallback& callback);
+        int onRigidBodyCollisionEnd(const CollisionCallback& callback, bool oneTime = false);
 
         /**
          * @brief Add an event listener to a rigid body collision stay event
-         * @param callback The function to be executed when event is fired
+         * @param callback The function to be executed when the event is fired
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
          *
          * The callback function is called while this game object remains in
          * contact with another game object. The callback is passed this game
          * object and the game object that is currently in contact with this
-         * game object respectively. Pass nullptr to remove the current callback
+         * game object respectively.
          *
          * A collision stay handler may be registered on the game object or on
          * the collider that is attached to the game objects rigid body or on
@@ -290,12 +292,9 @@ namespace ime {
          * a rigid body attached to it and the rigid body is awake and has a
          * Collider attached to it that is not a sensor
          *
-         * @warning Don't keep the pointers passed to the callback, they are
-         * invalidated when the callback execution terminates
-         *
          * @see attachRigidBody, onCollisionStart and onCollisionEnd
          */
-        void onRigidBodyCollisionStay(const CollisionCallback& callback);
+        int onRigidBodyCollisionStay(const CollisionCallback& callback, bool oneTime = false);
 
         /**
          * @brief Get the game objects transform
@@ -382,9 +381,6 @@ namespace ime {
         int postStepId_;                      //!< Scene post step handler id
         int destructionId_;                   //!< Scene destruction listener id
         PropertyContainer userData_;          //!< Used to store metadata about the object
-        CollisionCallback onContactBegin_;    //!< Called when this game object starts colliding with another game object or vice versa
-        CollisionCallback onContactStay_;     //!< Called when this game object remains in collision with another game object or vice versa
-        CollisionCallback onContactEnd_;      //!< Called when this game object stops colliding with another game object or vice versa
     };
 }
 
