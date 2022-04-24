@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/common/Transform.h"
+#include "IME/utility/Helpers.h"
 #include <cmath>
 
 namespace ime {
@@ -38,8 +39,7 @@ namespace ime {
         position_.x = x;
         position_.y = y;
 
-        if (onPropertyChange_)
-            onPropertyChange_(Property{"position", position_});
+        eventEmitter_.emit("propertyChange", Property{"position", position_});
     }
 
     void Transform::setPosition(const Vector2f& position) {
@@ -59,8 +59,7 @@ namespace ime {
         if (rotation_ < 0)
             rotation_ += 360.f;
 
-        if (onPropertyChange_)
-            onPropertyChange_(Property{"rotation", rotation_});
+        eventEmitter_.emit("propertyChange", Property{"rotation", rotation_});
     }
 
     void Transform::rotate(float angle) {
@@ -78,8 +77,7 @@ namespace ime {
         scale_.x = factorX;
         scale_.y = factorY;
 
-        if (onPropertyChange_)
-            onPropertyChange_(Property{"scale", scale_});
+        eventEmitter_.emit("propertyChange", Property{"scale", scale_});
     }
 
     void Transform::setScale(const Vector2f& scale) {
@@ -105,8 +103,7 @@ namespace ime {
         origin_.x = x;
         origin_.y = y;
 
-        if (onPropertyChange_)
-            onPropertyChange_(Property{"origin", origin_});
+        eventEmitter_.emit("propertyChange", Property{"origin", origin_});
     }
 
     void Transform::setOrigin(const Vector2f& origin) {
@@ -125,7 +122,11 @@ namespace ime {
         move(offset.x, offset.y);
     }
 
-    void Transform::onPropertyChange(Callback<const Property&> callback) {
-        onPropertyChange_ = std::move(callback);
+    int Transform::onPropertyChange(const Callback<Property>& callback, bool oneTime) {
+        return utility::addEventListener(eventEmitter_, "propertyChange", callback, oneTime);
+    }
+
+    bool Transform::unsubscribe(int id) {
+        return eventEmitter_.removeEventListener(id);
     }
 }

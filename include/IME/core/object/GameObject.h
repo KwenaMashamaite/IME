@@ -302,10 +302,6 @@ namespace ime {
          *
          * The transform can be used to query or modify the game object
          * position, scale, rotation and origin
-         *
-         * @warning Do not use the ime::Transform::onPropertyChange function
-         * of the returned object, It is used internally. Use ime::Object::onPropertyChange
-         * instead, which in inherited.
          */
         Transform& getTransform();
         const Transform& getTransform() const;

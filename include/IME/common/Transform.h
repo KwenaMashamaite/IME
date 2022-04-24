@@ -28,7 +28,7 @@
 #include "IME/Config.h"
 #include "IME/common/Vector2.h"
 #include "IME/common/Property.h"
-#include <functional>
+#include "IME/core/event/EventEmitter.h"
 #include <string>
 
 namespace ime {
@@ -37,9 +37,6 @@ namespace ime {
      */
     class IME_API Transform {
     public:
-        template <typename... Args>
-        using Callback = std::function<void(Args...)>; //!< Event listener
-
         /**
          * @brief Default constructor
          */
@@ -216,21 +213,57 @@ namespace ime {
         /**
          * @brief Add an event listener to a property change event
          * @param callback The function to be executed when a property changes
+         * @param oneTime True to execute the callback one-time or false to
+         *                execute it every time the event is triggered
+         * @return The event listeners identification number
          *
-         * Note that only one callback may be registered at a time. The new
-         * callback overwrites the previous one. The callback is passed the
-         * property that changed on invocation. Pass nullptr to cancel the
-         * callback.
+         * A property change event is triggered by any function that has a
+         * 'set' prefix, that is a setter function. The name of the property
+         * is the text that appears after the 'set' prefix in lowercase. For
+         * example, the setPosition() function will trigger a 'position' change
+         * event.
+         *
+         * The callback is passed a property object that has the name and
+         * new value of the property that was changed. For example, the following
+         * code prints the position (whenever it changes) to the standard output
+         * stream:
+         *
+         * @code
+         * // Register the event listener
+         * int id = transform.onPropertyChange([](const ime::Property& property) {
+         *      if (property.getName() == "position") {
+         *          ime::Vector2f pos = property.getValue<ime::Vector2f>();
+         *          std::cout << "New Position = " << pos.x << ", " << pos.y << std::endl;
+         *      }
+         * });
+         *
+         * // Trigger the event - This will set the new position and invoke position change listeners
+         * transform.setPosition(100.0f, 50.0f);
+         *
+         * // Remove the event listener
+         * transform.unsubscribe(id);
+         * @endcode
+         *
+         * @see unsubscribe
          */
-        void onPropertyChange(Callback<const Property&> callback);
+        int onPropertyChange(const Callback<Property>& callback, bool oneTime = false);
+
+        /**
+         * @brief Remove a property change event listener
+         * @param id The identification number of the event listener
+         * @return True if the event listener was removed or false if no such
+         *         event listener exists
+         *
+         * @see onPropertyChange
+         */
+        bool unsubscribe(int id);
 
     private:
         Vector2f position_; //!< Position of the object in the 2D world
         Vector2f scale_;    //!< Scale of the object
         Vector2f origin_;   //!< Origin of translation/rotation/scaling of the object
         float rotation_;    //!< Orientation of the object, in degrees
-
-        Callback<const Property&> onPropertyChange_; //!< A function executed when a property of the object changes
+        EventEmitter eventEmitter_; //!< Dispatches property change events
     };
 }
 
