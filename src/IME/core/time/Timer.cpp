@@ -240,6 +240,9 @@ namespace ime {
     }
 
     void Timer::onTimeout(const Timer::Callback<> &callback) {
+        if (!callback)
+            throw InvalidArgumentException("'ime::Timer::onTimeout()' must not be called with a 'nullptr' argument");
+
         onTimeout_ = callback;
         dispatchCount_ = 0;
     }

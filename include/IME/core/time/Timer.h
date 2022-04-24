@@ -68,6 +68,8 @@ namespace ime {
          * @param callback Function to execute when the timer reaches zero
          * @param repeatCounter The number of timer the timer should repeat
          * @return The new timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * The timer is not repeated be default (@a repeatCounter = 0), this
          * means that the timer will stop after invoking the callback
@@ -86,6 +88,8 @@ namespace ime {
          * @param callback Function to execute when the timer reaches zero
          * @param repeatCounter The number of timer the timer should repeat
          * @return The new timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * The timer is not repeated be default (@a repeatCounter = 0), this
          * means that the timer will stop after invoking the callback
@@ -350,6 +354,8 @@ namespace ime {
         /**
          * @brief Add the function that is executed when countdown completes
          * @param callback Function to be executed when the countdown terminates
+         * @throws InvalidArgumentException if the specified callback is argument
+         *              is a nullptr
          *
          * @see start
          */
@@ -358,6 +364,8 @@ namespace ime {
         /**
          * @brief Add the function that is executed when countdown completes
          * @param callback Function to be executed when the countdown terminates
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * The callback is passed the execution timer as an argument on invocation
          *

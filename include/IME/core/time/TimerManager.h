@@ -49,6 +49,8 @@ namespace ime {
          * @param delay The time to wait before executing the callback
          * @param callback The function to be executed
          * @return A reference to the callback execution timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * On invocation, the callback is passed the Timer that is responsible
          * for the callback execution, the timer can be used to extend the
@@ -66,6 +68,8 @@ namespace ime {
          * @param delay The time to wait before executing the callback
          * @param callback The function to be executed
          * @return A reference to the callback execution timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * @note The returned reference will be invalidated when the timer
          * stops, either explicitly or when it expires
@@ -80,6 +84,8 @@ namespace ime {
          * @param callback The callback to be executed
          * @param repeatCount The number of times to repeat the callback
          * @return A reference to the callback execution timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * On invocation, the callback is passed the Timer that is responsible
          * for the callback execution, the timer can be used to extend the
@@ -103,6 +109,8 @@ namespace ime {
          * @param callback The callback to be executed
          * @param repeatCount The number of times to repeat the callback
          * @return A reference to the callback execution timer
+         * @throws InvalidArgumentException if the specified callback argument
+         *          is a nullptr
          *
          * By default, if @a repeatCounter is left unspecified then the
          * callback will be executed forever every @a delay. The callback
