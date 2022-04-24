@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IME/core/time/Timer.h"
+#include "IME/core/exceptions/Exceptions.h"
 
 namespace ime {
     Timer::Timer() :
@@ -103,7 +104,9 @@ namespace ime {
     }
 
     void Timer::start() {
-        IME_ASSERT(onTimeout_, "The timeout callback must be set before starting the timer, see setTimeoutCallback() function")
+        if (!onTimeout_)
+            throw AccessViolationException("'ime::Timer::start()' must not be called before the timeout callback is set, see 'ime::Timer::onTimeout()'");
+
         if (status_ != Status::Running) {
             if (status_ == Status::Paused)
                 resume();

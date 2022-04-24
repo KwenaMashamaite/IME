@@ -200,13 +200,16 @@ namespace ime {
 
         /**
          * @brief Start the timer
+         * @throws AccessViolationException if this function is called before
+         *              the timeout callback is set
          *
          * This function will start the timer if it was not started
          * or resume it if it was paused. If start() is called while
          * the timer is running then, the timer will restart
          *
-         * @note Calling this function without a registered timeout callback
-         * is undefined behaviour (see onTimeout())
+         * @note A Timer needs a timeout callback before it can be started. Attempting
+         * to start the timer without registering a timeout callback first will
+         * trigger a ime::AccessViolationException exception, see onTimeout()
          *
          * @see onStart, setInterval, onTimeout, restart and pause
          */
