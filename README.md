@@ -9,6 +9,9 @@ IME is a state-based game engine for developing 2D games on the Windows platform
 _**Note** - This project has been retired (life cycle: 23 January 2020 - 24 April 2022). This means that IME will no longer receive new
 features and bug fixes. The last stable IME version is `v3.2.0`_
 
+_**Important Note:**_ As of 14th April 2023, this project has been continued as [Mighter2d](https://github.com/KwenaMashamaite/Mighter2d).
+To find out more about the new project and how it builds upon the work done in this project, please click the link to visit the new repository.
+
 ## Features
 
 * **Graphics** - Render Window, 2D grid, Animatable Sprites, 2D camera, Spritesheet, etc...
